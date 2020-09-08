@@ -1,0 +1,305 @@
+@charset "UTF-8"; 
+/* 
+ * normalize css
+ */
+html, body { margin:0; padding:0 }
+/* 
+ * fonts
+ */
+@font-face {
+  font-family: droidserif;
+  font-style: normal;
+  font-weight: normal;
+  src: url('http://this.transpect.io/a9s/ts/fonts/droid/DroidSerif-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: droidserif;
+  font-style: italic;
+  font-weight: normal;
+  src: url('http://this.transpect.io/a9s/ts/fonts/droid/DroidSerif-Italic.ttf') format('truetype');
+}
+@font-face {
+  font-family: droidserif;
+  font-style: normal;
+  font-weight: bold;
+  src: url('http://this.transpect.io/a9s/ts/fonts/droid/DroidSerif-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: droidserif;
+  font-style: italic;
+  font-weight: bold;
+  src: url('http://this.transpect.io/a9s/ts/fonts/droid/DroidSerif-BoldItalic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'roboto';
+  font-style: normal;
+  font-weight: normal;
+  src: url('http://this.transpect.io/a9s/ts/fonts/roboto/Roboto-Regular.otf') format('opentype');
+}
+@font-face {
+  font-family: 'roboto';
+  font-style: italic;
+  font-weight: normal;
+  src: url('http://this.transpect.io/a9s/ts/fonts/roboto/Roboto-Italic.otf') format('opentype');
+}
+@font-face {
+  font-family: 'roboto';
+  font-style: normal;
+  font-weight: bold;
+  src: url('http://this.transpect.io/a9s/ts/fonts/roboto/Roboto-Medium.otf') format('opentype');
+}
+@font-face {
+  font-family: 'roboto';
+  font-style: italic;
+  font-weight: bold;
+  src: url('http://this.transpect.io/a9s/ts/fonts/roboto/Roboto-MediumItalic.otf') format('opentype');
+}
+p, li, dd, dt {
+  font-family: droidserif, 'Georgia', serif;
+}
+h1, h2, h3, h4, h5, blockquote *, a, section.title-page p.author, span.toc-author, p.heading-author {
+  font-family: 'roboto', sans-serif;
+}
+/* 
+ * colors
+ */
+h1, h2, h3, a { 
+  color:#00354a
+}
+/* 
+ * page layout
+ */
+body {
+  margin: 3% 2% 2% 5%;
+}
+/* 
+ * links
+ */
+a {
+  font-size:0.9em;
+  text-decoration:none;
+}
+/* 
+ * headlines
+ */
+h2.part {
+  font-size: 3em;
+  margin:1em 0;
+}
+h2.part, h3.chapter, h3.toc-title {
+  page-break-before:always;
+}
+h2.part, h3.chapter, h4.chapter, h3.toc-title {
+  font-weight: bold;
+}
+p.notes-headline {
+  font-family: 'roboto', sans-serif;
+  font-size: 1.5em;
+  padding: 1em 0 0.5em 0;
+}
+h5.section {
+  font-weight: normal;
+}
+h3.chapter, h4.chapter, h3.toc-title {
+  font-size: 2em;
+  padding: 1.5em 0 1em 0;
+  border-bottom: 2px solid #00354a;
+}
+h3.chapter + h4.section, h4.chapter + h5.section  {
+  margin-top:0;
+}
+h4.section {
+  font-size: 1.5em;
+}
+h5.section {
+  font-size: 1.3em;
+}
+span.heading-subtitle {
+  font-weight:normal;
+}
+p.heading-author {
+  margin-top:-1em;
+  font-size:1.2em;
+  font-style:italic;
+}
+/* 
+ * paragraphs
+ */
+p {
+  margin:0;
+  line-height:1.6;
+}
+p.indent {
+  text-indent:2em;
+}
+div.lox p.indent {
+  text-indent:0;
+}
+blockquote {
+  margin: 2em 0 2em 2em;
+}
+p.tsliterature {
+  margin: 0 0 0 2em;
+  text-indent: -2em;
+}
+/* 
+ * footnotes
+ */ 
+p.note, p.endnote { 
+  font-size:0.9em;
+  margin-left:1.5em;
+}
+a.footnote-marker, a.endnote-marker { 
+  float:left; 
+  width:1.5em; 
+  margin-left:-1.5em; 
+  vertical-align:top;
+  display:inline-block;
+}
+a.footnote-marker.large, a.endnote-marker.large { 
+  width:2.5em; 
+  margin-left:-2.5em;
+}
+span.footnote-text {
+  margin-top:0;
+  margin-left:1.5em;
+  vertical-align:top;
+  padding-left:0.5em;
+  display:block;
+}
+span.footnote-text.next.narrow { 
+  margin-left:1.5em;
+}
+span.footnote-text.next.large { 
+  margin-left:2.5em;
+}
+span.footnote-text.next { 
+  text-indent:1em;
+}
+span.footnote-p { 
+  display:block
+}
+/* 
+ * halftitle
+ */
+ div.about-book {
+  border-left:5px solid #00354a;
+}
+div.about-author {
+  border-left:5px solid #8ea5ad;
+}
+div.about-book, div.about-author {
+  margin-top:1em;
+  padding:0 1em;
+}
+/* 
+ * title page
+ */
+h1.title {
+  margin: 0.5em 0 0 0;
+  font-size: 3em;
+  font-weight: bold;
+}
+h2.subtitle, section.title-page p.author {
+  margin-top: 0.5em;
+  font-weight: normal;
+}
+section.title-page p.author {
+  font-size:1.2em;
+}
+section.title-page h2.subtitle {
+  font-size: 1.5em;
+}
+section.title-page div.logo {
+  margin-top: 12em;
+}
+section.title-page div.logo img {
+  height: 1.5em;
+}
+/* 
+ * imprint
+ */
+section.imprint p {
+  text-indent: 0;
+}
+section.imprint a {
+  font-size: 1em;
+}
+p.license-image, p.copyright-holder, p.copyright-text, p.publisher-url {
+margin-top: 1em;
+}
+p.copyright-text {
+  margin-bottom:1em;
+}
+p.license-image img {
+  height: 3em;
+}
+p.licence-text, p.licence-link, p.licence-href {
+  font-family: 'roboto', 'Corbel', 'Helvetica', sans-serif;
+}
+p.dnb-headline {
+  font-weight: bold;
+  margin-top: 1em;
+}
+/* 
+ * toc
+ */
+#toc ol {
+  padding:0;
+  list-style:none;
+  margin-top:0.5em;
+}
+#toc li.toc2, #toc li.toc3 {
+  margin:1em 0;
+  font-weight:bold;
+}
+#toc li.toc4, #toc li.toc5, #toc li.toc6 {
+  font-weight:normal;
+}
+#toc li.toc2 a {
+  display: block;
+  padding: 1em 0;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1em;
+  border-top: 1px solid #ccc;
+}
+#toc li.toc3 a, #toc li.toc4 a, #toc li.toc5 a, #toc li.toc6 a { 
+  display:inline; 
+  border-style:none; 
+  margin:0; 
+  padding:0 
+}
+#toc li.toc4 {
+  margin-left:0em;
+}
+#toc li.toc5 {
+  margin-left:1em;
+}
+#toc li.toc6 {
+  margin-left:2em;
+}
+#toc a {
+  font-size:1em;
+}
+span.toc-author, span.toc-subtitle {
+  font-weight:normal;
+}
+span.toc-author {
+  font-style:italic;
+}
+span.label.width-5 { display:inline-block }
+h3 span.label.width-5 { min-width:1.5em; }
+h4 span.label.width-5 { min-width:2em; }
+h5 span.label.width-5 { min-width:1.75em; }
+
+nav {display:none;}
+/*
+ * cover
+ */
+#epub-cover-image-container {
+  text-align: center;
+  width:100%;
+}
+#epub-cover-image-container img{
+  width:100%;
+}
