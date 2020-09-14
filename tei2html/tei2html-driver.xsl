@@ -119,6 +119,14 @@
     </h2>
   </xsl:template>
   
+  <xsl:template match="term[@key eq 'Lizenzlink']" mode="tei2html">
+    <p class="{lower-case(translate(@key, ' ', '-'))}">
+      <a href="{.}">
+        <xsl:apply-templates mode="#current"/>
+      </a>
+    </p>
+  </xsl:template>
+  
   <xsl:template name="toc">
     <nav class="toc" epub:type="toc" id="toc">
       <xsl:call-template name="generate-toc-headline"/>  
