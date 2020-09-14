@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:c="http://www.w3.org/ns/xproc-step"
-  xmlns:cx="http://xmlcalabash.com/ns/extensions" 
+  xmlns:cx="http://xmlcalabash.com/ns/extensions"
+  xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
   xmlns:tr="http://transpect.io"
   xmlns:ts="http://www.transcript-verlag.de/transpect"
   version="1.0"
@@ -41,10 +42,10 @@
   
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
   <p:import href="http://transpect.io/cascade/xpl/paths-for-files-xml.xpl"/>
-  <p:import href="http://transpect.io/xproc-util/xslt-mode/xpl/xslt-mode.xpl"/>
+  <p:import href="http://transpect.io/xproc-util/file-uri/xpl/file-uri.xpl"/>
   <p:import href="http://transpect.io/xproc-util/load/xpl/load.xpl"/>
   <p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl"/>
-
+  <p:import href="http://transpect.io/xproc-util/xslt-mode/xpl/xslt-mode.xpl"/>
 
   <p:variable name="basename" select="/c:param-set/c:param[@name eq 'basename']/@value"/>
 
@@ -107,18 +108,25 @@
     <p:with-option name="filenames" select="concat($basename, '.meta.xml')"/>
   </tr:paths-for-files-xml>
   
+  <tr:file-uri name="meta-file-uri">
+    <p:with-option name="filename" select="/c:files/c:file/@name"/>
+  </tr:file-uri>
+  
   <p:try name="try-load-titlepage-meta">
     <p:group>
       <p:output port="result"/>
-      <p:variable name="titlepage-meta-href" select="/c:files/c:file/@name">
-        <p:pipe port="result" step="get-titlepage-meta-path"/>
-      </p:variable>
+      <p:variable name="titlepage-meta-href" select="/c:result/@local-href"/>
+      <p:variable name="titlepage-meta-dir-href" select="replace($titlepage-meta-href, '^(.+/).+?$', '$1')"/>
       
       <cx:message>
         <p:with-option name="message" select="'[info] load titlepage-meta: ', $titlepage-meta-href"/>
       </cx:message>
       
-      <p:load name="load-titlepage-meta" dtd-validate="false">
+      <cxf:copy name="copy-dtd" href="../schema/PropList-1.0.dtd" fail-on-error="true"> 
+        <p:with-option name="target" select="concat($titlepage-meta-dir-href, 'PropList-1.0.dtd')"/>
+      </cxf:copy>
+      
+      <p:load name="load-titlepage-meta" dtd-validate="true" cx:depends-on="copy-dtd">
         <p:with-option name="href" select="$titlepage-meta-href"/>
       </p:load>
       
@@ -126,7 +134,15 @@
     <p:catch>
       <p:output port="result"/>
       
+      <cxf:copy href="../schema/PropList-1.0.dtd"> 
+        <p:with-option name="target" select="'PropList-1.0.dtd'"/>
+      </cxf:copy>
+      
       <p:load name="load-fallback" href="fallback.meta.xml" dtd-validate="false"/>
+      
+      <cx:message>
+        <p:with-option name="message" select="'[WARNING] could not load metadata... Loading metadata fallback!'"/>
+      </cx:message>
       
     </p:catch>
   </p:try> 
