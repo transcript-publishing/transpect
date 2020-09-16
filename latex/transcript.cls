@@ -7,7 +7,7 @@
 %%
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesClass{transcript}
-    [2020/07/29 0.100 Transcript Books]
+    [2020/09/16 0.101 Transcript Books]
 \frenchspacing
 \clubpenalty10000
 \widowpenalty10000
