@@ -5,7 +5,7 @@
 %%
 %% lualatex  -  texlive2019
 %%
-\NeedsTeXFormat{LaTeX2e}[2019/01/01]
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesClass{transcript}
     [2020/07/29 0.100 Transcript Books]
 \frenchspacing
@@ -1087,10 +1087,10 @@
         \captionof{figure}{#2}%
         \ifx\@rgi\@empty\else
           \vfill
-        \captionsetup{font=footnotesize,skip=\z@}%
-        \caption*{#1}%
-        \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
-       \fi
+          \captionsetup{font=footnotesize,skip=\z@}%
+          \caption*{#1}%
+          \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
+        \fi
       \end{minipage}\hfill
       \begin{minipage}[t][\tr@nscriptHt]{\tr@nscriptFltWd}\centering
         \unhbox\tr@nscriptFlt%
@@ -1161,18 +1161,22 @@
 \let\orig@doendpe\@doendpe
 \newenvironment{kastengrau}{%
   \def\FrameCommand{\fboxsep\FrameSep \colorbox[gray]{0.75}}%
+  \savenotes
   \begin{framed}%
     \noindent\nsffamily\ignorespaces
   }{\end{framed}%
+  \spewnotes
   \aftergroup\@afterbox}
 
 \newenvironment{kastenlinie}{%
   \FrameSep3mm
   \fboxrule.5bp
+  \savenotes
   \def\FrameCommand{\fboxsep\FrameSep \fbox}%
   \begin{framed}%
     \noindent\nsffamily\ignorespaces\@afterheading
   }{\end{framed}%
+  \spewnotes
   \aftergroup\@afterbox}
 
 \renewenvironment{quotation}
