@@ -428,8 +428,7 @@
     <!-- https://redmine.le-tex.de/issues/8785 -->    
   </xsl:template>
   
-  <xsl:template match="p[@rend eq 'tsendnotesheading']" mode="tei2html"/>
-  
+  <xsl:template match="p[@rend eq 'tsendnotesheading']" mode="tei2html"/>  
 
   <xsl:template match="*:head//*:lb" mode="strip-indexterms-etc">
     <xsl:choose>
@@ -442,5 +441,17 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
+  
+  <xsl:template match="p[matches(@rend, '^tscodeblock[a-z0-9]+$')]" mode="tei2html">
+    <pre>
+      <xsl:apply-templates mode="#current"/>
+    </pre>
+  </xsl:template>
+  
+  <xsl:template match="p/hi" mode="tei2html">
+    <code class="{replace(parent::p/@rend, '^tscodeblock', '')}">
+      <xsl:apply-templates mode="#current"/>
+    </code>
+  </xsl:template>
+  
 </xsl:stylesheet>

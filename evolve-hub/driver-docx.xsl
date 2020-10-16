@@ -22,4 +22,12 @@
     </dedication>
   </xsl:template>
   
+  <xsl:template match="para[matches(@role, '^tscodeblock[a-z0-9]+$')]" mode="custom-1">
+    <programlisting role="{@role}">
+      <line>
+        <xsl:apply-templates mode="#current"/>
+      </line>
+    </programlisting>
+  </xsl:template>
+  
   </xsl:stylesheet>
