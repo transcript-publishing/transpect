@@ -7,7 +7,7 @@
 %%
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesClass{transcript}
-    [2020/09/16 0.101 Transcript Books]
+    [2020/07/29 0.100 Transcript Books]
 \frenchspacing
 \clubpenalty10000
 \widowpenalty10000
@@ -208,20 +208,22 @@
 
 \ifx\use@script@armenian\relax
   \message{^^JLoaded Script: Armenian^^J}
+  \babelprovide{armenian}%
   \newfontfamily\fallbackfont@armenian{NotoSansArmenian-Regular.ttf}%
     [BoldFont = NotoSansArmenian-Bold.ttf,%
     Path = fonts/NotoSans/Armenian/,%
     WordSpace = 1.25]
-  \DeclareTextFontCommand\armenian{\fallbackfont@armenian}
+  \DeclareTextFontCommand\armenian{\selectlanguage{armenian}\fallbackfont@armenian}
 \fi
 
 \ifx\use@script@chinese\relax
+  \babelprovide{chinese}%
   \message{^^JLoaded Script: Chinese^^J}
   \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Regular.otf}%
     [BoldFont = NotoSansCJKsc-Bold.otf,%
     Path = fonts/NotoSans/Chinese/,%
     WordSpace = 1.25]
-  \DeclareTextFontCommand\chin{\fallbackfont@chinese}
+  \DeclareTextFontCommand\chin{\selectlanguage{chinese}\fallbackfont@chinese}
 \fi
 
 
@@ -451,7 +453,8 @@
     \@makechapterhead{#2}%
     \@afterheading
   \fi
-  \let\thechapter\old@thechapter}
+  %\let\thechapter\old@thechapter
+}
 
 \long\def\chapterquote#1{\long\gdef\@chapterquote{#1}}
 
@@ -1030,7 +1033,7 @@
 
 %% END: sameheight
 
-\newcommand\transriptFixedFigure[3][]{% #1: Layout-Variante, #2 Teilbilder
+\newcommand\transriptFixedFigure[3][]{% #1: caption, #2: Layout-Variante, #3 Teilbilder
   \bgroup
   \shhsize\hsize
   \subgraphicssep2mm
@@ -1044,7 +1047,7 @@
         \@tempdima30mm
       \else
         \ifx#2D\relax
-          \@tempdima50mm
+          \@tempdima60mm
         \fi
       \fi
     \fi
@@ -1539,7 +1542,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 \def\flq{‹}
 \def\frq{›}
 
-\usepackage[breaklinks,linktocpage,pdfborder={0 0 0},pdfencoding=auto,bookmarksnumbered=true]{hyperref}
+\usepackage[breaklinks,linktocpage,pdfborder={0 0 0},pdfencoding=auto,bookmarksnumbered=true,linktoc=all]{hyperref}
 \usepackage[normalem]{ulem}
 
 
