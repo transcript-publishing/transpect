@@ -386,6 +386,7 @@
      \parindent\z@
      \null\vskip\headingsep%
      \sffamily\sbseries\HUGE
+     \def\numberline##1{##1}%
      \HUGE #2\par}%
     \global\c@footnote0\relax
     \@endpart}
@@ -801,8 +802,9 @@
     \parfillskip -\@pnumwidth
     {\leavevmode
       \raggedright
-      \def\numberline##1{##1\hfill\break\nopagebreak}%
-      \sfwide\sbseries\huge#1\hfill\strut}\par
+      \sfwide\sbseries\huge
+      \def\numberline##1{##1\nopagebreak}%
+      #1\hfill\strut}\par
     \nobreak
     \global\@nobreaktrue
     \everypar{\global\@nobreakfalse\everypar{}}%
