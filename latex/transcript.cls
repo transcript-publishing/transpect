@@ -226,6 +226,16 @@
   \DeclareTextFontCommand\chin{\selectlanguage{chinese}\fallbackfont@chinese}
 \fi
 
+\ifx\use@script@arabic\relax
+  \babelprovide{arabic}%
+  \message{^^JLoaded Script: Arabic^^J}
+  \newfontfamily\fallbackfont@arabic{NotoNaskhArabic-Regular.ttf}%
+    [BoldFont = NotoNaskhArabic-Bold.ttf,%
+    Path = fonts/NotoSans/Arabic/,%
+    WordSpace = 1.25]
+  \DeclareTextFontCommand\arab{\selectlanguage{arabic}\fallbackfont@arabic}
+\fi
+
 
 \usepackage{newunicodechar}
 \newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
@@ -1117,7 +1127,7 @@
   \tr@nscriptWd\z@% \tr@nscriptSep\z@
 }
 
-\def\tablefont{\nsffamily\small}
+\def\tablefont{\nsffamily\footnotesize}
 \def\arraystretch{1.3}
 \def\@tabular{%
   \leavevmode
@@ -1207,6 +1217,22 @@
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
 
+\renewenvironment{verse}
+{\list{}{\listparindent\z@%
+    \itemindent    \listparindent
+    \leftmargin 5mm
+    \rightmargin   \z@
+    \rightskip\rightmargin\@plus1fil
+    \nsfwider
+    \topsep6.4bp
+    \parsep        .5\baselineskip}%
+\item\noindent\ignorespaces}
+{\endlist
+  \gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe}}
+
 \newenvironment{motto}
                {\list{}{\rightmargin\leftmargin
                    \parsep6.4bp
@@ -1229,6 +1255,7 @@
     \itshape
     \centering\par
   }{\par\egroup\aftergroup\cleardoublepage}
+
 
 \usepackage{enumerate}
 
