@@ -347,25 +347,21 @@
     <xsl:param name="_work-lang" as="xs:string?" tunnel="yes"/>
     <xsl:if test="$restructured-body-parts[@epub:type = ('toc')]">
       <div class="toc" id="toc" xmlns:epub="http://www.idpf.org/2007/ops" epub:type="toc">
-    <xsl:choose>
-       <xsl:when test="matches($_content, '\S') and not($restructured-body-parts[@epub:type = ('toc')]/*[local-name() = ('h1', 'h2', 'h3')])">
-          <xsl:call-template name="_heading">
-            <xsl:with-param name="content" select="$_content"/>
-            <xsl:with-param name="class" select="'toc'"/>
-            <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:if test="not($_content) and not($restructured-body-parts[@epub:type = ('toc')]/*[local-name() = ('h1', 'h2', 'h3')])">
-            <h1 class="Frontmatter_Ueberschriften_U1_Frontmatter"><xsl:value-of select="if ($_work-lang = 'eng') then $toc-heading-title_en else $toc-heading-title_de"/></h1>
-          </xsl:if>
-        </xsl:otherwise>
+        <xsl:choose>
+           <xsl:when test="matches($_content, '\S') and not($restructured-body-parts[@epub:type = ('toc')]/*[local-name() = ('h1', 'h2', 'h3')])">
+              <xsl:call-template name="_heading">
+                <xsl:with-param name="content" select="$_content"/>
+                <xsl:with-param name="class" select="'toc'"/>
+                <xsl:with-param name="prelim" select="$no-dedicated-info"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:if test="not($_content) and not($restructured-body-parts[@epub:type = ('toc')]/*[local-name() = ('h1', 'h2', 'h3')])">
+                <h1 class="Frontmatter_Ueberschriften_U1_Frontmatter"><xsl:value-of select="if ($_work-lang = 'eng') then $toc-heading-title_en else $toc-heading-title_de"/></h1>
+              </xsl:if>
+            </xsl:otherwise>
         </xsl:choose>
-       
         <xsl:apply-templates select="$restructured-body-parts[@epub:type = 'toc']/node()"/>
-    <!--    <xsl:if test="$htmlinput[1]//*[@epub:type = ('footnote', 'rearnote')]">
-          <p class="toc1-nolabel"><a href="#footnotes"><xsl:value-of select="if ($_work-lang = 'eng') then $footnote-heading-title_en else $footnote-heading-title_de"/></a></p>
-        </xsl:if>-->
       </div>
     </xsl:if>
   </xsl:template>
