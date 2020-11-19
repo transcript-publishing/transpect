@@ -7,7 +7,7 @@
 %%
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesClass{transcript}
-    [2020/07/29 0.100 Transcript Books]
+    [2020/11/19 0.101 Transcript Books]
 \frenchspacing
 \clubpenalty10000
 \widowpenalty10000
@@ -791,7 +791,12 @@
       \leavevmode \sffamily
       \advance\leftskip\@tempdima
       \hskip -\leftskip
-      {\sbseries#1}\nobreak
+      {\sbseries#1}%
+      \ifx\toc@chapter@sub\@undefined\else
+        \par\nopagebreak\toc@chapter@sub%
+        \global\let\toc@chapter@sub\@undefined
+      \fi%
+      \nobreak
       \leaders\hbox{$\m@th
         \mkern \@dotsep mu\textnormal{\hbox{.}}\mkern \@dotsep
         mu$}\hfill
