@@ -931,7 +931,7 @@
 %%%%%%%%%%%%%%%%
 % Gleitobjekte %
 %%%%%%%%%%%%%%%%
-\usepackage{rotating}
+\usepackage[figuresright]{rotating}
 \usepackage{tabularx}
 \usepackage{multirow}
 
