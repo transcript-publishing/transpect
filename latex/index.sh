@@ -22,7 +22,7 @@ sed -i -e 's/"|hyperindexformat\{\\\([^\}]\)/\\\/\1/g' $1.idx
 
 perl -i -p -0 -e 's/hyperindexformat\{\\see ?(\{[^\}]+)\}/see$1/g' $1.idx
 perl -i -p -0 -e 's/hyperindexformat\{\\seealso ?(\{[^\}]+)\}/seealso$1/g' $1.idx
-perl -i -p -0 -e 's/(\\indexentry ?\{.+)(\|seealso\{.+\})\}\{(.+)}/$1}\{$3}\n$1$2}{$3}/g' $1.idx #seealso-Eintrag verdoppeln, um Seitenzahl vor texindy zu retten
+perl -i -p -0 -e 's/(\\indexentry ?\{.+)(\|seealso\{.+\})\}\{(.+)}/$1}{$3}\n$1$2}{$3}/g' $1.idx #seealso-Eintrag verdoppeln, um Seitenzahl vor texindy zu retten
 perl -i -p -0 -e 's/\(hyperpage/\(/g' $1.idx
 xindy -d keep_tmpfiles -v -d script -L general -C utf8 -M tex/inputenc/utf8 -M german-sty.xdy -M texindy -M page-ranges -M word-order -M german-sty.xdy -M transcript.xdy -I latex $1.idx
 perl -i -p -0 -e 's/(item[^\n]+)(\\enskip [0-9]{1,2}\n)/$1\\nobreak$2/g' $1.ind
