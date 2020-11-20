@@ -14,7 +14,7 @@ fi
 sed -i -e 's/"|/\\\//g' $1.idx
 sed -i -e 's/"=/-/g' $1.idx
 sed -i -e 's/"~/-/g' $1.idx
-sed -i -e 's/"|hyperindexformat\{\\\([^\}]\)/\\\/\1/g' $1.idx
+sed -i -e 's/"|hyperindexformat{\\\([^}]\)/\\\/\1/g' $1.idx
 # if egrep '[^\\]"' $1.idx >/dev/null ; then
 #   echo "Unescaptes Gänsefüßchen in \"$1.idx\" gefunden. Bitte escapen oder ersetzen, denn xindy schluckt unescapte Gänsefüßchen."
 #   exit 1
