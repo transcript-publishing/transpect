@@ -14,19 +14,18 @@
   
   <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
   
-  <xsl:template match="blockquote[para[matches(@role, '^[a-z]{2,3}ded(ication)?$')]]
-                      |para[matches(@role, '^[a-z]{2,3}ded(ication)?$')][not(parent::blockquote)]" mode="custom-1">
-    <dedication>
+  <xsl:template match="/*" mode="custom-2">
+    <xsl:variable name="out-dir" as="element(keyword)"
+                  select="/hub/info/keywordset[@role eq 'hub']/keyword[@role eq 'archive-dir-uri']"/>
+    <xsl:variable name="basename" as="element(keyword)" 
+                  select="/hub/info/keywordset[@role eq 'hub']/keyword[@role eq 'source-basename']"/>
+    <xsl:copy>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
-    </dedication>
+    </xsl:copy>
+    <xsl:result-document href="{concat($out-dir, '/', $basename, '.bib.txt')}" 
+                         method="text" media-type="text/plain" encoding="UTF-8">
+      <xsl:value-of select="string-join(//bibliomixed, '&#xa;')"/>
+    </xsl:result-document>
   </xsl:template>
-  
-  <xsl:template match="para[matches(@role, '^[a-z]{2,3}codeblock[a-z0-9]+$')]" mode="custom-1">
-    <programlisting role="{@role}">
-      <line>
-        <xsl:apply-templates mode="#current"/>
-      </line>
-    </programlisting>
-  </xsl:template>
-  
+    
 </xsl:stylesheet>
