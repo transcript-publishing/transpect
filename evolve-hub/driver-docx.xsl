@@ -12,7 +12,6 @@
   exclude-result-prefixes="xs hub dbk ts" 
   version="2.0">
   
-  <xsl:import href="http://transpect.io/evolve-hub/xsl/evolve-hub.xsl"/>
   <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
   
   <xsl:template match="blockquote[para[matches(@role, '^[a-z]{2,3}ded(ication)?$')]]
@@ -22,7 +21,7 @@
     </dedication>
   </xsl:template>
   
-  <xsl:template match="para[matches(@role, '^tscodeblock[a-z0-9]+$')]" mode="custom-1">
+  <xsl:template match="para[matches(@role, '^[a-z]{2,3}codeblock[a-z0-9]+$')]" mode="custom-1">
     <programlisting role="{@role}">
       <line>
         <xsl:apply-templates mode="#current"/>
@@ -30,4 +29,4 @@
     </programlisting>
   </xsl:template>
   
-  </xsl:stylesheet>
+</xsl:stylesheet>
