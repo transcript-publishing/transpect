@@ -14,18 +14,20 @@
   
   <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
   
-  <xsl:template match="/*" mode="custom-2">
+  <xsl:template match="/" mode="custom-2">
     <xsl:variable name="out-dir" as="element(keyword)"
-                  select="/hub/info/keywordset[@role eq 'hub']/keyword[@role eq 'archive-dir-uri']"/>
+                  select="hub/info/keywordset[@role eq 'hub']/keyword[@role eq 'archive-dir-uri']"/>
     <xsl:variable name="basename" as="element(keyword)" 
-                  select="/hub/info/keywordset[@role eq 'hub']/keyword[@role eq 'source-basename']"/>
+                  select="hub/info/keywordset[@role eq 'hub']/keyword[@role eq 'source-basename']"/>
     <xsl:copy>
-      <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <xsl:apply-templates mode="#current"/>
     </xsl:copy>
-    <xsl:result-document href="{concat($out-dir, '/', $basename, '.bib.txt')}" 
-                         method="text" media-type="text/plain" encoding="UTF-8">
-      <xsl:value-of select="string-join(//bibliomixed, '&#xa;')"/>
-    </xsl:result-document>
+    <xsl:if test="//bibliomixed[node()]">
+      <xsl:result-document href="{concat($out-dir, '/', $basename, '.bib.txt')}" 
+                           method="text" media-type="text/plain" encoding="UTF-8">
+        <xsl:value-of select="string-join(//bibliomixed, '&#xa;')"/>
+      </xsl:result-document>
+    </xsl:if>
   </xsl:template>
     
 </xsl:stylesheet>
