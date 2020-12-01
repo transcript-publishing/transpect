@@ -19,6 +19,7 @@
 \DeclareOptionX{book}{\global\collectionfalse}
 \DeclareOptionX{collection}{\global\collectiontrue}
 \DeclareOptionX{endnotes}{\global\endnotestrue}
+\DeclareOptionX{ennotoc}{\global\endnotestrue\global\let\noendnotetoc\relax}
 \DeclareOptionX{endnotesperchapter}{\global\endnotestrue\global\let\endnotes@per@chapter\relax}
 \long\gdef\LayVar#1#2#3#4{#4}%
 \global\let\lay=c\relax%% Standard-Layout
@@ -218,7 +219,7 @@
 
 \ifx\use@script@chinese\relax
   \babelprovide{chinese}%
-  \message{^^JLoaded Script: Chinese^^J}
+  \message{^^JLoaded Script: Chinese^^J}%
   \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Regular.otf}%
     [BoldFont = NotoSansCJKsc-Bold.otf,%
     Path = fonts/NotoSans/Chinese/,%
@@ -899,14 +900,20 @@
     \ifcollection
       \ifx\endnotes@per@chapter\relax
         \chapter*{\notesname}%
-        \addcontentsline{toc}{chapter}{\notesname}%
+        \ifx\noendnotetoc\@undefined
+          \addcontentsline{toc}{chapter}{\notesname}%
+        \fi
       \else
         \section*{\notesname}%
-        \addcontentsline{toc}{chapter}{\notesname}%
+        \ifx\noendnotetoc\@undefined
+          \addcontentsline{toc}{chapter}{\notesname}%
+        \fi
       \fi
     \else
       \chapter*{\notesname}%
-      \addcontentsline{toc}{chapter}{\notesname}%
+      \ifx\noendnotetoc\@undefined
+        \addcontentsline{toc}{chapter}{\notesname}%
+      \fi
     \fi
     \leftskip2em
   }%
