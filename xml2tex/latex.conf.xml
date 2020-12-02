@@ -5,7 +5,10 @@
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
   <xsl:import href="http://transpect.io/xslt-util/functx/Sequences/Sorting-and-Grouping/sort.xsl"/>
-  
+
+  <xsl:variable name="basename" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'hub']/dbk:keyword[@role eq 'source-basename']" as="element(dbk:keyword)"/>
+  <xsl:variable name="is-collection" select="matches($basename, '^ts_[a-z]{3}_anth')" as="xs:boolean"/>
+
   <xsl:variable name="title" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Titel']" as="element(dbk:keyword)?"/>
   <xsl:variable name="subtitle" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Untertitel']" as="element(dbk:keyword)?"/>
   <xsl:variable name="editors" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Herausgeber']" as="element(dbk:keyword)*"/>
