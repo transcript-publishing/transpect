@@ -88,6 +88,7 @@
                                       if($notes-type eq 'endnotes' and $endnotes-with-chapter eq 'yes')  then ',endnotesperchapter'
                                  else if($notes-type eq 'endnotes')                                      then ',endnotes'
                                  else (),
+                                 if($notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  for $i in $other-scripts-in-doc
                                  return concat(',usescript=', $i),
                                  ']{transcript}&#xa;')"/>
