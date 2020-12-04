@@ -964,8 +964,8 @@
 }
 
 \newlength\aboveSourceSkip \aboveSourceSkip0mm
-\newcommand\transcriptBild[3][]{\tr@nscriptFloat{#1}{#2}{#3}}
-\newcommand\transcriptTab[3][]{\aboveSourceSkip1mm\let\use@depth\relax\tr@nscriptFloat{#1}{#2}{#3}}
+\newcommand\transcriptBild[3]{\tr@nscriptFloat{#1}{#2}{#3}}
+\newcommand\transcriptTab[3]{\aboveSourceSkip1mm\let\use@depth\relax\tr@nscriptFloat{#1}{#2}{#3}}
 
 \newbox\tr@nscriptFlt
 \newdimen\tr@nscriptFltWd
