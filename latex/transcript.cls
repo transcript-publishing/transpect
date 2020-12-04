@@ -1050,7 +1050,7 @@
 
 %% END: sameheight
 
-\newcommand\transriptFixedFigure[3][]{% #1: caption, #2: Layout-Variante, #3 Teilbilder
+\newcommand\transriptFixedFigure[3]{% #1: caption, #2: Layout-Variante, #3 Teilbilder
   \bgroup
   \shhsize\hsize
   \subgraphicssep2mm
