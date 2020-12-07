@@ -970,8 +970,8 @@
 }
 
 \newlength\aboveSourceSkip \aboveSourceSkip0mm
-\newcommand\transcriptBild[3]{\tr@nscriptFloat{#1}{#2}{#3}}
-\newcommand\transcriptTab[3]{\aboveSourceSkip1mm\let\use@depth\relax\tr@nscriptFloat{#1}{#2}{#3}}
+\newcommand\transcriptBild[2]{\tr@nscriptFloat{#1}{#2}}
+\newcommand\transcriptTab[2]{\aboveSourceSkip1mm\let\use@depth\relax\tr@nscriptFloat{#1}{#2}}
 
 \newbox\tr@nscriptFlt
 \newdimen\tr@nscriptFltWd
@@ -1047,6 +1047,7 @@
       \fi
       \expandafter\expandafter\expandafter\includegraphics\expandafter\expandafter\expandafter[\expandafter\@igopts\expandafter]\expandafter{\@tempb}%
       \ifx\c@psource\@undefined\else
+        \ifhmode\par\fi
         \vskip\dimexpr-\topskip+\aboveSourceSkip+.5mm\relax
         \vtop{\captionsetup{font=footnotesize}\caption*{\c@psource}}%
         \global\let\c@psource\@undefined
@@ -1060,6 +1061,7 @@
 
 \newcommand\transcriptFixedFigure[3]{% #1: caption, #2: Layout-Variante, #3 Teilbilder
   \bgroup
+    \def\@captype{figure}%
   \shhsize\hsize
   \subgraphicssep2mm
   \ifx#2A\relax
@@ -1082,8 +1084,10 @@
   \vskip1\baselineskip
   \captionsetup{margin=\sh@margins\relax}%
   \if!#1!\else#1\fi
-  \hskip\sh@margins\sameheight{#3}%
+  \ifhmode\par\fi
+  \noindent\hskip\sh@margins\sameheight{#3}%
   \ifx\c@psource\@undefined\else
+    \ifhmode\par\fi
     \vskip\aboveSourceSkip
     \captionsetup{font=footnotesize,skip=-1mm}%
     \caption*{\c@psource}%
@@ -1099,21 +1103,16 @@
 \renewenvironment{figure}{\savenotes\oldfigure}{\oldendfigure\spewnotes}
 
 
-\long\def\tr@nscriptFloat#1#2#3{%
+\long\def\tr@nscriptFloat#1#2{%
   \def\@rgi{#1}%
-  \def\@rgii{#2}%
-  \setbox\tr@nscriptFlt\hbox{#3}%
+  \setbox\tr@nscriptFlt\hbox{\ignorespaces#2}%
   \tr@nscriptFltWd=\wd\tr@nscriptFlt\relax
   \tr@nscriptHt=\dimexpr\ht\tr@nscriptFlt\ifx\use@depth\relax+\dp\tr@nscriptFlt\fi\relax
   \tr@nscriptSep\dimexpr(\textwidth-\tr@nscriptFltWd)/2\relax
   \vskip\baselineskip
-  \ifx\@rgii\@empty
+  \ifx\@rgi\@empty
     \begin{minipage}{\tr@nscriptFltWd}\centering%
       \unhbox\tr@nscriptFlt\par
-      \ifx\@rgi\@empty\else
-        \captionsetup{font=footnotesize,skip=-1mm}\caption*{#1}%
-        \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
-      \fi
     \end{minipage}%
   \else
     \ifdim\tr@nscriptFltWd<.5\textwidth\relax
@@ -1122,12 +1121,14 @@
         \tr@nscriptWd\dimexpr\textwidth-\tr@nscriptFltWd\relax
         \noindent\begin{minipage}[\ifx\use@depth\relax t\else b\fi][\tr@nscriptHt][t]{\tr@nscriptWd}%
           \captionsetup{justification=RaggedRight}%
-          \captionof{figure}{#2}%
-          \ifx\@rgi\@empty\else
+          \def\@captype{figure}%
+          #1%
+          \ifx\c@psource\@undefined\else
             \vfill
             \captionsetup{font=footnotesize,skip=\z@}%
-            \caption*{#1}%
+            \caption*{\c@psource}%
             \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
+            \global\let\c@psource\@undefined
           \fi
         \end{minipage}\hfill
         \begin{minipage}[t][\tr@nscriptHt]{\tr@nscriptFltWd}\centering
@@ -1137,11 +1138,16 @@
     \else
       \noindent\hskip\tr@nscriptSep
       \begin{minipage}{\tr@nscriptFltWd}\centering%
-        \captionof{figure}{#2}%
+        \def\@captype{figure}%
+        #1%
         \unhbox\tr@nscriptFlt\par
-        \ifx\@rgi\@empty\else
-          \captionsetup{font=footnotesize,skip=-1mm}\caption*{#1}%
+        \ifx\c@psource\@undefined\else
+          \ifhmode\par\fi
+          \vskip\aboveSourceSkip
+          \captionsetup{font=footnotesize,skip=-1mm}%
+          \captionof*{figure}{\c@psource}%
           \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
+          \global\let\c@psource\@undefined
         \fi
       \end{minipage}%
     \fi
