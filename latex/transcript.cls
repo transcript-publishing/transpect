@@ -243,6 +243,12 @@
 \newunicodechar{‐}{\penalty\@M-\hskip\z@skip}% 8617
 \newunicodechar{‑}{\hbox{-}\penalty\@M\hskip\z@skip}% 8617
 \newunicodechar{↩}{\hskip\z@skip}
+\newunicodechar{。}{\hbox{$_\circ$\enskip\ignorespaces}}
+\newunicodechar{、}{,\enskip\ignorespaces}
+\newunicodechar{；}{;\enskip\ignorespaces}
+\newunicodechar{：}{:\enskip\ignorespaces}
+\newunicodechar{，}{,\enskip\ignorespaces}
+
 \DeclareRobustCommand\unichar[1]{\textfallback{#1}}
 
 %%%%%%%%%%%%%%
@@ -983,7 +989,7 @@
 \newdimen\sh@margins
 \RequirePackage{ltxcmds}
 
-\newcommand*\includesubgraphics[2][]{%
+\newcommand*\includesubgraphics[2]{%
   \global\advance\c@includesubgraphics\@ne
   \ltx@LocalExpandAfter\gdef\csname subgraphics@caption@\the\c@includesubgraphics\endcsname{#1}%
   \ltx@LocalExpandAfter\gdef\csname subgraphics@name@\the\c@includesubgraphics\endcsname{#2}%
@@ -1050,7 +1056,7 @@
 
 %% END: sameheight
 
-\newcommand\transriptFixedFigure[3]{% #1: caption, #2: Layout-Variante, #3 Teilbilder
+\newcommand\transcriptFixedFigure[3]{% #1: caption, #2: Layout-Variante, #3 Teilbilder
   \bgroup
   \shhsize\hsize
   \subgraphicssep2mm
@@ -1093,39 +1099,50 @@
 
 \long\def\tr@nscriptFloat#1#2#3{%
   \def\@rgi{#1}%
+  \def\@rgii{#2}%
   \setbox\tr@nscriptFlt\hbox{#3}%
   \tr@nscriptFltWd=\wd\tr@nscriptFlt\relax
   \tr@nscriptHt=\dimexpr\ht\tr@nscriptFlt\ifx\use@depth\relax+\dp\tr@nscriptFlt\fi\relax
   \tr@nscriptSep\dimexpr(\textwidth-\tr@nscriptFltWd)/2\relax
   \vskip\baselineskip
-  \ifdim\tr@nscriptFltWd<.5\textwidth\relax
-    \bgroup
-      %\tr@nscriptSep4mm
-      \tr@nscriptWd\dimexpr\textwidth-\tr@nscriptFltWd\relax
-      \noindent\begin{minipage}[\ifx\use@depth\relax t\else b\fi][\tr@nscriptHt][t]{\tr@nscriptWd}%
-        \captionsetup{justification=RaggedRight}%
-        \captionof{figure}{#2}%
-        \ifx\@rgi\@empty\else
-          \vfill
-          \captionsetup{font=footnotesize,skip=\z@}%
-          \caption*{#1}%
-          \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
-        \fi
-      \end{minipage}\hfill
-      \begin{minipage}[t][\tr@nscriptHt]{\tr@nscriptFltWd}\centering
-        \unhbox\tr@nscriptFlt%
-      \end{minipage}%
-    \egroup
-  \else
-    \noindent\hskip\tr@nscriptSep
+  \ifx\@rgii\@empty
     \begin{minipage}{\tr@nscriptFltWd}\centering%
-      \captionof{figure}{#2}%
       \unhbox\tr@nscriptFlt\par
       \ifx\@rgi\@empty\else
         \captionsetup{font=footnotesize,skip=-1mm}\caption*{#1}%
         \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
       \fi
     \end{minipage}%
+  \else
+    \ifdim\tr@nscriptFltWd<.5\textwidth\relax
+      \bgroup
+        % \tr@nscriptSep4mm
+        \tr@nscriptWd\dimexpr\textwidth-\tr@nscriptFltWd\relax
+        \noindent\begin{minipage}[\ifx\use@depth\relax t\else b\fi][\tr@nscriptHt][t]{\tr@nscriptWd}%
+          \captionsetup{justification=RaggedRight}%
+          \captionof{figure}{#2}%
+          \ifx\@rgi\@empty\else
+            \vfill
+            \captionsetup{font=footnotesize,skip=\z@}%
+            \caption*{#1}%
+            \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
+          \fi
+        \end{minipage}\hfill
+        \begin{minipage}[t][\tr@nscriptHt]{\tr@nscriptFltWd}\centering
+          \unhbox\tr@nscriptFlt%
+        \end{minipage}%
+      \egroup
+    \else
+      \noindent\hskip\tr@nscriptSep
+      \begin{minipage}{\tr@nscriptFltWd}\centering%
+        \captionof{figure}{#2}%
+        \unhbox\tr@nscriptFlt\par
+        \ifx\@rgi\@empty\else
+          \captionsetup{font=footnotesize,skip=-1mm}\caption*{#1}%
+          \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
+        \fi
+      \end{minipage}%
+    \fi
   \fi
   \vskip\baselineskip
   \global\let\use@depth\@undefined
