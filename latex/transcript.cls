@@ -1042,7 +1042,9 @@
     \def\@igopts{width=\linewidth}%
     \begin{minipage}[b]{\@tempdimb}%
       \captionsetup{margin=\z@}%
-      \csname subgraphics@caption@\the\@tempcnta\endcsname%
+      \expandafter\ifx\csname subgraphics@caption@\the\@tempcnta\endcsname\relax\else%
+        \csname subgraphics@caption@\the\@tempcnta\endcsname%
+      \fi
       \expandafter\expandafter\expandafter\includegraphics\expandafter\expandafter\expandafter[\expandafter\@igopts\expandafter]\expandafter{\@tempb}%
       \ifx\c@psource\@undefined\else
         \vskip\dimexpr-\topskip+\aboveSourceSkip+.5mm\relax
