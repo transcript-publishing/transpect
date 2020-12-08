@@ -1643,8 +1643,8 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 
 \let\oldhref\href
 
-\def\@nohyphen#1#2\relax{#1\penalty0\ifx\relax#2\else\@nohyphen#2\relax\fi}
-\protected\def\href#1#2{\oldhref{#1}{\@nohyphen#2\relax\relax}}
+\def\@nohyphen#1\@nil#2#3\relax{\oldhref{#1}{#2}\discretionary{}{}{}\ifx\relax#3\else\@nohyphen#1\@nil#3\relax\fi}
+\protected\def\href#1#2{\@nohyphen#1\@nil#2\relax\relax}
 \let\fn@href\href
 % \bgroup
 % \let↩\relax
