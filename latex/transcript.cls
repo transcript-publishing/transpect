@@ -1225,7 +1225,7 @@
   \aftergroup\@afterbox}
 
 \renewenvironment{quotation}
-{\list{}{\listparindent\z@%
+{\par\list{}{\listparindent\z@%
     \itemindent    \listparindent
     \leftmargin \parindent
     \rightmargin   \z@
@@ -1234,21 +1234,22 @@
     \parsep        \z@}%
 \item\noindent\ignorespaces}
 {\endlist
-  \gdef\@doendpe{%
+ \par
+ \gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
 
 \renewenvironment{quote}
-               {\list{}{\rightmargin\leftmargin\nsfwider}%
-                \item\relax}
-               {\endlist\gdef\@doendpe{%
+{\par\list{}{\rightmargin\leftmargin\nsfwider}%
+\item\relax}
+{\endlist\par\gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
 
 \renewenvironment{verse}
-{\list{}{\listparindent\z@%
+{\par\list{}{\listparindent\z@%
     \itemindent    \listparindent
     \leftmargin 5mm
     \rightmargin   \z@
@@ -1258,18 +1259,19 @@
     \parsep        .5\baselineskip}%
 \item\noindent\ignorespaces}
 {\endlist
-  \gdef\@doendpe{%
-    \@endpetrue
-    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
-    \global\let\@doendpe\orig@doendpe}}
+ \par
+ \gdef\@doendpe{%
+   \@endpetrue
+   \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+   \global\let\@doendpe\orig@doendpe}}
 
 \newenvironment{motto}
-               {\list{}{\rightmargin\leftmargin
+               {\par\list{}{\rightmargin\leftmargin
                    \parsep6.4bp
                    \partopsep\z@
                    \nsfwider}%
                 \item\relax}
-               {\endlist\gdef\@doendpe{%
+               {\endlist\par\gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
