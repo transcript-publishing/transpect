@@ -220,12 +220,22 @@
 \ifx\use@script@chinese\relax
   \babelprovide{chinese}%
   \message{^^JLoaded Script: Chinese^^J}%
-  \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Regular.otf}%
-    [BoldFont = NotoSansCJKsc-Bold.otf,%
+  \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Light.otf}%
+    [BoldFont = NotoSansCJKsc-Regular.otf,%
     Path = fonts/NotoSans/Chinese/,%
     WordSpace = 1.25]
   \DeclareTextFontCommand\chin{\selectlanguage{chinese}\fallbackfont@chinese}
 \fi
+
+%\ifx\use@script@chinese\relax
+%  \babelprovide{chinese}%
+%  \message{^^JLoaded Script: Chinese^^J}
+%  \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Regular.otf}%
+%    [BoldFont = NotoSansCJKsc-Bold.otf,%
+%    Path = fonts/NotoSans/Chinese/,%
+%    WordSpace = 1.25]
+%  \DeclareTextFontCommand\chin{\selectlanguage{chinese}\fallbackfont@chinese}
+%\fi
 
 \ifx\use@script@arabic\relax
   \babelprovide{arabic}%
