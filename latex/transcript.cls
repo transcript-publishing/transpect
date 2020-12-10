@@ -1235,7 +1235,9 @@
   \aftergroup\@afterbox}
 
 \renewenvironment{quotation}
-{\par\list{}{\listparindent\z@%
+{\noindent\par\list{}{%
+    \listparindent\z@%
+    \parindent\z@
     \itemindent    \listparindent
     \leftmargin \parindent
     \rightmargin   \z@
@@ -1244,14 +1246,14 @@
     \parsep        \z@}%
 \item\noindent\ignorespaces}
 {\endlist
- \par
+ \noindent\par
  \gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
 
 \renewenvironment{quote}
-{\par\list{}{\rightmargin\leftmargin\nsfwider}%
+{\noindent\par\list{}{\rightmargin\leftmargin\nsfwider}%
 \item\relax}
 {\endlist\par\gdef\@doendpe{%
     \@endpetrue
@@ -1259,7 +1261,9 @@
     \global\let\@doendpe\orig@doendpe}}
 
 \renewenvironment{verse}
-{\par\list{}{\listparindent\z@%
+{\noindent\par\list{}{%
+    \listparindent\z@%
+    \parindent\z@
     \itemindent    \listparindent
     \leftmargin 5mm
     \rightmargin   \z@
@@ -1274,11 +1278,31 @@
    \@endpetrue
    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
    \global\let\@doendpe\orig@doendpe}}
+\newenvironment{versecentered}
+{\noindent\par\list{}{%
+    \listparindent\z@%
+    \parindent\z@
+    \itemindent    \listparindent
+    \leftmargin \z@
+    \rightmargin   \z@
+    \rightskip \z@
+    \nsfwider
+    \topsep6.4bp
+    \parsep        .5\baselineskip}%
+    \centering
+\item\noindent\ignorespaces}
+{\endlist
+ \par
+ \gdef\@doendpe{%
+   \@endpetrue
+   \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+   \global\let\@doendpe\orig@doendpe}}
 
 \newenvironment{motto}
-               {\par\list{}{\rightmargin\leftmargin
+               {\noindent\par\list{}{\rightmargin\leftmargin
                    \parsep6.4bp
                    \partopsep\z@
+                   \parindent\z@
                    \nsfwider}%
                 \item\relax}
                {\endlist\par\gdef\@doendpe{%
