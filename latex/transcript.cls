@@ -1240,6 +1240,7 @@
     \parindent\z@
     \itemindent    \listparindent
     \leftmargin \parindent
+    \leftmargin 5mm
     \rightmargin   \z@
     \nsfwider
     \topsep6.4bp
