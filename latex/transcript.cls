@@ -1235,7 +1235,7 @@
   \aftergroup\@afterbox}
 
 \renewenvironment{quotation}
-{\noindent\par\list{}{%
+{\noindent\list{}{%
     \listparindent\z@%
     \parindent\z@
     \itemindent    \listparindent
@@ -1246,7 +1246,7 @@
     \parsep        \z@}%
 \item\noindent\ignorespaces}
 {\endlist
- \noindent\par
+ \noindent
  \gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
