@@ -1234,21 +1234,41 @@
   \spewnotes
   \aftergroup\@afterbox}
 
+% 2020-12-17, mk
+% https://redmine.le-tex.de/issues/9488
+% commented and replaced with old quotation environment
+% in order to fix issues with wrong indents and margins
+%
+%\renewenvironment{quotation}
+%{\noindent\list{}{%
+%    \listparindent\z@%
+%    \parindent\z@
+%    \itemindent    \listparindent
+%    \leftmargin \parindent
+%    \leftmargin 5mm
+%    \rightmargin   \z@
+%    \nsfwider
+%    \topsep6.4bp
+%    \parsep        \z@}%
+%\item\noindent\ignorespaces}
+%{\endlist
+% \noindent
+% \gdef\@doendpe{%
+%    \@endpetrue
+%    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+%    \global\let\@doendpe\orig@doendpe}}
+
 \renewenvironment{quotation}
-{\noindent\list{}{%
-    \listparindent\z@%
-    \parindent\z@
+{\list{}{\listparindent\z@%
     \itemindent    \listparindent
     \leftmargin \parindent
-    \leftmargin 5mm
     \rightmargin   \z@
     \nsfwider
     \topsep6.4bp
     \parsep        \z@}%
 \item\noindent\ignorespaces}
 {\endlist
- \noindent
- \gdef\@doendpe{%
+  \gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
