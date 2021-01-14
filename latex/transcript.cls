@@ -716,12 +716,14 @@
 
 % \newif\ifusenumberline \usenumberlinetrue
 
+\renewcommand\@tocrmarg{5em}
 \def\@dottedtocline#1#2#3#4#5{%
   \ifnum #1>\c@tocdepth \else
     \vskip \z@
-    {\leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
+    {\leftskip #2\relax \rightskip \@tocrmarg\@plus1fil \parfillskip -\rightskip
      \parindent #2\relax\@afterindenttrue
      \interlinepenalty\@M
+     \hyphenpenalty=\@M
      \leavevmode
       \ifx\usenumberline\relax
         \@tempdima #3\relax
@@ -1238,6 +1240,9 @@
 % https://redmine.le-tex.de/issues/9488
 % commented and replaced with old quotation environment
 % in order to fix issues with wrong indents and margins
+%%
+%% Nachtrag Lupino 2021-01-14: die eigentliche Ticket-URL ist:
+%% https://redmine.le-tex.de/issues/9465
 %
 %\renewenvironment{quotation}
 %{\noindent\list{}{%
