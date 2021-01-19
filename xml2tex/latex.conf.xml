@@ -187,7 +187,11 @@
       else if(//dbk:section[count(ancestor::dbk:section) gt 1][1]/dbk:info/dbk:title[matches(@role, '^tsheadingenumerated\d$')]) then  '3'
       else                                                                                                                    '0'
       , '}&#xa;')"/>-->
-    
+    <xsl:if test="//dbk:div[@role eq 'hub:index']">
+      <xsl:value-of select="concat('\renewindex{default}{idx}{ind}{',
+                                   //dbk:div[@role eq 'hub:index']/dbk:para,
+                                   '}')"/>
+    </xsl:if>
   </preamble>
   
   <front>
