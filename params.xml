@@ -8,10 +8,11 @@
   <c:param name="cascade-paths-regex" value="^({$publisher-regex})_({$series-regex})_({$type-regex})_({$work-regex})(_.*)?$"/>
   <c:param name="unzip-dirname" value="archive"/>
   <c:param name="cascade-path" value="."/>
-  <c:param name="exclude-filter" value="'(css|epub|evolve-hub|hub2tei|jats2html|js|latex|metadata|tei2html|xml2tex|schematron|styles|xpl|xsl)'"/><!-- expects a regex -->
+  <c:param name="exclude-filter" value="'(css|epub|evolve-hub|hub2tei|jats2html|js|latex|metadata|tei2html|idml2xml|xml2tex|schematron|styles|xpl|xsl)'"/><!-- expects a regex -->
   <c:param name="content-base-uri" value="http://transpect.io/content-repo/"/>
   <c:param name="paths-xsl-uri" value="http://this.transpect.io/a9s/ts/xsl/paths.xsl"/>
   <c:param name="evolve-hub-driver-docx-path" value="evolve-hub/driver-docx"/>
+  <c:param name="evolve-hub-driver-idml-path" value="evolve-hub/driver-idml"/>
   <c:param name="clade-role" value="publisher"/>
   
 </c:param-set>
