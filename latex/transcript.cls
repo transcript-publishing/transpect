@@ -410,6 +410,7 @@
     \markboth{}{}%
     {\interlinepenalty \@M
      \parindent\z@
+     \raggedright
      \null\vskip\headingsep%
      \sffamily\sbseries\HUGE
      \def\numberline##1{##1}%
@@ -421,6 +422,7 @@
     {\interlinepenalty \@M
      \parindent\z@
      \null\vskip\headingsep%
+     \raggedright
      \normalfont
      \sffamily\sbseries\HUGE
      #1\par}%
@@ -720,7 +722,9 @@
 \def\@dottedtocline#1#2#3#4#5{%
   \ifnum #1>\c@tocdepth \else
     \vskip \z@
-    {\leftskip #2\relax \rightskip \@tocrmarg\@plus1fil \parfillskip -\rightskip
+    {\leftskip #2\relax
+     \rightskip \@tocrmarg\@plus1fil
+     \parfillskip -\rightskip
      \parindent #2\relax\@afterindenttrue
      \interlinepenalty\@M
      \hyphenpenalty=\@M
@@ -831,7 +835,9 @@
     \addvspace{2.25em}%
     \setlength\@tempdima{3em}%
     \begingroup
-    \parindent \z@ \rightskip \@pnumwidth
+    \parindent \z@
+    \raggedright
+    \rightskip \@pnumwidth \@plus 1fil
     \parfillskip -\@pnumwidth
     {\leavevmode
       \raggedright
