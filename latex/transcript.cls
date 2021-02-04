@@ -332,7 +332,7 @@
 %% Abstand von part und chapter nach oben
 
 \parindent5mm
-
+{\footnotesize\global\setlength\footnotesep{\ht\strutbox}}%
 \setlength{\skip\footins}{12.8bp \@plus 25.6bp}
 \flushbottom
 %\raggedbottom
