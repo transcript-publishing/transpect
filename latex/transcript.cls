@@ -1,7 +1,5 @@
 %%
-%% stylesheet for the Apparatus Journal.
-%%
-%% Maintainer: lupino
+%% stylesheet for Transcript.
 %%
 %% lualatex  -  texlive2019
 %%
@@ -71,183 +69,10 @@
 % Fonts  %
 %%%%%%%%%%
 
-\usepackage{fontspec}
-\setmainfont{Alegreya-Regular.ttf}[%
-  Path=fonts/Alegreya/Alegreya/,%
-  BoldFont = Alegreya-Bold.ttf,%
-  FontFace = {eb}{n}{Alegreya-ExtraBold.ttf},
-  FontFace = {eb}{it}{Alegreya-ExtraBoldItalic.ttf},
-  FontFace = {sb}{n}{Alegreya-Medium.ttf},
-  FontFace = {sb}{it}{Alegreya-MediumItalic.ttf},
-  ItalicFont = Alegreya-Italic.ttf,%
-  WordSpace = 1.25,
-  BoldItalicFont = Alegreya-BoldItalic.ttf]
+\RequirePackage{transcript-fonts}
 
-\setsansfont{BarlowCondensed-Regular.ttf}[%
-  Path=fonts/Barlow/Barlow Condensed/,%
-  BoldFont = BarlowCondensed-Bold.ttf,%
-  FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
-  FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},
-  FontFace = {lt}{n}{BarlowCondensed-Light.ttf},
-  FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},
-  FontFace = {md}{n}{BarlowCondensed-Medium.ttf},
-  FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},
-  FontFace = {eb}{n}{BarlowCondensed-Black.ttf},
-  FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},
-  FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},
-  FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},
-  ItalicFont = BarlowCondensed-Italic.ttf,%
-  BoldItalicFont = BarlowCondensed-BoldItalic.ttf,
-  WordSpace=1.1,
-  LetterSpace=1.1,
-  FakeStretch=1.02,
-  Color=353132]
-\DeclareRobustCommand{\ltseries}{\fontseries{lt}\selectfont}
-\DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
-\DeclareRobustCommand{\sbseries}{\fontseries{sb}\selectfont}
-\DeclareRobustCommand{\mdseries}{\fontseries{md}\selectfont}
-\DeclareRobustCommand{\upseries}{\fontseries{up}\selectfont}
-
-\DeclareRobustCommand{\wideText}{\addfontfeature{LetterSpace=2.0}}
-
-\newfontfamily\sfwide{BarlowCondensed-Regular.ttf}[%
-  Path=fonts/Barlow/Barlow Condensed/,%
-  BoldFont = BarlowCondensed-Bold.ttf,%
-  FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
-  FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},
-  FontFace = {lt}{n}{BarlowCondensed-Light.ttf},
-  FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},
-  FontFace = {md}{n}{BarlowCondensed-Medium.ttf},
-  FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},
-  FontFace = {eb}{n}{BarlowCondensed-Black.ttf},
-  FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},
-  FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},
-  FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},
-  ItalicFont = BarlowCondensed-Italic.ttf,%
-  BoldItalicFont = BarlowCondensed-BoldItalic.ttf,
-  WordSpace=2.0,
-  LetterSpace=2.0,
-  FakeStretch=1.02,
-  Color=353132]
-
-\newfontfamily\sfwider{BarlowCondensed-Regular.ttf}[%
-  Path=fonts/Barlow/Barlow Condensed/,%
-  BoldFont = BarlowCondensed-Bold.ttf,%
-  FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
-  FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},
-  FontFace = {lt}{n}{BarlowCondensed-Light.ttf},
-  FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},
-  FontFace = {md}{n}{BarlowCondensed-Medium.ttf},
-  FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},
-  FontFace = {eb}{n}{BarlowCondensed-Black.ttf},
-  FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},
-  FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},
-  FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},
-  ItalicFont = BarlowCondensed-Italic.ttf,%
-  BoldItalicFont = BarlowCondensed-BoldItalic.ttf,
-  WordSpace=2.0,
-  LetterSpace=5.0,
-  FakeStretch=1.02,
-  Color=353132]
-
-\newfontfamily\sfchap{BarlowCondensed-Regular.ttf}[%
-  Path=fonts/Barlow/Barlow Condensed/,%
-  BoldFont = BarlowCondensed-Bold.ttf,%
-  FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
-  FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},
-  FontFace = {lt}{n}{BarlowCondensed-Light.ttf},
-  FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},
-  FontFace = {md}{n}{BarlowCondensed-Medium.ttf},
-  FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},
-  FontFace = {eb}{n}{BarlowCondensed-Black.ttf},
-  FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},
-  FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},
-  FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},
-  ItalicFont = BarlowCondensed-Italic.ttf,%
-  BoldItalicFont = BarlowCondensed-BoldItalic.ttf,
-  WordSpace=1.2,
-  LetterSpace=2.0,
-  FakeStretch=1.02,
-  Color=353132]
-
-
-\emergencystretch=2em
-
-\newfontfamily\nsffamily{AlegreyaSans-Regular.ttf}[%
-  Path=fonts/Alegreya/Alegreya Sans/,%
-  BoldFont = AlegreyaSans-Bold.ttf,%
-  FontFace = {eb}{n}{AlegreyaSans-ExtraBold.ttf},
-  FontFace = {eb}{it}{AlegreyaSans-ExtraBoldItalic.ttf},
-  FontFace = {md}{n}{AlegreyaSans-Regular.ttf},
-  FontFace = {md}{it}{AlegreyaSans-Italic.ttf},
-  FontFace = {sb}{n}{AlegreyaSans-Medium.ttf},
-  FontFace = {sb}{n}{AlegreyaSans-MediumItalic.ttf},
-  ItalicFont = AlegreyaSans-Italic.ttf,%
-  BoldItalicFont = AlegreyaSans-BoldItalic.ttf]
-
-\newfontfamily\nsfwider{AlegreyaSans-Regular.ttf}[%
-  BoldFont = AlegreyaSans-Bold.ttf,%
-  FontFace = {eb}{n}{AlegreyaSans-ExtraBold.ttf},
-  FontFace = {eb}{it}{AlegreyaSans-ExtraBoldItalic.ttf},
-  FontFace = {md}{n}{AlegreyaSans-Regular.ttf},
-  FontFace = {md}{it}{AlegreyaSans-Italic.ttf},
-  FontFace = {sb}{n}{AlegreyaSans-Medium.ttf},
-  FontFace = {sb}{it}{AlegreyaSans-MediumItalic.ttf},
-  ItalicFont = AlegreyaSans-Italic.ttf,%
-  BoldItalicFont = AlegreyaSans-BoldItalic.ttf,
-  WordSpace=1.2,
-  Path=fonts/Alegreya/Alegreya Sans/,
-  LetterSpace=1.2]
-
-\newfontfamily\fallbackfont{NotoSans-Regular.ttf}%
-[BoldFont = NotoSans-Bold.ttf,%
- ItalicFont = NotoSans-Italic.ttf,%
- BoldItalicFont = NotoSans-BoldItalic.ttf,%
- Path = fonts/NotoSans/,%
- WordSpace = 1.25]
-\DeclareTextFontCommand\textfallback{\fallbackfont}
-
-\ifx\use@script@armenian\relax
-  \message{^^JLoaded Script: Armenian^^J}
-  \babelprovide{armenian}%
-  \newfontfamily\fallbackfont@armenian{NotoSansArmenian-Regular.ttf}%
-    [BoldFont = NotoSansArmenian-Bold.ttf,%
-    Path = fonts/NotoSans/Armenian/,%
-    WordSpace = 1.25]
-  \DeclareTextFontCommand\armenian{\selectlanguage{armenian}\fallbackfont@armenian}
-\fi
-
-\ifx\use@script@chinese\relax
-  \babelprovide{chinese}%
-  \message{^^JLoaded Script: Chinese^^J}%
-  \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Light.otf}%
-    [BoldFont = NotoSansCJKsc-Regular.otf,%
-    Path = fonts/NotoSans/Chinese/,%
-    WordSpace = 1.25]
-  \DeclareTextFontCommand\chin{\selectlanguage{chinese}\fallbackfont@chinese}
-\fi
-
-%\ifx\use@script@chinese\relax
-%  \babelprovide{chinese}%
-%  \message{^^JLoaded Script: Chinese^^J}
-%  \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Regular.otf}%
-%    [BoldFont = NotoSansCJKsc-Bold.otf,%
-%    Path = fonts/NotoSans/Chinese/,%
-%    WordSpace = 1.25]
-%  \DeclareTextFontCommand\chin{\selectlanguage{chinese}\fallbackfont@chinese}
-%\fi
-
-\ifx\use@script@arabic\relax
-  \babelprovide{arabic}%
-  \message{^^JLoaded Script: Arabic^^J}
-  \newfontfamily\fallbackfont@arabic{NotoNaskhArabic-Regular.ttf}%
-    [BoldFont = NotoNaskhArabic-Bold.ttf,%
-    Path = fonts/NotoSans/Arabic/,%
-    WordSpace = 1.25]
-  \DeclareTextFontCommand\arab{\selectlanguage{arabic}\fallbackfont@arabic}
-\fi
-
-
+%% Globale, schrift- und fontunabhängige Sachen sollten in der .cls
+%% bleiben damit sie bei jedem Font gleichermaßen verfügbar sind:
 \usepackage{newunicodechar}
 %\newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
 \newunicodechar{‐}{\penalty\@M-\hskip\z@skip}% 8617
@@ -260,6 +85,10 @@
 \newunicodechar{，}{,\enskip\ignorespaces}
 
 \DeclareRobustCommand\unichar[1]{\textfallback{#1}}
+
+
+%%%% TO BE MODULARIZED %%%%%
+
 
 %%%%%%%%%%%%%%
 % Font sizes %
@@ -309,6 +138,8 @@
 %%%%%%%%%%%%%%%
 % page layout %
 %%%%%%%%%%%%%%%
+
+\emergencystretch=2em
 
 \voffset-1in\relax
 \hoffset-1in\relax
