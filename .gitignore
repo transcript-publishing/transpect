@@ -1,0 +1,14 @@
+# Ignore emacs and LateX's temporary and auxiliary files.
+
+*.aux
+*.*~
+*.dvi
+*.log
+*.toc
+*.idx
+*.ind
+*.ilg
+*.out
+*.ent
+*.lof
+*.lot
