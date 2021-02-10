@@ -6,9 +6,6 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesClass{transcript}
     [2020/11/19 0.101 Transcript Books]
-\frenchspacing
-\clubpenalty10000
-\widowpenalty10000
 \RequirePackage{kvoptions-patch}%%%NEW
 \RequirePackage{xkeyval}
 \PassOptionsToPackage{cmyk}{xcolor}
@@ -123,17 +120,35 @@
 \renewcommand\Huge{\@setfontsize\Huge{15bp}{18.3bp}}% chapter
 \newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{25.6bp}}% part
 
-\parskip\z@
 
-%%%%%%%%%%%%%%%
-% page layout %
-%%%%%%%%%%%%%%%
-
+%% MODUL: die folgenden Parameter sind vmtl global und sollten in der cls verbleiben:
+%% MODUL: Spielraum für die Verteilung von Weißraum in einer Zeile
 \emergencystretch=2em
-
+%% MODUL: nach Satzzeichen normale Leerzeichen, keine vergrößerten
+\frenchspacing
+%% MODUL: Unterdrückt Schusterjungen und Hurenkinder
+\clubpenalty10000
+\widowpenalty10000
+%% MODUL: Kein vertikaler Weißraum zwischen Absätzen
+\parskip\z@
+%% MODUL: Kein vertikaler Weißraum zwischen Absätzen in Listen
+\parsep\z@
+%% MODUL: Bezugspunkt für Maße auf linke obere Ecke des Blattes festsetzen:
 \voffset-1in\relax
 \hoffset-1in\relax
+%% MODUL: Umbruchbefehl für Doppelseitenumbruch mit Vakatseite, falls erforderlich:
+\gdef\cleardoublepage{%
+  \clearpage
+  \ifodd\c@page\relax\else
+    \ifx\lay f\else
+      \hbox{}\thispagestyle{empty}\newpage
+      \if@twocolumn\hbox{}\thispagestyle{empty}\newpage\fi
+    \fi
+  \fi}
 
+%%%%%%%%%%%%%%%
+% Satzspiegel %
+%%%%%%%%%%%%%%%
 \LayVar{\paperwidth=155mm\relax}{\paperwidth=148mm\relax}{\paperwidth=148mm\relax}{\paperwidth=148mm\relax}
 \LayVar{\paperheight=240mm\relax}{\paperheight=225mm\relax}{\paperheight=225mm\relax}{\paperheight=225mm\relax}
 
@@ -147,22 +162,20 @@
 
 \LayVar{\textwidth=115mm\relax}{\textwidth=94mm\relax}{\textwidth=102mm\relax}{\textwidth=109mm\relax}
 \LayVar{\textheight=\dimexpr44\baselineskip+\topskip\relax}{\textheight=\dimexpr34\baselineskip+\topskip\relax}{\textheight=\dimexpr37\baselineskip+\topskip\relax}{\textheight=\dimexpr40\baselineskip+\topskip\relax}
+
+%% Abstand von part und chapter nach oben
 \newlength\headingsep
 \LayVar{\headingsep=35mm\relax}{\headingsep=16mm\relax}{\headingsep=16mm\relax}{\headingsep=16mm\relax}
-\parsep\z@
-%% Abstand von part und chapter nach oben
 
 \parindent5mm
 {\footnotesize\global\setlength\footnotesep{\ht\strutbox}}%
 \setlength{\skip\footins}{12.8bp \@plus 25.6bp}
 \flushbottom
-%\raggedbottom
 \vfuzz=\z@
 
-%%%%%%%%%%%%%%%
-% Page Styles %
-%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Kopf- und Fusszeilen %
+%%%%%%%%%%%%%%%%%%%%%%%%
 \def\ps@empty{%
   \let\@oddhead\@empty
   \let\@oddfoot\@empty
@@ -194,15 +207,6 @@
   }%
 }
 \pagestyle{headings}
-
-\gdef\cleardoublepage{%
-  \clearpage
-  \ifodd\c@page\relax\else
-    \ifx\lay f\else
-      \hbox{}\thispagestyle{empty}\newpage
-      \if@twocolumn\hbox{}\thispagestyle{empty}\newpage\fi
-    \fi
-  \fi}
 
 \usepackage{color}
 \usepackage{graphicx}
@@ -366,13 +370,6 @@
   \global\let\@chapterquote\@undefined
 }}
 
-% \def\@schapter[#1]#2{\if@twocolumn
-%                    \@topnewpage[\@makeschapterhead{#1}]%
-%                  \else
-%                    \@makeschapterhead{#1}%
-%                    \@afterheading
-%                  \fi}
-
 \def\@makeschapterhead#1{%
   % \@makechapterhead{#1}%
   \null\vskip\headingsep\vskip-.45mm\relax%
@@ -523,9 +520,8 @@
 
 
 %%%%%%%
-% TOC %
+% IHV %
 %%%%%%%
-% \RequirePackage{bookmark}
 
 \def\contentsname{Inhalt}%
 \renewcommand\@dotsep{.5}
@@ -536,8 +532,6 @@
   \@starttoc{toc}%
   \clearpage\pagestyle{headings}%
 }
-
-% \newif\ifusenumberline \usenumberlinetrue
 
 \renewcommand\@tocrmarg{5em}
 \def\@dottedtocline#1#2#3#4#5{%
@@ -679,45 +673,15 @@
 \renewcommand*\l@subsubsection{\@dottedtocline{3}{4.5em}{3.0em}}
 \renewcommand*\l@paragraph{\@dottedtocline{4}{7.5em}{3.5em}}
 \renewcommand*\l@subparagraph{\@dottedtocline{5}{11.0em}{4.0em}}
-% \ifx\lay b\relax
-%   \ifcollection\else
-%     \RequirePackage{titletoc}%
-%     \setcounter{tocdepth}{1}%
-%     \def\mytocrule{\nobreak\lower1\p@\hbox{\rule{1\p@}{\ht\strutbox}}}%
-%     \titlecontents{part}[\z@]%
-%       {\addvspace{1\baselineskip}%
-%         \sfwide\sbseries\huge}%
-%       {}%
-%       {}%
-%       {\enskip\mytocrule\enskip\thecontentspage}%
-%     \titlecontents{chapter}[0em]%
-%       {\addvspace{.5\baselineskip}\sbseries\sffamily\large\ifx\thecontentslabel\@empty\else\hangindent1em\hangafter1\fi\@tempdima.9em}%
-%       {\hbox to 1em{\thecontentslabel\hss}}%
-%       {}%
-%       {\nobreak\enskip\mytocrule\enskip\nobreak{\normalfont\sffamily\thecontentspage}}%
-%     \titlecontents*{section}[1em]%
-%       {\sffamily\filright}%
-%       {\ifx\thecontentslabel\@empty\else\thecontentslabel\enskip\fi}%
-%       {}%
-%       {\enskip\nobreak\thecontentspage}[\enskip\mytocrule\enskip][]%
-%   \fi
-% \fi
 
-%%%%%%%%%%%%%
-% Footnotes %
-%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+% Fuss-/Endnoten %
+%%%%%%%%%%%%%%%%%%
 \usepackage{footnote}
-%\@removefromreset{footnote}{chapter}
 \def\footnoterule{\kern-6.4bp\hrule \@height .4bp \@width 33mm \kern 6bp} % the \hrule is .4pt high
 
-
-% \def\@makefnmark{\smash{\textsuperscript{\@thefnmark}}}
 \def\@makefnmark{\hbox{\@textsuperscript{\selectfont\@thefnmark}}}%(giovanni, 2019-07-30)
 \newlength\fnumwidth \fnumwidth2em
-
-
-% Define the \urlx command which works like \url, but with line brakes
-% \def\fnurlhref#1#2{\old@href{#1}{#2}}
 
 \renewcommand\@makefntext[1]{%
     \parindent\z@%
@@ -818,8 +782,6 @@
 \newdimen\tr@nscriptHt
 \newdimen\tr@nscriptSep
 
-
-%% BEGIN: sameheight
 \newbox\@includesubgraphicsbox
 \newcount\c@includesubgraphics \c@includesubgraphics\z@
 \newdimen\includesubgraphics@maxheight
@@ -1063,33 +1025,6 @@
   \spewnotes
   \aftergroup\@afterbox}
 
-% 2020-12-17, mk
-% https://redmine.le-tex.de/issues/9488
-% commented and replaced with old quotation environment
-% in order to fix issues with wrong indents and margins
-%%
-%% Nachtrag Lupino 2021-01-14: die eigentliche Ticket-URL ist:
-%% https://redmine.le-tex.de/issues/9465
-%
-%\renewenvironment{quotation}
-%{\noindent\list{}{%
-%    \listparindent\z@%
-%    \parindent\z@
-%    \itemindent    \listparindent
-%    \leftmargin \parindent
-%    \leftmargin 5mm
-%    \rightmargin   \z@
-%    \nsfwider
-%    \topsep6.4bp
-%    \parsep        \z@}%
-%\item\noindent\ignorespaces}
-%{\endlist
-% \noindent
-% \gdef\@doendpe{%
-%    \@endpetrue
-%    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
-%    \global\let\@doendpe\orig@doendpe}}
-
 \renewenvironment{quotation}
 {\list{}{\listparindent\z@%
     \itemindent    \listparindent
@@ -1278,7 +1213,9 @@
 
 \def\source#1{\leavevmode\par#1}
 
-%% Titelei
+%%%%%%%%%%%
+% Titelei %
+%%%%%%%%%%%
 
 \def\@tempa{%
   \def\lectoratename{Lectorate: }%
@@ -1495,7 +1432,9 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 \usepackage{soul}
 
 
-%% Register
+%%%%%%%%%%%%
+% Register %
+%%%%%%%%%%%%
 \usepackage{index}
 \makeindex
 %% aus index.sty
@@ -1530,14 +1469,10 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
         \fi
     }
 
+
+
 \let\oldhref\href
 \def\@nohyphen#1\@nil#2#3\relax{\oldhref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#3\else\@nohyphen#1\@nil#3\relax\fi}
 \protected\def\href#1#2{\@nohyphen#1\@nil#2\relax\relax}
 \let\fn@href\href
-% \bgroup
-% \let↩\relax
-% \gdef\fn@href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
-% \gdef\href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
-% \gdef\@fn@href #1\@nil #2↩#3↩\@nil{\oldhref{#1}{#2}\hskip\z@skip\if!#3!\else\@fn@href #1\@nil #3↩\@nil\fi}
-% \egroup
 \endinput
