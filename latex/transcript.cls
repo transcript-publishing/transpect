@@ -38,7 +38,7 @@
 
 \let\usescript\relax
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
-%% Auslagerung der Schriftzuladung in das transcrpt-fonts Paket:
+%% MODUL: Auslagerung der Schriftzuladung in das transcrpt-fonts Paket:
 \DeclareOption*{\PassOptionsToClass{usescript}{transcript-fonts}}
 \ProcessOptionsX
 
@@ -57,11 +57,12 @@
 %%%%%%%%%%
 % Fonts  %
 %%%%%%%%%%
-
+%% MODUL: ausgelagert
 \RequirePackage{transcript-fonts}
 
-%% Globale, schrift- und fontunabhängige Sachen sollten in der .cls
-%% bleiben damit sie bei jedem Font gleichermaßen verfügbar sind:
+%% MODUL: Globale, schrift- und fontunabhängige Sachen sollten in der
+%% transcript.cls bleiben damit sie bei jedem Font gleichermaßen
+%% verfügbar sind:
 \usepackage{newunicodechar}
 %\newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
 \newunicodechar{‐}{\penalty\@M-\hskip\z@skip}% 8617
@@ -76,11 +77,11 @@
 \DeclareRobustCommand\unichar[1]{\textfallback{#1}}
 
 
-%%%% TO BE MODULARIZED %%%%%
+%%%% MODUL: to be modularized... %%%%%
 
 
 %%%%%%%%%%%%%%
-% Font sizes %
+% font sizes %
 %%%%%%%%%%%%%%
 
 \renewcommand\normalsize{%
