@@ -9,6 +9,21 @@
 \NeedsTeXFormat{LaTeX2e}[2019/10/01]
 \ProvidesPackage{transcript-fonts}[2020/27/08 Transcript]\relax
 
+\define@key{transcript.cls}{usescript}[none]{\def\usescript{#1}}
+\ProcessOptionsX
+
+\def\parse@script#1,#2,\relax{%
+  \expandafter\let\csname use@script@#1\endcsname\relax%
+  \def\@argii{#2}%
+  \let\next\relax
+  \ifx\@argii\@empty\else
+    \def\next{\parse@script#2,,\relax}%
+  \fi\next}
+
+\ifx\usescript\relax\else
+  \expandafter\parse@script\usescript,,\relax
+\fi
+
 %% Material aus transcript.cls %%
 \usepackage{fontspec}
 \setmainfont{Alegreya-Regular.ttf}[%

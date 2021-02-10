@@ -37,21 +37,10 @@
   \fi}%
 
 \let\usescript\relax
-\define@key{transcript.cls}{usescript}[none]{\def\usescript{#1}}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
+%% Auslagerung der Schriftzuladung in das transcrpt-fonts Paket:
+\DeclareOption*{\PassOptionsToClass{usescript}{transcript-fonts}}
 \ProcessOptionsX
-
-\def\parse@script#1,#2,\relax{%
-  \expandafter\let\csname use@script@#1\endcsname\relax%
-  \def\@argii{#2}%
-  \let\next\relax
-  \ifx\@argii\@empty\else
-    \def\next{\parse@script#2,,\relax}%
-  \fi\next}
-
-\ifx\usescript\relax\else
-  \expandafter\parse@script\usescript,,\relax
-\fi
 
 \message{^^JTranscript Class Layout Variant: \LayVar{e}{a}{b}{c}^^J}
 
