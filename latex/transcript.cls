@@ -71,6 +71,7 @@
 % Fonts  %
 %%%%%%%%%%
 
+\usepackage{amsfonts}
 \usepackage{fontspec}
 \setmainfont{Alegreya-Regular.ttf}[%
   Path=fonts/Alegreya/Alegreya/,%
