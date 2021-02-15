@@ -244,6 +244,18 @@
     <xsl:apply-templates select="node()" mode="#current"/>
   </template>
 
+  <xsl:template name="option-for-headlines">
+    <xsl:if test=".//dbk:footnote
+                 |parent::*/dbk:subtitle
+                 |parent::*/dbk:info/dbk:subtitle">
+      <xsl:text>[</xsl:text>
+      <xsl:apply-templates select="node()" mode="#current">
+        <xsl:with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+      </xsl:apply-templates>
+      <xsl:text>]</xsl:text>
+    </xsl:if>
+  </xsl:template>
+
   <template context="dbk:title[matches(@role, $genereral-heading-style)]/dbk:phrase[@role eq 'hub:identifier']"/>
 
   <template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?1$')]">
