@@ -189,11 +189,10 @@
       else if(//dbk:section[count(ancestor::dbk:section) gt 1][1]/dbk:info/dbk:title[matches(@role, '^tsheadingenumerated\d$')]) then  '3'
       else                                                                                                                    '0'
       , '}&#xa;')"/>-->
-    <xsl:if test="//dbk:div[@role eq 'hub:index']">
-      <xsl:value-of select="concat('\renewindex{default}{idx}{ind}{',
-                                   //dbk:div[@role eq 'hub:index']/dbk:para,
-                                   '}')"/>
-    </xsl:if>
+    <xsl:for-each select="//dbk:index">
+      <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
+      <xsl:value-of select="concat('\newindex{', $index-index, '}{', $index-index, '_idx}{', $index-index, '_ind}{', dbk:title/node(), '}&#xa;')"/>
+    </xsl:for-each>
   </preamble>
   
   <front>
