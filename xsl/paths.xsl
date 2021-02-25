@@ -10,24 +10,9 @@
   
   <xsl:strip-space elements="*"/>
 
-  <!-- see a9s/common/params.xml -->
+  <!-- cascade paths regex is taken from a9s/common/params.xml -->
   
-  <xsl:param name="work-regex" select="doc('../params.xml')/c:param-set/c:param[@name eq 'work-regex']/@value" as="xs:string"/>
-  <xsl:param name="series-regex" select="doc('../params.xml')/c:param-set/c:param[@name eq 'series-regex']/@value" as="xs:string"/>
-  <xsl:param name="type-regex" select="doc('../params.xml')/c:param-set/c:param[@name eq 'type-regex']/@value" as="xs:string"/>
-  <xsl:param name="publisher-regex" select="doc('../params.xml')/c:param-set/c:param[@name eq 'publisher-regex']/@value" as="xs:string"/>
-  <xsl:param name="cascade-paths-regex" as="xs:string"
-	     select="concat(
-		            '^(',
-			    $publisher-regex,
-			    ')_(',
-			    $series-regex,
-			    ')_(',
-			    $type-regex,
-			    ')_(',
-			    $work-regex,
-			    ')(_.*)?$'
-		            )"/>  
+  <xsl:param name="cascade-paths-regex" as="xs:string"/>
   
   <xsl:function name="tr:parse-file-name" as="attribute(*)*">
     <xsl:param name="filename" as="xs:string?"/>
