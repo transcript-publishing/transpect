@@ -5,7 +5,7 @@
   <c:param name="type-regex" value="[a-z]{4}"/>
   <c:param name="series-regex" value="[a-z]{3}"/>
   <c:param name="publisher-regex" value="[a-z]{2}"/>
-  <c:param name="cascade-paths-regex" value="^{$publisher-regex}_{$series-regex}_{$type-regex}_{$work-regex}_.*?$"/>
+  <c:param name="cascade-paths-regex" value="^{$publisher-regex}_{$series-regex}_{$type-regex}_{$work-regex}(_.*)?$"/>
   <c:param name="unzip-dirname" value="archive"/>
   <c:param name="cascade-path" value="."/>
   <c:param name="exclude-filter" value="\.svn|\.git|css|epub|evolve-hub|fonts|htmltemplates|hub2tei|jats2html|js|latex|logos|metadata|schema|tei2html|idml2xml|xml2tex|schematron|styles|xpl|xsl"/>
