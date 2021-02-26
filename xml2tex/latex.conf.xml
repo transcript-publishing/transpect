@@ -515,5 +515,14 @@
       <text select="node() except dbk:personname[@role eq 'speaker']"/>
     </rule>
   </template>
+  
+  <!-- https://redmine.le-tex.de/issues/9852 -->
 
+  <template context="dbk:itemizedlist[@mark]/dbk:listitem">
+    <rule name="item" type="cmd">
+      <option select="parent::*/@mark"/>
+      <text select="' '"/>
+      <text/>
+    </rule>
+  </template>
 </set>
