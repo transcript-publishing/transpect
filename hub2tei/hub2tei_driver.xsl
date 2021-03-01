@@ -18,9 +18,9 @@
   
   <xsl:output indent="yes"/>
   
-  <xsl:import href="http://transpect.io/hub2tei/xsl/hub2tei.xsl"/>
   <xsl:import href="http://this.transpect.io/a9s/common/hub2tei/hub2tei_driver.xsl"/>
-  <xsl:import href="http://transpect.io/xslt-util/cals2htmltable/xsl/cals2htmltables.xsl"/>
+
+  <xsl:param name="repo-href-canonical"/>
   
   <xsl:template match="programlisting" mode="hub2tei:dbk2tei">
     <p rend="{@role}">
@@ -34,4 +34,31 @@
     </hi>
   </xsl:template>
   
+  <xsl:function name="hub2tei:image-path"  as="xs:string">
+    <xsl:param name="path" as="xs:string"/>
+    <xsl:param name="root" as="document-node()?"/>
+    <!--<xsl:variable name="source-type" as="xs:string?" 
+      select="$root/*[self::book or self::hub]/info/keywordset/keyword[@role eq 'source-type']"/>-->
+    <xsl:choose>
+      <xsl:when test="matches($path, '^https?:')">
+        <xsl:sequence select="$path"/>
+      </xsl:when>
+      <xsl:when test="matches($path, '(/(idml|word)/(images|media)/|/out/images/)')">
+        <xsl:sequence select="$path"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="image-content-repo-path" 
+          select="replace($repo-href-canonical, '^(.+/\d{5}/).+$', '$1images/')" as="xs:string"/>
+        <xsl:variable name="image-basename" 
+          select="replace($path, '^.+/', '')" as="xs:string"/>
+        <xsl:variable name="image-path" 
+          select="string-join(($image-content-repo-path, $image-basename), '')" as="xs:string"/>
+        <xsl:sequence select="if (not(matches($image-path, '_png\.'))) 
+             then replace($image-path, '\.(tiff?|eps|ai|pdf)$', '.jpg', 'i') 
+             else replace($image-path, '_png\.(tiff?|eps|ai|pdf)$', '.png', 'i')"/>
+      </xsl:otherwise>
+    </xsl:choose>
+
+  </xsl:function>
+
 </xsl:stylesheet>
