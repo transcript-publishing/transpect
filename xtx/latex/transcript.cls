@@ -265,9 +265,8 @@
 %%%%%%%%%%%%%%
 % Font sizes %
 %%%%%%%%%%%%%%
-
+%% MODUL: ausgelagert
 \RequirePackage{transcript-font-sizes}
-%% Modularized
 
 %%%%%%%%%%%%%%%
 % page layout %
