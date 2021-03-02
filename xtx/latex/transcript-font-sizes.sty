@@ -1,0 +1,40 @@
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize{9.3bp}{13.0bp}%
+   \abovedisplayskip 9\p@ \@plus2\p@ \@minus5\p@
+   \abovedisplayshortskip \z@ \@plus3\p@
+   \belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listI}
+\normalsize
+\renewcommand\small{%
+   \@setfontsize\small{9bp}{12}% head
+   \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus2\p@
+   \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 6.4bp
+               \parsep 3.2bp
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\renewcommand\footnotesize{% footnotes
+   \@setfontsize\footnotesize{8bp}{12.5bp}%
+   \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
+   \abovedisplayshortskip \z@ \@plus\p@
+   \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
+   \def\@listi{\leftmargin\leftmargini
+               \topsep 3.2bp
+               \parsep 2\p@ \@plus\p@ \@minus\p@
+               \itemsep \parsep}%
+   \belowdisplayskip \abovedisplayskip
+}
+\renewcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
+\renewcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
+\renewcommand\large{\@setfontsize\large{11bp}{13.5bp}}% chapter in TOC % OK
+\renewcommand\Large{\@setfontsize\Large{11.5bp}{13.5bp}}% subsection % OK
+\renewcommand\LARGE{\@setfontsize\LARGE{12bp}{13.5bp}}% section % OK
+\renewcommand\huge{\@setfontsize\huge{14bp}{16bp}}% part in TOC % OK
+\renewcommand\Huge{\@setfontsize\Huge{15bp}{17bp}}% chapter % OK
+\newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{36bp}}% part  % OK
+
+\parskip\z@
