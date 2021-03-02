@@ -7,7 +7,7 @@
 %%
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesClass{transcript}
-    [2020/07/29 0.100 Transcript Books]
+    [2020/11/19 0.101 Transcript Books]
 \frenchspacing
 \clubpenalty10000
 \widowpenalty10000
@@ -19,6 +19,7 @@
 \DeclareOptionX{book}{\global\collectionfalse}
 \DeclareOptionX{collection}{\global\collectiontrue}
 \DeclareOptionX{endnotes}{\global\endnotestrue}
+\DeclareOptionX{ennotoc}{\global\endnotestrue\global\let\noendnotetoc\relax}
 \DeclareOptionX{endnotesperchapter}{\global\endnotestrue\global\let\endnotes@per@chapter\relax}
 \long\gdef\LayVar#1#2#3#4{#4}%
 \global\let\lay=c\relax%% Standard-Layout
@@ -70,6 +71,7 @@
 % Fonts  %
 %%%%%%%%%%
 
+\usepackage{amsfonts}
 \usepackage{fontspec}
 \setmainfont{Alegreya-Regular.ttf}[%
   Path=fonts/Alegreya/Alegreya/,%
@@ -218,66 +220,54 @@
 
 \ifx\use@script@chinese\relax
   \babelprovide{chinese}%
-  \message{^^JLoaded Script: Chinese^^J}
-  \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Regular.otf}%
-    [BoldFont = NotoSansCJKsc-Bold.otf,%
+  \message{^^JLoaded Script: Chinese^^J}%
+  \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Light.otf}%
+    [BoldFont = NotoSansCJKsc-Regular.otf,%
     Path = fonts/NotoSans/Chinese/,%
     WordSpace = 1.25]
   \DeclareTextFontCommand\chin{\selectlanguage{chinese}\fallbackfont@chinese}
 \fi
 
+%\ifx\use@script@chinese\relax
+%  \babelprovide{chinese}%
+%  \message{^^JLoaded Script: Chinese^^J}
+%  \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Regular.otf}%
+%    [BoldFont = NotoSansCJKsc-Bold.otf,%
+%    Path = fonts/NotoSans/Chinese/,%
+%    WordSpace = 1.25]
+%  \DeclareTextFontCommand\chin{\selectlanguage{chinese}\fallbackfont@chinese}
+%\fi
+
+\ifx\use@script@arabic\relax
+  \babelprovide{arabic}%
+  \message{^^JLoaded Script: Arabic^^J}
+  \newfontfamily\fallbackfont@arabic{NotoNaskhArabic-Regular.ttf}%
+    [BoldFont = NotoNaskhArabic-Bold.ttf,%
+    Path = fonts/NotoSans/Arabic/,%
+    WordSpace = 1.25]
+  \DeclareTextFontCommand\arab{\selectlanguage{arabic}\fallbackfont@arabic}
+\fi
+
 
 \usepackage{newunicodechar}
-\newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
+%\newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
 \newunicodechar{‐}{\penalty\@M-\hskip\z@skip}% 8617
 \newunicodechar{‑}{\hbox{-}\penalty\@M\hskip\z@skip}% 8617
-\def↩{\discretionary{}{}{}}
+\newunicodechar{↩}{\hskip\z@skip}
+\newunicodechar{。}{\hbox{$_\circ$\enskip\ignorespaces}}
+\newunicodechar{、}{,\enskip\ignorespaces}
+\newunicodechar{；}{;\enskip\ignorespaces}
+\newunicodechar{：}{:\enskip\ignorespaces}
+\newunicodechar{，}{,\enskip\ignorespaces}
+
 \DeclareRobustCommand\unichar[1]{\textfallback{#1}}
 
 %%%%%%%%%%%%%%
 % Font sizes %
 %%%%%%%%%%%%%%
 
-\renewcommand\normalsize{%
-   \@setfontsize\normalsize{9.2bp}{12.8bp}%
-   \abovedisplayskip 9.3\p@ \@plus2\p@ \@minus5\p@
-   \abovedisplayshortskip \z@ \@plus3\p@
-   \belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
-   \belowdisplayskip \abovedisplayskip
-   \let\@listi\@listI}
-\normalsize
-\renewcommand\small{%
-   \@setfontsize\small{9bp}{11}% head
-   \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
-   \abovedisplayshortskip \z@ \@plus2\p@
-   \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
-   \def\@listi{\leftmargin\leftmargini
-               \topsep 6.4bp
-               \parsep 3.2bp
-               \itemsep \parsep}%
-   \belowdisplayskip \abovedisplayskip
-}
-\renewcommand\footnotesize{% footnotes
-   \@setfontsize\footnotesize{8bp}{11bp}%
-   \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
-   \abovedisplayshortskip \z@ \@plus\p@
-   \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
-   \def\@listi{\leftmargin\leftmargini
-               \topsep 3.2bp
-               \parsep 2\p@ \@plus\p@ \@minus\p@
-               \itemsep \parsep}%
-   \belowdisplayskip \abovedisplayskip
-}
-\renewcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
-\renewcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
-\renewcommand\large{\@setfontsize\large{10bp}{12.8bp}}% chapter in TOC
-\renewcommand\Large{\@setfontsize\Large{11bp}{12.8bp}}% subsection
-\renewcommand\LARGE{\@setfontsize\LARGE{11.5bp}{12.8bp}}% section
-\renewcommand\huge{\@setfontsize\huge{13bp}{16}}% part in TOC
-\renewcommand\Huge{\@setfontsize\Huge{15bp}{18.3bp}}% chapter
-\newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{25.6bp}}% part
-
-\parskip\z@
+\RequirePackage{font-sizes}
+%% Modularized
 
 %%%%%%%%%%%%%%%
 % page layout %
@@ -286,19 +276,19 @@
 \voffset-1in\relax
 \hoffset-1in\relax
 
-\LayVar{\paperwidth=155mm\relax}{\paperwidth=148mm\relax}{\paperwidth=148mm\relax}{\paperwidth=148mm\relax}
+\LayVar{\paperwidth=155mm\relax}{\paperwidth=135mm\relax}{\paperwidth=135mm\relax}{\paperwidth=135mm\relax}
 \LayVar{\paperheight=240mm\relax}{\paperheight=225mm\relax}{\paperheight=225mm\relax}{\paperheight=225mm\relax}
 
-\headheight=12.8bp\relax
-\topskip=9.2bp\relax
-\LayVar{\topmargin=\dimexpr15mm-\headheight\relax}{\topmargin=\dimexpr21.5mm-\headheight\relax}{\topmargin=\dimexpr17mm-\headheight\relax}{\topmargin=\dimexpr15.35mm-\headheight\relax}
-\LayVar{\headsep=\dimexpr9mm-\topskip\relax}{\headsep=\dimexpr14mm-\topskip\relax}{\headsep=\dimexpr13.35mm-\topskip\relax}{\headsep=\dimexpr10.5mm-\topskip\relax}
+\headheight=12bp\relax
+\topskip=9.3bp\relax
+\LayVar{\topmargin=\dimexpr15mm-\headheight\relax}{\topmargin=\dimexpr16.75mm-\headheight\relax}{\topmargin=\dimexpr18.8mm-\headheight\relax}{\topmargin=\dimexpr15.35mm-\headheight\relax}
+\LayVar{\headsep=\dimexpr9mm-\topskip\relax}{\headsep=\dimexpr11.8mm-\topskip\relax}{\headsep=\dimexpr12.25mm-\topskip\relax}{\headsep=\dimexpr10.5mm-\topskip\relax}
 
-\LayVar{\evensidemargin=22mm\relax}{\evensidemargin=32mm\relax}{\evensidemargin=27mm\relax}{\evensidemargin=21.5mm\relax}
-\LayVar{\oddsidemargin=18mm\relax}{\oddsidemargin=22mm\relax}{\oddsidemargin=19mm\relax}{\oddsidemargin=17.5mm\relax}
+\LayVar{\evensidemargin=22mm\relax}{\evensidemargin=26.375mm\relax}{\evensidemargin=23mm\relax}{\evensidemargin=21.5mm\relax}
+\LayVar{\oddsidemargin=18mm\relax}{\oddsidemargin=18.625mm\relax}{\oddsidemargin=17mm\relax}{\oddsidemargin=17.5mm\relax}
 
-\LayVar{\textwidth=115mm\relax}{\textwidth=94mm\relax}{\textwidth=102mm\relax}{\textwidth=109mm\relax}
-\LayVar{\textheight=\dimexpr44\baselineskip+\topskip\relax}{\textheight=\dimexpr34\baselineskip+\topskip\relax}{\textheight=\dimexpr37\baselineskip+\topskip\relax}{\textheight=\dimexpr40\baselineskip+\topskip\relax}
+\LayVar{\textwidth=115mm\relax}{\textwidth=90mm\relax}{\textwidth=95mm\relax}{\textwidth=109mm\relax}
+\LayVar{\textheight=\dimexpr44\baselineskip+\topskip\relax}{\textheight=\dimexpr36\baselineskip+\topskip\relax}{\textheight=\dimexpr38\baselineskip+\topskip\relax}{\textheight=\dimexpr40\baselineskip+\topskip\relax}
 \newlength\headingsep
 \LayVar{\headingsep=35mm\relax}{\headingsep=16mm\relax}{\headingsep=16mm\relax}{\headingsep=16mm\relax}
 \parsep\z@
@@ -306,7 +296,9 @@
 
 \parindent5mm
 
-\setlength{\skip\footins}{12.8bp \@plus 25.6bp}
+\setlength{\skip\footins}{12.5bp \@plus 25bp}
+\footnotesize\global\setlength\footnotesep{\ht\strutbox}
+%\setlength\footnotesep{12.5bp}
 \flushbottom
 %\raggedbottom
 \vfuzz=\z@
@@ -358,7 +350,6 @@
 
 \usepackage{color}
 \usepackage{graphicx}
-\usepackage{soul}
 
 %%%%%%%%%%%%%%%%%
 % Überschriften %
@@ -384,6 +375,7 @@
     \markboth{}{}%
     {\interlinepenalty \@M
      \parindent\z@
+     \raggedright
      \null\vskip\headingsep%
      \sffamily\sbseries\HUGE
      \def\numberline##1{##1}%
@@ -395,6 +387,7 @@
     {\interlinepenalty \@M
      \parindent\z@
      \null\vskip\headingsep%
+     \raggedright
      \normalfont
      \sffamily\sbseries\HUGE
      #1\par}%
@@ -549,33 +542,33 @@
 
 \def\subheading{\@startsection{section}{1}{\z@}%
   {-1sp}%
-  {12.8bp}%
+  {13.5bp}%
   {\vskip-\lastskip\sffamily\LARGE}*}
 \def\subsubheading{\@startsection{subsection}{1}{\z@}%
-  {-12.8bp}%
+  {-13.5bp}%
   {\baselineskip}%
   {\vskip-\lastskip\sffamily\LARGE}*}
 
 \renewcommand\section{\@startsection {section}{1}{\z@}%
   {-24.2bp}%
-  {12.8bp}%
+  {13.5bp}%
   {\sffamily\LARGE\sbseries
     % \ifx\lay b\relax \scshape\fi
   }}
 \renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
   {-11.5\p@}%
-  {12.8bp}%
+  {13.5bp}%
   {\sffamily\mdseries\Large}}
 \renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
-  {-12.8bp}%
+  {-13.5bp}%
   {1sp}%
   {\sffamily\Large\mdseries}}
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
-  {-12.8bp}%
+  {-13.5bp}%
   {1sp}%
   {\normalfont\sfwide\normalsize}}
 \renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
-  {-12.8bp}%
+  {-13.5bp}%
   {-.5em}%
   {\sffamily\normalsize\mdseries}}
 
@@ -690,12 +683,16 @@
 
 % \newif\ifusenumberline \usenumberlinetrue
 
+\renewcommand\@tocrmarg{5em}
 \def\@dottedtocline#1#2#3#4#5{%
   \ifnum #1>\c@tocdepth \else
     \vskip \z@
-    {\leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
+    {\leftskip #2\relax
+     \rightskip \@tocrmarg\@plus1fil
+     \parfillskip -\rightskip
      \parindent #2\relax\@afterindenttrue
      \interlinepenalty\@M
+     \hyphenpenalty=\@M
      \leavevmode
       \ifx\usenumberline\relax
         \@tempdima #3\relax
@@ -781,7 +778,12 @@
       \leavevmode \sffamily
       \advance\leftskip\@tempdima
       \hskip -\leftskip
-      {\sbseries#1}\nobreak
+      {\sbseries#1}%
+      \ifx\toc@chapter@sub\@undefined\else
+        \par\nopagebreak\toc@chapter@sub%
+        \global\let\toc@chapter@sub\@undefined
+      \fi%
+      \nobreak
       \leaders\hbox{$\m@th
         \mkern \@dotsep mu\textnormal{\hbox{.}}\mkern \@dotsep
         mu$}\hfill
@@ -798,7 +800,9 @@
     \addvspace{2.25em}%
     \setlength\@tempdima{3em}%
     \begingroup
-    \parindent \z@ \rightskip \@pnumwidth
+    \parindent \z@
+    \raggedright
+    \rightskip \@pnumwidth \@plus 1fil
     \parfillskip -\@pnumwidth
     {\leavevmode
       \raggedright
@@ -859,12 +863,6 @@
 % Define the \urlx command which works like \url, but with line brakes
 % \def\fnurlhref#1#2{\old@href{#1}{#2}}
 
-\bgroup
-\let↩\relax
-\gdef\fn@href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
-\gdef\@fn@href #1\@nil #2↩#3↩\@nil{\oldhref{#1}{#2}\hskip\z@skip\if!#3!\else\@fn@href #1\@nil #3↩\@nil\fi}
-\egroup
-
 \renewcommand\@makefntext[1]{%
     \parindent\z@%
     \leftskip\fnumwidth
@@ -884,14 +882,20 @@
     \ifcollection
       \ifx\endnotes@per@chapter\relax
         \chapter*{\notesname}%
-        \addcontentsline{toc}{chapter}{\notesname}%
+        \ifx\noendnotetoc\@undefined
+          \addcontentsline{toc}{chapter}{\notesname}%
+        \fi
       \else
         \section*{\notesname}%
-        \addcontentsline{toc}{chapter}{\notesname}%
+        \ifx\noendnotetoc\@undefined
+          \addcontentsline{toc}{chapter}{\notesname}%
+        \fi
       \fi
     \else
       \chapter*{\notesname}%
-      \addcontentsline{toc}{chapter}{\notesname}%
+      \ifx\noendnotetoc\@undefined
+        \addcontentsline{toc}{chapter}{\notesname}%
+      \fi
     \fi
     \leftskip2em
   }%
@@ -916,7 +920,7 @@
 %%%%%%%%%%%%%%%%
 % Gleitobjekte %
 %%%%%%%%%%%%%%%%
-\usepackage{rotating}
+\usepackage[figuresright]{rotating}
 \usepackage{tabularx}
 \usepackage{multirow}
 
@@ -949,8 +953,8 @@
 }
 
 \newlength\aboveSourceSkip \aboveSourceSkip0mm
-\newcommand\transcriptBild[3][]{\tr@nscriptFloat{#1}{#2}{#3}}
-\newcommand\transcriptTab[3][]{\aboveSourceSkip1mm\let\use@depth\relax\tr@nscriptFloat{#1}{#2}{#3}}
+\newcommand\transcriptBild[2]{\tr@nscriptFloat{#1}{#2}}
+\newcommand\transcriptTab[2]{\aboveSourceSkip1mm\let\use@depth\relax\tr@nscriptFloat{#1}{#2}}
 
 \newbox\tr@nscriptFlt
 \newdimen\tr@nscriptFltWd
@@ -968,7 +972,7 @@
 \newdimen\sh@margins
 \RequirePackage{ltxcmds}
 
-\newcommand*\includesubgraphics[2][]{%
+\newcommand*\includesubgraphics[2]{%
   \global\advance\c@includesubgraphics\@ne
   \ltx@LocalExpandAfter\gdef\csname subgraphics@caption@\the\c@includesubgraphics\endcsname{#1}%
   \ltx@LocalExpandAfter\gdef\csname subgraphics@name@\the\c@includesubgraphics\endcsname{#2}%
@@ -1021,9 +1025,12 @@
     \def\@igopts{width=\linewidth}%
     \begin{minipage}[b]{\@tempdimb}%
       \captionsetup{margin=\z@}%
-      \csname subgraphics@caption@\the\@tempcnta\endcsname%
+      \expandafter\ifx\csname subgraphics@caption@\the\@tempcnta\endcsname\relax\else%
+        \csname subgraphics@caption@\the\@tempcnta\endcsname%
+      \fi
       \expandafter\expandafter\expandafter\includegraphics\expandafter\expandafter\expandafter[\expandafter\@igopts\expandafter]\expandafter{\@tempb}%
       \ifx\c@psource\@undefined\else
+        \ifhmode\par\fi
         \vskip\dimexpr-\topskip+\aboveSourceSkip+.5mm\relax
         \vtop{\captionsetup{font=footnotesize}\caption*{\c@psource}}%
         \global\let\c@psource\@undefined
@@ -1035,8 +1042,9 @@
 
 %% END: sameheight
 
-\newcommand\transriptFixedFigure[3][]{% #1: caption, #2: Layout-Variante, #3 Teilbilder
+\newcommand\transcriptFixedFigure[3]{% #1: caption, #2: Layout-Variante, #3 Teilbilder
   \bgroup
+    \def\@captype{figure}%
   \shhsize\hsize
   \subgraphicssep2mm
   \ifx#2A\relax
@@ -1059,8 +1067,10 @@
   \vskip1\baselineskip
   \captionsetup{margin=\sh@margins\relax}%
   \if!#1!\else#1\fi
-  \hskip\sh@margins\sameheight{#3}%
+  \ifhmode\par\fi
+  \noindent\hskip\sh@margins\sameheight{#3}%
   \ifx\c@psource\@undefined\else
+    \ifhmode\par\fi
     \vskip\aboveSourceSkip
     \captionsetup{font=footnotesize,skip=-1mm}%
     \caption*{\c@psource}%
@@ -1076,48 +1086,61 @@
 \renewenvironment{figure}{\savenotes\oldfigure}{\oldendfigure\spewnotes}
 
 
-\long\def\tr@nscriptFloat#1#2#3{%
+\long\def\tr@nscriptFloat#1#2{%
   \def\@rgi{#1}%
-  \setbox\tr@nscriptFlt\hbox{#3}%
+  \setbox\tr@nscriptFlt\hbox{\ignorespaces#2}%
   \tr@nscriptFltWd=\wd\tr@nscriptFlt\relax
   \tr@nscriptHt=\dimexpr\ht\tr@nscriptFlt\ifx\use@depth\relax+\dp\tr@nscriptFlt\fi\relax
   \tr@nscriptSep\dimexpr(\textwidth-\tr@nscriptFltWd)/2\relax
   \vskip\baselineskip
-  \ifdim\tr@nscriptFltWd<.5\textwidth\relax
-    \bgroup
-      %\tr@nscriptSep4mm
-      \tr@nscriptWd\dimexpr\textwidth-\tr@nscriptFltWd\relax
-      \noindent\begin{minipage}[\ifx\use@depth\relax t\else b\fi][\tr@nscriptHt][t]{\tr@nscriptWd}%
-        \captionsetup{justification=RaggedRight}%
-        \captionof{figure}{#2}%
-        \ifx\@rgi\@empty\else
-          \vfill
-          \captionsetup{font=footnotesize,skip=\z@}%
-          \caption*{#1}%
-          \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
-        \fi
-      \end{minipage}\hfill
-      \begin{minipage}[t][\tr@nscriptHt]{\tr@nscriptFltWd}\centering
-        \unhbox\tr@nscriptFlt%
-      \end{minipage}%
-    \egroup
-  \else
-    \noindent\hskip\tr@nscriptSep
+  \ifx\@rgi\@empty
     \begin{minipage}{\tr@nscriptFltWd}\centering%
-      \captionof{figure}{#2}%
       \unhbox\tr@nscriptFlt\par
-      \ifx\@rgi\@empty\else
-        \captionsetup{font=footnotesize,skip=-1mm}\caption*{#1}%
-        \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
-      \fi
     \end{minipage}%
+  \else
+    \ifdim\tr@nscriptFltWd<.5\textwidth\relax
+      \bgroup
+        % \tr@nscriptSep4mm
+        \tr@nscriptWd\dimexpr\textwidth-\tr@nscriptFltWd\relax
+        \noindent\begin{minipage}[\ifx\use@depth\relax t\else b\fi][\tr@nscriptHt][t]{\tr@nscriptWd}%
+          \captionsetup{justification=RaggedRight}%
+          \def\@captype{figure}%
+          #1%
+          \ifx\c@psource\@undefined\else
+            \vfill
+            \captionsetup{font=footnotesize,skip=\z@}%
+            \caption*{\c@psource}%
+            \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
+            \global\let\c@psource\@undefined
+          \fi
+        \end{minipage}\hfill
+        \begin{minipage}[t][\tr@nscriptHt]{\tr@nscriptFltWd}\centering
+          \unhbox\tr@nscriptFlt%
+        \end{minipage}%
+      \egroup
+    \else
+      \noindent\hskip\tr@nscriptSep
+      \begin{minipage}{\tr@nscriptFltWd}\centering%
+        \def\@captype{figure}%
+        #1%
+        \unhbox\tr@nscriptFlt\par
+        \ifx\c@psource\@undefined\else
+          \ifhmode\par\fi
+          \vskip\aboveSourceSkip
+          \captionsetup{font=footnotesize,skip=-1mm}%
+          \captionof*{figure}{\c@psource}%
+          \vspace*{\dimexpr-\dp\tr@nscriptFlt-1mm}%
+          \global\let\c@psource\@undefined
+        \fi
+      \end{minipage}%
+    \fi
   \fi
   \vskip\baselineskip
   \global\let\use@depth\@undefined
   \tr@nscriptWd\z@% \tr@nscriptSep\z@
 }
 
-\def\tablefont{\nsffamily\small}
+\def\tablefont{\nsffamily\footnotesize}
 \def\arraystretch{1.3}
 \def\@tabular{%
   \leavevmode
@@ -1184,6 +1207,33 @@
   \spewnotes
   \aftergroup\@afterbox}
 
+% 2020-12-17, mk
+% https://redmine.le-tex.de/issues/9488
+% commented and replaced with old quotation environment
+% in order to fix issues with wrong indents and margins
+%%
+%% Nachtrag Lupino 2021-01-14: die eigentliche Ticket-URL ist:
+%% https://redmine.le-tex.de/issues/9465
+%
+%\renewenvironment{quotation}
+%{\noindent\list{}{%
+%    \listparindent\z@%
+%    \parindent\z@
+%    \itemindent    \listparindent
+%    \leftmargin \parindent
+%    \leftmargin 5mm
+%    \rightmargin   \z@
+%    \nsfwider
+%    \topsep6.4bp
+%    \parsep        \z@}%
+%\item\noindent\ignorespaces}
+%{\endlist
+% \noindent
+% \gdef\@doendpe{%
+%    \@endpetrue
+%    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+%    \global\let\@doendpe\orig@doendpe}}
+
 \renewenvironment{quotation}
 {\list{}{\listparindent\z@%
     \itemindent    \listparindent
@@ -1200,20 +1250,59 @@
     \global\let\@doendpe\orig@doendpe}}
 
 \renewenvironment{quote}
-               {\list{}{\rightmargin\leftmargin\nsfwider}%
-                \item\relax}
-               {\endlist\gdef\@doendpe{%
+{\noindent\par\list{}{\rightmargin\leftmargin\nsfwider}%
+\item\relax}
+{\endlist\par\gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
 
+\renewenvironment{verse}
+{\noindent\par\list{}{%
+    \listparindent\z@%
+    \parindent\z@
+    \itemindent    \listparindent
+    \leftmargin 5mm
+    \rightmargin   \z@
+    \rightskip\rightmargin\@plus1fil
+    \nsfwider
+    \topsep6.4bp
+    \parsep        .5\baselineskip}%
+\item\noindent\ignorespaces}
+{\endlist
+ \par
+ \gdef\@doendpe{%
+   \@endpetrue
+   \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+   \global\let\@doendpe\orig@doendpe}}
+\newenvironment{versecentered}
+{\noindent\par\list{}{%
+    \listparindent\z@%
+    \parindent\z@
+    \itemindent    \listparindent
+    \leftmargin \z@
+    \rightmargin   \z@
+    \rightskip \z@
+    \nsfwider
+    \topsep6.4bp
+    \parsep        .5\baselineskip}%
+    \centering
+\item\noindent\ignorespaces}
+{\endlist
+ \par
+ \gdef\@doendpe{%
+   \@endpetrue
+   \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+   \global\let\@doendpe\orig@doendpe}}
+
 \newenvironment{motto}
-               {\list{}{\rightmargin\leftmargin
+               {\noindent\par\list{}{\rightmargin\leftmargin
                    \parsep6.4bp
                    \partopsep\z@
+                   \parindent\z@
                    \nsfwider}%
                 \item\relax}
-               {\endlist\gdef\@doendpe{%
+               {\endlist\par\gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
@@ -1229,6 +1318,7 @@
     \itshape
     \centering\par
   }{\par\egroup\aftergroup\cleardoublepage}
+
 
 \usepackage{enumerate}
 
@@ -1544,8 +1634,9 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 \def\flq{‹}
 \def\frq{›}
 
-\usepackage[breaklinks,linktocpage,pdfborder={0 0 0},pdfencoding=auto,bookmarksnumbered=true,linktoc=all]{hyperref}
+\usepackage[breaklinks=true,linktocpage,pdfborder={0 0 0},pdfencoding=auto,bookmarksnumbered=true,linktoc=all]{hyperref}
 \usepackage[normalem]{ulem}
+\usepackage{soul}
 
 
 %% Register
@@ -1584,4 +1675,13 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
     }
 
 \let\oldhref\href
-
+\def\@nohyphen#1\@nil#2#3\relax{\oldhref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#3\else\@nohyphen#1\@nil#3\relax\fi}
+\protected\def\href#1#2{\@nohyphen#1\@nil#2\relax\relax}
+\let\fn@href\href
+% \bgroup
+% \let↩\relax
+% \gdef\fn@href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
+% \gdef\href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
+% \gdef\@fn@href #1\@nil #2↩#3↩\@nil{\oldhref{#1}{#2}\hskip\z@skip\if!#3!\else\@fn@href #1\@nil #3↩\@nil\fi}
+% \egroup
+\endinput
