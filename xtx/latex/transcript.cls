@@ -266,7 +266,7 @@
 % Font sizes %
 %%%%%%%%%%%%%%
 
-\RequirePackage{font-sizes}
+\RequirePackage{transcript-font-sizes}
 %% Modularized
 
 %%%%%%%%%%%%%%%
