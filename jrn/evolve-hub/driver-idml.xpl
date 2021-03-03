@@ -127,7 +127,7 @@
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
   </tr:xslt-mode>
 
-  <tr:xslt-mode msg="yes" hub-version="1.2" prefix="evolve-hub/13" mode="hub:process-meta" name="process-meta">
+  <tr:xslt-mode msg="yes" hub-version="1.2" prefix="evolve-hub/12" mode="hub:process-meta-sidebar" name="process-meta">
     <p:input port="stylesheet"><p:pipe step="driver-idml" port="stylesheet"/></p:input>
     <p:input port="parameters"><p:pipe step="driver-idml" port="parameters"/></p:input>
     <p:input port="models"><p:empty/></p:input>
@@ -137,7 +137,7 @@
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
   </tr:xslt-mode>
 
-  <tr:xslt-mode msg="yes" hub-version="1.2" prefix="evolve-hub/13" mode="hub:join-tables" name="join-tables">
+  <tr:xslt-mode msg="yes" hub-version="1.2" prefix="evolve-hub/14" mode="hub:join-tables" name="join-tables">
     <p:input port="stylesheet"><p:pipe step="driver-idml" port="stylesheet"/></p:input>
     <p:input port="parameters"><p:pipe step="driver-idml" port="parameters"/></p:input>
     <p:input port="models"><p:empty/></p:input>
