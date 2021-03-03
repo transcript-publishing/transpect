@@ -1,16 +1,11 @@
 %%
-%% stylesheet for the Apparatus Journal.
-%%
-%% Maintainer: lupino
+%% stylesheet for Transcript.
 %%
 %% lualatex  -  texlive2019
 %%
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesClass{transcript}
     [2020/11/19 0.101 Transcript Books]
-\frenchspacing
-\clubpenalty10000
-\widowpenalty10000
 \RequirePackage{kvoptions-patch}%%%NEW
 \RequirePackage{xkeyval}
 \PassOptionsToPackage{cmyk}{xcolor}
@@ -39,11 +34,16 @@
   \fi}%
 
 \let\usescript\relax
-\define@key{transcript.cls}{usescript}[none]{\def\usescript{#1}}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
+%% MODUL: Auslagerung der Schriftzuladung in das transcrpt-fonts Paket:
+\DeclareOption*{\PassOptionsToClass{usescript}{transcript-fonts}}
 \ProcessOptionsX
 
-\def\parse@script#1,#2,\relax{%
+\message{^^JTranscript Class Layout Variant: \LayVar{e}{a}{b}{c}^^J}
+
+\LoadClass[10pt,a4paper]{book}
+
+%%%%%%%%%%%%
   \expandafter\let\csname use@script@#1\endcsname\relax%
   \def\@argii{#2}%
   \let\next\relax
