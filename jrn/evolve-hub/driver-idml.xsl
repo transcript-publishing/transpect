@@ -26,18 +26,5 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="para[starts-with(@role, 'tsheading')][preceding-sibling::*[1][@role = 'article-metadata']]" mode="hub:reorder-marginal-notes">
-    <xsl:next-match/>
-    <xsl:apply-templates select="preceding-sibling::*[1][@role = 'article-metadata']" mode="#current">
-      <xsl:with-param name="process-meta-section" tunnel="yes" as="xs:boolean" select="true()"/>
-    </xsl:apply-templates>
-  </xsl:template>
-
-  <xsl:template match="sidebar[@role = 'article-metadata']" mode="hub:reorder-marginal-notes">
-    <xsl:param name="process-meta-section" tunnel="yes" as="xs:boolean?"/>
-    <xsl:if test="$process-meta-section">
-      <xsl:next-match/>
-    </xsl:if>
-  </xsl:template>
 
 </xsl:stylesheet>

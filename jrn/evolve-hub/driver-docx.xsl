@@ -9,7 +9,7 @@
   xmlns:ts="http://www.transcript-verlag.de/transpect"
   xmlns="http://docbook.org/ns/docbook" 
   xpath-default-namespace="http://docbook.org/ns/docbook"
-  exclude-result-prefixes="xs hub dbk ts" 
+  exclude-result-prefixes="xs hub dbk ts xlink functx" 
   version="2.0">
   
   <xsl:import href="../../evolve-hub/driver-docx.xsl"/>  
@@ -24,12 +24,50 @@
     </xsl:copy>
   </xsl:template>
 
+
+ <!-- group meta infos for same structure as in IDML-->
+ <xsl:template match="*[*[starts-with(@role, 'tsmeta')]]" mode="hub:meta-infos-to-sidebar">
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:for-each-group select="node()" group-adjacent="exists(self::para[starts-with(@role, 'tsmeta')])">
+        <xsl:choose>
+          <xsl:when test="current-grouping-key()">
+            <sidebar role="article-metadata">
+              <xsl:apply-templates select="current-group()" mode="#current"/>
+            </sidebar>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="current-group()" mode="#current"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each-group>
+    </xsl:copy>
+  </xsl:template>
+
+ <!-- pull meta infos after headings -->
+  <xsl:template match="para[starts-with(@role, 'tsheading')][preceding-sibling::*[1][@role = 'article-metadata']]" mode="hub:reorder-marginal-notes">
+    <xsl:next-match/>
+    <xsl:apply-templates select="preceding-sibling::*[1][@role = 'article-metadata']" mode="#current">
+      <xsl:with-param name="process-meta-section" tunnel="yes" as="xs:boolean" select="true()"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template match="sidebar[@role = 'article-metadata']" mode="hub:reorder-marginal-notes">
+    <xsl:param name="process-meta-section" tunnel="yes" as="xs:boolean?"/>
+    <xsl:if test="$process-meta-section">
+      <xsl:next-match/>
+    </xsl:if>
+  </xsl:template>
+
+ <!-- meta infos to biblioset -->
   <xsl:template match="sidebar[@role = 'article-metadata']" mode="hub:process-meta-sidebar">
     <biblioset role="article-metadata">
       <xsl:apply-templates select="*" mode="#current"/>
     </biblioset>
   </xsl:template>
 
+
+ <!-- sort metadata in chapter  -->
   <xsl:template match="*[sidebar[@role = 'article-metadata']]" mode="hub:process-meta-sidebar" priority="5">
     <xsl:copy>
       <xsl:apply-templates select="@*, (title | abbrev | subtitle | author | para[@role[matches(.,'^(tsauthor|tssubheading)')]])" mode="#current"/>
@@ -161,7 +199,8 @@
       <xsl:when test="$process-meta">
         <xsl:variable name="lang" select="key('natives', @role)" as="element(css:rule)?"/>
         <xsl:variable name="text" select="string-join(descendant::text(), '')" as="xs:string?"/>
-        <xsl:variable name="single-keywords" select="tokenize($text, '[,]')" as="xs:string*"/>
+        <xsl:variable name="without-heading" select="replace($text, '^(Schlüssel(wörter|begriffe)|Key\s?words|Mots[ -]clés):[\p{Zs}*]?', '', 'i')" as="xs:string?"/>
+        <xsl:variable name="single-keywords" select="tokenize($without-heading, '[,]')" as="xs:string*"/>
         <xsl:for-each select="$single-keywords">
           <xsl:element name="keyword">
             <xsl:if test="$lang[@xml:lang]">
@@ -175,6 +214,23 @@
         <xsl:next-match/>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="/hub/info" mode="custom-2" priority="2">
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*, node()"/>
+      
+      <xsl:if test="/hub/part[1]/info/title">
+        <xsl:element name="title"><xsl:value-of select="normalize-space(/hub/part[1]/info/title[1])"/>
+        </xsl:element>
+      </xsl:if>
+      <xsl:for-each select="/hub/descendant::biblioset[1]/(issuenum | volumenum | biblioid[@otherclass = 'journal'] | productname | pubdate)">
+        <xsl:element name="{current()/name()}">
+          <xsl:value-of select="normalize-space(current())"/>
+        </xsl:element>
+      </xsl:for-each>
+<!--      <xsl:copy-of select="/hub/descendant::biblioset[1]/(issuenum | volumenum | biblioid[@otherclass = 'journal'] | productname | pubdate)" />-->
+    </xsl:copy>
   </xsl:template>
 
 </xsl:stylesheet>
