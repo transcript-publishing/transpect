@@ -44,22 +44,6 @@
 \LoadClass[10pt,a4paper]{book}
 
 %%%%%%%%%%%%
-  \expandafter\let\csname use@script@#1\endcsname\relax%
-  \def\@argii{#2}%
-  \let\next\relax
-  \ifx\@argii\@empty\else
-    \def\next{\parse@script#2,,\relax}%
-  \fi\next}
-
-\ifx\usescript\relax\else
-  \expandafter\parse@script\usescript,,\relax
-\fi
-
-\message{^^JTranscript Class Layout Variant: \LayVar{e}{a}{b}{c}^^J}
-
-\LoadClass[10pt,a4paper]{book}
-
-%%%%%%%%%%%%
 % Sprachen %
 %%%%%%%%%%%%
 
@@ -70,185 +54,12 @@
 %%%%%%%%%%
 % Fonts  %
 %%%%%%%%%%
+%% MODUL: ausgelagert
+\RequirePackage{transcript-fonts}
 
-\usepackage{amsfonts}
-\usepackage{fontspec}
-\setmainfont{Alegreya-Regular.ttf}[%
-  Path=fonts/Alegreya/Alegreya/,%
-  BoldFont = Alegreya-Bold.ttf,%
-  FontFace = {eb}{n}{Alegreya-ExtraBold.ttf},
-  FontFace = {eb}{it}{Alegreya-ExtraBoldItalic.ttf},
-  FontFace = {sb}{n}{Alegreya-Medium.ttf},
-  FontFace = {sb}{it}{Alegreya-MediumItalic.ttf},
-  ItalicFont = Alegreya-Italic.ttf,%
-  WordSpace = 1.25,
-  BoldItalicFont = Alegreya-BoldItalic.ttf]
-
-\setsansfont{BarlowCondensed-Regular.ttf}[%
-  Path=fonts/Barlow/Barlow Condensed/,%
-  BoldFont = BarlowCondensed-Bold.ttf,%
-  FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
-  FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},
-  FontFace = {lt}{n}{BarlowCondensed-Light.ttf},
-  FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},
-  FontFace = {md}{n}{BarlowCondensed-Medium.ttf},
-  FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},
-  FontFace = {eb}{n}{BarlowCondensed-Black.ttf},
-  FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},
-  FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},
-  FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},
-  ItalicFont = BarlowCondensed-Italic.ttf,%
-  BoldItalicFont = BarlowCondensed-BoldItalic.ttf,
-  WordSpace=1.1,
-  LetterSpace=1.1,
-  FakeStretch=1.02,
-  Color=353132]
-\DeclareRobustCommand{\ltseries}{\fontseries{lt}\selectfont}
-\DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
-\DeclareRobustCommand{\sbseries}{\fontseries{sb}\selectfont}
-\DeclareRobustCommand{\mdseries}{\fontseries{md}\selectfont}
-\DeclareRobustCommand{\upseries}{\fontseries{up}\selectfont}
-
-\DeclareRobustCommand{\wideText}{\addfontfeature{LetterSpace=2.0}}
-
-\newfontfamily\sfwide{BarlowCondensed-Regular.ttf}[%
-  Path=fonts/Barlow/Barlow Condensed/,%
-  BoldFont = BarlowCondensed-Bold.ttf,%
-  FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
-  FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},
-  FontFace = {lt}{n}{BarlowCondensed-Light.ttf},
-  FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},
-  FontFace = {md}{n}{BarlowCondensed-Medium.ttf},
-  FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},
-  FontFace = {eb}{n}{BarlowCondensed-Black.ttf},
-  FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},
-  FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},
-  FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},
-  ItalicFont = BarlowCondensed-Italic.ttf,%
-  BoldItalicFont = BarlowCondensed-BoldItalic.ttf,
-  WordSpace=2.0,
-  LetterSpace=2.0,
-  FakeStretch=1.02,
-  Color=353132]
-
-\newfontfamily\sfwider{BarlowCondensed-Regular.ttf}[%
-  Path=fonts/Barlow/Barlow Condensed/,%
-  BoldFont = BarlowCondensed-Bold.ttf,%
-  FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
-  FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},
-  FontFace = {lt}{n}{BarlowCondensed-Light.ttf},
-  FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},
-  FontFace = {md}{n}{BarlowCondensed-Medium.ttf},
-  FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},
-  FontFace = {eb}{n}{BarlowCondensed-Black.ttf},
-  FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},
-  FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},
-  FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},
-  ItalicFont = BarlowCondensed-Italic.ttf,%
-  BoldItalicFont = BarlowCondensed-BoldItalic.ttf,
-  WordSpace=2.0,
-  LetterSpace=5.0,
-  FakeStretch=1.02,
-  Color=353132]
-
-\newfontfamily\sfchap{BarlowCondensed-Regular.ttf}[%
-  Path=fonts/Barlow/Barlow Condensed/,%
-  BoldFont = BarlowCondensed-Bold.ttf,%
-  FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
-  FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},
-  FontFace = {lt}{n}{BarlowCondensed-Light.ttf},
-  FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},
-  FontFace = {md}{n}{BarlowCondensed-Medium.ttf},
-  FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},
-  FontFace = {eb}{n}{BarlowCondensed-Black.ttf},
-  FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},
-  FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},
-  FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},
-  ItalicFont = BarlowCondensed-Italic.ttf,%
-  BoldItalicFont = BarlowCondensed-BoldItalic.ttf,
-  WordSpace=1.2,
-  LetterSpace=2.0,
-  FakeStretch=1.02,
-  Color=353132]
-
-
-\emergencystretch=2em
-
-\newfontfamily\nsffamily{AlegreyaSans-Regular.ttf}[%
-  Path=fonts/Alegreya/Alegreya Sans/,%
-  BoldFont = AlegreyaSans-Bold.ttf,%
-  FontFace = {eb}{n}{AlegreyaSans-ExtraBold.ttf},
-  FontFace = {eb}{it}{AlegreyaSans-ExtraBoldItalic.ttf},
-  FontFace = {md}{n}{AlegreyaSans-Regular.ttf},
-  FontFace = {md}{it}{AlegreyaSans-Italic.ttf},
-  FontFace = {sb}{n}{AlegreyaSans-Medium.ttf},
-  FontFace = {sb}{n}{AlegreyaSans-MediumItalic.ttf},
-  ItalicFont = AlegreyaSans-Italic.ttf,%
-  BoldItalicFont = AlegreyaSans-BoldItalic.ttf]
-
-\newfontfamily\nsfwider{AlegreyaSans-Regular.ttf}[%
-  BoldFont = AlegreyaSans-Bold.ttf,%
-  FontFace = {eb}{n}{AlegreyaSans-ExtraBold.ttf},
-  FontFace = {eb}{it}{AlegreyaSans-ExtraBoldItalic.ttf},
-  FontFace = {md}{n}{AlegreyaSans-Regular.ttf},
-  FontFace = {md}{it}{AlegreyaSans-Italic.ttf},
-  FontFace = {sb}{n}{AlegreyaSans-Medium.ttf},
-  FontFace = {sb}{it}{AlegreyaSans-MediumItalic.ttf},
-  ItalicFont = AlegreyaSans-Italic.ttf,%
-  BoldItalicFont = AlegreyaSans-BoldItalic.ttf,
-  WordSpace=1.2,
-  Path=fonts/Alegreya/Alegreya Sans/,
-  LetterSpace=1.2]
-
-\newfontfamily\fallbackfont{NotoSans-Regular.ttf}%
-[BoldFont = NotoSans-Bold.ttf,%
- ItalicFont = NotoSans-Italic.ttf,%
- BoldItalicFont = NotoSans-BoldItalic.ttf,%
- Path = fonts/NotoSans/,%
- WordSpace = 1.25]
-\DeclareTextFontCommand\textfallback{\fallbackfont}
-
-\ifx\use@script@armenian\relax
-  \message{^^JLoaded Script: Armenian^^J}
-  \babelprovide{armenian}%
-  \newfontfamily\fallbackfont@armenian{NotoSansArmenian-Regular.ttf}%
-    [BoldFont = NotoSansArmenian-Bold.ttf,%
-    Path = fonts/NotoSans/Armenian/,%
-    WordSpace = 1.25]
-  \DeclareTextFontCommand\armenian{\selectlanguage{armenian}\fallbackfont@armenian}
-\fi
-
-\ifx\use@script@chinese\relax
-  \babelprovide{chinese}%
-  \message{^^JLoaded Script: Chinese^^J}%
-  \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Light.otf}%
-    [BoldFont = NotoSansCJKsc-Regular.otf,%
-    Path = fonts/NotoSans/Chinese/,%
-    WordSpace = 1.25]
-  \DeclareTextFontCommand\chin{\selectlanguage{chinese}\fallbackfont@chinese}
-\fi
-
-%\ifx\use@script@chinese\relax
-%  \babelprovide{chinese}%
-%  \message{^^JLoaded Script: Chinese^^J}
-%  \newfontfamily\fallbackfont@chinese{NotoSansCJKsc-Regular.otf}%
-%    [BoldFont = NotoSansCJKsc-Bold.otf,%
-%    Path = fonts/NotoSans/Chinese/,%
-%    WordSpace = 1.25]
-%  \DeclareTextFontCommand\chin{\selectlanguage{chinese}\fallbackfont@chinese}
-%\fi
-
-\ifx\use@script@arabic\relax
-  \babelprovide{arabic}%
-  \message{^^JLoaded Script: Arabic^^J}
-  \newfontfamily\fallbackfont@arabic{NotoNaskhArabic-Regular.ttf}%
-    [BoldFont = NotoNaskhArabic-Bold.ttf,%
-    Path = fonts/NotoSans/Arabic/,%
-    WordSpace = 1.25]
-  \DeclareTextFontCommand\arab{\selectlanguage{arabic}\fallbackfont@arabic}
-\fi
-
-
+%% MODUL: Globale, schrift- und fontunabhängige Sachen sollten in der
+%% transcript.cls bleiben damit sie bei jedem Font gleichermaßen
+%% verfügbar sind:
 \usepackage{newunicodechar}
 %\newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
 \newunicodechar{‐}{\penalty\@M-\hskip\z@skip}% 8617
@@ -262,82 +73,33 @@
 
 \DeclareRobustCommand\unichar[1]{\textfallback{#1}}
 
+
+%%%% MODUL: to be modularized... %%%%%
+
+
 %%%%%%%%%%%%%%
-% Font sizes %
+% font sizes %
 %%%%%%%%%%%%%%
 %% MODUL: ausgelagert
 \RequirePackage{transcript-font-sizes}
 
-%%%%%%%%%%%%%%%
-% page layout %
-%%%%%%%%%%%%%%%
 
+%% MODUL: die folgenden Parameter sind vmtl global und sollten in der cls verbleiben:
+%% MODUL: Spielraum für die Verteilung von Weißraum in einer Zeile
+\emergencystretch=2em
+%% MODUL: nach Satzzeichen normale Leerzeichen, keine vergrößerten
+\frenchspacing
+%% MODUL: Unterdrückt Schusterjungen und Hurenkinder
+\clubpenalty10000
+\widowpenalty10000
+%% MODUL: Kein vertikaler Weißraum zwischen Absätzen
+\parskip\z@
+%% MODUL: Kein vertikaler Weißraum zwischen Absätzen in Listen
+\parsep\z@
+%% MODUL: Bezugspunkt für Maße auf linke obere Ecke des Blattes festsetzen:
 \voffset-1in\relax
 \hoffset-1in\relax
-
-\LayVar{\paperwidth=155mm\relax}{\paperwidth=135mm\relax}{\paperwidth=135mm\relax}{\paperwidth=135mm\relax}
-\LayVar{\paperheight=240mm\relax}{\paperheight=225mm\relax}{\paperheight=225mm\relax}{\paperheight=225mm\relax}
-
-\headheight=12bp\relax
-\topskip=9.3bp\relax
-\LayVar{\topmargin=\dimexpr15mm-\headheight\relax}{\topmargin=\dimexpr16.75mm-\headheight\relax}{\topmargin=\dimexpr18.8mm-\headheight\relax}{\topmargin=\dimexpr15.35mm-\headheight\relax}
-\LayVar{\headsep=\dimexpr9mm-\topskip\relax}{\headsep=\dimexpr11.8mm-\topskip\relax}{\headsep=\dimexpr12.25mm-\topskip\relax}{\headsep=\dimexpr10.5mm-\topskip\relax}
-
-\LayVar{\evensidemargin=22mm\relax}{\evensidemargin=26.375mm\relax}{\evensidemargin=23mm\relax}{\evensidemargin=21.5mm\relax}
-\LayVar{\oddsidemargin=18mm\relax}{\oddsidemargin=18.625mm\relax}{\oddsidemargin=17mm\relax}{\oddsidemargin=17.5mm\relax}
-
-\LayVar{\textwidth=115mm\relax}{\textwidth=90mm\relax}{\textwidth=95mm\relax}{\textwidth=109mm\relax}
-\LayVar{\textheight=\dimexpr44\baselineskip+\topskip\relax}{\textheight=\dimexpr36\baselineskip+\topskip\relax}{\textheight=\dimexpr38\baselineskip+\topskip\relax}{\textheight=\dimexpr40\baselineskip+\topskip\relax}
-\newlength\headingsep
-\LayVar{\headingsep=35mm\relax}{\headingsep=16mm\relax}{\headingsep=16mm\relax}{\headingsep=16mm\relax}
-\parsep\z@
-%% Abstand von part und chapter nach oben
-
-\parindent5mm
-
-\setlength{\skip\footins}{12.5bp \@plus 25bp}
-\footnotesize\global\setlength\footnotesep{\ht\strutbox}
-%\setlength\footnotesep{12.5bp}
-\flushbottom
-%\raggedbottom
-\vfuzz=\z@
-
-%%%%%%%%%%%%%%%
-% Page Styles %
-%%%%%%%%%%%%%%%
-
-\def\ps@empty{%
-  \let\@oddhead\@empty
-  \let\@oddfoot\@empty
-  \let\@evenhead\@empty
-  \let\@evenfoot\@empty
-}
-\newif\ifhasparts \haspartsfalse
-
-\def\ps@headings{%
-  \def\left@side{\ifx\partmarkoverride\@undefined\ifcollection\ifx\authormark\@empty\leftmark\else\authormark\fi\else\ifhasparts\partmark\else\@title\fi\fi\else\partmarkoverride\fi}%
-  \def\@oddhead{\hfill{\small\sffamily\leftmark\rlap{\hb@xt@8mm{\hfill\thepage}}%
-      % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    }}%
-  \def\@evenhead{%
-    % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    {\small\sffamily\llap{\hb@xt@8mm{\thepage\hfill}}\left@side}\hfill}%
-  \let\@oddfoot\@empty
-  \let\@evenfoot\@empty
-    \def\chaptermark##1{%
-  \ifcollection
-    \markboth {##1}{}%
-  \else
-    \ifnum \c@secnumdepth >\m@ne
-      \markboth {\thechapter\enskip##1}{}%
-    \else
-      \markboth {##1}{}%
-    \fi
-  \fi%
-  }%
-}
-\pagestyle{headings}
-
+%% MODUL: Umbruchbefehl für Doppelseitenumbruch mit Vakatseite, falls erforderlich:
 \gdef\cleardoublepage{%
   \clearpage
   \ifodd\c@page\relax\else
@@ -347,328 +109,30 @@
     \fi
   \fi}
 
+%%%%%%%%%%%%%%%
+% Satzspiegel %
+%%%%%%%%%%%%%%%
+%% MODUL: ausgelagert
+\RequirePackage{transcript-satzspiegel}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Kopf- und Fusszeilen %
+%%%%%%%%%%%%%%%%%%%%%%%%
+%% MODUL: ausgelagert
+\RequirePackage{transcript-kopf-und-fusszeilen}
+
 \usepackage{color}
 \usepackage{graphicx}
 
 %%%%%%%%%%%%%%%%%
 % Überschriften %
 %%%%%%%%%%%%%%%%%
-
-\renewcommand\thepart{\@Roman\c@part}
-\renewcommand\part{%
-  \cleardoublepage
-  \pagestyle{empty}%
-  \@tempswafalse
-  \secdef\@part\@spart}
-
-\def\partmark{}%
-\let\oldaddcontentsline\addcontentsline
-
-\def\@part[#1]#2{%
-    \ifnum \c@secnumdepth >-2\relax
-      \refstepcounter{part}%
-    \fi
-    \addcontentsline{toc}{part}{{#1}}%
-    \def\partmark{#2}%
-    \global\let\partmarkoverride\@undefined
-    \markboth{}{}%
-    {\interlinepenalty \@M
-     \parindent\z@
-     \raggedright
-     \null\vskip\headingsep%
-     \sffamily\sbseries\HUGE
-     \def\numberline##1{##1}%
-     \HUGE #2\par}%
-    \global\c@footnote0\relax
-    \@endpart}
-
-\def\@spart#1{%
-    {\interlinepenalty \@M
-     \parindent\z@
-     \null\vskip\headingsep%
-     \raggedright
-     \normalfont
-     \sffamily\sbseries\HUGE
-     #1\par}%
-    \@endpart}
-
-\newcount\real@chap \real@chap\z@
-\renewcommand\chapter{\cleardoublepage
-                    \pagestyle{headings}%
-                    \thispagestyle{empty}%
-                    \global\@topnum\z@
-                    \@afterindentfalse
-                    \global\c@footnote0\relax
-                    \secdef\@chapter\@schapter}
-
-\ifcollection\c@tocdepth=0\relax\else\c@tocdepth=3\relax\fi
-
-\let\old@thechapter\thechapter
-\newcount\realchap\realchap\z@
-
-\def\@chapter[#1]#2{%
-  \ifx\endnotes@per@chapter\relax
-    \ifnum\c@endnote>\z@
-      \expandafter\global\expandafter\let\csname enotes@in@\the\realchap\endcsname\@empty
-    \fi
-    \advance\realchap\@ne
-    \global\c@endnote\z@
-    \addtoendnotes{\noexpand\expandafter\noexpand\ifx\noexpand\csname enotes@in@\the\realchap\noexpand\endcsname\noexpand\@empty\bgroup\leftskip\z@\protect\section*{#1}\egroup\noexpand\fi}%
-  \fi
-  \hypersetup{bookmarksdepth=-1}%
-  \ifx\@subtitle\@empty\else
-    \addcontentsline{toc}{chapsub}{\@subtitle}%
-  \fi
-  \ifx\@author\@empty\else
-    \addcontentsline{toc}{chapauthor}{\@author}%
-  \fi
-  \hypersetup{bookmarksdepth}%
-  \ifnum \c@secnumdepth >\m@ne
-    \if@mainmatter
-      \refstepcounter{chapter}%
-      \typeout{\@chapapp\space\thechapter.}%
-      \ifcollection
-        \addcontentsline{toc}{chapter}{#1}%
-      \else
-        \addtocontents{toc}{\protect\let\string\usenumberline\protect\relax}%
-        \addcontentsline{toc}{chapter}{\numberline{\thechapter}#1}%
-      \fi
-    \else
-      \addcontentsline{toc}{chapter}{#1}%
-    \fi
-  \else
-    \addcontentsline{toc}{chapter}{#1}%
-  \fi
-  \chaptermark{#1}%
-  \if@twocolumn
-    \@topnewpage[\@makechapterhead{#2}]%
-  \else
-    \@makechapterhead{#2}%
-    \@afterheading
-  \fi
-  %\let\thechapter\old@thechapter
-}
-
-\long\def\chapterquote#1{\long\gdef\@chapterquote{#1}}
-
-\def\@makechapterhead#1{{%
-  \parindent\z@
-  \null\vskip\headingsep\vskip-.45mm\relax%
-  {\parindent \z@ \raggedright \normalfont
-    \Huge\sbseries
-    \interlinepenalty\@M
-    \if@mainmatter
-      \bgroup
-        \par
-        \ifnum \c@secnumdepth >\m@ne
-          \leftskip7mm
-          {\sfchap
-            \hskip-7mm\hb@xt@7mm{\thechapter\hfill}#1}\par%
-          \ifx\@subtitle\@empty\else
-            % \vskip.25\baselineskip
-            {\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\@subtitle}\par
-          \fi
-          \global\let\partmarkoverride\@undefined
-        \else
-          {\sfchap#1}\par%
-          \ifx\@subtitle\@empty\else
-            {\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\@subtitle}\par%\vskip2mm
-          \fi
-        \fi
-      \egroup
-    \else
-      {\sfchap#1}\par\nobreak
-    \fi
-  }%
-  \vskip\dimexpr-1\baselineskip\relax\smash{\rlap{\lower3.5mm\vbox{\rule{\textwidth}{.4\p@}}}}\par%
-  \global\let\authormark\@empty
-  % \ifcollection
-    \ifx\@author\@empty\else
-      \bgroup\large
-        \vskip\baselineskip
-        \sfwide\itshape\@author%
-        \xdef\authormark{\@author}%
-      \egroup
-    \fi
-  % \fi
-  \par%
-  \ifx\@chapterquote\@undefined\else
-    \ifx\@author\@empty\vskip\baselineskip\par\fi
-    \savenotes
-    \hfill\vbox{\hsize.5\textwidth%
-      \vskip\baselineskip
-      \normalsize\nsfwider
-      \@chapterquote
-    }%
-    \spewnotes
-  \fi
-  \vskip1.68\baselineskip\relax
-  \ifx\@author\@empty\ifx\@chapterquote\@undefined\vskip2\baselineskip\fi\fi
-  \global\let\@subtitle\@empty
-  \global\let\@author\@empty
-  \global\let\@chapterquote\@undefined
-}}
-
-% \def\@schapter[#1]#2{\if@twocolumn
-%                    \@topnewpage[\@makeschapterhead{#1}]%
-%                  \else
-%                    \@makeschapterhead{#1}%
-%                    \@afterheading
-%                  \fi}
-
-\def\@makeschapterhead#1{%
-  % \@makechapterhead{#1}%
-  \null\vskip\headingsep\vskip-.45mm\relax%
-  {\parindent \z@ \raggedright
-    \Huge\sbseries\sffamily
-    \interlinepenalty\@M
-    #1\par\nobreak
-    \vskip-\baselineskip\rlap{\lower3.1mm\vbox{\rule{\textwidth}{.4\p@}}}\par%
-    \vskip1.62\baselineskip\relax
-  }%
-}
-
-\long\def\secquote#1{%
-    \savenotes
-    \hfill\vbox{\hsize.5\textwidth%
-      \normalsize\nsfwider\mdseries
-      \noindent
-      #1}%
-    \vskip\baselineskip
-    \spewnotes
-    \@afterheading
-    \ignorespaces}
-
-\def\subheading{\@startsection{section}{1}{\z@}%
-  {-1sp}%
-  {13.5bp}%
-  {\vskip-\lastskip\sffamily\LARGE}*}
-\def\subsubheading{\@startsection{subsection}{1}{\z@}%
-  {-13.5bp}%
-  {\baselineskip}%
-  {\vskip-\lastskip\sffamily\LARGE}*}
-
-\renewcommand\section{\@startsection {section}{1}{\z@}%
-  {-24.2bp}%
-  {13.5bp}%
-  {\sffamily\LARGE\sbseries
-    % \ifx\lay b\relax \scshape\fi
-  }}
-\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
-  {-11.5\p@}%
-  {13.5bp}%
-  {\sffamily\mdseries\Large}}
-\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
-  {-13.5bp}%
-  {1sp}%
-  {\sffamily\Large\mdseries}}
-\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
-  {-13.5bp}%
-  {1sp}%
-  {\normalfont\sfwide\normalsize}}
-\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
-  {-13.5bp}%
-  {-.5em}%
-  {\sffamily\normalsize\mdseries}}
-
-\let\old@thesection\thesection
-\let\old@thesubsection\thesubsection
-\let\old@thesubsubsection\thesubsubsection
-
-\def\@startsection#1#2#3#4#5#6{%
-  \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@tempa\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\global\expandafter\expandafter\expandafter\let\expandafter\expandafter\csname the#1\endcsname\csname old@the#1\endcsname}%
-  \if@noskipsec \leavevmode \fi
-  \par
-  \@tempskipa #4\relax
-  \@afterindenttrue
-  \ifdim \@tempskipa <\z@
-    \@tempskipa -\@tempskipa \@afterindentfalse
-  \fi
-  \if@nobreak
-    \everypar{}%
-  \else
-    \addpenalty\@secpenalty\addvspace\@tempskipa
-  \fi
-  \@ifstar
-    {\@ssect{#3}{#4}{#5}{#6}}%
-    {\@dblarg{\@sect{#1}{#2}{#3}{#4}{#5}{#6}}}}
-
-\def\@sect#1#2#3#4#5#6[#7]#8{%
-  \ifnum #2>\c@secnumdepth
-    \let\@svsec\@empty
-  \else
-    \refstepcounter{#1}%
-    \protected@edef\@svsec{\@seccntformat{#1}\relax}%
-  \fi
-  \@tempskipa #5\relax
-  \ifdim \@tempskipa>\z@
-    \begingroup
-      \raggedright
-      #6{%
-        \@hangfrom{\hskip #3\relax\@svsec}%
-          \interlinepenalty \@M #8\@@par}%
-    \endgroup
-    \csname #1mark\endcsname{#7}%
-    \ifnum #2>\c@secnumdepth \else
-      \addtocontents{toc}{\protect\let\string\usenumberline\protect\relax}%
-    \fi
-    \ifnum #2>\c@tocdepth \else
-      \addcontentsline{toc}{#1}{%
-        \ifnum #2>\c@secnumdepth \else
-          \protect\numberline{\csname the#1\endcsname}%
-        \fi
-        #7}%
-    \fi
-  \else
-    \def\@svsechd{%
-      #6{\hskip #3\relax
-      \@svsec #8}%
-      \csname #1mark\endcsname{#7}%
-      \ifnum #2>\c@tocdepth \else
-        \ifnum #2>\c@secnumdepth \else
-          \addtocontents{toc}{\protect\let\string\usenumberline\protect\relax}%
-        \fi
-        \addcontentsline{toc}{#1}{%
-          \ifnum #2>\c@secnumdepth \else
-            \protect\numberline{\csname the#1\endcsname}%
-          \fi
-          #7}%
-      \fi
-    }%
-  \fi
-  \@xsect{#5}}
-
-\def\@xsect#1{%
-  \@tempskipa #1\relax
-  \ifdim \@tempskipa>\z@
-    \par \nobreak
-    \vskip \@tempskipa
-    \@afterheading
-  \else
-    \@nobreakfalse
-    \global\@noskipsectrue
-    \everypar{%
-      \if@noskipsec
-        \global\@noskipsecfalse
-       {\setbox\z@\lastbox}%
-        \clubpenalty\@M
-        \begingroup \@svsechd \endgroup
-        \unskip
-        \@tempskipa #1\relax
-        \hskip -\@tempskipa
-      \else
-        \clubpenalty \@clubpenalty
-        \everypar{}%
-      \fi}%
-  \fi
-  \@tempa
-  \ignorespaces}
-
+%% MODUL: ausgelagert
+\RequirePackage{transcript-ueberschriften}
 
 %%%%%%%
-% TOC %
+% IHV %
 %%%%%%%
-% \RequirePackage{bookmark}
 
 \def\contentsname{Inhalt}%
 \renewcommand\@dotsep{.5}
@@ -679,8 +143,6 @@
   \@starttoc{toc}%
   \clearpage\pagestyle{headings}%
 }
-
-% \newif\ifusenumberline \usenumberlinetrue
 
 \renewcommand\@tocrmarg{5em}
 \def\@dottedtocline#1#2#3#4#5{%
@@ -822,45 +284,15 @@
 \renewcommand*\l@subsubsection{\@dottedtocline{3}{4.5em}{3.0em}}
 \renewcommand*\l@paragraph{\@dottedtocline{4}{7.5em}{3.5em}}
 \renewcommand*\l@subparagraph{\@dottedtocline{5}{11.0em}{4.0em}}
-% \ifx\lay b\relax
-%   \ifcollection\else
-%     \RequirePackage{titletoc}%
-%     \setcounter{tocdepth}{1}%
-%     \def\mytocrule{\nobreak\lower1\p@\hbox{\rule{1\p@}{\ht\strutbox}}}%
-%     \titlecontents{part}[\z@]%
-%       {\addvspace{1\baselineskip}%
-%         \sfwide\sbseries\huge}%
-%       {}%
-%       {}%
-%       {\enskip\mytocrule\enskip\thecontentspage}%
-%     \titlecontents{chapter}[0em]%
-%       {\addvspace{.5\baselineskip}\sbseries\sffamily\large\ifx\thecontentslabel\@empty\else\hangindent1em\hangafter1\fi\@tempdima.9em}%
-%       {\hbox to 1em{\thecontentslabel\hss}}%
-%       {}%
-%       {\nobreak\enskip\mytocrule\enskip\nobreak{\normalfont\sffamily\thecontentspage}}%
-%     \titlecontents*{section}[1em]%
-%       {\sffamily\filright}%
-%       {\ifx\thecontentslabel\@empty\else\thecontentslabel\enskip\fi}%
-%       {}%
-%       {\enskip\nobreak\thecontentspage}[\enskip\mytocrule\enskip][]%
-%   \fi
-% \fi
 
-%%%%%%%%%%%%%
-% Footnotes %
-%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
+% Fuss-/Endnoten %
+%%%%%%%%%%%%%%%%%%
 \usepackage{footnote}
-%\@removefromreset{footnote}{chapter}
 \def\footnoterule{\kern-6.4bp\hrule \@height .4bp \@width 33mm \kern 6bp} % the \hrule is .4pt high
 
-
-% \def\@makefnmark{\smash{\textsuperscript{\@thefnmark}}}
 \def\@makefnmark{\hbox{\@textsuperscript{\selectfont\@thefnmark}}}%(giovanni, 2019-07-30)
 \newlength\fnumwidth \fnumwidth2em
-
-
-% Define the \urlx command which works like \url, but with line brakes
-% \def\fnurlhref#1#2{\old@href{#1}{#2}}
 
 \renewcommand\@makefntext[1]{%
     \parindent\z@%
@@ -961,8 +393,6 @@
 \newdimen\tr@nscriptHt
 \newdimen\tr@nscriptSep
 
-
-%% BEGIN: sameheight
 \newbox\@includesubgraphicsbox
 \newcount\c@includesubgraphics \c@includesubgraphics\z@
 \newdimen\includesubgraphics@maxheight
@@ -1206,33 +636,6 @@
   \spewnotes
   \aftergroup\@afterbox}
 
-% 2020-12-17, mk
-% https://redmine.le-tex.de/issues/9488
-% commented and replaced with old quotation environment
-% in order to fix issues with wrong indents and margins
-%%
-%% Nachtrag Lupino 2021-01-14: die eigentliche Ticket-URL ist:
-%% https://redmine.le-tex.de/issues/9465
-%
-%\renewenvironment{quotation}
-%{\noindent\list{}{%
-%    \listparindent\z@%
-%    \parindent\z@
-%    \itemindent    \listparindent
-%    \leftmargin \parindent
-%    \leftmargin 5mm
-%    \rightmargin   \z@
-%    \nsfwider
-%    \topsep6.4bp
-%    \parsep        \z@}%
-%\item\noindent\ignorespaces}
-%{\endlist
-% \noindent
-% \gdef\@doendpe{%
-%    \@endpetrue
-%    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
-%    \global\let\@doendpe\orig@doendpe}}
-
 \renewenvironment{quotation}
 {\list{}{\listparindent\z@%
     \itemindent    \listparindent
@@ -1421,7 +824,9 @@
 
 \def\source#1{\leavevmode\par#1}
 
-%% Titelei
+%%%%%%%%%%%
+% Titelei %
+%%%%%%%%%%%
 
 \def\@tempa{%
   \def\lectoratename{Lectorate: }%
@@ -1638,7 +1043,9 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 \usepackage{soul}
 
 
-%% Register
+%%%%%%%%%%%%
+% Register %
+%%%%%%%%%%%%
 \usepackage{index}
 \makeindex
 %% aus index.sty
@@ -1673,14 +1080,10 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
         \fi
     }
 
+
+
 \let\oldhref\href
 \def\@nohyphen#1\@nil#2#3\relax{\oldhref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#3\else\@nohyphen#1\@nil#3\relax\fi}
 \protected\def\href#1#2{\@nohyphen#1\@nil#2\relax\relax}
 \let\fn@href\href
-% \bgroup
-% \let↩\relax
-% \gdef\fn@href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
-% \gdef\href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
-% \gdef\@fn@href #1\@nil #2↩#3↩\@nil{\oldhref{#1}{#2}\hskip\z@skip\if!#3!\else\@fn@href #1\@nil #3↩\@nil\fi}
-% \egroup
 \endinput

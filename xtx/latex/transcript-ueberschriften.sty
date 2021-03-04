@@ -1,0 +1,309 @@
+\renewcommand\thepart{\@Roman\c@part}
+\renewcommand\part{%
+  \cleardoublepage
+  \pagestyle{empty}%
+  \@tempswafalse
+  \secdef\@part\@spart}
+
+\def\partmark{}%
+\let\oldaddcontentsline\addcontentsline
+
+\def\@part[#1]#2{%
+    \ifnum \c@secnumdepth >-2\relax
+      \refstepcounter{part}%
+    \fi
+    \addcontentsline{toc}{part}{{#1}}%
+    \def\partmark{#2}%
+    \global\let\partmarkoverride\@undefined
+    \markboth{}{}%
+    {\interlinepenalty \@M
+     \parindent\z@
+     \raggedright
+     \null\vskip\headingsep%
+     \sffamily\sbseries\HUGE
+     \def\numberline##1{##1}%
+     \HUGE #2\par}%
+    \global\c@footnote0\relax
+    \@endpart}
+
+\def\@spart#1{%
+    {\interlinepenalty \@M
+     \parindent\z@
+     \null\vskip\headingsep%
+     \raggedright
+     \normalfont
+     \sffamily\sbseries\HUGE
+     #1\par}%
+    \@endpart}
+
+\newcount\real@chap \real@chap\z@
+\renewcommand\chapter{\cleardoublepage
+                    \pagestyle{headings}%
+                    \thispagestyle{empty}%
+                    \global\@topnum\z@
+                    \@afterindentfalse
+                    \global\c@footnote0\relax
+                    \secdef\@chapter\@schapter}
+
+\ifcollection\c@tocdepth=0\relax\else\c@tocdepth=3\relax\fi
+
+\let\old@thechapter\thechapter
+\newcount\realchap\realchap\z@
+
+\def\@chapter[#1]#2{%
+  \ifx\endnotes@per@chapter\relax
+    \ifnum\c@endnote>\z@
+      \expandafter\global\expandafter\let\csname enotes@in@\the\realchap\endcsname\@empty
+    \fi
+    \advance\realchap\@ne
+    \global\c@endnote\z@
+    \addtoendnotes{\noexpand\expandafter\noexpand\ifx\noexpand\csname enotes@in@\the\realchap\noexpand\endcsname\noexpand\@empty\bgroup\leftskip\z@\protect\section*{#1}\egroup\noexpand\fi}%
+  \fi
+  \hypersetup{bookmarksdepth=-1}%
+  \ifx\@subtitle\@empty\else
+    \addcontentsline{toc}{chapsub}{\@subtitle}%
+  \fi
+  \ifx\@author\@empty\else
+    \addcontentsline{toc}{chapauthor}{\@author}%
+  \fi
+  \hypersetup{bookmarksdepth}%
+  \ifnum \c@secnumdepth >\m@ne
+    \if@mainmatter
+      \refstepcounter{chapter}%
+      \typeout{\@chapapp\space\thechapter.}%
+      \ifcollection
+        \addcontentsline{toc}{chapter}{#1}%
+      \else
+        \addtocontents{toc}{\protect\let\string\usenumberline\protect\relax}%
+        \addcontentsline{toc}{chapter}{\numberline{\thechapter}#1}%
+      \fi
+    \else
+      \addcontentsline{toc}{chapter}{#1}%
+    \fi
+  \else
+    \addcontentsline{toc}{chapter}{#1}%
+  \fi
+  \chaptermark{#1}%
+  \if@twocolumn
+    \@topnewpage[\@makechapterhead{#2}]%
+  \else
+    \@makechapterhead{#2}%
+    \@afterheading
+  \fi
+  %\let\thechapter\old@thechapter
+}
+
+\long\def\chapterquote#1{\long\gdef\@chapterquote{#1}}
+
+\def\@makechapterhead#1{{%
+  \parindent\z@
+  \null\vskip\headingsep\vskip-.45mm\relax%
+  {\parindent \z@ \raggedright \normalfont
+    \Huge\sbseries
+    \interlinepenalty\@M
+    \if@mainmatter
+      \bgroup
+        \par
+        \ifnum \c@secnumdepth >\m@ne
+          \leftskip7mm
+          {\sfchap
+            \hskip-7mm\hb@xt@7mm{\thechapter\hfill}#1}\par%
+          \ifx\@subtitle\@empty\else
+            % \vskip.25\baselineskip
+            {\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\@subtitle}\par
+          \fi
+          \global\let\partmarkoverride\@undefined
+        \else
+          {\sfchap#1}\par%
+          \ifx\@subtitle\@empty\else
+            {\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\@subtitle}\par%\vskip2mm
+          \fi
+        \fi
+      \egroup
+    \else
+      {\sfchap#1}\par\nobreak
+    \fi
+  }%
+  \vskip\dimexpr-1\baselineskip\relax\smash{\rlap{\lower3.5mm\vbox{\rule{\textwidth}{.4\p@}}}}\par%
+  \global\let\authormark\@empty
+  % \ifcollection
+    \ifx\@author\@empty\else
+      \bgroup\large
+        \vskip\baselineskip
+        \sfwide\itshape\@author%
+        \xdef\authormark{\@author}%
+      \egroup
+    \fi
+  % \fi
+  \par%
+  \ifx\@chapterquote\@undefined\else
+    \ifx\@author\@empty\vskip\baselineskip\par\fi
+    \savenotes
+    \hfill\vbox{\hsize.5\textwidth%
+      \vskip\baselineskip
+      \normalsize\nsfwider
+      \@chapterquote
+    }%
+    \spewnotes
+  \fi
+  \vskip1.68\baselineskip\relax
+  \ifx\@author\@empty\ifx\@chapterquote\@undefined\vskip2\baselineskip\fi\fi
+  \global\let\@subtitle\@empty
+  \global\let\@author\@empty
+  \global\let\@chapterquote\@undefined
+}}
+
+% \def\@schapter[#1]#2{\if@twocolumn
+%                    \@topnewpage[\@makeschapterhead{#1}]%
+%                  \else
+%                    \@makeschapterhead{#1}%
+%                    \@afterheading
+%                  \fi}
+
+\def\@makeschapterhead#1{%
+  % \@makechapterhead{#1}%
+  \null\vskip\headingsep\vskip-.45mm\relax%
+  {\parindent \z@ \raggedright
+    \Huge\sbseries\sffamily
+    \interlinepenalty\@M
+    #1\par\nobreak
+    \vskip-\baselineskip\rlap{\lower3.1mm\vbox{\rule{\textwidth}{.4\p@}}}\par%
+    \vskip1.62\baselineskip\relax
+  }%
+}
+
+\long\def\secquote#1{%
+    \savenotes
+    \hfill\vbox{\hsize.5\textwidth%
+      \normalsize\nsfwider\mdseries
+      \noindent
+      #1}%
+    \vskip\baselineskip
+    \spewnotes
+    \@afterheading
+    \ignorespaces}
+
+\def\subheading{\@startsection{section}{1}{\z@}%
+  {-1sp}%
+  {13.5bp}%
+  {\vskip-\lastskip\sffamily\LARGE}*}
+\def\subsubheading{\@startsection{subsection}{1}{\z@}%
+  {-13.5bp}%
+  {\baselineskip}%
+  {\vskip-\lastskip\sffamily\LARGE}*}
+
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+  {-24.2bp}%
+  {13.5bp}%
+  {\sffamily\LARGE\sbseries
+    % \ifx\lay b\relax \scshape\fi
+  }}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-11.5\p@}%
+  {13.5bp}%
+  {\sffamily\mdseries\Large}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+  {-13.5bp}%
+  {1sp}%
+  {\sffamily\Large\mdseries}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {-13.5bp}%
+  {1sp}%
+  {\normalfont\sfwide\normalsize}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
+  {-13.5bp}%
+  {-.5em}%
+  {\sffamily\normalsize\mdseries}}
+
+\let\old@thesection\thesection
+\let\old@thesubsection\thesubsection
+\let\old@thesubsubsection\thesubsubsection
+
+\def\@startsection#1#2#3#4#5#6{%
+  \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@tempa\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\global\expandafter\expandafter\expandafter\let\expandafter\expandafter\csname the#1\endcsname\csname old@the#1\endcsname}%
+  \if@noskipsec \leavevmode \fi
+  \par
+  \@tempskipa #4\relax
+  \@afterindenttrue
+  \ifdim \@tempskipa <\z@
+    \@tempskipa -\@tempskipa \@afterindentfalse
+  \fi
+  \if@nobreak
+    \everypar{}%
+  \else
+    \addpenalty\@secpenalty\addvspace\@tempskipa
+  \fi
+  \@ifstar
+    {\@ssect{#3}{#4}{#5}{#6}}%
+    {\@dblarg{\@sect{#1}{#2}{#3}{#4}{#5}{#6}}}}
+
+\def\@sect#1#2#3#4#5#6[#7]#8{%
+  \ifnum #2>\c@secnumdepth
+    \let\@svsec\@empty
+  \else
+    \refstepcounter{#1}%
+    \protected@edef\@svsec{\@seccntformat{#1}\relax}%
+  \fi
+  \@tempskipa #5\relax
+  \ifdim \@tempskipa>\z@
+    \begingroup
+      \raggedright
+      #6{%
+        \@hangfrom{\hskip #3\relax\@svsec}%
+          \interlinepenalty \@M #8\@@par}%
+    \endgroup
+    \csname #1mark\endcsname{#7}%
+    \ifnum #2>\c@secnumdepth \else
+      \addtocontents{toc}{\protect\let\string\usenumberline\protect\relax}%
+    \fi
+    \ifnum #2>\c@tocdepth \else
+      \addcontentsline{toc}{#1}{%
+        \ifnum #2>\c@secnumdepth \else
+          \protect\numberline{\csname the#1\endcsname}%
+        \fi
+        #7}%
+    \fi
+  \else
+    \def\@svsechd{%
+      #6{\hskip #3\relax
+      \@svsec #8}%
+      \csname #1mark\endcsname{#7}%
+      \ifnum #2>\c@tocdepth \else
+        \ifnum #2>\c@secnumdepth \else
+          \addtocontents{toc}{\protect\let\string\usenumberline\protect\relax}%
+        \fi
+        \addcontentsline{toc}{#1}{%
+          \ifnum #2>\c@secnumdepth \else
+            \protect\numberline{\csname the#1\endcsname}%
+          \fi
+          #7}%
+      \fi
+    }%
+  \fi
+  \@xsect{#5}}
+
+\def\@xsect#1{%
+  \@tempskipa #1\relax
+  \ifdim \@tempskipa>\z@
+    \par \nobreak
+    \vskip \@tempskipa
+    \@afterheading
+  \else
+    \@nobreakfalse
+    \global\@noskipsectrue
+    \everypar{%
+      \if@noskipsec
+        \global\@noskipsecfalse
+       {\setbox\z@\lastbox}%
+        \clubpenalty\@M
+        \begingroup \@svsechd \endgroup
+        \unskip
+        \@tempskipa #1\relax
+        \hskip -\@tempskipa
+      \else
+        \clubpenalty \@clubpenalty
+        \everypar{}%
+      \fi}%
+  \fi
+  \@tempa
+  \ignorespaces}
