@@ -12,3 +12,4 @@
 *.ent
 *.lof
 *.lot
+.DS_Store
