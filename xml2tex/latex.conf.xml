@@ -517,12 +517,23 @@
   </template>
   
   <!-- https://redmine.le-tex.de/issues/9852 -->
+  
+  <xsl:variable name="list-mark-map" as="element(xml2tex:map)+">
+    <xml2tex:map from="dash"   to="&#x2014;"/>
+    <xml2tex:map from="bullet" to="&#x2022;"/>
+    <xml2tex:map from="circle" to="&#x25cb;"/>
+    <xml2tex:map from="square" to="&#x25aa;"/>
+  </xsl:variable>
 
   <template context="dbk:itemizedlist[@mark]/dbk:listitem">
     <rule name="item" type="cmd">
-      <option select="parent::*/@mark"/>
+      <option select="if(matches(parent::*/@mark, string-join($list-mark-map/@from, '|')))
+                      then for $mark in parent::*/@mark
+                           return $list-mark-map[@from eq $mark]/@to
+                      else parent::*/@mark"/>
       <text select="' '"/>
       <text/>
     </rule>
   </template>
+  
 </set>
