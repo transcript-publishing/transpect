@@ -71,7 +71,6 @@
 % Fonts  %
 %%%%%%%%%%
 
-\usepackage{amsfonts}
 \usepackage{fontspec}
 \setmainfont{Alegreya-Regular.ttf}[%
   Path=fonts/Alegreya/Alegreya/,%
@@ -259,6 +258,7 @@
 \newunicodechar{；}{;\enskip\ignorespaces}
 \newunicodechar{：}{:\enskip\ignorespaces}
 \newunicodechar{，}{,\enskip\ignorespaces}
+\newunicodechar{ǀ}{|}
 
 \DeclareRobustCommand\unichar[1]{\textfallback{#1}}
 
@@ -488,6 +488,8 @@
 
 \long\def\chapterquote#1{\long\gdef\@chapterquote{#1}}
 
+\newdimen\chaphskip \chaphskip7mm %% default
+
 \def\@makechapterhead#1{{%
   \parindent\z@
   \null\vskip\headingsep\vskip-.45mm\relax%
@@ -498,9 +500,14 @@
       \bgroup
         \par
         \ifnum \c@secnumdepth >\m@ne
-          \leftskip7mm
+          \settowidth\@tempdima{\sfchap\thechapter}%
+          \ifdim\@tempdima>\chaphskip\relax
+            \immediate\write\@auxout{\string\global\string\chaphskip=\the\@tempdima}%
+            \global\chaphskip=\the\@tempdima
+          \fi
+          \leftskip\chaphskip
           {\sfchap
-            \hskip-7mm\hb@xt@7mm{\thechapter\hfill}#1}\par%
+            \hskip-\chaphskip\hb@xt@\chaphskip{\thechapter\hfill}#1}\par%
           \ifx\@subtitle\@empty\else
             % \vskip.25\baselineskip
             {\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\@subtitle}\par
@@ -1297,13 +1304,14 @@
 {\noindent\par\list{}{%
     \listparindent\z@%
     \parindent\z@
+    \partopsep\z@
     \itemindent    \listparindent
     \leftmargin 5mm
     \rightmargin   \z@
     \rightskip\rightmargin\@plus1fil
     \nsfwider
     \topsep6.4bp
-    \parsep        .5\baselineskip}%
+    \parsep .5\baselineskip}%
 \item\noindent\ignorespaces}
 {\endlist
  \par
@@ -1350,9 +1358,9 @@
     \thispagestyle{empty}%
     \null\vskip\dimexpr\headingsep+1\baselineskip-.45mm\relax%
     \parindent \z@
-    \raggedright \normalfont
+    \normalfont
     \itshape
-    \centering\par
+    \centering
   }{\par\egroup\aftergroup\cleardoublepage}
 
 
@@ -1395,6 +1403,23 @@
        \labelwidth\csname leftmargin\romannumeral\the\@itemdepth\endcsname
        \def\makelabel##1{##1\hss}}%
   \fi}
+
+\renewenvironment{description}[1][]
+{\list{}{%
+    \settowidth\labelwidth{\normalfont\sbseries#1\enskip}%
+    \ifdim\labelwidth=\z@\relax
+      \itemindent-\leftmargin
+    \else
+      \labelsep   -\labelwidth\relax
+      \leftmargin  \labelwidth\relax
+    \fi
+    \itemsep\z@
+    \let\makelabel\descriptionlabel}}
+{\endlist}
+\renewcommand*\descriptionlabel[1]{\hspace\labelsep
+  \hbox to \labelwidth{%
+    \normalfont\sbseries #1}}
+
 
 \newenvironment{dialog}{%
   \list{}%
@@ -1550,7 +1575,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 
 \def\granttext#1{\def\@granttext{#1}}     \granttext{}
 
-\def\dedication#1{\def\@dedication{#1}}     \dedication{}
+\long\def\dedication#1{\long\def\@dedication{#1}}     \dedication{}
 \def\lectorate#1{\def\@lectorate{#1}}     \lectorate{}
 \def\translator#1{\def\@translator{#1}}     \translator{}
 \def\qualification#1{\def\@qualification{#1}}     \qualification{}
@@ -1720,4 +1745,6 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 % \gdef\href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
 % \gdef\@fn@href #1\@nil #2↩#3↩\@nil{\oldhref{#1}{#2}\hskip\z@skip\if!#3!\else\@fn@href #1\@nil #3↩\@nil\fi}
 % \egroup
+
+\let\ul\uline
 \endinput
