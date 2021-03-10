@@ -418,6 +418,20 @@
     </rule>
   </template>
   
+  <!-- copied from ../a9s/common/xml2tex/latex.conf.xml -->
+  
+  <template context="*[local-name() = ('table', 'informaltable')]
+                      [   matches(@role, $rotated-table-style)
+                       or exists(.//dbk:entry[   matches(@css:transform, 'rotate\((90|270)deg\)')
+                                 or @css:writing-mode eq 'bt-lr']
+                                 )]">
+    <rule name="sidewaystable" type="env">
+      <param select="dbk:title, 
+                     dbk:caption"/>
+      <param select="dbk:tgroup"/>
+    </rule>
+  </template>
+  
   <template context="dbk:figure">
     <rule name="transcriptBild" type="cmd" break-after="1" break-before="1">
       <param select="dbk:title, 
