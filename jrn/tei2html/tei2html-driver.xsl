@@ -17,5 +17,61 @@
   <xsl:import href="http://this.transpect.io/a9s/ts/tei2html/tei2html-driver.xsl"/>
   
   <xsl:template match="abstract" mode="tei2html"/>
-  
+
+  <xsl:key name="tei:by-corresp" match="*[@corresp]" use="@corresp"/>
+
+  <xsl:template match="tei:div[@type= 'article'][count(key('tei:by-corresp', concat('#', @xml:id))) gt 0]" mode="epub-alternatives">
+    <xsl:copy copy-namespaces="yes">
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:apply-templates select="key('tei:by-corresp', concat('#', @xml:id))" mode="meta"/>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*:keywords[@rendition='Keywords']" mode="meta">
+    <xsl:copy copy-namespaces="yes">
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*:keywords[@rendition='article-meta']" mode="meta">
+    <xsl:copy copy-namespaces="yes">
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*:abstract" mode="meta">
+    <xsl:copy copy-namespaces="yes">
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template name="meta">
+    <!-- warum matcht langUsage nicht? -->
+    <xsl:apply-templates select="teiHeader/profileDesc/langUsage, teiHeader/fileDesc/seriesStmt, teiHeader/fileDesc/publicationStmt/date" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="publicationStmt/date" mode="tei2html">
+    <meta name="journal-year" content="{normalize-space(.)}"/>
+  </xsl:template>
+
+  <xsl:template match="seriesStmt" mode="tei2html">
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="seriesStmt/biblScope[@unit]" mode="tei2html">
+   <meta name="journal-issue" content="{normalize-space(.)}"/>
+  </xsl:template>
+
+  <xsl:template match="seriesStmt/title[@type = 'main']" mode="tei2html" priority="4">
+    <meta name="journal-title" content="{normalize-space(.)}"/>
+  </xsl:template>
+
+  <xsl:template match="seriesStmt/idno[@rend= 'tsmetadoi']" mode="tei2html">
+    <meta name="doi" content="{normalize-space(.)}"/>
+  </xsl:template>
+
 </xsl:stylesheet>

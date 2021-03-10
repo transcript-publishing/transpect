@@ -23,7 +23,8 @@
   <xsl:template match="*:chapter" mode="hub2tei:dbk2tei" priority="2">
     <xsl:param name="exclude" tunnel="yes" as="element(*)*"/>
     <xsl:if test="not(some $e in $exclude satisfies (. is $e))">
-      <div type="article">
+      <xsl:variable name="type" select="if (dbk:info[1]/dbk:title[matches(@role, '[a-z]{1,3}journalreviewheading')]) then 'book-review' else 'article'"/>
+      <div type="{$type}">
         <xsl:if test="(./dbk:title[1]/@role or ./dbk:info[1]/@role)">
           <xsl:attribute name="rend" select="(./dbk:title[1]/@role, ./dbk:info[1]/@role)[1]"/>
         </xsl:if>

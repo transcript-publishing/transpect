@@ -1,22 +1,15 @@
 @charset "UTF-8"; 
 
-h2.part {
-  font-size: 3em;
-  margin:1em 0;
-}
-h3.article {
-  page-break-before:always;
-}
-h3.article {
-  font-weight: bold;
+h3.article,  h3.book-review {
+  page-break-before:always; font-weight: bold;
 }
 
-h3.article, h4.article {
+h3.article, h4.article, h3.book-review, h4.book-review {
   font-size: 2em;
   padding: 1.5em 0 1em 0;
   border-bottom: 2px solid #00354a;
 }
-h3.article + h4.section, h4.article + h5.section  {
+h3.article + h4.section, h4.article + h5.section, h3.book-review + h4.section, h4.book-review + h5.section  {
   margin-top:0;
 }
 
