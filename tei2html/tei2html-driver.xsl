@@ -35,9 +35,9 @@
       <head>
         <xsl:call-template name="stylesheet-links"/>
         <title>
-          <xsl:apply-templates select="$metadata[@key = 'Titel']" mode="#current"/>
+          <xsl:apply-templates select="$metadata[@key = 'Titel']//text()" mode="#current"/>
         </title>
-        <!--<xsl:call-template name="meta"/>-->
+        <xsl:call-template name="meta"/>
         <!--<xsl:apply-templates select="teiHeader/encodingDesc/css:rules" mode="#current"/>-->
       </head>
       <body>
@@ -53,6 +53,10 @@
     </html>
   </xsl:template>
   
+  <xsl:template name="meta">
+    <!-- to allow generation of meta tags in other series-->
+  </xsl:template>
+
   <xsl:template name="half-title">
     <section class="halftitle title-page" epub:type="halftitlepage" id="halftitle">
       <xsl:apply-templates select="$metadata[@key = ('Kurztext', 'Autoreninformationen', 'Widmung')]" mode="#current"/>
@@ -295,7 +299,7 @@
     <xsl:apply-templates select="$author" mode="heading-content"/>
   </xsl:template>
   
-<xsl:function name="tei2html:heading-level" as="xs:integer?">
+  <xsl:function name="tei2html:heading-level" as="xs:integer?">
     <xsl:param name="elt" as="element(*)"/>
     <xsl:variable name="level" as="xs:integer?">
       <xsl:choose>
