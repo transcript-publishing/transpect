@@ -313,7 +313,7 @@
             $elt/parent::listBibl">
           <xsl:sequence select="3"/>
         </xsl:when>
-        <xsl:when test="$elt/parent::div/@type = ('chapter')">
+        <xsl:when test="$elt/parent::div/@type = ('chapter', 'article')">
           <xsl:sequence
             select="
               if ($elt/ancestor::div/@type = 'part') then
@@ -328,7 +328,7 @@
         <xsl:when test="$elt/parent::div/@type = ('bibliography')">
           <xsl:sequence
             select="
-              if ($elt/ancestor::div/@type = 'chapter') then
+              if ($elt/ancestor::div/@type = ('chapter', 'article')) then
                 5
               else
                 4"
@@ -336,6 +336,9 @@
         </xsl:when>
         <xsl:when test="$elt/parent::*[matches(local-name(.), '^div\d')]">
           <xsl:sequence select="count($elt/ancestor::*[matches(local-name(.), '^div')])"/>
+        </xsl:when>
+        <xsl:when test="$elt/parent::argument">
+          <xsl:sequence select="4"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="custom" as="xs:integer?">
