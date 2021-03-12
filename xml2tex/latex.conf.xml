@@ -356,6 +356,10 @@
     </rule>
   </template>
   
+  <template context="dbk:dedication//dbk:br">
+    <xsl:text>\\</xsl:text>
+  </template>
+  
   <template context="dbk:part/dbk:title
                     |dbk:part/dbk:info/dbk:title">
       <rule name="part" type="cmd" break-after="2" break-before="2">
