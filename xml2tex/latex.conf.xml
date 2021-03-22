@@ -554,4 +554,23 @@
     </rule>
   </template>
   
+    <template context="dbk:para[matches(@role, $list-of-figures-style)]
+                    | dbk:title[matches(@role, $list-of-figures-style)]">
+    <rule name="renewcommand" type="cmd" break-after="1" break-before="1">
+      <param>\listfigurename</param>
+      <param/>
+    </rule>
+    <rule name="listoffigures" type="cmd" break-after="1"/>
+  </template>
+  
+  <template context="dbk:para[matches(@role, $list-of-tables-style)]
+                    |dbk:title[matches(@role, $list-of-tables-style)]">
+    <rule name="renewcommand" type="cmd" break-after="1" break-before="1">
+      <param>\listtablename</param>
+      <param/>
+    </rule>
+    <rule name="listoftables" type="cmd" break-after="1"/>
+  </template>
+  
+  
 </set>
