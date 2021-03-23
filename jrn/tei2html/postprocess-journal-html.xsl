@@ -31,9 +31,7 @@
     <xsl:variable name="head" select="/*/*:head" as="element(*)"/>
     <xsl:variable name="articles" as="element(*)*">
       <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | *:div[contains(@class, 'article')])">
-        <article><xsl:sequence select=".">
-        </xsl:sequence>
-        </article>
+        <article><xsl:sequence select="."></xsl:sequence></article>
       </xsl:for-each>
     </xsl:variable>
     <export-root>
@@ -56,13 +54,59 @@
       <xsl:next-match/>
     </xsl:if>
   </xsl:template>
+
+  <xsl:template match="*:header[@class = 'article-meta-sec']" mode="#default"/>
   
   <xsl:template match="*:head" mode="#default">
+    <xsl:param name="context" as="element(*)?" tunnel="yes"/>
+    <xsl:variable name="meta-elements" as="element()*">
+      <xsl:if test="$context">
+        <xsl:apply-templates select="$context/descendant::*:header[@class = 'article-meta-sec'][1]/*" mode="generate-article-meta-tags"/>
+      </xsl:if>
+    </xsl:variable>
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*" mode="#current"/>
       <meta charset="utf-8"/>
-      <xsl:apply-templates select="node()" mode="#current"/>
+      <xsl:apply-templates select="node()[not(self::*:meta[@name = $meta-elements/@name])], $meta-elements" mode="#current">
+        <xsl:sort select="name()" />
+        <xsl:sort select="(@name, @href)[1]" />
+      </xsl:apply-templates>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*:header[@class = 'article-meta-sec']/*:ul[@class = 'article-metadata']" mode="generate-article-meta-tags">
+    <xsl:for-each select="*:li">
+      <meta name="{./@class}" content="{./text()}"/>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="*:header[@class = 'article-meta-sec']/*:ul[@class = 'article-keywords']" mode="generate-article-meta-tags">
+    <meta name="keywords" content="{string-join(*:li, '; ')}"/>
+  </xsl:template>
+
+  <xsl:template match="*:header[@class = 'article-meta-sec']/*:div[@class = 'article-abstract']" mode="generate-article-meta-tags">
+    <meta name="abstract" content="{text()}"/>
+  </xsl:template>
+
+
+  <xsl:template match="*:head/*:link/@href" mode="#default">
+    <!-- https://redmine.le-tex.de/issues/9545#note-8 -->
+    <!-- <link type="text/css" rel="stylesheet" href="/assets/css/styles.css" />
+         <link href="file:///C:/cygwin/home/mpufe/transcript/trunk/a9s/common/css/stylesheet.css" type="text/css" rel="stylesheet"/>
+      -->
+    <xsl:attribute name="{name()}" select="replace(., '^.+/a9s/', 'assets/css/')"/>
+    <!-- schwierig. da müsste ja alles in ein Stylefile-->
+  </xsl:template>
+
+  <xsl:variable name="short-isbn" select="replace(replace(/*/@xml:base, '^.+/.+?(\d+).+$', '$1'), '^[0]', '')"/>
+
+  <xsl:template match="*:img/@src" mode="#default">
+    <!-- https://redmine.le-tex.de/issues/9545#note-8 -->
+    <!-- <img alt="{{ts_figure_caption}}" src="/{{kurz-isbn}}/images/{{image}}" />
+         <img alt="" src="http://transpect.io/content-repo/ts/jrn/inge/00002/images/ts_jrn_inge_00002_image2.jpg"/>
+      -->
+    <xsl:attribute name="{name()}" select="concat('/', $short-isbn, '/images/', replace(., '^.+/', ''))"/>
+    <!-- schwierig. da müsste ja alles in ein Stylefile-->
   </xsl:template>
 
   <xsl:template match="*:head/*:title" mode="#default">
@@ -70,8 +114,7 @@
     <xsl:copy copy-namespaces="no">
       <xsl:choose>  
         <xsl:when test="$context">
-<!--        <xsl:value-of select="concat(string-join($context/descendant::*:p[@class = 'U1_Autor'][1]//text(), ''), ': ', $context/descendant::*[local-name() = ('h1', 'h2')][1][matches(@class, 'p_h1_chapter_group')]/@title)"/>-->
-            <xsl:value-of select="$context/descendant::*:p[@class = 'tsmetachunkdoi'][1]/text()"/>
+            <xsl:value-of select="$context/descendant::*:header[@class = 'article-meta-sec']/*:ul[@class = 'article-metadata']/*:li[@class = 'chunk-doi'][1]/text()"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="/*/*:head/*:meta[@name = 'DC.title']/@content"/>
@@ -80,13 +123,12 @@
     </xsl:copy>
   </xsl:template>
   
-
   <xsl:template match="*:article" mode="#default">
     <xsl:param name="head" as="element(*)?" tunnel="yes"/>
     <xsl:variable name="uri">
       <xsl:choose>
-        <xsl:when test="descendant::*:p[@class = 'tsmetachunkdoi']">
-          <xsl:value-of select="replace(descendant::*:p[@class = 'tsmetachunkdoi'][1], '^.+?/', '')"/>
+        <xsl:when test="descendant::*:header[@class = 'article-meta-sec'][*:ul[@class = 'article-metadata']/*:li[@class = 'chunk-doi']]">
+          <xsl:value-of select="replace(descendant::*:header[@class = 'article-meta-sec']/*:ul[@class = 'article-metadata']/*:li[@class = 'chunk-doi'][1], '^.+?/', '')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="(*/@id, generate-id())[1]"/>

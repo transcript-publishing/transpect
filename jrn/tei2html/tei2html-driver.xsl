@@ -18,33 +18,41 @@
   
   <xsl:template match="abstract" mode="tei2html"/>
 
+  <xsl:template match="*:header/abstract" mode="tei2html" priority="2">
+    <div class="article-abstract">
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </div>
+  </xsl:template>
+
   <xsl:key name="tei:by-corresp" match="*[@corresp]" use="@corresp"/>
 
   <xsl:template match="tei:div[@type= 'article'][count(key('tei:by-corresp', concat('#', @xml:id))) gt 0]" mode="epub-alternatives">
     <xsl:copy copy-namespaces="yes">
       <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:apply-templates select="key('tei:by-corresp', concat('#', @xml:id))" mode="meta"/>
+      <header rend="article-meta-sec"><xsl:apply-templates select="key('tei:by-corresp', concat('#', @xml:id))" mode="meta"/></header>
       <xsl:apply-templates select="node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
 
   <xsl:template match="*:keywords[@rendition='Keywords']" mode="meta">
-    <xsl:copy copy-namespaces="yes">
-      <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:apply-templates select="node()" mode="#current"/>
-    </xsl:copy>
+    <ul rend="article-keywords">
+      <xsl:for-each select="*:term">
+        <li><xsl:value-of select="."/></li>
+      </xsl:for-each>
+    </ul>
   </xsl:template>
 
   <xsl:template match="*:keywords[@rendition='article-meta']" mode="meta">
-    <xsl:copy copy-namespaces="yes">
-      <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:apply-templates select="node()" mode="#current"/>
-    </xsl:copy>
+    <ul rend="article-metadata">
+      <xsl:for-each select="*:term">
+        <li rend="{./@key}"><xsl:value-of select="./text()"/></li>
+      </xsl:for-each>
+    </ul>
   </xsl:template>
 
   <xsl:template match="*:abstract" mode="meta">
     <xsl:copy copy-namespaces="yes">
-      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:attribute name="rend" select="'article-abstract'"/>
       <xsl:apply-templates select="node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
