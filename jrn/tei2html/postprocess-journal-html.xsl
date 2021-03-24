@@ -21,7 +21,9 @@
 
   <xsl:variable name="catalog-resolved-target-dir" as="xs:string" 
     select="concat(tr:resolve-uri-by-catalog($out-dir-uri, doc('http://this.transpect.io/xmlcatalog/catalog.xml')), '/')"/>
-  
+  <xsl:variable name="local-dir-issue" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/' else 'html/issue/')"/>  
+  <xsl:variable name="local-dir-article" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/' else 'html/article/')"/>  
+
   <xsl:template match="@* | node()" mode="#default export">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
@@ -40,7 +42,7 @@
     <export-root>
       <xsl:element name="html" >
         <xsl:copy-of select="/*/@*" copy-namespaces="no"/>
-        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, 'html/issue/', replace(/*/*:head/*:meta[@name = 'doi']/@content, '^.+?/', ''), '.html')"/>
+        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, replace(/*/*:head/*:meta[@name = 'doi']/@content, '^.+?/', ''), '.html')"/>
         <xsl:apply-templates select="/*/node()" mode="#current">
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
         </xsl:apply-templates>
@@ -145,7 +147,7 @@
     </xsl:variable>
     <xsl:call-template name="html:create-chunk">
       <xsl:with-param name="nodes" as="element(*)+" select="*"/>
-      <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, 'html/article/', $uri, '.html')"/>
+      <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-article, $uri, '.html')"/>
       <xsl:with-param name="id" as="xs:string" select="(*/@id, generate-id())[1]"/>
       <xsl:with-param name="head" select="$head-with-title" as="element(*)?" tunnel="yes"/>
     </xsl:call-template>
