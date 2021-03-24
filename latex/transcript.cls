@@ -1406,19 +1406,27 @@
 
 \renewenvironment{description}[1][]
 {\list{}{%
-    \settowidth\labelwidth{\normalfont\sbseries#1\enskip}%
+    \settowidth\labelwidth{\normalfont\sbseries#1}%
     \ifdim\labelwidth=\z@\relax
       \itemindent-\leftmargin
     \else
+      \advance\labelwidth.5em
       \labelsep   -\labelwidth\relax
       \leftmargin  \labelwidth\relax
     \fi
     \itemsep\z@
     \let\makelabel\descriptionlabel}}
 {\endlist}
-\renewcommand*\descriptionlabel[1]{\hspace\labelsep
-  \hbox to \labelwidth{%
-    \normalfont\sbseries #1}}
+\renewcommand*\descriptionlabel[1]{%
+  \setbox\z@\hbox{#1}%
+  \hskip\labelsep
+  \ifdim\wd\z@>\labelwidth
+    {\normalfont\sbseries #1\enskip}%
+    \hskip-\labelsep
+  \else
+    \hbox to \labelwidth{\normalfont\sbseries #1\hfill}%
+  \fi
+  }
 
 
 \newenvironment{dialog}{%
