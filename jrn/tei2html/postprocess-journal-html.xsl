@@ -21,8 +21,8 @@
 
   <xsl:variable name="catalog-resolved-target-dir" as="xs:string" 
     select="concat(tr:resolve-uri-by-catalog($out-dir-uri, doc('http://this.transpect.io/xmlcatalog/catalog.xml')), '/')"/>
-  <xsl:variable name="local-dir-issue" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/' else 'html/issue/')"/>  
-  <xsl:variable name="local-dir-article" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/' else 'html/article/')"/>  
+  <xsl:variable name="local-dir-issue" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/' else 'html/issue/'"/>  
+  <xsl:variable name="local-dir-article" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/' else 'html/article/'"/>  
 
   <xsl:template match="@* | node()" mode="#default export">
     <xsl:copy copy-namespaces="no">
