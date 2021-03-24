@@ -66,7 +66,6 @@
     </biblioset>
   </xsl:template>
 
-
  <!-- sort metadata in chapter  -->
   <xsl:template match="*[sidebar[@role = 'article-metadata']]" mode="hub:process-meta-sidebar" priority="5">
     <xsl:copy>
@@ -76,22 +75,38 @@
     </xsl:copy>
   </xsl:template>
   
-  <xsl:template match="para[@role = 'tsmetadoi']" mode="hub:process-meta-sidebar">
-    <biblioid class="doi" otherclass="journal">
+  <xsl:template match="para[@role = ('tsmetadoi', 'tsmetachunkdoi')]" mode="hub:process-meta-sidebar">
+    <biblioid otherclass="{if(@role eq 'tsmetadoi') then 'journal-doi' else 'article-doi'}">
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:value-of select="normalize-space(.)"/>
     </biblioid>
   </xsl:template>
   
+  <xsl:template match="para[@role eq 'tsmetacontributionorcid']" mode="hub:process-meta-sidebar">
+    <uri otherclass="orcid">
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:value-of select="normalize-space(.)"/>
+    </uri>
+  </xsl:template>
+  
   <xsl:template match="para[@role = 'tsmetajournaltitle']" mode="hub:process-meta-sidebar">
-    <productname>
+    <productname otherclass="journal-title">
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:value-of select="normalize-space(.)"/>
     </productname>
   </xsl:template>
   
+  <xsl:template match="para[@role = 'tsmetacontributionlicence']" mode="hub:process-meta-sidebar">
+    <legalnotice otherclass="{if(matches(., '&#xa9;')) then 'copyright' else 'license'}">
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:copy>
+        <xsl:value-of select="normalize-space(.)"/>        
+      </xsl:copy>
+    </legalnotice>
+  </xsl:template>
+  
   <xsl:template match="para[@role = 'tsmetajournalyear']" mode="hub:process-meta-sidebar">
-    <date>
+    <date otherclass="journal-year">
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:value-of select="normalize-space(.)"/>
     </date>
@@ -104,40 +119,19 @@
     </issuenum>
   </xsl:template>
   
-  <xsl:template match="para[@role = 'tsmetachunkdoi']" mode="hub:process-meta-sidebar">
-    <biblioid class="doi" otherclass="article">
+  <xsl:template match="para[@role = 'tsmetacontributionauthoraffiliation']" mode="hub:process-meta-sidebar">
+    <orgname otherclass="affiliation">
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:value-of select="normalize-space(.)"/>
-    </biblioid>
-  </xsl:template>
-  
-  <xsl:template match="para[@role = 'tsmetacontributionauthoraffiliation']" mode="hub:process-meta-sidebar">
-    <orgname>
-      <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:value-of select="normalize-space(.)"/></orgname>
+    </orgname>
   </xsl:template>
   
   <xsl:template match="para[@role = 'tsmetacontributionauthorcontact']" mode="hub:process-meta-sidebar">
-    <address>
+    <email>
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:value-of select="normalize-space(.)"/>
-    </address>
+    </email>
   </xsl:template>
-  
-  <xsl:template match="para[@role = 'tsmetacontributionorcid']" mode="hub:process-meta-sidebar">
-    <biblioid class="doi" otherclass="orcid">
-      <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:value-of select="normalize-space(.)"/>
-    </biblioid>
-  </xsl:template>
-  
-  <xsl:template match="para[@role = 'tsmetacontributionlicense']" mode="hub:process-meta-sidebar">
-    <legalnotice>
-      <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:value-of select="normalize-space(.)"/>
-    </legalnotice>
-  </xsl:template>
-
 
   <xsl:template match="section[@role = 'abstract']" mode="hub:process-meta-sidebar">
     <abstract>
@@ -267,7 +261,7 @@
         <xsl:element name="title"><xsl:value-of select="normalize-space(/hub/part[1]/info/title[1])"/>
         </xsl:element>
       </xsl:if>
-      <xsl:for-each select="/hub/descendant::biblioset[1]/(issuenum | volumenum | biblioid[@otherclass = 'journal'] | productname | pubdate)">
+      <xsl:for-each select="/hub/descendant::biblioset[1]/(issuenum | volumenum | biblioid[@role = 'journal-doi'] | productname | pubdate)">
         <xsl:copy copy-namespaces="no">
           <xsl:apply-templates select="current()/@* except @srcpath" mode="#current"/>
           <xsl:value-of select="normalize-space(current())"/>
@@ -275,6 +269,21 @@
       </xsl:for-each>
     </xsl:copy>
   </xsl:template>
+  
+  <xsl:template match="info/author" mode="custom-2">
+    <xsl:copy>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <affiliation>
+        <xsl:copy-of select="parent::info/biblioset/orgname"/>
+      </affiliation>
+      <xsl:copy-of select="parent::info/biblioset/email,
+                           parent::info/biblioset/uri"/>
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="info/biblioset/email
+                      |info/biblioset/orgname
+                      |info/biblioset/uri" mode="custom-2"/>
 
 <!-- TO DO: license → licence-->
 </xsl:stylesheet>
