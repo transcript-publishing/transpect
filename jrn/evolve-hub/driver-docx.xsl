@@ -26,10 +26,10 @@
 
 
  <!-- group meta infos for same structure as in IDML-->
- <xsl:template match="*[*[starts-with(@role, 'tsmeta') and @role != 'tsmetakeyword']]" mode="hub:meta-infos-to-sidebar">
+ <xsl:template match="*[*[starts-with(@role, 'tsmeta') and @role != 'tsmetakeywords']]" mode="hub:meta-infos-to-sidebar">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:for-each-group select="node()" group-adjacent="exists(self::para[starts-with(@role, 'tsmeta') and @role != 'tsmetakeyword'])">
+      <xsl:for-each-group select="node()" group-adjacent="exists(self::para[starts-with(@role, 'tsmeta') and @role != 'tsmetakeywords'])">
         <xsl:choose>
           <xsl:when test="current-grouping-key()">
             <sidebar role="article-metadata">
@@ -153,7 +153,7 @@
     </abstract>
   </xsl:template>
 
-  <xsl:template match="section[@role = ('abstract', 'keywords')][not(title)]/para[matches(@role, '[a-z]{1,3}(abstract|metakeyword)')][1]/node()[1][self::phrase]" mode="hub:process-meta-sidebar" priority="2">
+  <xsl:template match="section[@role = ('abstract', 'keywords')][not(title)]/para[matches(@role, '[a-z]{1,3}(abstract|metakeywords)')][1]/node()[1][self::phrase]" mode="hub:process-meta-sidebar" priority="2">
     <xsl:param name="phrase-to-title" as="xs:boolean?" tunnel="yes"/>
     <xsl:if test="$phrase-to-title" >
       <title>
@@ -163,7 +163,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="section[@role = ('abstract', 'keywords')][not(title)]/para[matches(@role, '[a-z]{1,3}(abstract|metakeyword)')][1][node()[1][self::phrase]]/node()[2][self::text()]" mode="hub:process-meta-sidebar" priority="2">
+  <xsl:template match="section[@role = ('abstract', 'keywords')][not(title)]/para[matches(@role, '[a-z]{1,3}(abstract|metakeywords)')][1][node()[1][self::phrase]]/node()[2][self::text()]" mode="hub:process-meta-sidebar" priority="2">
     <xsl:value-of select="replace(., '^[\p{Zs}]+', '')"/>
   </xsl:template>
 
@@ -185,7 +185,7 @@
       <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:if test="not(title)">
-        <xsl:apply-templates select="para[matches(@role, '[a-z]{1,3}metakeyword')][1]/node()[1][self::phrase]" mode="#current">
+        <xsl:apply-templates select="para[matches(@role, '[a-z]{1,3}metakeywords')][1]/node()[1][self::phrase]" mode="#current">
           <xsl:with-param name="phrase-to-title" as="xs:boolean" tunnel="yes" select="true()"/>
         </xsl:apply-templates>
       </xsl:if>
@@ -224,7 +224,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="*[para[matches(@role, '[a-z]{1,3}(abstract|metakeyword)')]]" mode="hub:repair-hierarchy" priority="2">
+  <xsl:template match="*[para[matches(@role, '[a-z]{1,3}(abstract|metakeywords)')]]" mode="hub:repair-hierarchy" priority="2">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:for-each-group select="*" group-adjacent="exists(.[@role[matches(., '[a-z]{1,3}(abstract(keywordsheading)?)')]])">
@@ -235,7 +235,7 @@
             </section>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:for-each-group select="current-group()" group-adjacent="exists(.[@role[matches(., '[a-z]{1,3}metakeyword')]])">
+            <xsl:for-each-group select="current-group()" group-adjacent="exists(.[@role[matches(., '[a-z]{1,3}metakeywords')]])">
               <xsl:choose>
                 <xsl:when test="current-grouping-key()">
                   <section role="keywords">
