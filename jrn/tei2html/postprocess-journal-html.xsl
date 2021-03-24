@@ -13,11 +13,14 @@
 <!--  <xsl:import href="http://transpect.io/xslt-util/hex/xsl/hex.xsl"/>-->
   <xsl:import href="http://transpect.io/xslt-util/xslt-based-catalog-resolver/xsl/resolve-uri-by-catalog.xsl"/>
   
+
   <xsl:param name="s9y1-path" as="xs:string"/>
+  <xsl:param name="out-dir-uri" as="xs:string"/>
+  
   <xsl:param name="cat:missing-next-catalogs-warning" as="xs:string" select="'no'"/>
 
   <xsl:variable name="catalog-resolved-target-dir" as="xs:string" 
-    select="tr:resolve-uri-by-catalog($s9y1-path, doc('http://this.transpect.io/xmlcatalog/catalog.xml'))"/>
+    select="concat(tr:resolve-uri-by-catalog($out-dir-uri, doc('http://this.transpect.io/xmlcatalog/catalog.xml')), '/')"/>
   
   <xsl:template match="@* | node()" mode="#default export">
     <xsl:copy copy-namespaces="no">
