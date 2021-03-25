@@ -221,28 +221,30 @@
   <xsl:template match="*[para[matches(@role, '[a-z]{1,3}(abstract|metakeywords)')]]" mode="hub:repair-hierarchy" priority="2">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:for-each-group select="*" group-adjacent="exists(.[@role[matches(., '[a-z]{1,3}(abstract(keywordsheading)?)')]])">
-        <xsl:choose>
-          <xsl:when test="current-grouping-key()">
-            <section role="abstract">
+      <xsl:for-each-group select="*" group-adjacent="exists(.[self::para][@role[matches(., '[a-z]{1,3}(abstract(keywordsheading)?|metakeywords)')]])">
+        <xsl:variable name="all-abstract-and-keyword-para" as="element(*)*" select="current-group()"/>
+        <xsl:for-each-group select="current-group()" group-starting-with="para[@role[matches(., '[a-z]{1,3}abstractkeywordsheading')] 
+                                                                            or 
+                                                                            (@role[matches(., '[a-z]{1,3}(abstracts|metakeywords)$')] 
+                                                                              and not($all-abstract-and-keyword-para[@role[matches(., '[a-z]{1,3}abstractkeywordsheading')]]) 
+                                                                              and (. is $all-abstract-and-keyword-para[@role = current()/@role][1])
+                                                                            )]">
+          <xsl:choose>
+            <xsl:when test="current-group()[self::para[@role[matches(., '[a-z]{1,3}metakeywords')]]]">
+              <section role="keywords">
+                <xsl:apply-templates select="current-group()" mode="#current"/>
+              </section>
+            </xsl:when>
+            <xsl:when test="current-group()[self::para[@role[matches(., '[a-z]{1,3}abstracts$')]]]">
+              <section role="abstract">
+                <xsl:apply-templates select="current-group()" mode="#current"/>
+              </section>
+            </xsl:when>
+            <xsl:otherwise>
               <xsl:apply-templates select="current-group()" mode="#current"/>
-            </section>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:for-each-group select="current-group()" group-adjacent="exists(.[@role[matches(., '[a-z]{1,3}metakeywords')]])">
-              <xsl:choose>
-                <xsl:when test="current-grouping-key()">
-                  <section role="keywords">
-                    <xsl:apply-templates select="current-group()" mode="#current"/>
-                  </section>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:apply-templates select="current-group()" mode="#current"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:for-each-group>
-          </xsl:otherwise>
-        </xsl:choose>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each-group>
       </xsl:for-each-group>
     </xsl:copy>
   </xsl:template>
