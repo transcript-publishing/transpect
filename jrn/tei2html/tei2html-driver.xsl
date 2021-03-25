@@ -82,4 +82,6 @@
     <meta name="doi" content="{normalize-space(.)}"/>
   </xsl:template>
 
+  <xsl:template match="byline/affiliation | byline/email | byline/ref" mode="tei2html"/>
+
 </xsl:stylesheet>
