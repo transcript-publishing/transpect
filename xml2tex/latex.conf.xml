@@ -397,7 +397,8 @@
     <!-- copied from common to reinstall template priorities-->
   </template>
   
-    <template context="dbk:bibliography[not(parent::dbk:bibliography)]">
+    <template context="dbk:bibliography[not(@role eq 'Citavi')]
+                                       [not(parent::dbk:bibliography)]">
     <xsl:text>\FloatBarrier&#xa;</xsl:text>
     <xsl:apply-templates select="dbk:info/dbk:title" mode="#current"/>
     <xsl:apply-templates select="dbk:info/dbk:abbrev" mode="#current"/>
