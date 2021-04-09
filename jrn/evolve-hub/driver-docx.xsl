@@ -45,7 +45,7 @@
   </xsl:template>
 
  <!-- pull meta infos after headings -->
-  <xsl:template match="para[starts-with(@role, 'tsheading')][preceding-sibling::*[1][@role = 'article-metadata']]" mode="hub:reorder-marginal-notes">
+  <xsl:template match="para[matches(@role, '^(tsheading|toctitle)')][preceding-sibling::*[1][@role = 'article-metadata']]" mode="hub:reorder-marginal-notes">
     <xsl:next-match/>
     <xsl:apply-templates select="preceding-sibling::*[1][@role = 'article-metadata']" mode="#current">
       <xsl:with-param name="process-meta-section" tunnel="yes" as="xs:boolean" select="true()"/>
@@ -288,4 +288,12 @@
                       |info/biblioset/uri" mode="custom-2"/>
 
 <!-- TO DO: license → licence-->
+
+  <xsl:template match="hub/section[matches(@role, $hub:toc-heading)]" 
+                mode="hub:postprocess-hierarchy">
+    <toc xml:id="toc">
+      <xsl:apply-templates select="@*, title, sidebar[@role = 'article-metadata']" mode="#current"/>
+    </toc>
+  </xsl:template>
+
 </xsl:stylesheet>
