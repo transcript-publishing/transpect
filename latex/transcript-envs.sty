@@ -1,0 +1,207 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-envs}[2021/04/09 transcript]\relax
+
+\RequirePackage{framed}
+\def\FrameHeightAdjust{\topskip}
+\FrameRule\z@
+\FrameSep2mm
+
+\def\@afterbox{%
+  \everypar{%
+    \if@nobreak
+      \@nobreakfalse
+      \clubpenalty \@M
+      \if@afterindent \else
+        {\setbox\z@\lastbox}%
+        \everypar{}%2015-04-09
+      \fi
+    \else
+      \clubpenalty \@clubpenalty
+      {\setbox\z@\lastbox}%
+      \everypar{}%
+    \fi}}
+
+\let\orig@doendpe\@doendpe
+\newenvironment{kastengrau}{%
+  \def\FrameCommand{\fboxsep\FrameSep \colorbox[gray]{0.75}}%
+  \savenotes
+  \begin{framed}%
+    \noindent\nsffamily\ignorespaces
+  }{\end{framed}%
+  \spewnotes
+  \aftergroup\@afterbox}
+
+\newenvironment{kastenlinie}{%
+  \FrameSep3mm
+  \fboxrule.5bp
+  \savenotes
+  \def\FrameCommand{\fboxsep\FrameSep \fbox}%
+  \begin{framed}%
+    \noindent\nsffamily\ignorespaces\@afterheading
+  }{\end{framed}%
+  \spewnotes
+  \aftergroup\@afterbox}
+
+\renewenvironment{quotation}
+{\list{}{\listparindent\z@%
+    \itemindent    \listparindent
+    \leftmargin \parindent
+    \rightmargin   \z@
+    \nsfwider
+    \topsep6.4bp
+    \parsep        \z@}%
+\item\noindent\ignorespaces}
+{\endlist
+  \gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe}}
+
+\renewenvironment{quote}
+{\noindent\par\list{}{\rightmargin\leftmargin\nsfwider}%
+\item\relax}
+{\endlist\par\gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe}}
+
+\renewenvironment{verse}
+{\noindent\par\list{}{%
+    \listparindent\z@%
+    \parindent\z@
+    \partopsep\z@
+    \itemindent    \listparindent
+    \leftmargin 5mm
+    \rightmargin   \z@
+    \rightskip\rightmargin\@plus1fil
+    \nsfwider
+    \topsep6.4bp
+    \parsep .5\baselineskip}%
+\item\noindent\ignorespaces}
+{\endlist
+ \par
+ \gdef\@doendpe{%
+   \@endpetrue
+   \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+   \global\let\@doendpe\orig@doendpe}}
+\newenvironment{versecentered}
+{\noindent\par\list{}{%
+    \listparindent\z@%
+    \parindent\z@
+    \itemindent    \listparindent
+    \leftmargin \z@
+    \rightmargin   \z@
+    \rightskip \z@
+    \nsfwider
+    \topsep6.4bp
+    \parsep        .5\baselineskip}%
+    \centering
+\item\noindent\ignorespaces}
+{\endlist
+ \par
+ \gdef\@doendpe{%
+   \@endpetrue
+   \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+   \global\let\@doendpe\orig@doendpe}}
+
+\newenvironment{motto}
+               {\noindent\par\list{}{\rightmargin\leftmargin
+                   \parsep6.4bp
+                   \partopsep\z@
+                   \parindent\z@
+                   \nsfwider}%
+                \item\relax}
+               {\endlist\par\gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe}}
+
+\newenvironment{widmung}{%
+  \cleardoublepage
+  \bgroup
+    \parindent\z@
+    \thispagestyle{empty}%
+    \null\vskip\dimexpr\headingsep+1\baselineskip-.45mm\relax%
+    \parindent \z@
+    \normalfont
+    \itshape
+    \centering
+  }{\par\egroup\aftergroup\cleardoublepage}
+
+
+\usepackage{enumerate}
+
+\leftmargini\parindent
+\leftmarginii2\parindent
+
+%% Überdef
+\def\@enum@{%
+  \list{\csname label\@enumctr\endcsname}%
+  {\labelsep\z@
+   \itemsep\z@
+   \ifnum \@enumdepth=\@ne
+     \leftmargin\parindent
+     \labelwidth\parindent
+   \else
+     \@tempdima3mm
+     \leftmargin\dimexpr\@enumdepth\@tempdima\relax
+     \labelwidth\dimexpr\@enumdepth\@tempdima\relax
+     \itemindent\z@%\leftmargin
+   \fi
+   \parsep\z@
+   \ifnum \@enumdepth=\@ne\topsep12.8bp\else\topsep\z@\fi
+   \usecounter\@enumctr%
+   \def\makelabel##1{\small##1\hss}}}
+
+\def\itemize{%
+  \ifnum \@itemdepth >\thr@@\@toodeep\else
+    \advance\@itemdepth\@ne
+    \@enumdepth=\@itemdepth
+    \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
+    \expandafter
+    \list
+      \csname\@itemitem\endcsname
+      {\topsep12.8bp
+       \labelsep\z@
+       \itemsep\z@
+       \parsep\z@
+       \labelwidth\csname leftmargin\romannumeral\the\@itemdepth\endcsname
+       \def\makelabel##1{##1\hss}}%
+  \fi}
+
+\renewenvironment{description}[1][]
+{\list{}{%
+    \settowidth\labelwidth{\normalfont\sbseries#1}%
+    \ifdim\labelwidth=\z@\relax
+      \itemindent-\leftmargin
+    \else
+      \advance\labelwidth.5em
+      \labelsep   -\labelwidth\relax
+      \leftmargin  \labelwidth\relax
+    \fi
+    \itemsep\z@
+    \let\makelabel\descriptionlabel}}
+{\endlist}
+\renewcommand*\descriptionlabel[1]{%
+  \setbox\z@\hbox{#1}%
+  \hskip\labelsep
+  \ifdim\wd\z@>\labelwidth
+    {\normalfont\sbseries #1\enskip}%
+    \hskip-\labelsep
+  \else
+    \hbox to \labelwidth{\normalfont\sbseries #1\hfill}%
+  \fi
+  }
+
+
+\newenvironment{dialog}{%
+  \list{}%
+  {\leftmargin5mm
+   \labelsep1em
+   \labelwidth\dimexpr5mm-\labelsep\relax
+   \itemsep\z@
+   \itemindent\z@
+   \parsep\z@
+   \topsep12.8bp
+   \def\makelabel##1{{\ignorespaces\itshape##1\ignorespaces}}}%
+}{\endlist}
