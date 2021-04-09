@@ -140,7 +140,7 @@
     <xsl:variable name="uri">
       <xsl:choose>
         <xsl:when test="descendant::*:header[@class = 'article-meta-sec'][*:ul[@class = 'article-metadata']/*:li[@class = 'chunk-doi']]">
-          <xsl:value-of select="replace(descendant::*:header[@class = 'article-meta-sec']/*:ul[@class = 'article-metadata']/*:li[@class = 'chunk-doi'][1], '^.+?/', '')"/>
+          <xsl:value-of select="replace(descendant::*:header[@class = 'article-meta-sec']/*:ul[@class = 'article-metadata']/*:li[@class = 'chunk-doi'][1], '^.+/', '')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="(*/@id, generate-id())[1]"/>
