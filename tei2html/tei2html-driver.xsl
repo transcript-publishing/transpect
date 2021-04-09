@@ -133,7 +133,8 @@
   
   <xsl:template name="toc">
     <nav class="toc" epub:type="toc" id="toc">
-      <xsl:call-template name="generate-toc-headline"/>  
+      <xsl:call-template name="generate-toc-headline"/>
+      <xsl:apply-templates select="/TEI/text/front/divGen[@type = 'toc']/*:header[@rend = 'article-meta-sec']" mode="tei2html"/>
       <xsl:call-template name="generate-toc-body">
         <xsl:with-param name="toc_level" select="$toc-depth"/>
       </xsl:call-template>
