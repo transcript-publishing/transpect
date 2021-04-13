@@ -208,6 +208,23 @@
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
   
+    <template context="dbk:para[matches(@role, $endnotes-heading-style)]">
+    <xsl:value-of select="concat('&#xa;\def\notesname{', . ,'}')"/>
+    <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
+  </template>
+  
+  <template context="dbk:chapter[$notes-type eq 'endnotes' and $notes-per-chapter eq 'yes']
+                                [.//dbk:footnote]
+                                [not(.//dbk:para[matches(@role, $endnotes-heading-style)])]">
+
+    <xsl:next-match/>
+    <xsl:value-of select="concat('&#xa;\renewcommand{\notesname}{', 
+                                 ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)] ,
+                                 '}')"/>
+     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
+    
+  </template>
+  
   <template context="dbk:dedication[@role eq 'tsded']">
     <rule name="wid" type="env"  break-after="1" break-before="1">
       <param/>
