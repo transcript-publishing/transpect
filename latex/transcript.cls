@@ -724,6 +724,14 @@
   \clearpage\pagestyle{headings}%
 }
 
+\renewcommand\listoffigures{%
+  \chapter*{\listfigurename}%
+  \@mkboth{\listfigurename}%
+  {\listfigurename}%
+  \@starttoc{lof}%
+}
+
+
 % \newif\ifusenumberline \usenumberlinetrue
 
 \renewcommand\@tocrmarg{5em}
@@ -1397,10 +1405,12 @@
     \list
       \csname\@itemitem\endcsname
       {\topsep12.8bp
+       \labelwidth\csname leftmargin\romannumeral\the\@itemdepth\endcsname
+       \leftmargin\labelwidth
        \labelsep\z@
        \itemsep\z@
        \parsep\z@
-       \labelwidth\csname leftmargin\romannumeral\the\@itemdepth\endcsname
+       \partopskip\z@
        \def\makelabel##1{##1\hss}}%
   \fi}
 
@@ -1415,6 +1425,8 @@
       \leftmargin  \labelwidth\relax
     \fi
     \itemsep\z@
+    \parsep\z@
+    \partopskip\z@
     \let\makelabel\descriptionlabel}}
 {\endlist}
 \renewcommand*\descriptionlabel[1]{%
