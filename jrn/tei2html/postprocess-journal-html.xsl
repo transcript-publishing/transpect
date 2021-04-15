@@ -96,11 +96,9 @@
 
   <xsl:template match="*:head/*:link/@href" mode="#default">
     <!-- https://redmine.le-tex.de/issues/9545#note-8 -->
-    <!-- <link type="text/css" rel="stylesheet" href="/assets/css/styles.css" />
-         <link href="file:///C:/cygwin/home/mpufe/transcript/trunk/a9s/common/css/stylesheet.css" type="text/css" rel="stylesheet"/>
-      -->
-    <xsl:attribute name="{name()}" select="replace(., '^.+/a9s/', 'assets/css/')"/>
-    <!-- schwierig. da müsste ja alles in ein Stylefile-->
+<!--     <link type="text/css" rel="stylesheet" href="/assets/css/styles.css" />-->
+<!--     <link href="file:///C:/cygwin/home/mpufe/transcript/trunk/a9s/common/css/stylesheet.css" type="text/css" rel="stylesheet"/>-->
+    <xsl:attribute name="{name()}" select="'/assets/css/styles.css'"/>
   </xsl:template>
 
   <xsl:variable name="short-isbn" select="replace(replace(/*/@xml:base, '^.+/.+?(\d+).+$', '$1'), '^[0]', '')"/>
@@ -108,10 +106,19 @@
   <xsl:template match="*:img/@src" mode="#default">
     <!-- https://redmine.le-tex.de/issues/9545#note-8 -->
     <!-- <img alt="{{ts_figure_caption}}" src="/{{kurz-isbn}}/images/{{image}}" />
-         <img alt="" src="http://transpect.io/content-repo/ts/jrn/inge/00002/images/ts_jrn_inge_00002_image2.jpg"/>
-      -->
+      <img alt="" src="http://transpect.io/content-repo/ts/jrn/inge/00002/images/ts_jrn_inge_00002_image2.jpg"/>
+    -->
     <xsl:attribute name="{name()}" select="concat('/', $short-isbn, '/images/', replace(., '^.+/', ''))"/>
-    <!-- schwierig. da müsste ja alles in ein Stylefile-->
+    <xsl:if test="not(../@alt) and ../../*:p[@class = 'tsfigurecaption']">
+      <xsl:attribute name="alt" select="string-join(../../*:p[@class = 'tsfigurecaption'], '')"/>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*:img/@alt[. = '']" mode="#default">
+    <!-- https://redmine.le-tex.de/issues/9545#note-8 -->
+    <!-- <img alt="{{ts_figure_caption}}" src="/{{kurz-isbn}}/images/{{image}}" />
+    -->
+      <xsl:attribute name="alt" select="string-join(../../*:p[@class = 'tsfigurecaption']//text(), '')"/>
   </xsl:template>
 
   <xsl:template match="*:head/*:title" mode="#default">
@@ -133,7 +140,7 @@
     <xsl:variable name="uri">
       <xsl:choose>
         <xsl:when test="descendant::*:header[@class = 'article-meta-sec'][*:ul[@class = 'article-metadata']/*:li[@class = 'chunk-doi']]">
-          <xsl:value-of select="replace(descendant::*:header[@class = 'article-meta-sec']/*:ul[@class = 'article-metadata']/*:li[@class = 'chunk-doi'][1], '^.+?/', '')"/>
+          <xsl:value-of select="replace(descendant::*:header[@class = 'article-meta-sec']/*:ul[@class = 'article-metadata']/*:li[@class = 'chunk-doi'][1], '^.+/', '')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="(*/@id, generate-id())[1]"/>

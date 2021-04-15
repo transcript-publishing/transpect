@@ -2,7 +2,7 @@
 <c:param-set xmlns:c="http://www.w3.org/ns/xproc-step">
   
   <c:param name="work-regex" value="\d{5}"/>
-  <c:param name="type-regex" value="[a-z]{4}"/>
+  <c:param name="type-regex" value="[a-z]{3,4}"/>
   <c:param name="series-regex" value="[a-z]{3}"/>
   <c:param name="publisher-regex" value="[a-z]{2}"/>
   <c:param name="cascade-paths-regex" value="^{$publisher-regex}_{$series-regex}_{$type-regex}_{$work-regex}(_.*)?$"/>

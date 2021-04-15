@@ -208,6 +208,23 @@
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
   
+    <template context="dbk:para[matches(@role, $endnotes-heading-style)]">
+    <xsl:value-of select="concat('&#xa;\def\notesname{', . ,'}')"/>
+    <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
+  </template>
+  
+  <template context="dbk:chapter[$notes-type eq 'endnotes' and $notes-per-chapter eq 'yes']
+                                [.//dbk:footnote]
+                                [not(.//dbk:para[matches(@role, $endnotes-heading-style)])]">
+
+    <xsl:next-match/>
+    <xsl:value-of select="concat('&#xa;\renewcommand{\notesname}{', 
+                                 ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)] ,
+                                 '}')"/>
+     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
+    
+  </template>
+  
   <template context="dbk:dedication[@role eq 'tsded']">
     <rule name="wid" type="env"  break-after="1" break-before="1">
       <param/>
@@ -397,7 +414,8 @@
     <!-- copied from common to reinstall template priorities-->
   </template>
   
-    <template context="dbk:bibliography[not(parent::dbk:bibliography)]">
+    <template context="dbk:bibliography[not(@role eq 'Citavi')]
+                                       [not(parent::dbk:bibliography)]">
     <xsl:text>\FloatBarrier&#xa;</xsl:text>
     <xsl:apply-templates select="dbk:info/dbk:title" mode="#current"/>
     <xsl:apply-templates select="dbk:info/dbk:abbrev" mode="#current"/>
@@ -554,8 +572,34 @@
     </rule>
   </template>
   
-    <template context="dbk:para[matches(@role, $list-of-figures-style)]
-                    | dbk:title[matches(@role, $list-of-figures-style)]">
+  <template context="*[self::dbk:chapter | self::dbk:section | self::dbk:part | self::dbk:appendix][dbk:info[dbk:title[matches(@role, $list-of-figures-style)]]]">
+    <xsl:apply-templates select="dbk:info" mode="#current"/>
+    <rule name="listoffigures" type="cmd" break-after="1"/>
+  </template>
+  
+  
+   <template context="*[self::dbk:chapter 
+                       |self::dbk:section 
+                       |self::dbk:part
+                       |self::dbk:appendix]
+                       [dbk:info[dbk:title[matches(@role, $list-of-figures-style)]]]">
+    <rule>
+      <text/>
+    </rule>
+  </template>
+  
+  <template context="*[self::dbk:chapter 
+                      |self::dbk:section 
+                      |self::dbk:part
+                      |self::dbk:appendix]
+                      [dbk:info[dbk:title[matches(@role, $list-of-tables-style)]]]">
+    <rule>
+      <text/>
+    </rule>
+  </template>
+  
+  <template context="dbk:para[matches(@role, $list-of-figures-style)]
+                    |dbk:title[matches(@role, $list-of-figures-style)]">
     <rule name="renewcommand" type="cmd" break-after="1" break-before="1">
       <param>\listfigurename</param>
       <param/>

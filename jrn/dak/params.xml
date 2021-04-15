@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <c:param-set xmlns:c="http://www.w3.org/ns/xproc-step">
   
-  <c:param name="work-regex" value="\d{4,5}"/>
-  <c:param name="type-regex" value="[a-z]{3}"/>
-  <c:param name="clade-role" value="series"/>
+  <c:param name="clade-role" value="type"/>
   <c:param name="exclude-filter" value="'(css|latex|xsl)'"/><!-- expects a regex -->
 
 </c:param-set>

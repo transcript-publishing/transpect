@@ -26,7 +26,8 @@
 
   <xsl:key name="tei:by-corresp" match="*[@corresp]" use="@corresp"/>
 
-  <xsl:template match="tei:div[@type= 'article'][count(key('tei:by-corresp', concat('#', @xml:id))) gt 0]" mode="epub-alternatives">
+  <xsl:template match="tei:div[@type= 'article'][count(key('tei:by-corresp', concat('#', @xml:id))) gt 0] | 
+                       tei:divGen[@type= 'toc'][count(key('tei:by-corresp', concat('#', @xml:id))) gt 0]" mode="epub-alternatives">
     <xsl:copy copy-namespaces="yes">
       <xsl:apply-templates select="@*" mode="#current"/>
       <header rend="article-meta-sec"><xsl:apply-templates select="key('tei:by-corresp', concat('#', @xml:id))" mode="meta"/></header>
@@ -80,6 +81,12 @@
 
   <xsl:template match="seriesStmt/idno[@rend= 'tsmetadoi']" mode="tei2html">
     <meta name="doi" content="{normalize-space(.)}"/>
+  </xsl:template>
+
+  <xsl:template match="byline/affiliation | byline/email | byline/ref" mode="tei2html"/>
+
+  <xsl:template match="@*[starts-with(name(), 'css:')][(ancestor::*[@*[name() = current()/name()]])[1][@*[name() = current()/name()][. = current()]]]" mode="epub-alternatives">
+  <!--  exclude duplicate styles-->
   </xsl:template>
 
 </xsl:stylesheet>
