@@ -53,10 +53,6 @@
     </html>
   </xsl:template>
   
-  <xsl:template name="meta">
-    <!-- to allow generation of meta tags in other series-->
-  </xsl:template>
-
   <xsl:template name="half-title">
     <section class="halftitle title-page" epub:type="halftitlepage" id="halftitle">
       <xsl:apply-templates select="$metadata[@key = ('Kurztext', 'Autoreninformationen', 'Widmung')]" mode="#current"/>
@@ -134,7 +130,7 @@
   <xsl:template name="toc">
     <nav class="toc" epub:type="toc" id="toc">
       <xsl:call-template name="generate-toc-headline"/>
-      <xsl:apply-templates select="/TEI/text/front/divGen[@type = 'toc']/*:header[@rend = 'article-meta-sec']" mode="tei2html"/>
+      <xsl:apply-templates select="/TEI/text/front/divGen[@type = 'toc']/*:header[@rend = 'chunk-meta-sec']" mode="tei2html"/>
       <xsl:call-template name="generate-toc-body">
         <xsl:with-param name="toc_level" select="$toc-depth"/>
       </xsl:call-template>
@@ -474,5 +470,65 @@
     </xsl:attribute>
   </xsl:template>
 
+  <xsl:template match="abstract" mode="tei2html"/>
+
+  <xsl:template match="*:header/abstract" mode="tei2html" priority="2">
+    <div class="chunk-abstract">
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </div>
+  </xsl:template>
+
+  <xsl:key name="tei:by-corresp" match="*[@corresp]" use="@corresp"/>
+
+  <xsl:template match="tei:div[@type= 'chapter'][count(key('tei:by-corresp', concat('#', @xml:id))) gt 0] | 
+                       tei:divGen[@type= 'toc'][count(key('tei:by-corresp', concat('#', @xml:id))) gt 0]" mode="epub-alternatives">
+    <xsl:copy copy-namespaces="yes">
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <header rend="chunk-meta-sec"><xsl:apply-templates select="key('tei:by-corresp', concat('#', @xml:id))" mode="meta"/></header>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*:keywords[@rendition='Keywords']" mode="meta">
+    <ul rend="chunk-keywords">
+      <xsl:for-each select="*:term">
+        <li><xsl:value-of select="."/></li>
+      </xsl:for-each>
+    </ul>
+  </xsl:template>
+
+  <xsl:template match="*:keywords[@rendition='chunk-meta']" mode="meta">
+    <ul rend="chunk-metadata">
+      <xsl:for-each select="*:term">
+        <li rend="{./@key}"><xsl:value-of select="./text()"/></li>
+      </xsl:for-each>
+    </ul>
+  </xsl:template>
+
+  <xsl:template match="*:abstract" mode="meta">
+    <xsl:copy copy-namespaces="yes">
+      <xsl:attribute name="rend" select="'chunk-abstract'"/>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template name="meta">
+    <!-- warum matcht langUsage nicht? -->
+    <xsl:apply-templates select="teiHeader/profileDesc/langUsage, teiHeader/fileDesc/seriesStmt, teiHeader/fileDesc/publicationStmt/date" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="seriesStmt" mode="tei2html">
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="seriesStmt/idno[@rend= 'tsmetadoi']" mode="tei2html">
+    <meta name="doi" content="{normalize-space(.)}"/>
+  </xsl:template>
+
+  <xsl:template match="byline/affiliation | byline/email | byline/ref" mode="tei2html"/>
+
+  <xsl:template match="@*[starts-with(name(), 'css:')][(ancestor::*[@*[name() = current()/name()]])[1][@*[name() = current()/name()][. = current()]]]" mode="epub-alternatives">
+  <!--  exclude duplicate styles-->
+  </xsl:template>
   
 </xsl:stylesheet>
