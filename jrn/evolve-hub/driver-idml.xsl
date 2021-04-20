@@ -16,15 +16,4 @@
   <xsl:import href="http://this.transpect.io/a9s/ts/evolve-hub/driver-idml.xsl"/>  
   <xsl:import href="driver-docx.xsl"/> 
 
-  <xsl:template match="para[@role = 'Fuzeile'] | *[not(self::css:rule)]/@idml2xml:layer" mode="hub:split-at-tab"/>
-  
-  <xsl:template match="sidebar[para[starts-with(@role, 'tsmeta')]]" mode="hub:split-at-tab">
-    <xsl:copy>
-      <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:attribute name="role" select="'article-metadata'"/>
-      <xsl:apply-templates select="node()" mode="#current"/>
-    </xsl:copy>
-  </xsl:template>
-
-
 </xsl:stylesheet>
