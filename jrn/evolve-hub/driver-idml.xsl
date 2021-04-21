@@ -13,7 +13,7 @@
   exclude-result-prefixes="xs hub dbk ts idml2xml" 
   version="2.0">
 
-  <xsl:import href="http://this.transpect.io/a9s/ts/evolve-hub/driver-idml.xsl"/>  
   <xsl:import href="driver-docx.xsl"/> 
+  <xsl:import href="http://this.transpect.io/a9s/ts/evolve-hub/driver-idml.xsl"/>  
 
 </xsl:stylesheet>
