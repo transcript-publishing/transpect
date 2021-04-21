@@ -37,10 +37,16 @@
         <article><xsl:sequence select="."></xsl:sequence></article>
       </xsl:for-each>
     </xsl:variable>
+    <xsl:variable select="if (*:head/*:meta[@name = 'doi'][@content]) 
+                          then replace(/*/*:head/*:meta[@name = 'doi']/@content, '^.+/', '')
+                          else 
+                             if (descendant::*[self::*:header[@class = 'chunk-meta-sec']][*:ul/*:li[@class = 'chunk-doi']])
+                             then replace((descendant::*[self::*:header[@class = 'chunk-meta-sec']]/*:ul/*:li[@class = 'chunk-doi'])[1], '^.+/(.+)-.+$', '$1')
+                             else 'no-chunk-doi-for-main-doc'" name="filename" as="xs:string" />
     <export-root>
       <xsl:element name="html" >
         <xsl:copy-of select="/*/@*" copy-namespaces="no"/>
-        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-chunk, replace(/*/*:head/*:meta[@name = 'doi']/@content, '^.+/', ''), '.html')"/>
+        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-chunk, $filename, '.html')"/>
         <xsl:apply-templates select="/*/node()" mode="#current">
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
         </xsl:apply-templates>
