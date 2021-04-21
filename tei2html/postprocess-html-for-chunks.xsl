@@ -76,7 +76,7 @@
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*" mode="#current"/>
       <meta charset="utf-8"/>
-      <xsl:apply-templates select="node()[not(self::*:meta[@name = $meta-elements/@name])], $meta-elements" mode="#current">
+      <xsl:apply-templates select="node()[not(self::*:meta[@name = $meta-elements/@name]) and not(self::*:link)], *:link[1], $meta-elements" mode="#current">
         <xsl:sort select="name()" />
         <xsl:sort select="(@name, @href)[1]" />
       </xsl:apply-templates>
@@ -96,9 +96,8 @@
   <xsl:template match="*:header[@class = 'chunk-meta-sec']/*:div[@class = 'chunk-abstract']" mode="generate-chunk-meta-tags">
     <meta name="abstract" content="{text()}"/>
   </xsl:template>
-
-
-  <xsl:template match="*:head/*:link/@href" mode="#default">
+ 
+  <xsl:template match="*:head/*:link[1]/@href" mode="#default">
     <!-- https://redmine.le-tex.de/issues/9545#note-8 -->
 <!--     <link type="text/css" rel="stylesheet" href="/assets/css/styles.css" />-->
 <!--     <link href="file:///C:/cygwin/home/mpufe/transcript/trunk/a9s/common/css/stylesheet.css" type="text/css" rel="stylesheet"/>-->
