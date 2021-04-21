@@ -13,7 +13,8 @@
   version="2.0">
   
   <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
-  
+  <xsl:import href="http://this.transpect.io/a9s/ts/xsl/shared-variables.xsl"/>
+
   <xsl:template match="/" mode="custom-2">
     <xsl:variable name="out-dir" as="element(keyword)"
                   select="hub/info/keywordset[@role eq 'hub']/keyword[@role eq 'archive-dir-uri']"/>
@@ -31,10 +32,10 @@
   </xsl:template>
 
  <!-- group meta infos for same structure as in IDML-->
- <xsl:template match="*[*[starts-with(@role, 'tsmeta') and @role != 'tsmetakeywords']]" mode="hub:meta-infos-to-sidebar">
+ <xsl:template match="*[*[starts-with(@role, 'tsmeta') and not(@role[starts-with(.,'tsmetakeyword')])]]" mode="hub:meta-infos-to-sidebar">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:for-each-group select="node()" group-adjacent="exists(self::para[starts-with(@role, 'tsmeta') and @role != 'tsmetakeywords'])">
+      <xsl:for-each-group select="node()" group-adjacent="exists(self::para[starts-with(@role, 'tsmeta') and not(@role[starts-with(.,'tsmetakeyword')])])">
         <xsl:choose>
           <xsl:when test="current-grouping-key()">
             <sidebar role="chunk-metadata">
@@ -48,6 +49,8 @@
       </xsl:for-each-group>
     </xsl:copy>
   </xsl:template>
+
+  <xsl:template match="para[matches(@role, '^(tsheading1|toctitle)$')][not(node())]" mode="hub:split-at-tab"/>
 
  <!-- pull meta infos after headings -->
   <xsl:template match="para[matches(@role, '^(tsheading|toctitle)')][preceding-sibling::*[1][@role = 'chunk-metadata']]" mode="hub:reorder-marginal-notes">
@@ -153,9 +156,10 @@
   </xsl:template>
 
   <xsl:template match="section[@role = 'keywords']" mode="hub:process-meta-sidebar">
-      <keywordset role="{if (title) 
-                        then normalize-space(title) 
-                        else replace(descendant-or-self::para[matches(@role, $hub:article-keywords-role-regex)][1], '^(Schlüssel(wörter|begriffe)|Key\s?words|Mots[-]clés):.+$', '$1')}">
+<xsl:variable name="keyword-role" as="xs:string?" select="if (title) 
+                                                         then normalize-space(title) 
+                                                         else replace(descendant-or-self::para[matches(@role, $hub:article-keywords-role-regex)][1], '^(Schlüssel(wörter|begriffe)|Key\s?words|Mots[-]clés):.+$', '$1')"/>
+      <keywordset role="{if (matches($keyword-role, '^(Schlüssel(wörter|begriffe)|Key\s?words|Mots[-]clés)')) then $keyword-role else 'Keywords'}">
         <xsl:apply-templates select="descendant-or-self::para[matches(@role, $hub:article-keywords-role-regex)]" mode="#current">
           <xsl:with-param name="process-meta" tunnel="yes" as="xs:boolean?" select="true()"/>
         </xsl:apply-templates>
@@ -259,9 +263,11 @@
   <xsl:template match="info/author" mode="custom-2">
     <xsl:copy>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
-      <affiliation>
-        <xsl:copy-of select="parent::info/biblioset/orgname"/>
-      </affiliation>
+      <xsl:if test="parent::info/biblioset/orgname">
+        <affiliation>
+          <xsl:copy-of select="parent::info/biblioset/orgname"/>
+        </affiliation>
+      </xsl:if>
       <xsl:copy-of select="parent::info/biblioset/email,
                            parent::info/biblioset/uri"/>
     </xsl:copy>
@@ -276,5 +282,6 @@
     <toc xml:id="toc">
       <xsl:apply-templates select="@*, title, sidebar[@role = 'chunk-metadata']" mode="#current"/>
     </toc>
-  </xsl:template>    
+  </xsl:template>
+
 </xsl:stylesheet>

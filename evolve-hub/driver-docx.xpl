@@ -95,7 +95,7 @@
     <p:with-option name="debug-indent" select="$debug-indent"/>
   </tr:xslt-mode>
   
-  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/40" mode="hub:repair-hierarchy">
+  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/20" mode="hub:repair-hierarchy">
     <p:input port="stylesheet"><p:pipe step="driver-docx" port="stylesheet"/></p:input>
     <p:input port="models"><p:empty/></p:input>
     <p:with-option name="debug" select="$debug"/>
