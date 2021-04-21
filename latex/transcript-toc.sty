@@ -1,44 +1,47 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-toc}[2021/04/09 transcript]\relax
 
-\def\contentsname{Inhalt}%
+\addto\captionsngerman{\def\contentsname{Inhalt}}
+%
 \renewcommand\@dotsep{.5}
 \renewcommand\tableofcontents{%
-  \chapter*{\contentsname}\label{tableofcontents}%
+  \begin{heading}[notoc]{chapter}%
+    \title{\contentsname}\label{tableofcontents}%
+  \end{heading}%
   \pdfbookmark[0]{\contentsname}{tableofcontents}%
   \pagestyle{empty}%
   \@starttoc{toc}%
   \clearpage\pagestyle{headings}%
 }
+\ifcollection\c@tocdepth=0\relax\else\c@tocdepth=3\relax\fi
 
-% \newif\ifusenumberline \usenumberlinetrue
 
-\renewcommand\@tocrmarg{5em}
-\def\@dottedtocline#1#2#3#4#5{%
-  \ifnum #1>\c@tocdepth \else
-    \vskip \z@
-    {\leftskip #2\relax
-     \rightskip \@tocrmarg\@plus1fil
-     \parfillskip -\rightskip
-     \parindent #2\relax\@afterindenttrue
-     \interlinepenalty\@M
-     \hyphenpenalty=\@M
-     \leavevmode
-      \ifx\usenumberline\relax
-        \@tempdima #3\relax
-      \else
-        \@tempdima\z@\relax
-      \fi
-     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
-     \sffamily
-     {#4}\nobreak
-     \leaders\hbox{$\m@th
-        \mkern \@dotsep mu\textnormal{\hbox{.}}\mkern \@dotsep
-        mu$}\hfill
-     \nobreak
-     \kern.5\p@#5%
-     \par}%
-  \fi}
+% \renewcommand\@tocrmarg{5em}
+% \def\@dottedtocline#1#2#3#4#5{%
+%   \ifnum #1>\c@tocdepth \else
+%     \vskip \z@
+%     {\leftskip #2\relax
+%      \rightskip \@tocrmarg\@plus1fil
+%      \parfillskip -\rightskip
+%      \parindent #2\relax\@afterindenttrue
+%      \interlinepenalty\@M
+%      \hyphenpenalty=\@M
+%      \leavevmode
+%       \ifx\usenumberline\relax
+%         \@tempdima #3\relax
+%       \else
+%         \@tempdima\z@\relax
+%       \fi
+%      \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+%      \sffamily
+%      {#4}\nobreak
+%      \leaders\hbox{$\m@th
+%         \mkern \@dotsep mu\textnormal{\hbox{.}}\mkern \@dotsep
+%         mu$}\hfill
+%      \nobreak
+%      \kern.5\p@#5%
+%      \par}%
+%   \fi}
 
 \def\@freedottedtocline#1#2#3#4#5{%%giovanni, 2019-11-27 (damit auch unter \c@tocdepth=0 was passiert)
     \vskip \z@
@@ -65,94 +68,94 @@
 
 \def\afterfi#1\fi{\fi#1}
 
-\renewcommand*\l@chapter[2]{%
-  \ifnum \c@tocdepth >\m@ne
-    \ifcollection
-      \vskip \baselineskip
-      \begingroup
-      \parindent \z@
-      \raggedright
-      \rightskip \@pnumwidth \@plus 1fil
-      \hyphenpenalty=\@M
-      \parfillskip -\@pnumwidth
-      \leavevmode \sfwide\Large
-      {\sbseries #1}%
-      \ifx\toc@chapter@sub\@undefined\else
-        \par\nopagebreak\toc@chapter@sub%
-      \fi%
-      \ifx\toc@chapter@aut\@undefined\else
-        \par\nopagebreak%
-        {\normalsize\itshape\toc@chapter@aut}%
-      \fi%
-      {\normalsize\leaders\hbox{$\m@th
-          \mkern \@dotsep mu\textnormal{\hbox{.}}\mkern \@dotsep
-          mu$}\hfill
-        \kern.5\p@#2}\par
-      \endgroup
-      \global\let\toc@chapter@sub\@undefined
-      \global\let\toc@chapter@aut\@undefined
-    \else
-      \addpenalty{-\@highpenalty}%
-      \vskip \baselineskip
-      \ifx\usenumberline\relax
-        \@tempdima 2em\relax
-      \else
-        \@tempdima\z@\relax
-      \fi
-      \begingroup
-      \parindent \z@
-      \raggedright
-      \rightskip \@pnumwidth \@plus 1fil
-      \parfillskip -\@pnumwidth
-      \hyphenpenalty=\@M
-      \leavevmode \sffamily
-      \advance\leftskip\@tempdima
-      \hskip -\leftskip
-      {\sbseries#1}%
-      \ifx\toc@chapter@sub\@undefined\else
-        \par\nopagebreak\toc@chapter@sub%
-        \global\let\toc@chapter@sub\@undefined
-      \fi%
-      \nobreak
-      \leaders\hbox{$\m@th
-        \mkern \@dotsep mu\textnormal{\hbox{.}}\mkern \@dotsep
-        mu$}\hfill
-      \kern.5\p@#2\par
-      \penalty\@highpenalty
-      \endgroup
-    \fi
-  \fi
-  \let\usenumberline\@undefined}
+% \renewcommand*\l@chapter[2]{%
+%   \ifnum \c@tocdepth >\m@ne
+%     \ifcollection
+%       \vskip \baselineskip
+%       \begingroup
+%       \parindent \z@
+%       \raggedright
+%       \rightskip \@pnumwidth \@plus 1fil
+%       \hyphenpenalty=\@M
+%       \parfillskip -\@pnumwidth
+%       \leavevmode \sfwide\Large
+%       {\sbseries #1}%
+%       \ifx\toc@chapter@sub\@undefined\else
+%         \par\nopagebreak\toc@chapter@sub%
+%       \fi%
+%       \ifx\toc@chapter@aut\@undefined\else
+%         \par\nopagebreak%
+%         {\normalsize\itshape\toc@chapter@aut}%
+%       \fi%
+%       {\normalsize\leaders\hbox{$\m@th
+%           \mkern \@dotsep mu\textnormal{\hbox{.}}\mkern \@dotsep
+%           mu$}\hfill
+%         \kern.5\p@#2}\par
+%       \endgroup
+%       \global\let\toc@chapter@sub\@undefined
+%       \global\let\toc@chapter@aut\@undefined
+%     \else
+%       \addpenalty{-\@highpenalty}%
+%       \vskip \baselineskip
+%       \ifx\usenumberline\relax
+%         \@tempdima 2em\relax
+%       \else
+%         \@tempdima\z@\relax
+%       \fi
+%       \begingroup
+%       \parindent \z@
+%       \raggedright
+%       \rightskip \@pnumwidth \@plus 1fil
+%       \parfillskip -\@pnumwidth
+%       \hyphenpenalty=\@M
+%       \leavevmode \sffamily
+%       \advance\leftskip\@tempdima
+%       \hskip -\leftskip
+%       {\sbseries#1}%
+%       \ifx\toc@chapter@sub\@undefined\else
+%         \par\nopagebreak\toc@chapter@sub%
+%         \global\let\toc@chapter@sub\@undefined
+%       \fi%
+%       \nobreak
+%       \leaders\hbox{$\m@th
+%         \mkern \@dotsep mu\textnormal{\hbox{.}}\mkern \@dotsep
+%         mu$}\hfill
+%       \kern.5\p@#2\par
+%       \penalty\@highpenalty
+%       \endgroup
+%     \fi
+%   \fi
+%   \let\usenumberline\@undefined}
 
-\renewcommand*\l@part[2]{%
-  \ifnum \c@tocdepth >-2\relax
-    \addpenalty{-\@highpenalty}%
-    \addvspace{2.25em}%
-    \setlength\@tempdima{3em}%
-    \begingroup
-    \parindent \z@
-    \raggedright
-    \rightskip \@pnumwidth \@plus 1fil
-    \parfillskip -\@pnumwidth
-    {\leavevmode
-      \raggedright
-      \sfwide\sbseries\huge
-      \def\numberline##1{##1\nopagebreak}%
-      #1\hfill\strut}\par
-    \nobreak
-    \global\@nobreaktrue
-    \everypar{\global\@nobreakfalse\everypar{}}%
-    \endgroup
-  \fi}
+% \renewcommand*\l@part[2]{%
+%   \ifnum \c@tocdepth >-2\relax
+%     \addpenalty{-\@highpenalty}%
+%     \addvspace{2.25em}%
+%     \setlength\@tempdima{3em}%
+%     \begingroup
+%     \parindent \z@
+%     \raggedright
+%     \rightskip \@pnumwidth \@plus 1fil
+%     \parfillskip -\@pnumwidth
+%     {\leavevmode
+%       \raggedright
+%       \sfwide\sbseries\huge
+%       \def\numberline##1{##1\nopagebreak\space}%
+%       #1\hfill\strut}\par
+%     \nobreak
+%     \global\@nobreaktrue
+%     \everypar{\global\@nobreakfalse\everypar{}}%
+%     \endgroup
+%   \fi}
 
-\newcommand*\l@chapsub[2]{\gdef\toc@chapter@sub{\nobreak #1}}
-\newcommand*\l@chapauthor[2]{\gdef\toc@chapter@aut{\nobreak #1}}
+% % \newcommand*\l@chapsub[2]{\gdef\toc@chapter@sub{\nobreak #1}}
+% % \newcommand*\l@chapauthor[2]{\gdef\toc@chapter@aut{\nobreak #1}}
 
-\renewcommand*\l@section{\@dottedtocline{1}{\z@}{2em}}
-\renewcommand*\l@subsection{\@dottedtocline{2}{2em}{2.5em}}
-\renewcommand*\l@subsubsection{\@dottedtocline{3}{4.5em}{3.0em}}
-\renewcommand*\l@paragraph{\@dottedtocline{4}{7.5em}{3.5em}}
-\renewcommand*\l@subparagraph{\@dottedtocline{5}{11.0em}{4.0em}}
+% \renewcommand*\l@section{\@dottedtocline{1}{\z@}{2em}}
+% \renewcommand*\l@subsection{\@dottedtocline{2}{2em}{2.5em}}
+% \renewcommand*\l@subsubsection{\@dottedtocline{3}{4.5em}{3.0em}}
+% \renewcommand*\l@paragraph{\@dottedtocline{4}{7.5em}{3.5em}}
+% \renewcommand*\l@subparagraph{\@dottedtocline{5}{11.0em}{4.0em}}
 % \ifx\lay b\relax
 %   \ifcollection\else
 %     \RequirePackage{titletoc}%

@@ -2,40 +2,47 @@
 \ProvidesPackage{transcript-floats}[2021/04/09 transcript]\relax
 
 \usepackage[figuresright]{rotating}
+\usepackage{ragged2e}
 \usepackage{tabularx}
 \usepackage{multirow}
 
-\newcolumntype{Q}{>{\raggedright\arraybackslash\unskip}X} % gleich wie X, nur bei einer Kolumne verwenden, mk
-\newcolumntype{W}{>{\raggedleft\arraybackslash\unskip}X} % rechtsbündig, wie X, nur 1x verwenden
-\newcolumntype{L}{>{\raggedright\arraybackslash\unskip}p} % wie p nur linksbündig*
-\newcolumntype{P}{>{\RaggedRight\arraybackslash\unskip}p} % wie p und linksbündig und erlaubt Silbentrennung*
-\newcolumntype{R}{>{\raggedleft\arraybackslash\unskip}p} % rechtsbündig, wie p*
-\newcolumntype{C}{>{\centering\arraybackslash\unskip}X} % zentriert wie X
-\newcolumntype{Z}{>{\centering\arraybackslash\unskip}p} % zentriert wie p*
-\newcolumntype{e}{!{\extracolsep{\fill}}} % wird nicht verwendet
-
-\usepackage{caption}
-
-\renewcommand \thefigure
-     {\@arabic\c@figure}
-\@removefromreset{figure}{chapter}
-
-\renewcommand \thetable
-     {\@arabic\c@table}
-\@removefromreset{table}{chapter}
-
-\captionsetup{%
-   format=plain
-  ,labelformat=empty
-  ,font+=it
-  ,singlelinecheck=false
-  ,justification=RaggedRight
-  ,listformat=empty
+\usepackage{htmltabs}
+\expandafter\def\csname ht@font-family@sans-serif\endcsname{\ht@apply@prop{internal-font-family}{\nsffamily}}
+\SetHTClass{}{%
+  \SetClassProp{td}{font-family}{sans-serif}%
+  \SetClassProp{td}{font-size}{x-small}%
+  \SetClassProp[thead]{td}{font-weight}{bold}%
+  \SetClassProp{td}{padding}{0.9mm 2.15mm 0.3mm}%
 }
 
-\newlength\aboveSourceSkip \aboveSourceSkip0mm
-\newcommand\transcriptBild[2]{\tr@nscriptFloat{#1}{#2}}
-\newcommand\transcriptTab[2]{\aboveSourceSkip1mm\let\use@depth\relax\tr@nscriptFloat{#1}{#2}}
+
+% \def\tablefont{\nsffamily\footnotesize}
+
+
+\tpCaptionOrderTop[figure]{label,caption}
+\tpCaptionOrderBelow[figure]{source,legend}
+
+\tpCaptionOrderTop[table]{label,caption,source}
+\tpCaptionOrderBelow[table]{legend}
+
+\tpCaptionTopSkip{1\baselineskip}
+\tpCaptionBelowSkip{0mm}
+\tpCaptionFormat{\itshape\RaggedRight}
+\tpCaptionSourceFont{\footnotesize\upshape}
+
+\tpSubFloatSep{2mm}
+
+% \captionsetup{%
+%    format=plain
+%   ,labelformat=empty
+%   ,font+=it
+%   ,singlelinecheck=false
+%   ,justification=RaggedRight
+%   ,listformat=empty
+% }
+
+% \newcommand\transcriptBild[2]{\tr@nscriptFloat{#1}{#2}}
+% \newcommand\transcriptTab[2]{\aboveSourceSkip1mm\let\use@depth\relax\tr@nscriptFloat{#1}{#2}}
 
 % \newbox\tr@nscriptFlt
 % \newdimen\tr@nscriptFltWd
