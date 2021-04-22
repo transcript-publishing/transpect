@@ -175,17 +175,45 @@
       <!-- CSS -->
       <xsl:sequence select="$head" />
       <xsl:element name="body" namespace="http://www.w3.org/1999/xhtml">
-<!--        <xsl:element name="chapter" namespace="http://www.w3.org/1999/xhtml">-->
-<!--          <xsl:attribute name="class" select="'article'"/>-->
-          <xsl:apply-templates select="$nodes" mode="#current"/>
+        <!--        <xsl:element name="chapter" namespace="http://www.w3.org/1999/xhtml">-->s
+        <!--          <xsl:attribute name="class" select="'article'"/>-->
+        <xsl:apply-templates select="$nodes" mode="#current"/>
         <!--</xsl:element>-->
       </xsl:element>
     </xsl:element>
+    <xsl:call-template name="create-bib-elt">
+      <xsl:with-param name="nodes" select="$nodes"/>
+      <xsl:with-param name="id" select="$id"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="create-bib-elt">
+    <xsl:param name="nodes" as="node()*"/>
+    <xsl:param name="id" as="xs:string?"/>
+    <xsl:if test="$nodes[.//*[self::*:div[@role = ('doc-bibliography')]]]">
+      <xsl:element name="doi" namespace="">
+        <xsl:attribute name="xml:base" select="replace($uri, 'html', 'xml')"/>
+        <xsl:attribute name="name" select="$id"/>
+        <xsl:apply-templates select="$nodes//*[self::*:div[@role = ('doc-bibliography')]]" mode="bib-chunks"/>
+      </xsl:element>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*:div[@role = 'doc-bibliography']" mode="bib-chunks">
+    <xsl:apply-templates select="*:p" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="*:div[@role = 'doc-bibliography']//*:p" mode="bib-chunks">
+    <xsl:element name="bibl" namespace=""><xsl:apply-templates select="node()" mode="#current"/></xsl:element>
+  </xsl:template>
+
+  <xsl:template match="*" mode="bib-chunks">
+    <xsl:apply-templates mode="#current"/>
   </xsl:template>
 
   <xsl:template match="/*:export-root" mode="export">
     <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
-    <xsl:apply-templates select="*:html" mode="#current"/>
+    <xsl:apply-templates select="*:html | *:doi" mode="#current"/>
   </xsl:template>
 
   <xsl:template match="*:html" mode="export">
@@ -193,6 +221,11 @@
       <xsl:next-match/>
     </xsl:result-document>
   </xsl:template>
- 
+
+  <xsl:template match="*:doi" mode="export">
+    <xsl:result-document href="{@xml:base}">
+      <xsl:next-match/>
+    </xsl:result-document>
+  </xsl:template> 
 
 </xsl:stylesheet>
