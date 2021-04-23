@@ -41,6 +41,7 @@
       <xsl:call-template name="create-bib-elt">
         <xsl:with-param name="nodes" select="node()"/>
         <xsl:with-param name="id" select="$filename"/>
+        <xsl:with-param name="uri" select="$uri"/>
       </xsl:call-template>
       <!--<xsl:if test=".//*[self::*:div[@role = ('doc-bibliography')]]">
         <xsl:element name="doi" namespace="">
