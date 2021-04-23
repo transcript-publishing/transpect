@@ -314,7 +314,7 @@
             $elt/parent::listBibl">
           <xsl:sequence select="3"/>
         </xsl:when>
-        <xsl:when test="$elt/parent::div/@type = ('chapter', 'article', 'article')">
+        <xsl:when test="$elt/parent::div/@type = ('chapter', 'article')">
           <xsl:sequence
             select="
               if ($elt/ancestor::div/@type = 'part') then
