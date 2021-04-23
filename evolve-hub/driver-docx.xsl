@@ -43,7 +43,7 @@
     <xsl:copy>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
       <caption>
-          <xsl:apply-templates select="following-sibling::*[self::caption]/node()" mode="#current"/>  
+          <xsl:apply-templates select="following-sibling::*[1][self::caption]/node()" mode="#current"/>  
       </caption>
     </xsl:copy>
   </xsl:template>
