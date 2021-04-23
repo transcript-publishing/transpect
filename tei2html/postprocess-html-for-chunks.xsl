@@ -34,7 +34,7 @@
     <xsl:variable name="head" select="/*/*:head" as="element(*)"/>
     <xsl:variable name="articles" as="element(*)*">
       <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | descendant::*:div[contains(@class, 'chapter')])">
-        <article><xsl:sequence select="."></xsl:sequence></article>
+        <article><xsl:sequence select="., ./following-sibling::*[1][self::*:div[@class = 'notes']]"></xsl:sequence></article>
       </xsl:for-each>
     </xsl:variable>
     <xsl:variable select="if (*:head/*:meta[@name = 'doi'][@content]) 
@@ -99,8 +99,6 @@
  
   <xsl:template match="*:head/*:link[1]/@href" mode="#default">
     <!-- https://redmine.le-tex.de/issues/9545#note-8 -->
-<!--     <link type="text/css" rel="stylesheet" href="/assets/css/styles.css" />-->
-<!--     <link href="file:///C:/cygwin/home/mpufe/transcript/trunk/a9s/common/css/stylesheet.css" type="text/css" rel="stylesheet"/>-->
     <xsl:attribute name="{name()}" select="'/assets/css/styles.css'"/>
   </xsl:template>
 
@@ -175,7 +173,7 @@
       <!-- CSS -->
       <xsl:sequence select="$head" />
       <xsl:element name="body" namespace="http://www.w3.org/1999/xhtml">
-        <!--        <xsl:element name="chapter" namespace="http://www.w3.org/1999/xhtml">-->s
+        <!--        <xsl:element name="chapter" namespace="http://www.w3.org/1999/xhtml">-->
         <!--          <xsl:attribute name="class" select="'article'"/>-->
         <xsl:apply-templates select="$nodes" mode="#current"/>
         <!--</xsl:element>-->
@@ -184,12 +182,14 @@
     <xsl:call-template name="create-bib-elt">
       <xsl:with-param name="nodes" select="$nodes"/>
       <xsl:with-param name="id" select="$id"/>
+      <xsl:with-param name="uri" select="$uri"/>
     </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="create-bib-elt">
     <xsl:param name="nodes" as="node()*"/>
     <xsl:param name="id" as="xs:string?"/>
+    <xsl:param name="uri" as="xs:string"/>
     <xsl:if test="$nodes[.//*[self::*:div[@role = ('doc-bibliography')]]]">
       <xsl:element name="doi" namespace="">
         <xsl:attribute name="xml:base" select="replace($uri, 'html', 'xml')"/>
