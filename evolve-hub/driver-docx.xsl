@@ -32,9 +32,22 @@
   </xsl:template>
 
   <xsl:template match="para[matches(@role, $hub:figure-copyright-statement-role-regex)]" mode="hub:figure-captions">
+    <caption>
+      <xsl:copy>
+        <xsl:apply-templates select="node()" mode="#current"/>
+      </xsl:copy>
+    </caption>
+  </xsl:template>
+
+  <xsl:template match="figure[following-sibling::*[1][self::caption]]" mode="custom-1">
     <xsl:copy>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <caption>
+          <xsl:apply-templates select="following-sibling::*[self::caption]/node()" mode="#current"/>  
+      </caption>
     </xsl:copy>
   </xsl:template>
+  
+  <xsl:template match="caption[preceding-sibling::*[1][self::figure]]" mode="custom-1"/>
 
 </xsl:stylesheet>
