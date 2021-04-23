@@ -79,6 +79,7 @@
     <xsl:call-template name="create-bib-elt">
       <xsl:with-param name="nodes" select="$nodes"/>
       <xsl:with-param name="id" select="$id"/>
+      <xsl:with-param name="uri" select="$uri"/>
     </xsl:call-template>
   </xsl:template>
 
