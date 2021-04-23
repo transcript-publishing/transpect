@@ -527,8 +527,4 @@
 
   <xsl:template match="byline/affiliation | byline/email | byline/ref" mode="tei2html"/>
 
-  <xsl:template match="@*[starts-with(name(), 'css:')][(ancestor::*[@*[name() = current()/name()]])[1][@*[name() = current()/name()][. = current()]]]" mode="epub-alternatives">
-  <!--  exclude duplicate styles-->
-  </xsl:template>
-  
 </xsl:stylesheet>
