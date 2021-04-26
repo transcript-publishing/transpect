@@ -35,9 +35,9 @@
       <head>
         <xsl:call-template name="stylesheet-links"/>
         <title>
-          <xsl:apply-templates select="$metadata[@key = 'Titel']" mode="#current"/>
+          <xsl:apply-templates select="$metadata[@key = 'Titel']//text()" mode="#current"/>
         </title>
-        <!--<xsl:call-template name="meta"/>-->
+        <xsl:call-template name="meta"/>
         <!--<xsl:apply-templates select="teiHeader/encodingDesc/css:rules" mode="#current"/>-->
       </head>
       <body>
@@ -129,7 +129,8 @@
   
   <xsl:template name="toc">
     <nav class="toc" epub:type="toc" id="toc">
-      <xsl:call-template name="generate-toc-headline"/>  
+      <xsl:call-template name="generate-toc-headline"/>
+      <xsl:apply-templates select="/TEI/text/front/divGen[@type = 'toc']/*:header[@rend = 'chunk-meta-sec']" mode="tei2html"/>
       <xsl:call-template name="generate-toc-body">
         <xsl:with-param name="toc_level" select="$toc-depth"/>
       </xsl:call-template>
@@ -295,7 +296,7 @@
     <xsl:apply-templates select="$author" mode="heading-content"/>
   </xsl:template>
   
-<xsl:function name="tei2html:heading-level" as="xs:integer?">
+  <xsl:function name="tei2html:heading-level" as="xs:integer?">
     <xsl:param name="elt" as="element(*)"/>
     <xsl:variable name="level" as="xs:integer?">
       <xsl:choose>
@@ -313,7 +314,7 @@
             $elt/parent::listBibl">
           <xsl:sequence select="3"/>
         </xsl:when>
-        <xsl:when test="$elt/parent::div/@type = ('chapter')">
+        <xsl:when test="$elt/parent::div/@type = ('chapter', 'article')">
           <xsl:sequence
             select="
               if ($elt/ancestor::div/@type = 'part') then
@@ -325,10 +326,10 @@
         <xsl:when test="$elt/parent::div[@type = ('section')]">
           <xsl:sequence select="count($elt/ancestor::div[@type eq 'section']) + 3"/>
         </xsl:when>
-        <xsl:when test="$elt/parent::div/@type = ('bibliography')">
+        <xsl:when test="$elt/parent::div/@type = ('bibliography', 'abstract','keywords')">
           <xsl:sequence
             select="
-              if ($elt/ancestor::div/@type = 'chapter') then
+              if ($elt/ancestor::div/@type = ('chapter', 'article')) then
                 5
               else
                 4"
@@ -336,6 +337,15 @@
         </xsl:when>
         <xsl:when test="$elt/parent::*[matches(local-name(.), '^div\d')]">
           <xsl:sequence select="count($elt/ancestor::*[matches(local-name(.), '^div')])"/>
+        </xsl:when>
+        <xsl:when test="$elt/parent::argument">
+         <xsl:sequence
+            select="
+              if ($elt/ancestor::div/@type = ('chapter', 'article')) then
+                5
+              else
+                4"
+          />
         </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="custom" as="xs:integer?">
@@ -453,5 +463,68 @@
       <xsl:apply-templates mode="#current"/>
     </code>
   </xsl:template>
-  
+
+  <xsl:template match="*:img[contains(../@class, 'fig')][../*:p[*:span[@class='hub:caption-text']]]/@alt[.= '']" mode="clean-up">
+    <xsl:attribute name="{name()}">
+      <xsl:apply-templates select="../../*:p[*:span[@class='hub:caption-text']]/*:span[@class='hub:caption-text']" mode="strip-indexterms-etc"/>
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template match="abstract" mode="tei2html"/>
+
+  <xsl:template match="*:header/abstract" mode="tei2html" priority="2">
+    <div class="chunk-abstract">
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </div>
+  </xsl:template>
+
+  <xsl:key name="tei:by-corresp" match="*[@corresp]" use="@corresp"/>
+
+  <xsl:template match="tei:div[@type= 'chapter'][count(key('tei:by-corresp', concat('#', @xml:id))) gt 0] | 
+                       tei:divGen[@type= 'toc'][count(key('tei:by-corresp', concat('#', @xml:id))) gt 0]" mode="epub-alternatives">
+    <xsl:copy copy-namespaces="yes">
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <header rend="chunk-meta-sec"><xsl:apply-templates select="key('tei:by-corresp', concat('#', @xml:id))" mode="meta"/></header>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*:keywords[@rendition='Keywords']" mode="meta">
+    <ul rend="chunk-keywords">
+      <xsl:for-each select="*:term">
+        <li><xsl:value-of select="."/></li>
+      </xsl:for-each>
+    </ul>
+  </xsl:template>
+
+  <xsl:template match="*:keywords[@rendition='chunk-meta']" mode="meta">
+    <ul rend="chunk-metadata">
+      <xsl:for-each select="*:term">
+        <li rend="{./@key}"><xsl:value-of select="./text()"/></li>
+      </xsl:for-each>
+    </ul>
+  </xsl:template>
+
+  <xsl:template match="*:abstract" mode="meta">
+    <xsl:copy copy-namespaces="yes">
+      <xsl:attribute name="rend" select="'chunk-abstract'"/>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template name="meta">
+    <!-- warum matcht langUsage nicht? -->
+    <xsl:apply-templates select="teiHeader/profileDesc/langUsage, teiHeader/fileDesc/seriesStmt, teiHeader/fileDesc/publicationStmt/date" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="seriesStmt" mode="tei2html">
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="seriesStmt/idno[@rend= 'tsmetadoi']" mode="tei2html">
+    <meta name="doi" content="{normalize-space(.)}"/>
+  </xsl:template>
+
+  <xsl:template match="byline/affiliation | byline/email | byline/ref" mode="tei2html"/>
+
 </xsl:stylesheet>

@@ -1,0 +1,65 @@
+<?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<set xmlns="http://transpect.io/xml2tex" 
+     xmlns:xml2tex="http://transpect.io/xml2tex" 
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  
+  <import href="../../xml2tex/latex.conf.xml"/>
+  
+  <preamble>%
+    % transcript journal
+    %
+    <xsl:value-of select="concat('\documentclass[',
+                                 string-join(($babel-langs[position() ne 1],
+                                              $babel-langs[1]), (: 1st lang is main lang and comes last :)
+                                 ','),
+                                 ',article',
+                                 ',lay=',
+                                 lower-case($layout),
+                                 for $i in $other-scripts-in-doc
+                                 return concat(',usescript=', $i),
+                                 ']{transcript}&#xa;')"/>
+    \definecolor{color-1}{rgb}{0,0,0}
+    \definecolor{color-2}{rgb}{0.85,0.85,0.85}
+    <xsl:for-each select="xml2tex:rgb-to-tex-color( $colors )">
+      <xsl:if test="not(matches(., 'color-(1|2)'))">        
+        <xsl:value-of select="concat('\define', ., '&#xa;')"/>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:if test="$langs = 'zh'">
+      <xsl:value-of select="'\usepackage{CJK}&#xa;'"/>
+    </xsl:if>
+  </preamble>
+  
+  <front>
+    <xsl:if test="$title-pages eq 'yes'">
+      <xsl:text>\maketitle&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="'\setcounter{secnumdepth}{-1}&#xa;'"/>
+    <xsl:value-of select="concat('\setcounter{tocdepth}{', 
+                                   if(//dbk:part) 
+                                   then xs:string(xs:integer($toc-depth) - 2)
+                                   else xs:string(xs:integer($toc-depth) - 1),
+                                   '}&#xa;')"/>
+    <xsl:text>\tableofcontents&#xa;</xsl:text>
+  </front>
+  
+  <template context="dbk:dedication[@role eq 'tsded']">
+    <rule name="wid" type="env"  break-after="1" break-before="1">
+      <param/>
+    </rule>
+  </template>
+  
+    <template context="dbk:abbrev[matches(@role, $col-head-right-style)]">
+    <rule name="chaptermark" type="cmd" break-after="1">
+      <param/>
+    </rule>
+  </template>
+  
+  <template context="dbk:abbrev[matches(@role, concat($col-head-short-style, '|', $col-head-left-style))]">    
+    <rule name="def\partmarkoverride" type="cmd" break-after="1" break-before="1">
+      <param/>
+    </rule>
+  </template>
+  
+</set>
