@@ -85,7 +85,7 @@
 
   <xsl:template match="*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']" mode="generate-chunk-meta-tags">
     <xsl:for-each select="*:li">
-      <meta name="{./@class}" content="{./text()}"/>
+      <meta name="{./@class}" content="{if (@class = '') then replace(./text(), '^http://doi.org/', '') else ./text()}"/>
     </xsl:for-each>
   </xsl:template>
 
@@ -193,7 +193,7 @@
     <xsl:if test="$nodes[.//*[self::*:div[@role = ('doc-bibliography')]]]">
       <xsl:element name="doi" namespace="">
         <xsl:attribute name="xml:base" select="replace($uri, 'html', 'xml')"/>
-        <xsl:attribute name="name" select="$id"/>
+        <xsl:attribute name="name" select="replace($uri, '^.+/(.+?)\.html', '$1')"/>
         <xsl:apply-templates select="$nodes//*[self::*:div[@role = ('doc-bibliography')]]" mode="bib-chunks"/>
       </xsl:element>
     </xsl:if>
