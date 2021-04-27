@@ -164,6 +164,37 @@
  
   <xsl:template match="@xml:base" mode="export"/>
   
+  <xsl:template match="*:p[matches(@class, 'tsmediacaption')]" mode="#default">
+    <xsl:param name="preserve" as="xs:boolean?"/>
+    <xsl:if test="$preserve">
+      <p class="tsMediaCaption"><xsl:apply-templates select="@* except @class, node()"/></p>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*:p[matches(@class, 'tsmediasource')]" mode="#default">
+    <xsl:param name="preserve" as="xs:boolean?"/>
+    <xsl:if test="$preserve">
+      <p class="tsMediaSource"><xsl:apply-templates select="@* except @class, node()"/></p>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*:p[matches(@class, 'tsmediaurl')]" mode="#default">
+    <div class="tsMediaContainer">
+      <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediacaption')], following-sibling::*[matches(@class, 'tsmediacaption')]">
+        <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
+      </xsl:apply-templates>
+      <div class="tsIframeContainer">
+        <iframe class="tsMediaUrl" src="{normalize-space(string-join(.))}" loading="lazy">
+          <p>Your browser does not support iframes, please consider using Firefox.</p>
+        </iframe>
+      </div>
+      <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediasource')], following-sibling::*[matches(@class, 'tsmediasource')]">
+        <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
+      </xsl:apply-templates>
+    </div>
+  </xsl:template>
+
+
   <xsl:template name="html:create-chunk">
     <xsl:param name="nodes" as="element(*)+"/>
     <xsl:param name="uri" as="xs:string"/>
