@@ -34,8 +34,8 @@
   <xsl:template match="/" mode="#default">
     <xsl:variable name="head" select="/*/*:head" as="element(*)"/>
     <xsl:variable name="articles" as="element(*)*">
-      <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | descendant::*:div[contains(@class, 'chapter')])">
-        <article><xsl:sequence select="., ./following-sibling::*[1][self::*:div[@class = 'notes']]"></xsl:sequence></article>
+      <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | descendant::*:div[contains(@class, 'chapter')])"><article><xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"></xsl:sequence>
+        </article>
       </xsl:for-each>
     </xsl:variable>
     <xsl:variable select="if (*:head/*:meta[@name = 'doi'][@content]) 
@@ -56,6 +56,18 @@
         <xsl:with-param name="head" select="$head" as="element(*)?" tunnel="yes"/>
       </xsl:apply-templates>
     </export-root>
+  </xsl:template>
+
+  <xsl:function name="tr:get-part-title" as="element(*)?">
+    <xsl:param name="book-part" as="element(*)"/>
+    <xsl:apply-templates select="$book-part/ancestor::*[self::*:div[@role = 'doc-part']]/*[local-name() = ('h1', 'h2', 'h3', 'h4', 'h5')]" mode="create-column-titles"/>
+  </xsl:function>
+
+  <xsl:template match="*[local-name() = ('h1', 'h2', 'h3', 'h4', 'h5')] " mode="create-column-titles" priority="7">
+    <xsl:element name="p" namespace="http://www.w3.org/1999/xhtml">
+      <xsl:attribute name="class" select="'chunk columntitle'"/>
+      <xsl:apply-templates select="node()" mode="#default"/>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="*:div[@epub:type = ('imprint', 'loi', 'lot')] | *:section[@id = 'halftitle'] | *:div[contains(@class, 'book-review')] " mode="#default" priority="7">
