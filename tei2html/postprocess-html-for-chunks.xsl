@@ -23,7 +23,7 @@
   <xsl:variable name="local-dir-chunk" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/chunks/' else 'chunks/'"/>  
   <xsl:variable name="local-dir-issue" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/chunks/issue/' else 'chunks/issue/'"/>
   
-  <xsl:template match="@* | node()" mode="#default export">
+  <xsl:template match="@* | node()" mode="#default export create-column-titles">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </xsl:copy>
@@ -66,8 +66,14 @@
   <xsl:template match="*[local-name() = ('h1', 'h2', 'h3', 'h4', 'h5')] " mode="create-column-titles" priority="7">
     <xsl:element name="p" namespace="http://www.w3.org/1999/xhtml">
       <xsl:attribute name="class" select="'chunk columntitle'"/>
-      <xsl:apply-templates select="node()" mode="#default"/>
+      <xsl:apply-templates select="node()" mode="#current"/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="*:br" mode="create-column-titles" priority="5">
+    <xsl:if test="matches(preceding-sibling::node()[1], '\P{Zs}$') and matches(following-sibling::node()[1], '^\P{Zs}')">
+      <xsl:text> </xsl:text>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="*:div[@epub:type = ('imprint', 'loi', 'lot')] | *:section[@id = 'halftitle'] | *:div[contains(@class, 'book-review')] " mode="#default" priority="7">
