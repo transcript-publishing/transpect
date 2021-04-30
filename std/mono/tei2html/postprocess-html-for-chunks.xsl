@@ -21,12 +21,14 @@
         <article><xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"></xsl:sequence></article>
       </xsl:for-each>
     </xsl:variable>
-    <xsl:variable select="if (*:head/*:meta[@name = 'doi'][@content]) 
-                          then replace(/*/*:head/*:meta[@name = 'doi']/@content, '^.+/', '')
+    <xsl:variable name="whole-doi" select="if (*:head/*:meta[@name = 'doi'][@content]) 
+                          then /*/*:head/*:meta[@name = 'doi']/@content
                           else 
                              if (descendant::*[self::*:header[@class = 'chunk-meta-sec']][*:ul/*:li[@class = 'chunk-doi']])
-                             then replace((descendant::*[self::*:header[@class = 'chunk-meta-sec']]/*:ul/*:li[@class = 'chunk-doi'])[1], '^.+/(.+)-.+$', '$1')
-                             else 'no-chunk-doi-for-main-doc'" name="filename" as="xs:string" />
+                             then (descendant::*[self::*:header[@class = 'chunk-meta-sec']]/*:ul/*:li[@class = 'chunk-doi'])[1]
+                             else 'no-chunk-doi-for-main-doc'" as="xs:string" />
+
+    <xsl:variable name="filename" select="replace($whole-doi, '^.+/([^-]+)(-.+)?$', '$1')" as="xs:string" />
     <export-root>
       <xsl:element name="html" >
         <xsl:copy-of select="/*/@*" copy-namespaces="no"/>
@@ -40,7 +42,7 @@
       </xsl:apply-templates>
       <xsl:call-template name="create-bib-elt">
         <xsl:with-param name="nodes" select="node()"/>
-        <xsl:with-param name="id" select="$filename"/>
+        <xsl:with-param name="doi" select="$whole-doi"/>
         <xsl:with-param name="uri" select="$uri"/>
       </xsl:call-template>
       <!--<xsl:if test=".//*[self::*:div[@role = ('doc-bibliography')]]">
