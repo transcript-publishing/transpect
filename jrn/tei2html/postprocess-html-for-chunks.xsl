@@ -57,6 +57,7 @@
       <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-chunk, $uri, '.html')"/>
       <xsl:with-param name="id" as="xs:string" select="(*/@id, generate-id())[1]"/>
       <xsl:with-param name="head" select="$head-with-title" as="element(*)?" tunnel="yes"/>
+      <xsl:with-param name="doi" as="xs:string?" select="replace(descendant::*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1], '^.*/(10\.\d+/.+)$', '$1')"/>
     </xsl:call-template>
   </xsl:template>
 
@@ -65,6 +66,7 @@
     <xsl:param name="uri" as="xs:string"/>
     <xsl:param name="id" as="xs:string"/>
     <xsl:param name="head" as="element(*)?" tunnel="yes"/>
+    <xsl:param name="doi" as="xs:string?"/>
     <xsl:element name="html" namespace="http://www.w3.org/1999/xhtml">
       <xsl:attribute name="xml:base" select="$uri"/>
       <!-- CSS -->
@@ -78,7 +80,7 @@
     </xsl:element>
     <xsl:call-template name="create-bib-elt">
       <xsl:with-param name="nodes" select="$nodes"/>
-      <xsl:with-param name="id" select="$id"/>
+      <xsl:with-param name="doi" select="$doi"/>
       <xsl:with-param name="uri" select="$uri"/>
     </xsl:call-template>
   </xsl:template>
