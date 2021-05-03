@@ -309,6 +309,22 @@
 \parskip\z@
 
 %%%%%%%%%%%%%%%
+% math        %
+%%%%%%%%%%%%%%%
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsxtra}
+\usepackage{wasysym}
+\usepackage{isomath}
+\usepackage{mathtools}
+\usepackage{txfonts}
+\usepackage{upgreek}
+\usepackage{tensor}
+\usepackage{xfrac}
+
+%%%%%%%%%%%%%%%
 % page layout %
 %%%%%%%%%%%%%%%
 
