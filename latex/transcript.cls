@@ -63,7 +63,8 @@
 % Sprachen %
 %%%%%%%%%%%%
 
-\RequirePackage{babel}
+\RequirePackage[shorthands=off]{babel}
+
 \addto\captionsngerman{\def\contentsname{Inhalt}}
 \addto\captionsngerman{\def\refname{Literaturverzeichnis}}
 
