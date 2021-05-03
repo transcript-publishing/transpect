@@ -19,8 +19,8 @@
   <css:rule layout-type="para" native-name="ts_journal_header" name="tsjournalheader"/>
   <css:rule layout-type="para" native-name="ts_journal_review_bookinfo" name="tsjournalreviewbookinfo"/>
   <css:rule layout-type="para" native-name="ts_journal_review_author" name="tsjournalreviewauthor"/>
-  <css:rule layout-type="para" native-name="ts_jorunal_review_heading" name="tsjorunalreviewheading"/>
-  <css:rule layout-type="para" native-name="ts_jorunal_review_subheading" name="tsjorunalreviewsubheading"/>
+  <css:rule layout-type="para" native-name="ts_journal_review_heading" name="tsjournalreviewheading"/>
+  <css:rule layout-type="para" native-name="ts_journal_review_subheading" name="tsjorunalreviewsubheading"/>
   <css:rule layout-type="para" native-name="ts_subheading_1" name="tssubheading1"/>
   <css:rule layout-type="para" native-name="ts_subheading_2" name="tssubheading2"/>
   <css:rule layout-type="para" native-name="ts_subheading_3" name="tssubheading3"/>

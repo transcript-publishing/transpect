@@ -256,7 +256,7 @@
   
    
   <!-- headings -->
-  <template context="dbk:chapter/dbk:info | dbk:section/dbk:info | dbk:chapter/dbk:info | dbk:preface/dbk:info | dbk:appendix/dbk:info | dbk:bibliogaphy/dbk:info">
+  <template context="dbk:part/dbk:info | dbk:section/dbk:info | dbk:chapter/dbk:info | dbk:preface/dbk:info | dbk:appendix/dbk:info | dbk:bibliogaphy/dbk:info">
     <xsl:apply-templates select="node()" mode="#current"/>
   </template>
 

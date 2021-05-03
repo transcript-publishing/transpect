@@ -38,8 +38,8 @@
     <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
     <p:with-option name="debug-indent" select="$debug-indent"/>
   </tr:xslt-mode>
-  
-  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/02" mode="hub:preprocess-hierarchy">
+
+  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/02" mode="hub:meta-infos-to-sidebar">
     <p:input port="stylesheet"><p:pipe step="driver-docx" port="stylesheet"/></p:input>
     <p:input port="models"><p:empty/></p:input>
     <p:with-option name="debug" select="$debug"/>
@@ -47,7 +47,7 @@
     <p:with-option name="debug-indent" select="$debug-indent"/>
   </tr:xslt-mode>
   
-  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/03" mode="hub:hierarchy">
+  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/03" mode="hub:reorder-marginal-notes">
     <p:input port="stylesheet"><p:pipe step="driver-docx" port="stylesheet"/></p:input>
     <p:input port="models"><p:empty/></p:input>
     <p:with-option name="debug" select="$debug"/>
@@ -55,7 +55,23 @@
     <p:with-option name="debug-indent" select="$debug-indent"/>
   </tr:xslt-mode>
   
-  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/04" mode="hub:postprocess-hierarchy">
+  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/04" mode="hub:preprocess-hierarchy">
+    <p:input port="stylesheet"><p:pipe step="driver-docx" port="stylesheet"/></p:input>
+    <p:input port="models"><p:empty/></p:input>
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="debug-indent" select="$debug-indent"/>
+  </tr:xslt-mode>
+  
+  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/05" mode="hub:hierarchy">
+    <p:input port="stylesheet"><p:pipe step="driver-docx" port="stylesheet"/></p:input>
+    <p:input port="models"><p:empty/></p:input>
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="debug-indent" select="$debug-indent"/>
+  </tr:xslt-mode>
+  
+  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/06" mode="hub:postprocess-hierarchy">
     <p:input port="stylesheet"><p:pipe step="driver-docx" port="stylesheet"/></p:input>
     <p:input port="models"><p:empty/></p:input>
     <p:with-option name="debug" select="$debug"/>
@@ -79,7 +95,7 @@
     <p:with-option name="debug-indent" select="$debug-indent"/>
   </tr:xslt-mode>
   
-  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/40" mode="hub:repair-hierarchy">
+  <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/20" mode="hub:repair-hierarchy">
     <p:input port="stylesheet"><p:pipe step="driver-docx" port="stylesheet"/></p:input>
     <p:input port="models"><p:empty/></p:input>
     <p:with-option name="debug" select="$debug"/>
@@ -87,6 +103,14 @@
     <p:with-option name="debug-indent" select="$debug-indent"/>
   </tr:xslt-mode>
   
+  <tr:xslt-mode msg="yes" hub-version="1.2" prefix="evolve-hub/35" mode="hub:process-meta-sidebar" name="process-meta">
+    <p:input port="stylesheet"><p:pipe step="driver-docx" port="stylesheet"/></p:input>
+    <p:input port="models"><p:empty/></p:input>
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="debug-indent" select="$debug-indent"/>
+  </tr:xslt-mode>
+
   <tr:xslt-mode msg="yes" hub-version="1.1" prefix="evolve-hub/41" mode="hub:join-phrases">
     <p:input port="stylesheet"><p:pipe step="driver-docx" port="stylesheet"/></p:input>
     <p:input port="models"><p:empty/></p:input>

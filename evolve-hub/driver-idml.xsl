@@ -7,12 +7,16 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:functx="http://www.functx.com"
   xmlns:ts="http://www.transcript-verlag.de/transpect"
+ xmlns:idml2xml="http://transpect.io/idml2xml"
   xmlns="http://docbook.org/ns/docbook" 
   xpath-default-namespace="http://docbook.org/ns/docbook"
-  exclude-result-prefixes="xs hub dbk ts" 
+  exclude-result-prefixes="xs hub dbk ts idml2xml" 
   version="2.0">
   
-  <xsl:import href="driver-docx.xsl"/>  
   <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-idml.xsl"/>  
+  <xsl:import href="http://this.transpect.io/a9s/ts/xsl/shared-variables.xsl"/>
+
+ <xsl:template match="para[@role = 'Fuzeile'] | *[not(self::css:rule)]/@idml2xml:layer" mode="hub:split-at-tab"/>
+
 
 </xsl:stylesheet>
