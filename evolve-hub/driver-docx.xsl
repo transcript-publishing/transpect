@@ -13,7 +13,8 @@
   version="2.0">
   
   <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
-  
+  <xsl:import href="http://this.transpect.io/a9s/ts/xsl/shared-variables.xsl"/>
+
   <xsl:template match="/" mode="custom-2">
     <xsl:variable name="out-dir" as="element(keyword)"
                   select="hub/info/keywordset[@role eq 'hub']/keyword[@role eq 'archive-dir-uri']"/>
@@ -29,5 +30,24 @@
       </xsl:result-document>
     </xsl:if>
   </xsl:template>
-    
+
+  <xsl:template match="para[matches(@role, $hub:figure-copyright-statement-role-regex)]" mode="hub:figure-captions">
+    <caption>
+      <xsl:copy>
+        <xsl:apply-templates select="node()" mode="#current"/>
+      </xsl:copy>
+    </caption>
+  </xsl:template>
+
+  <xsl:template match="figure[following-sibling::*[1][self::caption]]" mode="custom-1">
+    <xsl:copy>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <caption>
+          <xsl:apply-templates select="following-sibling::*[1][self::caption]/node()" mode="#current"/>  
+      </caption>
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="caption[preceding-sibling::*[1][self::figure]]" mode="custom-1"/>
+
 </xsl:stylesheet>
