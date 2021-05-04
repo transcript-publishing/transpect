@@ -22,13 +22,29 @@
 \tpCaptionOrderTop[figure]{label,caption}
 \tpCaptionOrderBelow[figure]{source,legend}
 
+
+\intextsep\baselineskip
+\def\tpListEntry{\tp@lo@cpt}
+\tpIntextSkipAbove{1\baselineskip}
+\tpIntextSkipBelow{-2.5bp}
+
 \tpCaptionOrderTop[table]{label,caption,source}
 \tpCaptionOrderBelow[table]{legend}
 
-\tpCaptionTopSkip{1\baselineskip}
-\tpCaptionBelowSkip{0mm}
-\tpCaptionFormat{\itshape\RaggedRight}
-\tpCaptionSourceFont{\footnotesize\upshape}
+\tpCaptionVAlignTop{b}
+\tpCaptionVAlignBottom{t}
+\tpCaptionTopSep[table]{9bp}
+
+\tpCaptionTopSep[figure]{1bp}
+\tpCaptionBelowSep[figure]{4bp}
+\tpCaptionFormatTop{\itshape\RaggedRight}
+\tpCaptionFormatBelow{\footnotesize\upshape\RaggedRight}
+
+\CSSDeclareClass{}{}
+\CSSDeclareClass{A}{\tpLeftSkip{0mm}\tpRightSkip{0mm}}
+\CSSDeclareClass{B}{\tpLeftSkip{10mm}\tpRightSkip{10mm}}
+\CSSDeclareClass{C}{\tpLeftSkip{15mm}\tpRightSkip{15mm}}
+\CSSDeclareClass{D}{\tpLeftSkip{30mm}\tpRightSkip{30mm}}
 
 \tpSubFloatSep{2mm}
 

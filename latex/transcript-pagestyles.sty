@@ -7,28 +7,44 @@
   \let\@evenhead\@empty
   \let\@evenfoot\@empty
 }
-\newif\ifhasparts \haspartsfalse
 
 \def\ps@headings{%
-  \def\left@side{\ifx\partmarkoverride\@undefined\ifcollection\ifx\authormark\@empty\leftmark\else\authormark\fi\else\ifhasparts\partmark\else\@title\fi\fi\else\partmarkoverride\fi}%
-  \def\@oddhead{\hfill{\small\sffamily\leftmark\rlap{\hb@xt@8mm{\hfill\thepage}}%
+  \def\left@mark{%
+    \def\numberline####1{####1\enskip}%
+    \ifcollection
+      \ifx\authormark\@empty
+        \ifx\@chaptermark\@undefined\else
+          \@chaptermark
+        \fi
+      \else
+        \authormark
+      \fi
+    \else
+      \ifx\@partmark\@undefined
+        \@title
+      \else
+        \@partmark
+      \fi
+    \fi
+  }%
+  \def\right@mark{%
+    \def\numberline####1{####1\enskip}%
+    \ifx\@chaptermark\@undefined\else
+      \@chaptermark
+    \fi}%
+  \def\@oddhead{\hfill{\small\sffamily\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
       % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     }}%
   \def\@evenhead{%
     % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    {\small\sffamily\llap{\hb@xt@8mm{\thepage\hfill}}\left@side}\hfill}%
+    {\small\sffamily\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
   \let\@oddfoot\@empty
   \let\@evenfoot\@empty
-    \def\chaptermark##1{%
-  \ifcollection
-    \markboth {##1}{}%
-  \else
-    \ifnum \c@secnumdepth >\m@ne
-      \markboth {\thechapter\enskip##1}{}%
-    \else
-      \markboth {##1}{}%
-    \fi
-  \fi%
+  \def\partmark##1{%
+    \gdef\@partmark{##1}%
+  }%
+  \def\chaptermark##1{%
+    \gdef\@chaptermark{##1}%
   }%
 }
 \pagestyle{headings}

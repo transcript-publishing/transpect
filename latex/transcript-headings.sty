@@ -22,8 +22,9 @@
 
 \tpDeclareHeading{-1}{part}{%
   \tpHeadingProperty{BlockFormat}{%
-    \markboth{}{}%
+    %\markboth{}{}%
     \thispagestyle{empty}%
+    \global\c@footnote0\relax
   }%
   \tpHeadingProperty{BeforeHeading}{\cleardoublepage\null\vskip\headingsep}%
   \tpHeadingProperty{AfterHeading}{\vfill}%
@@ -42,10 +43,10 @@
 \newdimen\chaphskip \chaphskip7mm %% default
 \tpDeclareHeading{0}{chapter}{%
   \tpHeadingProperty{BlockFormat}{%
-    \markboth{}{}%
     \thispagestyle{empty}%
     \raggedright \normalfont
     \interlinepenalty\@M
+    \global\c@footnote0\relax
   }%
   \tpHeadingProperty{AfterTitles}{%
     \@@par\vskip\dimexpr-1\baselineskip\relax
@@ -84,7 +85,9 @@
   \tpToCFormat{%
     \sbseries\Large\sfwide%
   }%
-  \ifcollection\tpToCNoNumber\fi
+  \ifcollection\tpToCNoNumber\else
+    \tpToCHangNumber
+  \fi
   %%
   \tsToC
 }
@@ -117,6 +120,7 @@
       \noindent
     }%
   \tpHeadingProperty{AfterQuote}{\egroup}%
+  \tpToCHangNumber
   \tsToC
 }
 
@@ -135,6 +139,7 @@
   \tpHeadingProperty{AfterAuthor}{\@@par}%
   \tpHeadingProperty{SubtitleFormat}{\sffamily\LARGE}%
   \tpHeadingProperty{BeforeQuote}{\@@par\vskip.5\baselineskip}%
+  \tpToCHangNumber
   \tsToC
 }
 
@@ -142,6 +147,7 @@
   \tpHeadingProperty{BeforeHeading}{\vskip12.8bp}%
   \tpHeadingProperty{AfterSkip}{1sp}%
   \tpHeadingProperty{TitleFormat}{\sffamily\mdseries\Large}%
+  \tpToCHangNumber
   \tsToC
 }
 
@@ -149,6 +155,7 @@
   \tpHeadingProperty{BeforeHeading}{\vskip12.8bp}%
   \tpHeadingProperty{AfterSkip}{1sp}%
   \tpHeadingProperty{TitleFormat}{\normalfont\sfwide\normalsize}%
+  \tpToCHangNumber
   \tsToC
 }
 
