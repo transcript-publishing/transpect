@@ -2,6 +2,7 @@
 <css:rules xmlns:css="http://www.w3.org/1996/css">
 
   <css:rule layout-type="para" native-name="ts_abstracts" name="tsabstracts"/>
+  <css:rule layout-type="para" native-name="ts_abstracts_heading" name="tsabstractsheading"/>
 
   <css:rule layout-type="para" native-name="ts_author" name="tsauthor"/>
   <css:rule layout-type="para" native-name="ts_author_name" name="tsauthorname" />
@@ -38,7 +39,10 @@
   <css:rule layout-type="para" native-name="ts_jorunal_review_subheading" name="tsjorunalreviewsubheading"/>
 
   <css:rule layout-type="para" native-name="ts_journal_twocolumn" name="tsjournaltwocolumn" regex="tsjournaltwocolumn(end|start)?"/>
-  <css:rule layout-type="para" native-name="ts_meta_keywords" name="tsmeta"/>
+  <css:rule layout-type="para" native-name="ts_meta_keywords" name="tsmetakeywords"/>
+  <css:rule layout-type="para" native-name="ts_meta_keywords_heading" name="tsmetakeywordsheading"/>
+  <css:rule layout-type="para" native-name="ts_meta_alternative_headline" name="tsmetaalternativeheadline"/>
+  <css:rule layout-type="para" native-name="ts_meta_alternative_headline_heading" name="tsmetaalternativeheadlineheading"/>
   <css:rule layout-type="para" native-name="ts_meta_doi" name="tsmetadoi"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_title" name="tsmetajournaltitle"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_year" name="tsmetajournalyear"/>
@@ -52,6 +56,8 @@
 
   <!--<css:rule layout-type="inline" native-name="footnote reference" name="Funotenzeichen"/>-->
   <css:rule layout-type="inline" native-name="ts_superscript" name="tssuperscript"/>
+  <css:rule layout-type="inline" native-name="ts_subscript " name="tssubscript"/>
+  <css:rule layout-type="inline" native-name="ts_smallcaps" name="tssmallcaps "/>
   <css:rule layout-type="inline" native-name="Hyperlink" name="Hyperlink"/>
   <css:rule layout-type="object" native-name="ts_box_grey" name="tsboxgrey"/>
   <css:rule layout-type="object" native-name="ts_figure" name="tsfigure"/>
