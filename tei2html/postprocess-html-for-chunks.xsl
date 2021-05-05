@@ -90,7 +90,7 @@
     <xsl:param name="context" as="element(*)?" tunnel="yes"/>
     <xsl:variable name="meta-elements" as="element()*">
       <xsl:if test="$context">
-        <xsl:apply-templates select="$context/descendant::*:header[@class = 'chunk-meta-sec'][1]/*" mode="generate-chunk-meta-tags"/>
+        <xsl:apply-templates select="$context/descendant::*:header[@class = 'chunk-meta-sec'][1]/*, $context/descendant::*:p[@class = 'tsmetaalternativeheadline'][1]" mode="generate-chunk-meta-tags"/>
       </xsl:if>
     </xsl:variable>
     <xsl:copy copy-namespaces="no">
@@ -101,6 +101,10 @@
         <xsl:sort select="(@name, @href)[1]" />
       </xsl:apply-templates>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*:p[@class = 'tsmetaalternativeheadline']" mode="generate-chunk-meta-tags">
+    <meta name="alternative-headline" content="{normalize-space(string-join(node()))}"/>
   </xsl:template>
 
   <xsl:template match="*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']" mode="generate-chunk-meta-tags">
@@ -183,22 +187,9 @@
   </xsl:template>
  
   <xsl:template match="@xml:base" mode="export"/>
-  
-  <xsl:template match="*:p[matches(@class, 'tsmediacaption')]" mode="#default">
-    <xsl:param name="preserve" as="xs:boolean?"/>
-    <xsl:if test="$preserve">
-      <p class="tsMediaCaption"><xsl:apply-templates select="@* except @class, node()"/></p>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="*:p[matches(@class, 'tsmediasource')]" mode="#default">
-    <xsl:param name="preserve" as="xs:boolean?"/>
-    <xsl:if test="$preserve">
-      <p class="tsMediaSource"><xsl:apply-templates select="@* except @class, node()"/></p>
-    </xsl:if>
-  </xsl:template>
 
   <xsl:template match="*:p[matches(@class, 'tsmediaurl')]" mode="#default">
+    <!--https://redmine.le-tex.de/issues/10237-->
     <div class="tsMediaContainer">
       <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediacaption')], following-sibling::*[matches(@class, 'tsmediacaption')]">
         <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
@@ -214,6 +205,21 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="*:p[matches(@class, 'tsmediacaption')]" mode="#default">
+    <xsl:param name="preserve" as="xs:boolean?"/>
+    <xsl:if test="$preserve">
+      <p class="tsMediaCaption"><xsl:apply-templates select="@* except @class, node()"/></p>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*:p[matches(@class, 'tsmediasource')]" mode="#default">
+    <xsl:param name="preserve" as="xs:boolean?"/>
+    <xsl:if test="$preserve">
+      <p class="tsMediaSource"><xsl:apply-templates select="@* except @class, node()"/></p>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*:div[starts-with(@class, 'tsfigure')][preceding-sibling::*[1][self::*:p][matches(@class, 'tsmedia(source|url)')]] " mode="#default"/>
 
   <xsl:template name="html:create-chunk">
     <xsl:param name="nodes" as="element(*)+"/>
