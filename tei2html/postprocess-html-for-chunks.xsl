@@ -219,8 +219,8 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="*:div[starts-with(@class, 'tsfigure')][preceding-sibling::*:p][matches(@class, 'tsmedia(source|url)')] | 
-                       *:div[starts-with(@class, 'tsfigure')][preceding-sibling::*[not(self::*:div[starts-with(@class, 'tsfigure')])][1][self::*:p][matches(@class, 'tsmedia(source|url)')]] " mode="#default"/>
+  <xsl:template match="*:div[starts-with(@class, 'tsfigure')][preceding-sibling::*:p][matches(@class, 'tsmedia(source|url|caption)')] | 
+                       *:div[starts-with(@class, 'tsfigure')][preceding-sibling::*[not(self::*:div[starts-with(@class, 'tsfigure')])][1][self::*:p][matches(@class, 'tsmedia(source|url|caption)')]] " mode="#default"/>
 
   <xsl:template name="html:create-chunk">
     <xsl:param name="nodes" as="element(*)+"/>
