@@ -18,5 +18,16 @@
 
  <xsl:template match="para[@role = 'Fuzeile'] | *[not(self::css:rule)]/@idml2xml:layer" mode="hub:split-at-tab"/>
 
+ <xsl:template match="phrase[@role = 'tssuperscript'][footnote]" mode="hub:split-at-tab">
+  <xsl:apply-templates select="*" mode="#current"/>
+</xsl:template>
+
+ <xsl:template match="phrase[@role = 'tssuperscript'][not(footnote)]" mode="hub:split-at-tab">
+  <superscript><xsl:apply-templates select="@*, *" mode="#current"/></superscript>
+</xsl:template>
+
+ <xsl:template match="phrase[@role = 'tssubscript']" mode="hub:split-at-tab">
+  <subscript><xsl:apply-templates select="@*, *" mode="#current"/></subscript>
+  </xsl:template>
 
 </xsl:stylesheet>
