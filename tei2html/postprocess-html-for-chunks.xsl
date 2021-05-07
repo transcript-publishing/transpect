@@ -85,7 +85,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="*:article/*:nav/*:ol/*:li/*:a/@href" mode="export" priority="7">
+  <xsl:template match="*:html[not(contains(@xml:base, '/issue'))]//*:nav/*:ol/*:li/*:a/@href" mode="export" priority="7">
     <!-- toc link to chunks https://redmine.le-tex.de/issues/10166#note-5 -->
     <xsl:attribute name="href" select="concat(replace((//*:export-root/*:html[not(contains(@xml:base, '/issue'))][descendant::*/@id = substring-after(current(), '#')]/@xml:base)[1], '^.+/', ''), .)"/>
   </xsl:template>
