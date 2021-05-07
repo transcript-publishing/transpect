@@ -12,8 +12,9 @@
   exclude-result-prefixes="xs hub dbk ts" 
   version="2.0">
   
-  <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
   <xsl:import href="http://this.transpect.io/a9s/ts/xsl/shared-variables.xsl"/>
+  <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
+  
 
   <xsl:template match="/" mode="custom-2">
     <xsl:variable name="out-dir" as="element(keyword)"
