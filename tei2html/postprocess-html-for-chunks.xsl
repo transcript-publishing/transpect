@@ -85,11 +85,16 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="*:html[not(contains(@xml:base, '/issue'))]//*:nav/*:ol/*:li/*:a/@href" mode="export" priority="7">
+  <xsl:template match="*:html[not(contains(@xml:base, '/issue'))]//*:nav/*:ol//*:li/*:a/@href" mode="export" priority="7">
     <!-- toc link to chunks https://redmine.le-tex.de/issues/10166#note-5 -->
     <xsl:attribute name="href" select="concat(replace((//*:export-root/*:html[not(contains(@xml:base, '/issue'))][descendant::*/@id = substring-after(current(), '#')]/@xml:base)[1], '^.+/', ''), .)"/>
   </xsl:template>
 
+  <xsl:template match="*:html[not(contains(@xml:base, '/issue'))]//*:nav/*:ol//*:li" mode="export" priority="7">
+    <xsl:if test="substring-after(*:a/@href, '#') = //*:export-root/*:html[not(contains(@xml:base, '/issue'))]/descendant::*/@id">
+      <xsl:next-match/>
+    </xsl:if>
+  </xsl:template>
 
   <xsl:template match="*:header[@class = 'chunk-meta-sec']" mode="#default"/>
   
