@@ -618,4 +618,11 @@
   
   <template context="dbk:para[matches(@role, 'tsmedia(caption|url|source)')]" priority="300"/>
   
+  <template context="dbk:link[@xlink:href][matches(@xlink:href, '^(https?|ftp):') or matches(., '^(https?|ftp):')]">
+    <rule name="href" type="cmd">
+      <param select="replace((@url, @xlink:href)[1], '(%|#|_|\\)', '\\$1' )"/>
+      <param select="xml2tex:add-tactical-break-chars-in-linktext(.)"/>
+    </rule>
+  </template>
+  
 </set>
