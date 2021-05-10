@@ -14,6 +14,7 @@
   <xsl:import href="http://transpect.io/xslt-util/xslt-based-catalog-resolver/xsl/resolve-uri-by-catalog.xsl"/>
   
   <xsl:param name="s9y1-path" as="xs:string"/>
+  <xsl:param name="basename" as="xs:string"/>
   <xsl:param name="out-dir-uri" as="xs:string"/>
   
   <xsl:param name="cat:missing-next-catalogs-warning" as="xs:string" select="'no'"/>
@@ -42,9 +43,9 @@
     <xsl:variable select="if (*:head/*:meta[@name = 'doi'][@content]) 
                           then replace(/*/*:head/*:meta[@name = 'doi']/@content, '^.+/', '')
                           else 
-                             if (descendant::*[self::*:header[@class = 'chunk-meta-sec']][*:ul/*:li[@class = 'chunk-doi']])
+                             if (descendant::*[self::*:header[@class = 'chunk-meta-sec']][*:ul/*:li[@class = 'chunk-doi'][matches(., '-0*\d+$')]])
                              then replace((descendant::*[self::*:header[@class = 'chunk-meta-sec']]/*:ul/*:li[@class = 'chunk-doi'])[1], '^.+/(.+)-.+$', '$1')
-                             else 'no-chunk-doi-for-main-doc'" name="filename" as="xs:string" />
+                             else $basename" name="filename" as="xs:string" />
     <export-root>
       <xsl:element name="html" >
         <xsl:copy-of select="/*/@*" copy-namespaces="no"/>
@@ -84,13 +85,24 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="*:html[not(contains(@xml:base, '/issue'))]//*:nav/*:ol//*:li/*:a/@href" mode="export" priority="7">
+    <!-- toc link to chunks https://redmine.le-tex.de/issues/10166#note-5 -->
+    <xsl:attribute name="href" select="concat(replace((//*:export-root/*:html[not(contains(@xml:base, '/issue'))][descendant::*/@id = substring-after(current(), '#')]/@xml:base)[1], '^.+/', ''), .)"/>
+  </xsl:template>
+
+  <xsl:template match="*:html[not(contains(@xml:base, '/issue'))]//*:nav/*:ol//*:li" mode="export" priority="7">
+    <xsl:if test="substring-after(*:a/@href, '#') = //*:export-root/*:html[not(contains(@xml:base, '/issue'))]/descendant::*/@id">
+      <xsl:next-match/>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="*:header[@class = 'chunk-meta-sec']" mode="#default"/>
   
   <xsl:template match="*:head" mode="#default">
     <xsl:param name="context" as="element(*)?" tunnel="yes"/>
     <xsl:variable name="meta-elements" as="element()*">
       <xsl:if test="$context">
-        <xsl:apply-templates select="$context/descendant::*:header[@class = 'chunk-meta-sec'][1]/*" mode="generate-chunk-meta-tags"/>
+        <xsl:apply-templates select="$context/descendant::*:header[@class = 'chunk-meta-sec'][1]/*, $context/descendant::*:p[@class = 'tsmetaalternativeheadline'][1]" mode="generate-chunk-meta-tags"/>
       </xsl:if>
     </xsl:variable>
     <xsl:copy copy-namespaces="no">
@@ -101,6 +113,10 @@
         <xsl:sort select="(@name, @href)[1]" />
       </xsl:apply-templates>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*:p[@class = 'tsmetaalternativeheadline']" mode="generate-chunk-meta-tags">
+    <meta name="alternative-headline" content="{normalize-space(string-join(node()))}"/>
   </xsl:template>
 
   <xsl:template match="*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']" mode="generate-chunk-meta-tags">
@@ -129,7 +145,7 @@
     <!-- <img alt="{{ts_figure_caption}}" src="/{{kurz-isbn}}/images/{{image}}" />
       <img alt="" src="http://transpect.io/content-repo/ts/jrn/inge/00002/images/ts_jrn_zig_00002_image2.jpg"/>
     -->
-    <xsl:attribute name="{name()}" select="concat('/', $short-isbn, '/images/', replace(., '^.+/', ''))"/>
+    <xsl:attribute name="{name()}" select="concat('images/', replace(., '^.+/', ''))"/>
     <xsl:if test="not(../@alt) and ../../*:p[@class = 'tsfigurecaption']">
       <xsl:attribute name="alt" select="string-join(../../*:p[@class = 'tsfigurecaption'], '')"/>
     </xsl:if>
@@ -183,22 +199,9 @@
   </xsl:template>
  
   <xsl:template match="@xml:base" mode="export"/>
-  
-  <xsl:template match="*:p[matches(@class, 'tsmediacaption')]" mode="#default">
-    <xsl:param name="preserve" as="xs:boolean?"/>
-    <xsl:if test="$preserve">
-      <p class="tsMediaCaption"><xsl:apply-templates select="@* except @class, node()"/></p>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="*:p[matches(@class, 'tsmediasource')]" mode="#default">
-    <xsl:param name="preserve" as="xs:boolean?"/>
-    <xsl:if test="$preserve">
-      <p class="tsMediaSource"><xsl:apply-templates select="@* except @class, node()"/></p>
-    </xsl:if>
-  </xsl:template>
 
   <xsl:template match="*:p[matches(@class, 'tsmediaurl')]" mode="#default">
+    <!--https://redmine.le-tex.de/issues/10237-->
     <div class="tsMediaContainer">
       <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediacaption')], following-sibling::*[matches(@class, 'tsmediacaption')]">
         <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
@@ -214,6 +217,22 @@
     </div>
   </xsl:template>
 
+  <xsl:template match="*:p[matches(@class, 'tsmediacaption')]" mode="#default">
+    <xsl:param name="preserve" as="xs:boolean?"/>
+    <xsl:if test="$preserve">
+      <p class="tsMediaCaption"><xsl:apply-templates select="@* except @class, node()"/></p>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*:p[matches(@class, 'tsmediasource')]" mode="#default">
+    <xsl:param name="preserve" as="xs:boolean?"/>
+    <xsl:if test="$preserve">
+      <p class="tsMediaSource"><xsl:apply-templates select="@* except @class, node()"/></p>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*:div[starts-with(@class, 'tsfigure')][preceding-sibling::*:p][matches(@class, 'tsmedia(source|url|caption)')] | 
+                       *:div[starts-with(@class, 'tsfigure')][preceding-sibling::*[not(self::*:div[starts-with(@class, 'tsfigure')])][1][self::*:p][matches(@class, 'tsmedia(source|url|caption)')]] " mode="#default"/>
 
   <xsl:template name="html:create-chunk">
     <xsl:param name="nodes" as="element(*)+"/>

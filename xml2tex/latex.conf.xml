@@ -616,5 +616,6 @@
     <rule name="listoftables" type="cmd" break-after="1"/>
   </template>
   
+  <template context="dbk:para[matches(@role, 'tsmedia(caption|url|source)')]" priority="300"/>
   
 </set>

@@ -323,10 +323,19 @@
                 3"
           />
         </xsl:when>
-        <xsl:when test="$elt/parent::div[@type = ('section')]">
+        <xsl:when test="$elt/parent::div/@rend = ('abstract', 'keywords', 'alternative-title')">
+          <xsl:sequence
+            select="
+              if ($elt/ancestor::div/@type = ('chapter', 'article')) then
+                5
+              else
+                4"
+          />
+        </xsl:when>
+        <xsl:when test="$elt/parent::div[@type = ('section')][not(@rend = ('abstract', 'keywords', 'alternative-title'))]">
           <xsl:sequence select="count($elt/ancestor::div[@type eq 'section']) + 3"/>
         </xsl:when>
-        <xsl:when test="$elt/parent::div/@type = ('bibliography', 'abstract','keywords')">
+        <xsl:when test="$elt/parent::div/@type = ('bibliography')">
           <xsl:sequence
             select="
               if ($elt/ancestor::div/@type = ('chapter', 'article')) then
