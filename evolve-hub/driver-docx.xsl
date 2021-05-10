@@ -51,4 +51,9 @@
   
   <xsl:template match="caption[preceding-sibling::*[1][self::figure]]" mode="custom-1"/>
 
+  <xsl:template match="para[matches(@role, 'tsmedia')]//text()[matches(., $hyphen-regex)]" mode="custom-2">
+    <!--https://redmine.le-tex.de/issues/10237#change-52626-->
+    <xsl:value-of select="."/>
+  </xsl:template>
+
 </xsl:stylesheet>
