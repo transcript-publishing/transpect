@@ -1411,7 +1411,7 @@
        \labelsep\z@
        \itemsep\z@
        \parsep\z@
-       \partopskip\z@
+       \partopsep\z@
        \def\makelabel##1{##1\hss}}%
   \fi}
 
@@ -1427,7 +1427,7 @@
     \fi
     \itemsep\z@
     \parsep\z@
-    \partopskip\z@
+    \partopsep\z@
     \let\makelabel\descriptionlabel}}
 {\endlist}
 \renewcommand*\descriptionlabel[1]{%
