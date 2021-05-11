@@ -24,7 +24,13 @@
     <export-root>
       <xsl:element name="html" >
         <xsl:copy-of select="/*/@*" copy-namespaces="no"/>
-        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, replace(/*/*:head/*:meta[@name = 'doi']/@content, '^.+/', ''), '.html')"/>
+        <xsl:variable select="if (/*/*:head/*:meta[@name = 'doi'][@content]) 
+                          then replace(/*/*:head/*:meta[@name = 'doi']/@content, '^.+/', '')
+                          else 
+                             if (descendant::*[self::*:header[@class = 'chunk-meta-sec']][*:ul/*:li[@class = 'chunk-doi'][matches(., '-[\d]{3}$')]])
+                             then replace((descendant::*[self::*:header[@class = 'chunk-meta-sec']]/*:ul/*:li[@class = 'chunk-doi'])[1], '^.+/(.+)-[\d]{3}$', '$1')
+                             else $basename" name="filename" as="xs:string" />
+        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.html')"/>
         <xsl:apply-templates select="/*/node()" mode="#current">
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
         </xsl:apply-templates>

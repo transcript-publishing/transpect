@@ -41,4 +41,6 @@
   <!--  exclude duplicate styles-->
   </xsl:template>
 
+  <xsl:variable name="tei2html:chapterwise-footnote" as="xs:boolean" select="true()"/>
+
 </xsl:stylesheet>
