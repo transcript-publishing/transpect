@@ -162,12 +162,10 @@
     \list
       \csname\@itemitem\endcsname
       {\topsep12.8bp
-       \labelwidth\csname leftmargin\romannumeral\the\@itemdepth\endcsname
-       \leftmargin\labelwidth
        \labelsep\z@
        \itemsep\z@
        \parsep\z@
-       \partopskip\z@
+       \labelwidth\csname leftmargin\romannumeral\the\@itemdepth\endcsname
        \def\makelabel##1{##1\hss}}%
   \fi}
 
@@ -182,8 +180,6 @@
       \leftmargin  \labelwidth\relax
     \fi
     \itemsep\z@
-    \parsep\z@
-    \partopskip\z@
     \let\makelabel\descriptionlabel}}
 {\endlist}
 \renewcommand*\descriptionlabel[1]{%

@@ -2,63 +2,40 @@
 \ProvidesPackage{transcript-floats}[2021/04/09 transcript]\relax
 
 \usepackage[figuresright]{rotating}
-\usepackage{ragged2e}
 \usepackage{tabularx}
 \usepackage{multirow}
 
-\usepackage{htmltabs}
-\expandafter\def\csname ht@font-family@sans-serif\endcsname{\ht@apply@prop{internal-font-family}{\nsffamily}}
-\SetHTClass{}{%
-  \SetClassProp{td}{font-family}{sans-serif}%
-  \SetClassProp{td}{font-size}{x-small}%
-  \SetClassProp[thead]{td}{font-weight}{bold}%
-  \SetClassProp{td}{padding}{0.9mm 2.15mm 0.3mm}%
+\newcolumntype{Q}{>{\raggedright\arraybackslash\unskip}X} % gleich wie X, nur bei einer Kolumne verwenden, mk
+\newcolumntype{W}{>{\raggedleft\arraybackslash\unskip}X} % rechtsbündig, wie X, nur 1x verwenden
+\newcolumntype{L}{>{\raggedright\arraybackslash\unskip}p} % wie p nur linksbündig*
+\newcolumntype{P}{>{\RaggedRight\arraybackslash\unskip}p} % wie p und linksbündig und erlaubt Silbentrennung*
+\newcolumntype{R}{>{\raggedleft\arraybackslash\unskip}p} % rechtsbündig, wie p*
+\newcolumntype{C}{>{\centering\arraybackslash\unskip}X} % zentriert wie X
+\newcolumntype{Z}{>{\centering\arraybackslash\unskip}p} % zentriert wie p*
+\newcolumntype{e}{!{\extracolsep{\fill}}} % wird nicht verwendet
+
+\usepackage{caption}
+
+\renewcommand \thefigure
+     {\@arabic\c@figure}
+\@removefromreset{figure}{chapter}
+
+\renewcommand \thetable
+     {\@arabic\c@table}
+\@removefromreset{table}{chapter}
+
+\captionsetup{%
+   format=plain
+  ,labelformat=empty
+  ,font+=it
+  ,singlelinecheck=false
+  ,justification=RaggedRight
+  ,listformat=empty
 }
 
-
-% \def\tablefont{\nsffamily\footnotesize}
-
-
-\tpCaptionOrderTop[figure]{label,caption}
-\tpCaptionOrderBelow[figure]{source,legend}
-
-
-\intextsep\baselineskip
-\def\tpListEntry{\tp@lo@cpt}
-\tpIntextSkipAbove{1\baselineskip}
-\tpIntextSkipBelow{-2.5bp}
-
-\tpCaptionOrderTop[table]{label,caption,source}
-\tpCaptionOrderBelow[table]{legend}
-
-\tpCaptionVAlignTop{b}
-\tpCaptionVAlignBottom{t}
-\tpCaptionTopSep[table]{9bp}
-
-\tpCaptionTopSep[figure]{1bp}
-\tpCaptionBelowSep[figure]{4bp}
-\tpCaptionFormatTop{\itshape\RaggedRight}
-\tpCaptionFormatBelow{\footnotesize\upshape\RaggedRight}
-
-\CSSDeclareClass{}{}
-\CSSDeclareClass{A}{\tpLeftSkip{0mm}\tpRightSkip{0mm}}
-\CSSDeclareClass{B}{\tpLeftSkip{10mm}\tpRightSkip{10mm}}
-\CSSDeclareClass{C}{\tpLeftSkip{15mm}\tpRightSkip{15mm}}
-\CSSDeclareClass{D}{\tpLeftSkip{30mm}\tpRightSkip{30mm}}
-
-\tpSubFloatSep{2mm}
-
-% \captionsetup{%
-%    format=plain
-%   ,labelformat=empty
-%   ,font+=it
-%   ,singlelinecheck=false
-%   ,justification=RaggedRight
-%   ,listformat=empty
-% }
-
-% \newcommand\transcriptBild[2]{\tr@nscriptFloat{#1}{#2}}
-% \newcommand\transcriptTab[2]{\aboveSourceSkip1mm\let\use@depth\relax\tr@nscriptFloat{#1}{#2}}
+\newlength\aboveSourceSkip \aboveSourceSkip0mm
+\newcommand\transcriptBild[2]{\tr@nscriptFloat{#1}{#2}}
+\newcommand\transcriptTab[2]{\aboveSourceSkip1mm\let\use@depth\relax\tr@nscriptFloat{#1}{#2}}
 
 % \newbox\tr@nscriptFlt
 % \newdimen\tr@nscriptFltWd
