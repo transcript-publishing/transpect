@@ -68,6 +68,22 @@
 \addto\captionsngerman{\def\contentsname{Inhalt}}
 \addto\captionsngerman{\def\refname{Literaturverzeichnis}}
 
+%%%%%%%%%%%%%%%
+% math        %
+%%%%%%%%%%%%%%%
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsxtra}
+\usepackage{wasysym}
+\usepackage{isomath}
+\usepackage{mathtools}
+% %\usepackage{txfonts}
+\usepackage{upgreek}
+\usepackage{tensor}
+\usepackage{xfrac}
+
 %%%%%%%%%%
 % Fonts  %
 %%%%%%%%%%
@@ -262,6 +278,8 @@
 \newunicodechar{ǀ}{|}
 
 \DeclareRobustCommand\unichar[1]{\textfallback{#1}}
+\RequirePackage{mathastext}
+
 
 %%%%%%%%%%%%%%
 % Font sizes %
@@ -304,25 +322,9 @@
 \renewcommand\LARGE{\@setfontsize\LARGE{11.5bp}{12.8bp}}% section
 \renewcommand\huge{\@setfontsize\huge{13bp}{16}}% part in TOC
 \renewcommand\Huge{\@setfontsize\Huge{15bp}{18.3bp}}% chapter
-\newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{25.6bp}}% part
+\renewcommand\HUGE{\@setfontsize\HUGE{17.5bp}{25.6bp}}% part
 
 \parskip\z@
-
-%%%%%%%%%%%%%%%
-% math        %
-%%%%%%%%%%%%%%%
-
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsfonts}
-\usepackage{amsxtra}
-\usepackage{wasysym}
-\usepackage{isomath}
-\usepackage{mathtools}
-\usepackage{txfonts}
-\usepackage{upgreek}
-\usepackage{tensor}
-\usepackage{xfrac}
 
 %%%%%%%%%%%%%%%
 % page layout %
