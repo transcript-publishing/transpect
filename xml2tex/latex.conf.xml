@@ -106,14 +106,6 @@
     <xsl:if test="$langs = 'zh'">
       <xsl:value-of select="'\usepackage{CJK}&#xa;'"/>
     </xsl:if>
-    <xsl:choose>
-      <xsl:when test="/dbk:hub/dbk:part">
-        <xsl:text>\haspartstrue&#xa;</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>\haspartsfalse&#xa;</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
     <xsl:if test="$title-pages eq 'yes'">
       <xsl:value-of select="concat('&#xa;\title{', (normalize-space($title), 'Haupttitel')[1], '}&#xa;')"/>
       <xsl:if test="$subtitle">
