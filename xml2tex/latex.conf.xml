@@ -27,7 +27,7 @@
                                 '^.*?\d{4}(.*?)$', 
                                 '$1')"/>
   <xsl:variable name="copyright-place" as="xs:string?" 
-    select="tokenize(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Copyright'], ',')[1]"/>
+                select="tokenize(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Copyright'], ',')[1]"/>
   <xsl:variable name="copyright-year" 
                 select="replace(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Copyright'], '^.*?(\d{4}).*?$', '$1')" as="xs:string?"/>
   <xsl:variable name="dedication" as="xs:string?"
@@ -36,39 +36,40 @@
   <xsl:variable name="series-logo" as="xs:string?" 
                 select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Reihenlogo']"/>
   <xsl:variable name="editorial" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Editorial']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Editorial']"/>
   <xsl:variable name="author-info" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Autoreninformationen']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Autoreninformationen']"/>
   <xsl:variable name="website" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'transcript-Website']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'transcript-Website']"/>
   <xsl:variable name="thanksto" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Dank']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Dank']"/>
   <xsl:variable name="biblio-info" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Bibliografische Information']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Bibliografische Information']"/>
   <xsl:variable name="license-logo" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Lizenzlogo']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Lizenzlogo']"/>
   <xsl:variable name="license-text" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Lizenztext']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Lizenztext']"/>
   <xsl:variable name="cover-art" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Umschlaggestaltung']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Umschlaggestaltung']"/>
   <xsl:variable name="cover-credit" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Umschlagcredit']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Umschlagcredit']"/>
   <xsl:variable name="copy-editing" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Korrektorat']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Korrektorat']"/>
   <xsl:variable name="typesetter" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Setzer']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Setzer']"/>
   <xsl:variable name="print" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Druck']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Druck']"/>
   <xsl:variable name="lectorate" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Lektorat']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Lektorat']"/>
   <xsl:variable name="translator" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Übersetzer']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Übersetzer']"/>
   <xsl:variable name="grantlogo" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Förderlogo']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Förderlogo']"/>
   <xsl:variable name="granttext" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Fördertext']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Fördertext']"/>
   
-  <xsl:variable name="new-common" as="xs:boolean" select="false()"/>
+  <xsl:variable name="new-common"                 select="true()" as="xs:boolean"/>
+  <xsl:variable name="create-customer-toctitles"  select="true()" as="xs:boolean"/>
 
   <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
   <ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
@@ -84,8 +85,6 @@
                                  ','),
                                  ',',
                                  if($is-collection) then 'collection' else 'book',
-                                 ',lay=',
-                                 lower-case($layout),
                                       if($notes-type eq 'endnotes' and $endnotes-with-chapter eq 'yes')  then ',endnotesperchapter'
                                  else if($notes-type eq 'endnotes')                                      then ',endnotes'
                                  else (),
@@ -100,6 +99,10 @@
         <xsl:value-of select="concat('\define', ., '&#xa;')"/>
       </xsl:if>
     </xsl:for-each>
+    <xsl:value-of select="concat('\usepackage[lay=',
+                                 lower-case($layout),
+                                 ']{transcript}&#xa;')"/>
+    
     <xsl:if test="$langs = 'zh'">
       <xsl:value-of select="'\usepackage{CJK}&#xa;'"/>
     </xsl:if>
@@ -176,9 +179,6 @@
       <xsl:if test="$funder">
         <xsl:value-of select="concat('&#xa;\thanks{', normalize-space($funder), '}&#xa;')"/>
       </xsl:if>
-      <xsl:if test="$dedication">
-        <xsl:value-of select="concat('&#xa;\begin{dedication}&#xa;', normalize-space($dedication), '\end{dedication}&#xa;')"/>
-      </xsl:if>
     </xsl:if>
     <!-- global part/chapter/section numbering -->
     <!--<xsl:value-of select="concat('\setcounter{secnumdepth}{', 
@@ -198,6 +198,9 @@
   <front>
     <xsl:if test="$title-pages eq 'yes'">
       <xsl:text>\maketitle&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$dedication">
+      <xsl:value-of select="concat('&#xa;\begin{dedication}&#xa;', normalize-space($dedication), '\end{dedication}&#xa;')"/>
     </xsl:if>
     <xsl:value-of select="'\setcounter{secnumdepth}{-1}&#xa;'"/>
     <xsl:value-of select="concat('\setcounter{tocdepth}{', 
@@ -225,13 +228,13 @@
     
   </template>
   
-  <template context="dbk:dedication[@role eq 'tsded']">
+  <!--<template context="dbk:dedication[@role eq 'tsded']">
     <rule name="wid" type="env"  break-after="1" break-before="1">
       <param/>
     </rule>
-  </template>
+  </template>-->
   
-    <template context="dbk:abbrev[matches(@role, $col-head-right-style)]">
+    <!--<template context="dbk:abbrev[matches(@role, $col-head-right-style)]">
     <rule name="chaptermark" type="cmd" break-after="1">
       <param/>
     </rule>
@@ -241,7 +244,7 @@
     <rule name="def\partmarkoverride" type="cmd" break-after="1" break-before="1">
       <param/>
     </rule>
-  </template>
+  </template>-->
   
     <!-- suppress additional underline markup in titles -->
   
@@ -256,11 +259,11 @@
   
    
   <!-- headings -->
-  <template context="dbk:part/dbk:info | dbk:section/dbk:info | dbk:chapter/dbk:info | dbk:preface/dbk:info | dbk:appendix/dbk:info | dbk:bibliogaphy/dbk:info">
+  <!--<template context="dbk:part/dbk:info | dbk:section/dbk:info | dbk:chapter/dbk:info | dbk:preface/dbk:info | dbk:appendix/dbk:info | dbk:bibliogaphy/dbk:info">
     <xsl:apply-templates select="node()" mode="#current"/>
-  </template>
+  </template>-->
 
-  <xsl:template name="option-for-headlines">
+  <!--<xsl:template name="option-for-headlines">
     <xsl:if test=".//dbk:footnote
                  |parent::*/dbk:subtitle
                  |parent::*/dbk:info/dbk:subtitle">
@@ -270,11 +273,11 @@
       </xsl:apply-templates>
       <xsl:text>]</xsl:text>
     </xsl:if>
-  </xsl:template>
+  </xsl:template>-->
 
-  <template context="dbk:title[matches(@role, $genereral-heading-style)]/dbk:phrase[@role eq 'hub:identifier']"/>
+  <!--<template context="dbk:title[matches(@role, $genereral-heading-style)]/dbk:phrase[@role eq 'hub:identifier']"/>-->
 
-  <template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?1$')]">
+  <!--<template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?1$')]">
     <xsl:choose>
       <xsl:when test="dbk:phrase[@role eq 'hub:identifier']">
         <xsl:value-of select="concat('\setcounter{secnumdepth}{', $secnumdepth, '}&#xa;')"/>
@@ -289,9 +292,9 @@
       <param/>
     </rule>
     <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>
+  </template>-->
     
-  <template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?2$')]">
+  <!--<template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?2$')]">
     <xsl:choose>
       <xsl:when test="dbk:phrase[@role eq 'hub:identifier']">
         <xsl:value-of select="concat('\setcounter{secnumdepth}{', $secnumdepth, '}&#xa;')"/>
@@ -306,9 +309,9 @@
       <param/>
     </rule>
     <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>
+  </template>-->
   
-  <template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?3$')]">
+  <!--<template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?3$')]">
     <xsl:choose>
       <xsl:when test="dbk:phrase[@role eq 'hub:identifier']">
         <xsl:value-of select="concat('\setcounter{secnumdepth}{', $secnumdepth, '}&#xa;')"/>
@@ -323,9 +326,9 @@
       <param/>
     </rule>
     <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>
+  </template>-->
   
-  <template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?4$')]">
+  <!--<template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?4$')]">
     <xsl:choose>
       <xsl:when test="dbk:phrase[@role eq 'hub:identifier']">
         <xsl:value-of select="concat('\setcounter{secnumdepth}{', $secnumdepth, '}&#xa;')"/>
@@ -340,9 +343,9 @@
       <param/>
     </rule>
     <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>
+  </template>-->
   
-  <template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?5$')]">
+  <!--<template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?5$')]">
     <xsl:choose>
       <xsl:when test="dbk:phrase[@role eq 'hub:identifier']">
         <xsl:value-of select="concat('\setcounter{secnumdepth}{', $secnumdepth, '}&#xa;')"/>
@@ -356,28 +359,28 @@
       <param/>
     </rule>
     <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>
+  </template>-->
 
-  <template context="dbk:preface/dbk:title
+  <!--<template context="dbk:preface/dbk:title
                     |dbk:preface/dbk:info/dbk:title">
     <rule name="chapter*" type="cmd"  break-after="2" break-before="2">
       <xsl:call-template name="option-for-headlines"/>
       <param/>
       <text select="concat('\addcontentsline{toc}{chapter}{', ., '}')"/>
     </rule>
-  </template>
+  </template>-->
   
-  <template context="dbk:dedication">
+  <!--<template context="dbk:dedication">
     <rule name="widmung" type="env"  break-after="1" break-before="1">
       <param/>
     </rule>
-  </template>
+  </template>-->
   
-  <template context="dbk:dedication//dbk:br">
+  <!--<template context="dbk:dedication//dbk:br">
     <xsl:text>\\</xsl:text>
-  </template>
+  </template>-->
   
-  <template context="dbk:part/dbk:title
+  <!--<template context="dbk:part/dbk:title
                     |dbk:part/dbk:info/dbk:title">
       <rule name="part" type="cmd" break-after="2" break-before="2">
         <xsl:text>{</xsl:text>
@@ -388,7 +391,7 @@
         <xsl:text>}</xsl:text>
       </rule>
       <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>
+  </template>-->
   
   <template context="dbk:blockquote[dbk:para][not(matches(@role, '^[a-z]+_?verse.*$'))]
                     |dbk:blockquote[matches(@role, $dialogue-style)]">
@@ -454,15 +457,15 @@
     </rule>
   </template>
   
-  <template context="dbk:figure">
+  <!--<template context="dbk:figure">
     <rule name="transcriptBild" type="cmd" break-after="1" break-before="1">
       <param select="dbk:title, 
                      dbk:caption"/>
       <param select="dbk:mediaobject"/>
     </rule>
-  </template>
+  </template>-->
 
-  <template context="dbk:figure[matches(@role, $fig-style)]">
+  <!--<template context="dbk:figure[matches(@role, $fig-style)]">
     <rule name="figure" type="env" break-after="1" break-before="1">
       <option>h!</option>
       <text>&#xa;\transcriptFixedFigure</text>
@@ -476,16 +479,16 @@
         </xsl:for-each>
       <xsl:text>}</xsl:text>
     </rule>
-  </template>
+  </template>-->
 
-  <template context="dbk:figure/dbk:title|dbk:table/dbk:title">
+  <!--<template context="dbk:figure/dbk:title|dbk:table/dbk:title">
     <rule break-after="1" break-before="1" name="caption" type="cmd">
       <param/>
     </rule>
-  <!-- copied from docx2tex/conf for compatibility reasons-->
-  </template>
+  <!-\- copied from docx2tex/conf for compatibility reasons-\->
+  </template>-->
   
-  <template context="dbk:figure/dbk:title[not(matches(., '^[\S\r\n]+$'))]
+  <!--<template context="dbk:figure/dbk:title[not(matches(., '^[\S\r\n]+$'))]
                     |dbk:table/dbk:title[not(matches(., '^[\S\r\n]+$'))]">
     <rule name="caption" type="cmd">
       <xsl:if test=".//dbk:footnote
@@ -496,9 +499,9 @@
       </xsl:if>
       <param/>
     </rule>
-  </template>
+  </template>-->
   
-  <template context="dbk:imagedata[@fileref]">
+  <!--<template context="dbk:imagedata[@fileref]">
     <rule name="includegraphics" type="cmd">
       <option select="concat('width=', 
                              1 div count(ancestor::*[dbk:mediaobject
@@ -506,39 +509,39 @@
                                                                                               'inlinemediaobject')]),'\textwidth')"/>
       <param select="replace(@fileref, '^.+/(.+?)$', concat($image-dir, '$1'))"/>
     </rule>
-  </template>
+  </template>-->
   
-  <template context="dbk:figure[matches(@role, $fig-style)]//dbk:imagedata">
+  <!--<template context="dbk:figure[matches(@role, $fig-style)]//dbk:imagedata">
     <rule name="includesubgraphics" type="cmd">
       <param/>
       <param select="replace(@fileref, '^.+/(.+?)$', concat($image-dir, '$1'))"/>
     </rule>
-  </template>
+  </template>-->
   
-  <template context="dbk:figure/dbk:caption
+  <!--<template context="dbk:figure/dbk:caption
                     |dbk:table/dbk:caption">
     <rule name="capsource" type="cmd">
       <param/>
     </rule>
-  </template>
+  </template>-->
   
-  <template context="/dbk:hub/*[self::dbk:part | self::dbk:chapter | self::dbk:section][1]">
+  <!--<template context="/dbk:hub/*[self::dbk:part | self::dbk:chapter | self::dbk:section][1]">
     <xsl:next-match/>
-  </template>
+  </template>-->
 
-  <template context="dbk:section[count(ancestor::dbk:section) eq 0]/dbk:subtitle
+  <!--<template context="dbk:section[count(ancestor::dbk:section) eq 0]/dbk:subtitle
                     |dbk:section[count(ancestor::dbk:section) eq 0]/dbk:info/dbk:subtitle">
     <rule name="subheading" type="cmd" break-after="2" break-before="2">
       <param/>
     </rule>
-  </template>
+  </template>-->
   
-  <template context="dbk:section[count(ancestor::dbk:section) gt 0]/dbk:subtitle
+  <!--<template context="dbk:section[count(ancestor::dbk:section) gt 0]/dbk:subtitle
                     |dbk:section[count(ancestor::dbk:section) gt 0]/dbk:info/dbk:subtitle">
     <rule name="subsubheading" type="cmd" break-after="2" break-before="2">
       <param/>
     </rule>
-  </template>
+  </template>-->
 
   <template context="*[not(local-name() = ('part', 'chapter', 'section'))][@css:page-break-before='always']">
     <xsl:text>\pagebreak&#xa;</xsl:text>
@@ -572,7 +575,7 @@
     </rule>
   </template>
   
-  <template context="*[self::dbk:chapter | self::dbk:section | self::dbk:part | self::dbk:appendix][dbk:info[dbk:title[matches(@role, $list-of-figures-style)]]]">
+  <!--<template context="*[self::dbk:chapter | self::dbk:section | self::dbk:part | self::dbk:appendix][dbk:info[dbk:title[matches(@role, $list-of-figures-style)]]]">
     <xsl:apply-templates select="dbk:info" mode="#current"/>
     <rule name="listoffigures" type="cmd" break-after="1"/>
   </template>
@@ -596,7 +599,7 @@
     <rule>
       <text/>
     </rule>
-  </template>
+  </template>-->
   
   <template context="dbk:para[matches(@role, $list-of-figures-style)]
                     |dbk:title[matches(@role, $list-of-figures-style)]">
@@ -616,5 +619,13 @@
     <rule name="listoftables" type="cmd" break-after="1"/>
   </template>
   
+  <template context="dbk:para[matches(@role, 'tsmedia(caption|url|source)')]" priority="300"/>
+  
+  <template context="dbk:link[@xlink:href][matches(@xlink:href, '^(https?|ftp):') or matches(., '^(https?|ftp):')]">
+    <rule name="href" type="cmd">
+      <param select="replace((@url, @xlink:href)[1], '(%|#|_|\\)', '\\$1' )"/>
+      <param select="xml2tex:add-tactical-break-chars-in-linktext(.)"/>
+    </rule>
+  </template>
   
 </set>
