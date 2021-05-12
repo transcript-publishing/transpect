@@ -91,7 +91,7 @@
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  for $i in $other-scripts-in-doc
                                  return concat(',usescript=', $i),
-                                 ']{transcript}&#xa;')"/>
+                                 ']{transpect}&#xa;')"/>
     \definecolor{color-1}{rgb}{0,0,0}
     \definecolor{color-2}{rgb}{0.85,0.85,0.85}
     <xsl:for-each select="xml2tex:rgb-to-tex-color( $colors )">
@@ -427,13 +427,13 @@
     </rule>
   </template>
   
-  <template context="dbk:table">
+  <!--<template context="dbk:table">
     <rule name="transcriptTab" type="cmd" break-after="2" break-before="1">
       <param select="dbk:title, 
                      dbk:caption"/>  
       <param select="dbk:tgroup"/>
     </rule>
-  </template>
+  </template>-->
   
   <!-- copied from ../a9s/common/xml2tex/latex.conf.xml -->
   
