@@ -256,8 +256,14 @@
   
    
   <!-- headings -->
-  <template context="dbk:part/dbk:info | dbk:section/dbk:info | dbk:chapter/dbk:info | dbk:preface/dbk:info | dbk:appendix/dbk:info | dbk:bibliogaphy/dbk:info">
-    <xsl:apply-templates select="node()" mode="#current"/>
+  <template context="dbk:part/dbk:info 
+                    |dbk:section/dbk:info
+                    |dbk:chapter/dbk:info
+                    |dbk:preface/dbk:info
+                    |dbk:appendix/dbk:info
+                    |dbk:bibliogaphy/dbk:info">
+    <xsl:apply-templates select="node() except dbk:title,
+                                 dbk:title" mode="#current"/>
   </template>
 
   <xsl:template name="option-for-headlines">
