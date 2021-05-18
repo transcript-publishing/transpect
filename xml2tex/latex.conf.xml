@@ -649,4 +649,18 @@
     </rule>
   </template>
   
+  <template context="dbk:epigraph[@role eq 'motto']/dbk:para[not(position() eq last())]
+    [matches(@role, $motto-source-style)]">
+    <rule>
+      <text/>
+      <text>\par\vskip\baselineskip&#xa;</text>
+    </rule>
+  </template>
+  
+  <template context="dbk:epigraph[@role eq 'motto']/dbk:para[position() eq last()]">
+    <rule>
+      <text/>
+    </rule>
+  </template>
+  
 </set>
