@@ -631,4 +631,22 @@
     </rule>
   </template>
   
+  <template context="dbk:chapter/dbk:info/dbk:epigraph[@role eq 'motto']">
+    <rule name="chapterquote" type="cmd">
+      <param select="dbk:para"/>
+    </rule>
+  </template>
+  
+  <template context="dbk:section/dbk:info/dbk:epigraph[@role eq 'motto']">
+    <rule name="secquote" type="cmd">
+      <param select="dbk:para"/>
+    </rule>
+  </template>
+  
+  <template context="dbk:epigraph[@role eq 'motto']/dbk:para[matches(@role, $motto-source-style)]">
+    <rule name="textit" type="cmd">
+      <text/>
+    </rule>
+  </template>
+  
 </set>
