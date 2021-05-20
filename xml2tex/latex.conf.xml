@@ -231,7 +231,7 @@
     </rule>
   </template>
   
-    <template context="dbk:abbrev[matches(@role, $col-head-right-style)]">
+  <template context="dbk:abbrev[matches(@role, $col-head-right-style)]">
     <rule name="chaptermark" type="cmd" break-after="1">
       <param/>
     </rule>
@@ -263,7 +263,9 @@
                     |dbk:appendix/dbk:info
                     |dbk:bibliogaphy/dbk:info">
     <xsl:apply-templates select="node() except dbk:title,
-                                 dbk:title" mode="#current"/>
+                                 dbk:title,
+                                 dbk:abbrev[matches(@role, concat($col-head-short-style, '|', $col-head-left-style))] (: https://redmine.le-tex.de/issues/10417 :)" 
+                          mode="#current"/>
   </template>
 
   <xsl:template name="option-for-headlines">
