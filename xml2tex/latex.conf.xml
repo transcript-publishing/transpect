@@ -262,11 +262,13 @@
                     |dbk:preface/dbk:info
                     |dbk:appendix/dbk:info
                     |dbk:bibliogaphy/dbk:info">
-    <xsl:apply-templates select="node() except (dbk:title, 
-                                                dbk:abbrev[matches(@role, concat($col-head-short-style, '|', $col-head-left-style))]),
+    <xsl:apply-templates select="node() except (dbk:title,
+                                                dbk:abbrev[matches(@role, concat($col-head-short-style, '|', $col-head-left-style))],
+                                                dbk:abstract),
                                  dbk:title,
                                  dbk:abbrev[matches(@role, concat($col-head-short-style, '|', $col-head-left-style))], (: https://redmine.le-tex.de/issues/10417 :)
-                                 dbk:abbrev[matches(@role, $col-head-right-style)] (: https://redmine.le-tex.de/issues/10448 :)" 
+                                 dbk:abbrev[matches(@role, $col-head-right-style)],  (: https://redmine.le-tex.de/issues/10448 :)
+                                 dbk:abstract" 
                          mode="#current"/>
   </template>
 
@@ -424,7 +426,7 @@
     <!-- copied from common to reinstall template priorities-->
   </template>
   
-    <template context="dbk:bibliography[not(@role eq 'Citavi')]
+  <template context="dbk:bibliography[not(@role eq 'Citavi')]
                                        [not(parent::dbk:bibliography)]">
     <xsl:text>\FloatBarrier&#xa;</xsl:text>
     <xsl:apply-templates select="dbk:info/dbk:title" mode="#current"/>
