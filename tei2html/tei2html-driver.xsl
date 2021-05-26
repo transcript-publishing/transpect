@@ -129,16 +129,18 @@
 
   <xsl:template match="term[@key eq 'Lizenzlogo']" mode="tei2html">
     <xsl:if test="matches(., '\S')">
+    <!-- file:///X:/Ablagen/Titeleien/Reihenlogos/TIT_cc_by_nc_nd_logo.EPS → http://this.transpect.io/a9s/ts/logos/cc/by-nc-nd.png-->
     <div class="{lower-case(translate(@key, ' ', '-'))}">
-       <img alt="Lizenzlogo Creative Commons" src="{replace(., '^.+/TIT_cc_(.+)_logo\.(eps|EPS)', 'http://this.transpect.io/a9s/ts/logos/cc/$1.png')}"/>
+       <img alt="Lizenzlogo Creative Commons" src="{replace(translate(., '_', '-'), '^.+/TIT-cc-(.+)-logo\.(eps|EPS)', 'http://this.transpect.io/a9s/ts/logos/cc/$1.png')}"/>
     </div>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="term[@key eq 'Forderlogos']" mode="tei2html">
     <xsl:if test="matches(., '\S')">
+
     <div class="{lower-case(translate(@key, ' ', '-'))}">
-       <xsl:for-each select="tokenize(normalize-space(.), '\s+', 'm')"><img alt="Förderlogo" src="{replace(., '^.+/(.+)\.(eps|EPS)', concat($s9y1-path, 'images/$1.png'))}"/></xsl:for-each>
+       <xsl:for-each select="tokenize(normalize-space(.), '\s+', 'm')"><img alt="Förderlogo" src="{replace(., '^.+/(.+)\.(eps|EPS)', concat($s9y1-path, '$1.png'))}"/></xsl:for-each>
     </div>
     </xsl:if>
   </xsl:template>
@@ -580,5 +582,9 @@
   </xsl:template>
 
   <xsl:template match="byline/affiliation | byline/email | byline/ref" mode="tei2html"/>
+
+  <xsl:template match="html:i[html:i] | html:b[html:b] | html:i[html:p] | html:b[html:p]" mode="clean-up">
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
 
 </xsl:stylesheet>
