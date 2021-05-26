@@ -163,7 +163,7 @@
       <meta-role de="Lektorat" en="Editing"/>
       <meta-role de="Konvertierung" en="Conversion"/>
       <meta-role de="Satz" en="Typesetting"/>
-     <!-- <meta-role de="Gutachter" en=""/>-->
+      <meta-role de="Gutachter" en="Appraiser"/>
     </meta-role>
   </xsl:variable>
 
