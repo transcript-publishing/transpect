@@ -306,4 +306,21 @@ nav {display:none;}
 #epub-cover-image-container img{
   width:100%;
 }
-/*hi :)*/
+/* title pages :)*/
+
+section.fulltitle {
+  padding-top:2em;
+}
+p.widmung{ padding-top:20%; }
+p.kurztext{ 
+  margin-top:3em;
+  text-indent:0;
+}
+section.title-page p.autor { font-family:'roboto', sans-serif; margin-bottom:3em; font-weight:normal;}
+h1.titel { font-weight:normal;}
+h2.untertitel { font-weight:normal; font-size:1em; }
+
+p.copyright {margin-bottom:1em; font-weight:bold;}
+p.copyright, p.umschlaggestaltung {margin-top:1em;}
+
+div.lizenzlogo img { height:2em}
