@@ -42,7 +42,7 @@
       </head>
       <body>
         <xsl:call-template name="half-title"/>
-        <!--<xsl:call-template name="frontispiece"/>--><!-- series page not needed, yet -->
+        <xsl:call-template name="frontispiece"/><!-- series page not needed, yet -->
         <xsl:call-template name="full-title"/>
         <xsl:call-template name="imprint"/>
         <xsl:call-template name="toc"/>
@@ -60,7 +60,9 @@
   </xsl:template>
   
   <xsl:template name="frontispiece">
-    <section class="{local-name()} title-page" epub:type="seriespage"/>
+    <section class="{local-name()} title-page" epub:type="seriespage">
+      <xsl:apply-templates select="$metadata[@key = ('Reihe', 'Bandnummmer')], $metadata[@key = 'Reihenlogo']" mode="#current"/>
+    </section>
   </xsl:template>
   
   <xsl:template name="full-title">
@@ -127,11 +129,20 @@
     </p>
   </xsl:template>
 
-  <xsl:template match="term[@key eq 'Lizenzlogo']" mode="tei2html">
+  <xsl:template match="term[@key = 'Lizenzlogo']" mode="tei2html">
     <xsl:if test="matches(., '\S')">
     <!-- file:///X:/Ablagen/Titeleien/Reihenlogos/TIT_cc_by_nc_nd_logo.EPS → http://this.transpect.io/a9s/ts/logos/cc/by-nc-nd.png-->
     <div class="{lower-case(translate(@key, ' ', '-'))}">
        <img alt="Lizenzlogo Creative Commons" src="{replace(translate(., '_', '-'), '^.+/TIT-cc-(.+)-logo\.(eps|EPS)', 'http://this.transpect.io/a9s/ts/logos/cc/$1.png')}"/>
+    </div>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="term[@key = 'Reihenlogo']" mode="tei2html">
+    <xsl:if test="matches(., '\S')">
+    <!-- file:///X:/Ablagen/Titeleien/Reihenlogos/REIHENLOGO_KUL_ZIG.EPS → http://this.transpect.io/a9s/ts/logos/series/REIHENLOGO_KUL_ZIG.png-->
+    <div class="{lower-case(translate(@key, ' ', '-'))}">
+       <img alt="Reihenlogo" src="{replace(., '^.+/(.+)\.(eps|EPS)', 'http://this.transpect.io/a9s/ts/logos/series/$1.png')}"/>
     </div>
     </xsl:if>
   </xsl:template>
