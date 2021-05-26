@@ -597,5 +597,7 @@
   <xsl:template match="html:i[html:i] | html:b[html:b] | html:i[html:p] | html:b[html:p]" mode="clean-up">
     <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
-
+  
+  <xsl:template match="figure[count(head) gt 1]/head[not(normalize-space())]" mode="epub-alternatives"/>
+  
 </xsl:stylesheet>
