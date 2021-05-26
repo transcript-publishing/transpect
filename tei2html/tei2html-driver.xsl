@@ -126,7 +126,52 @@
       </a>
     </p>
   </xsl:template>
-  
+
+  <xsl:template match="term[@key eq 'Lizenzlogo']" mode="tei2html">
+    <xsl:if test="matches(., '\S')">
+    <div class="{lower-case(translate(@key, ' ', '-'))}">
+       <img alt="Lizenzlogo Creative Commons" src="{replace(., '^.+/TIT_cc_(.+)_logo\.(eps|EPS)', 'http://this.transpect.io/a9s/ts/logos/cc/$1.png')}"/>
+    </div>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="term[@key eq 'Forderlogos']" mode="tei2html">
+    <xsl:if test="matches(., '\S')">
+    <div class="{lower-case(translate(@key, ' ', '-'))}">
+       <xsl:for-each select="tokenize(normalize-space(.), '\s+', 'm')"><img alt="Förderlogo" src="{replace(., '^.+/(.+)\.(eps|EPS)', concat($s9y1-path, 'images/$1.png'))}"/></xsl:for-each>
+    </div>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:variable name="meta-roles" as="element()">
+    <meta-role>
+      <meta-role de="Umschlaggestaltung" en="Cover design"/>
+      <meta-role de="Korrektorat" en="Proofreading"/>
+      <meta-role de="Lektorat" en="Editing"/>
+      <meta-role de="Konvertierung" en="Conversion"/>
+      <meta-role de="Satz" en="Typesetting"/>
+     <!-- <meta-role de="Gutachter" en=""/>-->
+    </meta-role>
+  </xsl:variable>
+
+  <xsl:template match="term[@key = ('Umschlaggestaltung', 'Korrektorat', 'Lektorat', 'Konvertierung', 'Satz')]" mode="tei2html">
+    <xsl:if test="matches(., '\S')">
+      <p class="{lower-case(translate(@key, ' ', '-'))}">
+        <span class="meta-role"><xsl:value-of select="concat(if (/*/@xml:lang='en') then $meta-roles/*:meta-role[@de = current()/@key]/@en else @key, ': ')"/></span>
+        <xsl:apply-templates mode="#current"/>
+      </p>
+    </xsl:if>
+  </xsl:template>
+ 
+  <xsl:template match="term[@key eq 'Umschlagcredit']" mode="tei2html">
+    <xsl:if test="matches(., '\S')">
+      <p class="{lower-case(translate(@key, ' ', '-'))}">
+        <span class="meta-role"><xsl:value-of select="if (/@xml:lang='en') then 'Umschlagabbildung: ' else 'Cover image: '"/></span>
+        <xsl:apply-templates mode="#current"/>
+      </p>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template name="toc">
     <nav class="toc" epub:type="toc" id="toc">
       <xsl:call-template name="generate-toc-headline"/>
