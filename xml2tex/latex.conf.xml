@@ -69,6 +69,8 @@
     select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Fördertext']"/>
   
   <xsl:variable name="new-common" as="xs:boolean" select="false()"/>
+  
+  <xsl:variable name="fig-style" select="'^figure-[a-z]$'" as="xs:string"/>
 
   <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
   <ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
