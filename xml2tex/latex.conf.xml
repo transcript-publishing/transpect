@@ -70,7 +70,7 @@
   
   <xsl:variable name="new-common" as="xs:boolean" select="false()"/>
   
-  <xsl:variable name="fig-style" select="'^figure-[a-z]$'" as="xs:string"/>
+  <xsl:variable name="fig-style" select="'^figure\-([a-z])$'" as="xs:string"/>
 
   <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
   <ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
@@ -482,7 +482,7 @@
       <text>&#xa;\transcriptFixedFigure</text>
       <param select="dbk:title, 
                      dbk:caption"/>
-      <param select="replace(@role, '^[a-z]{2,3}figure([A-Z])(\d)$', '$1')"/>
+      <param select="upper-case(replace(@role, $fig-style, '$1'))"/>
       <xsl:text>{%</xsl:text>
         <xsl:for-each select="dbk:mediaobject">
           <xsl:text>&#xa;</xsl:text>
@@ -492,7 +492,8 @@
     </rule>
   </template>
 
-  <template context="dbk:figure/dbk:title|dbk:table/dbk:title">
+  <template context="dbk:figure/dbk:title
+                    |dbk:table/dbk:title">
     <rule break-after="1" break-before="1" name="caption" type="cmd">
       <param/>
     </rule>
