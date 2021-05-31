@@ -401,8 +401,8 @@
   </template>
   
  <template context="dbk:para[following-sibling::*[1][self::dbk:blockquote]]
-                    |dbk:blockquote/dbk:para[last()]
-                    |dbk:caption/dbk:para[last()]">
+                   |dbk:blockquote/dbk:para[last()]
+                   |dbk:caption/dbk:para[last()]">
     <rule break-after="0">
       <text/>
     </rule>
@@ -619,5 +619,16 @@
       <param select="xml2tex:add-tactical-break-chars-in-linktext(.)"/>
     </rule>
   </template>
+  
+  <!--<template context="dbk:info/dbk:epigraph[@role eq 'motto']">
+    <rule name="quote" type="cmd" break-before="1">
+      <xsl:text>{</xsl:text>
+      <xsl:apply-templates select="dbk:*[not(matches(@role, $motto-source-style))]" mode="#current"/>
+      <xsl:text>}</xsl:text>
+    </rule>
+    <rule name="quotesource" type="cmd" break-before="1">
+      <param/>
+    </rule>
+  </template>-->
   
 </set>
