@@ -1,7 +1,9 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-floats}[2021/04/09 transcript]\relax
 
-\usepackage[figuresright]{rotating}
+%% gedrehte Gleitobjekte immer in die gleiche Richtung drehen:
+\@rot@twosidefalse
+\def\rot@LR{-1}%
 \usepackage{ragged2e}
 \usepackage{tabularx}
 \usepackage{multirow}

@@ -54,7 +54,7 @@
   }%
   \tpHangNumber
   \tpAuthorAfterIndent
-  \tpHangFixed{\chaphskip}%
+  % \tpHangFixed{\chaphskip}%
   \tpHeadingProperty{BeforeHeading}{%
     \cleardoublepage
     \null\vskip\headingsep\vskip-.45mm\relax
@@ -65,8 +65,12 @@
     \vskip1.68\baselineskip
     \ifx\heading@Author\relax\ifx\heading@Quote\relax\ifx\tp@starred\relax\vskip\baselineskip\else\vskip2\baselineskip\fi\fi\fi
     }%
-  \tpHeadingProperty{BeforeNumber}{\hb@xt@\chaphskip\bgroup}%
-  \tpHeadingProperty{AfterNumber}{\hss\egroup}%
+  \tpHeadingProperty{BeforeNumber}{\setbox\@tempboxa\hbox\bgroup}%
+  \tpHeadingProperty{AfterNumber}{\egroup
+    \@tempdima\wd\@tempboxa \advance\@tempdima.5em
+    \ifdim\@tempdima>\chaphskip\chaphskip\@tempdima\fi
+    \hb@xt@\chaphskip{\box\@tempboxa\hss}%
+  }%
   \tpHeadingProperty{BlockFormat}{\Huge\sbseries}%
   \tpHeadingProperty{TitleFormat}{\ifx\tp@starred\relax\sffamily\else\sfchap\fi}%
   \tpHeadingProperty{BeforeSubtitle}{\@@par}%
@@ -78,6 +82,9 @@
   \tpHeadingProperty{BeforeQuote}{\vskip\baselineskip\hfill\hbox\bgroup\vbox\bgroup\hsize.5\textwidth}%
   \tpHeadingProperty{QuoteFormat}{\normalfont\normalsize\nsfwider}%
   \tpHeadingProperty{AfterQuote}{\egroup\egroup}%
+  \tpHeadingProperty{BeforeQuoteSource}{\@par\vskip.5\baselineskip\hfill\hbox\bgroup\vbox\bgroup\hsize.5\textwidth}%
+  \tpHeadingProperty{QuoteSourceFormat}{\normalfont\normalsize\nsfwider}%
+  \tpHeadingProperty{AfterQuoteSource}{\egroup\egroup}%
   \tpToCBefore{\addvspace{1\baselineskip}}%
   \tpToCSubTitle%
   \tpToCSubTitleBefore{\@par\nopagebreak}%
@@ -144,7 +151,9 @@
 }
 
 \tpDeclareHeading{3}{subsubsection}{%
+  \tpHangNumber
   \tpHeadingProperty{BeforeHeading}{\vskip12.8bp}%
+  \tpHeadingProperty{AfterNumber}{\quad}%
   \tpHeadingProperty{AfterSkip}{1sp}%
   \tpHeadingProperty{TitleFormat}{\sffamily\mdseries\Large}%
   \tpToCHangNumber
@@ -152,7 +161,9 @@
 }
 
 \tpDeclareHeading{4}{paragraph}{%
+  \tpHangNumber
   \tpHeadingProperty{BeforeHeading}{\vskip12.8bp}%
+  \tpHeadingProperty{AfterNumber}{\quad}%
   \tpHeadingProperty{AfterSkip}{1sp}%
   \tpHeadingProperty{TitleFormat}{\normalfont\sfwide\normalsize}%
   \tpToCHangNumber
