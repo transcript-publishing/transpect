@@ -21,20 +21,24 @@
         <article><xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"></xsl:sequence></article>
       </xsl:for-each>
     </xsl:variable>
-    <export-root>
-      <xsl:element name="html" >
-        <xsl:copy-of select="/*/@*" copy-namespaces="no"/>
-        <xsl:variable select="if (/*/*:head/*:meta[@name = 'doi'][@content]) 
+    <xsl:variable select="if (/*/*:head/*:meta[@name = 'doi'][@content]) 
                           then replace(/*/*:head/*:meta[@name = 'doi']/@content, '^.+/', '')
                           else 
                              if (descendant::*[self::*:header[@class = 'chunk-meta-sec']][*:ul/*:li[@class = 'chunk-doi'][matches(., '-[\d]{3}$')]])
                              then replace((descendant::*[self::*:header[@class = 'chunk-meta-sec']]/*:ul/*:li[@class = 'chunk-doi'])[1], '^.+/(.+)-[\d]{3}$', '$1')
                              else $basename" name="filename" as="xs:string" />
+    <export-root>
+      <xsl:element name="html" >
+        <xsl:copy-of select="/*/@*" copy-namespaces="no"/>
         <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.html')"/>
         <xsl:apply-templates select="/*/node()" mode="#current">
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
         </xsl:apply-templates>
       </xsl:element>
+    <xsl:call-template name="create-meta-elt">
+      <xsl:with-param name="nodes" select="node()"/>
+      <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.html')"/>
+    </xsl:call-template>
       <xsl:apply-templates select="$articles" mode="#current">
         <xsl:with-param name="head" select="$head" as="element(*)?" tunnel="yes"/>
       </xsl:apply-templates>
@@ -89,7 +93,10 @@
       <xsl:with-param name="doi" select="$doi"/>
       <xsl:with-param name="uri" select="$uri"/>
     </xsl:call-template>
+    <xsl:call-template name="create-meta-elt">
+      <xsl:with-param name="nodes" select="$nodes"/>
+      <xsl:with-param name="uri" select="$uri"/>
+    </xsl:call-template>
   </xsl:template>
-
 
 </xsl:stylesheet>
