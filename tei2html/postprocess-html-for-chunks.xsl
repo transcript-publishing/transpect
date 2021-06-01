@@ -280,15 +280,15 @@
       </xsl:element>
     </xsl:if>
   </xsl:template>
-  <xsl:variable name="tei-file" as="document-node()" select="document('file:///C:/cygwin/home/mpufe/transcript/content/ts/std/mono/05018/ts_std_mono_05018.debug/hub2tei/99.hub2tei_tidy.xml')"/>
+<!--  <xsl:variable name="tei-file" as="document-node()" select="document('file:///C:/cygwin/home/mpufe/transcript/content/ts/std/mono/05018/ts_std_mono_05018.debug/hub2tei/99.hub2tei_tidy.xml')"/>-->
 <!--  <xsl:variable name="tei-file" as="document-node()" select="document('file:///C:/cygwin/home/mpufe/transcript/content/ts/jrn/dak/ts_jrn_dak_01000_Muster.debug/hub2tei/99.hub2tei_tidy.xml')"/>-->
-<!--  <xsl:variable name="tei-file" as="document-node()" select="collection()[/*[self::*:TEI]]"/>-->
+  <xsl:variable name="tei-file" as="document-node()" select="collection()[/*[self::*:TEI]]"/>
 
   <xsl:template name="create-meta-elt" exclude-result-prefixes="#all">
     <xsl:param name="nodes" as="node()*"/>
     <xsl:param name="uri" as="xs:string"/>
     <xsl:variable name="book-part" select="$tei-file//*[@xml:id = $nodes/@id]" as="element(*)?"/>
-    <xsl:variable name="tei-meta" select="$tei-file//*:TEI/*:teiHeader/*:profileDesc/*:textClass/*:keywords[@rendition='titlepage']"/>
+    <xsl:variable name="tei-meta" select="$tei-file//*:TEI/*:teiHeader/*:profileDesc/*:textClass/*:keywords[@rendition='titlepage']" as="element(*)?"/>
     <xsl:element name="chunk-meta" namespace="">
       <xsl:attribute name="xml:base" select="replace(replace($uri, '^(.+/)(.+)\.html', '$1chunk-meta-$2.xml'), 'title-page', 'fm')"/>
       <xsl:attribute name="id" select="$nodes/@id"/>
