@@ -14,7 +14,7 @@
   <xsl:import href="http://transpect.io/xslt-util/xslt-based-catalog-resolver/xsl/resolve-uri-by-catalog.xsl"/>
   <xsl:import href="http://this.transpect.io/a9s/ts/tei2html/postprocess-html-for-chunks.xsl"/>  
 
-  <xsl:template match="/" mode="#default">
+  <xsl:template match="/*[self::*:html]" mode="#default">
     <xsl:variable name="head" select="/*/*:head" as="element(*)"/>
     <xsl:variable name="articles" as="element(*)*">
       <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | descendant::*:div[@epub:type= ('chapter')])">
