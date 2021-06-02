@@ -33,7 +33,7 @@
   <xsl:template match="@srcpath" mode="#default"/>
   <xsl:key name="elt-by-uri" match="*" use="@xml:base"/>
 
-  <xsl:template match="/" mode="#default">
+  <xsl:template match="/*[self::*:html]" mode="#default">
     <xsl:variable name="head" select="/*/*:head" as="element(*)"/>
     <xsl:variable name="articles" as="element(*)*">
       <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | descendant::*:div[contains(@class, 'chapter')])">
