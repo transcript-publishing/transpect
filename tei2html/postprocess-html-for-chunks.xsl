@@ -326,7 +326,13 @@
       <xsl:element name="chunk-subtitle" namespace=""><xsl:value-of select="normalize-space(string-join($book-part/*:head[@type = 'sub'][1]/node()[not(self::*:note | self::*:index)]))"/></xsl:element>  
       <xsl:element name="fpage" namespace=""/>
       <xsl:element name="lpage" namespace=""/> 
-      <xsl:element name="license" namespace=""><xsl:value-of select="normalize-space($tei-meta/*:term[@key = 'Lizenz'])"/></xsl:element> 
+      <xsl:element name="license" namespace="">
+        <xsl:attribute name="type" select="if (matches($tei-meta/*:term[@key = 'Lizenz'], 'by', 'i')) 
+                                           then 'open-access' 
+                                           else 
+                                             if ($nodes/@id = ('toc', 'title-page')) then 'free'
+                                             else 'restricted'"/>
+        <xsl:value-of select="if ($nodes/@id = ('toc', 'title-page') and not($tei-meta/*:term[@key = 'Lizenz'][matches(., '\S')])) then 'This content is free.' else normalize-space($tei-meta/*:term[@key = 'Lizenz'])"/></xsl:element> 
       <xsl:sequence select="tr:determine-meta-chunk-authors($tei-meta, $nodes)"/>
     </xsl:element>
   </xsl:template>
