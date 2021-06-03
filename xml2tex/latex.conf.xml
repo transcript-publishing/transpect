@@ -671,7 +671,7 @@
   
   <template context="dbk:epigraph[@role eq 'motto']/dbk:para[matches(@role, $motto-source-style)]">
     <rule name="textit" type="cmd">
-      <text/>
+      <param/>
     </rule>
   </template>
   
