@@ -266,10 +266,13 @@
                     |dbk:bibliogaphy/dbk:info">
     <xsl:apply-templates select="node() except (dbk:title,
                                                 dbk:abbrev[matches(@role, concat($col-head-short-style, '|', $col-head-left-style))],
-                                                dbk:abstract),
+                                                dbk:abstract,
+                                                if(parent::dbk:section) then dbk:epigraph else()
+                                                ),
                                  dbk:title,
                                  dbk:abbrev[matches(@role, concat($col-head-short-style, '|', $col-head-left-style))], (: https://redmine.le-tex.de/issues/10417 :)
                                  dbk:abbrev[matches(@role, $col-head-right-style)],  (: https://redmine.le-tex.de/issues/10448 :)
+                                 if(parent::dbk:section) then dbk:epigraph else(),
                                  dbk:abstract" 
                          mode="#current"/>
   </template>
