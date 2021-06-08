@@ -525,7 +525,7 @@
     </pre>
   </xsl:template>
   
-  <xsl:template match="p/hi" mode="tei2html">
+  <xsl:template match="p[matches(@rend, '^tscodeblock')]/hi" mode="tei2html">
     <code class="{replace(parent::p/@rend, '^tscodeblock', '')}">
       <xsl:apply-templates mode="#current"/>
     </code>

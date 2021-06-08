@@ -66,6 +66,15 @@
     </export-root>
   </xsl:template>
 
+  <xsl:template match="/*:html/*:body" mode="#default">
+    <xsl:copy>   
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <xsl:call-template name="add-modal-container">
+        <xsl:with-param name="nodes" as="node()*" select="node()"/>
+      </xsl:call-template>
+    </xsl:copy>
+  </xsl:template>
+
   <xsl:function name="tr:get-part-title" as="element(*)?">
     <xsl:param name="book-part" as="element(*)"/>
     <xsl:apply-templates select="$book-part/ancestor::*[self::*:div[@role = 'doc-part']]/*[local-name() = ('h1', 'h2', 'h3', 'h4', 'h5')]" mode="create-column-titles"/>
@@ -146,8 +155,24 @@
 
   <xsl:variable name="short-isbn" select="replace(replace(/*/@xml:base, '^.+/.+?(\d+).+$', '$1'), '^[0]', '')"/>
 
+  <xsl:template match="*:img" mode="#default">
+    <!--  https://redmine.le-tex.de/issues/10515 -->
+    <!-- <a class="imageLink" data-toggle="modal" data-target="#imageModal" data-src="images/{{image}}" data-caption="{{ts_figure_caption}}">
+           <img src="images/{{image}}" alt="{{ts_figure_caption}}" class="hover-shadow"/>
+         </a>
+    -->
+    <a class="imageLink" data-toggle="modal" data-target="#imageModal">
+      <xsl:attribute name="data-src" select="concat('images/', replace(@src., '^.+/', ''))"/>
+      <xsl:attribute name="data-caption" select="string-join(../*:p[@class = 'tsfigurecaption'], '')"/>
+      <xsl:copy>
+        <xsl:apply-templates select="@*" mode="#current"/>
+        <xsl:attribute name="class" select="'hover-shadow'"/>
+      </xsl:copy>
+    </a>
+  </xsl:template>
+
   <xsl:template match="*:img/@src" mode="#default">
-    <!-- https://redmine.le-tex.de/issues/9545#note-8 -->
+    <!-- https://redmine.le-tex.de/issues/9545#note-8, https://redmine.le-tex.de/issues/10515 -->
     <!-- <img alt="{{ts_figure_caption}}" src="/{{kurz-isbn}}/images/{{image}}" />
       <img alt="" src="http://transpect.io/content-repo/ts/jrn/inge/00002/images/ts_jrn_zig_00002_image2.jpg"/>
     -->
@@ -206,22 +231,76 @@
  
   <xsl:template match="@xml:base" mode="export"/>
 
+<!--  <xsl:template match="*:p[matches(@class, 'tsmediaurl')]" mode="#default">
+    <!-\-https://redmine.le-tex.de/issues/10237-\->
+    <xsl:if test="(preceding-sibling::*[matches(@class, 'tsmediacaption')] or following-sibling::*[matches(@class, 'tsmediacaption')])
+      and (preceding-sibling::*[matches(@class, 'tsmediasource')] or following-sibling::*[matches(@class, 'tsmediasource')])">
+      <div class="tsMediaContainer">
+        <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediacaption')], following-sibling::*[matches(@class, 'tsmediacaption')]">
+          <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
+        </xsl:apply-templates>
+        <div class="tsIframeContainer">
+          <iframe class="tsMediaUrl" src="{normalize-space(string-join(.))}" loading="lazy">
+            <p>Your browser does not support iframes, please consider using Firefox.</p>
+          </iframe>
+        </div>
+        <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediasource')], following-sibling::*[matches(@class, 'tsmediasource')]">
+          <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
+        </xsl:apply-templates>
+      </div>
+    </xsl:if>
+  </xsl:template>-->
+
   <xsl:template match="*:p[matches(@class, 'tsmediaurl')]" mode="#default">
     <!--https://redmine.le-tex.de/issues/10237-->
-    <div class="tsMediaContainer">
-      <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediacaption')], following-sibling::*[matches(@class, 'tsmediacaption')]">
-        <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
-      </xsl:apply-templates>
-      <div class="tsIframeContainer">
-        <iframe class="tsMediaUrl" src="{normalize-space(string-join(.))}" loading="lazy">
-          <p>Your browser does not support iframes, please consider using Firefox.</p>
-        </iframe>
+    <xsl:if test="(preceding-sibling::*[matches(@class, 'tsmediacaption')] or following-sibling::*[matches(@class, 'tsmediacaption')])
+                  and 
+                  (preceding-sibling::*[matches(@class, 'tsmediasource')] or following-sibling::*[matches(@class, 'tsmediasource')])">
+      <div class="tsCollapseContainer" id="tsCollapseContainer{{i}}">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-primary active">
+            <input type="radio" name="options" id="optionFigures{{i}}" autocomplete="off" data-toggle="collapse" data-target="#multiCollapseFigures{{i}}" aria-controls="multiCollapseFigures{{i}}" checked="yes"/>
+            Show figures
+          </label>
+          <label class="btn btn-primary">
+            <input type="radio" name="options" id="optionInteractive{{i}}" autocomplete="off" data-toggle="collapse" data-target="#multiCollapseInteractive{{i}}" aria-controls="multiCollapseInteractive{{i}}"/>
+            Show interactive content
+          </label>
+        </div>
+        <div class="accordion-group">
+          <div class="tsFigureContainer collapse show" id="multiCollapseFigures{{i}}" data-parent="#tsCollapseContainer{{i}}">
+            <div id="Fig11-1">
+              <p class="tsfigurecaption">
+                <span class="hub:caption-text">{{ts_figure_caption}}</span>
+              </p>
+              <a >
+                <img/>
+              </a>
+            </div>
+            <div class="tsfigureA1" id="Fig12-1">
+              <p>{{ts_figure_caption}}</p>
+              <a><img/></a>
+            </div>
+          </div>
+          <div class="tsMediaContainer collapse" id="multiCollapseInteractive{{i}}" data-parent="#tsCollapseContainer{{i}}">
+            <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediacaption')], following-sibling::*[matches(@class, 'tsmediacaption')]">
+              <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
+            </xsl:apply-templates>
+            <div class="tsIframeContainer">
+              <iframe class="tsMediaUrl" src="{normalize-space(string-join(.))}" loading="lazy">
+                <p>Your browser does not support iframes, please consider using Firefox.</p>
+              </iframe>
+            </div>
+            <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediasource')], following-sibling::*[matches(@class, 'tsmediasource')]">
+              <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
+            </xsl:apply-templates>
+          </div>
+        </div>
       </div>
-      <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediasource')], following-sibling::*[matches(@class, 'tsmediasource')]">
-        <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
-      </xsl:apply-templates>
-    </div>
+    </xsl:if>
   </xsl:template>
+
+
 
   <xsl:template match="*:p[matches(@class, 'tsmediacaption')]" mode="#default">
     <xsl:param name="preserve" as="xs:boolean?"/>
@@ -254,6 +333,9 @@
         <!--        <xsl:element name="chapter" namespace="http://www.w3.org/1999/xhtml">-->
         <!--          <xsl:attribute name="class" select="'article'"/>-->
         <xsl:apply-templates select="$nodes" mode="#current"/>
+        <xsl:call-template name="add-modal-container">
+          <xsl:with-param name="nodes" as="node()*" select="$nodes"/>
+        </xsl:call-template>
         <!--</xsl:element>-->
       </xsl:element>
     </xsl:element>
@@ -268,13 +350,37 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template name="add-modal-container">
+    <xsl:param name="nodes" as="node()*"/>
+    <!--https://redmine.le-tex.de/issues/10515-->
+    <xsl:if test="$nodes[descendant-or-self::*:p[matches(@class, 'tsmediaurl')]]">
+      <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModal" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 80vw">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&#215;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <figure class="tr-img-figure">
+                <img id="modalImage" src="" alt="" loading="lazy" />
+                <figcaption id="modalCaption"/>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template name="create-bib-elt">
     <xsl:param name="nodes" as="node()*"/>
     <xsl:param name="uri" as="xs:string"/>
     <xsl:param name="doi" as="xs:string?"/>
     <xsl:if test="$nodes[.//*[self::*:div[@role = ('doc-bibliography')]]]">
       <xsl:element name="doi" namespace="">
-        <xsl:attribute name="xml:base" select="replace($uri, 'html', 'xml')"/>
+        <xsl:attribute name="xml:base" select="replace($uri, '\.html', '.bibl.xml')"/>
         <xsl:attribute name="name" select="$doi"/>
         <xsl:apply-templates select="$nodes//*[self::*:div[@role = ('doc-bibliography')]]" mode="bib-chunks"/>
       </xsl:element>
