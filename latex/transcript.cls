@@ -1593,7 +1593,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 \def\editor#1{\def\@editor{#1}} \editor{}%
 \def\volume#1{\def\@volume{#1}}       \volume{}%
 \def\subtitle#1{\def\@subtitle{#1}} \subtitle{}%
-\def\logo#1{\let\@logo\@empty\if!#1!\else\def\@logo{\includegraphics{#1}}\fi} \logo{}
+\def\logo#1{\let\@logo\@empty\if!#1!\else\protect\def\@logo{#1}\fi} \logo{}
 \def\thanks#1{\def\@thanks{#1}} \thanks{}
 \def\biblioInfo#1{%
   \def\@biblioInfo{\biblioinfoname}%
