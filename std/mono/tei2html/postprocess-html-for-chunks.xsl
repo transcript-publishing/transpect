@@ -66,6 +66,9 @@
         <xsl:element name="article" namespace="http://www.w3.org/1999/xhtml">
 <!--          <xsl:attribute name="class" select="'article'"/>-->
           <xsl:apply-templates select="$nodes" mode="#current"/>
+          <xsl:call-template name="add-modal-container">
+            <xsl:with-param name="nodes" as="node()*" select="$nodes"/>
+          </xsl:call-template>
         </xsl:element>
       </xsl:element>
     </xsl:element>
