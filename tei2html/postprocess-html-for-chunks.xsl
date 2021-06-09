@@ -66,15 +66,6 @@
     </export-root>
   </xsl:template>
 
-  <xsl:template match="/*:html/*:body" mode="#default">
-    <xsl:copy>   
-      <xsl:apply-templates select="@*, node()" mode="#current"/>
-      <xsl:call-template name="add-modal-container">
-        <xsl:with-param name="nodes" as="node()*" select="node()"/>
-      </xsl:call-template>
-    </xsl:copy>
-  </xsl:template>
-
   <xsl:function name="tr:get-part-title" as="element(*)?">
     <xsl:param name="book-part" as="element(*)"/>
     <xsl:apply-templates select="$book-part/ancestor::*[self::*:div[@role = 'doc-part']]/*[local-name() = ('h1', 'h2', 'h3', 'h4', 'h5')]" mode="create-column-titles"/>
