@@ -531,9 +531,9 @@
     </code>
   </xsl:template>
 
-  <xsl:template match="*:img[contains(../@class, 'fig')][../*:p[*:span[@class='hub:caption-text']]]/@alt[.= '']" mode="clean-up">
+  <xsl:template match="*:img[contains(../@class, 'fig')][../*:p[*:span[@class='caption-text']]]/@alt[.= '']" mode="clean-up">
     <xsl:attribute name="{name()}">
-      <xsl:apply-templates select="../../*:p[*:span[@class='hub:caption-text']]/*:span[@class='hub:caption-text']" mode="strip-indexterms-etc"/>
+      <xsl:apply-templates select="../../*:p[*:span[@class='caption-text']]/*:span[@class='caption-text']" mode="strip-indexterms-etc"/>
     </xsl:attribute>
   </xsl:template>
 
