@@ -368,8 +368,7 @@
         <xsl:when
           test="
             $elt/parent::div/@type = ('part', 'appendix', 'imprint', 'acknowledgements', 'dedication', 'glossary', 'preface') or
-            $elt/parent::divGen/@type = ('index', 'toc') or
-            $elt/parent::listBibl">
+            $elt/parent::divGen/@type = ('index', 'toc')">
           <xsl:sequence select="3"/>
         </xsl:when>
         <xsl:when test="$elt/parent::div/@type = ('chapter', 'article')">
@@ -391,15 +390,16 @@
           />
         </xsl:when>
         <xsl:when test="$elt/parent::div[@type = ('section')][not(@rend = ('abstract', 'keywords', 'alternative-title'))]">
-          <xsl:sequence select="count($elt/ancestor::div[@type eq 'section']) + 3"/>
+          <xsl:sequence select="count($elt/ancestor::*[self::div/@type = ('part', 'article', 'chapter', 'section')]) + 2
+             "/>
         </xsl:when>
-        <xsl:when test="$elt/parent::div/@type = ('bibliography')">
+        <xsl:when test="$elt/parent::div/@type = ('bibliography') or $elt/parent::listBibl">
           <xsl:sequence
             select="
-              if ($elt/ancestor::div/@type = ('chapter', 'article')) then
-                5
+              if ($elt/ancestor::div/@type = ('part', 'article', 'chapter')) then
+                count($elt/ancestor::*[self::div/@type = ('part', 'article', 'chapter') or self::listBibl]) + 2
               else
-                4"
+                3"
           />
         </xsl:when>
         <xsl:when test="$elt/parent::*[matches(local-name(.), '^div\d')]">
