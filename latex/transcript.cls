@@ -1594,6 +1594,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 \def\volume#1{\def\@volume{#1}}       \volume{}%
 \def\subtitle#1{\def\@subtitle{#1}} \subtitle{}%
 \def\logo#1{\let\@logo\@empty\if!#1!\else\protect\def\@logo{#1}\fi} \logo{}
+\def\series#1{\let\@series\@empty\if!#1!\else\protect\def\@series{#1}\fi} \series{}
 \def\thanks#1{\def\@thanks{#1}} \thanks{}
 \def\biblioInfo#1{%
   \def\@biblioInfo{\biblioinfoname}%
@@ -1675,7 +1676,8 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
       \vskip5\p@
       \fontsize{10.5}{12}\selectfont\ifx\@subtitle\@empty\else\@subtitle\par\fi}%
     \vfill
-    \@logo
+    \ifx\@logo\@empty\else\@logo\fi
+    \ifx\@series\@empty\else{\sfwider\fontsize{10.5}{12}\sbseries\@series}\fi
     \clearpage
     %% Seite iv
     \thispagestyle{empty}%
