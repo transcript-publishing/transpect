@@ -162,14 +162,19 @@
          </a>
     -->
     <a class="imageLink" data-toggle="modal" data-target="#imageModal">
-      <xsl:attribute name="data-src" select="concat('images/', replace(@src., '^.+/', ''))"/>
-      <xsl:attribute name="data-caption" select="string-join(../*:p[@class = 'tsfigurecaption'], '')"/>
-      <xsl:copy>
+      <xsl:attribute name="data-src" select="concat('images/', replace(@src, '^.+/', ''))"/>
+      <xsl:attribute name="data-caption" select="tr:alt-text(.)"/>
+      <xsl:copy copy-namespaces="no">
         <xsl:apply-templates select="@*" mode="#current"/>
         <xsl:attribute name="class" select="'hover-shadow'"/>
       </xsl:copy>
     </a>
   </xsl:template>
+
+  <xsl:function name="tr:alt-text" as="xs:string">
+    <xsl:param name="img" as="node()*"/>
+    <xsl:sequence select="string-join($img/../*:p[@class = 'tsfigurecaption' or *:span[contains(@class,'caption-text')]]//text()[not(..[self::*:a][contains(@href, 'fn_')])], '')"></xsl:sequence>
+  </xsl:function>
 
   <xsl:template match="*:img/@src" mode="#default">
     <!-- https://redmine.le-tex.de/issues/9545#note-8, https://redmine.le-tex.de/issues/10515 -->
@@ -177,8 +182,8 @@
       <img alt="" src="http://transpect.io/content-repo/ts/jrn/inge/00002/images/ts_jrn_zig_00002_image2.jpg"/>
     -->
     <xsl:attribute name="{name()}" select="concat('images/', replace(., '^.+/', ''))"/>
-    <xsl:if test="not(../@alt) and ../../*:p[@class = 'tsfigurecaption']">
-      <xsl:attribute name="alt" select="string-join(../../*:p[@class = 'tsfigurecaption'], '')"/>
+    <xsl:if test="not(../@alt) and ../../*:p[@class = 'tsfigurecaption' or *:span[contains(@class,'caption-text')]]">
+      <xsl:attribute name="alt" select="tr:alt-text(..)"/>
     </xsl:if>
   </xsl:template>
 
@@ -186,7 +191,7 @@
     <!-- https://redmine.le-tex.de/issues/9545#note-8 -->
     <!-- <img alt="{{ts_figure_caption}}" src="/{{kurz-isbn}}/images/{{image}}" />
     -->
-      <xsl:attribute name="alt" select="string-join(../../*:p[@class = 'tsfigurecaption']//text(), '')"/>
+      <xsl:attribute name="alt" select="tr:alt-text(..)"/>
   </xsl:template>
 
   <xsl:template match="*:head/*:title" mode="#default">
@@ -231,67 +236,70 @@
  
   <xsl:template match="@xml:base" mode="export"/>
 
-<!--  <xsl:template match="*:p[matches(@class, 'tsmediaurl')]" mode="#default">
-    <!-\-https://redmine.le-tex.de/issues/10237-\->
-    <xsl:if test="(preceding-sibling::*[matches(@class, 'tsmediacaption')] or following-sibling::*[matches(@class, 'tsmediacaption')])
-      and (preceding-sibling::*[matches(@class, 'tsmediasource')] or following-sibling::*[matches(@class, 'tsmediasource')])">
-      <div class="tsMediaContainer">
-        <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediacaption')], following-sibling::*[matches(@class, 'tsmediacaption')]">
-          <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
-        </xsl:apply-templates>
-        <div class="tsIframeContainer">
-          <iframe class="tsMediaUrl" src="{normalize-space(string-join(.))}" loading="lazy">
-            <p>Your browser does not support iframes, please consider using Firefox.</p>
-          </iframe>
-        </div>
-        <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediasource')], following-sibling::*[matches(@class, 'tsmediasource')]">
-          <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
-        </xsl:apply-templates>
-      </div>
-    </xsl:if>
-  </xsl:template>-->
+  <xsl:variable name="media-url-paras" select="//*:p[matches(@class, 'tsmediaurl')]"/>
 
-  <xsl:template match="*:p[matches(@class, 'tsmediaurl')]" mode="#default">
+  <xsl:template match="*[*:p[matches(@class, 'tsmedia(source|url|caption)')]]" mode="#default">
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*" mode="#current"/>
+    </xsl:copy>
+    <xsl:for-each-group select="node()[not(self::text()[matches(., '^\s+$')])]" group-adjacent="exists(.[matches(@class, '^tsmedia(source|url|caption)|^tsfigure')])">
+      
+      <xsl:choose>
+        <xsl:when test="current-grouping-key()">
+          <xsl:for-each-group select="current-group()" group-ending-with=".[self::*:div[starts-with(@class, 'tsfigure')][following-sibling::*[1][self::*:p[[matches(@class, 'tsmedia(source|url|caption)')]]]]]">
+            <xsl:choose>
+              <xsl:when test="current-group()[self::*:p[matches(@class, 'tsmedia(url|caption)')]]">
+                <xsl:call-template name="create-collapseContainer">
+                  <xsl:with-param name="figure-group" select="current-group()" as="node()*"/>
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:apply-templates select="current-group()" mode="#current"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each-group>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="current-group()" mode="#current"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each-group>
+  </xsl:template>
+
+
+  <xsl:template name="create-collapseContainer">
+    <xsl:param name="figure-group" as="node()*"/>
     <!--https://redmine.le-tex.de/issues/10237-->
-    <xsl:if test="(preceding-sibling::*[matches(@class, 'tsmediacaption')] or following-sibling::*[matches(@class, 'tsmediacaption')])
-                  and 
-                  (preceding-sibling::*[matches(@class, 'tsmediasource')] or following-sibling::*[matches(@class, 'tsmediasource')])">
-      <div class="tsCollapseContainer" id="tsCollapseContainer{{i}}">
+    <xsl:variable name="id" select="index-of($media-url-paras, $figure-group[self::*:p][starts-with(@class, 'tsmediaurl')][1])"/>
+    <xsl:if test="$figure-group[matches(@class, 'tsmediacaption')]
+      (:and 
+      (preceding-sibling::*[matches(@class, 'tsmediasource')] or following-sibling::*[matches(@class, 'tsmediasource')]):)">
+      <div class="tsCollapseContainer" id="tsCollapseContainer{$id}">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label class="btn btn-primary active">
-            <input type="radio" name="options" id="optionFigures{{i}}" autocomplete="off" data-toggle="collapse" data-target="#multiCollapseFigures{{i}}" aria-controls="multiCollapseFigures{{i}}" checked="yes"/>
-            Show figures
-          </label>
+            <input type="radio" name="options" id="optionFigures{$id}" autocomplete="off" data-toggle="collapse" 
+              data-target="#multiCollapseFigures{$id}" aria-controls="multiCollapseFigures{$id}" checked="yes"/>Show figures</label>
           <label class="btn btn-primary">
-            <input type="radio" name="options" id="optionInteractive{{i}}" autocomplete="off" data-toggle="collapse" data-target="#multiCollapseInteractive{{i}}" aria-controls="multiCollapseInteractive{{i}}"/>
-            Show interactive content
-          </label>
+            <input type="radio" name="options" id="optionInteractive{$id}" 
+              autocomplete="off" data-toggle="collapse" data-target="#multiCollapseInteractive{$id}" aria-controls="multiCollapseInteractive{$id}"/>Show interactive content</label>
         </div>
         <div class="accordion-group">
-          <div class="tsFigureContainer collapse show" id="multiCollapseFigures{{i}}" data-parent="#tsCollapseContainer{{i}}">
-            <div id="Fig11-1">
-              <p class="tsfigurecaption">
-                <span class="hub:caption-text">{{ts_figure_caption}}</span>
-              </p>
-              <a >
-                <img/>
-              </a>
-            </div>
-            <div class="tsfigureA1" id="Fig12-1">
-              <p>{{ts_figure_caption}}</p>
-              <a><img/></a>
-            </div>
+          <div class="tsFigureContainer collapse show" id="multiCollapseFigures{$id}" data-parent="#tsCollapseContainer{$id}">
+            <xsl:apply-templates select="$figure-group[self::*:div][starts-with(@class, 'tsfigure')]">
+              <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
+              <xsl:with-param name="container-id" as="xs:integer" select="$id"/>
+            </xsl:apply-templates>
           </div>
-          <div class="tsMediaContainer collapse" id="multiCollapseInteractive{{i}}" data-parent="#tsCollapseContainer{{i}}">
-            <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediacaption')], following-sibling::*[matches(@class, 'tsmediacaption')]">
+          <div class="tsMediaContainer collapse" id="multiCollapseInteractive{$id}" data-parent="#tsCollapseContainer{$id}">
+            <xsl:apply-templates select="$figure-group[self::*:p][starts-with(@class, 'tsmediacaption')]">
               <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
             </xsl:apply-templates>
             <div class="tsIframeContainer">
-              <iframe class="tsMediaUrl" src="{normalize-space(string-join(.))}" loading="lazy">
+              <iframe class="tsMediaUrl" src="{normalize-space(string-join($figure-group[self::*:p][starts-with(@class, 'tsmediaurl')]))}" loading="lazy">
                 <p>Your browser does not support iframes, please consider using Firefox.</p>
               </iframe>
             </div>
-            <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediasource')], following-sibling::*[matches(@class, 'tsmediasource')]">
+            <xsl:apply-templates select="$figure-group[self::*:p][starts-with(@class, 'tsmediasource')]">
               <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
             </xsl:apply-templates>
           </div>
@@ -300,7 +308,78 @@
     </xsl:if>
   </xsl:template>
 
+  <!--<xsl:template match="*:p[matches(@class, 'tsmediaurl')]" mode="#default">
+    <!-\-https://redmine.le-tex.de/issues/10237-\->
+    <xsl:variable name="id" select="index-of($media-url-paras, .)"/>
+    <xsl:if test="(preceding-sibling::*[matches(@class, 'tsmediacaption')] or following-sibling::*[matches(@class, 'tsmediacaption')])
+                  (:and 
+                  (preceding-sibling::*[matches(@class, 'tsmediasource')] or following-sibling::*[matches(@class, 'tsmediasource')]):)">
+      <div class="tsCollapseContainer" id="tsCollapseContainer{$id}">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-primary active">
+            <input type="radio" name="options" id="optionFigures{$id}" autocomplete="off" data-toggle="collapse" 
+                  data-target="#multiCollapseFigures{$id}" aria-controls="multiCollapseFigures{$id}" checked="yes"/>Show figures</label>
+          <label class="btn btn-primary">
+            <input type="radio" name="options" id="optionInteractive{$id}" 
+                  autocomplete="off" data-toggle="collapse" data-target="#multiCollapseInteractive{$id}" aria-controls="multiCollapseInteractive{$id}"/>Show interactive content</label>
+        </div>
+        <div class="accordion-group">
+          <div class="tsFigureContainer collapse show" id="multiCollapseFigures{$id}" data-parent="#tsCollapseContainer{$id}">
+      <!-\- KLAPPT HIER NOCH NICHT-\->
+<xsl:message select="'-\-\-\-\-', ."></xsl:message>
+<xsl:message select="'#####', following-sibling::*[self::*:div][starts-with(@class, 'tsfigure')][(preceding-sibling::*:p[matches(@class, 'tsmediaurl')])[1][. is current()]]"></xsl:message>
 
+            <xsl:apply-templates select="following-sibling::*[self::*:div][starts-with(@class, 'tsfigure')][(preceding-sibling::*:p[matches(@class, 'tsmediaurl')])[1][. is current()]]">
+              <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
+              <xsl:with-param name="container-id" as="xs:integer" select="$id"/>
+            </xsl:apply-templates>
+          </div>
+<!-\-          <div class="tsFigureContainer collapse show" id="multiCollapseFigures{$id}" data-parent="#tsCollapseContainer{$id}">
+            <div id="Fig11-{$id}">
+              <p class="tsfigurecaption">
+                <span class="hub:caption-text">{{ts_figure_caption}}</span>
+              </p>
+              <a >
+                <img/>
+              </a>
+            </div>
+            <div class="tsfigureA1" id="Fig12-{$id}">
+              <p>{{ts_figure_caption}}</p>
+              <a><img/></a>
+            </div>
+          </div>-\->
+          <div class="tsMediaContainer collapse" id="multiCollapseInteractive{$id}" data-parent="#tsCollapseContainer{$id}">
+            <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediacaption')][1], following-sibling::*[matches(@class, 'tsmediacaption')][1]">
+              <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
+            </xsl:apply-templates>
+            <div class="tsIframeContainer">
+              <iframe class="tsMediaUrl" src="{normalize-space(string-join(.))}" loading="lazy">
+                <p>Your browser does not support iframes, please consider using Firefox.</p>
+              </iframe>
+            </div>
+            <xsl:apply-templates select="preceding-sibling::*[matches(@class, 'tsmediasource')][1], following-sibling::*[matches(@class, 'tsmediasource')][1]">
+              <xsl:with-param name="preserve" as="xs:boolean" select="true()"/>
+            </xsl:apply-templates>
+          </div>
+        </div>
+      </div>
+    </xsl:if>
+  </xsl:template>-->
+
+  <xsl:template match="*:div[starts-with(@class, 'tsfigure')]" mode="#default">
+    <xsl:param name="preserve" as="xs:boolean?" />
+    <xsl:param name="container-id" as="xs:integer?"/>
+    <xsl:choose>
+      <xsl:when test="$preserve">
+        <xsl:copy copy-namespaces="no">
+          <xsl:apply-templates select="@* except @id" mode="#current"/>
+          <xsl:attribute name="id" select="concat(@id, '-', $container-id)"/>
+          <xsl:apply-templates select="node()" mode="#current"/>
+        </xsl:copy>
+      </xsl:when>
+      <xsl:otherwise><xsl:next-match/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <xsl:template match="*:p[matches(@class, 'tsmediacaption')]" mode="#default">
     <xsl:param name="preserve" as="xs:boolean?"/>
@@ -316,9 +395,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="*:div[starts-with(@class, 'tsfigure')][preceding-sibling::*:p][matches(@class, 'tsmedia(source|url|caption)')] | 
-                       *:div[starts-with(@class, 'tsfigure')][preceding-sibling::*[not(self::*:div[starts-with(@class, 'tsfigure')])][1][self::*:p][matches(@class, 'tsmedia(source|url|caption)')]] " mode="#default"/>
-
+ 
   <xsl:template name="html:create-chunk">
     <xsl:param name="nodes" as="element(*)+"/>
     <xsl:param name="uri" as="xs:string"/>
@@ -353,7 +430,7 @@
   <xsl:template name="add-modal-container">
     <xsl:param name="nodes" as="node()*"/>
     <!--https://redmine.le-tex.de/issues/10515-->
-    <xsl:if test="$nodes[descendant-or-self::*:p[matches(@class, 'tsmediaurl')]]">
+    <xsl:if test="$nodes[descendant-or-self::*:figure]">
       <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModal" aria-hidden="true">
         <div class="modal-dialog" style="max-width: 80vw">
           <div class="modal-content">
@@ -388,6 +465,7 @@
   </xsl:template>
 <!--  <xsl:variable name="tei-file" as="document-node()" select="document('file:///C:/cygwin/home/mpufe/transcript/content/ts/std/mono/05018/ts_std_mono_05018.debug/hub2tei/99.hub2tei_tidy.xml')"/>-->
 <!--  <xsl:variable name="tei-file" as="document-node()" select="document('file:///C:/cygwin/home/mpufe/transcript/content/ts/jrn/dak/ts_jrn_dak_01000_Muster.debug/hub2tei/99.hub2tei_tidy.xml')"/>-->
+<!--  <xsl:variable name="tei-file" as="document-node()" select="document('file:///C:/cygwin/home/mpufe/transcript/content/ts/jrn/inge/05419/docx/ts_jrn_inge_05419_DHR.debug/hub2tei/99.hub2tei_tidy.xml')"/>-->
   <xsl:variable name="tei-file" as="document-node()" select="collection()[/*[self::*:TEI]]"/>
 
   <xsl:template name="create-meta-elt" exclude-result-prefixes="#all">
