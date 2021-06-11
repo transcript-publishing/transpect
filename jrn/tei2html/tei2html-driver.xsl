@@ -37,9 +37,10 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="@*[starts-with(name(), 'css:')][(ancestor::*[@*[name() = current()/name()]])[1][@*[name() = current()/name()][. = current()]]]" mode="epub-alternatives">
-  <!--  exclude duplicate styles-->
+  <xsl:template match="@*[starts-with(name(), 'css:')][(../ancestor::*[@*[name() = current()/name()]])[1][@*[name() = current()/name()][. = current()]]]" mode="epub-alternatives">
+    <!--  exclude duplicate styles-->
   </xsl:template>
+
 
   <xsl:variable name="tei2html:chapterwise-footnote" as="xs:boolean" select="true()"/>
 
