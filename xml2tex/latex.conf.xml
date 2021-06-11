@@ -683,4 +683,11 @@
     </rule>
   </template>
   
+  <template context="dbk:para[preceding-sibling::*[1][self::*/local-name() = ('itemizedlist', 'orderedlist', 'variablelist')]]">
+    <rule>
+      <text>\noindent{}</text>
+      <xsl:next-match/>
+    </rule>
+  </template>
+  
 </set>
