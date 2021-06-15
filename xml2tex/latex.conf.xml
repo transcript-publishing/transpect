@@ -44,11 +44,15 @@
   <xsl:variable name="thanksto" as="xs:string?" 
     select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Dank']"/>
   <xsl:variable name="biblio-info" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Bibliografische Information']"/>
+    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Bibliografische_Information']"/>
   <xsl:variable name="license-logo" as="xs:string?" 
     select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Lizenzlogo']"/>
   <xsl:variable name="license-text" as="xs:string?" 
     select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Lizenztext']"/>
+  <xsl:variable name="series-logo" as="xs:string?" 
+    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Reihenlogo']"/>
+  <xsl:variable name="series-text" as="xs:string?" 
+    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Reihe']"/>
   <xsl:variable name="cover-art" as="xs:string?" 
     select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Umschlaggestaltung']"/>
   <xsl:variable name="cover-credit" as="xs:string?" 
@@ -62,11 +66,11 @@
   <xsl:variable name="lectorate" as="xs:string?" 
     select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Lektorat']"/>
   <xsl:variable name="translator" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Übersetzer']"/>
+    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Ubersetzer']"/>
   <xsl:variable name="grantlogo" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Förderlogo']"/>
+    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Forderlogo']"/>
   <xsl:variable name="granttext" as="xs:string?" 
-    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Fördertext']"/>
+    select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Fordertext']"/>
   
   <xsl:variable name="new-common" as="xs:boolean" select="false()"/>
   
@@ -153,10 +157,9 @@
       <xsl:if test="$license-text">
         <xsl:value-of select="concat('&#xa;\cctext{', normalize-space($license-text), '}&#xa;')"/>
       </xsl:if>
-      <!-- path is not defined yet
-        <xsl:if test="$license-logo">
-        <xsl:value-of select="concat('&#xa;\ccimage{', normalize-space($license-logo), '}&#xa;')"/>
-      </xsl:if>-->
+      <xsl:if test="$license-logo">
+        <xsl:value-of select="concat('&#xa;\ccimage{', translate(replace(upper-case(normalize-space($license-logo)), '^.+/TIT_', 'logos/cc/$1'), '_', '-'), '}&#xa;')"/>
+      </xsl:if>
       <xsl:if test="$cover-art">
         <xsl:value-of select="concat('&#xa;\coverDesign{', normalize-space($cover-art), '}&#xa;')"/>
       </xsl:if>
@@ -181,7 +184,14 @@
       <xsl:if test="$dedication">
         <xsl:value-of select="concat('&#xa;\begin{dedication}&#xa;', normalize-space($dedication), '\end{dedication}&#xa;')"/>
       </xsl:if>
+      <xsl:if test="$series-text">
+        <xsl:value-of select="concat('&#xa;\series{', normalize-space($series-text), '}&#xa;')"/>
+      </xsl:if>
+      <xsl:if test="$series-logo">
+        <xsl:for-each select="tokenize(normalize-space($series-logo), '\s')"><xsl:value-of select="concat('&#xa;\series{\includegraphics{', replace(., '^.+/', 'logos/series/$1'), '}}&#xa;')"/></xsl:for-each>
+      </xsl:if>
     </xsl:if>
+    
     <!-- global part/chapter/section numbering -->
     <!--<xsl:value-of select="concat('\setcounter{secnumdepth}{', 
            if(//dbk:part[1]/dbk:info/dbk:title[matches(@role, '^tsheadingenumerated\d$')])                              then '-2'
