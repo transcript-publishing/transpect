@@ -230,31 +230,40 @@
   <xsl:variable name="media-url-paras" select="//*:p[matches(@class, 'tsmediaurl')]"/>
 
   <xsl:template match="*[*:p[matches(@class, 'tsmedia(source|url|caption)')]]" mode="#default">
+    <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*" mode="#current"/>
     </xsl:copy>
-    <xsl:for-each-group select="node()[not(self::text()[matches(., '^\s+$')])]" group-adjacent="exists(.[matches(@class, '^tsmedia(source|url|caption)|^tsfigure')])">
-      
-      <xsl:choose>
-        <xsl:when test="current-grouping-key()">
-          <xsl:for-each-group select="current-group()" group-ending-with=".[self::*:div[starts-with(@class, 'tsfigure')][following-sibling::*[1][self::*:p[[matches(@class, 'tsmedia(source|url|caption)')]]]]]">
-            <xsl:choose>
-              <xsl:when test="current-group()[self::*:p[matches(@class, 'tsmedia(url|caption)')]]">
-                <xsl:call-template name="create-collapseContainer">
-                  <xsl:with-param name="figure-group" select="current-group()" as="node()*"/>
-                </xsl:call-template>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:apply-templates select="current-group()" mode="#current"/>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:for-each-group>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates select="current-group()" mode="#current"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:for-each-group>
+    <xsl:choose>
+      <xsl:when test="not($in-issue)">
+        <!-- do not create containers in issue/book html-->
+        <xsl:for-each-group select="node()[not(self::text()[matches(., '^\s+$')])]" group-adjacent="exists(.[matches(@class, '^tsmedia(source|url|caption)|^tsfigure')])">
+          
+          <xsl:choose>
+            <xsl:when test="current-grouping-key()">
+              <xsl:for-each-group select="current-group()" group-ending-with=".[self::*:div[starts-with(@class, 'tsfigure')][following-sibling::*[1][self::*:p[[matches(@class, 'tsmedia(source|url|caption)')]]]]]">
+                <xsl:choose>
+                  <xsl:when test="current-group()[self::*:p[matches(@class, 'tsmedia(url|caption)')]]">
+                    <xsl:call-template name="create-collapseContainer">
+                      <xsl:with-param name="figure-group" select="current-group()" as="node()*"/>
+                    </xsl:call-template>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:apply-templates select="current-group()" mode="#current"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:for-each-group>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="current-group()" mode="#current"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each-group>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 
