@@ -1676,7 +1676,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
       \vskip5\p@
       \fontsize{10.5}{12}\selectfont\ifx\@subtitle\@empty\else\@subtitle\par\fi}%
     \vfill
-    \ifx\@logo\@empty\else\@logo\fi
+    \ifx\@logo\@empty\else\@logo\par\fi
     \ifx\@series\@empty\else{\sfwider\fontsize{10.5}{12}\sbseries\@series}\fi
     \clearpage
     %% Seite iv
