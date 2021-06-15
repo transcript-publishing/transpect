@@ -261,7 +261,8 @@
   <xsl:template name="create-collapseContainer">
     <xsl:param name="figure-group" as="node()*"/>
     <!--https://redmine.le-tex.de/issues/10237-->
-    <xsl:variable name="id" select="index-of($media-url-paras, $figure-group[self::*:p][starts-with(@class, 'tsmediaurl')][1])"/>
+    <xsl:variable name="id" select="index-of($media-url-paras/@srcpath, ($figure-group[self::*:p][starts-with(@class, 'tsmediaurl')])[1]/@srcpath)"/>
+<xsl:message select="$id,   $figure-group, '|||', $media-url-paras"/>
     <xsl:if test="$figure-group[matches(@class, 'tsmediacaption')]
       (:and 
       (preceding-sibling::*[matches(@class, 'tsmediasource')] or following-sibling::*[matches(@class, 'tsmediasource')]):)">
