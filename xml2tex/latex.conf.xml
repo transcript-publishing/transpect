@@ -276,6 +276,7 @@
                     |dbk:bibliogaphy/dbk:info">
     <xsl:apply-templates select="node() except (dbk:title,
                                                 dbk:abbrev[matches(@role, concat($col-head-short-style, '|', $col-head-left-style))],
+                                                dbk:abbrev[matches(@role, $col-head-right-style)],
                                                 dbk:abstract,
                                                 if(parent::dbk:section) then dbk:epigraph else()
                                                 ),
