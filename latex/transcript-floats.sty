@@ -10,6 +10,8 @@
 
 \usepackage{htmltabs}
 \expandafter\def\csname ht@font-family@sans-serif\endcsname{\ht@apply@prop{internal-font-family}{\nsffamily}}
+
+%% default-Klasse für Tabellen:
 \SetHTClass{}{%
   \SetClassProp{td}{font-family}{sans-serif}%
   \SetClassProp{td}{font-size}{x-small}%
@@ -19,36 +21,41 @@
 
 
 % \def\tablefont{\nsffamily\footnotesize}
-
-
-\tpCaptionOrderTop[figure]{label,caption}
-\tpCaptionOrderBelow[figure]{source,legend}
-
-
 \intextsep\baselineskip
 \def\tpListEntry{\tp@lo@cpt}
-\tpIntextSkipAbove{1\baselineskip}
-\tpIntextSkipBelow{-2.5bp}
 
-\tpCaptionOrderTop[table]{label,caption,source}
-\tpCaptionOrderBelow[table]{legend}
+%% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
+\tpAddToDefault{float}{%
+  \tpSetProperty{caption-valign-above}{b}%
+  \tpSetProperty{caption-valign-below}{t}%
+  \tpSetProperty{caption-format-above}{\itshape\RaggedRight}%
+  \tpSetProperty{caption-format-below}{\footnotesize\upshape\RaggedRight}%
+  \tpSetProperty{subfloat-sep}{2mm}%
+  \tpSetProperty{intext-skip-above}{1\baselineskip}%
+  \tpSetProperty{intext-skip-below}{\dimexpr1\baselineskip-2.5bp\relax}%
+}
 
-\tpCaptionVAlignTop{b}
-\tpCaptionVAlignBottom{t}
-\tpCaptionTopSep[table]{9bp}
+%% gilt nur für Abbildungen:
+\tpDeclareFloat[tpFloat]{tpFigure}{figure}{lof}{%
+  \tpSetProperty{caption-order-above}{label,caption}
+  \tpSetProperty{caption-order-below}{source,legend}
+  \tpSetProperty{caption-above-sep}{1bp}
+  \tpSetProperty{caption-below-sep}{4bp}
+}
 
-\tpCaptionTopSep[figure]{1bp}
-\tpCaptionBelowSep[figure]{4bp}
-\tpCaptionFormatTop{\itshape\RaggedRight}
-\tpCaptionFormatBelow{\footnotesize\upshape\RaggedRight}
+%% gilt nur für Tabellen:
+\tpDeclareFloat[tpFloat]{tpTable}{table}{lot}{%
+  \tpSetProperty{caption-order-above}{label,caption,source}
+  \tpSetProperty{caption-order-below}{legend}
+  \tpSetProperty{caption-above-sep}{9bp}
+}
 
-\CSSDeclareClass{}{}
-\CSSDeclareClass{A}{\tpLeftSkip{0mm}\tpRightSkip{0mm}}
-\CSSDeclareClass{B}{\tpLeftSkip{10mm}\tpRightSkip{10mm}}
-\CSSDeclareClass{C}{\tpLeftSkip{15mm}\tpRightSkip{15mm}}
-\CSSDeclareClass{D}{\tpLeftSkip{30mm}\tpRightSkip{30mm}}
+%% Klassen für Abbildungen:
+\tpDeclareClass{A}{\tpSetProperty{left-skip}{0mm}\tpSetProperty{right-skip}{0mm}}
+\tpDeclareClass{B}{\tpSetProperty{left-skip}{10mm}\tpSetProperty{right-skip}{10mm}}
+\tpDeclareClass{C}{\tpSetProperty{left-skip}{15mm}\tpSetProperty{right-skip}{15mm}}
+\tpDeclareClass{D}{\tpSetProperty{left-skip}{30mm}\tpSetProperty{right-skip}{30mm}}
 
-\tpSubFloatSep{2mm}
 
 % \captionsetup{%
 %    format=plain

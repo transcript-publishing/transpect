@@ -1,6 +1,145 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-headings}[2021/04/09 transcript]\relax
 
+\newdimen\chaphskip \chaphskip7mm %% default
+
+%% Globale Settings: gelten für alle ÜS-Ebenen
+\tpAddToDefault{heading}{%
+  \tpSetProperty{toc-before-entry}{%
+    \parindent \z@
+    \raggedright
+    \rightskip \@pnumwidth \@plus 1fil
+    \hyphenpenalty=\@M
+    \parfillskip -\@pnumwidth
+  }%
+}
+
+\tpDeclareHeading{-1}{part}{%
+  \tpSetProperty{before-heading}{\cleardoublepage\null\vskip\headingsep}%
+  \tpSetProperty{title-format}{\HUGE\sffamily\sbseries}%
+  \tpSetProperty{heading-block}{%
+    \tpUseProperty{title-format}%
+    \tpIfMacro{Number}{\tpUseMacro{Number}\space}%
+    \tpUseMacro{Title}%
+    \tpIfMacro{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseMacro{Subtitle}\leavevmode\vskip\baselineskip}{}%
+  }%
+  \tpSetProperty{after-heading-block}{\vfill}%
+  \tpSetProperty{toc-number-indent}{}%
+}
+
+\tpDeclareHeading{0}{chapter}{%
+  \tpSetProperty{before-heading}{\cleardoublepage\null\vskip\headingsep\vskip-.45mm\relax}%
+  \tpSetProperty{after-heading-block}{\vskip1.68\baselineskip}%
+  \tpSetProperty{title-format}{\raggedright\Huge\sbseries\sfchap}%
+  \tpSetProperty{heading-block}{%
+    %% Titel
+    \bgroup
+      \tpUseProperty{title-format}%
+      \tpIfMacro{Number}{\tpHangNumber{\chaphskip}}{}%
+      {\sfchap\tpUseMacro{Title}}%
+      \tpIfMacro{Subtitle}{\par\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\tpUseMacro{Subtitle}}{}%
+      \par
+    \egroup
+    %% Linie
+    \vskip\dimexpr-1\baselineskip\relax
+    \smash{\rlap{\lower3.25mm\vbox{\rule{\textwidth}{.4\p@}}}}\par%
+    %% Autor
+    \tpIfMacro{Author}{%
+      \vskip\baselineskip
+      {\large\sfwide\itshape\tpUseMacro{Author}}%
+      \par\vskip\baselineskip
+    }{}%
+    %% Zitat
+    \tpIfMacro{Quote}{%
+      \vskip\baselineskip
+      \hfill\hbox{\vbox{%
+          \hsize.5\textwidth
+          \normalfont
+          \normalsize
+          \nsfwider
+          \tpUseMacro{Quote}\par
+    %% Zitat-Quelle
+          \tpIfMacro{QuoteSource}{%
+            \vskip.5\baselineskip
+            \tpUseMacro{QuoteSource}}{}}}}{}%
+  }%
+  %% Format Kolumnentitel
+  \tpSetProperty{running-heading}{%
+    \tpIfMacro{RunAuthor}{\tpUseMacro{RunAuthor}:\space}{}%
+    \tpIfMacro{RunNumber}{\tpUseMacro{RunNumber}}{}\enskip\tpUseMacro{RunTitle}}%
+  %% Format IHV-Eintrag
+  \tpSetProperty{toc-number-sep}{\enskip}%
+  \tpSetProperty{toc-heading}{%
+    \tpIfMacro{TocAuthor}{\tpUseMacro{TocAuthor}:\space}{}%
+    \tpHangNumber%
+    \tpUseMacro{TocTitle}%
+    \tpUseProperty{toc-page-sep}\tpUseMacro{TocPage}}%
+  %% Format PDF-Bookmarks
+  \tpSetProperty{bookmark}{%
+    % \tpIfMacro{TocAuthor}{\tpUseMacro{TocAuthor}:\space}{}%
+    \tpIfMacro{TocNumber}{\tpUseMacro{TocNumber}}{}\enskip\tpUseMacro{TocTitle}%
+  }%
+}
+
+
+\tpDeclareHeading{1}{section}{%
+  \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
+  \tpSetProperty{number-sep}{\quad}%
+  \tpSetProperty{after-skip}{12.8bp}%
+  \tpSetProperty{title-format}{\sffamily\LARGE\sbseries}%
+  \tpSetProperty{before-quote-skip}{1\baselineskip}%
+  \tpSetProperty{heading-block}{%
+    \bgroup
+      \raggedright \normalfont
+      \interlinepenalty\@M
+      \tpUseProperty{title-format}%
+      \tpIfMacro{Number}{\tpHangNumber{\tpUseProperty{number-width}}}{}%
+      \tpUseMacro{Title}\par
+      \tpIfMacro{Subtitle}{\normalfont\tpUseMacro{Subtitle}\par\addvspace{12.8bp}}{}%
+      \tpIfMacro{Author}{\itshape\tpUseMacro{Author}\par}{}%
+    \egroup
+    \tpIfMacro{Quote}{%
+      \vskip\tpUseProperty{before-quote-skip}%
+      \hfill\vbox{%
+        \hsize.5\textwidth
+        \itshape
+        \normalsize\nsfwider\mdseries
+        \noindent
+        \tpUseMacro{Quote}}%
+      \par}{}%
+  }%
+  \tpSetProperty{running-heading}{\tpIfMacro{RunNumber}{\tpUseMacro{RunNumber}\space}{}\tpUseMacro{RunTitle}}%
+  \tpSetProperty{bookmark}{\tpIfMacro{TocNumber}{\tpUseMacro{TocNumber}}{}\enskip\tpUseMacro{TocTitle}}%
+}
+
+\tpDeclareHeading[section]{2}{subsection}{%
+  \tpSetProperty{before-heading}{\addvspace{11.5bp}}%
+  \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
+  \tpSetProperty{before-quote-skip}{.5\baselineskip}%
+  \tpSetProperty{running-heading}{}% da subsection sonst die Kolumnentitel ebenfalls von section erben würde
+}
+
+\tpDeclareHeading[section]{3}{subsubsection}{%
+  \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
+  \tpSetProperty{after-skip}{1sp}%
+  \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
+}
+
+\tpDeclareHeading[section]{4}{paragraph}{%
+  \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
+  \tpSetProperty{after-skip}{1sp}%
+  \tpSetProperty{title-format}{\normalfont\sfwide\normalsize}%
+}
+
+\tpDeclareHeading{5}{subparagraph}{%
+  \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
+  \tpSetProperty{after-skip}{-.5em}%
+  \tpSetProperty{title-format}{\normalfont\sffamily\normalsize\mdseries}%
+}
+\endinput
+
+
+
 \def\tsToC{%
   \tpToCAlign{\tsToCAlign}%
   \tpToCPageSep{\tsToCPageSep}%
@@ -18,7 +157,6 @@
     mu$}\hfill
 }%
 \def\tsToCPageOut{\normalfont\sfwide\normalsize\kern.5\p@\tp@toc@the@page\@par}%
-
 
 \tpDeclareHeading{-1}{part}{%
   \tpHeadingProperty{BlockFormat}{%
@@ -94,6 +232,7 @@
   }%
   \ifcollection\tpToCNoNumber\else
     \tpToCHangNumber
+    \tpToCHangFixed{2em}
   \fi
   %%
   \tsToC
@@ -128,6 +267,7 @@
     }%
   \tpHeadingProperty{AfterQuote}{\egroup}%
   \tpToCHangNumber
+  \tpToCHangFixed{2em}
   \tsToC
 }
 
@@ -147,6 +287,7 @@
   \tpHeadingProperty{SubtitleFormat}{\sffamily\LARGE}%
   \tpHeadingProperty{BeforeQuote}{\@@par\vskip.5\baselineskip}%
   \tpToCHangNumber
+    \tpToCHangFixed{2em}
   \tsToC
 }
 
@@ -157,6 +298,7 @@
   \tpHeadingProperty{AfterSkip}{1sp}%
   \tpHeadingProperty{TitleFormat}{\sffamily\mdseries\Large}%
   \tpToCHangNumber
+    \tpToCHangFixed{2em}
   \tsToC
 }
 
@@ -167,6 +309,7 @@
   \tpHeadingProperty{AfterSkip}{1sp}%
   \tpHeadingProperty{TitleFormat}{\normalfont\sfwide\normalsize}%
   \tpToCHangNumber
+    \tpToCHangFixed{2em}
   \tsToC
 }
 
@@ -176,8 +319,6 @@
   \tpHeadingProperty{TitleFormat}{\normalfont\sffamily\normalsize\mdseries}%
   \tsToC
 }
-
-\endinput
 
 
 

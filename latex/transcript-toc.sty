@@ -5,10 +5,10 @@
 %
 \renewcommand\@dotsep{.5}
 \renewcommand\tableofcontents{%
-  \begin{heading}[notoc]{chapter}%
-    \title{\contentsname}\label{tableofcontents}%
+  \begin{heading}[notoc,label=tableofcontents]{chapter}%
+    \tpTitle{\contentsname}%
   \end{heading}%
-  \pdfbookmark[0]{\contentsname}{tableofcontents}%
+  %\pdfbookmark[0]{\contentsname}{tableofcontents}%
   \pagestyle{empty}%
   \@starttoc{toc}%
   \clearpage\pagestyle{headings}%
@@ -45,7 +45,8 @@
 
 \def\@freedottedtocline#1#2#3#4#5{%%giovanni, 2019-11-27 (damit auch unter \c@tocdepth=0 was passiert)
     \vskip \z@
-    {\leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
+    {\tpGobble
+     \leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
      \parindent #2\relax\@afterindenttrue
      \interlinepenalty\@M
      \leavevmode
