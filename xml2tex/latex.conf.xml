@@ -106,72 +106,78 @@
     <xsl:if test="$langs = 'zh'">
       <xsl:value-of select="'\usepackage{CJK}&#xa;'"/>
     </xsl:if>
-    <xsl:if test="$title-pages eq 'yes'">
-      <xsl:value-of select="concat('&#xa;\title{', (normalize-space($title), 'Haupttitel')[1], '}&#xa;')"/>
-      <xsl:if test="$subtitle">
-        <xsl:value-of select="concat('&#xa;\subtitle{', normalize-space($subtitle), '}&#xa;')"/>
-      </xsl:if>
-      <xsl:for-each select="$editors">
-        <xsl:value-of select="concat('&#xa;\editor{', normalize-space(.), '}&#xa;')"/>
-      </xsl:for-each>
-      <xsl:for-each select="$authors">
-        <xsl:value-of select="concat('&#xa;\authorinfo{', normalize-space(dbk:personname/dbk:othername), '}',
-                                     if(dbk:personblurb) then concat('{', dbk:personblurb, '}') else '',
-                                     '&#xa;')"/>
-      </xsl:for-each>
-      <xsl:if test="$abstract">
-        <xsl:text>&#xa;\editorial{</xsl:text>
-        <xsl:apply-templates select="$abstract" mode="#current"/>
-        <xsl:text>}&#xa;</xsl:text>
-      </xsl:if>
-      <xsl:if test="$edition">
-        <xsl:value-of select="concat('&#xa;\edition{', normalize-space($edition), '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="$print-isbn">
-        <xsl:value-of select="concat('&#xa;\isbn{', $print-isbn, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="$pdf-isbn">
-        <xsl:value-of select="concat('&#xa;\eisbn{', $pdf-isbn, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="$epub-isbn">
-        <xsl:value-of select="concat('&#xa;\epubisbn{', $epub-isbn, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="$copyright-holder">
-        <xsl:value-of select="concat('&#xa;\publ{', tokenize(normalize-space($copyright-holder), ',')[1], '}&#xa;')"/>
-        <xsl:value-of select="concat('&#xa;\place{', tokenize(normalize-space($copyright-holder), ',')[2], '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="$copyright-year">
-        <xsl:value-of select="concat('&#xa;\publyear{', normalize-space($copyright-year), '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="$license-text">
-        <xsl:value-of select="concat('&#xa;\cctext{', normalize-space($license-text), '}&#xa;')"/>
-      </xsl:if>
-      <!-- path is not defined yet
-        <xsl:if test="$license-logo">
-        <xsl:value-of select="concat('&#xa;\ccimage{', normalize-space($license-logo), '}&#xa;')"/>
-      </xsl:if>-->
-      <xsl:if test="$cover-art">
-        <xsl:value-of select="concat('&#xa;\coverDesign{', normalize-space($cover-art), '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="$cover-credit">
-        <xsl:value-of select="concat('&#xa;\coverimage{', normalize-space($cover-credit), '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="$print">
-        <xsl:value-of select="concat('&#xa;\print{', normalize-space($print), '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="$typesetter">
-        <xsl:value-of select="concat('&#xa;\typesetter{', normalize-space($typesetter), '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="$copy-editing">
-        <xsl:value-of select="concat('&#xa;\QandA{', normalize-space($copy-editing), '}&#xa;')"/>
-      </xsl:if>
-      <!--<xsl:for-each select="$contribs">
-        <xsl:value-of select="concat('&#xa;\', @role, '{', normalize-space(.), '}&#xa;')"/>
-      </xsl:for-each>-->
-      <xsl:if test="$funder">
-        <xsl:value-of select="concat('&#xa;\thanks{', normalize-space($funder), '}&#xa;')"/>
-      </xsl:if>
-    </xsl:if>
+      
+    <xsl:choose>
+      <xsl:when test="$title-pages eq 'yes'">
+        <xsl:value-of select="concat('&#xa;\title{', (normalize-space($title), 'Haupttitel')[1], '}&#xa;')"/>
+        <xsl:if test="$subtitle">
+          <xsl:value-of select="concat('&#xa;\subtitle{', normalize-space($subtitle), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:for-each select="$editors">
+          <xsl:value-of select="concat('&#xa;\editor{', normalize-space(.), '}&#xa;')"/>
+        </xsl:for-each>
+        <xsl:for-each select="$authors">
+          <xsl:value-of select="concat('&#xa;\authorinfo{', normalize-space(dbk:personname/dbk:othername), '}',
+                                       if(dbk:personblurb) then concat('{', dbk:personblurb, '}') else '',
+                                       '&#xa;')"/>
+        </xsl:for-each>
+        <xsl:if test="$abstract">
+          <xsl:text>&#xa;\editorial{</xsl:text>
+          <xsl:apply-templates select="$abstract" mode="#current"/>
+          <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="$edition">
+          <xsl:value-of select="concat('&#xa;\edition{', normalize-space($edition), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$print-isbn">
+          <xsl:value-of select="concat('&#xa;\isbn{', $print-isbn, '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$pdf-isbn">
+          <xsl:value-of select="concat('&#xa;\eisbn{', $pdf-isbn, '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$epub-isbn">
+          <xsl:value-of select="concat('&#xa;\epubisbn{', $epub-isbn, '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$copyright-holder">
+          <xsl:value-of select="concat('&#xa;\publ{', tokenize(normalize-space($copyright-holder), ',')[1], '}&#xa;')"/>
+          <xsl:value-of select="concat('&#xa;\place{', tokenize(normalize-space($copyright-holder), ',')[2], '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$copyright-year">
+          <xsl:value-of select="concat('&#xa;\publyear{', normalize-space($copyright-year), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$license-text">
+          <xsl:value-of select="concat('&#xa;\cctext{', normalize-space($license-text), '}&#xa;')"/>
+        </xsl:if>
+        <!-- path is not defined yet
+          <xsl:if test="$license-logo">
+          <xsl:value-of select="concat('&#xa;\ccimage{', normalize-space($license-logo), '}&#xa;')"/>
+        </xsl:if>-->
+        <xsl:if test="$cover-art">
+          <xsl:value-of select="concat('&#xa;\coverDesign{', normalize-space($cover-art), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$cover-credit">
+          <xsl:value-of select="concat('&#xa;\coverimage{', normalize-space($cover-credit), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$print">
+          <xsl:value-of select="concat('&#xa;\print{', normalize-space($print), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$typesetter">
+          <xsl:value-of select="concat('&#xa;\typesetter{', normalize-space($typesetter), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$copy-editing">
+          <xsl:value-of select="concat('&#xa;\QandA{', normalize-space($copy-editing), '}&#xa;')"/>
+        </xsl:if>
+        <!--<xsl:for-each select="$contribs">
+          <xsl:value-of select="concat('&#xa;\', @role, '{', normalize-space(.), '}&#xa;')"/>
+        </xsl:for-each>-->
+        <xsl:if test="$funder">
+          <xsl:value-of select="concat('&#xa;\thanks{', normalize-space($funder), '}&#xa;')"/>
+        </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>\title{}&#xa;</xsl:text>      
+      </xsl:otherwise>
+    </xsl:choose>
     <!-- global part/chapter/section numbering -->
     <!--<xsl:value-of select="concat('\setcounter{secnumdepth}{', 
            if(//dbk:part[1]/dbk:info/dbk:title[matches(@role, '^tsheadingenumerated\d$')])                              then '-2'
@@ -401,8 +407,8 @@
   </template>
   
  <template context="dbk:para[following-sibling::*[1][self::dbk:blockquote]]
-                    |dbk:blockquote/dbk:para[last()]
-                    |dbk:caption/dbk:para[last()]">
+                   |dbk:blockquote/dbk:para[last()]
+                   |dbk:caption/dbk:para[last()]">
     <rule break-after="0">
       <text/>
     </rule>
@@ -437,7 +443,7 @@
   
   <!-- copied from ../a9s/common/xml2tex/latex.conf.xml -->
   
-  <template context="*[local-name() = ('table', 'informaltable')]
+  <!--<template context="*[local-name() = ('table', 'informaltable')]
                       [   matches(@role, $rotated-table-style)
                        or exists(.//dbk:entry[   matches(@css:transform, 'rotate\((90|270)deg\)')
                                  or @css:writing-mode eq 'bt-lr']
@@ -447,7 +453,7 @@
                      dbk:caption"/>
       <param select="dbk:tgroup"/>
     </rule>
-  </template>
+  </template>-->
   
   <!--<template context="dbk:figure">
     <rule name="transcriptBild" type="cmd" break-after="1" break-before="1">
@@ -619,5 +625,16 @@
       <param select="xml2tex:add-tactical-break-chars-in-linktext(.)"/>
     </rule>
   </template>
+  
+  <!--<template context="dbk:info/dbk:epigraph[@role eq 'motto']">
+    <rule name="quote" type="cmd" break-before="1">
+      <xsl:text>{</xsl:text>
+      <xsl:apply-templates select="dbk:*[not(matches(@role, $motto-source-style))]" mode="#current"/>
+      <xsl:text>}</xsl:text>
+    </rule>
+    <rule name="quotesource" type="cmd" break-before="1">
+      <param/>
+    </rule>
+  </template>-->
   
 </set>
