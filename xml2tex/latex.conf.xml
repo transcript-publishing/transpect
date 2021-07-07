@@ -667,7 +667,8 @@
     </rule>
   </template>
   
-  <template context="dbk:epigraph[@role eq 'motto']/dbk:para[position() eq last()]">
+  <template context="dbk:epigraph[@role eq 'motto']
+                    |dbk:epigraph[@role eq 'motto']/dbk:para[position() eq last()]">
     <rule>
       <text/>
     </rule>
