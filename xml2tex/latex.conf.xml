@@ -701,4 +701,12 @@
     </rule>
   </template>
   
+  <template context="dbk:mediaobject[not(..[self::dbk:figure])]
+                                    [dbk:imageobject/dbk:imagedata[@fileref]]">
+    <rule name="figure" type="env" break-after="1" break-before="1">
+      <option>h!</option>
+      <text/>
+    </rule>
+  </template>
+  
 </set>
