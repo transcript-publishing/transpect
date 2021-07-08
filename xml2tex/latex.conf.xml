@@ -655,7 +655,7 @@
     </rule>
   </template>
   
-  <template context="dbk:chapter/dbk:info/dbk:epigraph[@role eq 'motto']">
+  <template context="dbk:info/dbk:epigraph[@role eq 'motto']">
     <rule name="chapterquote" type="cmd">
       <param select="dbk:para"/>
     </rule>
@@ -667,8 +667,7 @@
     </rule>
   </template>
   
-  <template context="dbk:epigraph[@role eq 'motto']
-                    |dbk:epigraph[@role eq 'motto']/dbk:para[position() eq last()]">
+  <template context="dbk:epigraph[@role eq 'motto']/dbk:para[position() eq last()]">
     <rule>
       <text/>
     </rule>
