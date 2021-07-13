@@ -380,16 +380,16 @@
     {\small\sffamily\llap{\hb@xt@8mm{\thepage\hfill}}\left@side}\hfill}%
   \let\@oddfoot\@empty
   \let\@evenfoot\@empty
-    \def\chaptermark##1{%
-  \ifcollection
-    \markboth {##1}{}%
-  \else
-    \ifnum \c@secnumdepth >\m@ne
-      \markboth {\thechapter\enskip##1}{}%
-    \else
+  \def\chaptermark##1{%
+    \ifcollection
       \markboth {##1}{}%
-    \fi
-  \fi%
+    \else
+      \ifnum \c@secnumdepth >\m@ne
+        \markboth {\thechapter\enskip##1}{}%
+      \else
+        \markboth {##1}{}%
+      \fi
+    \fi%
   }%
 }
 \pagestyle{headings}
@@ -939,7 +939,7 @@
     \bgroup\nsfwider
       \hskip-\fnumwidth\hb@xt@\fnumwidth{{\nsfwider\@thefnmark}\hss}%
       \let\href\fn@href
-      #1%
+      \strut#1%
     \egroup}
 
 \newif\if@enotesopen
