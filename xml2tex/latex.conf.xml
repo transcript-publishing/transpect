@@ -492,7 +492,7 @@
 
   <template context="dbk:figure[matches(@role, $fig-style)]
                     |dbk:informalfigure[matches(@role, $fig-style)]">
-    <rule name="figure" type="env" break-after="1" break-before="1">
+    <rule name="figure" type="env" break-after="2" break-before="1">
       <option>h!</option>
       <text>&#xa;\transcriptFixedFigure</text>
       <param select="dbk:title, 
