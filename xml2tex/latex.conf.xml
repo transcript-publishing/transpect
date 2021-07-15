@@ -420,7 +420,7 @@
   
   <template context="dbk:blockquote[dbk:para][not(matches(@role, '^[a-z]+_?verse.*$'))]
                     |dbk:blockquote[matches(@role, $dialogue-style)]">
-    <rule name="quotation" type="env" break-before="2">
+    <rule name="quotation" type="env" break-before="1" break-after="2">
       <text/>
     </rule>
   </template>
