@@ -468,6 +468,12 @@
     </rule>
   </template>
   
+  <template context="dbk:table">
+    <rule name="table" type="env" break-before="2" break-after="1">
+      <text/>
+    </rule>
+  </template>
+  
   <!-- copied from ../a9s/common/xml2tex/latex.conf.xml -->
   
   <template context="*[local-name() = ('table', 'informaltable')]
@@ -528,20 +534,24 @@
     </rule>
   </template>
   
-  <template context="dbk:imagedata[@fileref]">
+  <xsl:template match="dbk:figure/dbk:title//text()" mode="xml2tex">
+    <xsl:value-of select="replace(., '([\[\]])', '\\$1')"/>
+  </xsl:template>
+  
+  <template context="dbk:imageobject/dbk:imagedata[@fileref]">
     <rule name="includegraphics" type="cmd">
       <option select="concat('width=', 
                              1 div count(ancestor::*[dbk:mediaobject
                                                     |dbk:inlinemediaobject]/*[local-name() = ('mediaobject', 
                                                                                               'inlinemediaobject')]),'\textwidth')"/>
-      <param select="replace(@fileref, '^.+/(.+?)$', concat($image-dir, '$1'))"/>
+      <param select="replace(dbk:imagedata/@fileref, '^.+/(.+?)$', concat($image-dir, '$1'))"/>
     </rule>
   </template>
   
-  <template context="dbk:figure[matches(@role, $fig-style)]//dbk:imagedata">
+  <template context="dbk:figure[matches(@role, $fig-style)]//dbk:mediaobject/dbk:imageobject[dbk:imagedata[@fileref]]">
     <rule name="includesubgraphics" type="cmd">
       <param/>
-      <param select="replace(@fileref, '^.+/(.+?)$', concat($image-dir, '$1'))"/>
+      <param select="replace(dbk:imagedata/@fileref, '^.+/(.+?)$', concat($image-dir, '$1'))"/>
     </rule>
   </template>
   
@@ -658,6 +668,12 @@
   <template context="dbk:info/dbk:epigraph[@role eq 'motto']">
     <rule name="chapterquote" type="cmd">
       <param select="dbk:para"/>
+    </rule>
+  </template>
+  
+  <template context="dbk:part/dbk:info/dbk:epigraph[@role eq 'motto']">
+    <rule>
+      <text/>
     </rule>
   </template>
   
