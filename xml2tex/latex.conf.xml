@@ -492,7 +492,7 @@
     <rule name="transcriptBild" type="cmd" break-after="1" break-before="1">
       <param select="dbk:title, 
                      dbk:caption"/>
-      <param select="dbk:mediaobject"/>
+      <param select="dbk:mediaobject/dbk:imageobject"/>
     </rule>
   </template>
 
@@ -507,7 +507,7 @@
       <xsl:text>{%</xsl:text>
         <xsl:for-each select=".//dbk:mediaobject">
           <xsl:text>&#xa;</xsl:text>
-          <xsl:apply-templates mode="#current"/>
+          <xsl:apply-templates select="dbk:imageobject" mode="#current"/>
         </xsl:for-each>
       <xsl:text>}</xsl:text>
     </rule>
@@ -538,7 +538,7 @@
     <xsl:value-of select="replace(., '([\[\]])', '\\$1')"/>
   </xsl:template>
   
-  <template context="dbk:imageobject/dbk:imagedata[@fileref]">
+  <template context="dbk:figure[not(matches(@role, $fig-style))]/dbk:mediaobject/dbk:imageobject[dbk:imagedata[@fileref]]">
     <rule name="includegraphics" type="cmd">
       <option select="concat('width=', 
                              1 div count(ancestor::*[dbk:mediaobject
@@ -548,9 +548,9 @@
     </rule>
   </template>
   
-  <template context="dbk:figure[matches(@role, $fig-style)]//dbk:mediaobject/dbk:imageobject[dbk:imagedata[@fileref]]">
+  <template context="dbk:figure[matches(@role, $fig-style)]/dbk:mediaobject/dbk:imageobject[dbk:imagedata[@fileref]]">
     <rule name="includesubgraphics" type="cmd">
-      <param/>
+      <xsl:text>{}</xsl:text>
       <param select="replace(dbk:imagedata/@fileref, '^.+/(.+?)$', concat($image-dir, '$1'))"/>
     </rule>
   </template>
