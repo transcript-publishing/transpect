@@ -462,17 +462,16 @@
   
   <template context="dbk:table">
     <rule name="transcriptTab" type="cmd" break-after="2" break-before="1">
-      <param select="dbk:title, 
-                     dbk:caption"/>  
+      <xsl:text>{</xsl:text>
+      <xsl:apply-templates select="dbk:title, dbk:caption" mode="#current"/>
+      <xsl:text>}&#xa;</xsl:text>
       <param select="dbk:tgroup"/>
     </rule>
   </template>
+
+  <!-- fix outer par issue -->
   
-  <template context="dbk:table">
-    <rule name="table" type="env" break-before="2" break-after="1">
-      <text/>
-    </rule>
-  </template>
+  <template context="dbk:para[following-sibling::*[1][self::dbk:figure or self::dbk:table]]//dbk:br"/>
   
   <!-- copied from ../a9s/common/xml2tex/latex.conf.xml -->
   
@@ -500,7 +499,7 @@
                     |dbk:informalfigure[matches(@role, $fig-style)]">
     <rule name="figure" type="env" break-after="2" break-before="1">
       <option>h!</option>
-      <xsl:text>&#xa;\transcriptFixedFigure{%</xsl:text>
+      <xsl:text>&#xa;\transcriptFixedFigure{%&#xa;</xsl:text>
       <xsl:apply-templates select="dbk:title, dbk:caption" mode="#current"/>
       <xsl:text>}</xsl:text>
       <param select="upper-case(replace(@role, $fig-style, '$1'))"/>
