@@ -460,6 +460,12 @@
     </rule>
   </template>
   
+  <template context="dbk:informaltable">
+    <rule name="table" type="env" break-after="2" break-before="1">
+      <text/>
+    </rule>
+  </template>
+  
   <template context="dbk:table">
     <rule name="transcriptTab" type="cmd" break-after="2" break-before="1">
       <xsl:text>{</xsl:text>
