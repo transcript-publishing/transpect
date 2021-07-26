@@ -488,7 +488,7 @@
     </rule>
   </template>
   
-  <template context="dbk:figure">
+  <template context="dbk:figure[not(matches(@role, $fig-style))]">
     <rule name="transcriptBild" type="cmd" break-after="1" break-before="1">
       <param select="dbk:title, 
                      dbk:caption"/>
@@ -500,15 +500,14 @@
                     |dbk:informalfigure[matches(@role, $fig-style)]">
     <rule name="figure" type="env" break-after="2" break-before="1">
       <option>h!</option>
-      <text>&#xa;\transcriptFixedFigure</text>
-      <param select="dbk:title, 
-                     dbk:caption"/>
+      <xsl:text>&#xa;\transcriptFixedFigure{</xsl:text>
+      <xsl:apply-templates select="dbk:title, dbk:caption" mode="#current"/>
       <param select="upper-case(replace(@role, $fig-style, '$1'))"/>
-      <xsl:text>{%</xsl:text>
-        <xsl:for-each select=".//dbk:mediaobject">
-          <xsl:text>&#xa;</xsl:text>
-          <xsl:apply-templates select="dbk:imageobject" mode="#current"/>
-        </xsl:for-each>
+      <xsl:text>}{%</xsl:text>
+      <xsl:for-each select=".//dbk:mediaobject">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:apply-templates select="dbk:imageobject" mode="#current"/>
+      </xsl:for-each>
       <xsl:text>}</xsl:text>
     </rule>
   </template>
