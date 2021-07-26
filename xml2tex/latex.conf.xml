@@ -533,7 +533,7 @@
     </rule>
   </template>
   
-  <xsl:template match="dbk:figure/dbk:title//text()" mode="xml2tex">
+  <xsl:template match="dbk:figure/dbk:title//text()[matches(., '[\[\]]')]" mode="xml2tex figure-titles" priority="10">
     <xsl:value-of select="replace(., '([\[\]])', '\\$1')"/>
   </xsl:template>
   
