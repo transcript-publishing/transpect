@@ -5,15 +5,25 @@
 
 %% Globale Settings: gelten für alle ÜS-Ebenen
 \tpAddToDefault{heading}{%
+  \tpSetProperty{numbering}{}%
   \tpSetProperty{margin-left}{}%
   \tpSetProperty{indent}{auto}%
   \tpSetProperty{toc-margin-left}{auto-global}%
   \tpSetProperty{toc-indent}{auto}%
   \tpSetProperty{toc-number-align}{left}%
   \tpSetProperty{toc-number-sep}{\enskip}%
+  \tpSetProperty{toc-title-format}{}%
+  \tpSetProperty{toc-page-sep}{%
+    \nobreak\leaders\hbox{$\m@th
+      \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
+      mu$}\hfill}%
+  \tpSetProperty{toc-title-format}{\sfwide\normalsize}%
+  \tpSetProperty{toc-page-format}{\normalfont\sfwide\normalsize}%
   \tpSetProperty{toc-heading}{%
+    \tpUseProperty{toc-title-format}%
     \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
-    \tpUseProperty{toc-hang-number}\tpUseComp{TocTitle}%
+    \tpIfComp{TocNumber}{\tpUseProperty{toc-hang-number}}{}%
+    \tpUseComp{TocTitle}%
     \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
   }%
 }
@@ -29,8 +39,11 @@
   }%
   \tpSetProperty{after-heading-block}{\vfill}%
   %% ToC
+  \tpSetProperty{toc-margin-top}{2.25em}%
   \tpSetProperty{toc-indent}{}%
+  \tpSetProperty{toc-title-format}{\sfwide\sbseries\huge}%
   \tpSetProperty{toc-heading}{%
+    \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}%
     \tpUseComp{TocTitle}}%
   \tpSetProperty{toc-before-entry}{%
@@ -49,7 +62,7 @@
     \leftskip\z@
     \leavevmode
     \bgroup
-      \leftskip-\tpUseProperty{indent}%
+      \tpIfComp{Number}{\leftskip-\tpUseProperty{indent}}{}%
       \tpUseProperty{title-format}%
       {\sfchap
        \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
@@ -85,19 +98,26 @@
     \tpIfComp{RunAuthor}{\tpUseComp{RunAuthor}:\space}{}%
     \tpIfComp{RunNumber}{\tpUseComp{RunNumber}}{}\enskip\tpUseComp{RunTitle}}%
   %% Format IHV-Eintrag
+  \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-number-sep}{\enskip}%
-  % \tpSetProperty{toc-heading}{%
-  %   \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
-  %   \tpUseProperty{toc-hang-number}%
-  %   \tpUseComp{TocTitle}%
-  %   \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+  \tpSetProperty{toc-title-format}{\sbseries\sfwide}%
+  \tpSetProperty{toc-heading}{%
+    \tpUseProperty{toc-title-format}%
+    \tpIfComp{TocNumber}
+      {\tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
+       \tpUseProperty{toc-hang-number}}
+      {\leftskip\z@%
+       \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
+      }%
+    \tpUseComp{TocTitle}%
+    \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
+  }%
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
     % \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
     \tpIfComp{TocNumber}{\tpUseComp{TocNumber}}{}\enskip\tpUseComp{TocTitle}%
   }%
 }
-
 
 \tpDeclareHeading{1}{section}{%
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
@@ -110,7 +130,7 @@
       \normalfont
       \interlinepenalty\@M
       \tpUseProperty{title-format}%
-      \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
+      \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
       \tpUseComp{Title}\par
       \tpIfComp{Subtitle}{\normalfont\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
       \tpIfComp{Author}{\itshape\tpUseComp{Author}\par}{}%
