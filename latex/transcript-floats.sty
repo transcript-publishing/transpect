@@ -26,35 +26,32 @@
 
 %% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
 \tpAddToDefault{float}{%
-  \tpSetProperty{caption-valign-above}{b}%
-  \tpSetProperty{caption-valign-below}{t}%
-  \tpSetProperty{caption-format-above}{\itshape\RaggedRight}%
-  \tpSetProperty{caption-format-below}{\footnotesize\upshape\RaggedRight}%
+  \tpSetProperty{caption-valign-top}{b}%
+  \tpSetProperty{caption-valign-bottom}{t}%
+  \tpSetProperty{caption-format-top}{\itshape\RaggedRight}%
+  \tpSetProperty{caption-format-bottom}{\footnotesize\upshape\RaggedRight}%
   \tpSetProperty{subfloat-sep}{2mm}%
-  \tpSetProperty{intext-skip-above}{1\baselineskip}%
-  \tpSetProperty{intext-skip-below}{\dimexpr1\baselineskip-2.5bp\relax}%
+  \tpSetProperty{intext-skip-top}{1\baselineskip}%
+  \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}%
+  %\tpSetProperty{numbering}{}% keine automatische Nummerierung von Gleitobjekten!
 }
 
 %% gilt nur für Abbildungen:
 \tpDeclareFloat[tpFloat]{tpFigure}{figure}{lof}{%
-  \tpSetProperty{caption-order-above}{label,caption}
-  \tpSetProperty{caption-order-below}{source,legend}
-  \tpSetProperty{caption-above-sep}{1bp}
-  \tpSetProperty{caption-below-sep}{4bp}
+  \tpSetProperty{caption-top-sep}{1bp}
+  \tpSetProperty{caption-bottom-sep}{4bp}
 }
 
 %% gilt nur für Tabellen:
 \tpDeclareFloat[tpFloat]{tpTable}{table}{lot}{%
-  \tpSetProperty{caption-order-above}{label,caption,source}
-  \tpSetProperty{caption-order-below}{legend}
-  \tpSetProperty{caption-above-sep}{9bp}
+  \tpSetProperty{caption-top-sep}{9bp}
 }
 
 %% Klassen für Abbildungen:
-\tpDeclareClass{A}{\tpSetProperty{left-skip}{0mm}\tpSetProperty{right-skip}{0mm}}
-\tpDeclareClass{B}{\tpSetProperty{left-skip}{10mm}\tpSetProperty{right-skip}{10mm}}
-\tpDeclareClass{C}{\tpSetProperty{left-skip}{15mm}\tpSetProperty{right-skip}{15mm}}
-\tpDeclareClass{D}{\tpSetProperty{left-skip}{30mm}\tpSetProperty{right-skip}{30mm}}
+\tpDeclareClass{A}{\tpSetProperty{margin-left}{0mm}\tpSetProperty{margin-right}{0mm}}
+\tpDeclareClass{B}{\tpSetProperty{margin-left}{10mm}\tpSetProperty{margin-right}{10mm}}
+\tpDeclareClass{C}{\tpSetProperty{margin-left}{15mm}\tpSetProperty{margin-right}{15mm}}
+\tpDeclareClass{D}{\tpSetProperty{margin-left}{30mm}\tpSetProperty{margin-right}{30mm}}
 
 
 % \captionsetup{%
