@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
-\ProvidesPackage{transcript-headings}[2021/04/09 transcript]\relax
+\ProvidesPackage{transcript-headings}[2021/08/18 transcript]\relax
 
 \newdimen\chaphskip \chaphskip7mm %% default
 
@@ -8,8 +8,13 @@
   \tpSetProperty{numbering}{}%
   \tpSetProperty{margin-left}{}%
   \tpSetProperty{indent}{auto}%
-  \tpSetProperty{toc-margin-left}{auto-global}%
-  \tpSetProperty{toc-indent}{auto}%
+  \ifcollection
+    \tpSetProperty{toc-margin-left}{}%
+    \tpSetProperty{toc-indent}{}%
+  \else
+    \tpSetProperty{toc-margin-left}{auto-global}%
+    \tpSetProperty{toc-indent}{auto}%
+  \fi
   \tpSetProperty{toc-number-align}{left}%
   \tpSetProperty{toc-number-sep}{\enskip}%
   \tpSetProperty{toc-title-format}{}%
@@ -21,7 +26,7 @@
   \tpSetProperty{toc-page-format}{\normalfont\sfwide\normalsize}%
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
-    \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
+    \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\newline}{}%
     \tpIfComp{TocNumber}{\tpUseProperty{toc-hang-number}}{}%
     \tpUseComp{TocTitle}%
     \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
@@ -96,7 +101,7 @@
   %% Format Kolumnentitel
   \tpSetProperty{running-heading}{%
     \tpIfComp{RunAuthor}{\tpUseComp{RunAuthor}:\space}{}%
-    \tpIfComp{RunNumber}{\tpUseComp{RunNumber}}{}\enskip\tpUseComp{RunTitle}}%
+    \tpIfComp{RunNumber}{\tpUseComp{RunNumber}\enskip}{}\tpUseComp{RunTitle}}%
   %% Format IHV-Eintrag
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-number-sep}{\enskip}%
@@ -104,7 +109,7 @@
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}
-      {\tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
+      {\tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\newline}{}%
        \tpUseProperty{toc-hang-number}}
       {\leftskip\z@%
        \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
