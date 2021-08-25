@@ -2,27 +2,26 @@
 \ProvidesPackage{transcript-headings}[2021/08/18 transcript]\relax
 
 \newdimen\chaphskip \chaphskip7mm %% default
-
 %% Globale Settings: gelten für alle ÜS-Ebenen
 \tpAddToDefault{heading}{%
   \tpSetProperty{numbering}{}%
-  \tpSetProperty{margin-left}{}%
+  \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{auto}%
+  \tpSetProperty{toc-margin-right}{5em}%
   \ifcollection
     \tpSetProperty{toc-margin-left}{}%
     \tpSetProperty{toc-indent}{}%
   \else
-    \tpSetProperty{toc-margin-left}{auto-global}%
+    \tpSetProperty{toc-margin-left}{\tpIfComp{TocNumber}{auto}{0mm}}%
     \tpSetProperty{toc-indent}{auto}%
   \fi
   \tpSetProperty{toc-number-align}{left}%
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-title-format}{}%
   \tpSetProperty{toc-page-sep}{%
     \nobreak\leaders\hbox{$\m@th
       \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
       mu$}\hfill}%
-  \tpSetProperty{toc-title-format}{\sfwide\normalsize}%
+  \tpSetProperty{toc-title-format}{\sffamily\normalsize}%
   \tpSetProperty{toc-page-format}{\normalfont\sfwide\normalsize}%
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
@@ -46,7 +45,7 @@
   %% ToC
   \tpSetProperty{toc-margin-top}{2.25em}%
   \tpSetProperty{toc-indent}{}%
-  \tpSetProperty{toc-title-format}{\sfwide\sbseries\huge}%
+  \tpSetProperty{toc-title-format}{\sffamily\sbseries\huge}%
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}%
@@ -62,6 +61,7 @@
   \tpSetProperty{before-heading}{\cleardoublepage\null\vskip\headingsep\vskip-.45mm\relax}%
   \tpSetProperty{after-heading-block}{\vskip1.68\baselineskip}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchap}%
+  \tpSetProperty{toc-margin-right}{2em}%
   \tpSetProperty{heading-block}{%
     %% Titel
     \leftskip\z@
@@ -105,24 +105,32 @@
   %% Format IHV-Eintrag
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-title-format}{\sbseries\sfwide}%
+  \tpSetProperty{toc-title-format}{\sbseries\sffamily}%
+  \tpSetProperty{toc-subtitle-format}{\normalfont\sffamily}%
+  \tpSetProperty{toc-indent}{2em}%
+  \tpSetProperty{toc-margin-left}{2em}%
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}
       {\tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\newline}{}%
-       \tpUseProperty{toc-hang-number}}
+       \hskip-2em\hbox to 2em{\tpUseComp{TocNumber}}}
       {\leftskip\z@%
        \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
       }%
     \tpUseComp{TocTitle}%
+    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
     \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
   }%
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
     % \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
-    \tpIfComp{TocNumber}{\tpUseComp{TocNumber}}{}\enskip\tpUseComp{TocTitle}%
+    \tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}\tpUseComp{TocTitle}%
   }%
 }
+
+\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
+\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
+
 
 \tpDeclareHeading{1}{section}{%
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
@@ -151,7 +159,7 @@
       \par}{}%
   }%
   \tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
-  \tpSetProperty{bookmark}{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}}{}\enskip\tpUseComp{TocTitle}}%
+  \tpSetProperty{bookmark}{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\enskip}{}\tpUseComp{TocTitle}}%
 }
 
 \tpDeclareHeading[section]{2}{subsection}{%
@@ -159,6 +167,9 @@
   \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
   \tpSetProperty{before-quote-skip}{.5\baselineskip}%
   \tpSetProperty{running-heading}{}% da subsection sonst die Kolumnentitel ebenfalls von section erben würde
+  \ifcollection\else
+    \tpSetProperty{toc-margin-left}{\tpIfComp{TocNumber}{auto}{2em}}%
+  \fi
 }
 
 \tpDeclareHeading[section]{3}{subsubsection}{%
