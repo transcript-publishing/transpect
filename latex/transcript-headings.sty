@@ -1,6 +1,12 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-headings}[2021/08/18 transcript]\relax
 
+\def\mydotfill{%
+  \nobreak\leaders\hbox{$\m@th
+    \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
+    mu$}\hfill
+  \nobreak}
+
 \newdimen\chaphskip \chaphskip7mm %% default
 %% Globale Settings: gelten für alle ÜS-Ebenen
 \tpAddToDefault{heading}{%
@@ -17,10 +23,7 @@
   \fi
   \tpSetProperty{toc-number-align}{left}%
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-page-sep}{%
-    \nobreak\leaders\hbox{$\m@th
-      \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
-      mu$}\hfill}%
+  \tpSetProperty{toc-page-sep}{\mydotfill}%
   \tpSetProperty{toc-title-format}{\sffamily\normalsize}%
   \tpSetProperty{toc-page-format}{\normalfont\sfwide\normalsize}%
   \tpSetProperty{toc-heading}{%
@@ -62,17 +65,20 @@
   \tpSetProperty{after-heading-block}{\vskip1.68\baselineskip}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchap}%
   \tpSetProperty{toc-margin-right}{2em}%
+  \tpSetProperty{after-skip}{2\baselineskip}%
   \tpSetProperty{heading-block}{%
     %% Titel
+    \thispagestyle{empty}%
     \leftskip\z@
     \leavevmode
     \bgroup
+      \raggedright
       \tpIfComp{Number}{\leftskip-\tpUseProperty{indent}}{}%
       \tpUseProperty{title-format}%
       {\sfchap
        \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
        \tpUseComp{Title}}%
-      \tpIfComp{Subtitle}{\par\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\tpUseComp{Subtitle}}{}%
+      \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\tpUseComp{Subtitle}}{}%
       \par
     \egroup
     %% Linie
@@ -86,8 +92,9 @@
     }{}%
     %% Zitat
     \tpIfComp{Quote}{%
-      \vskip\baselineskip
+      \vskip2\baselineskip
       \hfill\hbox{\vbox{%
+          \rightskip\z@
           \hsize.5\textwidth
           \normalfont
           \normalsize
@@ -95,8 +102,10 @@
           \tpUseComp{Quote}\par
     %% Zitat-Quelle
           \tpIfComp{QuoteSource}{%
-            \vskip.5\baselineskip
-            \tpUseComp{QuoteSource}}{}}}}{}%
+            {\itshape
+            \tpUseComp{QuoteSource}}}{}}}%
+      \vskip-2\baselineskip
+    }{}%
   }%
   %% Format Kolumnentitel
   \tpSetProperty{running-heading}{%
@@ -189,6 +198,9 @@
   \tpSetProperty{after-skip}{-.5em}%
   \tpSetProperty{title-format}{\normalfont\sffamily\normalsize\mdseries}%
 }
+
+
+
 \endinput
 
 

@@ -5,9 +5,11 @@
 %
 \renewcommand\@dotsep{.5}
 \renewcommand\tableofcontents{%
+  \setcounter{page}{5}
   \begin{heading}[notoc,nonumber,label=tableofcontents]{chapter}%
     \tpTitle{\contentsname}%
   \end{heading}%
+  \vskip-\baselineskip
   %\pdfbookmark[0]{\contentsname}{tableofcontents}%
   \pagestyle{empty}%
   \@starttoc{toc}%
@@ -43,31 +45,28 @@
 %      \par}%
 %   \fi}
 
-\def\@freedottedtocline#1#2#3#4#5{%%giovanni, 2019-11-27 (damit auch unter \c@tocdepth=0 was passiert)
-    \vskip \z@
-    {\tpGobble
-     \leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
-     \parindent #2\relax\@afterindenttrue
-     \interlinepenalty\@M
-     \leavevmode
-      \ifx\usenumberline\relax
-        \@tempdima #3\relax
-      \else
-        \@tempdima\z@\relax
-      \fi
-     \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
-     \sffamily
-     {#4}\nobreak
-     \leaders\hbox{$\m@th
-        \mkern \@dotsep mu\textnormal{\hbox{.}}\mkern \@dotsep
-        mu$}\hfill
-     \nobreak
-     \kern.5\p@#5%
-     \par}}
-\renewcommand*\l@figure{\@freedottedtocline{1}{0pt}{2.3em}}%giovanni, 2019-11-27
-\let\l@table\l@figure%giovanni, 2019-11-27
-
-\def\afterfi#1\fi{\fi#1}
+% \def\@freedottedtocline#1#2#3#4#5{%%giovanni, 2019-11-27 (damit auch unter \c@tocdepth=0 was passiert)
+%     \vskip \z@
+%     {\tpGobble
+%      \leftskip #2\relax \rightskip \@tocrmarg \parfillskip -\rightskip
+%      \parindent #2\relax\@afterindenttrue
+%      \interlinepenalty\@M
+%      \leavevmode
+%       \ifx\usenumberline\relax
+%         \@tempdima #3\relax
+%       \else
+%         \@tempdima\z@\relax
+%       \fi
+%      \advance\leftskip \@tempdima \null\nobreak\hskip -\leftskip
+%      \sffamily
+%      {#4}\nobreak
+%      \leaders\hbox{$\m@th
+%         \mkern \@dotsep mu\textnormal{\hbox{.}}\mkern \@dotsep
+%         mu$}\hfill
+%      \nobreak
+%      \kern.5\p@#5%
+%      \par}}
+% \def\afterfi#1\fi{\fi#1}
 
 % \renewcommand*\l@chapter[2]{%
 %   \ifnum \c@tocdepth >\m@ne

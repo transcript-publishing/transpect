@@ -22,7 +22,6 @@
 
 % \def\tablefont{\nsffamily\footnotesize}
 \intextsep\baselineskip
-\def\tpListEntry{\tp@lo@cpt}
 
 %% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
 \tpAddToDefault{float}{%
@@ -31,19 +30,39 @@
   \tpSetProperty{caption-format-top}{\itshape\RaggedRight}%
   \tpSetProperty{caption-format-bottom}{\footnotesize\upshape\RaggedRight}%
   \tpSetProperty{subfloat-sep}{2mm}%
-  \tpSetProperty{intext-skip-top}{1\baselineskip}%
-  \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}%
+  \tpSetProperty{intext-skip-top}{2\baselineskip}%
+  \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
   \tpSetProperty{numbering}{}% keine automatische Nummerierung von Gleitobjekten!
+  %% Parameter für Abbindungs- und Tabellenverzeichnisse
+  \tpSetProperty{list-of-caption-format}{\sffamily}%
+  \tpSetProperty{list-of-indent}{0pt}%
+  \tpSetProperty{list-of-margin-left}{0pt}%
+  \tpSetProperty{list-of-margin-right}{5em}%
+  \tpSetProperty{list-of-page-sep}{\mydotfill\kern.5\p@}% siehe transcript-headings.sty für Def von \mydotfill
+  \tpSetProperty{list-of-caption-format}{\sffamily}%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}
+      {\tpUseComp{list-of-hang-number}:\space}
+      {\leftskip0pt}%
+    \tpUseComp{ListofCaption}%
+    \tpUseProperty{list-of-page-sep}\tpUseComp{ListofPage}%
+  }%
 }
+
+\setcounter{lofdepth}{0}%% Tiefe des Abb.-Verzeichnisses: 0 = nur Haupteinträge; 1 = auch (echte) sub-floats inkludieren!
 
 %% gilt nur für Abbildungen:
 \tpDeclareFloat[tpFloat]{tpFigure}{figure}{lof}{%
-  \tpSetProperty{caption-top-sep}{1bp}
-  \tpSetProperty{caption-bottom-sep}{4bp}
+  \tpSetProperty{caption-sep-top}{8bp}
+  \tpSetProperty{caption-sep-bottom}{4bp}
 }
 
+% \renewcommand*\l@figure{\@freedottedtocline{1}{0pt}{2.3em}}%giovanni, 2019-11-27
+% \let\l@table\l@figure%giovanni, 2019-11-27
+
 %% gilt nur für Tabellen:
-\tpDeclareFloat[tpFloat]{tpTable}{table}{lot}{%
+\tpDeclareFloat[tpFloat]{tpTable}{table}{lof}{%
   \tpSetProperty{caption-top-sep}{9bp}
 }
 
@@ -52,6 +71,14 @@
 \tpDeclareClass{B}{\tpSetProperty{margin-left}{10mm}\tpSetProperty{margin-right}{10mm}}
 \tpDeclareClass{C}{\tpSetProperty{margin-left}{15mm}\tpSetProperty{margin-right}{15mm}}
 \tpDeclareClass{D}{\tpSetProperty{margin-left}{30mm}\tpSetProperty{margin-right}{30mm}}
+
+%% Abbildungsverzeichnis
+\renewcommand\listoffigures{%
+  \begin{heading}[notoc]{chapter}%
+    \tpTitle{\listfigurename}%
+  \end{heading}
+  \@starttoc{lof}%
+  }
 
 
 % \captionsetup{%
