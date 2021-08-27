@@ -102,6 +102,16 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="*:html//*:nav/*:ol//*:li[matches(*:a/@href, '^#(epub-cover-image-container|halftitle|title-page|imprint|toc)$')]" mode="#default" priority="7"/>
+
+  <xsl:template match="*:html//*:nav//*:ol" mode="export" priority="5">
+    <xsl:element name="ul">
+     <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:if test="not(ancestor::*:ol)"><xsl:attribute name="class" select="'toc-list'"/></xsl:if>
+     <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="*:header[@class = 'chunk-meta-sec']" mode="#default"/>
   
   <xsl:template match="*:head" mode="#default">
@@ -271,7 +281,7 @@
     <xsl:param name="figure-group" as="node()*"/>
     <!--https://redmine.le-tex.de/issues/10237-->
     <xsl:variable name="id" select="index-of($media-url-paras/@srcpath, ($figure-group[self::*:p][starts-with(@class, 'tsmediaurl')])[1]/@srcpath)"/>
-<xsl:message select="$id,   $figure-group, '|||', $media-url-paras"/>
+    <!-- <xsl:message select="$id,   $figure-group, '|||', $media-url-paras"/>-->
     <xsl:if test="$figure-group[matches(@class, 'tsmediacaption')]
       (:and 
       (preceding-sibling::*[matches(@class, 'tsmediasource')] or following-sibling::*[matches(@class, 'tsmediasource')]):)">
