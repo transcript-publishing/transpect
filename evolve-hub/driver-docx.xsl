@@ -56,4 +56,9 @@
     <xsl:value-of select="."/>
   </xsl:template>
 
+  <xsl:template match="link[@xlink:href][not(matches(@xlink:href, $regex-for-url-to-link-recognition))]" mode="hub:clean-hub">
+    <xsl:apply-templates mode="#current"/>
+  </xsl:template>
+
+
 </xsl:stylesheet>
