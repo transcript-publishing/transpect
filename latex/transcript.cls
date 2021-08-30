@@ -1787,5 +1787,8 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 % \gdef\@fn@href #1\@nil #2↩#3↩\@nil{\oldhref{#1}{#2}\hskip\z@skip\if!#3!\else\@fn@href #1\@nil #3↩\@nil\fi}
 % \egroup
 
+%% abstracts
+\newenvironment{abstract}{}{}
+
 \let\ul\uline
 \endinput
