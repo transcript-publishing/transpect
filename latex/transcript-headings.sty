@@ -108,8 +108,12 @@
     }{}%
   }%
   %% Format Kolumnentitel
+  \tpSetProperty{running-extra}{%
+    \tpIfComp{RunAuthor}
+      {\xdef\authormark{\tpUseComp{RunAuthor}}}
+      {\global\let\authormark\@empty}%
+  }%
   \tpSetProperty{running-heading}{%
-    \tpIfComp{RunAuthor}{\tpUseComp{RunAuthor}:\space}{}%
     \tpIfComp{RunNumber}{\tpUseComp{RunNumber}\enskip}{}\tpUseComp{RunTitle}}%
   %% Format IHV-Eintrag
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
@@ -143,7 +147,7 @@
 
 \tpDeclareHeading{1}{section}{%
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
-  \tpSetProperty{number-sep}{\quad}%
+  \tpSetProperty{number-sep}{\enskip}%
   \tpSetProperty{after-skip}{12.8bp}%
   \tpSetProperty{title-format}{\sffamily\LARGE\sbseries}%
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
