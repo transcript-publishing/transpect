@@ -415,17 +415,6 @@
     <!-- copied from common to reinstall template priorities-->
   </template>
   
-    <template context="dbk:bibliography[not(@role eq 'Citavi')]
-                                       [not(parent::dbk:bibliography)]">
-    <xsl:text>\FloatBarrier&#xa;</xsl:text>
-    <xsl:apply-templates select="dbk:info/dbk:title" mode="#current"/>
-    <xsl:apply-templates select="dbk:info/dbk:abbrev" mode="#current"/>
-    <rule name="thebibliography" type="env" break-after="2" break-before="1">
-      <param>0</param>
-      <text select="dbk:bibliomixed"/>
-    </rule>
-  </template>
-  
   <template context="dbk:phrase[matches(@role, $underline-style)]
                                [not(ancestor::dbk:title)]">
     <rule name="underline" type="cmd">
