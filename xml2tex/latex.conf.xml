@@ -252,6 +252,8 @@
     </rule>
   </template>
   
+  <template context="dbk:abbrev//dbk:indexterm"/>
+  
     <!-- suppress additional underline markup in titles -->
   
   <template context="dbk:part/dbk:title/dbk:phrase[matches(@role, '^[a-z]{2,3}underline$')]
