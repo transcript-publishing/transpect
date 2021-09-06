@@ -588,7 +588,7 @@
     </rule>
   </template>-->
   
-  <template context="dbk:para[matches(@role, $list-of-figures-style)]
+  <!--<template context="dbk:para[matches(@role, $list-of-figures-style)]
                     |dbk:title[matches(@role, $list-of-figures-style)]">
     <rule name="renewcommand" type="cmd" break-after="1" break-before="1">
       <param>\listfigurename</param>
@@ -604,7 +604,7 @@
       <param/>
     </rule>
     <rule name="listoftables" type="cmd" break-after="1"/>
-  </template>
+  </template>-->
   
   <template context="dbk:para[matches(@role, 'tsmedia(caption|url|source)')]" priority="300"/>
   
