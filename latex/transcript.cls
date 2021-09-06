@@ -73,6 +73,7 @@
 %%%%%%%%%%%%%%%
 
 \usepackage{amsmath}
+\let\lll\@undefined
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{amsxtra}
@@ -1788,7 +1789,19 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 % \egroup
 
 %% abstracts
-\newenvironment{abstract}{}{}
+\newenvironment{abstract}[1]{%
+  \itshape\small
+  {\bfseries #1}%
+  \par
+}{}
+
+%% abstracts
+\newenvironment{keyword}[1]{%
+  \itshape\small
+  {\bfseries #1}%
+  \par
+}{}
+
 
 \let\ul\uline
 \endinput
