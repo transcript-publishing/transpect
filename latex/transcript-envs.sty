@@ -214,4 +214,25 @@
 \RequirePackage{amssymb}
 \RequirePackage{upgreek}
 
-\newenvironment{abstract}{}{}
+
+% \def\@abstract#1{%
+%   \vskip-\lastskip
+%   % \addvspace{1\baselineskip}%
+%   % \par
+%   \bgroup
+%     \if!#1!\else
+%       \noindent{\bfseries #1}%
+%       \par\noindent
+%     \fi
+%     \small
+%     \itshape
+% }
+% \let\end@abstract\egroup
+% %% abstracts
+% \newenvironment{abstract}[1]{%
+%   \@abstract{#1}%
+%   }{\end@abstract}
+% %% keywords
+% \newenvironment{keywords}[1]{%
+%   \@abstract{#1}%
+%   }{\end@abstract}

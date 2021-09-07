@@ -106,6 +106,18 @@
             \tpUseComp{QuoteSource}}}{}}}%
       \vskip-2\baselineskip
     }{}%
+    %% Abstract
+    \tpIfComp{Abstract}
+    {\par\vskip.5\baselineskip
+      \rightskip\z@
+      {\bfseries\tpIfComp{AbstractTitle}{\tpUseComp{AbstractTitle}}{Abstract}}\par
+      {\itshape\small\tpUseComp{Abstract}}\par}
+    {}
+    \tpIfComp{Keywords}
+    {\par\vskip.5\baselineskip
+      {\bfseries\tpIfComp{KeywordsTtitle}{\tpUseComp{KeywordsTitle}}{Keywords}}\par
+      {\itshape\small\tpUseComp{Keywords}\par}}
+    {}
   }%
   %% Format Kolumnentitel
   \tpSetProperty{running-extra}{%

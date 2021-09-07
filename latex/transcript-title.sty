@@ -107,7 +107,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 \def\doi#1{\def\@doi{#1}}                 \doi{}
 \def\conversion#1{\def\@conversion{#1}}   \conversion{}
 \def\shorttext#1{\def\@shorttext{#1}}     \shorttext{}
-\def\keywords#1{\def\@keywords{#1}}       \keywords{}
+\def\keyword#1{\def\@keyword{#1}}         \keyword{}
 \def\discussion#1{\def\@discussion{#1}}   \discussion{}
 
 \def\ccimage#1{\def\@ccimage{#1}}         \ccimage{}
@@ -193,7 +193,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
       \ifx\@eisbn\@empty\else \eisbnname\space\@eisbn\par\fi
       \ifx\@epubisbn\@empty\else \epubisbnname\space\@epubisbn\par\fi
       \ifx\@doi\@empty\else {\def\UrlFont{\rmfamily}\url{https://doi.org/\@doi}}\par\fi
-      \ifx\@keywords\@empty\else \keywordsname\space\@keywords\par\fi
+      \ifx\@keyword\@empty\else \keywordsname\space\@keyword\par\fi
     \egroup
     \ifprintpublinfo
       \vskip\baselineskip
