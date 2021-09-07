@@ -106,18 +106,6 @@
             \tpUseComp{QuoteSource}}}{}}}%
       \vskip-2\baselineskip
     }{}%
-    %% Abstract
-    \tpIfComp{Abstract}
-    {\par\vskip.5\baselineskip
-      \rightskip\z@
-      {\bfseries\tpIfComp{AbstractTitle}{\tpUseComp{AbstractTitle}}{Abstract}}\par
-      {\itshape\small\tpUseComp{Abstract}}\par}
-    {}
-    \tpIfComp{Keywords}
-    {\par\vskip.5\baselineskip
-      {\bfseries\tpIfComp{KeywordsTtitle}{\tpUseComp{KeywordsTitle}}{Keywords}}\par
-      {\itshape\small\tpUseComp{Keywords}\par}}
-    {}
   }%
   %% Format Kolumnentitel
   \tpSetProperty{running-extra}{%
@@ -152,6 +140,25 @@
     \tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}\tpUseComp{TocTitle}%
   }%
 }
+
+\tpDeclareHeading[chapter]{0}{contribution}{%
+  \tpSetProperty{extended}{true}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
+  %% Abstract
+  \tpSetProperty{extended-heading}{%
+    \tpIfComp{Abstract}
+      {\par\vskip.5\baselineskip
+       \rightskip\z@
+       {\bfseries\tpIfComp{AbstractTitle}{\tpUseComp{AbstractTitle}}{Abstract}}\par
+       {\itshape\small\tpUseComp{Abstract}}\par}
+      {}%
+    \tpIfComp{Keywords}
+      {\par\vskip.5\baselineskip
+       {\bfseries\tpIfComp{KeywordsTtitle}{\tpUseComp{KeywordsTitle}}{Keywords}}\par
+       {\itshape\small\tpUseComp{Keywords}\par}}
+     {}%
+   }%
+}
+
 
 \tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
 \tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
