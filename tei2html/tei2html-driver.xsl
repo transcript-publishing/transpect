@@ -38,7 +38,7 @@
           <xsl:apply-templates select="$metadata[@key = 'Titel']//text()" mode="#current"/>
         </title>
         <xsl:call-template name="meta"/>
-        <!--<xsl:apply-templates select="teiHeader/encodingDesc/css:rules" mode="#current"/>-->
+        <xsl:apply-templates select="teiHeader/encodingDesc/css:rules" mode="hub2htm:css"/>
       </head>
       <body>
         <xsl:call-template name="half-title"/>
@@ -52,6 +52,25 @@
       </body>
     </html>
   </xsl:template>
+
+  <xsl:template match="css:rule[not(@layout-type = ('table', 'cell'))]" mode="hub2htm:css"/>
+
+  <xsl:template match="css:rule" mode="hub2htm:css">
+    <!-- Add table to selector -->
+    <xsl:variable name="css-selector" select="if (@layout-type = ('cell', 'table')) then replace(@name, '_-_', '.') else @name"/>
+    <xsl:variable name="css-atts" as="attribute(*)*">
+      <!-- This mode enables selective property filtering in your overriding template -->
+      <xsl:apply-templates select="@* except @csstmp:*" mode="hub2htm:css-style-defs"/>
+    </xsl:variable>
+    <xsl:variable name="eltname" as="xs:string?" select="if (@layout-type = 'table') then 'table' else 'td'"/>
+    <xsl:variable name="css-properties" select="string-join(
+      for $i in $css-atts return concat($i/local-name(), ':', $i)
+      , ';&#xa;  ')"/>
+    <xsl:variable name="compound-selector-name" as="xs:string" select="if ($eltname = 'td') then concat('&#xa;', $eltname, '.', $css-selector, ', th.', $css-selector) else concat('&#xa;', $eltname, '.', $css-selector)"/>
+    <xsl:if test="exists($css-atts)">
+      <xsl:value-of select="concat($compound-selector-name, ' {&#xa;  ', $css-properties, '&#xa;}&#xa;')"></xsl:value-of>  
+    </xsl:if>
+  </xsl:template> 
   
   <xsl:template name="half-title">
     <section class="halftitle title-page" epub:type="halftitlepage" id="halftitle">
