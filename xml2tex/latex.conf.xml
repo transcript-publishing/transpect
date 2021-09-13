@@ -290,14 +290,22 @@
   <xsl:template name="option-for-headlines">
     <xsl:if test=".//dbk:footnote
                  |parent::*/dbk:subtitle
-                 |parent::*/dbk:info/dbk:subtitle">
+                 |parent::*/dbk:info/dbk:subtitle
+                 |.//dbk:phrase[matches(@role, $underline-style) or matches(@role, $strikethrough-style)]">
       <xsl:text>[</xsl:text>
       <xsl:apply-templates select="node()" mode="#current">
         <xsl:with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+        <xsl:with-param name="unexpand-lines" select="true()" as="xs:boolean?" tunnel="yes"/>
       </xsl:apply-templates>
       <xsl:text>]</xsl:text>
     </xsl:if>
   </xsl:template>
+
+  <template context="dbk:phrase[matches(@role, $strikethrough-style)] | dbk:phrase[matches(@role, $underline-style)]">
+    <xsl:param name="unexpand-lines" as="xs:boolean?" tunnel="yes"/>
+    <xsl:if test="$unexpand-lines"><xsl:text>\noexpand</xsl:text></xsl:if> 
+    <xsl:next-match/>
+  </template>
 
   <template context="dbk:title[matches(@role, $genereral-heading-style)]/dbk:phrase[@role eq 'hub:identifier']"/>
 
@@ -449,13 +457,6 @@
     <rule name="thebibliography" type="env" break-after="2" break-before="1">
       <param>0</param>
       <text select="dbk:bibliomixed"/>
-    </rule>
-  </template>
-  
-  <template context="dbk:phrase[matches(@role, $underline-style)]
-                               [not(ancestor::dbk:title)]">
-    <rule name="underline" type="cmd">
-      <param/>
     </rule>
   </template>
   
