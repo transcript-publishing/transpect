@@ -527,7 +527,7 @@
   
   <xsl:template match="p[@rend eq 'tsendnotesheading']" mode="tei2html"/>  
 
-  <xsl:template match="*:head//*:lb" mode="strip-indexterms-etc tei2html">
+  <xsl:template match="*:head//*:lb" mode="strip-indexterms-etc">
     <xsl:choose>
       <xsl:when
         test="
