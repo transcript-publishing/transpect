@@ -104,6 +104,17 @@
 
   <xsl:template match="*:html//*:nav/*:ol//*:li[matches(*:a/@href, '^#(epub-cover-image-container|halftitle|title-page|imprint|toc)$')]" mode="#default" priority="7"/>
 
+  <xsl:template match="*[self::*:td | self::*:tr]/@style" mode="#default" priority="7">
+    <xsl:variable name="regex" as="xs:string" select="'(border-(top|right|bottom|left)-width: 1px(; )?)|(border-(top|right|bottom|left)-style: solid(; )?)|(border-(top|right|bottom|left)-color: #000000(; )?)'"/>
+    <xsl:variable name="stripped-cell-atts">
+      <xsl:analyze-string select="." regex="{$regex}">
+        <xsl:matching-substring/>
+        <xsl:non-matching-substring><xsl:sequence select="."/></xsl:non-matching-substring>
+      </xsl:analyze-string>
+    </xsl:variable>
+    <xsl:if test="some $s in $stripped-cell-atts satisfies $s[normalize-space()]"><xsl:attribute name="{name()}" select="string-join($stripped-cell-atts)"></xsl:attribute></xsl:if>
+  </xsl:template>
+
   <xsl:template match="*:html//*:nav//*:ol" mode="export" priority="5">
     <xsl:element name="ul">
      <xsl:apply-templates select="@*" mode="#current"/>
