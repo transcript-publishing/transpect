@@ -527,7 +527,7 @@
   
   <xsl:template match="p[@rend eq 'tsendnotesheading']" mode="tei2html"/>  
 
-  <xsl:template match="*:head//*:lb" mode="strip-indexterms-etc">
+  <xsl:template match="*:head//*:lb" mode="strip-indexterms-etc tei2html">
     <xsl:choose>
       <xsl:when
         test="
@@ -539,6 +539,21 @@
     </xsl:choose>
   </xsl:template>
   
+  <xsl:template match="*:head//*:lb" mode="tei2html">
+    <xsl:param name="in-toc" as="xs:boolean?" tunnel="yes"/>
+    <xsl:choose>
+      <xsl:when test="$in-toc">
+        <xsl:sequence select="if (preceding-sibling::node()[1]/(self::text()) and matches(preceding-sibling::node()[1], '\s$') or
+                                  following-sibling::node()[1]/(self::text()) and matches(following-sibling::node()[1], '^\s'))
+                              then '' 
+                              else '&#160;'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="p[matches(@rend, '^tscodeblock[a-z0-9]+$')]" mode="tei2html">
     <pre>
       <xsl:apply-templates mode="#current"/>
