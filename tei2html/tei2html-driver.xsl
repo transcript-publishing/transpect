@@ -38,7 +38,7 @@
           <xsl:apply-templates select="$metadata[@key = 'Titel']//text()" mode="#current"/>
         </title>
         <xsl:call-template name="meta"/>
-        <xsl:apply-templates select="teiHeader/encodingDesc/css:rules" mode="hub2htm:css"/>
+<!--        <xsl:apply-templates select="teiHeader/encodingDesc/css:rules" mode="hub2htm:css"/>-->
       </head>
       <body>
         <xsl:call-template name="half-title"/>
