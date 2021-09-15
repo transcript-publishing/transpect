@@ -110,7 +110,7 @@
   %% Format Kolumnentitel
   \tpSetProperty{running-extra}{%
     \tpIfComp{RunAuthor}
-      {\xdef\authormark{\tpUseComp{RunAuthor}}}
+      {\protected@xdef\authormark{\tpUseComp{RunAuthor}}}
       {\global\let\authormark\@empty}%
   }%
   \tpSetProperty{running-heading}{%
