@@ -54,9 +54,17 @@
     \tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}%
     \tpUseComp{TocTitle}}%
   \tpSetProperty{toc-before-entry}{%
+    \addvspace{\tpUseProperty{toc-margin-top}}
     \parindent \z@
-    \parfillskip -\rightskip
-    \centering
+    \hyphenpenalty=\@M
+    \ifcollection
+      \parfillskip -\rightskip
+      \centering
+    \else
+      \let\\\@centercr
+      \rightskip\z@skip\relax
+      \parfillskip\@flushglue
+    \fi
   }%
 }
 
@@ -93,6 +101,7 @@
     %% Zitat
     \tpIfComp{Quote}{%
       \vskip2\baselineskip
+      \savenotes
       \hfill\hbox{\vbox{%
           \rightskip\z@
           \hsize.5\textwidth
@@ -100,10 +109,11 @@
           \normalsize
           \nsfwider
           \tpUseComp{Quote}\par
-    %% Zitat-Quelle
+          %% Zitat-Quelle
           \tpIfComp{QuoteSource}{%
             {\itshape
             \tpUseComp{QuoteSource}}}{}}}%
+      \spewnotes
       \vskip-2\baselineskip
     }{}%
   }%
@@ -182,16 +192,34 @@
     \egroup
     \tpIfComp{Quote}{%
       \vskip\tpUseProperty{before-quote-skip}%
+      %\savenotes
       \hfill\vbox{%
         \hsize.5\textwidth
         \itshape
         \normalsize\nsfwider\mdseries
         \noindent
         \tpUseComp{Quote}}%
+      %\spewnotes
       \par}{}%
   }%
   \tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
   \tpSetProperty{bookmark}{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\enskip}{}\tpUseComp{TocTitle}}%
+  \ifcollection\else
+    \tpSetProperty{toc-indent}{2em}%
+    \tpSetProperty{toc-margin-left}{2em}%
+    \tpSetProperty{toc-heading}{%
+      \tpUseProperty{toc-title-format}%
+      \tpIfComp{TocNumber}
+      {\tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\newline}{}%
+        \hskip-2em\hbox to 2em{\tpUseComp{TocNumber}}}
+      {%\leftskip\z@%
+        \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
+      }%
+      \tpUseComp{TocTitle}%
+      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
+      \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
+    }%
+  \fi
 }
 
 \tpDeclareHeading[section]{2}{subsection}{%
@@ -200,18 +228,19 @@
   \tpSetProperty{before-quote-skip}{.5\baselineskip}%
   \tpSetProperty{running-heading}{}% da subsection sonst die Kolumnentitel ebenfalls von section erben würde
   \ifcollection\else
-    \tpSetProperty{toc-margin-left}{\tpIfComp{TocNumber}{auto}{2em}}%
+    \tpSetProperty{toc-indent}{2em}%
+    \tpSetProperty{toc-margin-left}{4em}%
   \fi
 }
 
 \tpDeclareHeading[section]{3}{subsubsection}{%
-  \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
+  \tpSetProperty{before-heading}{\minusvspace{12.8bp}}%
   \tpSetProperty{after-skip}{1sp}%
   \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
 }
 
 \tpDeclareHeading[section]{4}{paragraph}{%
-  \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
+  \tpSetProperty{before-heading}{\minusvspace{12.8bp}}%
   \tpSetProperty{after-skip}{1sp}%
   \tpSetProperty{title-format}{\normalfont\sfwide\normalsize}%
 }

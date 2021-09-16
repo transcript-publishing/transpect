@@ -3,31 +3,32 @@
 
 
 \renewenvironment{theindex}{%
-        \edef\indexname{\the\@nameuse{idxtitle@\@indextype}}%
-        \if@twocolumn
-            \@restonecolfalse
-        \else
-            \@restonecoltrue
-        \fi
-        \columnseprule \z@
-        \columnsep 35\p@
-        \twocolumn[%
-            \@makeschapterhead{\indexname}%
-            \addcontentsline{toc}{chapter}{\indexname}%
-            \ifx\index@prologue\@empty\else
-                \index@prologue
-                \bigskip
-            \fi
-        ]%
-        \@mkboth{\indexname}{\indexname}%
-        \thispagestyle{empty}%
-        \parindent\z@
-        \parskip\z@ \@plus .3\p@\relax
-        \let\item\@idxitem
-    }{%
-        \if@restonecol
-            \onecolumn
-        \else
-            \clearpage
-        \fi
-    }
+  \edef\indexname{\the\@nameuse{idxtitle@\@indextype}}%
+  \if@twocolumn
+    \@restonecolfalse
+  \else
+    \@restonecoltrue
+  \fi
+  \columnseprule \z@
+  \columnsep 35\p@
+  \twocolumn[%
+  \begin{heading}{chapter}
+    \tpTitle{\indexname}%
+  \end{heading}
+  \ifx\index@prologue\@empty\else
+    \index@prologue
+    \bigskip
+  \fi
+  ]%
+  \@mkboth{\indexname}{\indexname}%
+  \thispagestyle{empty}%
+  \parindent\z@
+  \parskip\z@ \@plus .3\p@\relax
+  \let\item\@idxitem
+}{%
+  \if@restonecol
+    \onecolumn
+  \else
+    \clearpage
+  \fi
+}
