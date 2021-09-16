@@ -112,7 +112,8 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="*[self::*:td | self::*:tr]/@style" mode="#default" priority="7">
+  <!--<xsl:template match="*[self::*:td | self::*:tr]/@style" mode="#default" priority="7">
+    <!-\- https://redmine.le-tex.de/issues/11058 discard default atts -\->
     <xsl:variable name="regex" as="xs:string" select="'(border-(top|right|bottom|left)-width: 1px(; )?)|(border-(top|right|bottom|left)-style: solid(; )?)|(border-(top|right|bottom|left)-color: #000000(; )?)'"/>
     <xsl:variable name="stripped-cell-atts">
       <xsl:analyze-string select="." regex="{$regex}">
@@ -121,7 +122,7 @@
       </xsl:analyze-string>
     </xsl:variable>
     <xsl:if test="some $s in $stripped-cell-atts satisfies $s[normalize-space()]"><xsl:attribute name="{name()}" select="string-join($stripped-cell-atts)"></xsl:attribute></xsl:if>
-  </xsl:template>
+  </xsl:template>-->
 
   <xsl:template match="*:header[@class = 'chunk-meta-sec']" mode="#default"/>
   
