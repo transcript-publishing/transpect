@@ -619,4 +619,6 @@
     </rule>
   </template>-->
   
+  <template context="dbk:title[matches(@role, $general-heading-style)]/dbk:tab[preceding-sibling::dbk:phrase[@role eq 'hub:identifier']]"/>
+
 </set>
