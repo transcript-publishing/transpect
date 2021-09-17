@@ -36,11 +36,11 @@
 }
 
 \tpDeclareHeading{-1}{part}{%
-  \tpSetProperty{before-heading}{\cleardoublepage\null\vskip\headingsep}%
+  \tpSetProperty{before-heading}{\cleardoublepage\null\vskip\headingsep\thispagestyle{empty}}%
   \tpSetProperty{title-format}{\HUGE\sffamily\sbseries}%
   \tpSetProperty{heading-block}{%
     \tpUseProperty{title-format}%
-    \tpIfComp{Number}{\tpUseComp{Number}\space}%
+    \tpIfComp{Number}{\tpUseComp{Number}\space}{}%
     \tpUseComp{Title}%
     \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
   }%
