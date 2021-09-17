@@ -1,34 +1,19 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-index}[2021/04/09 transcript]\relax
-
+\RequirePackage{multicol}
 
 \renewenvironment{theindex}{%
-  \edef\indexname{\the\@nameuse{idxtitle@\@indextype}}%
-  \if@twocolumn
-    \@restonecolfalse
-  \else
-    \@restonecoltrue
-  \fi
-  \columnseprule \z@
-  \columnsep 35\p@
-  \twocolumn[%
-  \begin{heading}{chapter}
-    \tpTitle{\indexname}%
-  \end{heading}
-  \ifx\index@prologue\@empty\else
-    \index@prologue
-    \bigskip
-  \fi
-  ]%
-  \@mkboth{\indexname}{\indexname}%
-  \thispagestyle{empty}%
-  \parindent\z@
-  \parskip\z@ \@plus .3\p@\relax
-  \let\item\@idxitem
+  \begin{multicols}{2}[%
+    \ifx\index@prologue\@empty\else
+      \index@prologue
+      \bigskip
+    \fi
+    ]%
+    \thispagestyle{empty}%
+    \parindent\z@
+    \parskip\z@ \@plus .3\p@\relax
+    \let\item\@idxitem
 }{%
-  \if@restonecol
-    \onecolumn
-  \else
-    \clearpage
-  \fi
+  \end{multicols}
+  \clearpage
 }
