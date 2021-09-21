@@ -2,15 +2,15 @@
 \ProvidesPackage{transcript-fontsizes}[2021/04/09 transcript]\relax
 
 \renewcommand\normalsize{%
-   \@setfontsize\normalsize{9.2bp}{12.8bp}%
-   \abovedisplayskip 9.3\p@ \@plus2\p@ \@minus5\p@
+   \@setfontsize\normalsize{9.3bp}{13.0bp}%
+   \abovedisplayskip 9\p@ \@plus2\p@ \@minus5\p@
    \abovedisplayshortskip \z@ \@plus3\p@
    \belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
    \belowdisplayskip \abovedisplayskip
    \let\@listi\@listI}
 \normalsize
 \renewcommand\small{%
-   \@setfontsize\small{9bp}{11}% head
+   \@setfontsize\small{9bp}{12}% head
    \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
    \abovedisplayshortskip \z@ \@plus2\p@
    \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
@@ -21,7 +21,7 @@
    \belowdisplayskip \abovedisplayskip
 }
 \renewcommand\footnotesize{% footnotes
-   \@setfontsize\footnotesize{8bp}{11bp}%
+   \@setfontsize\footnotesize{8bp}{12.5bp}%
    \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
    \abovedisplayshortskip \z@ \@plus\p@
    \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
@@ -33,9 +33,9 @@
 }
 \renewcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
 \renewcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
-\renewcommand\large{\@setfontsize\large{10bp}{12.8bp}}% chapter in TOC
-\renewcommand\Large{\@setfontsize\Large{11bp}{12.8bp}}% subsection
-\renewcommand\LARGE{\@setfontsize\LARGE{11.5bp}{12.8bp}}% section
-\renewcommand\huge{\@setfontsize\huge{13bp}{16}}% part in TOC
-\renewcommand\Huge{\@setfontsize\Huge{15bp}{18.3bp}}% chapter
-\newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{25.6bp}}% part
+\renewcommand\large{\@setfontsize\large{11bp}{13.5bp}}% chapter in TOC % OK
+\renewcommand\Large{\@setfontsize\Large{11.5bp}{13.5bp}}% subsection % OK
+\renewcommand\LARGE{\@setfontsize\LARGE{12bp}{13.5bp}}% section % OK
+\renewcommand\huge{\@setfontsize\huge{14bp}{16bp}}% part in TOC % OK
+\renewcommand\Huge{\@setfontsize\Huge{15bp}{17bp}}% chapter % OK
+\newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{36bp}}% part  % OK
