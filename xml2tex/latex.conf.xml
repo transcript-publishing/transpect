@@ -189,7 +189,7 @@
       , '}&#xa;')"/>-->
     <xsl:for-each select="//dbk:index">
       <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
-      <xsl:value-of select="concat('\newindex{', $index-index, '}{', $index-index, '_idx}{', $index-index, '_ind}{', dbk:title/node(), '}&#xa;')"/>
+      <xsl:value-of select="concat('\newindex{', $index-index, '}{', $index-index, '_idx}{', $index-index, '_ind}{}&#xa;')"/>
     </xsl:for-each>
   </preamble>
   
@@ -219,10 +219,14 @@
                                 [not(.//dbk:para[matches(@role, $endnotes-heading-style)])]">
 
     <xsl:next-match/>
-    <xsl:value-of select="concat('&#xa;\renewcommand{\notesname}{', 
+
+    <rule name="heading" type="env" break-after="2" break-before="1">
+      <param select="'section'"/>
+      <xsl:value-of select="concat('&#xa;\tpTitle{', 
                                  ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)] ,
                                  '}')"/>
-     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
+    </rule>
+    <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
     
   </template>
   
