@@ -11,13 +11,11 @@
 
 %% Paketoptionen
 %% durchreichen der script-Optionen
-\def\script@ption{}
-\define@key{transcript.sty}{usescript}[none]{\def\script@ption{usescript={#1}}}
 \define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}}
 \DeclareOptionX{nohead}{\global\let\n@head\relax}
 \ProcessOptionsX\relax
-\expandafter\RequirePackage\expandafter[\script@ption]{transpect-script}
 
+\RequirePackage{transpect-script}
 %%%%%%%%%%
 % Fonts  %
 %%%%%%%%%%

@@ -132,7 +132,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
     \fi\par
     \@title\par
     \vfill
-    \ifx\@edition\@empty\else{\fontsize{10.5}{11}\selectfont\sfwider\@edition}\ifx\@band\@empty\else\enskip\lower.5\dp\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip \volname~\@volume\fi\fi
+    \ifx\@edition\@empty\else{\fontsize{10.5}{11}\selectfont\sfwiderfamily\@edition}\ifx\@band\@empty\else\enskip\lower.5\dp\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip \volname~\@volume\fi\fi
     \clearpage
     %% Seite ii
     \thispagestyle{empty}%
@@ -148,7 +148,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
       \@editor\space(Hg.)
     \fi}\par
     \vskip5\p@
-    {\sfwider{\fontsize{15.5}{19}\selectfont\@title}\par
+    {\sfwiderfamily{\fontsize{15.5}{19}\selectfont\@title}\par
       \vskip5\p@
       \fontsize{10.5}{12}\selectfont\ifx\@subtitle\@empty\else\@subtitle\par\fi}%
     \vfill
@@ -172,7 +172,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
       {\footnotesize\@granttext}\par
     \fi
     \vskip\baselineskip
-    {\sfwide\bfseries \textcopyright\space\@publyear\space\@publ,\space\@place}\par%
+    {\sfwidefamily\bfseries \textcopyright\space\@publyear\space\@publ,\space\@place}\par%
     \vskip\baselineskip
     \ifdocopydisclaimer\@copyrightDiscl\fi\par
     \vskip\baselineskip

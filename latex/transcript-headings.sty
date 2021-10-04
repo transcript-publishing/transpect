@@ -25,7 +25,7 @@
   \tpSetProperty{toc-number-sep}{\enskip}%
   \tpSetProperty{toc-page-sep}{\mydotfill}%
   \tpSetProperty{toc-title-format}{\sffamily\normalsize}%
-  \tpSetProperty{toc-page-format}{\normalfont\sfwide\normalsize}%
+  \tpSetProperty{toc-page-format}{\normalfont\sfwidefamily\normalsize}%
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\newline}{}%
@@ -71,7 +71,7 @@
 \tpDeclareHeading{0}{chapter}{%
   \tpSetProperty{before-heading}{\cleardoublepage\null\vskip\headingsep\vskip-.45mm\relax}%
   \tpSetProperty{after-heading-block}{\vskip1.68\baselineskip}%
-  \tpSetProperty{title-format}{\Huge\sbseries\sfchap}%
+  \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
   \tpSetProperty{toc-margin-right}{2em}%
   \tpSetProperty{after-skip}{2\baselineskip}%
   \tpSetProperty{heading-block}{%
@@ -83,7 +83,7 @@
       \raggedright
       \tpIfComp{Number}{\leftskip-\tpUseProperty{indent}}{}%
       \tpUseProperty{title-format}%
-      {\sfchap
+      {\sfchapfamily
        \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
        \tpUseComp{Title}}%
       \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\tpUseComp{Subtitle}}{}%
@@ -95,7 +95,7 @@
     %% Autor
     \tpIfComp{Author}{%
       \vskip\baselineskip
-      {\large\sfwide\itshape\tpUseComp{Author}}%
+      {\large\sfwidefamily\itshape\tpUseComp{Author}}%
       \par\vskip\baselineskip
     }{}%
     %% Zitat
@@ -107,7 +107,7 @@
           \hsize.5\textwidth
           \normalfont
           \normalsize
-          \nsfwider
+          \nsfwiderfamily
           \tpUseComp{Quote}\par
           %% Zitat-Quelle
           \tpIfComp{QuoteSource}{%
@@ -196,7 +196,7 @@
       \hfill\vbox{%
         \hsize.5\textwidth
         \itshape
-        \normalsize\nsfwider\mdseries
+        \normalsize\nsfwiderfamily\mdseries
         \noindent
         \tpUseComp{Quote}}%
       %\spewnotes
@@ -242,7 +242,7 @@
 \tpDeclareHeading[section]{4}{paragraph}{%
   \tpSetProperty{before-heading}{\minusvspace{12.8bp}}%
   \tpSetProperty{after-skip}{1sp}%
-  \tpSetProperty{title-format}{\normalfont\sfwide\normalsize}%
+  \tpSetProperty{title-format}{\normalfont\sfwidefamily\normalsize}%
 }
 
 \tpDeclareHeading{5}{subparagraph}{%
@@ -273,7 +273,7 @@
     \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
     mu$}\hfill
 }%
-\def\tsToCPageOut{\normalfont\sfwide\normalsize\kern.5\p@\tp@toc@the@page\@par}%
+\def\tsToCPageOut{\normalfont\sfwidefamily\normalsize\kern.5\p@\tp@toc@the@page\@par}%
 
 \tpDeclareHeading{-1}{part}{%
   \tpHeadingProperty{BlockFormat}{%
@@ -288,7 +288,7 @@
   \tpHeadingProperty{SubtitleFormat}{\leavevmode\vskip\baselineskip\large\bfseries}%
   \tpHeadingProperty{AfterNumber}{\space}%
   \tpToCBefore{\addvspace{2.25em}}%
-  \tpToCFormat{\sfwide\sbseries\huge}%
+  \tpToCFormat{\sfwidefamily\sbseries\huge}%
   \tpToCNumSep{\space}%
   \tpToCNoPage
   \tpToCHangNumber
@@ -327,25 +327,25 @@
     \hb@xt@\chaphskip{\box\@tempboxa\hss}%
   }%
   \tpHeadingProperty{BlockFormat}{\Huge\sbseries}%
-  \tpHeadingProperty{TitleFormat}{\ifx\tp@starred\relax\sffamily\else\sfchap\fi}%
+  \tpHeadingProperty{TitleFormat}{\ifx\tp@starred\relax\sffamily\else\sfchapfamily\fi}%
   \tpHeadingProperty{BeforeSubtitle}{\@@par}%
   \tpHeadingProperty{AfterSubtitle}{\@@par}%
   \tpHeadingProperty{SubtitleFormat}{\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily}%
   \tpHeadingProperty{BeforeAuthor}{\@@par\vskip\baselineskip}%
-  \tpHeadingProperty{AuthorFormat}{\large\sfwide\itshape}%
+  \tpHeadingProperty{AuthorFormat}{\large\sfwidefamily\itshape}%
   \tpHeadingProperty{AfterAuthor}{\@@par\vskip\baselineskip}%
   \tpHeadingProperty{BeforeQuote}{\vskip\baselineskip\hfill\hbox\bgroup\vbox\bgroup\hsize.5\textwidth}%
-  \tpHeadingProperty{QuoteFormat}{\normalfont\normalsize\nsfwider}%
+  \tpHeadingProperty{QuoteFormat}{\normalfont\normalsize\nsfwiderfamily}%
   \tpHeadingProperty{AfterQuote}{\egroup\egroup}%
   \tpHeadingProperty{BeforeQuoteSource}{\@par\vskip.5\baselineskip\hfill\hbox\bgroup\vbox\bgroup\hsize.5\textwidth}%
-  \tpHeadingProperty{QuoteSourceFormat}{\normalfont\normalsize\nsfwider}%
+  \tpHeadingProperty{QuoteSourceFormat}{\normalfont\normalsize\nsfwiderfamily}%
   \tpHeadingProperty{AfterQuoteSource}{\egroup\egroup}%
   \tpToCBefore{\addvspace{1\baselineskip}}%
   \tpToCSubTitle%
   \tpToCSubTitleBefore{\@par\nopagebreak}%
-  \tpToCSubTitleFormat{\normalfont\sfwide}%
+  \tpToCSubTitleFormat{\normalfont\sfwidefamily}%
   \tpToCFormat{%
-    \sbseries\Large\sfwide%
+    \sbseries\Large\sfwidefamily%
   }%
   \ifcollection\tpToCNoNumber\else
     \tpToCHangNumber
@@ -379,7 +379,7 @@
   \tpHeadingProperty{BeforeQuote}{\@@par
     \vskip\baselineskip
     \hfill\vbox\bgroup\hsize.5\textwidth%
-      \normalsize\nsfwider\mdseries
+      \normalsize\nsfwiderfamily\mdseries
       \noindent
     }%
   \tpHeadingProperty{AfterQuote}{\egroup}%
@@ -424,7 +424,7 @@
   \tpHeadingProperty{BeforeHeading}{\vskip12.8bp}%
   \tpHeadingProperty{AfterNumber}{\quad}%
   \tpHeadingProperty{AfterSkip}{1sp}%
-  \tpHeadingProperty{TitleFormat}{\normalfont\sfwide\normalsize}%
+  \tpHeadingProperty{TitleFormat}{\normalfont\sfwidefamily\normalsize}%
   \tpToCHangNumber
     \tpToCHangFixed{2em}
   \tsToC
@@ -550,13 +550,13 @@
       \bgroup
         \par
         \ifnum \c@secnumdepth >\m@ne
-          \settowidth\@tempdima{\sfchap\thechapter}%
+          \settowidth\@tempdima{\sfchapfamily\thechapter}%
           \ifdim\@tempdima>\chaphskip\relax
             \immediate\write\@auxout{\string\global\string\chaphskip=\the\@tempdima}%
             \global\chaphskip=\the\@tempdima
           \fi
           \leftskip\chaphskip
-          {\sfchap
+          {\sfchapfamily
             \hskip-\chaphskip\hb@xt@\chaphskip{\thechapter\hfill}#1}\par%
           \ifx\@subtitle\@empty\else
             % \vskip.25\baselineskip
@@ -564,14 +564,14 @@
           \fi
           \global\let\partmarkoverride\@undefined
         \else
-          {\sfchap#1}\par%
+          {\sfchapfamily#1}\par%
           \ifx\@subtitle\@empty\else
             {\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\@subtitle}\par%\vskip2mm
           \fi
         \fi
       \egroup
     \else
-      {\sfchap#1}\par\nobreak
+      {\sfchapfamily#1}\par\nobreak
     \fi
   }%
   \vskip\dimexpr-1\baselineskip\relax\smash{\rlap{\lower3.5mm\vbox{\rule{\textwidth}{.4\p@}}}}\par%
@@ -580,7 +580,7 @@
     \ifx\@author\@empty\else
       \bgroup\large
         \vskip\baselineskip
-        \sfwide\itshape\@author%
+        \sfwidefamily\itshape\@author%
         \xdef\authormark{\@author}%
       \egroup
     \fi
@@ -591,7 +591,7 @@
     \savenotes
     \hfill\vbox{\hsize.5\textwidth%
       \vskip\baselineskip
-      \normalsize\nsfwider
+      \normalsize\nsfwiderfamily
       \@chapterquote
     }%
     \spewnotes
@@ -625,7 +625,7 @@
 \long\def\secquote#1{%
     \savenotes
     \hfill\vbox{\hsize.5\textwidth%
-      \normalsize\nsfwider\mdseries
+      \normalsize\nsfwiderfamily\mdseries
       \noindent
       #1}%
     \vskip\baselineskip
@@ -659,7 +659,7 @@
 \renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
   {-12.8bp}%
   {1sp}%
-  {\normalfont\sfwide\normalsize}}
+  {\normalfont\sfwidefamily\normalsize}}
 \renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
   {-12.8bp}%
   {-.5em}%
