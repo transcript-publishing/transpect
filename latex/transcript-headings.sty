@@ -135,13 +135,11 @@
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}
-      {\tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\newline}{}%
-       \hskip-2em\hbox to 2em{\tpUseComp{TocNumber}}}
-      {\leftskip\z@%
-       \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
-      }%
+      {\hskip-2em\hbox to 2em{\tpUseComp{TocNumber}}}
+      {\leftskip\z@}%
     \tpUseComp{TocTitle}%
     \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
+    \tpIfComp{TocAuthor}{\newline{\normalfont\sffamily\itshape\tpUseComp{TocAuthor}}}{}%
     \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
   }%
   %% Format PDF-Bookmarks
