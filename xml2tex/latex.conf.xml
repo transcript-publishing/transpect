@@ -714,14 +714,7 @@
       <text>\par\vskip\baselineskip&#xa;\noindent{}</text>
     </rule>
   </template>
-  
-  <template context="dbk:para[preceding-sibling::*[1][self::*/local-name() = ('itemizedlist', 'orderedlist', 'variablelist')]]">
-    <rule>
-      <text>\noindent{}</text>
-      <xsl:next-match/>
-    </rule>
-  </template>
-  
+    
   <template context="dbk:mediaobject[not(..[self::dbk:figure])]
                                     [dbk:imageobject/dbk:imagedata[@fileref]]">
     <rule name="figure" type="env" break-after="1" break-before="1">
