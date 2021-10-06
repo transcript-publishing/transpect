@@ -1278,6 +1278,20 @@
   \spewnotes
   \aftergroup\@afterbox}
 
+
+\def\endenumerate{\endlist
+  \gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\global\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe}}
+
+\def\enditemize{\endlist
+  \gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\global\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe}}
+
+
 % 2020-12-17, mk
 % https://redmine.le-tex.de/issues/9488
 % commented and replaced with old quotation environment
@@ -1317,7 +1331,7 @@
 {\endlist
   \gdef\@doendpe{%
     \@endpetrue
-    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\global\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
 
 \renewenvironment{quote}
