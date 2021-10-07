@@ -96,8 +96,10 @@
                                  else if($notes-type eq 'endnotes')                                      then ',endnotes'
                                  else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
-                                 for $i in $other-scripts-in-doc
-                                 return concat(',usescript=', $i),
+                                 if(exists($other-scripts-in-doc))
+                                 then concat(',usescript=',
+                                             string-join($other-scripts-in-doc, ','))
+                                 else (),
                                  ']{transcript}&#xa;')"/>
     
     <xsl:for-each select="xml2tex:rgb-to-tex-color( $colors )">        
@@ -714,14 +716,7 @@
       <text>\par\vskip\baselineskip&#xa;\noindent{}</text>
     </rule>
   </template>
-  
-  <template context="dbk:para[preceding-sibling::*[1][self::*/local-name() = ('itemizedlist', 'orderedlist', 'variablelist')]]">
-    <rule>
-      <text>\noindent{}</text>
-      <xsl:next-match/>
-    </rule>
-  </template>
-  
+    
   <template context="dbk:mediaobject[not(..[self::dbk:figure])]
                                     [dbk:imageobject/dbk:imagedata[@fileref]]">
     <rule name="figure" type="env" break-after="1" break-before="1">
