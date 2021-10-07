@@ -89,10 +89,7 @@
                                  else if($notes-type eq 'endnotes')                                      then ',endnotes'
                                  else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
-                                 if(exists($other-scripts-in-doc))
-                                 then concat(',usescript=',
-                                             string-join($other-scripts-in-doc, ','))
-                                 else (),
+                                 xml2tex:foreign-scripts(root()),
                                  ']{transpect}&#xa;')"/>
     \definecolor{color-1}{rgb}{0,0,0}
     \definecolor{color-2}{rgb}{0.85,0.85,0.85}
@@ -626,25 +623,5 @@
   </template>-->
   
   <template context="dbk:title[matches(@role, $general-heading-style)]/dbk:tab[preceding-sibling::dbk:phrase[@role eq 'hub:identifier']]"/>
-
-  <!-- override of docx2tex -->
-
-  <template context="dbk:phrase[@xml:lang]
-                               [normalize-space(.)]
-                               [xml2tex:lang-to-babel-lang(@xml:lang)]
-                               [not(parent::dbk:link)]
-                               [not(ancestor::dbk:entry or self::dbk:term or self::dbk:listitem)]
-                               [not((*/local-name() = ('link', 'mediaobject', 'inlinemediaobject'))
-                                    and 
-                                    not(normalize-space(string-join(.//text()[not(ancestor::*/local-name() = ('link', 'mediaobject', 'inlinemediaobject'))], '')))
-                                    )]
-                               [not(matches(., '^[\p{P}\p{Z}\d&#x4e00;-&#x9fff;&#x530;-&#x58f;&#xfb13;-&#xfb17;]+$'))]">
-    <xsl:param name="remove-footnote" select="false()" as="xs:boolean" tunnel="yes"/>
-    <xsl:if test="not($remove-footnote)">
-      <xsl:value-of select="concat('\foreignlanguage{', xml2tex:lang-to-babel-lang(@xml:lang), '}{')"/>
-      <xsl:next-match/>
-      <xsl:text>}</xsl:text>      
-    </xsl:if>
-  </template>
 
 </set>
