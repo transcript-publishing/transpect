@@ -265,6 +265,16 @@
   \DeclareTextFontCommand\arab{\selectlanguage{arabic}\fallbackfont@arabic}
 \fi
 
+\ifx\use@script@japanese\relax
+  \babelprovide{japanese}%
+  \message{^^JLoaded Script: Japanese^^J}
+  \newfontfamily\fallbackfont@japanese{NotoSansJP-Regular.otf}%
+    [BoldFont = NotoSansJP-Bold.otf,%
+    Path = fonts/NotoSans/Japanese/,%
+    WordSpace = 1.25]
+  \DeclareTextFontCommand\japanese{\selectlanguage{japanese}\fallbackfont@japanese}
+\fi
+
 
 \usepackage{newunicodechar}
 %\newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
