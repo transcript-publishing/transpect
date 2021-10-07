@@ -92,6 +92,7 @@
                                  if(exists($other-scripts-in-doc))
                                  then concat(',usescript=',
                                              string-join($other-scripts-in-doc, ','))
+                                 else (),
                                  ']{transpect}&#xa;')"/>
     \definecolor{color-1}{rgb}{0,0,0}
     \definecolor{color-2}{rgb}{0.85,0.85,0.85}
