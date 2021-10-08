@@ -39,7 +39,7 @@
   \fi}%
 
 \let\usescript\relax
-\define@key{transcript.cls}{usescript}[none]{\def\usescript{#1}}
+\define@key{transcript.cls}{usescript}{\def\usescript{#1}}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
 \ProcessOptionsX
 
@@ -48,7 +48,7 @@
   \def\@argii{#2}%
   \let\next\relax
   \ifx\@argii\@empty\else
-    \def\next{\parse@script#2,,\relax}%
+    \def\next{\parse@script#2,\relax}%
   \fi\next}
 
 \ifx\usescript\relax\else
