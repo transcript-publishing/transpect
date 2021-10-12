@@ -85,9 +85,10 @@
                                  ','),
                                  ',',
                                  if($is-collection) then 'collection' else 'book',
-                                      if($notes-type eq 'endnotes' and $endnotes-with-chapter eq 'yes')  then ',endnotesperchapter'
-                                 else if($notes-type eq 'endnotes')                                      then ',endnotes'
-                                 else (),
+                                 if($notes-per-chapter = ('yes', 'true') or $notes-type = 'footnotes') then ',resetnotesperchapter' else (),
+                                 if($notes-type eq 'endnotes' and $endnotes-with-chapter eq 'yes')  
+                                  then ',endnoteswithchapters'
+                                  else if($notes-type eq 'endnotes') then ',endnotes' else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  xml2tex:foreign-scripts(root()),
                                  ']{transpect}&#xa;')"/>
@@ -258,6 +259,19 @@
     </rule>
   </template>
   
+  <template context="dbk:bibliography[not(@role eq 'Citavi')]/dbk:bibliodiv">
+    <xsl:variable name="level" select="count(ancestor::dbk:bibliography)" as="xs:integer"/>
+    <xsl:variable name="name" as="xs:string"
+                  select="if($level eq 1) then 'section'
+                     else if($level eq 2) then 'subsection'
+                     else if($level eq 3) then 'subsubsection'
+                     else                      'paragraph'"/>
+    <xsl:value-of select="concat('\def\bibname{', dbk:title, '}&#xa;', 
+                                 '\renewcommand\bibsection{\', $name, '*{\bibname}}&#xa;')"/>
+    <rule name="bibsection" type="env">
+      <text/>
+    </rule>
+  </template>
    
   <!-- headings -->
   <!--<template context="dbk:part/dbk:info | dbk:section/dbk:info | dbk:chapter/dbk:info | dbk:preface/dbk:info | dbk:appendix/dbk:info | dbk:bibliogaphy/dbk:info">
