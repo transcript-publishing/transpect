@@ -2,7 +2,7 @@
 \ProvidesPackage{transcript-fonts}[2021/04/09 transcript]\relax
 
 \usepackage{fontspec}
-\babelfont{sf}{Alegreya-Regular.ttf}[%
+\babelfont{sf}[%
   Path=fonts/Alegreya/Alegreya/,%
   BoldFont = Alegreya-Bold.ttf,%
   FontFace = {eb}{n}{Alegreya-ExtraBold.ttf},
@@ -11,9 +11,9 @@
   FontFace = {sb}{it}{Alegreya-MediumItalic.ttf},
   ItalicFont = Alegreya-Italic.ttf,%
   WordSpace = 1.25,
-  BoldItalicFont = Alegreya-BoldItalic.ttf]
+  BoldItalicFont = Alegreya-BoldItalic.ttf]{Alegreya-Regular.ttf}
 
-\babelfont{rm}{BarlowCondensed-Regular.ttf}[%
+\babelfont{rm}[%
   Path=fonts/Barlow/Barlow Condensed/,%
   BoldFont = BarlowCondensed-Bold.ttf,%
   FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
@@ -31,7 +31,7 @@
   WordSpace=1.1,
   LetterSpace=1.1,
   FakeStretch=1.02,
-  Color=353132]
+  Color=353132]{BarlowCondensed-Regular.ttf}
 \DeclareRobustCommand{\ltseries}{\fontseries{lt}\selectfont}
 \DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
 \DeclareRobustCommand{\sbseries}{\fontseries{sb}\selectfont}
@@ -40,7 +40,7 @@
 
 \DeclareRobustCommand{\wideText}{\addfontfeature{LetterSpace=2.0}}
 
-\babelfont{sfwide}{BarlowCondensed-Regular.ttf}[%
+\babelfont{sfwide}[%
   Path=fonts/Barlow/Barlow Condensed/,%
   BoldFont = BarlowCondensed-Bold.ttf,%
   FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
@@ -58,9 +58,9 @@
   WordSpace=2.0,
   LetterSpace=2.0,
   FakeStretch=1.02,
-  Color=353132]
+  Color=353132]{BarlowCondensed-Regular.ttf}
 
-\babelfont{sfwider}{BarlowCondensed-Regular.ttf}[%
+\babelfont{sfwider}[%
   Path=fonts/Barlow/Barlow Condensed/,%
   BoldFont = BarlowCondensed-Bold.ttf,%
   FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
@@ -78,9 +78,9 @@
   WordSpace=2.0,
   LetterSpace=5.0,
   FakeStretch=1.02,
-  Color=353132]
+  Color=353132]{BarlowCondensed-Regular.ttf}
 
-\babelfont{sfchap}{BarlowCondensed-Regular.ttf}[%
+\babelfont{sfchap}[%
   Path=fonts/Barlow/Barlow Condensed/,%
   BoldFont = BarlowCondensed-Bold.ttf,%
   FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
@@ -98,9 +98,9 @@
   WordSpace=1.2,
   LetterSpace=2.0,
   FakeStretch=1.02,
-  Color=353132]
+  Color=353132]{BarlowCondensed-Regular.ttf}
 
-\babelfont{nsffamily}{AlegreyaSans-Regular.ttf}[%
+\babelfont{nsffamily}[%
   Path=fonts/Alegreya/Alegreya Sans/,%
   BoldFont = AlegreyaSans-Bold.ttf,%
   FontFace = {eb}{n}{AlegreyaSans-ExtraBold.ttf},
@@ -110,9 +110,9 @@
   FontFace = {sb}{n}{AlegreyaSans-Medium.ttf},
   FontFace = {sb}{it}{AlegreyaSans-MediumItalic.ttf},
   ItalicFont = AlegreyaSans-Italic.ttf,%
-  BoldItalicFont = AlegreyaSans-BoldItalic.ttf]
+  BoldItalicFont = AlegreyaSans-BoldItalic.ttf]{AlegreyaSans-Regular.ttf}
 
-\babelfont{nsfwider}{AlegreyaSans-Regular.ttf}[%
+\babelfont{nsfwider}[%
   BoldFont = AlegreyaSans-Bold.ttf,%
   FontFace = {eb}{n}{AlegreyaSans-ExtraBold.ttf},
   FontFace = {eb}{it}{AlegreyaSans-ExtraBoldItalic.ttf},
@@ -124,6 +124,6 @@
   BoldItalicFont = AlegreyaSans-BoldItalic.ttf,
   WordSpace=1.2,
   Path=fonts/Alegreya/Alegreya Sans/,
-  LetterSpace=1.2]
+  LetterSpace=1.2]{AlegreyaSans-Regular.ttf}
 
 \RequirePackage{transpect-script}
