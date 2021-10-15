@@ -2,7 +2,7 @@
 \ProvidesPackage{transcript-fonts}[2021/04/09 transcript]\relax
 
 \usepackage{fontspec}
-\setmainfont{Alegreya-Regular.ttf}[%
+\babelfont{sf}{Alegreya-Regular.ttf}[%
   Path=fonts/Alegreya/Alegreya/,%
   BoldFont = Alegreya-Bold.ttf,%
   FontFace = {eb}{n}{Alegreya-ExtraBold.ttf},
@@ -13,7 +13,7 @@
   WordSpace = 1.25,
   BoldItalicFont = Alegreya-BoldItalic.ttf]
 
-\setsansfont{BarlowCondensed-Regular.ttf}[%
+\babelfont{rm}{BarlowCondensed-Regular.ttf}[%
   Path=fonts/Barlow/Barlow Condensed/,%
   BoldFont = BarlowCondensed-Bold.ttf,%
   FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
@@ -40,7 +40,7 @@
 
 \DeclareRobustCommand{\wideText}{\addfontfeature{LetterSpace=2.0}}
 
-\newfontfamily\sfwide{BarlowCondensed-Regular.ttf}[%
+\babelfont{sfwide}{BarlowCondensed-Regular.ttf}[%
   Path=fonts/Barlow/Barlow Condensed/,%
   BoldFont = BarlowCondensed-Bold.ttf,%
   FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
@@ -60,7 +60,7 @@
   FakeStretch=1.02,
   Color=353132]
 
-\newfontfamily\sfwider{BarlowCondensed-Regular.ttf}[%
+\babelfont{sfwider}{BarlowCondensed-Regular.ttf}[%
   Path=fonts/Barlow/Barlow Condensed/,%
   BoldFont = BarlowCondensed-Bold.ttf,%
   FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
@@ -80,7 +80,7 @@
   FakeStretch=1.02,
   Color=353132]
 
-\newfontfamily\sfchap{BarlowCondensed-Regular.ttf}[%
+\babelfont{sfchap}{BarlowCondensed-Regular.ttf}[%
   Path=fonts/Barlow/Barlow Condensed/,%
   BoldFont = BarlowCondensed-Bold.ttf,%
   FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},
@@ -100,7 +100,7 @@
   FakeStretch=1.02,
   Color=353132]
 
-\newfontfamily\nsffamily{AlegreyaSans-Regular.ttf}[%
+\babelfont{nsffamily}{AlegreyaSans-Regular.ttf}[%
   Path=fonts/Alegreya/Alegreya Sans/,%
   BoldFont = AlegreyaSans-Bold.ttf,%
   FontFace = {eb}{n}{AlegreyaSans-ExtraBold.ttf},
@@ -112,7 +112,7 @@
   ItalicFont = AlegreyaSans-Italic.ttf,%
   BoldItalicFont = AlegreyaSans-BoldItalic.ttf]
 
-\newfontfamily\nsfwider{AlegreyaSans-Regular.ttf}[%
+\babelfont{nsfwider}{AlegreyaSans-Regular.ttf}[%
   BoldFont = AlegreyaSans-Bold.ttf,%
   FontFace = {eb}{n}{AlegreyaSans-ExtraBold.ttf},
   FontFace = {eb}{it}{AlegreyaSans-ExtraBoldItalic.ttf},
