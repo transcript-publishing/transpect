@@ -43,6 +43,24 @@
     \tpIfComp{Number}{\tpUseComp{Number}\space}{}%
     \tpUseComp{Title}%
     \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
+    %% Zitat
+    \tpIfComp{Quote}{%
+      \vskip2\baselineskip
+      \savenotes
+      \hfill\hbox{\vbox{%
+          \rightskip\z@
+          \hsize.5\textwidth
+          \normalfont
+          \normalsize
+          \nsfwiderfamily
+          \tpUseComp{Quote}\par
+          %% Zitat-Quelle
+          \tpIfComp{QuoteSource}{%
+            {\itshape
+            \tpUseComp{QuoteSource}}}{}}}%
+      \spewnotes
+      \vskip-2\baselineskip
+    }{}%
   }%
   \tpSetProperty{after-heading-block}{\vfill}%
   %% ToC
@@ -52,20 +70,16 @@
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}%
-    \tpUseComp{TocTitle}}%
+    \tpUseComp{TocTitle}\nobreak}%
   \tpSetProperty{toc-before-entry}{%
     \addvspace{\tpUseProperty{toc-margin-top}}
     \parindent \z@
     \hyphenpenalty=\@M
-    \ifcollection
-      \parfillskip -\rightskip
-      \centering
-    \else
-      \let\\\@centercr
-      \rightskip\z@skip\relax
-      \parfillskip\@flushglue
-    \fi
+    \let\\\@centercr
+    \rightskip\z@skip\relax
+    \parfillskip\@flushglue
   }%
+  \tpSetProperty{toc-after-entry}{\par\nobreak\addvspace{\tpUseProperty{toc-margin-bottom}}}% Thing at the end of the entry, after the page number
 }
 
 \tpDeclareHeading{0}{chapter}{%
