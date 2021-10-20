@@ -23,47 +23,47 @@
       #1%
     \egroup}
 
-\newif\if@enotesopen
-\ifendnotes
-  \RequirePackage{endnotes}
-  \let\footnote=\endnote
-  \def\enotesize{\normalsize}%
-  \def\enoteformat{\leavevmode\hskip-2em\hb@xt@2em{\@theenmark\hss}}%
-  \def\enoteheading{%
-    \ifcollection
-      \ifx\endnotes@per@chapter\relax
-        \chapter*{\notesname}%
-        \ifx\noendnotetoc\@undefined
-          \addcontentsline{toc}{chapter}{\notesname}%
-        \fi
-      \else
-        \section*{\notesname}%
-        \ifx\noendnotetoc\@undefined
-          \addcontentsline{toc}{chapter}{\notesname}%
-        \fi
-      \fi
-    \else
-      \chapter*{\notesname}%
-      \ifx\noendnotetoc\@undefined
-        \addcontentsline{toc}{chapter}{\notesname}%
-      \fi
-    \fi
-    \leftskip2em
-  }%
-  \def\printnotes{%
-    \ifx\endnotes@per@chapter\relax
-      \ifnum\c@endnote>\z@
-        \expandafter\global\expandafter\let\csname enotes@in@\the\realchap\endcsname\@empty
-      \fi
-    \fi
-    \if@enotesopen
-      \global\c@endnote\z@%
-      \bgroup
-      \parindent\z@
-      \parskip\z@
-      \theendnotes
-      \egroup
-    \fi}
-\else
-  \let\printnotes\relax
-\fi
+% \newif\if@enotesopen
+% \ifendnotes
+%   \RequirePackage{endnotes}
+%   \let\footnote=\endnote
+%   \def\enotesize{\normalsize}%
+%   \def\enoteformat{\leavevmode\hskip-2em\hb@xt@2em{\@theenmark\hss}}%
+%   \def\enoteheading{%
+%     \ifcollection
+%       \ifx\endnotes@per@chapter\relax
+%         \chapter*{\notesname}%
+%         \ifx\noendnotetoc\@undefined
+%           \addcontentsline{toc}{chapter}{\notesname}%
+%         \fi
+%       \else
+%         \section*{\notesname}%
+%         \ifx\noendnotetoc\@undefined
+%           \addcontentsline{toc}{chapter}{\notesname}%
+%         \fi
+%       \fi
+%     \else
+%       \chapter*{\notesname}%
+%       \ifx\noendnotetoc\@undefined
+%         \addcontentsline{toc}{chapter}{\notesname}%
+%       \fi
+%     \fi
+%     \leftskip2em
+%   }%
+%   \def\printnotes{%
+%     \ifx\endnotes@per@chapter\relax
+%       \ifnum\c@endnote>\z@
+%         \expandafter\global\expandafter\let\csname enotes@in@\the\realchap\endcsname\@empty
+%       \fi
+%     \fi
+%     \if@enotesopen
+%       \global\c@endnote\z@%
+%       \bgroup
+%       \parindent\z@
+%       \parskip\z@
+%       \theendnotes
+%       \egroup
+%     \fi}
+% \else
+%   \let\printnotes\relax
+% \fi
