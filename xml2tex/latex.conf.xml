@@ -97,8 +97,9 @@
                                  else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  if(exists($other-scripts-in-doc))
-                                 then concat(',usescript=',
-                                             string-join($other-scripts-in-doc, ','))
+                                 then concat(',usescript={',
+                                             string-join($other-scripts-in-doc, ','), 
+                                             '}')
                                  else (),
                                  ']{transcript}&#xa;')"/>
     
