@@ -16,7 +16,8 @@
                                  ',article',
                                  ',lay=',
                                  lower-case($layout),
-                                 xml2tex:foreign-scripts(root()),
+                                 for $i in $other-scripts-in-doc
+                                 return concat(',usescript=', $i),
                                  ']{transcript}&#xa;')"/>
     \definecolor{color-1}{rgb}{0,0,0}
     \definecolor{color-2}{rgb}{0.85,0.85,0.85}
@@ -43,7 +44,7 @@
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
   
-<!--  <template context="dbk:dedication[@role eq 'tsded']">
+  <template context="dbk:dedication[@role eq 'tsded']">
     <rule name="wid" type="env"  break-after="1" break-before="1">
       <param/>
     </rule>
@@ -59,6 +60,6 @@
     <rule name="def\partmarkoverride" type="cmd" break-after="1" break-before="1">
       <param/>
     </rule>
-  </template>-->
+  </template>
   
 </set>
