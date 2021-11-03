@@ -50,4 +50,6 @@
   
   <xsl:template match="caption[preceding-sibling::*[1][self::figure]]" mode="custom-1"/>
 
+  <xsl:template match="*[self::table | self::informaltable]/@css:padding-left | *[self::table | self::informaltable]/@css:padding-right" mode="hub:clean-hub"/>
+  
 </xsl:stylesheet>
