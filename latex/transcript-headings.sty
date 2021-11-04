@@ -37,10 +37,13 @@
 
 \tpDeclareHeading{-1}{part}{%
   \tpSetProperty{before-heading}{\cleardoublepage\null\vskip\headingsep\thispagestyle{empty}}%
-  \tpSetProperty{title-format}{\HUGE\sffamily\sbseries}%
+  \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
+  \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
+  \tpSetProperty{title-format}{\sffamily\sbseries\HUGE}%
   \tpSetProperty{heading-block}{%
     \tpUseProperty{title-format}%
-    \tpIfComp{Number}{\tpUseComp{Number}\space}{}%
+    \vskip.5\baselineskip
+    \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
     \tpUseComp{Title}%
     \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
     %% Zitat
@@ -84,10 +87,9 @@
 
 \tpDeclareHeading{0}{chapter}{%
   \tpSetProperty{before-heading}{\cleardoublepage\null\vskip\headingsep\vskip-.45mm\relax}%
-  \tpSetProperty{after-heading-block}{\vskip1.68\baselineskip}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
   \tpSetProperty{toc-margin-right}{2em}%
-  \tpSetProperty{after-skip}{2\baselineskip}%
+  \tpSetProperty{after-skip}{1.68\baselineskip}%
   \tpSetProperty{heading-block}{%
     %% Titel
     \thispagestyle{empty}%
@@ -110,11 +112,12 @@
     \tpIfComp{Author}{%
       \vskip\baselineskip
       {\large\sfwidefamily\itshape\tpUseComp{Author}}%
-      \par\vskip\baselineskip
+      \par%\vskip\baselineskip
     }{}%
     %% Zitat
+    \par
     \tpIfComp{Quote}{%
-      \vskip2\baselineskip
+      \vskip\baselineskip
       \savenotes
       \hfill\hbox{\vbox{%
           \rightskip\z@
@@ -128,7 +131,6 @@
             {\itshape
             \tpUseComp{QuoteSource}}}{}}}%
       \spewnotes
-      \vskip-2\baselineskip
     }{}%
   }%
   %% Format Kolumnentitel
@@ -142,7 +144,7 @@
   %% Format IHV-Eintrag
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-title-format}{\sbseries\sffamily}%
+  \tpSetProperty{toc-title-format}{\sbseries\sfwidefamily\ifcollection\Large\fi}%
   \tpSetProperty{toc-subtitle-format}{\normalfont\sffamily}%
   \tpSetProperty{toc-indent}{2em}%
   \tpSetProperty{toc-margin-left}{2em}%
@@ -153,7 +155,7 @@
       {\leftskip\z@}%
     \tpUseComp{TocTitle}%
     \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
-    \tpIfComp{TocAuthor}{\newline{\normalfont\sffamily\itshape\tpUseComp{TocAuthor}}}{}%
+    \tpIfComp{TocAuthor}{\newline{\normalfont\sffamily\itshape\normalsize\tpUseComp{TocAuthor}}}{}%
     \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
   }%
   %% Format PDF-Bookmarks
