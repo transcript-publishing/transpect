@@ -84,11 +84,13 @@
                                               $babel-langs[1]), (: 1st lang is main lang and comes last :)
                                  ','),
                                  ',',
-                                 if($is-collection) then 'collection' else 'book',
+                                 if($is-collection) then 'pubtype=collection' else (),
                                  if($notes-per-chapter = ('yes', 'true') or $notes-type = 'footnotes') then ',resetnotesperchapter' else (),
                                  if($notes-type eq 'endnotes' and $endnotes-with-chapter eq 'yes')  
-                                  then ',endnoteswithchapters'
-                                  else if($notes-type eq 'endnotes') then ',endnotes' else (),
+                                                                     then ',endnoteswithchapters'
+                                 else if($notes-type eq 'endnotes') 
+                                                                     then ',endnotes' 
+                                 else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  xml2tex:foreign-scripts(root()),
                                  ']{transpect}&#xa;')"/>
