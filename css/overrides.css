@@ -307,3 +307,16 @@ nav {display:none;}
   width:100%;
 }
 /*hi :)*/
+
+div.tsboxgrey, div.tsboxborder { 
+  margin: 1em 0em; 
+  padding:0.75em;
+}
+
+div.tsboxgrey{ 
+  background-color:rgb(0,0,0,0.15);
+}
+
+div.tsboxborder { 
+  border:1px solid black;
+}
