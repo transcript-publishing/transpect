@@ -314,7 +314,7 @@ div.tsboxgrey, div.tsboxborder {
 }
 
 div.tsboxgrey{ 
-  background-color:rgb(0,0,0,0.15);
+  background-color:#ccc;
 }
 
 div.tsboxborder { 
