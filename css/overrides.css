@@ -324,3 +324,16 @@ p.copyright {margin-bottom:1em; font-weight:bold;}
 p.copyright, p.umschlaggestaltung {margin-top:1em;}
 
 div.lizenzlogo img { height:2em}
+
+div.tsboxgrey, div.tsboxborder { 
+  margin: 1em 0em; 
+  padding:0.75em;
+}
+
+div.tsboxgrey{ 
+  background-color:#ccc;
+}
+
+div.tsboxborder { 
+  border:1px solid black;
+}
