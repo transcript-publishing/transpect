@@ -54,7 +54,9 @@
   <css:rule layout-type="inline" native-name="ts_superscript" name="tssuperscript"/>
   <css:rule layout-type="inline" native-name="Hyperlink" name="Hyperlink"/>
   <css:rule layout-type="object" native-name="ts_box_grey" name="tsboxgrey"/>
+  <css:rule layout-type="object" native-name="ts_box_border" name="tsboxborder"/>
   <css:rule layout-type="object" native-name="ts_figure" name="tsfigure"/>
+  <css:rule layout-type="object" native-name="ts_dummy" name="tsdummy"/>
 
 
 </css:rules>
