@@ -12,9 +12,10 @@
   <xsl:variable name="subtitle" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Untertitel']" as="element(dbk:keyword)?"/>
   <xsl:variable name="editors" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Herausgeber']" as="element(dbk:keyword)*"/>
   <xsl:variable name="authors" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Autor']" as="element(dbk:keyword)*"/>
+  <xsl:variable name="authorinfo" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Autoreninformationen']" as="element(dbk:keyword)*"/>
   <xsl:variable name="edition" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Reihe']" as="element(dbk:keyword)*"/>
   <xsl:variable name="volumenum" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Bandnummer']" as="element(dbk:keyword)*"/>
-  
+  <xsl:variable name="editorial" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Editorial']" as="element(dbk:keyword)*"/>
   <xsl:variable name="print-isbn" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Print-ISBN']" as="element(dbk:keyword)?"/>
   <xsl:variable name="pdf-isbn" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'PDF-ISBN']" as="element(dbk:keyword)?"/>
   <xsl:variable name="epub-isbn" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'ePUB-ISBN']" as="element(dbk:keyword)?"/>
@@ -37,6 +38,8 @@
                 select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Reihenlogo']"/>
   <xsl:variable name="editorial" as="xs:string?" 
                 select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Editorial']"/>
+  <xsl:variable name="author" as="xs:string?" 
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Autor']"/>
   <xsl:variable name="author-info" as="xs:string?" 
                 select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Autoreninformationen']"/>
   <xsl:variable name="website" as="xs:string?" 
@@ -118,18 +121,20 @@
         <xsl:for-each select="$editors">
           <xsl:value-of select="concat('&#xa;\editor{', normalize-space(.), '}&#xa;')"/>
         </xsl:for-each>
-        <xsl:for-each select="$authors">
-          <xsl:value-of select="concat('&#xa;\authorinfo{', normalize-space(dbk:personname/dbk:othername), '}',
-                                       if(dbk:personblurb) then concat('{', dbk:personblurb, '}') else '',
-                                       '&#xa;')"/>
-        </xsl:for-each>
-        <xsl:if test="$abstract">
-          <xsl:text>&#xa;\editorial{</xsl:text>
-          <xsl:apply-templates select="$abstract" mode="#current"/>
-          <xsl:text>}&#xa;</xsl:text>
+        <xsl:if test="$author">
+          <xsl:value-of select="concat('&#xa;\author{', normalize-space($author), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$author-info">
+          <xsl:value-of select="concat('&#xa;\authorinfo{}{', normalize-space($author-info), '}&#xa;')"/>
         </xsl:if>
         <xsl:if test="$edition">
           <xsl:value-of select="concat('&#xa;\edition{', normalize-space($edition), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$volumenum">
+          <xsl:value-of select="concat('&#xa;\volume{', normalize-space($volumenum), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="$editorial">
+          <xsl:value-of select="concat('&#xa;\editorial{', normalize-space($editorial), '}&#xa;')"/>
         </xsl:if>
         <xsl:if test="$print-isbn">
           <xsl:value-of select="concat('&#xa;\isbn{', $print-isbn, '}&#xa;')"/>
