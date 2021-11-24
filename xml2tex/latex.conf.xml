@@ -66,11 +66,11 @@
   <xsl:variable name="lectorate" as="xs:string?" 
                 select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Lektorat']"/>
   <xsl:variable name="translator" as="xs:string?" 
-                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Übersetzer']"/>
-  <xsl:variable name="grantlogo" as="xs:string?" 
-                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Förderlogo']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Ubersetzer']"/>
+  <xsl:variable name="grantlogo" as="xs:string*" 
+                select="tokenize(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Forderlogos'], '\p{Zs}+')"/>
   <xsl:variable name="granttext" as="xs:string?" 
-                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Fördertext']"/>
+                select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Fordertext']"/>
   
   <xsl:variable name="new-common"                 select="true()" as="xs:boolean"/>
   <xsl:variable name="create-customer-toctitles"  select="true()" as="xs:boolean"/>
@@ -87,8 +87,7 @@
                                  string-join(($babel-langs[position() ne 1],
                                               $babel-langs[1]), (: 1st lang is main lang and comes last :)
                                  ','),
-                                 ',',
-                                 if($is-collection) then 'pubtype=collection' else (),
+                                 if($is-collection) then ',pubtype=collection' else (),
                                  if($notes-per-chapter = ('yes', 'true') or $notes-type = 'footnotes') then ',resetnotesperchapter' else (),
                                  if($notes-type eq 'endnotes' and $endnotes-with-chapter eq 'yes')  
                                                                      then ',endnoteswithchapters'
@@ -135,6 +134,9 @@
                                                         then concat('\includegraphics{', $series-logo, '}')
                                                         else normalize-space($series),
                                                      '}&#xa;')"/>
+        </xsl:if>
+        <xsl:if test="some $gl in $grantlogo satisfies $gl[normalize-space()]">
+          <xsl:value-of select="concat('&#xa;\grantlogo{', string-join(for $g in $grantlogo[normalize-space()] return concat('\includegraphics{', replace(normalize-space($g), '^.+/', ''), '} '), ''),'}')"/>
         </xsl:if>
         <xsl:if test="$volumenum">
           <xsl:value-of select="concat('&#xa;\volume{', normalize-space($volumenum), '}&#xa;')"/>
