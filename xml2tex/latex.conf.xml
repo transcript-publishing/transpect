@@ -8,7 +8,7 @@
   
   <xsl:variable name="is-collection" select="matches($basename,  'ts_[a-z]{3}_anth_')" as="xs:boolean"/>
 
-  <xsl:variable name="title" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Titel']" as="element(dbk:keyword)?"/>
+  <xsl:variable name="title" select="(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Titel'][not(. = 'Fallback')], /dbk:hub/dbk:info/dbk:title)[1]" as="element(*)?"/>
   <xsl:variable name="subtitle" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Untertitel']" as="element(dbk:keyword)?"/>
   <xsl:variable name="editors" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Herausgeber']" as="element(dbk:keyword)*"/>
   <xsl:variable name="authors" select="/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Autor']" as="element(dbk:keyword)*"/>
@@ -111,7 +111,7 @@
     <xsl:if test="$langs = 'zh'">
       <xsl:value-of select="'\usepackage{CJK}&#xa;'"/>
     </xsl:if>
-    <xsl:value-of select="concat('&#xa;\title{', (normalize-space($title), 'Haupttitel')[1], '}&#xa;')"/>
+    <xsl:value-of select="concat('&#xa;\title{', normalize-space($title), '}&#xa;')"/>
     <xsl:choose>
       <xsl:when test="$title-pages eq 'yes'">
         <xsl:if test="$subtitle">
@@ -188,9 +188,6 @@
           <xsl:value-of select="concat('&#xa;\thanks{', normalize-space($funder), '}&#xa;')"/>
         </xsl:if>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>\title{}&#xa;</xsl:text>      
-      </xsl:otherwise>
     </xsl:choose>
     <!-- global part/chapter/section numbering -->
     <!--<xsl:value-of select="concat('\setcounter{secnumdepth}{', 
@@ -652,6 +649,8 @@
   
   <template context="dbk:title[matches(@role, $general-heading-style)]/dbk:tab[preceding-sibling::dbk:phrase[@role eq 'hub:identifier']]"/>
 
+  <xsl:variable name="col-author-style" select="'^[a-z]{1,3}headline(author)$'" as="xs:string"/>
+
   <template name="col-titles">
     <!-- use col-style para for runtitle. if it doesn't exist and heading contains footnotes or linebreaks:
          discard those and use as column title. otherwise do not create an element-->
@@ -659,29 +658,31 @@
 <!--    <xsl:choose>
       <xsl:when test="$is-collection">-->
 <!--        links: tpAuthor/tpRunAuthor, wenn es den nicht gibt: \tp(Run)Title | Rechts: \tp(Run)Title-->
-        <xsl:if test="dbk:abbrev[matches(@role, $col-head-left-style)] or dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]">
+        <xsl:if test="dbk:abbrev[matches(@role, $col-author-style)] or dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]">
           <rule name="tpRunAuthor" type="cmd" break-before="1">
-            <param select="(dbk:abbrev[matches(@role, $col-head-left-style)], dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]])[1]/node()
-              [not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+            <param select="(dbk:abbrev[matches(@role, $col-author-style)], 
+                            dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]
+                            )[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
             </param>
           </rule>
         </xsl:if>
-        <xsl:if test="dbk:abbrev[matches(@role, $col-head-right-style)] or dbk:title[descendant::*[self::dbk:footnote]]">
+        <xsl:if test="dbk:abbrev[matches(@role, $col-head-style)] or dbk:title[descendant::*[self::dbk:footnote]]">
           <rule name="tpRunTitle" type="cmd" break-before="1">
-            <param select="dbk:title/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+            <param select="(dbk:abbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
             </param>
           </rule>
         </xsl:if>
-        <xsl:if test="(dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:abbrev[matches(@role, $col-head-left-style)]))
+        <xsl:if test="(dbk:title[descendant::*[self::dbk:footnote]]/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:abbrev[matches(@role, $col-head-style)]))
                       or 
-                      dbk:abbrev[matches(@role, $col-head-left-style)][dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
+                      dbk:abbrev[matches(@role, $col-head-style)][dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
           <rule name="tpRunNumber" type="cmd" break-before="1">
-            <param select="(dbk:abbrev[matches(@role, $col-head-left-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')],
-                            dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')])[1]/node()">
+            <param select="if (dbk:abbrev[matches(@role, $col-head-style)][dbk:phrase[@role = ('identifier', 'hub:identifier')]])
+                           then dbk:abbrev[matches(@role, $col-head-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()
+                           else dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()">
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
             </param>
