@@ -11,27 +11,50 @@
 \def\ps@headings{%
   \def\left@mark{%
     \def\numberline####1{####1\enskip}%
-    \ifcollection
-      \ifx\authormark\@empty
-        \ifx\@chaptermark\@undefined\else
-          \@chaptermark
+    \ifx\@chaptername\contentsname\else
+      \ifx\has@parts\relax
+        \ifx\@partmark\@undefined
+          \@title
+        \else
+          \ifx\@chaptermark\@undefined
+            \@title
+          \else
+            \@partmark
+          \fi
         \fi
       \else
-        \authormark
-      \fi
-    \else
-      \ifx\@partmark\@undefined
-        \@title
-      \else
-        \@partmark
+        \ifcollection
+          \@authormark
+        \else
+          \@title
+        \fi
       \fi
     \fi
   }%
   \def\right@mark{%
     \def\numberline####1{####1\enskip}%
-    \ifx\@chaptermark\@undefined\else
-      \@chaptermark
-    \fi}%
+    \ifx\@chaptername\contentsname\else
+      \ifx\has@parts\relax
+        \ifcollection
+          \ifx\@authormark\@empty
+          \else
+            \@authormark:
+          \fi
+        \fi
+        \ifx\@partmark\@undefined
+          \@chaptermark
+        \else
+          \ifx\@chaptermark\@undefined
+            \@partmark
+          \else
+            \@chaptermark
+          \fi
+        \fi
+      \else
+        \@chaptermark
+      \fi
+    \fi
+  }%
   \def\@oddhead{\hfill{\small\sffamily\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
       % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     }}%

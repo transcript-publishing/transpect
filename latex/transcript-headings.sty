@@ -36,7 +36,14 @@
 }
 
 \tpDeclareHeading{-1}{part}{%
-  \tpSetProperty{before-heading}{\cleardoublepage\null\vskip\headingsep\thispagestyle{empty}}%
+  \tpSetProperty{before-heading}{%
+    \cleardoublepage
+    \null\vskip\headingsep
+    \thispagestyle{empty}%
+    \global\let\@chaptermark\@undefined
+    \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
+    \ifcollection \global\let\@authormark\@empty\fi
+  }%
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{title-format}{\sffamily\sbseries\HUGE}%
@@ -136,8 +143,8 @@
   %% Format Kolumnentitel
   \tpSetProperty{running-extra}{%
     \tpIfComp{RunAuthor}
-      {\protected@xdef\authormark{\tpUseComp{RunAuthor}}}
-      {\global\let\authormark\@empty}%
+      {\protected@xdef\@authormark{\tpUseComp{RunAuthor}}}
+      {\global\let\@authormark\@empty}%
   }%
   \tpSetProperty{running-heading}{%
     \tpIfComp{RunNumber}{\tpUseComp{RunNumber}\enskip}{}\tpUseComp{RunTitle}}%
@@ -589,13 +596,13 @@
     \fi
   }%
   \vskip\dimexpr-1\baselineskip\relax\smash{\rlap{\lower3.5mm\vbox{\rule{\textwidth}{.4\p@}}}}\par%
-  \global\let\authormark\@empty
+  \global\let\@authormark\@empty
   % \ifcollection
     \ifx\@author\@empty\else
       \bgroup\large
         \vskip\baselineskip
         \sfwidefamily\itshape\@author%
-        \xdef\authormark{\@author}%
+        \xdef\@authormark{\@author}%
       \egroup
     \fi
   % \fi
