@@ -41,6 +41,7 @@
     \null\vskip\headingsep
     \thispagestyle{empty}%
     \global\let\@chaptermark\@undefined
+    \global\let\has@parts\relax
     \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
     \ifcollection \global\let\@authormark\@empty\fi
   }%
