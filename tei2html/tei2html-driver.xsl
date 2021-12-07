@@ -503,6 +503,10 @@
     </xsl:attribute>
   </xsl:template>
 
+  <xsl:template match="*:blockquote//*:p[matches(@class,'tsquotation')]/@class" mode="clean-up">
+    <!--https://redmine.le-tex.de/issues/11749-->
+  </xsl:template>
+
   <xsl:template match="abstract" mode="tei2html"/>
 
   <xsl:template match="*:header/abstract" mode="tei2html" priority="2">
