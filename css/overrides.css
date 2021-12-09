@@ -152,34 +152,34 @@ p.note, p.endnote {
   font-size:0.9em;
   margin-left:1.5em;
 }
-a.footnote-marker, a.endnote-marker { 
+a.fn-m, a.en-m { 
   float:left; 
   width:1.5em; 
   margin-left:-1.5em; 
   vertical-align:top;
   display:inline-block;
 }
-a.footnote-marker.large, a.endnote-marker.large { 
+a.fn-m.large, a.en-m.large { 
   width:2.5em; 
   margin-left:-2.5em;
 }
-span.footnote-text {
+span.fn-t {
   margin-top:0;
   margin-left:1.5em;
   vertical-align:top;
   padding-left:0.5em;
   display:block;
 }
-span.footnote-text.next.narrow { 
+span.fn-t.next.narrow { 
   margin-left:1.5em;
 }
-span.footnote-text.next.large { 
+span.fn-t.next.large { 
   margin-left:2.5em;
 }
-span.footnote-text.next { 
+span.fn-t.next { 
   text-indent:1em;
 }
-span.footnote-p { 
+span.fn-p { 
   display:block
 }
 /* 
@@ -306,7 +306,24 @@ nav {display:none;}
 #epub-cover-image-container img{
   width:100%;
 }
-/*hi :)*/
+/* title pages :)*/
+
+section.fulltitle {
+  padding-top:2em;
+}
+p.widmung{ padding-top:20%; }
+p.kurztext{ 
+  margin-top:3em;
+  text-indent:0;
+}
+section.title-page p.autor { font-family:'roboto', sans-serif; margin-bottom:3em; font-weight:normal;}
+h1.titel { font-weight:normal;}
+h2.untertitel { font-weight:normal; font-size:1em; }
+
+p.copyright {margin-bottom:1em; font-weight:bold;}
+p.copyright, p.umschlaggestaltung {margin-top:1em;}
+
+div.lizenzlogo img { height:2em}
 
 div.tsboxgrey, div.tsboxborder { 
   margin: 1em 0em; 
