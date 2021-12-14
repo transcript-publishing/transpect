@@ -125,7 +125,6 @@
         <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
         <xsl:text>\end{tpEditor}&#xa;</xsl:text>
       </xsl:for-each>
-      <xsl:text>\end{tpMeta}</xsl:text>
       <xsl:if test="$title">
         <xsl:value-of select="concat('&#xa;\tpTitle{', $title, '}&#xa;')"/>
       </xsl:if>
@@ -188,6 +187,7 @@
         <xsl:value-of select="concat('&#xa;\thanks{', normalize-space($funder), '}&#xa;')"/>
       </xsl:if>
     </xsl:if>
+    <xsl:text>\end{tpMeta}</xsl:text>
     <xsl:for-each select="//dbk:index">
       <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
       <xsl:value-of select="concat('\newindex{', $index-index, '}{', $index-index, '_idx}{', $index-index, '_ind}{}&#xa;')"/>
