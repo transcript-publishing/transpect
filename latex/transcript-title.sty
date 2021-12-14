@@ -2,47 +2,138 @@
 \ProvidesPackage{transcript-title}[2021/04/09 transcript]\relax
 
 \tpDeclareTitlepage{%
+  \tpSetProperty{before-titlepage-roman}{%
+    \setcounter{page}{1}%
+    \def\thepage{\roman{page}}%
+    \def\UrlFont{\rmfamily}%
+    \fontsize{9.3}{11}\selectfont
+  }%
   \tpSetProperty{titlepage-i}{%
     \ifcollection
       \tpUseComp{EditorString}%
     \else
       \tpUseComp{AuthorNameList}%
     \fi%
-    \vskip\baselineskip
+    \par
     \tpUseComp{Title}%
+    \par\vfill
+    \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\tpUseComp{EditionNote}}}{}
+    \tpIfComp{Volume}{{\enskip\lower.5\dp\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip\tpUseComp{Volume}}}{}
   }%
   \tpSetProperty{titlepage-ii}{%
+    \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
+    \tpGetComp{Editorial}%
     \null
     \vfill
     \tpUseProperty{bio-block}%
   }%
   \tpSetProperty{titlepage-iii}{%
-    \ifcollection
+    {\Large\sffamily\ifcollection
       \tpUseComp{EditorString}%
     \else
       \tpUseComp{AuthorNameList}%
-    \fi%
+    \fi}%
     \par
-    \tpUseComp{Title}\par
-    \tpGetComp{Subtitle}%
+    \vskip5bp
+    {{\sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{Title}}%
+      \tpIfComp{Subtitle}{%
+        \par
+        \sffamily\vskip5bp
+        \Large
+        \tpUseComp{Subtitle}}{}}%
+    \par
     \vskip\baselineskip
-    \tpGetComp{Edition}%
-    \tpGetComp{EditionNote}%
     \vfill
+    \tpIfComp{PubLogo}{\includegraphics{\tpUseComp{Logo}}}{}
     \clearpage
   }%
   \tpSetProperty{titlepage-iv}{%
-    \null
     \tpUseProperty{funding-block}%
     \vfill
+    \tpUseProperty{imprint-format}%
+    \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
+    \tpUseProperty{licence}%
+    \vskip2\baselineskip
     \bgroup
-      \tpUseProperty{imprint-format}%
-      \tpGetComp{Biblio}%
-      \tpUseProperty{imprint-sep}%
       \tpUseProperty{imprint}%
     \egroup
     \clearpage
   }%
+  %% Format Verlagsangaben
+  \tpSetProperty{publisher}{%
+    \tpGetComp{PubDivInfo}%
+    \tpUseProperty{copyright}%
+  }%
+  %% Format Copyright-Zeile
+  \tpSetProperty{copyright}{%
+    \tpIfComp{Copyright}
+    {\tpUseComp{Copyright}\par}
+    {{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
+    \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}%
+  }
+  %% Format Impressum
+  \tpSetProperty{imprint}{%
+    \tpUseProperty{publisher}%
+    \tpUseProperty{imprint-sep}
+    \tpGetComp{Qualification}%%
+    \tpGetComp{Conversion}%%
+    \tpGetComp{CoverDesign}%%
+    \tpGetComp{CoverImage}%%
+    \tpGetComp{Lectorate}%%
+    \tpGetComp{QA}%%
+    \tpGetComp{Translator}%%
+    \tpGetComp{Appraiser}%%
+    \tpGetComp{Discussion}%%
+    \tpGetComp{Typesetter}%%
+    \tpGetComp{Print}%%
+    \tpGetComp{DOI}%%
+    \tpGetComp{Keywords}%%
+    \tpGetComp{ISBN}%
+    \tpGetComp{EpubPreText}%
+    \tpGetComp{EISBN}%
+    \tpGetComp{EpubISBN}%
+    \tpUseProperty{imprint-sep}%
+    \tpGetComp{EnvDisclaimer}%
+  }%
+  %% Format Biographien
+  \tpSetProperty{imprint-format}{%
+    \leftskip\z@skip
+    \rightskip\z@skip
+    \parfillskip\@flushglue
+    }%
+  \tpSetProperty{name-meta-format}{%
+    {\sbseries\tpUseComp{FullName}}\space%
+    \tpUseComp{Bio}\par%
+    \tpUseProperty{counted-meta-sep}%
+  }
+  %% Format CC-Lizenz
+  \tpSetProperty{licence}{%
+    \bgroup
+      \tpIfComp{LicenceLogo}{%
+        \fontsize{8.5}{10}\selectfont
+        \vskip.5\baselineskip
+        \includegraphics{\tpUseComp{LicenceLogo}}\par\vskip1mm}{}%
+      \tpGetComp{LicenceText}%
+    \egroup
+  }
+  %% Format Förderer-Logos
+  \tpSetProperty{fund-sep}{\hskip2mm}% horiz. Abstand zwischen Fördererlogos
+  \tpSetProperty{fund-format}{%
+    \setbox\z@\hbox{\includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}}%
+    \vtop{\hsize\wd\z@\tpIfComp{FundName}{\tpUseComp{FundName}\par\vskip2mm}{\strut\par}%
+      \box\z@}%
+    \tpUseProperty{fund-sep}%
+  }%
+  \tpSetProperty{funding-block}{%
+    \bgroup
+      \rightskip\@flushglue
+      \leavevmode
+      \tpGetComp{FundingPreText}%
+      \tpGetComp{FundingBlock}%
+      \tpGetComp{FundingPostText}%
+      \par
+    \egroup
+  }
 }
 
 
