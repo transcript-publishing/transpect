@@ -1,6 +1,52 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-title}[2021/04/09 transcript]\relax
 
+\tpDeclareTitlepage{%
+  \tpSetProperty{titlepage-i}{%
+    \ifcollection
+      \tpUseComp{EditorString}%
+    \else
+      \tpUseComp{AuthorNameList}%
+    \fi%
+    \vskip\baselineskip
+    \tpUseComp{Title}%
+  }%
+  \tpSetProperty{titlepage-ii}{%
+    \null
+    \vfill
+    \tpUseProperty{bio-block}%
+  }%
+  \tpSetProperty{titlepage-iii}{%
+    \ifcollection
+      \tpUseComp{EditorString}%
+    \else
+      \tpUseComp{AuthorNameList}%
+    \fi%
+    \par
+    \tpUseComp{Title}\par
+    \tpGetComp{Subtitle}%
+    \vskip\baselineskip
+    \tpGetComp{Edition}%
+    \tpGetComp{EditionNote}%
+    \vfill
+    \clearpage
+  }%
+  \tpSetProperty{titlepage-iv}{%
+    \null
+    \tpUseProperty{funding-block}%
+    \vfill
+    \bgroup
+      \tpUseProperty{imprint-format}%
+      \tpGetComp{Biblio}%
+      \tpUseProperty{imprint-sep}%
+      \tpUseProperty{imprint}%
+    \egroup
+    \clearpage
+  }%
+}
+
+
+%% LEGACY:
 \def\@tempa{%
   \def\lectoratename{Lectorate: }%
   \def\qualificationname{Qualification: }%
@@ -76,6 +122,7 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
   \def\@biblioInfo{\biblioinfoname}%
   \if!#1!\else\def\@biblioInfo{#1}\fi} \biblioInfo{}
 \def\publ#1{\def\@publ{#1}} \publ{transcript Verlag}
+\def\series#1{\def\@series{#1}} \series{}
 \def\publyear#1{\def\@publyear{#1}} \publyear{2019}
 \def\place#1{\def\@place{#1}} \place{Bielefeld}
 \long\def\editorial#1{\long\def\@editorial{#1}} \editorial{}
