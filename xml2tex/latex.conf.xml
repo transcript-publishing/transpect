@@ -114,7 +114,7 @@
         <!-- authors -->
         <xsl:for-each select="$authors">
           <xsl:text>&#xa;\begin{tpAuthor}</xsl:text>
-          <xsl:value-of select="concat(&#xa;\tpFullName{', ., '}'"/>
+          <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
           <xsl:if test="$author-info">
             <xsl:value-of select="concat('&#xa;\tpBio{', normalize-space($author-info), '}&#xa;')"/>
           </xsl:if>
@@ -122,7 +122,7 @@
         </xsl:for-each>
       <xsl:for-each select="$editors">
         <xsl:text>&#xa;\begin{tpEditor}</xsl:text>
-        <xsl:value-of select="concat(&#xa;\tpFullName{', ., '}'"/>
+        <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
         <xsl:text>\end{tpEditor}&#xa;</xsl:text>
       </xsl:for-each>
       <xsl:text>\end{tpMeta}</xsl:text>
