@@ -132,7 +132,7 @@
       <xsl:if test="$subtitle">
         <xsl:value-of select="concat('&#xa;\tpSubtitle{', $subtitle, '}&#xa;')"/>
       </xsl:if>
-      <xsl:if test="$tpEdition">
+      <xsl:if test="$edition">
         <xsl:value-of select="concat('&#xa;\tpEdition{', $edition, '}&#xa;')"/>
       </xsl:if>
       <!-- https://redmine.le-tex.de/issues/10412#note-10 -->
