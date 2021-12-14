@@ -35,9 +35,10 @@
   \tpSetProperty{titlepage-ii}{%
     \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
     \tpGetComp{Editorial}%
-    \null
     \vfill
-    \tpUseProperty{bio-block}%
+    \bgroup
+      \tpUseProperty{bio-block}%
+    \egroup
   }%
   \tpSetProperty{titlepage-iii}{%
     {\Large\sffamily\ifcollection
@@ -60,17 +61,19 @@
     \clearpage
   }%
   \tpSetProperty{titlepage-iv}{%
-    \tpUseProperty{funding-block}%
-    \vfill
-    \tpUseProperty{imprint-format}%
-    \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
-    \tpUseProperty{licence}%
-    \vskip2\baselineskip
     \bgroup
-      \tpUseProperty{imprint}%
+      \tpUseProperty{funding-block}%
+      \vfill
+      \tpUseProperty{imprint-format}%
+      \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
+      \tpUseProperty{licence}%
+      \vskip2\baselineskip
+      \bgroup
+        \tpUseProperty{imprint}%
+      \egroup
     \egroup
     \clearpage
-  }%
+    }%
   %% Format Verlagsangaben
   \tpSetProperty{publisher}{%
     \tpGetComp{PubDivInfo}%
@@ -108,11 +111,7 @@
     \tpGetComp{EnvDisclaimer}%
   }%
   %% Format Biographien
-  \tpSetProperty{imprint-format}{%
-    \leftskip\z@skip
-    \rightskip\z@skip
-    \parfillskip\@flushglue
-    }%
+  \tpSetProperty{imprint-format}{}%
   \tpSetProperty{name-meta-format}{%
     {\sbseries\tpUseComp{FullName}}\space%
     \tpUseComp{Bio}\par%
@@ -129,23 +128,31 @@
     \egroup
   }
   %% Format Förderer-Logos
-  \tpSetProperty{fund-sep}{\hskip2mm}% horiz. Abstand zwischen Fördererlogos
+  \tpSetProperty{fund-vsep}{1mm}% vert. Abstand zwischen Fördererlogos
   \tpSetProperty{fund-format}{%
-    \setbox\z@\hbox{\includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}}%
-    \vtop{\hsize\wd\z@\tpIfComp{FundName}{\tpUseComp{FundName}\par\vskip2mm}{\strut\par}%
-      \box\z@}%
-    \tpUseProperty{fund-sep}%
+    \tpIfComp{FundName}
+      {\tpUseComp{FundName}\par\vskip-\parskip%% sonst doppelter Abstand
+       \includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}\par\vskip-\parskip\leavevmode}
+      {%
+        \setbox\@tempboxa\hbox{\includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}}%
+        \vbox{\hsize\wd\@tempboxa \box\@tempboxa}\hskip\z@skip%
+      }%
   }%
   \tpSetProperty{funding-block}{%
     \bgroup
-      \rightskip\@flushglue
-      \leavevmode
-      \tpGetComp{FundingPreText}%
-      \tpGetComp{FundingBlock}%
-      \tpGetComp{FundingPostText}%
-      \par
+      \tpIfComp{FundingPreText}{\tpUseComp{FundingPreText}\par}{}%
+      \bgroup
+        \raggedright
+        \lineskip\tpUseProperty{fund-vsep}% vertikaler Abstand zwischen Logos
+        \parskip\tpUseProperty{fund-vsep}%
+        \leavevmode
+        \tpUseComp{FundingBlock}\par%
+      \egroup
+      \tpIfComp{FundingPostText}{\vskip.5\baselineskip\tpUseComp{FundingPostText}\par}{}%
     \egroup
   }
+  \tpSetProperty{counted-name-sep}{\ifnum\tpCurCount<\tpTotalCount\relax,\space\fi}%
+  \tpSetProperty{editor-suffix}{\space(Hg.)}
 }
 
 
