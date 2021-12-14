@@ -2,6 +2,18 @@
 \ProvidesPackage{transcript-title}[2021/04/09 transcript]\relax
 
 \tpDeclareTitlepage{%
+  \tpSetProperty{coverpage}{%
+    \bgroup
+      \def\thepage{\@alph\c@page}%
+      \smash{\rlap{%
+          \raise\dimexpr\topskip+\headheight+\headsep+\topmargin-\paperheight\relax
+          \vtop{%
+            \hspace*{-\oddsidemargin}\relax
+            \includegraphics[width=\paperwidth,height=\paperheight]{\tpUseComp{Cover}}%
+          }}}%
+      \clearpage
+    \egroup
+  }%
   \tpSetProperty{before-titlepage-roman}{%
     \setcounter{page}{1}%
     \def\thepage{\roman{page}}%
