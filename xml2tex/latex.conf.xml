@@ -330,6 +330,7 @@
       <xsl:if test="$funder-posttext">
         <xsl:value-of select="concat('&#xa;\tpFundingPostText{', $funder-posttext, '}&#xa;')"/>
       </xsl:if>
+      <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
     <xsl:for-each select="//dbk:index">
