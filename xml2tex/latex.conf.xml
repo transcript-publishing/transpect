@@ -332,7 +332,6 @@
       </xsl:if>
       <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
     <xsl:for-each select="//dbk:index">
       <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
       <xsl:value-of select="concat('\newindex{', $index-index, '}{', $index-index, '_idx}{', $index-index, '_ind}{}&#xa;')"/>
