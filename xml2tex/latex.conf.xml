@@ -21,7 +21,10 @@
                 select="$metadata/dbk:keyword[@role eq 'Autoreninformationen']" />
   <!-- title metadata -->
   <xsl:variable name="title" 
-                select="($metadata/dbk:keyword[@role eq 'Titel'][not(. = 'Fallback')], /dbk:hub/dbk:info/dbk:title)[1]" as="element(*)?"/>
+                select="(/dbk:*/dbk:title,
+                         /dbk:*/dbk:info/dbk:title,
+                         $metadata/dbk:keyword[@role eq 'Titel'][not(. = 'Fallback')] 
+                         )[1]" as="element(*)?"/>
   <xsl:variable name="subtitle" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Untertitel']"/>
   <xsl:variable name="shorttitle" as="element(dbk:keyword)?"
@@ -149,6 +152,7 @@
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  xml2tex:foreign-scripts(root()),
                                  ']{transpect}&#xa;')"/>
+    \usepackage{htmltabs}&#xa;
     \definecolor{color-1}{rgb}{0,0,0}
     \definecolor{color-2}{rgb}{0.85,0.85,0.85}
     <xsl:for-each select="xml2tex:rgb-to-tex-color( $colors )">
@@ -162,7 +166,10 @@
     
     <xsl:if test="$langs = 'zh'">
       <xsl:value-of select="'\usepackage{CJK}&#xa;'"/>
-    </xsl:if>    
+    </xsl:if>
+    <xsl:if test="$title-pages ne 'yes' and $title">
+      <xsl:value-of select="concat('&#xa;\tpBookTitle{', $title, '}&#xa;')"/>
+    </xsl:if>
     <xsl:if test="$title-pages eq 'yes'">
       <xsl:text>&#xa;\begin{tpMeta}&#xa;</xsl:text>
         <!-- authors -->
