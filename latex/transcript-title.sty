@@ -18,7 +18,7 @@
     \setcounter{page}{1}%
     \def\thepage{\roman{page}}%
     \def\UrlFont{\rmfamily}%
-    \fontsize{9.3}{11}\selectfont
+    \fontsize{9.3}{12.5}\selectfont
   }%
   \tpSetProperty{titlepage-i}{%
     \ifcollection
@@ -29,8 +29,8 @@
     \par
     \tpUseComp{Title}%
     \par\vfill
-    \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\tpUseComp{EditionNote}}}{}
-    \tpIfComp{Volume}{{\enskip\lower.5\dp\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip\tpUseComp{Volume}}}{}
+    \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
+    \tpIfComp{Volume}{{\hskip1.5em\lower.5\dp\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\hskip1.5em\ignorespaces\tpUseComp{Volume}}}{}%
   }%
   \tpSetProperty{titlepage-ii}{%
     \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
@@ -112,6 +112,7 @@
   }%
   %% Format Biographien
   \tpSetProperty{imprint-format}{}%
+  \tpSetProperty{counted-meta-sep}{}%
   \tpSetProperty{name-meta-format}{%
     {\sbseries\tpUseComp{FullName}}\space%
     \tpUseComp{Bio}\par%
