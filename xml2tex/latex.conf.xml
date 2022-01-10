@@ -328,8 +328,10 @@
       <xsl:if test="$funder-name">
         <xsl:value-of select="concat('&#xa;\tpFundName{', $funder-name, '}&#xa;')"/>
       </xsl:if>
-      <xsl:if test="$funder-logo">
-        <xsl:value-of select="concat('&#xa;\tpFundLogo{', $funder-logo, '}&#xa;')"/>
+      <xsl:if test="exists($funder-logo)">
+        <xsl:for-each select="$funder-logo">
+          <xsl:value-of select="concat('&#xa;\tpFundLogo{', ., '}&#xa;')"/>  
+        </xsl:for-each>
       </xsl:if>
       <xsl:if test="$funder-pretext">
         <xsl:value-of select="concat('&#xa;\tpFundingPreText{', $funder-pretext, '}&#xa;')"/>
