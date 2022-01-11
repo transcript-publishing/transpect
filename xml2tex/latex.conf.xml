@@ -96,6 +96,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Satz']"/>
   <xsl:variable name="printer" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Druck']"/>
+  <xsl:variable name="used-font" as="element(dbk:keyword)?" 
+                select="$metadata/dbk:keyword[@role eq 'Schrift']"/>
   <xsl:variable name="cover-credit" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Umschlagcredit']"/>
   <xsl:variable name="cover-art" as="element(dbk:keyword)?" 
@@ -304,6 +306,9 @@
       </xsl:if>
       <xsl:if test="normalize-space($printer)">
         <xsl:value-of select="concat('&#xa;\tpPrint{', $printer, '}&#xa;')"/>
+      </xsl:if>
+      <xsl:if test="normalize-space($used-font)">
+        <xsl:value-of select="concat('&#xa;\tpUsedFont{', $used-font, '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($converter)">
         <xsl:value-of select="concat('&#xa;\tpConversion{', $converter, '}&#xa;')"/>
