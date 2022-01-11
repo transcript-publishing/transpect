@@ -28,12 +28,14 @@
     \fi%
     \par
     \tpUseComp{Title}%
+    \tpIfComp{Statement}{\par\vskip\baselineskip{\fontsize{10.5}{11}\selectfont\tpUseComp{EditionNote}}}{}%
     \par\vfill
     \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
     \tpIfComp{Volume}{{\hskip1.5em\lower.5\dp\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\hskip1.5em\ignorespaces\tpUseComp{Volume}}}{}%
   }%
   \tpSetProperty{titlepage-ii}{%
     \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
+    \tpIfComp{Acknowledgements}{{\itshape\large\tpUseComp{Acknowledgements}}\par\vskip\baselineskip}{}%
     \tpGetComp{Editorial}%
     \vfill
     \bgroup
