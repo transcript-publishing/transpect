@@ -112,6 +112,11 @@
     <p:with-option name="filename" select="/c:files/c:file/@name"/>
   </tr:file-uri>
   
+  <tr:store-debug pipeline-step="metadata/02_path">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </tr:store-debug>
+  
   <p:try name="try-load-titlepage-meta">
     <p:group>
       <p:output port="result"/>
