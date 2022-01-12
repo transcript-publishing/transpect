@@ -361,7 +361,7 @@
     </xsl:if>
     <xsl:for-each select="//dbk:index">
       <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
-      <xsl:value-of select="concat('\newindex{', $index-index, '}{', $index-index, '_idx}{', $index-index, '_ind}{}&#xa;')"/>
+      <xsl:value-of select="concat('\newindex{', $index-index, '}{', $index-index, '_idx}{', $index-index, '_ind}{', normalize-space(dbk:title), '}&#xa;')"/>
     </xsl:for-each>
   </preamble>
   
