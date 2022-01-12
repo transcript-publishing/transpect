@@ -321,7 +321,7 @@
         <xsl:value-of select="concat('&#xa;\tpCopyright{', tokenize($copyright-holder, ',')[2], '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($license-logo-href)">
-        <xsl:value-of select="concat('&#xa;\tpLicenceLogo{', 'http://this.transpect.io/', $license-logo-href, '}&#xa;')"/>
+        <xsl:value-of select="concat('&#xa;\tpLicenceLogo{', $license-logo-href, '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($license-text)">
         <xsl:value-of select="concat('&#xA;\tpLicenceText{', 
@@ -335,20 +335,27 @@
       <xsl:if test="normalize-space($license-name)">
         <xsl:value-of select="concat('&#xa;\tpLicenceName{', $license-name, '}&#xa;')"/>
       </xsl:if>
-      <!-- funding statement -->
-      <xsl:if test="normalize-space($funder-name)">
-        <xsl:value-of select="concat('&#xa;\tpFundName{', $funder-name, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="exists($funder-logo)">
-        <xsl:for-each select="$funder-logo[normalize-space()]">
-          <xsl:value-of select="concat('&#xa;\tpFundLogo{', normalize-space(.), '}&#xa;')"/>  
-        </xsl:for-each>
-      </xsl:if>
+      <!-- funding statement, \tpFundingPreText and \tpFundingPostText are placed before and
+           below one or more \begin{tpFunding} environment. One of which may contain a \tpFundName
+           and \tpFundLogo macro. Implement this according to the customer-specific metadata model.
+      -->
       <xsl:if test="normalize-space($funder-pretext)">
         <xsl:value-of select="concat('&#xa;\tpFundingPreText{', $funder-pretext, '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($funder-posttext)">
         <xsl:value-of select="concat('&#xa;\tpFundingPostText{', $funder-posttext, '}&#xa;')"/>
+      </xsl:if>
+      <xsl:if test="normalize-space($funder-name) or exists($funder-logo)">
+        <xsl:text>&#xa;\begin{tpFunding}</xsl:text>
+        <xsl:if test="normalize-space($funder-name)">
+          <xsl:value-of select="concat('&#xa;\tpFundName{', $funder-name, '}')"/>
+        </xsl:if>
+        <xsl:for-each select="$funder-logo[normalize-space()]">
+          <xsl:value-of select="concat('&#xa;\tpFundLogo{', 
+                                       replace(normalize-space(.), '^file:/+', ''), 
+                                       '}')"/>  
+        </xsl:for-each>
+        <xsl:text>&#xa;\end{tpFunding}&#xa;</xsl:text>  
       </xsl:if>
       <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
     </xsl:if>
