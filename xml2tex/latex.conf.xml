@@ -366,9 +366,14 @@
   </preamble>
   
   <front>
-    <xsl:if test="$title-pages eq 'yes'">
-      <xsl:text>\tpMaketitle&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="$title-pages eq 'yes'">
+        <xsl:text>\tpMaketitle&#xa;</xsl:text>  
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>\setcounter{page}{5}&#xa;</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:value-of select="'\setcounter{secnumdepth}{-1}&#xa;'"/>
     <xsl:value-of select="concat('\setcounter{tocdepth}{', 
                                    if(//dbk:part) 
