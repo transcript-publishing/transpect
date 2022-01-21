@@ -31,6 +31,7 @@
     \tpIfComp{Statement}{\par\vskip\baselineskip{\fontsize{10.5}{11}\selectfont\tpUseComp{EditionNote}}}{}%
     \par\vfill
     \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
+    \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
     \tpIfComp{Volume}{{\hskip1.5em\lower.5\dp\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\hskip1.5em\ignorespaces\tpUseComp{Volume}}}{}%
   }%
   \tpSetProperty{titlepage-ii}{%
@@ -76,16 +77,9 @@
     \egroup
     \clearpage
     }%
-  %% Format Verlagsangaben
-  \tpSetProperty{publisher}{%
-    \tpGetComp{PubDivInfo}%
-    \tpUseProperty{copyright}%
-  }%
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
-    \tpIfComp{Copyright}
-    {\tpUseComp{Copyright}\par}
-    {{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
+    \tpIfComp{Copyright}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}{}%
     \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}%
   }
   %% Format Impressum
