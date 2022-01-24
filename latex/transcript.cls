@@ -1816,15 +1816,13 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 \newenvironment{abstract}[1]{%
   \itshape\small
   {\bfseries #1}%
-  \par
-}{}
+  \par\noindent}{}
 
 %% abstracts
 \newenvironment{keyword}[1]{%
   \itshape\small
   {\bfseries #1}%
-  \par
-}{}
+  \par\noindent}{}
 
 
 \let\ul\uline
