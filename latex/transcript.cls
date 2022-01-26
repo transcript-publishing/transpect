@@ -1814,15 +1814,16 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
 
 %% abstracts
 \newenvironment{abstract}[1]{%
+  \vskip1\baselineskip%
   \itshape\small
-  {\bfseries #1}%
+  \if!#1!\else{\bfseries #1}\fi%
   \par\noindent}{}
 
 %% abstracts
 \newenvironment{keyword}[1]{%
-  \itshape\small
-  {\bfseries #1}%
-  \par\noindent}{}
+  \bgroup\itshape\small
+  \if!#1!\else{\bfseries #1}\fi%
+  \par\noindent}{\egroup}
 
 
 \let\ul\uline
