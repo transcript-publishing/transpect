@@ -137,6 +137,7 @@
       <xsl:apply-templates select="@*" mode="#current"/>
       <meta charset="utf-8"/>
       <xsl:apply-templates select="node()[not(self::*:meta[@name = $meta-elements/@name]) and not(self::*:link)], *:link[1], $meta-elements" mode="#current">
+        <xsl:with-param name="context" select="$context" tunnel="yes"/>
         <xsl:sort select="name()" />
         <xsl:sort select="(@name, @href)[1]" />
       </xsl:apply-templates>
@@ -160,7 +161,31 @@
   <xsl:template match="*:header[@class = 'chunk-meta-sec']/*:div[@class = 'chunk-abstract']" mode="generate-chunk-meta-tags">
     <meta name="abstract" content="{text()}"/>
   </xsl:template>
- 
+
+  <xsl:template match="*:head/*:meta[@name = 'DC.title']" mode="#default">
+    <xsl:param name="context" as="element(*)*" tunnel="yes"/>
+      <meta name="{@name}" content="{if ($context/descendant::*:header[@class = 'chunk-meta-sec'])
+                                     then $context/descendant::*[local-name() = ('h2', 'h3')][1]/@title
+                                     else @content}"/>
+  </xsl:template>
+
+  <xsl:template match="*:head/*:meta[@name = 'DC.identifier']" mode="#default">
+    <xsl:param name="context" as="element(*)*" tunnel="yes"/>
+      <meta name="{@name}" content="{if ($context/descendant::*:header[@class = 'chunk-meta-sec'][*:ul/*:li[@class ='chunk-doi']])
+                                     then replace($context/descendant::*:header[@class = 'chunk-meta-sec']/*:ul/*:li[@class ='chunk-doi'], 'https?://doi.org/', '')
+                                     else @content}"/>
+  </xsl:template>
+
+  <xsl:template match="*:head/*:meta[@name = 'DC.creator']" mode="#default">
+    <xsl:param name="context" as="element(*)*" tunnel="yes"/>
+      <meta name="{@name}" content="{if (@content[normalize-space()])
+                                     then @conten
+                                     else 
+                                        if (/*/*:body/*:section[@epub:type ='titlepage'][*:p[@class='autor']]) 
+                                        then /*/*:body/*:section[@epub:type ='titlepage'][*:p[@class='autor']]
+                                        else $context/descendant::*:p[@class = 'heading-author'][1]}"/>
+  </xsl:template>
+
   <xsl:template match="*:head/*:link[1]/@href" mode="#default">
     <!-- https://redmine.le-tex.de/issues/9545#note-8 -->
     <xsl:attribute name="{name()}" select="'/assets/css/styles.css'"/>
