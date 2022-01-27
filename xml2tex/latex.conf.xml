@@ -57,7 +57,7 @@
                 select="replace(
                                 replace($metadata/dbk:keyword[@role eq 'Reihenlogo'], '\\(.)', '$1'), 
                                 '^.*/(.+?)$',
-                                'logos/series/$1')"/>
+                                '$1')"/>
   <xsl:variable name="publisher-note" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Verlagshinweis']"/>
   <xsl:variable name="publisher-location" as="element(dbk:keyword)?"
@@ -233,7 +233,7 @@
         <xsl:value-of select="concat('&#xa;\tpPubDivInfo{', $publisher-imprint-info, '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($publisher-logo-href)">
-        <xsl:value-of select="concat('&#xa;\tpPubLogo{', $publisher-logo-href, '}&#xa;')"/>
+        <xsl:value-of select="concat('&#xa;\tpPubLogo{', 'logos/series/', $publisher-logo-href, '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($publisher-note)">
         <xsl:value-of select="concat('&#xa;\tpPubNote{', $publisher-note, '}&#xa;')"/>
@@ -329,11 +329,11 @@
         <xsl:value-of select="concat('&#xa;\tpCopyright{', tokenize($copyright-holder, ',')[2], '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($license-logo-href)">
-        <xsl:value-of select="concat('&#xa;\tpLicenceLogo{', 
+        <xsl:value-of select="concat('&#xa;\tpLicenceLogo{logos/cc/', 
                                      replace(
                                              replace($license-logo-href, '\\(.)', '$1'),
                                              '^.*/(.+?)$',
-                                             'logos/cc/$1'),
+                                             '$1'),
                                      '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($license-text)">
