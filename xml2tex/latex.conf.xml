@@ -54,7 +54,8 @@
   <xsl:variable name="publisher-imprint-info" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Verlagsinfo']"/>
   <xsl:variable name="publisher-logo-href" as="xs:string?" 
-                select="replace($metadata/dbk:keyword[@role eq 'Reihenlogo'], 
+                select="replace(
+                                replace($metadata/dbk:keyword[@role eq 'Reihenlogo'], '\\(.)', '$1'), 
                                 '^.*/(.+?)$',
                                 'logos/series/$1')"/>
   <xsl:variable name="publisher-note" as="element(dbk:keyword)?"
@@ -329,7 +330,8 @@
       </xsl:if>
       <xsl:if test="normalize-space($license-logo-href)">
         <xsl:value-of select="concat('&#xa;\tpLicenceLogo{', 
-                                     replace($license-logo-href,
+                                     replace(
+                                             replace($license-logo-href, '\\(.)', '$1'),
                                              '^.*/(.+?)$',
                                              'logos/cc/$1'),
                                      '}&#xa;')"/>
@@ -365,7 +367,7 @@
           <xsl:value-of select="concat('&#xa;\tpFundLogo{', 
                                        $s9y1-path,
                                        'images/',
-                                       replace(normalize-space(.), '^file:/+', ''), 
+                                       replace(replace(normalize-space(.), '^file:/+', ''), '\\(.)', '$1'), 
                                        '}')"/>  
         </xsl:for-each>
         <xsl:text>&#xa;\end{tpFunding}&#xa;</xsl:text>  
