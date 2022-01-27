@@ -6,6 +6,11 @@
   
   <xsl:import href="http://transpect.io/xslt-util/functx/Sequences/Sorting-and-Grouping/sort.xsl"/>
   
+  <xsl:param name="s9y1-path" as="xs:string?"/>
+  <xsl:param name="s9y2-path" as="xs:string?"/>
+  <xsl:param name="s9y3-path" as="xs:string?"/>
+  <xsl:param name="s9y4-path" as="xs:string?"/>
+  
   <xsl:variable name="is-collection" select="matches($basename,  'ts_[a-z]{3}_anth_')" as="xs:boolean"/>
 
   <!-- see the wiki link below for details
@@ -49,7 +54,9 @@
   <xsl:variable name="publisher-imprint-info" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Verlagsinfo']"/>
   <xsl:variable name="publisher-logo-href" as="xs:string?" 
-                select="replace($metadata/dbk:keyword[@role eq 'Reihenlogo'], '^.+/(.+)\.EPS$', 'logos/series/$1.png')"/>
+                select="replace($metadata/dbk:keyword[@role eq 'Reihenlogo'], 
+                                '^.*/(.+?)$',
+                                'logos/series/$1')"/>
   <xsl:variable name="publisher-note" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Verlagshinweis']"/>
   <xsl:variable name="publisher-location" as="element(dbk:keyword)?"
@@ -321,7 +328,11 @@
         <xsl:value-of select="concat('&#xa;\tpCopyright{', tokenize($copyright-holder, ',')[2], '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($license-logo-href)">
-        <xsl:value-of select="concat('&#xa;\tpLicenceLogo{', $license-logo-href, '}&#xa;')"/>
+        <xsl:value-of select="concat('&#xa;\tpLicenceLogo{', 
+                                     replace($license-logo-href,
+                                             '^.*/(.+?)$',
+                                             'logos/cc/$1'),
+                                     '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($license-text)">
         <xsl:value-of select="concat('&#xA;\tpLicenceText{', 
@@ -352,6 +363,8 @@
         </xsl:if>
         <xsl:for-each select="$funder-logo[normalize-space()]">
           <xsl:value-of select="concat('&#xa;\tpFundLogo{', 
+                                       $s9y1-path,
+                                       'images/',
                                        replace(normalize-space(.), '^file:/+', ''), 
                                        '}')"/>  
         </xsl:for-each>
