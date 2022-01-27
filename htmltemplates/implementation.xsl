@@ -101,11 +101,11 @@
   
   
   <xsl:template match="*:metadata" mode="meta">
-    <meta name="DC.creator" content="{dc.creator}"/>
-    <meta name="DC.title" content="{dc:title}"/>
-    <meta name="DC.identifier" content="{dc:identifier}"/>
-    <meta name="DC.publisher" content="{dc:publisher}"/>
-    <meta name="lang" content="{dc:language}"/>
+    <meta name="DC.creator" content="{(dc.creator[normalize-space()])}"/>
+    <meta name="DC.title" content="{(dc:title[normalize-space()])}"/>
+    <meta name="DC.identifier" content="{(dc:identifier[normalize-space()])}"/>
+    <meta name="DC.publisher" content="{(dc:publisher[normalize-space()], 'transcript')[1]}"/>
+    <meta name="lang" content="{(dc:language[normalize-space()], $htmlinput[1]/html:html/@xml:lang)[1]}"/>
   </xsl:template>
   
    
