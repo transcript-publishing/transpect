@@ -365,7 +365,7 @@
         </xsl:if>
         <xsl:for-each select="$funder-logo[normalize-space()]">
           <xsl:value-of select="concat('&#xa;\tpFundLogo{', 
-                                       $s9y1-path,
+                                       replace($s9y1-path, '^file:/+', ''),
                                        'images/',
                                        replace(replace(normalize-space(.), '^file:/+', ''), '\\(.)', '$1'), 
                                        '}')"/>  
