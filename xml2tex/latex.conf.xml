@@ -180,6 +180,14 @@
     <xsl:if test="$title-pages ne 'yes' and $title">
       <xsl:value-of select="concat('&#xa;\tpBookTitle{', $title, '}&#xa;')"/>
     </xsl:if>
+    <xsl:choose>
+      <xsl:when test="$title-pages ne 'yes' and $title">
+        <xsl:value-of select="concat('&#xa;\tpBookTitle{', $title, '}&#xa;')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>&#xa;\tpBookTitle{}&#xa;</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:if test="$title-pages eq 'yes'">
       <xsl:text>&#xa;\begin{tpMeta}&#xa;</xsl:text>
         <!-- authors -->
