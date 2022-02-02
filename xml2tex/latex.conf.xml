@@ -367,9 +367,10 @@
         <xsl:value-of select="concat('&#xa;\tpFundingPostText{', $funder-posttext, '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($funder-name) or exists($funder-logo)">
-        <xsl:for-each select="$funder-logo[normalize-space()] and position() eq 1">
+        <xsl:for-each select="$funder-logo[normalize-space()]">
           <xsl:text>&#xa;\begin{tpFunding}</xsl:text>
-          <xsl:if test="normalize-space($funder-name)">
+          <!-- currenly no method for multiple funding logo/name pairs -->
+          <xsl:if test="normalize-space($funder-name) and position() eq 1">
             <xsl:value-of select="concat('&#xa;\tpFundName{', $funder-name, '}')"/>
           </xsl:if>
           <xsl:value-of select="concat('&#xa;\tpFundLogo{', 
