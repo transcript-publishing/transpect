@@ -220,21 +220,35 @@
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
   
-    <template context="dbk:para[matches(@role, $endnotes-heading-style)]">
-    <xsl:value-of select="concat('&#xa;\def\notesname{', . ,'}')"/>
-    <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
-  </template>
-  
-  <template context="dbk:chapter[$notes-type eq 'endnotes' and $notes-per-chapter eq 'yes']
-                                [.//dbk:footnote]
-                                [not(.//dbk:para[matches(@role, $endnotes-heading-style)])]">
-
-    <xsl:next-match/>
-    <xsl:value-of select="concat('&#xa;\renewcommand{\notesname}{', 
-                                 ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)] ,
-                                 '}')"/>
-     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
-    
+  <template name="create-printnotes">
+    <xsl:param name="context" as="element(*)"/>
+    <xsl:choose>
+      <!-- no endnotes heading exist, endnotes at the back -->
+      <xsl:when test="not($context//dbk:para[matches(@role, $endnotes-heading-style)])
+                      and $context/local-name() eq 'hub'
+                      and not($endnotes-with-chapter)">
+        <xsl:value-of select="concat('&#xa;\renewcommand{\notesname}{', 
+                                     ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)] ,
+                                     '}')"/>
+        <xsl:text>&#xa;\printnotes&#xa;</xsl:text>        
+      </xsl:when>
+      <!-- no endnotes heading exist, chapter endnotes -->
+      <xsl:when test="not($context//dbk:para[matches(@role, $endnotes-heading-style)])
+                      and $context/local-name() ne 'hub'
+                      and $endnotes-with-chapter">
+        <xsl:value-of select="concat('&#xa;\renewcommand{\notesname}{', 
+                                     ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)] ,
+                                     '}')"/>
+        <xsl:text>&#xa;\printnotes&#xa;</xsl:text>        
+      </xsl:when>
+      <!-- no endnotes heading exists -->
+      <xsl:when test="$context[self::para[matches(@role, $endnotes-heading-style)]]">
+        <xsl:value-of select="concat('&#xa;\def\notesname{', 
+                                     $context//dbk:para[matches(@role, $endnotes-heading-style)][1]/node(),
+                                     '}')"/>
+        <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
+      </xsl:when>
+    </xsl:choose>
   </template>
   
   <template context="dbk:dedication[@role eq 'tsded']">
@@ -257,7 +271,7 @@
   
   <template context="dbk:abbrev//dbk:indexterm"/>
   
-    <!-- suppress additional underline markup in titles -->
+  <!-- suppress additional underline markup in titles -->
   
   <template context="dbk:part/dbk:title/dbk:phrase[matches(@role, '^[a-z]{2,3}underline$')]
                     |dbk:chapter/dbk:info/dbk:title/dbk:phrase[matches(@role, '^[a-z]{2,3}underline$')]
