@@ -22,7 +22,11 @@
     </keyword>
   </xsl:template>
   
-  <xsl:template match="array|string">
+  <xsl:template match="array">
+    <xsl:apply-templates select="*"/>
+  </xsl:template>
+  
+  <xsl:template match="string">
     <xsl:apply-templates/>
   </xsl:template>
   
