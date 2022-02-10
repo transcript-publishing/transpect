@@ -55,7 +55,7 @@
                 select="$metadata/dbk:keyword[@role eq 'Verlagsinfo']"/>
   <xsl:variable name="publisher-logo-href" as="xs:string?" 
                 select="replace(
-                                replace($metadata/dbk:keyword[@role eq 'Reihenlogo'], '\\(.)', '$1'), 
+                                lower-case(replace($metadata/dbk:keyword[@role eq 'Reihenlogo'], '\\(.)', '$1')), 
                                 '^.*/(.+?)$',
                                 '$1')"/>
   <xsl:variable name="publisher-note" as="element(dbk:keyword)?"
