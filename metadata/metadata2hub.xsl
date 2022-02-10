@@ -26,6 +26,11 @@
     <xsl:apply-templates/>
   </xsl:template>
   
+  <xsl:template match="string[preceding-sibling::*[1][self::string]]">
+    <br/>
+    <xsl:apply-templates/>
+  </xsl:template>
+  
   <xsl:template match="b">
     <phrase css:font-weight="bold">
       <xsl:apply-templates/>
