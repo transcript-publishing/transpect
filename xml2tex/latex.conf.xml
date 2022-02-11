@@ -227,26 +227,40 @@
       <xsl:when test="not($context//dbk:para[matches(@role, $endnotes-heading-style)])
                       and $context/local-name() eq 'hub'
                       and not($endnotes-with-chapter)">
-        <xsl:value-of select="concat('&#xa;\renewcommand{\notesname}{', 
-                                     ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)] ,
-                                     '}')"/>
-        <xsl:text>&#xa;\printnotes&#xa;</xsl:text>        
+        <rule name="heading" type="env" break-after="2" break-before="2">
+          <param select="'chapter'"/>
+          <param select="concat('\title{', 
+                                ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)], 
+                                '}')"/>
+        </rule>
+        <xsl:text>&#xa;\printnotes&#xa;%hurz0</xsl:text>
+        <xsl:value-of select="$context/local-name()"/>        
       </xsl:when>
       <!-- no endnotes heading exist, chapter endnotes -->
       <xsl:when test="not($context//dbk:para[matches(@role, $endnotes-heading-style)])
                       and $context/local-name() ne 'hub'
                       and $endnotes-with-chapter">
-        <xsl:value-of select="concat('&#xa;\renewcommand{\notesname}{', 
-                                     ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)] ,
-                                     '}')"/>
-        <xsl:text>&#xa;\printnotes&#xa;</xsl:text>        
+        <rule name="heading" type="env" break-after="2" break-before="2">
+          <param select="'section'"/>
+          <param select="concat('\title{', 
+                                ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)], 
+                                '}')"/>
+        </rule>
+        <xsl:text>&#xa;\printnotes&#xa;%hurz1</xsl:text>
+        <xsl:value-of select="$context/local-name()"/>        
       </xsl:when>
-      <!-- no endnotes heading exists -->
       <xsl:when test="$context[self::para[matches(@role, $endnotes-heading-style)]]">
         <xsl:value-of select="concat('&#xa;\def\notesname{', 
                                      $context//dbk:para[matches(@role, $endnotes-heading-style)][1]/node(),
                                      '}')"/>
-        <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
+        <rule name="heading" type="env" break-after="2" break-before="2">
+          <param select="(tr:heading-level($context), 'chapter')[1]"/>
+          <param select="concat('\title{', 
+                                $context//dbk:para[matches(@role, $endnotes-heading-style)][1]/node(), 
+                                '}')"/>
+        </rule>
+        <xsl:text>&#xa;\printnotes&#xa;%hurz1</xsl:text>
+        <xsl:value-of select="$context/local-name()"/>
       </xsl:when>
     </xsl:choose>
   </template>
