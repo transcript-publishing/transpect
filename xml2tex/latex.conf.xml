@@ -240,7 +240,7 @@
                       and $context/local-name() ne 'hub'
                       and $endnotes-with-chapter">
         <rule name="heading" type="env" break-after="2" break-before="2">
-          <param select="'section'"/>
+          <param select="'chapter'"/>
           <param select="concat('\title{', 
                                 ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)], 
                                 '}')"/>
