@@ -223,6 +223,18 @@
   <template name="create-printnotes">
     <xsl:param name="context" as="element(*)"/>
     <xsl:choose>
+      <!-- no endnotes heading exist, chapter-wise endnotes -->
+      <xsl:when test="not($context//dbk:para[matches(@role, $endnotes-heading-style)])
+                      and $context/local-name() eq 'chapter'
+                      and $notes-per-chapter eq 'yes'">
+        <rule name="section" type="env" break-after="2" break-before="2">
+          <param select="'section'"/>
+          <param select="concat('\title{', 
+                                ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)], 
+                                '}')"/>
+        </rule>
+        <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
+      </xsl:when>
       <!-- no endnotes heading exist, endnotes at the back -->
       <xsl:when test="not($context//dbk:para[matches(@role, $endnotes-heading-style)])
                       and $context/local-name() eq 'hub'
@@ -235,18 +247,7 @@
         </rule>
         <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
       </xsl:when>
-      <!-- no endnotes heading exist, chapter endnotes -->
-      <xsl:when test="not($context//dbk:para[matches(@role, $endnotes-heading-style)])
-                      and $context/local-name() ne 'hub'
-                      and $endnotes-with-chapter">
-        <rule name="heading" type="env" break-after="2" break-before="2">
-          <param select="'chapter'"/>
-          <param select="concat('\title{', 
-                                ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)], 
-                                '}')"/>
-        </rule>
-        <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
-      </xsl:when>
+      <!-- regular endnote headings exist, print endnotes there -->
       <xsl:when test="$context[self::para[matches(@role, $endnotes-heading-style)]]">
         <xsl:value-of select="concat('&#xa;\def\notesname{', 
                                      $context//dbk:para[matches(@role, $endnotes-heading-style)][1]/node(),
