@@ -79,7 +79,7 @@
     }%
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
-    \tpIfComp{Copyright}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}{}%
+    \tpIfComp{Copyright}{\tpUseComp{Copyright}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
     \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}%
   }
   %% Format Impressum
