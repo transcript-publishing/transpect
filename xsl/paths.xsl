@@ -59,5 +59,9 @@
   <xsl:template match="@ext[. = ('cover.png', 'cover.jpg')]" mode="tr:ext-to-target-subdir">
     <xsl:sequence select="'epub/cover'"/>
   </xsl:template>
-  
+
+
+  <xsl:template match="@ext[. = ('eps')]" mode="tr:ext-to-target-subdir">
+    <xsl:sequence select="'images'"/>
+  </xsl:template>  
 </xsl:stylesheet>
