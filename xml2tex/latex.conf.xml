@@ -409,6 +409,10 @@
                                    then xs:string(xs:integer($toc-depth) - 2)
                                    else xs:string(xs:integer($toc-depth) - 1),
                                    '}&#xa;')"/>
+    <xsl:apply-templates select="/dbk:*/dbk:colophon[@role = 'dedication']
+                                 |/dbk:*/dbk:dedication" mode="#current">
+      <xsl:with-param name="keep" select="true()" tunnel="yes"/>
+    </xsl:apply-templates>
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
   
