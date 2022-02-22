@@ -25,11 +25,12 @@
   <xsl:variable name="author-info" as="element(dbk:keyword)*"
                 select="$metadata/dbk:keyword[@role eq 'Autoreninformationen']" />
   <!-- title metadata -->
-  <xsl:variable name="title" 
+  <xsl:variable name="title" as="element(*)?"
+                select="$metadata/dbk:keyword[@role eq 'Titel'][not(. = 'Fallback')]" />
+  <xsl:variable name="title-for-running-head" as="element(*)?" 
                 select="(/dbk:*/dbk:title,
                          /dbk:*/dbk:info/dbk:title,
-                         $metadata/dbk:keyword[@role eq 'Titel'][not(. = 'Fallback')] 
-                         )[1]" as="element(*)?"/>
+                         $title)[1]"/>
   <xsl:variable name="subtitle" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Untertitel']"/>
   <xsl:variable name="shorttitle" as="element(dbk:keyword)?"
@@ -177,12 +178,9 @@
     <xsl:if test="$langs = 'zh'">
       <xsl:value-of select="'\usepackage{CJK}&#xa;'"/>
     </xsl:if>
-    <xsl:if test="$title-pages ne 'yes' and $title">
-      <xsl:value-of select="concat('&#xa;\tpBookTitle{', $title, '}&#xa;')"/>
-    </xsl:if>
     <xsl:choose>
-      <xsl:when test="$title-pages ne 'yes' and $title">
-        <xsl:value-of select="concat('&#xa;\tpBookTitle{', $title, '}&#xa;')"/>
+      <xsl:when test="$title-for-running-head">
+        <xsl:value-of select="concat('&#xa;\tpBookTitle{', $title-for-running-head, '}&#xa;')"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:text>&#xa;\tpBookTitle{}&#xa;</xsl:text>
