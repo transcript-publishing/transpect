@@ -390,6 +390,20 @@
       <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
       <xsl:value-of select="concat('\newindex{', $index-index, '}{', $index-index, '_idx}{', $index-index, '_ind}{', normalize-space(dbk:title), '}&#xa;')"/>
     </xsl:for-each>
+    <xsl:if test="$toc-depth">
+      <!-- chapter 0 ist und section 1, part (normalerweise) -1, subsection 2 usw. If subparts are used, they would be -1, whereas parts would bei -2 in that case-->
+      <xsl:value-of select="concat('\setcounter{tocdepth}{', 
+                                   if(//dbk:part) 
+                                   then xs:string(xs:integer($toc-depth) - 2)
+                                   else xs:string(xs:integer($toc-depth) - 1),
+                                   '}&#xa;')"/>
+    </xsl:if>
+    <!-- no numbering: -99, -9 would be sufficient -->
+    <xsl:if test="$numbering-depth">
+      <xsl:value-of select="concat('\setcounter{secnumdepth}{',
+                                   $secnumdepth,
+                                   '}&#xa;')"/>
+    </xsl:if>
   </preamble>
   
   <front>
@@ -401,12 +415,6 @@
         <xsl:text>\setcounter{page}{5}&#xa;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:value-of select="'\setcounter{secnumdepth}{-1}&#xa;'"/>
-    <xsl:value-of select="concat('\setcounter{tocdepth}{', 
-                                   if(//dbk:part) 
-                                   then xs:string(xs:integer($toc-depth) - 2)
-                                   else xs:string(xs:integer($toc-depth) - 1),
-                                   '}&#xa;')"/>
     <xsl:apply-templates select="/dbk:*/dbk:colophon[@role = 'dedication']
                                  |/dbk:*/dbk:dedication" mode="#current">
       <xsl:with-param name="keep" select="true()" tunnel="yes"/>
@@ -414,7 +422,7 @@
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
   
-    <template context="dbk:para[matches(@role, $endnotes-heading-style)]">
+  <template context="dbk:para[matches(@role, $endnotes-heading-style)]">
     <xsl:value-of select="concat('&#xa;\def\notesname{', . ,'}')"/>
     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
   </template>
