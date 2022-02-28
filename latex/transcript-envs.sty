@@ -126,6 +126,12 @@
     \normalfont
     \itshape
     \centering
+    \def\@gnewline ##1{%
+      \ifvmode
+        \@nolnerr
+      \else
+        \unskip \reserved@e {\reserved@f##1}\break
+      \fi}
   }{\par\egroup\aftergroup\cleardoublepage}
 
 
@@ -214,6 +220,7 @@
 \let\lll\relax
 \RequirePackage{amssymb}
 \RequirePackage{upgreek}
+
 
 
 % \def\@abstract#1{%

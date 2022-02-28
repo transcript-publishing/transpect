@@ -42,7 +42,11 @@
           \fi
         \fi
         \ifx\@partmark\@undefined
-          \@chaptermark
+          \ifx\@chaptermark\@undefined
+            \@title
+          \else
+            \@chaptermark
+          \fi
         \else
           \ifx\@chaptermark\@undefined
             \@partmark
@@ -51,7 +55,11 @@
           \fi
         \fi
       \else
-        \@chaptermark
+        \ifx\@chaptermark\@undefined
+          \@title
+        \else
+          \@chaptermark
+        \fi
       \fi
     \fi
   }%
