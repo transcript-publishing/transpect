@@ -132,8 +132,11 @@ p {
   margin:0;
   line-height:1.6;
 }
-p.indent {
+p + p {
   text-indent:2em;
+}
+p.heading-author + p {
+  text-indent:0em;
 }
 div.lox p.indent {
   text-indent:0;
