@@ -933,5 +933,20 @@
       </rule>
     </xsl:if>
   </template>
+  
+  <!--  * 
+        * preliminary common override, hoping to have a standard solution here, soonish
+        * https://redmine.le-tex.de/issues/12178
+        * -->
+  
+  <template context="/dbk:*/dbk:colophon[@role = 'dedication']
+                    |/dbk:*/dbk:dedication">
+    <xsl:param name="keep" as="xs:boolean?" tunnel="yes"/>
+    <xsl:if test="$keep">
+      <rule name="widmung" type="env" break-after="2" break-before="2">
+        <param/>
+      </rule>
+    </xsl:if>
+  </template>
 
 </set>
