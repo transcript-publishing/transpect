@@ -256,13 +256,13 @@
   
   <!-- indent attribute -->
   
-  <xsl:template match="html:p[preceding-sibling::*[1][self::html:p[not(matches(@class, 'heading-author'))]]]
+<!--  <xsl:template match="html:p[preceding-sibling::*[1][self::html:p[not(matches(@class, 'heading-author'))]]]
                              [not(matches(@class, 'footnote|literature'))]
                              [not(parent::html:div[matches(@class, 'tsbox')])]" mode="clean-up">
     <p class="{if(@class) then concat(@class, ' indent') else 'indent'}">
       <xsl:apply-templates select="@* except @class, node()" mode="#current"/>
     </p>
-  </xsl:template>
+  </xsl:template>-->
   
   <!-- remove overrides to avoid that CSS stylesheet instructions have no effect -->
   
