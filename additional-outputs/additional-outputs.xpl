@@ -35,7 +35,6 @@
 <!--  <p:option name="status-dir-uri" required="false" select="resolve-uri('status')"/>-->
 
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />
-  <p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl"/>
   <p:import href="http://transpect.io/xproc-util/simple-progress-msg/xpl/simple-progress-msg.xpl"/>
   <p:import href="http://transpect.io/tei2bits/xpl/tei2bits.xpl"/>
 
@@ -82,6 +81,7 @@
     </p:input>
     <p:with-option name="status-dir-uri" select="$status-dir-uri"/>
   </tr:simple-progress-msg>
+
   <p:sink/>
 
 
