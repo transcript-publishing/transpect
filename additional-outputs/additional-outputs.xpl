@@ -32,7 +32,7 @@
   <p:option name="debug" required="false" select="'no'"/>
   <p:option name="debug-dir-uri"/>
   <!-- the other options are contained in the paths params -->
-  <p:option name="status-dir-uri" required="false" select="resolve-uri('status')"/>
+<!--  <p:option name="status-dir-uri" required="false" select="resolve-uri('status')"/>-->
 
   <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" />
   <p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl"/>
