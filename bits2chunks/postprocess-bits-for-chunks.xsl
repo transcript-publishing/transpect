@@ -51,6 +51,14 @@
                              then replace((descendant::*[self::*:header[@class = 'chunk-meta-sec']]/*:ul/*:li[@class = 'chunk-doi'])[1], '^.+/(.+)-.+$', '$1')
                              else $basename" name="filename" as="xs:string" />
     <export-root>
+      <!-- every book element with an xml:base will be exported there -->
+      <!-- original BITS output-->
+      <xsl:copy>
+        <xsl:copy-of select="@*" copy-namespaces="no"/>
+        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.bits.xml')"/>
+        <xsl:sequence select="node()"/>
+      </xsl:copy>
+      <!-- complete issue referencinf book-parts only-->
       <book dtd-version="3.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/">
         <xsl:copy-of select="/*/@xml:lang" copy-namespaces="no"/>
         <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.all.jats.xml')"/>
@@ -68,6 +76,7 @@
           </book-part>
         </body>
       </book>
+      <!-- single book-parts as temporary articles -->
       <xsl:apply-templates select="$articles" mode="#current">
         <xsl:with-param name="meta" select="$meta" as="element(*)?" tunnel="yes"/>
         <xsl:with-param name="in-issue" select="false()" as="xs:boolean" tunnel="yes"/>
@@ -75,7 +84,7 @@
     </export-root>
   </xsl:template>
 
-  <xsl:template match="kwd-group[@kwd-group-type = ('docProps', 'http://www.le-tex.de/resource/schema/hub/1.1/hub.rng')] |
+  <xsl:template match="kwd-group[@kwd-group-type = ('docProps', 'http://www.le-tex.de/resource/schema/hub/1.1/hub.rng', 'title-page')] |
                        custom-meta-group" mode="#default" priority="7"/>
 
   <xsl:template match="break" mode="#default" priority="5">
