@@ -25,7 +25,8 @@
     select="concat(tr:resolve-uri-by-catalog($out-dir-uri, doc('http://this.transpect.io/xmlcatalog/catalog.xml')), '/')"/>
   <xsl:variable name="local-dir-chunk" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/chunks-atypon/' else 'chunks-atypon/'"/>  
   <xsl:variable name="local-dir-issue" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/chunks-atypon/issue/' else 'chunks-atypon/issue/'"/>
-
+  <xsl:variable name="local-dir-bits" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/chunks-atypon/bits/' else 'chunks-atypon/bits/'"/>
+ 
   <xsl:template match="@* | node()" mode="#default export create-column-titles">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
@@ -55,7 +56,7 @@
       <!-- original BITS output-->
       <xsl:copy>
         <xsl:copy-of select="@*" copy-namespaces="no"/>
-        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.bits.xml')"/>
+        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-bits, $filename, '.bits.xml')"/>
         <xsl:sequence select="node()"/>
       </xsl:copy>
       <!-- complete issue referencinf book-parts only-->
@@ -84,7 +85,7 @@
     </export-root>
   </xsl:template>
 
-  <xsl:template match="kwd-group[@kwd-group-type = ('docProps', 'http://www.le-tex.de/resource/schema/hub/1.1/hub.rng', 'title-page')] |
+  <xsl:template match="kwd-group[@kwd-group-type = ('docProps', 'http://www.le-tex.de/resource/schema/hub/1.1/hub.rng', 'title-page', 'titlepage')] |
                        custom-meta-group" mode="#default" priority="7"/>
 
   <xsl:template match="break" mode="#default" priority="5">
