@@ -37,7 +37,7 @@
   \tpSetProperty{titlepage-ii}{%
     \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
     \tpIfComp{Acknowledgements}{{\itshape\large\tpUseComp{Acknowledgements}}\par\vskip\baselineskip}{}%
-    \tpGetComp{Editorial}%
+    \tpIfComp{Editorial}{\tpUseComp{Editorial}\par\vskip\baselineskip}{}%
     \vfill
     \bgroup
       \tpUseProperty{bio-block}%
@@ -51,12 +51,15 @@
     \fi}%
     \par
     \vskip5bp
-    {{\sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{Title}}%
+    {\raggedright
+      \leavevmode
+      {\sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{Title}}%
       \tpIfComp{Subtitle}{%
         \par
         \sffamily\vskip5bp
         \Large
-        \tpUseComp{Subtitle}}{}}%
+        \tpUseComp{Subtitle}}{}%
+    }%
     \par
     \vskip\baselineskip
     \vfill
@@ -76,7 +79,7 @@
       \egroup
     \egroup
     \clearpage
-    }%
+  }%
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
     \tpIfComp{Copyright}{\tpUseComp{Copyright}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
