@@ -69,6 +69,11 @@
 \tpDeclareClass{C}{\tpSetProperty{margin-left}{15mm}\tpSetProperty{margin-right}{15mm}}
 \tpDeclareClass{D}{\tpSetProperty{margin-left}{30mm}\tpSetProperty{margin-right}{30mm}}
 
+\tpDeclareClass{wide}{%
+  \tpSetProperty{margin-outer}{\dimexpr-\evensidemargin+10mm\relax}%
+  %\tpSetProperty{margin-inner}{-\oddsidemargin}%
+}
+
 \def\ht@min@p@rows{4}%
 \def\ht@min@b@rows{2}%
 
