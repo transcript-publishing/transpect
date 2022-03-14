@@ -86,3 +86,10 @@
   \@starttoc{lof}%
   }
 
+%% Tabellenverzeichnis
+\renewcommand\listoftables{%
+  \begin{heading}[notoc]{chapter}%
+    \tpTitle{\listtablename}%
+  \end{heading}
+  \@starttoc{lot}%
+  }
