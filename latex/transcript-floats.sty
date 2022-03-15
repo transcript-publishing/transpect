@@ -80,16 +80,12 @@
 
 %% Abbildungsverzeichnis
 \renewcommand\listoffigures{%
-  \begin{heading}[notoc]{chapter}%
-    \tpTitle{\listfigurename}%
-  \end{heading}
   \@starttoc{lof}%
+  \clearpage
   }
 
 %% Tabellenverzeichnis
 \renewcommand\listoftables{%
-  \begin{heading}[notoc]{chapter}%
-    \tpTitle{\listtablename}%
-  \end{heading}
   \@starttoc{lot}%
+  \clearpage
   }
