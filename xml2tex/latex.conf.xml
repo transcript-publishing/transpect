@@ -2,7 +2,8 @@
 <?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <set xmlns="http://transpect.io/xml2tex" 
      xmlns:xml2tex="http://transpect.io/xml2tex" 
-     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+     xmlns:tr="http://transpect.io">
   
   <xsl:import href="http://transpect.io/xslt-util/functx/Sequences/Sorting-and-Grouping/sort.xsl"/>
   
@@ -948,5 +949,14 @@
       </rule>
     </xsl:if>
   </template>
+
+  <xsl:function name="tr:determine-fig-class" as="xs:string?">
+    <xsl:param name="elt" as="element(*)"/>
+    <xsl:sequence select="if (matches($elt/@role, '^figure-d$')) 
+                          then 'class=wide' 
+                          else if (matches($elt/@role, '^figure-[a-z]$'))
+                               then concat('class=', upper-case(replace($elt/@role, '^figure-', '')))
+                               else ()"/>
+  </xsl:function>
 
 </set>
