@@ -302,9 +302,9 @@
         <xsl:value-of select="concat('&#xa;\tpStatement{', $statement, '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($biblio-info)">
-        <xsl:text>&#xa;\tpBiblio{</xsl:text>
-        <xsl:apply-templates select="$biblio-info" mode="#current"/>
-        <xsl:text>}&#xa;</xsl:text>
+        <xsl:value-of select="concat('&#xa;\tpBiblio{', 
+                                     string-join($biblio-info/*, '\\&#xa;'),
+                                     '}&#xa;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($print-note)">
         <xsl:value-of select="concat('&#xa;\tpPrintNote{', $print-note, '}&#xa;')"/>
@@ -359,8 +359,7 @@
       </xsl:if>
       <xsl:if test="normalize-space($license-text)">
         <xsl:value-of select="concat('&#xA;\tpLicenceText{', 
-                                     string-join(for $line in tokenize($license-text, '\n')[normalize-space()]
-                                                 return normalize-space($line), '\\&#xa;'),
+                                     string-join($license-text/*, '\\&#xa;'),
                                      '}&#xA;')"/>
       </xsl:if>
       <xsl:if test="normalize-space($license-link)">
