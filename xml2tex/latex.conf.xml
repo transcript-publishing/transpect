@@ -189,16 +189,16 @@
     </xsl:choose>
     <xsl:if test="$title-pages eq 'yes'">
       <xsl:text>&#xa;\begin{tpMeta}&#xa;</xsl:text>
-        <!-- authors -->
-        <xsl:for-each select="$authors">
-          <xsl:text>&#xa;\begin{tpAuthor}</xsl:text>
-          <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
-          <xsl:if test="$author-info">
-            <xsl:value-of select="concat('&#xa;\tpBio{', normalize-space($author-info), '}&#xa;')"/>
-          </xsl:if>
-          <xsl:text>\end{tpAuthor}&#xa;</xsl:text>
-        </xsl:for-each>
-      <xsl:for-each select="$editors">
+      <!-- authors -->
+      <xsl:for-each select="$authors/text()">
+        <xsl:text>&#xa;\begin{tpAuthor}</xsl:text>
+        <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
+        <xsl:if test="$author-info">
+          <xsl:value-of select="concat('&#xa;\tpBio{', normalize-space($author-info), '}&#xa;')"/>
+        </xsl:if>
+        <xsl:text>\end{tpAuthor}&#xa;</xsl:text>
+      </xsl:for-each>
+      <xsl:for-each select="$editors/text()">
         <xsl:text>&#xa;\begin{tpEditor}</xsl:text>
         <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
         <xsl:text>\end{tpEditor}&#xa;</xsl:text>
