@@ -30,9 +30,10 @@
     <xsl:apply-templates/>
   </xsl:template>
   
-  <xsl:template match="string[preceding-sibling::*[1][self::string]]">
-    <br/>
-    <xsl:apply-templates/>
+  <xsl:template match="array/string" priority="2">
+    <para>
+      <xsl:apply-templates/>
+    </para>
   </xsl:template>
   
   <xsl:template match="b">

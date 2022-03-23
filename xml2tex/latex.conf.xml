@@ -25,6 +25,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Autor']"/>
   <xsl:variable name="author-info" as="element(dbk:keyword)*"
                 select="$metadata/dbk:keyword[@role eq 'Autoreninformationen']" />
+  <xsl:variable name="editor-info" as="element(dbk:keyword)*"
+                select="$metadata/dbk:keyword[@role eq 'Herausgeberinformationen']" />
   <!-- title metadata -->
   <xsl:variable name="title" as="element(*)?"
                 select="$metadata/dbk:keyword[@role eq 'Titel'][not(. = 'Fallback')]" />
@@ -190,17 +192,24 @@
     <xsl:if test="$title-pages eq 'yes'">
       <xsl:text>&#xa;\begin{tpMeta}&#xa;</xsl:text>
       <!-- authors -->
-      <xsl:for-each select="$authors/text()">
+      <xsl:for-each select="if(count($authors/*) gt 1) then $authors/* else $authors">
+        <xsl:variable name="pos" select="position()" as="xs:integer"/>
         <xsl:text>&#xa;\begin{tpAuthor}</xsl:text>
         <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
         <xsl:if test="$author-info">
-          <xsl:value-of select="concat('&#xa;\tpBio{', normalize-space($author-info), '}&#xa;')"/>
+          <xsl:value-of select="concat('&#xa;\tpBio{', 
+                                       normalize-space(if(count($authors/*) gt 1) then $author-info/*[$pos] else $author-info), 
+                                       '}&#xa;')"/>
         </xsl:if>
         <xsl:text>\end{tpAuthor}&#xa;</xsl:text>
       </xsl:for-each>
-      <xsl:for-each select="$editors/text()">
+      <xsl:for-each select="if(count($editors/*) gt 1) then $editors/* else $editors">
+        <xsl:variable name="pos" select="position()" as="xs:integer"/>
         <xsl:text>&#xa;\begin{tpEditor}</xsl:text>
         <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
+        <xsl:value-of select="concat('&#xa;\tpBio{', 
+                                                  normalize-space(if(count($editors/*) gt 1) then $editor-info/*[$pos] else $editor-info), 
+                                                  '}&#xa;')"/>
         <xsl:text>\end{tpEditor}&#xa;</xsl:text>
       </xsl:for-each>
       <xsl:if test="normalize-space($title)">
