@@ -37,13 +37,14 @@
   <xsl:function name="hub2tei:image-path"  as="xs:string">
     <xsl:param name="path" as="xs:string"/>
     <xsl:param name="root" as="document-node()?"/>
+
     <!--<xsl:variable name="source-type" as="xs:string?" 
       select="$root/*[self::book or self::hub]/info/keywordset/keyword[@role eq 'source-type']"/>-->
     <xsl:choose>
       <xsl:when test="matches($path, '^https?:')">
         <xsl:sequence select="$path"/>
       </xsl:when>
-      <xsl:when test="matches($path, '(/(idml|word)/(images|media)/|/out/images/)')">
+      <xsl:when test="matches($path, '(/(idml|word)/(images|media)/|/out/images/|\.docx/out)')">
         <xsl:sequence select="$path"/>
       </xsl:when>
       <xsl:otherwise>
