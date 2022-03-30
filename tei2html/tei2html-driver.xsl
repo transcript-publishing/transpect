@@ -331,8 +331,7 @@
         <xsl:when
           test="
             $elt/parent::div/@type = ('part', 'appendix', 'imprint', 'acknowledgements', 'dedication', 'glossary', 'preface') or
-            $elt/parent::divGen/@type = ('index', 'toc') or
-            $elt/parent::listBibl">
+            $elt/parent::divGen/@type = ('index', 'toc')">
           <xsl:sequence select="3"/>
         </xsl:when>
         <xsl:when test="$elt/parent::div/@type = ('chapter', 'article')">
@@ -344,8 +343,10 @@
                 3"
           />
         </xsl:when>
-        <xsl:when test="$elt/parent::div[@type = ('section')]">
-          <xsl:sequence select="count($elt/ancestor::div[@type eq 'section']) + 3"/>
+        <xsl:when test="$elt/parent::div[@type = ('section')] or $elt/parent::listBibl">
+          <xsl:sequence select="if ($elt/ancestor::div/@type = 'part') 
+                                then count($elt/ancestor::*[self::div[@type eq 'section'] | self::listBibl]) + 4
+                                else count($elt/ancestor::*[self::div[@type eq 'section'] | self::listBibl]) + 3"/>
         </xsl:when>
         <xsl:when test="$elt/parent::div/@type = ('bibliography', 'abstract','keywords')">
           <xsl:sequence
@@ -405,6 +406,7 @@
   </xsl:template>
   
   <xsl:template match="head[@type eq 'sub']" mode="heading-content">
+    <xsl:text> </xsl:text>
     <br/>
     <span class="heading-subtitle">
       <xsl:apply-templates mode="tei2html"/>
