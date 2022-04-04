@@ -1817,7 +1817,8 @@ Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Di
   \vskip1\baselineskip%
   \itshape\small
   \if!#1!\else{\bfseries #1}\fi%
-  \par\noindent}{}
+  \par\noindent}%
+  {\vskip1\baselineskip}
 
 %% abstracts
 \newenvironment{keyword}[1]{%
