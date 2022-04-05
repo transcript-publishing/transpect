@@ -5,7 +5,7 @@
   xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
   xmlns:pxf="http://exproc.org/proposed/steps/file"
   xmlns:tr="http://transpect.io"
-  xmlns:ts="http://www.transcript-verlag.de/transpect"
+  xmlns:tx="http://transpect.io/xerif"
   version="1.0"
   name="load-epub-config">
   

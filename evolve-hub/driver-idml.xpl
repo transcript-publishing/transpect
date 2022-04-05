@@ -3,7 +3,7 @@
   xmlns:c="http://www.w3.org/ns/xproc-step" 
   xmlns:tr="http://transpect.io"
   xmlns:hub="http://transpect.io/hub"
-  xmlns:ts="http://www.transcript-verlag.de/transpect"
+  xmlns:tx="http://transpect.io/xerif"
   version="1.0"
   name="driver-idml">
     

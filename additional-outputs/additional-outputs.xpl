@@ -12,7 +12,7 @@
   xmlns:hub="http://transpect.io/hub"
   xmlns:tei2hub="http://transpect.io/tei2hub"
   xmlns:xml2tex="http://transpect.io/xml2tex"
-  xmlns:ts="http://www.transcript-verlag.de/transpect"
+  xmlns:tx="http://transpect.io/xerif"
   xmlns:tei2bits="http://transpect.io/tei2bits" 
   version="1.0"
   name="customer-output">

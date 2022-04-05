@@ -4,7 +4,7 @@
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:cxf="http://xmlcalabash.com/ns/extensions/fileutils"
   xmlns:tr="http://transpect.io"
-  xmlns:ts="http://www.transcript-verlag.de/transpect"
+  xmlns:tx="http://transpect.io/xerif"
   version="1.0"
   name="load-meta">
   
