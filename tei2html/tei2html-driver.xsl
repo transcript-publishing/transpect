@@ -471,19 +471,20 @@
   
   <xsl:template match="p[@rend eq 'tsendnotesheading']" mode="tei2html"/>  
 
-  <xsl:template match="*:head//*:lb" mode="strip-indexterms-etc">
+  <xsl:template match="*:lb" mode="strip-indexterms-etc tei2html">
+    <!-- https://redmine.le-tex.de/issues/12371 -->
     <xsl:choose>
       <xsl:when
         test="
-        preceding-sibling::node()[1]/(self::text()) and matches(preceding-sibling::node()[1], '\s$') or
-        following-sibling::node()[1]/(self::text()) and matches(following-sibling::node()[1], '^\s')"/>
+        preceding-sibling::node() and matches(preceding-sibling::node()[1], '\s$') or
+        following-sibling::node() and matches(following-sibling::node()[1], '^\s')"/>
       <xsl:otherwise>
         <xsl:text>&#160;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template match="*:head//*:lb" mode="tei2html">
+  <xsl:template match="*:head//*:lb" mode="tei2html" priority="2">
     <xsl:param name="in-toc" as="xs:boolean?" tunnel="yes"/>
     <xsl:choose>
       <xsl:when test="$in-toc">
@@ -494,7 +495,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
+  
   <xsl:template match="p[matches(@rend, '^tscodeblock[a-z0-9]+$')]" mode="tei2html">
     <pre>
       <xsl:apply-templates mode="#current"/>
@@ -573,5 +574,16 @@
   </xsl:template>
 
   <xsl:template match="byline/affiliation | byline/email | byline/ref" mode="tei2html"/>
+  
+  <xsl:template match="tei:p[matches(@rend, 'tsquotation')][descendant::tei:lb]" mode="epub-alternatives">
+    <!-- https://redmine.le-tex.de/issues/12371-->
+    <xsl:variable name="context" select="."/>
+    <xsl:for-each-group select="node()" group-starting-with="tei:lb">
+      <p xmlns="http://www.tei-c.org/ns/1.0">
+        <xsl:apply-templates select="$context/@*, current-group()" mode="#current"/>
+      </p>
+    </xsl:for-each-group>
+  </xsl:template>
+  
 
 </xsl:stylesheet>
