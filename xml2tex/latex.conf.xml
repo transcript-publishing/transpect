@@ -489,7 +489,7 @@
     </rule>
   </template>
   
-  <template context="dbk:citation">
+  <template context="dbk:citation | dbk:biblioref[matches(., '\S')]">
     <rule>
       <text/>
     </rule>
