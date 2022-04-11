@@ -489,6 +489,12 @@
     </rule>
   </template>
   
+  <template context="dbk:citation">
+    <rule>
+      <text/>
+    </rule>
+  </template>
+  
   <template context="dbk:informaltable">
     <rule name="table" type="env" break-after="2" break-before="1">
       <text/>
