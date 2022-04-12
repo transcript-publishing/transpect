@@ -14,10 +14,10 @@
     \ifx\@chaptername\contentsname\else
       \ifx\has@parts\relax
         \ifx\@partmark\@undefined
-          \@title
+          \tpRunBookTitle
         \else
           \ifx\@chaptermark\@undefined
-            \@title
+            \tpRunBookTitle
           \else
             \@partmark
           \fi
@@ -26,7 +26,7 @@
         \ifcollection
           \@authormark
         \else
-          \@title
+          \tpRunBookTitle
         \fi
       \fi
     \fi
@@ -43,7 +43,7 @@
         \fi
         \ifx\@partmark\@undefined
           \ifx\@chaptermark\@undefined
-            \@title
+            \tpRunBookTitle
           \else
             \@chaptermark
           \fi
@@ -56,7 +56,7 @@
         \fi
       \else
         \ifx\@chaptermark\@undefined
-          \@title
+          \tpRunBookTitle
         \else
           \@chaptermark
         \fi

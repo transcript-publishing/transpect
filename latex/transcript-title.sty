@@ -22,7 +22,7 @@
   }%
   \tpSetProperty{titlepage-i}{%
     \ifcollection
-      \tpUseComp{EditorString}%
+      \tpUseProperty{editor-string}%
     \else
       \tpUseComp{AuthorNameList}%
     \fi%
@@ -45,7 +45,7 @@
   }%
   \tpSetProperty{titlepage-iii}{%
     {\Large\sffamily\ifcollection
-      \tpUseComp{EditorString}%
+      \tpUseProperty{editor-string}%
     \else
       \tpUseComp{AuthorNameList}%
     \fi}%
