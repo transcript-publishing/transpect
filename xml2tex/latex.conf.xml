@@ -189,212 +189,210 @@
         <xsl:text>&#xa;\tpBookTitle{}&#xa;</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="$title-pages eq 'yes'">
-      <xsl:text>&#xa;\begin{tpMeta}&#xa;</xsl:text>
-      <!-- authors -->
-      <xsl:for-each select="if(count($authors/*) gt 1) then $authors/* else $authors">
-        <xsl:variable name="pos" select="position()" as="xs:integer"/>
-        <xsl:text>&#xa;\begin{tpAuthor}</xsl:text>
-        <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
-        <xsl:if test="$author-info">
-          <xsl:value-of select="concat('&#xa;\tpBio{', 
-                                       normalize-space(if(count($authors/*) gt 1) then $author-info/*[$pos] else $author-info), 
-                                       '}&#xa;')"/>
-        </xsl:if>
-        <xsl:text>\end{tpAuthor}&#xa;</xsl:text>
-      </xsl:for-each>
-      <xsl:for-each select="if(count($editors/*) gt 1) then $editors/* else $editors">
-        <xsl:variable name="pos" select="position()" as="xs:integer"/>
-        <xsl:text>&#xa;\begin{tpEditor}</xsl:text>
-        <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
+    <xsl:text>&#xa;\begin{tpMeta}&#xa;</xsl:text>
+    <!-- authors -->
+    <xsl:for-each select="if(count($authors/*) gt 1) then $authors/* else $authors">
+      <xsl:variable name="pos" select="position()" as="xs:integer"/>
+      <xsl:text>&#xa;\begin{tpAuthor}</xsl:text>
+      <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
+      <xsl:if test="$author-info">
         <xsl:value-of select="concat('&#xa;\tpBio{', 
-                                                  normalize-space(if(count($editors/*) gt 1) then $editor-info/*[$pos] else $editor-info), 
-                                                  '}&#xa;')"/>
-        <xsl:text>\end{tpEditor}&#xa;</xsl:text>
-      </xsl:for-each>
-      <xsl:if test="normalize-space($title)">
-        <xsl:value-of select="concat('&#xa;\tpTitle{', $title, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($subtitle)">
-        <xsl:value-of select="concat('&#xa;\tpSubtitle{', $subtitle, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($shorttitle)">
-        <xsl:value-of select="concat('&#xa;\tpShortTitle{', $shorttitle, '}&#xa;')"/>
-      </xsl:if>
-      <!-- cover image -->
-      <xsl:if test="normalize-space($cover-href)">
-        <xsl:value-of select="concat('&#xa;\tpCover{', $cover-href, '}&#xa;')"/>
-      </xsl:if>
-      <!-- series metadata -->
-      <xsl:if test="normalize-space($series-number)">
-        <xsl:value-of select="concat('&#xa;\tpNumber{', $series-number, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($series-name)">
-        <xsl:value-of select="concat('&#xa;\tpSeries{', $series-name, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($subseries-name)">
-        <xsl:value-of select="concat('&#xa;\tpSubSeries{', $subseries-name, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($volume)">
-        <xsl:value-of select="concat('&#xa;\tpVolume{', $volume, '}&#xa;')"/>
-      </xsl:if>
-      <!-- publisher metadata -->
-      <xsl:if test="normalize-space($publisher-name)">
-        <xsl:value-of select="concat('&#xa;\tpPublisher{', $publisher-name, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($publisher-imprint-name)">
-        <xsl:value-of select="concat('&#xa;\tpPubDivision{', $publisher-imprint-name, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($publisher-imprint-info)">
-        <xsl:value-of select="concat('&#xa;\tpPubDivInfo{', $publisher-imprint-info, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($publisher-logo-href)">
-        <xsl:value-of select="concat('&#xa;\tpPubLogo{', 'logos/series/', $publisher-logo-href, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($publisher-note)">
-        <xsl:value-of select="concat('&#xa;\tpPubNote{', $publisher-note, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($publisher-location)">
-        <xsl:value-of select="concat('&#xa;\tpPubPlace{', $publisher-location, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($publisher-website)">
-        <xsl:value-of select="concat('&#xa;\tpPubWeb{', $publisher-website, '}&#xa;')"/>
-      </xsl:if>
-      <!-- publication meta -->
-      <xsl:if test="normalize-space($doi)">
-        <xsl:value-of select="concat('&#xa;\tpDOI{', $doi, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($print-isbn)">
-        <xsl:value-of select="concat('&#xa;\tpISBN{', $print-isbn, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($epdf-isbn)">
-        <xsl:value-of select="concat('&#xa;\tpEISBN{', $epdf-isbn, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($epub-isbn)">
-        <xsl:value-of select="concat('&#xa;\tpEpubISBN{', $epub-isbn, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($isbn-text)">
-        <xsl:value-of select="concat('&#xa;\tpEpubPreText{', $isbn-text, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($issn)">
-        <xsl:value-of select="concat('&#xa;\tpISSN{', $issn, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($dedication)">
-        <xsl:text>&#xa;\tpDedication{</xsl:text>
-        <xsl:apply-templates select="$dedication" mode="#current"/>
-        <xsl:text>}&#xa;</xsl:text>
-      </xsl:if>
-      <xsl:if test="normalize-space($acknowledgements)">
-        <xsl:value-of select="concat('&#xa;\tpAcknowledgements{', $acknowledgements, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($editorial)">
-        <xsl:text>&#xa;\tpEditorial{</xsl:text>
-        <xsl:apply-templates select="$editorial" mode="#current"/>
-        <xsl:text>}&#xa;</xsl:text>
-      </xsl:if>
-      <xsl:if test="normalize-space($edition-note)">
-        <xsl:value-of select="concat('&#xa;\tpEditionNote{', $edition-note, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($pub-year)">
-        <xsl:value-of select="concat('&#xa;\tpYear{', $pub-year, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($statement)">
-        <xsl:value-of select="concat('&#xa;\tpStatement{', $statement, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($biblio-info)">
-        <xsl:value-of select="concat('&#xa;\tpBiblio{', 
-                                     string-join($biblio-info/*, '\\&#xa;'),
+                                     normalize-space(if(count($authors/*) gt 1) then $author-info/*[$pos] else $author-info), 
                                      '}&#xa;')"/>
       </xsl:if>
-      <xsl:if test="normalize-space($print-note)">
-        <xsl:value-of select="concat('&#xa;\tpPrintNote{', $print-note, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($environmental-note)">
-        <xsl:value-of select="concat('&#xa;\tpEnvDisclaimer{', $environmental-note, '}&#xa;')"/>
-      </xsl:if>
-      <!-- contributor meta -->
-      <xsl:if test="normalize-space($lectorate)">
-        <xsl:value-of select="concat('&#xa;\tpLectorate{', $lectorate, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($translator)">
-        <xsl:value-of select="concat('&#xa;\tpTranslator{', $translator, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($copy-editing)">
-        <xsl:value-of select="concat('&#xa;\tpQA{', $copy-editing, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($cover-credit)">
-        <xsl:value-of select="concat('&#xa;\tpCoverDesign{', $cover-credit, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($cover-art)">
-        <xsl:value-of select="concat('&#xa;\tpCoverImage{', $cover-art, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($typesetter)">
-        <xsl:value-of select="concat('&#xa;\tpTypesetter{', $typesetter, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($printer)">
-        <xsl:value-of select="concat('&#xa;\tpPrint{', $printer, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($used-font)">
-        <xsl:value-of select="concat('&#xa;\tpUsedFont{', $used-font, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($converter)">
-        <xsl:value-of select="concat('&#xa;\tpConversion{', $converter, '}&#xa;')"/>
-      </xsl:if>
-      <!-- licensing meta -->
-      <xsl:if test="normalize-space($copyright-note)">
-        <xsl:value-of select="concat('&#xa;\tpCopyrightDisclaimer{', $copyright-note, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($copyright-holder)">
-        <xsl:text>&#xa;\tpCopyright{</xsl:text>
-        <xsl:apply-templates select="$copyright-holder" mode="#current"/>
-        <xsl:text>}&#xa;</xsl:text>
-      </xsl:if>
-      <xsl:if test="normalize-space($license-logo-href)">
-        <xsl:value-of select="concat('&#xa;\tpLicenceLogo{logos/cc/', 
-                                     replace(
-                                             replace($license-logo-href, '\\(.)', '$1'),
-                                             '^.*/(.+?)$',
-                                             '$1'),
-                                     '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($license-text)">
-        <xsl:value-of select="concat('&#xA;\tpLicenceText{', 
-                                     string-join($license-text/*, '\\&#xa;'),
-                                     '}&#xA;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($license-link)">
-        <xsl:value-of select="concat('&#xa;\tpLicenceLink{', $license-link, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($license-name)">
-        <xsl:value-of select="concat('&#xa;\tpLicenceName{', $license-name, '}&#xa;')"/>
-      </xsl:if>
-      <!-- funding statement, \tpFundingPreText and \tpFundingPostText are placed before and
-           below one or more \begin{tpFunding} environment. One of which may contain a \tpFundName
-           and \tpFundLogo macro. Implement this according to the customer-specific metadata model.
-      -->
-      <xsl:if test="normalize-space($funder-pretext)">
-        <xsl:value-of select="concat('&#xa;\tpFundingPreText{', $funder-pretext, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($funder-posttext)">
-        <xsl:value-of select="concat('&#xa;\tpFundingPostText{', $funder-posttext, '}&#xa;')"/>
-      </xsl:if>
-      <xsl:if test="normalize-space($funder-name) or exists($funder-logo)">
-        <xsl:for-each select="$funder-logo[normalize-space()]">
-          <xsl:text>&#xa;\begin{tpFunding}</xsl:text>
-          <!-- currenly no method for multiple funding logo/name pairs -->
-          <xsl:if test="normalize-space($funder-name) and position() eq 1">
-            <xsl:value-of select="concat('&#xa;\tpFundName{', $funder-name, '}')"/>
-          </xsl:if>
-          <xsl:value-of select="concat('&#xa;\tpFundLogo{', 
-                                       replace($s9y1-path, '^file:/+', '/'),
-                                       'images/',
-                                       replace(replace(normalize-space(.), '^file:/+', ''), '\\(.)', '$1'), 
-                                       '}')"/>
-          <xsl:text>&#xa;\end{tpFunding}&#xa;</xsl:text>
-        </xsl:for-each>  
-      </xsl:if>
-      <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
+      <xsl:text>\end{tpAuthor}&#xa;</xsl:text>
+    </xsl:for-each>
+    <xsl:for-each select="if(count($editors/*) gt 1) then $editors/* else $editors">
+      <xsl:variable name="pos" select="position()" as="xs:integer"/>
+      <xsl:text>&#xa;\begin{tpEditor}</xsl:text>
+      <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
+      <xsl:value-of select="concat('&#xa;\tpBio{', 
+                                                normalize-space(if(count($editors/*) gt 1) then $editor-info/*[$pos] else $editor-info), 
+                                                '}&#xa;')"/>
+      <xsl:text>\end{tpEditor}&#xa;</xsl:text>
+    </xsl:for-each>
+    <xsl:if test="normalize-space($title)">
+      <xsl:value-of select="concat('&#xa;\tpTitle{', $title, '}&#xa;')"/>
     </xsl:if>
+    <xsl:if test="normalize-space($subtitle)">
+      <xsl:value-of select="concat('&#xa;\tpSubtitle{', $subtitle, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($shorttitle)">
+      <xsl:value-of select="concat('&#xa;\tpShortTitle{', $shorttitle, '}&#xa;')"/>
+    </xsl:if>
+    <!-- cover image -->
+    <xsl:if test="normalize-space($cover-href)">
+      <xsl:value-of select="concat('&#xa;\tpCover{', $cover-href, '}&#xa;')"/>
+    </xsl:if>
+    <!-- series metadata -->
+    <xsl:if test="normalize-space($series-number)">
+      <xsl:value-of select="concat('&#xa;\tpNumber{', $series-number, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($series-name)">
+      <xsl:value-of select="concat('&#xa;\tpSeries{', $series-name, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($subseries-name)">
+      <xsl:value-of select="concat('&#xa;\tpSubSeries{', $subseries-name, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($volume)">
+      <xsl:value-of select="concat('&#xa;\tpVolume{', $volume, '}&#xa;')"/>
+    </xsl:if>
+    <!-- publisher metadata -->
+    <xsl:if test="normalize-space($publisher-name)">
+      <xsl:value-of select="concat('&#xa;\tpPublisher{', $publisher-name, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($publisher-imprint-name)">
+      <xsl:value-of select="concat('&#xa;\tpPubDivision{', $publisher-imprint-name, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($publisher-imprint-info)">
+      <xsl:value-of select="concat('&#xa;\tpPubDivInfo{', $publisher-imprint-info, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($publisher-logo-href)">
+      <xsl:value-of select="concat('&#xa;\tpPubLogo{', 'logos/series/', $publisher-logo-href, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($publisher-note)">
+      <xsl:value-of select="concat('&#xa;\tpPubNote{', $publisher-note, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($publisher-location)">
+      <xsl:value-of select="concat('&#xa;\tpPubPlace{', $publisher-location, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($publisher-website)">
+      <xsl:value-of select="concat('&#xa;\tpPubWeb{', $publisher-website, '}&#xa;')"/>
+    </xsl:if>
+    <!-- publication meta -->
+    <xsl:if test="normalize-space($doi)">
+      <xsl:value-of select="concat('&#xa;\tpDOI{', $doi, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($print-isbn)">
+      <xsl:value-of select="concat('&#xa;\tpISBN{', $print-isbn, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($epdf-isbn)">
+      <xsl:value-of select="concat('&#xa;\tpEISBN{', $epdf-isbn, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($epub-isbn)">
+      <xsl:value-of select="concat('&#xa;\tpEpubISBN{', $epub-isbn, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($isbn-text)">
+      <xsl:value-of select="concat('&#xa;\tpEpubPreText{', $isbn-text, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($issn)">
+      <xsl:value-of select="concat('&#xa;\tpISSN{', $issn, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($dedication)">
+      <xsl:text>&#xa;\tpDedication{</xsl:text>
+      <xsl:apply-templates select="$dedication" mode="#current"/>
+      <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="normalize-space($acknowledgements)">
+      <xsl:value-of select="concat('&#xa;\tpAcknowledgements{', $acknowledgements, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($editorial)">
+      <xsl:text>&#xa;\tpEditorial{</xsl:text>
+      <xsl:apply-templates select="$editorial" mode="#current"/>
+      <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="normalize-space($edition-note)">
+      <xsl:value-of select="concat('&#xa;\tpEditionNote{', $edition-note, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($pub-year)">
+      <xsl:value-of select="concat('&#xa;\tpYear{', $pub-year, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($statement)">
+      <xsl:value-of select="concat('&#xa;\tpStatement{', $statement, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($biblio-info)">
+      <xsl:value-of select="concat('&#xa;\tpBiblio{', 
+                                   string-join($biblio-info/*, '\\&#xa;'),
+                                   '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($print-note)">
+      <xsl:value-of select="concat('&#xa;\tpPrintNote{', $print-note, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($environmental-note)">
+      <xsl:value-of select="concat('&#xa;\tpEnvDisclaimer{', $environmental-note, '}&#xa;')"/>
+    </xsl:if>
+    <!-- contributor meta -->
+    <xsl:if test="normalize-space($lectorate)">
+      <xsl:value-of select="concat('&#xa;\tpLectorate{', $lectorate, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($translator)">
+      <xsl:value-of select="concat('&#xa;\tpTranslator{', $translator, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($copy-editing)">
+      <xsl:value-of select="concat('&#xa;\tpQA{', $copy-editing, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($cover-credit)">
+      <xsl:value-of select="concat('&#xa;\tpCoverDesign{', $cover-credit, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($cover-art)">
+      <xsl:value-of select="concat('&#xa;\tpCoverImage{', $cover-art, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($typesetter)">
+      <xsl:value-of select="concat('&#xa;\tpTypesetter{', $typesetter, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($printer)">
+      <xsl:value-of select="concat('&#xa;\tpPrint{', $printer, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($used-font)">
+      <xsl:value-of select="concat('&#xa;\tpUsedFont{', $used-font, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($converter)">
+      <xsl:value-of select="concat('&#xa;\tpConversion{', $converter, '}&#xa;')"/>
+    </xsl:if>
+    <!-- licensing meta -->
+    <xsl:if test="normalize-space($copyright-note)">
+      <xsl:value-of select="concat('&#xa;\tpCopyrightDisclaimer{', $copyright-note, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($copyright-holder)">
+      <xsl:text>&#xa;\tpCopyright{</xsl:text>
+      <xsl:apply-templates select="$copyright-holder" mode="#current"/>
+      <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="normalize-space($license-logo-href)">
+      <xsl:value-of select="concat('&#xa;\tpLicenceLogo{logos/cc/', 
+                                   replace(
+                                           replace($license-logo-href, '\\(.)', '$1'),
+                                           '^.*/(.+?)$',
+                                           '$1'),
+                                   '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($license-text)">
+      <xsl:value-of select="concat('&#xA;\tpLicenceText{', 
+                                   string-join($license-text/*, '\\&#xa;'),
+                                   '}&#xA;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($license-link)">
+      <xsl:value-of select="concat('&#xa;\tpLicenceLink{', $license-link, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($license-name)">
+      <xsl:value-of select="concat('&#xa;\tpLicenceName{', $license-name, '}&#xa;')"/>
+    </xsl:if>
+    <!-- funding statement, \tpFundingPreText and \tpFundingPostText are placed before and
+         below one or more \begin{tpFunding} environment. One of which may contain a \tpFundName
+         and \tpFundLogo macro. Implement this according to the customer-specific metadata model.
+    -->
+    <xsl:if test="normalize-space($funder-pretext)">
+      <xsl:value-of select="concat('&#xa;\tpFundingPreText{', $funder-pretext, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($funder-posttext)">
+      <xsl:value-of select="concat('&#xa;\tpFundingPostText{', $funder-posttext, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($funder-name) or exists($funder-logo)">
+      <xsl:for-each select="$funder-logo[normalize-space()]">
+        <xsl:text>&#xa;\begin{tpFunding}</xsl:text>
+        <!-- currenly no method for multiple funding logo/name pairs -->
+        <xsl:if test="normalize-space($funder-name) and position() eq 1">
+          <xsl:value-of select="concat('&#xa;\tpFundName{', $funder-name, '}')"/>
+        </xsl:if>
+        <xsl:value-of select="concat('&#xa;\tpFundLogo{', 
+                                     replace($s9y1-path, '^file:/+', '/'),
+                                     'images/',
+                                     replace(replace(normalize-space(.), '^file:/+', ''), '\\(.)', '$1'), 
+                                     '}')"/>
+        <xsl:text>&#xa;\end{tpFunding}&#xa;</xsl:text>
+      </xsl:for-each>  
+    </xsl:if>
+    <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
     <xsl:for-each select="//dbk:index">
       <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
       <xsl:value-of select="concat('\newindex{', $index-index, '}{', $index-index, '_idx}{', $index-index, '_ind}{', normalize-space(dbk:info/dbk:title), '}&#xa;')"/>
