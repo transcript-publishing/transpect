@@ -60,9 +60,10 @@
         <xsl:sequence select="node()"/>
       </xsl:copy>
       <!-- complete issue referencinf book-parts only-->
-      <book dtd-version="3.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/">
+      <book xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/">
         <xsl:copy-of select="/*/@xml:lang" copy-namespaces="no"/>
         <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.all.jats.xml')"/>
+<!--        <xsl:attribute name="dtd-version" select="'3.0'"/>-->
         <xsl:apply-templates select="book-meta" mode="#current">
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
         </xsl:apply-templates>
@@ -79,6 +80,7 @@
       </book>
       <!-- single book-parts as temporary articles -->
       <xsl:apply-templates select="$articles" mode="#current">
+        <xsl:with-param name="book-atts" select="@*" as="attribute(*)*" tunnel="yes"/>
         <xsl:with-param name="meta" select="$meta" as="element(*)?" tunnel="yes"/>
         <xsl:with-param name="in-issue" select="false()" as="xs:boolean" tunnel="yes"/>
       </xsl:apply-templates>
@@ -244,6 +246,7 @@
   </xsl:template>
   
   <xsl:template match="*:article" mode="#default">
+    <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
     <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
     <xsl:variable name="uri">
       <xsl:choose>
@@ -264,6 +267,7 @@
       <xsl:with-param name="nodes" as="element(*)+" select="*"/>
       <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-chunk, $uri, '.jats.xml')"/>
       <xsl:with-param name="id" as="xs:string" select="(*/@id, generate-id())[1]"/>
+      <xsl:with-param name="book-atts" select="$book-atts" as="attribute(*)*" tunnel="yes"/>
       <xsl:with-param name="meta" select="$head-with-title" as="element(*)?" tunnel="yes"/>
       <xsl:with-param name="doi" as="xs:string?" select="replace(descendant::*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1], '^.*/(10\.\d+/.+)$', '$1')"/>
     </xsl:call-template>
@@ -275,11 +279,13 @@
     <xsl:param name="nodes" as="element(*)+"/>
     <xsl:param name="uri" as="xs:string"/>
     <xsl:param name="id" as="xs:string"/>
+    <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
     <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
     <xsl:param name="doi" as="xs:string?"/>
-    <book dtd-version="3.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/">
+    <book xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/">
+      <xsl:attribute name="dtd-version" select="'3.0'"/>
       <xsl:attribute name="xml:base" select="$uri"/>
-      <xsl:sequence select="$meta"/>
+      <xsl:sequence select="$book-atts[not(local-name() = ('base', 'dtd-version'))], $meta"/>
       <body>
         <xsl:apply-templates select="$nodes" mode="#current" />
       </body>
