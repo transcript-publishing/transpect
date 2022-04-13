@@ -1,6 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-headings}[2021/08/18 transcript]\relax
 
+
 \def\mydotfill{%
   \nobreak\leaders\hbox{$\m@th
     \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
@@ -28,10 +29,11 @@
   \tpSetProperty{toc-page-format}{\normalfont\sfwidefamily\normalsize}%
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
-    \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\newline}{}%
+    \tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\newline}{}%
     \tpIfComp{TocNumber}{\tpUseProperty{toc-hang-number}}{}%
-    \tpUseComp{TocTitle}%
-    \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
+    \tpTocLink{%
+      \tpUseComp{TocTitle}%
+      \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
   }%
 }
 
@@ -80,8 +82,8 @@
   \tpSetProperty{toc-title-format}{\sffamily\sbseries\huge}%
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
-    \tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}%
-    \tpUseComp{TocTitle}\nobreak}%
+    \tpTocLink{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}%
+      \tpUseComp{TocTitle}}\nobreak}%
   \tpSetProperty{toc-before-entry}{%
     \addvspace{\tpUseProperty{toc-margin-top}}
     \parindent \z@
@@ -159,12 +161,12 @@
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}
-      {\hskip-2em\hbox to 2em{\tpUseComp{TocNumber}}}
+      {\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
       {\leftskip\z@}%
-    \tpUseComp{TocTitle}%
-    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
-    \tpIfComp{TocAuthor}{\newline{\normalfont\sffamily\itshape\normalsize\tpUseComp{TocAuthor}}}{}%
-    \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
+    \tpTocLink{\tpUseComp{TocTitle}}%
+    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+    \tpIfComp{TocAuthor}{\newline{\normalfont\sffamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
+    \tpUseProperty{toc-page-sep}\tpTocLink{\tpUseComp{TocPage}}%
   }%
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
@@ -232,14 +234,14 @@
     \tpSetProperty{toc-heading}{%
       \tpUseProperty{toc-title-format}%
       \tpIfComp{TocNumber}
-      {\tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\newline}{}%
-        \hskip-2em\hbox to 2em{\tpUseComp{TocNumber}}}
+      {\tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\newline}{}%
+        \hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
       {%\leftskip\z@%
-        \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
+        \tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\space}{}%
       }%
-      \tpUseComp{TocTitle}%
-      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
-      \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
+      \tpTocLink{\tpUseComp{TocTitle}}%
+      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
     }%
   \fi
 }
