@@ -185,15 +185,18 @@
     <xsl:if test="title[@type = 'title'] or $metadata/term[@key = 'Titel'][normalize-space()]">
       <book-title-group>
         <book-title>
-          <xsl:value-of select="$metadata/term[@key = 'Titel'][normalize-space()]"/>
+          <xsl:apply-templates select="title[@type = 'main']/@*" mode="#current"/>
+          <xsl:value-of select="($metadata/term[@key = 'Titel'][normalize-space()], title[@type = 'sub'])[1]"/>
         </book-title>
         <xsl:if test="title[@type = 'sub'] or $metadata/term[@key = 'Untertitel'][normalize-space()]">
+          <xsl:apply-templates select="title[@type = 'main']/@*" mode="#current"/>
           <subtitle>
             <xsl:value-of select="($metadata/term[@key = 'Untertitel'][normalize-space()], title[@type = 'sub'])[1]"/>
           </subtitle>
         </xsl:if>
         <xsl:if test="title[@type = 'issue-title'] or $metadata/term[@key = 'Reihe'][normalize-space()]">
           <subtitle content-type="issue-title">
+            <xsl:apply-templates select="title[@type = 'issue-title']/@*" mode="#current"/>
             <xsl:value-of select="($metadata/term[@key = 'Reihe'][normalize-space()], title[@type = 'issue-title'])[1]"/>
           </subtitle>
         </xsl:if>
@@ -227,7 +230,17 @@
   </xsl:template>
 
   <xsl:template match="textClass" mode="tei2bits">
-    <xsl:apply-templates select="node() except keywords[matches(@corresp, '^#\p{Ll}')]" mode="#current"/>
+    <xsl:apply-templates select="node() except keywords[matches(@corresp, '^#\p{L}')]" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="keywords[@rendition = 'chunk-meta']" mode="tei2bits">
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="keywords[@rendition = ('titlepage', 'custom-meta')]" mode="tei2bits"/>
+
+  <xsl:template match="keywords[@rendition = 'chunk-meta']/term[@key='chunk-doi']" mode="tei2bits">
+    <book-part-id book-part-id-type="doi"><xsl:apply-templates select="node()" mode="#current"/></book-part-id>
   </xsl:template>
 
 </xsl:stylesheet>
