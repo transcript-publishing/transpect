@@ -23,6 +23,7 @@
   <xsl:param name="verbose" select="'no'"/>
   
   <xsl:param name="basename" as="xs:string"/>
+  <xsl:param name="generate-note-link-title" select="true()" as="xs:boolean"/>
   
   <xsl:variable name="divify-sections" select="'no'"/>
   
@@ -502,7 +503,7 @@
     </pre>
   </xsl:template>
   
-  <xsl:template match="p/hi" mode="tei2html">
+  <xsl:template match="p[matches(@rend, '^tscodeblock[a-z0-9]+$')]/hi" mode="tei2html">
     <code class="{replace(parent::p/@rend, '^tscodeblock', '')}">
       <xsl:apply-templates mode="#current"/>
     </code>
