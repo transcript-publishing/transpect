@@ -113,9 +113,11 @@
   \tpSetProperty{imprint-format}{}%
   \tpSetProperty{counted-meta-sep}{}%
   \tpSetProperty{name-meta-format}{%
-    {\sbseries\tpUseComp{FullName}}\space%
-    \tpUseComp{Bio}\par%
-    \tpUseProperty{counted-meta-sep}%
+    \tpIfComp{Bio}
+      {{\sbseries\tpUseComp{FullName}}\space%
+       \tpUseComp{Bio}\par%
+       \tpUseProperty{counted-meta-sep}%
+     }{}%
   }
   %% Format CC-Lizenz
   \tpSetProperty{licence}{%

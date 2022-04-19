@@ -96,7 +96,7 @@
 }
 
 \tpDeclareHeading{0}{chapter}{%
-  \tpSetProperty{before-heading}{\cleardoublepage\null\vskip\headingsep\vskip-.45mm\relax}%
+  \tpSetProperty{before-heading}{\cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
   \tpSetProperty{toc-margin-right}{2em}%
   \tpSetProperty{after-skip}{\tpIfComp{Author}{1.68\baselineskip}{3.68\baselineskip}}%
@@ -113,7 +113,7 @@
        \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
        \tpUseComp{Title}}%
       \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\tpUseComp{Subtitle}}{}%
-      \par
+      \par\nobreak
     \egroup
     %% Linie
     \vskip\dimexpr-1\baselineskip\relax
