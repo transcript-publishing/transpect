@@ -158,10 +158,17 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="*[local-name() = ('title-group', 'book-title-group')][parent::*[local-name() = ('book-part-meta', 'book-meta')][*:trans-abstract[*:title]]]" mode="clean-up" priority="3">
+  <xsl:template match="*[local-name() = ('title-group', 'book-title-group')]
+                        [parent::*[local-name() = ('book-part-meta', 'book-meta')]
+                                  [*:trans-abstract[*:title]
+                                   or
+                                   following-sibling::*:body[1]/*:sec[@sec-type = 'alternative-title'][*:p]]
+                        ]" mode="clean-up" priority="3">
+    <!-- move abstract title or alt title to title group -->
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
-      <xsl:for-each select="../*:trans-abstract/*:title">
+      <xsl:for-each select="../*:trans-abstract/*:title | 
+                            ../following-sibling::*:body[1]/*:sec[@sec-type = 'alternative-title']/*:p">
         <xsl:element name="trans-title-group">
           <xsl:apply-templates select="../@xml:lang" mode="#current"/>
           <xsl:element name="trans-title">
@@ -242,5 +249,15 @@
   <xsl:template match="keywords[@rendition = 'chunk-meta']/term[@key='chunk-doi']" mode="tei2bits">
     <book-part-id book-part-id-type="doi"><xsl:apply-templates select="node()" mode="#current"/></book-part-id>
   </xsl:template>
+
+  <xsl:template match="keywords[not(@rendition = ('titlepage', 'docProps'))]/@rendition" mode="tei2bits">
+    <xsl:attribute name="kwd-group-type" select="'auhor-generated'"/>
+    <!-- https://redmine.le-tex.de/issues/12464 -->
+  </xsl:template>
+
+  <xsl:template match="sec/@sec-type[. = 'keywords']" mode="tei2bits" priority="5">
+    <!-- needed only as metadata-->
+  </xsl:template>
+
 
 </xsl:stylesheet>
