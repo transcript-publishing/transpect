@@ -862,6 +862,7 @@
 <!--    <xsl:choose>
       <xsl:when test="$is-collection">-->
 <!--        links: tpAuthor/tpRunAuthor, wenn es den nicht gibt: \tp(Run)Title | Rechts: \tp(Run)Title-->
+
         <xsl:if test="dbk:abbrev[matches(@role, $col-author-style)] or dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]">
           <rule name="tpRunAuthor" type="cmd" break-before="1">
             <param select="(dbk:abbrev[matches(@role, $col-author-style)], 
@@ -872,7 +873,9 @@
             </param>
           </rule>
         </xsl:if>
-        <xsl:if test="dbk:abbrev[matches(@role, $col-head-style)] or dbk:title[descendant::*[self::dbk:footnote]]">
+        <xsl:if test="dbk:abbrev[matches(@role, $col-head-style)] 
+                      or  
+                      dbk:title[descendant::*[self::dbk:footnote | self::dbk:br]]">
           <rule name="tpRunTitle" type="cmd" break-before="1">
             <param select="(dbk:abbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
