@@ -126,6 +126,7 @@
     }{}%
     %% Zitat
     \par
+    \vskip\baselineskip
     \tpIfComp{Quote}{%
       \vskip\baselineskip
       \savenotes
@@ -219,7 +220,6 @@
       %\savenotes
       \hfill\vbox{%
         \hsize.5\textwidth
-        \itshape
         \normalsize\nsfwiderfamily\mdseries
         \noindent
         \tpUseComp{Quote}}%
@@ -259,7 +259,7 @@
 
 \tpDeclareHeading[section]{3}{subsubsection}{%
   \tpSetProperty{before-heading}{\minusvspace{12.8bp}}%
-  \tpSetProperty{after-skip}{1sp}%
+  %\tpSetProperty{after-skip}{1sp}% Ticket 12534, 2022-04-25
   \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
 }
 
