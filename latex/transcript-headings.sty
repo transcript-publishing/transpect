@@ -49,12 +49,12 @@
   }%
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
-  \tpSetProperty{title-format}{\sffamily\sbseries\HUGE}%
+  \tpSetProperty{title-format}{\sffamily\sbseries\fontsize{17.5bp}{25.6bp}\selectfont}%
   \tpSetProperty{heading-block}{%
     \tpUseProperty{title-format}%
     \vskip.5\baselineskip
     \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
-    \tpUseComp{Title}%
+    \tpUseComp{Title}\par%
     \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
     %% Zitat
     \tpIfComp{Quote}{%
