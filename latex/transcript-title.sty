@@ -39,10 +39,19 @@
     \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
     \tpIfComp{Acknowledgements}{{\itshape\large\tpUseComp{Acknowledgements}}\par\vskip\baselineskip}{}%
     \tpIfComp{Editorial}{\tpUseComp{Editorial}\par\vskip\baselineskip}{}%
-    \vfill
+    \vspace*{\fill}%
     \bgroup
       \tpUseProperty{bio-block}%
     \egroup
+  }%
+    % Bio
+  \tpSetProperty{bio-block}{%
+    \ifcollection
+      \tpGetComp{EditorMetaBlock}%
+      %\tpGetComp{SeriesEditorMetaBlock}% Erzeugt ein Fundinglogo.
+    \else
+      \tpGetComp{AuthorMetaBlock}% Erzeugt ein Fundinglogo.
+    \fi
   }%
   \tpSetProperty{titlepage-iii}{%
     {\Large\sffamily\ifcollection
