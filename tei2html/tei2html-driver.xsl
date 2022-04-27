@@ -508,6 +508,14 @@
       <xsl:apply-templates mode="#current"/>
     </code>
   </xsl:template>
+  
+  <!-- https://redmine.le-tex.de/issues/12371 -->
+  
+  <xsl:template match="p[not(parent::quote)]//lb" mode="tei2html"/>
+  
+  <xsl:template match="quote/p//lb" mode="tei2html">
+    <br class="tsline"/>
+  </xsl:template>
 
   <xsl:template match="*:img[contains(../@class, 'fig')][../*:p[*:span[@class='hub:caption-text']]]/@alt[.= '']" mode="clean-up">
     <xsl:attribute name="{name()}">
@@ -560,7 +568,7 @@
       <xsl:apply-templates select="node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
-
+  
   <xsl:template name="meta">
     <!-- warum matcht langUsage nicht? -->
     <xsl:apply-templates select="teiHeader/profileDesc/langUsage, teiHeader/fileDesc/seriesStmt, teiHeader/fileDesc/publicationStmt/date" mode="#current"/>
