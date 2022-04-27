@@ -22,7 +22,8 @@
   }%
   \tpSetProperty{titlepage-i}{%
     \ifcollection
-      \tpUseProperty{editor-string}%
+      \topsep0pt \partopsep0pt % no space before
+      \flushleft\tpUseProperty{editor-string}\endflushleft%
     \else
       \tpUseComp{AuthorNameList}%
     \fi%
@@ -155,7 +156,7 @@
     \egroup
   }
   \tpSetProperty{counted-name-sep}{\ifnum\tpCurCount<\tpTotalCount\relax,\space\fi}%
-  \tpSetProperty{editor-suffix}{\space(Hg.)}
+  \tpSetProperty{editor-suffix}{~(Hg.)}
 }
 
 
