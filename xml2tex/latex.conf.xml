@@ -953,6 +953,17 @@
       </rule>
     </xsl:if>
   </template>
+  
+  <xsl:template match="dbk:title//text()[matches(., '[&#x1e24;&#x1e25;&#x1e6f;&#x1e0d;&#x1e2a;]+')]" mode="xml2tex" priority="100000">
+    <xsl:analyze-string select="." regex="([&#x1e24;&#x1e25;&#x1e6f;&#x1e0d;&#x1e2a;]+)">
+      <xsl:matching-substring>
+        <xsl:value-of select="concat('\foreignlanguage{arabic}{', ., '}')"/>
+      </xsl:matching-substring>
+      <xsl:non-matching-substring>
+        <xsl:value-of select="."/>
+      </xsl:non-matching-substring>
+    </xsl:analyze-string>
+  </xsl:template>
 
   <xsl:function name="tr:determine-fig-class" as="xs:string?">
     <xsl:param name="elt" as="element(*)"/>
