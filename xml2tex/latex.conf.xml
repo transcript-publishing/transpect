@@ -243,7 +243,7 @@
       <xsl:value-of select="concat('&#xa;\tpPubDivInfo{', $publisher-imprint-info, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($publisher-logo-href)">
-      <xsl:value-of select="concat('&#xa;\tpPubLogo{', 'logos/series/', $publisher-logo-href, '}&#xa;')"/>
+      <xsl:value-of select="concat('&#xa;\tpSeries{\includegraphics{logos/series/', $publisher-logo-href, '}}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($publisher-note)">
       <xsl:value-of select="concat('&#xa;\tpPubNote{', $publisher-note, '}&#xa;')"/>
