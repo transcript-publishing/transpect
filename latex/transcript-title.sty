@@ -23,7 +23,7 @@
   \tpSetProperty{titlepage-i}{%
     \ifcollection
       \topsep0pt \partopsep0pt % no space before
-      \flushleft\tpUseProperty{editor-string}\endflushleft%
+      \flushleft\tpUseProperty{EditorNameList}\endflushleft%
     \else
       \tpUseComp{AuthorNameList}%
     \fi%
@@ -55,7 +55,7 @@
   }%
   \tpSetProperty{titlepage-iii}{%
     {\Large\sffamily\ifcollection
-      \tpUseProperty{editor-string}%
+      \tpUseProperty{EditorNameList}%
     \else
       \tpUseComp{AuthorNameList}%
     \fi}%
