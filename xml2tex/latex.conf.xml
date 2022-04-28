@@ -186,7 +186,7 @@
     <xsl:for-each select="if(count($authors/*) gt 1) then $authors/* else $authors">
       <xsl:variable name="pos" select="position()" as="xs:integer"/>
       <xsl:text>&#xa;\begin{tpAuthor}</xsl:text>
-      <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
+      <xsl:value-of select="concat('&#xa;\tpFullName{', replace(., '[\p{Zs}&#xa;]', '~'), '}')"/>
       <xsl:if test="$author-info">
         <xsl:value-of select="concat('&#xa;\tpBio{', 
                                      normalize-space(if(count($authors/*) gt 1) then $author-info/*[$pos] else $author-info), 
@@ -197,7 +197,7 @@
     <xsl:for-each select="if(count($editors/*) gt 1) then $editors/* else $editors">
       <xsl:variable name="pos" select="position()" as="xs:integer"/>
       <xsl:text>&#xa;\begin{tpEditor}</xsl:text>
-      <xsl:value-of select="concat('&#xa;\tpFullName{', ., '}')"/>
+      <xsl:value-of select="concat('&#xa;\tpFullName{', replace(., '[\p{Zs}&#xa;]', '~'), '}')"/>
       <xsl:value-of select="concat('&#xa;\tpBio{', 
                                                 normalize-space(if(count($editors/*) gt 1) then $editor-info/*[$pos] else $editor-info), 
                                                 '}&#xa;')"/>
