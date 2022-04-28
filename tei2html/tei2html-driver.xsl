@@ -511,11 +511,11 @@
   
   <!-- https://redmine.le-tex.de/issues/12371 -->
   
-  <xsl:template match="p[not(parent::quote)]//lb" mode="tei2html"/>
+  <!--<xsl:template match="p[not(parent::quote)]//lb" mode="tei2html"/>
   
   <xsl:template match="quote/p//lb" mode="tei2html">
     <br class="tsline"/>
-  </xsl:template>
+  </xsl:template>-->
 
   <xsl:template match="*:img[contains(../@class, 'fig')][../*:p[*:span[@class='hub:caption-text']]]/@alt[.= '']" mode="clean-up">
     <xsl:attribute name="{name()}">
