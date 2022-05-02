@@ -125,7 +125,7 @@
   \tpSetProperty{counted-meta-sep}{}%
   \tpSetProperty{name-meta-format}{%
     \tpIfComp{Bio}
-      {{\sbseries\tpUseComp{FullName}}\space%
+      {%{\sbseries\tpUseComp{FullName}}\space% Ticket 12562; 2022-05-02.
        \tpUseComp{Bio}\par%
        \tpUseProperty{counted-meta-sep}%
      }{}%
