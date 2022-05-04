@@ -45,8 +45,8 @@
         </article>
       </xsl:for-each>
     </xsl:variable>
-    <xsl:variable select="if (*:head/*:meta[@name = 'doi'][@content]) 
-                          then replace(/*/*:head/*:meta[@name = 'doi']/@content, '^.+/', '')
+    <xsl:variable select="if (*:book-meta/*:book-id[@book-id-type= 'doi'][normalize-space()]) 
+                          then replace(*:book-meta/*:book-id[@book-id-type= 'doi'][normalize-space()], '^.+/', '')
                           else 
                              if (descendant::*[self::*:header[@class = 'chunk-meta-sec']][*:ul/*:li[@class = 'chunk-doi'][matches(., '-0*\d+$')]])
                              then replace((descendant::*[self::*:header[@class = 'chunk-meta-sec']]/*:ul/*:li[@class = 'chunk-doi'])[1], '^.+/(.+)-.+$', '$1')
@@ -59,10 +59,10 @@
         <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-bits, $filename, '.bits.xml')"/>
         <xsl:sequence select="node()"/>
       </xsl:copy>
-      <!-- complete issue referencinf book-parts only-->
+      <!-- complete issue referencing book-parts only-->
       <book xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/">
         <xsl:copy-of select="/*/@xml:lang" copy-namespaces="no"/>
-        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.all.jats.xml')"/>
+        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.jats.xml')"/>
 <!--        <xsl:attribute name="dtd-version" select="'3.0'"/>-->
         <xsl:apply-templates select="book-meta" mode="#current">
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
@@ -71,6 +71,7 @@
           <book-part book-part-type="book-toc-page-order">
             <body>
               <xsl:apply-templates select="$articles/node()" mode="#current">
+                <xsl:with-param name="book-atts" select="@*" as="attribute(*)*" tunnel="yes"/>
                 <xsl:with-param name="meta" select="$meta" as="element(*)?" tunnel="yes"/>
                 <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
               </xsl:apply-templates>
@@ -103,26 +104,68 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="front-matter-part[@book-part-type='toc']" mode="#default" priority="7">
+
+  <xsl:template match="front-matter-part[@book-part-type='title-page']" mode="#default" priority="3">
+    <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
+    <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
+    <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
+    <xsl:variable name="new-doi" select="replace($meta/book-id[@book-id-type='doi'], '^.+/(.+)$', '$1-fm')"/>
+    <book-part book-part-type="frontmatter" id="{concat('b_', $new-doi)}" >
+      <xsl:if test="not($in-issue)"><xsl:attribute name="id" select="concat('b_', $new-doi)"/></xsl:if>
+      <!--  <xsl:if test="not($in-issue)"><xsl:attribute name="book-part-number" select="'1'"/></xsl:if>-->
+      <book-part-meta>
+        <book-part-id pub-id-type="doi"><xsl:value-of select="concat($meta/book-id[@book-id-type='doi'], '-fm')"/></book-part-id>
+        <title-group>
+          <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="'Frontmatter'"/></title>
+        </title-group>
+        <permissions>
+          <copyright-statement>© 2021 transcript Verlag</copyright-statement>
+          <copyright-year>2021</copyright-year>
+          <copyright-holder>transcript Verlag</copyright-holder>
+          <ali:free_to_read/>
+        </permissions>
+        <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>
+        <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>
+      </book-part-meta>
+			<xsl:if test="not($in-issue)"><body/></xsl:if>
+    </book-part>
+  </xsl:template>
+
+  <xsl:template match="front-matter-part[@book-part-type='toc']" mode="#default" priority="3">
+    <xsl:param name="doi" as="xs:string?" tunnel="yes"/>
+    <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
+    <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
+    <xsl:variable name="new-doi" select="($doi, replace(book-part-meta/book-part-id, '^.+/(.+)-.+$', '$1-toc'))[1]"/>
+    <book-part book-part-type="contents" id="{concat('b_', $new-doi)}" >
+      <xsl:if test="not($in-issue)"><xsl:attribute name="id" select="concat('b_', $new-doi)"/></xsl:if>
+      <!-- <xsl:if test="$in-issue"><xsl:attribute name="book-part-number" select="'2'"/></xsl:if>-->
+      <book-part-meta>
+       <!-- <book-part-id pub-id-type="doi"><xsl:value-of select="replace($doi, '-.+$', '-toc')"/></book-part-id>-->
+        <xsl:apply-templates select="book-part-meta/book-part-id" mode="#current"/>
+        <title-group>
+          <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="if ($book-atts[name() = 'xml:lang'][contains(., 'de')]) then 'Inhalt' else 'Content'"/></title>
+        </title-group>
+        <permissions>
+          <copyright-statement>© 2021 transcript Verlag</copyright-statement>
+          <copyright-year>2021</copyright-year>
+          <copyright-holder>transcript Verlag</copyright-holder>
+          <ali:free_to_read/>
+        </permissions>
+        <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>
+        <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>
+      </book-part-meta>
+			<xsl:if test="not($in-issue)"><body/></xsl:if>
+    </book-part>
+  </xsl:template>
+
+  <!-- TODO: permission handling--> 
+
+<!--  <xsl:template match="front-matter/front-matter-part[not(@book-part-type = 'toc')][position() ne 1]" mode="#default" priority="3">
     <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
     <xsl:if test="$in-issue">
       <xsl:next-match/>
     </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="front-matter-part[@book-part-type='toc']" mode="#default" priority="3">
-    <xsl:param name="doi" as="xs:string?"/>
-    <book-part book-part-type="contents" id="{concat('b_', ($doi))}" book-part-number="2">
-      <xsl:apply-templates select="@*, node()" mode="#current"/> 
-    </book-part>
-  </xsl:template>
-
-  <xsl:template match="front-matter-part" mode="#default" priority="3">
-    <xsl:param name="doi" as="xs:string?"/>
-    <book-part book-part-type="" id="{concat('b_', ($doi))}" book-part-number="2">
-      <xsl:apply-templates select="@*" mode="#current"/> 
-    </book-part>
-  </xsl:template>
+  </xsl:template>-->
 
   <xsl:template match="body" mode="#default" priority="3">
    <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
@@ -145,13 +188,6 @@
 
   <xsl:template match="*:html//*:nav/*:ol//*:li[matches(*:a/@href, '^#(epub-cover-image-container|halftitle|title-page|imprint|toc)$')]" mode="#default" priority="7"/>
 
-  <xsl:template match="*:html//*:nav//*:ol" mode="export" priority="5">
-    <xsl:element name="ul">
-     <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:if test="not(ancestor::*:ol)"><xsl:attribute name="class" select="'toc-list'"/></xsl:if>
-     <xsl:apply-templates select="node()" mode="#current"/>
-    </xsl:element>
-  </xsl:template>
 
   <!--<xsl:template match="*[self::*:td | self::*:tr]/@style" mode="#default" priority="7">
     <!-\- https://redmine.le-tex.de/issues/11058 discard default atts -\->
@@ -185,79 +221,16 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="*:p[@class = 'tsmetaalternativeheadline']" mode="generate-chunk-meta-tags">
-    <meta name="alternative-headline" content="{normalize-space(string-join(node()))}"/>
-  </xsl:template>
-
-  <xsl:template match="*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']" mode="generate-chunk-meta-tags">
-    <xsl:for-each select="*:li">
-      <meta name="{./@class}" content="{if (@class = '') then replace(./text(), '^http://doi.org/', '') else ./text()}"/>
-    </xsl:for-each>
-  </xsl:template>
-
-  <xsl:template match="*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-keywords']" mode="generate-chunk-meta-tags">
-    <meta name="keywords" content="{string-join(*:li, '; ')}"/>
-  </xsl:template>
-
-  <xsl:template match="*:header[@class = 'chunk-meta-sec']/*:div[@class = 'chunk-abstract']" mode="generate-chunk-meta-tags">
-    <meta name="abstract" content="{text()}"/>
-  </xsl:template>
-
-  <xsl:template match="*:head/*:meta[@name = 'DC.title']" mode="#default">
-    <xsl:param name="context" as="element(*)*" tunnel="yes"/>
-      <meta name="{@name}" content="{if ($context/descendant::*:header[@class = 'chunk-meta-sec'])
-                                     then $context/descendant::*[local-name() = ('h2', 'h3')][1]/@title
-                                     else @content}"/>
-  </xsl:template>
-
-  <xsl:template match="*:head/*:meta[@name = 'DC.identifier']" mode="#default">
-    <xsl:param name="context" as="element(*)*" tunnel="yes"/>
-      <meta name="{@name}" content="{if ($context/descendant::*:header[@class = 'chunk-meta-sec'][*:ul/*:li[@class ='chunk-doi']])
-                                     then replace($context/descendant::*:header[@class = 'chunk-meta-sec']/*:ul/*:li[@class ='chunk-doi'], 'https?://doi.org/', '')
-                                     else @content}"/>
-  </xsl:template>
-
-  <xsl:template match="*:head/*:meta[@name = 'DC.creator']" mode="#default">
-    <xsl:param name="context" as="element(*)*" tunnel="yes"/>
-      <meta name="{@name}" content="{if (@content[normalize-space()])
-                                     then @conten
-                                     else 
-                                        if (/*/*:body/*:section[@epub:type ='titlepage'][*:p[@class='autor']]) 
-                                        then /*/*:body/*:section[@epub:type ='titlepage'][*:p[@class='autor']]
-                                        else $context/descendant::*:p[@class = 'heading-author'][1]}"/>
-  </xsl:template>
-
  
   <xsl:variable name="short-isbn" select="replace(replace(/*/@xml:base, '^.+/.+?(\d+).+$', '$1'), '^[0]', '')"/>
-
-
-  <xsl:template match="*:head/*:title" mode="#default">
-    <xsl:param name="context" as="element(*)?" tunnel="yes"/>
-    <xsl:copy copy-namespaces="no">
-      <xsl:choose>  
-        <xsl:when test="$context">
-            <xsl:value-of select="$context/descendant::*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1]/text()"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="/*/*:head/*:meta[@name = 'DC.title']/@content"/>
-        </xsl:otherwise> 
-      </xsl:choose>
-    </xsl:copy>
-  </xsl:template>
-  
+ 
   <xsl:template match="*:article" mode="#default">
     <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
     <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
-    <xsl:variable name="uri">
-      <xsl:choose>
-        <xsl:when test="descendant::*:header[@class = 'chunk-meta-sec'][*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi']]">
-          <xsl:value-of select="replace(descendant::*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1], '^.+/', '')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="(*/@id, generate-id())[1]"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
+    <xsl:variable name="temp-doi" select="(descendant::*:book-part-id[@book-part-id-type = 'doi'])[1]"/>
+    <xsl:variable name="uri" select="if (matches($temp-doi, '\d')) 
+                                     then replace($temp-doi, '^.+/', '') 
+                                     else concat($meta/*:book-id[@book-id-type='doi'], '-', generate-id(.))"/>
     <xsl:variable name="head-with-title" as="element(*)?">
       <xsl:apply-templates select="$meta" mode="#current">
         <xsl:with-param name="context" select="." as="element(*)" tunnel="yes"/>
@@ -269,10 +242,10 @@
       <xsl:with-param name="id" as="xs:string" select="(*/@id, generate-id())[1]"/>
       <xsl:with-param name="book-atts" select="$book-atts" as="attribute(*)*" tunnel="yes"/>
       <xsl:with-param name="meta" select="$head-with-title" as="element(*)?" tunnel="yes"/>
-      <xsl:with-param name="doi" as="xs:string?" select="replace(descendant::*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1], '^.*/(10\.\d+/.+)$', '$1')"/>
+      <xsl:with-param name="doi" as="xs:string?" select="$temp-doi" tunnel="yes"/>
     </xsl:call-template>
   </xsl:template>
- 
+
   <xsl:template match="@xml:base" mode="export"/>
   
   <xsl:template name="bts:create-chunk">
@@ -281,11 +254,11 @@
     <xsl:param name="id" as="xs:string"/>
     <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
     <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
-    <xsl:param name="doi" as="xs:string?"/>
+    <xsl:param name="doi" as="xs:string?" tunnel="yes"/>
     <book xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/">
-      <xsl:attribute name="dtd-version" select="'3.0'"/>
+<!--      <xsl:attribute name="dtd-version" select="'3.0'"/>-->
       <xsl:attribute name="xml:base" select="$uri"/>
-      <xsl:sequence select="$book-atts[not(local-name() = ('base', 'dtd-version'))], $meta"/>
+      <xsl:sequence select="$book-atts[not(local-name() = ('base')(:, 'dtd-version'):))], $meta"/>
       <body>
         <xsl:apply-templates select="$nodes" mode="#current" />
       </body>
