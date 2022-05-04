@@ -158,30 +158,49 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:variable name="book-part-chapters" select="/*:book/*[self::*:book-body|*:book-back]//*:book-part[not(@book-part-type = 'part')]"/>
+<!--  <xsl:variable name="book-part-parts" select="/*:book/*[self::*:book-body|*:book-back]//*:book-part[@book-part-type = 'part']"/>-->
+
   <xsl:template match="*[local-name() = ('title-group', 'book-title-group')]
-                        [parent::*[local-name() = ('book-part-meta', 'book-meta')]
-                                  [*:trans-abstract[*:title]
-                                   or
-                                   following-sibling::*:body[1]/*:sec[@sec-type = 'alternative-title'][*:p]]
-                        ]" mode="clean-up" priority="3">
+                        [parent::*[local-name() = ('book-part-meta', 'book-meta')]]" mode="clean-up" priority="3">
     <!-- move abstract title or alt title to title group -->
+    <xsl:if test="..[self::*:book-part-meta] and not(..[*:book-part-id])">
+      <xsl:variable name="counter" select="if (../..[@book-part-type = 'part']) 
+                                          then concat('NO-DOI-', *:title)
+                                          else xs:string(format-number(index-of($book-part-chapters, ../..), '000'))" as="xs:string?"/>
+      <xsl:variable name="counter-with-fm" select="if (../..[self::*:front-matter-part[@book-part-type= 'title-page']]) 
+                                                   then 'fm' 
+                                                   else 
+                                                      if (../..[self::*:front-matter-part][@book-part-type= 'toc']) 
+                                                      then 'toc'
+                                                      else $counter"/>
+      <book-part-id book-part-id-type="doi"><xsl:value-of select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'], '-', $counter-with-fm)"/></book-part-id>
+      <xsl:message select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'], '-', $counter)"/>
+    </xsl:if>
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <xsl:if test="parent::*[local-name() = ('book-part-meta', 'book-meta')]
+                                  [*:trans-abstract[*:title]
+                                   or
+                                   following-sibling::*:body[1]/*:sec[@sec-type = 'alternative-title'][*:p]]">
       <xsl:for-each select="../*:trans-abstract/*:title | 
                             ../following-sibling::*:body[1]/*:sec[@sec-type = 'alternative-title']/*:p">
         <xsl:element name="trans-title-group">
           <xsl:apply-templates select="../@xml:lang" mode="#current"/>
-          <xsl:element name="trans-title">
-            <xsl:apply-templates select="@*, node()" mode="#current"/>
+            <xsl:element name="trans-title">
+              <xsl:apply-templates select="@*, node()" mode="#current"/>
+            </xsl:element>
           </xsl:element>
-        </xsl:element>
-      </xsl:for-each>
+        </xsl:for-each>
+      </xsl:if>
     </xsl:copy>
   </xsl:template>
 
   <xsl:template match="titleStmt" mode="tei2bits">
 
-    <book-id pub-id-type="doi"><xsl:value-of select="$metadata/term[@key = 'DOI'][normalize-space()]"/></book-id>
+    <xsl:if test="$metadata/term[@key = 'DOI'][normalize-space()]">
+      <book-id book-id-type="doi"><xsl:value-of select="$metadata/term[@key = 'DOI'][normalize-space()]"/></book-id>
+    </xsl:if>
 
     <contrib-group>
       <xsl:for-each select="$metadata/term[@key = ('Autor', 'Herausgeber')][normalize-space()]">
@@ -255,9 +274,17 @@
     <!-- https://redmine.le-tex.de/issues/12464 -->
   </xsl:template>
 
-  <xsl:template match="sec/@sec-type[. = 'keywords']" mode="tei2bits" priority="5">
+  <xsl:template match="sec/@sec-type[. = 'keywords']" mode="clean-up" priority="5">
     <!-- needed only as metadata-->
   </xsl:template>
 
+  <xsl:template match="divGen[@type = 'toc']" mode="tei2bits" priority="2">
+    <front-matter-part book-part-type="toc">
+      <xsl:call-template name="named-book-part-meta"/>
+      <named-book-part-body>
+        <xsl:apply-templates select="@*, node() except head" mode="#current"/>
+      </named-book-part-body>
+    </front-matter-part>
+  </xsl:template>
 
 </xsl:stylesheet>
