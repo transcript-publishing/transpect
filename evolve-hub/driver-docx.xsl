@@ -7,11 +7,15 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:functx="http://www.functx.com"
   xmlns:ts="http://www.transcript-verlag.de/transpect"
+  xmlns:tr="http://transpect.io"
+
   xmlns="http://docbook.org/ns/docbook" 
   xpath-default-namespace="http://docbook.org/ns/docbook"
-  exclude-result-prefixes="xs hub dbk ts" 
+  exclude-result-prefixes="xs hub dbk ts tr xlink functx" 
   version="2.0">
   
+
+  <xsl:import href="http://transpect.io/xslt-util/isbn/xsl/isbncheck.xsl"/>
   <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
   <xsl:import href="http://this.transpect.io/a9s/ts/xsl/shared-variables.xsl"/>
 
@@ -52,4 +56,12 @@
 
   <xsl:template match="*[self::table | self::informaltable]/@css:padding-left | *[self::table | self::informaltable]/@css:padding-right | *[self::table | self::informaltable]/@css:width" mode="hub:clean-hub"/>
   
+  <xsl:template match="/hub/info/*[last()]" mode="custom-2">
+    <xsl:next-match/>
+    <xsl:variable name="temp-isbn" as="xs:string?" select="replace($basename, '^.+\d(\d{4}).*$', '97838394$10')"/>
+    <!--  <xsl:message select="'temp-isbn: ', $temp-isbn, ' calc isbn: ', tr:check-isbn($temp-isbn, 13), 'ges: ', concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>-->
+    <!-- https://redmine.le-tex.de/issues/12499 add doi for chunking later -->
+    <biblioid class="doi"><xsl:value-of select="concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/></biblioid>
+  </xsl:template>
+
 </xsl:stylesheet>
