@@ -57,9 +57,14 @@
                 select="$metadata/dbk:keyword[@role eq 'Verlagsimprint']"/>
   <xsl:variable name="publisher-imprint-info" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Verlagsinfo']"/>
-  <xsl:variable name="publisher-logo-href" as="xs:string?" 
+  <xsl:variable name="series-logo-href" as="xs:string?" 
                 select="replace(
                                 lower-case(replace($metadata/dbk:keyword[@role eq 'Reihenlogo'], '\\(.)', '$1')), 
+                                '^.*/(.+?)$',
+                                '$1')"/>
+  <xsl:variable name="publisher-logo-href" as="xs:string?" 
+                select="replace(
+                                lower-case(replace(($metadata/dbk:keyword[@role eq 'Verlagslogo'], 'transcript_rgb.png')[1], '\\(.)', '$1')), 
                                 '^.*/(.+?)$',
                                 '$1')"/>
   <xsl:variable name="publisher-note" as="element(dbk:keyword)?"
@@ -242,8 +247,11 @@
     <xsl:if test="normalize-space($publisher-imprint-info)">
       <xsl:value-of select="concat('&#xa;\tpPubDivInfo{', $publisher-imprint-info, '}&#xa;')"/>
     </xsl:if>
+    <xsl:if test="normalize-space($series-logo-href)">
+      <xsl:value-of select="concat('&#xa;\tpSeries{\includegraphics{logos/series/', $series-logo-href, '}}&#xa;')"/>
+    </xsl:if>
     <xsl:if test="normalize-space($publisher-logo-href)">
-      <xsl:value-of select="concat('&#xa;\tpSeries{\includegraphics{logos/series/', $publisher-logo-href, '}}&#xa;')"/>
+      <xsl:value-of select="concat('&#xa;\tpPubLogo{logos/', $publisher-logo-href, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($publisher-note)">
       <xsl:value-of select="concat('&#xa;\tpPubNote{', $publisher-note, '}&#xa;')"/>
