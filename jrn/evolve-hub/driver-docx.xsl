@@ -42,4 +42,27 @@
     </issuenum>
   </xsl:template>
 
+  <xsl:template match="para[matches(@role, $hub:article-keywords-role-regex)]" mode="hub:process-meta-sidebar" priority="2">
+    <xsl:param name="process-meta" tunnel="yes" as="xs:boolean?"/>
+    <xsl:choose>
+      <xsl:when test="$process-meta">
+        <xsl:variable name="lang" select="key('natives', @role)" as="element(css:rule)?"/>
+        <xsl:variable name="text" select="string-join(descendant::text(), '')" as="xs:string?"/>
+        <xsl:variable name="without-heading" select="replace($text, '^(Schlüssel(wörter|begriffe)|Key\s?words|Mots[ -]clés):[\p{Zs}*]?', '', 'i')" as="xs:string?"/>
+        <xsl:variable name="single-keywords" select="tokenize($without-heading, ';')" as="xs:string*"/>
+        <xsl:for-each select="$single-keywords">
+          <xsl:element name="keyword">
+            <xsl:if test="$lang[@xml:lang]">
+              <xsl:attribute name="xml:lang" select="$lang/@xml:lang"/>
+            </xsl:if>
+            <xsl:value-of select="if (. eq $single-keywords[last()]) then replace(normalize-space(.), '\.$', '') else normalize-space(.)"/>
+          </xsl:element>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 </xsl:stylesheet>
