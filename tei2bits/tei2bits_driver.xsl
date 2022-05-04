@@ -168,12 +168,9 @@
       <xsl:variable name="counter" select="if (../..[@book-part-type = 'part']) 
                                           then concat('NO-DOI-', *:title)
                                           else xs:string(format-number(index-of($book-part-chapters, ../..), '000'))" as="xs:string?"/>
-      <xsl:variable name="counter-with-fm" select="if (../..[self::*:front-matter-part[@book-part-type= 'title-page']]) 
-                                                   then 'fm' 
-                                                   else 
-                                                      if (../..[self::*:front-matter-part][@book-part-type= 'toc']) 
-                                                      then 'toc'
-                                                      else $counter"/>
+      <xsl:variable name="counter-with-fm" select="if (../..[self::*:front-matter-part][@book-part-type= 'toc']) 
+                                                    then 'toc'
+                                                    else $counter"/>
       <book-part-id book-part-id-type="doi"><xsl:value-of select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'], '-', $counter-with-fm)"/></book-part-id>
       <xsl:message select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'], '-', $counter)"/>
     </xsl:if>
@@ -194,6 +191,13 @@
         </xsl:for-each>
       </xsl:if>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="*:front-matter-part[@book-part-type='title-page']/*:named-book-part-body" mode="clean-up" priority="2">
+    <book-part-meta>
+      <book-part-id book-part-id-type="doi"><xsl:value-of select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'], '-fm')"/></book-part-id>
+    </book-part-meta>
+    <xsl:next-match/>
   </xsl:template>
 
   <xsl:template match="titleStmt" mode="tei2bits">
