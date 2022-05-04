@@ -109,12 +109,13 @@
     <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
     <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
     <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
-    <xsl:variable name="new-doi" select="replace($meta/book-id[@book-id-type='doi'], '^.+/(.+)$', '$1-fm')"/>
-    <book-part book-part-type="frontmatter" id="{concat('b_', $new-doi)}" >
+    <xsl:variable name="new-doi" select="replace(book-part-meta/book-part-id, '^.+/(.+)-.+$', '$1-fm')"/>
+    <!-- <book-part book-part-type="frontmatter" id="{concat('b_', $new-doi)}" >-->
       <xsl:if test="not($in-issue)"><xsl:attribute name="id" select="concat('b_', $new-doi)"/></xsl:if>
       <!--  <xsl:if test="not($in-issue)"><xsl:attribute name="book-part-number" select="'1'"/></xsl:if>-->
       <book-part-meta>
-        <book-part-id pub-id-type="doi"><xsl:value-of select="concat($meta/book-id[@book-id-type='doi'], '-fm')"/></book-part-id>
+        <xsl:apply-templates select="book-part-meta/book-part-id" mode="#current"/>
+        <!-- <book-part-id pub-id-type="doi"><xsl:value-of select="concat($meta/book-id[@book-id-type='doi'], '-fm')"/></book-part-id>-->
         <title-group>
           <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="'Frontmatter'"/></title>
         </title-group>
@@ -128,7 +129,7 @@
         <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>
       </book-part-meta>
 			<xsl:if test="not($in-issue)"><body/></xsl:if>
-    </book-part>
+    <!--</book-part>-->
   </xsl:template>
 
   <xsl:template match="front-matter-part[@book-part-type='toc']" mode="#default" priority="3">
