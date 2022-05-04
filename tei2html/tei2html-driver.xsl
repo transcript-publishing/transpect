@@ -570,9 +570,11 @@
     <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
 
-  <xsl:template match="seriesStmt/idno[@rend= 'tsmetadoi']" mode="tei2html">
+  <xsl:template match="seriesStmt/idno[@rend= 'tsmetadoi' or @type='doi']" mode="tei2html" priority="2">
     <meta name="doi" content="{normalize-space(.)}"/>
   </xsl:template>
+
+  <xsl:template match="seriesStmt/*" mode="tei2html" priority="2"/>
 
   <xsl:template match="byline/affiliation | byline/email | byline/ref" mode="tei2html"/>
   
