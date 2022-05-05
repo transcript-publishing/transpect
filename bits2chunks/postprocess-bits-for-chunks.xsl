@@ -110,7 +110,7 @@
     <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
     <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
     <xsl:variable name="new-doi" select="replace(book-part-meta/book-part-id, '^.+/(.+)-.+$', '$1-fm')"/>
-    <!-- <book-part book-part-type="frontmatter" id="{concat('b_', $new-doi)}" >-->
+     <book-part book-part-type="frontmatter">
       <xsl:if test="not($in-issue)"><xsl:attribute name="id" select="concat('b_', $new-doi)"/></xsl:if>
       <!--  <xsl:if test="not($in-issue)"><xsl:attribute name="book-part-number" select="'1'"/></xsl:if>-->
       <book-part-meta>
@@ -125,11 +125,11 @@
           <copyright-holder>transcript Verlag</copyright-holder>
           <ali:free_to_read/>
         </permissions>
-        <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>
-        <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>
+        <!-- <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>-->
+        <!--<alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>-->
       </book-part-meta>
 			<xsl:if test="not($in-issue)"><body/></xsl:if>
-    <!--</book-part>-->
+    </book-part>
   </xsl:template>
 
   <xsl:template match="front-matter-part[@book-part-type='toc']" mode="#default" priority="3">
@@ -152,8 +152,8 @@
           <copyright-holder>transcript Verlag</copyright-holder>
           <ali:free_to_read/>
         </permissions>
-        <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>
-        <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>
+        <!--  <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>
+        <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>-->
       </book-part-meta>
 			<xsl:if test="not($in-issue)"><body/></xsl:if>
     </book-part>
