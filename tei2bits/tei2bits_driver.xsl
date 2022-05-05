@@ -148,9 +148,9 @@
     <xsl:if test="date or publisher or $metadata/term[@key = 'Copyright']">
       <xsl:variable name="copyright" select="replace($metadata/term[@key = 'Copyright']/text(), ', .+$', '')" as="xs:string?"/>
       <permissions>
-        <copyright-statement><xsl:value-of select="$copyright"/></copyright-statement>
-        <copyright-year><xsl:value-of select="if ($metadata/term[@key eq 'Jahr']) then $metadata/term[@key eq 'Jahr'] else replace($copyright, '^.+?(\d{4}).*$', '$1')"/></copyright-year>
-        <copyright-holder><xsl:value-of select="if ($metadata/term[@key eq 'Verlagsname']) then $metadata/term[@key eq 'Verlagsname'] else  replace($copyright, '^.+?\d{4}\p{Zs}*(.+)$', '$1')"/></copyright-holder>
+        <copyright-statement><xsl:value-of select="($copyright, concat('© ', format-date(current-date(), '[Y]'), ' transcript Verlag'))[1]"/></copyright-statement>
+        <copyright-year><xsl:value-of select="if ($metadata/term[@key eq 'Jahr']) then $metadata/term[@key eq 'Jahr'] else (replace($copyright, '^.+?(\d{4}).*$', '$1'), format-date(current-date(), '[Y]'))[1]"/></copyright-year>
+        <copyright-holder><xsl:value-of select="if ($metadata/term[@key eq 'Verlagsname']) then $metadata/term[@key eq 'Verlagsname'] else (replace($copyright, '^.+?\d{4}\p{Zs}*(.+)$', '$1'), 'transcript Verlag')[1]"/></copyright-holder>
         <license>
           <!--will be filled later-->
         </license>
@@ -274,7 +274,7 @@
   </xsl:template>
 
   <xsl:template match="keywords[not(@rendition = ('titlepage', 'docProps'))]/@rendition" mode="tei2bits">
-    <xsl:attribute name="kwd-group-type" select="'auhor-generated'"/>
+    <xsl:attribute name="kwd-group-type" select="'author-generated'"/>
     <!-- https://redmine.le-tex.de/issues/12464 -->
   </xsl:template>
 
