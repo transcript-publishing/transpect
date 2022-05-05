@@ -278,7 +278,7 @@
     <!-- https://redmine.le-tex.de/issues/12464 -->
   </xsl:template>
 
-  <xsl:template match="sec/@sec-type[. = 'keywords']" mode="clean-up" priority="5">
+  <xsl:template match="sec/@sec-type[. = ('keywords', 'alternative-title')]" mode="clean-up" priority="5">
     <!-- needed only as metadata-->
   </xsl:template>
 
