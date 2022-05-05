@@ -973,6 +973,82 @@
     </xsl:analyze-string>
   </xsl:template>
 
+  <!-- override of common function to allow section jumps -->
+  
+  <xsl:function name="tr:heading-level" as="xs:string?">
+    <xsl:param    name="heading" as="element()"/>
+    <xsl:variable name="style"   as="attribute(role)?" select="$heading/dbk:info/dbk:title/@role"/>
+    <xsl:choose>
+      <xsl:when test="$style = 'tsheadingpart'">
+        <xsl:sequence select="'part'"/>
+      </xsl:when>
+      <xsl:when test="$style = 'tsheading1'">
+        <xsl:sequence select="'chapter'"/>
+      </xsl:when>
+      <xsl:when test="$style = 'tsheading2'">
+        <xsl:sequence select="'section'"/>
+      </xsl:when>
+      <xsl:when test="$style = 'tsheading3'">
+        <xsl:sequence select="'subsection'"/>
+      </xsl:when>
+      <xsl:when test="$style = 'tsheading4'">
+        <xsl:sequence select="'subsubsection'"/>
+      </xsl:when>
+      <xsl:when test="$style = 'tsheading5'">
+        <xsl:sequence select="'paragraph'"/>
+      </xsl:when>
+      <xsl:when test="($heading/local-name() = 'chapter' and $heading[@renderas = 'subhead'])
+                       or
+                      ($heading/local-name() = 'part' and $heading[@renderas = 'subhead'])">
+        <!-- subparts from chapters or parts -->
+        <xsl:sequence select="'subpart'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = 'part'
+        or
+        ($heading/local-name() = 'bibliography' and $heading/parent::dbk:*[local-name() = ('hub', 'book')][dbk:part])">
+        <xsl:sequence select="'part'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('chapter', 'index') 
+                      or 
+                      ($heading/local-name() = 'section' and $heading[@renderas = 'chapter'])
+                      or
+                      ($heading/local-name() = 'bibliography' 
+                      and (
+                           $heading/parent::dbk:part 
+                           or 
+                           $heading/parent::dbk:*[local-name() = ('hub', 'book')][not(dbk:part)]
+                          )
+                      )">
+        <!-- if subpart level exists chapters may be disguised as sections. For collections 
+             level is called contribution and allows integration of abstracts and keywords -->
+        <xsl:sequence select="if ($pubtype = ('collection', 'anth', '') 
+                                              or contains($basename, '_anth_')
+                                              or $heading[dbk:info[dbk:abstract | dbk:keywordset]]) 
+                              then 'contribution' 
+                              else 'chapter'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('section', 'bibliography') and not($heading/ancestor::*:section)">
+        <xsl:sequence select="'section'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('section', 'bibliography') and count($heading/ancestor::*:section) eq 1">
+        <xsl:sequence select="'subsection'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('section', 'bibliography') and count($heading/ancestor::*:section) eq 2">
+        <xsl:sequence select="'subsubsection'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('section', 'bibliography') and count($heading/ancestor::*:section) gt 2">
+        <xsl:sequence select="'paragraph'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('bibliodiv')">
+        <xsl:variable name="level" select="count($heading/ancestor::dbk:bibliography)" as="xs:integer"/>
+        <xsl:sequence select="     if($level eq 1) then 'section'
+                              else if($level eq 2) then 'subsection'
+                              else if($level eq 3) then 'subsubsection'
+                              else                      'paragraph'"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:function>
+
   <xsl:function name="tr:determine-fig-class" as="xs:string?">
     <xsl:param name="elt" as="element(*)"/>
     <xsl:sequence select="if (matches($elt/@role, '^figure-d$')) 
