@@ -161,12 +161,13 @@
 
   <!-- TODO: permission handling--> 
 
-<!--  <xsl:template match="front-matter/front-matter-part[not(@book-part-type = 'toc')][position() ne 1]" mode="#default" priority="3">
+  <xsl:template match="title-group/title" mode="#default" priority="3">
     <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
-    <xsl:if test="$in-issue">
-      <xsl:next-match/>
-    </xsl:if>
-  </xsl:template>-->
+    <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
+    <xsl:copy>
+      <xsl:apply-templates select="$book-atts[name() = 'xml:lang'], @*, node()" mode="#current"></xsl:apply-templates>
+    </xsl:copy>
+  </xsl:template>
 
   <xsl:template match="body" mode="#default" priority="3">
    <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
