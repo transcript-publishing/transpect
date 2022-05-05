@@ -291,4 +291,6 @@
     </front-matter-part>
   </xsl:template>
 
+  <xsl:template match="@source-dir-uri" mode="clean-up"/>
+
 </xsl:stylesheet>
