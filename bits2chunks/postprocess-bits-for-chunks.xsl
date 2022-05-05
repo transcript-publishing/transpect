@@ -120,8 +120,8 @@
           <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="'Frontmatter'"/></title>
         </title-group>
         <permissions>
-          <copyright-statement>© 2021 transcript Verlag</copyright-statement>
-          <copyright-year>2021</copyright-year>
+          <copyright-statement>© <xsl:value-of select="format-date(current-date(), '[Y]')"/> transcript Verlag</copyright-statement>
+          <copyright-year><xsl:value-of select="format-date(current-date(), '[Y]')"/></copyright-year>
           <copyright-holder>transcript Verlag</copyright-holder>
           <ali:free_to_read/>
         </permissions>
@@ -147,8 +147,8 @@
           <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="if ($book-atts[name() = 'xml:lang'][contains(., 'de')]) then 'Inhalt' else 'Content'"/></title>
         </title-group>
         <permissions>
-          <copyright-statement>© 2021 transcript Verlag</copyright-statement>
-          <copyright-year>2021</copyright-year>
+          <copyright-statement>© <xsl:value-of select="format-date(current-date(), '[Y]')"/> transcript Verlag</copyright-statement>
+          <copyright-year><xsl:value-of select="format-date(current-date(), '[Y]')"/></copyright-year>
           <copyright-holder>transcript Verlag</copyright-holder>
           <ali:free_to_read/>
         </permissions>
