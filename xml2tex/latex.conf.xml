@@ -963,9 +963,17 @@
   </template>
   
   <xsl:template match="dbk:title//text()[matches(., '[&#x1e24;&#x1e25;&#x1e6f;&#x1e0d;&#x1e2a;]+')]" mode="xml2tex" priority="100000">
+    <xsl:variable name="style" as="attribute()*" 
+                  select="parent::*/(@css:font-weight, @css:font-style)"/>
     <xsl:analyze-string select="." regex="([&#x1e24;&#x1e25;&#x1e6f;&#x1e0d;&#x1e2a;]+)">
       <xsl:matching-substring>
-        <xsl:value-of select="concat('\textsffallback{', ., '}')"/>
+        <xsl:value-of select="concat('\textsffallback{', 
+                                     if($style = 'bold' and $style = 'italic') then '[BoldItalicFont]'
+                                     else if($style = 'bold') then '[BoldFont]'
+                                     else if($style = 'italic') then '[ItalicFont]'
+                                     else '',
+                                     ., 
+                                     '}')"/>
       </xsl:matching-substring>
       <xsl:non-matching-substring>
         <xsl:value-of select="."/>
