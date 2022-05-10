@@ -417,14 +417,9 @@
   </preamble>
   
   <front>
-    <xsl:choose>
-      <xsl:when test="$title-pages eq 'yes'">
-        <xsl:text>\tpMaketitle&#xa;</xsl:text>  
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>\setcounter{page}{5}&#xa;</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:if test="$title-pages eq 'yes'">
+      <xsl:text>\tpMaketitle&#xa;</xsl:text>  
+    </xsl:if>
     <xsl:apply-templates select="/dbk:*/dbk:colophon[@role = 'dedication']
                                  |/dbk:*/dbk:dedication" mode="#current">
       <xsl:with-param name="keep" select="true()" tunnel="yes"/>
