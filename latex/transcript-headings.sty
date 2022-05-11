@@ -5,7 +5,7 @@
 \def\mydotfill{%
   \nobreak\leaders\hbox{$\m@th
     \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
-    mu$}\hfill
+    mu$}\hskip 2pt plus 1fill% Space of at least 2pt; prevents empty dotfills with page number directly after the toc heading.
   \nobreak}
 
 \newdimen\chaphskip \chaphskip7mm %% default
@@ -14,7 +14,7 @@
   \tpSetProperty{numbering}{}%
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{auto}%
-  \tpSetProperty{toc-margin-right}{5em}%
+  \tpSetProperty{toc-margin-right}{6em}%
   \ifcollection
     \tpSetProperty{toc-margin-left}{}%
     \tpSetProperty{toc-indent}{}%
@@ -260,6 +260,22 @@
   \tpSetProperty{before-heading}{\minusvspace{12.8bp}}%
   %\tpSetProperty{after-skip}{1sp}% Ticket 12534, 2022-04-25
   \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
+  \ifcollection\else
+    %\tpSetProperty{toc-indent}{8em}%
+    \tpSetProperty{toc-margin-left}{6.5em}%
+  \fi
+  \tpSetProperty{toc-heading}{%
+    \tpUseProperty{toc-title-format}%
+    \tpIfComp{TocNumber}
+    {\tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\newline}{}%
+      \hskip-2.5em\hbox to 2.5em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
+    {%\leftskip\z@%
+      \tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\space}{}%
+    }%
+    \tpTocLink{\tpUseComp{TocTitle}}%
+    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+    \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+  }%
 }
 
 \tpDeclareHeading[section]{4}{paragraph}{%
@@ -372,7 +388,7 @@
   }%
   \ifcollection\tpToCNoNumber\else
     \tpToCHangNumber
-    \tpToCHangFixed{2em}
+    \tpToCHangFixed{3em}
   \fi
   %%
   \tsToC
@@ -438,7 +454,7 @@
   \tpHeadingProperty{AfterSkip}{1sp}%
   \tpHeadingProperty{TitleFormat}{\sffamily\mdseries\Large}%
   \tpToCHangNumber
-    \tpToCHangFixed{2em}
+    \tpToCHangFixed{3em}
   \tsToC
 }
 
