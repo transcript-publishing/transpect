@@ -145,9 +145,51 @@
 
     <p:sink/>
 
+  <tr:load-cascaded name="bits2klopotek-stylesheet" filename="bits2chunks/bits2klopotek.xsl">
+    <p:input port="paths">
+      <p:pipe port="parameters" step="customer-output"/>
+    </p:input>
+    <p:with-option name="debug" select="$debug"/>
+    <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
+    <p:with-option name="required" select="'no'"/>
+  </tr:load-cascaded>
+
+  <p:sink/>
+
+   <p:xslt name="create-kloptek-xml" cx:depends-on="postprocess-bits" initial-mode="bits2klopotek">
+      <p:documentation>Extracts klopotek metadata from BITS Chunks</p:documentation>
+      <p:input port="source">
+        <p:pipe port="result" step="postprocess-bits"/>
+      </p:input>
+      <p:input port="stylesheet">
+        <p:pipe port="result" step="bits2klopotek-stylesheet"/>
+      </p:input>
+      <p:input port="parameters">
+        <p:empty/>
+      </p:input>
+      <p:with-param name="s9y1-path" select="/c:param-set/c:param[@name eq 's9y1-path']/@value">
+        <p:pipe port="parameters" step="customer-output"/>
+      </p:with-param>
+      <p:with-param name="basename" select="/c:param-set/c:param[@name eq 'basename']/@value">
+         <p:pipe port="parameters" step="customer-output"/>
+      </p:with-param>
+      <p:with-param name="out-dir-uri" select="replace(/c:param-set/c:param[@name eq 'out-dir-uri']/@value, '/(docx|idml)$', '')">
+         <p:pipe port="parameters" step="customer-output"/>
+      </p:with-param>
+    </p:xslt>
+
+    <tr:store-debug name="store-klopotek" pipeline-step="bits2chunks/klopotek-chunks">
+      <p:with-option name="active" select="$debug"/>
+      <p:with-option name="base-uri" select="$debug-dir-uri"/>
+      <p:with-option name="indent" select="true()"/>
+    </tr:store-debug>
+
+  <p:sink/>
+
   <p:for-each name="splitting-bits">
     <p:iteration-source>
       <p:pipe port="secondary" step="split-articles"/>
+      <p:pipe port="secondary" step="create-kloptek-xml"/>
     </p:iteration-source>
     
     <!--      <tr:html-embed-resources fail-on-error="false" unavailable-resource-message="yes">
