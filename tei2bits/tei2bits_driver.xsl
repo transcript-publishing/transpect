@@ -195,9 +195,41 @@
 
   <xsl:template match="*:front-matter-part[@book-part-type='title-page']/*:named-book-part-body" mode="clean-up" priority="2">
     <book-part-meta>
-      <book-part-id book-part-id-type="doi"><xsl:value-of select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'], '-fm')"/></book-part-id>
+      <book-part-id book-part-id-type="doi">
+        <xsl:value-of select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'], '-fm')"/>
+      </book-part-id>
+      <xsl:call-template name="page-range"/>
+      <xsl:call-template name="page-count"/>
     </book-part-meta>
     <xsl:next-match/>
+  </xsl:template>
+
+  <xsl:template match="*:book-part-meta" mode="clean-up">
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <xsl:call-template name="page-range"/>
+      <xsl:call-template name="page-count"/>
+    </xsl:copy>
+  </xsl:template>
+
+
+  <xsl:template match="*:book-meta" mode="clean-up">
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <xsl:call-template name="page-count"/>
+    </xsl:copy>
+  </xsl:template>
+
+
+  <xsl:template name="page-count">
+    <counts>
+      <page-count count=""/>
+    </counts>
+  </xsl:template> 
+
+  <xsl:template name="page-range">
+    <fpage></fpage>
+    <lpage></lpage>
   </xsl:template>
 
   <xsl:template match="titleStmt" mode="tei2bits">
