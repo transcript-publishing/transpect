@@ -11,8 +11,7 @@
   xmlns:ali="http://www.niso.org/schemas/ali/1.0/"
   exclude-result-prefixes="xs c cat tr"
   version="2.0">
-  
-<!--  <xsl:import href="http://transpect.io/xslt-util/hex/xsl/hex.xsl"/>-->
+
   <xsl:import href="http://transpect.io/xslt-util/xslt-based-catalog-resolver/xsl/resolve-uri-by-catalog.xsl"/>
   
   <xsl:param name="s9y1-path" as="xs:string"/>
@@ -181,32 +180,6 @@
       <xsl:copy copy-namespaces="no"/>
     </xsl:if>
   </xsl:template>
-
-  <xsl:template match="*:html[not(contains(@xml:base, '/issue'))]//*:nav/*:ol//*:li/*:a/@href" mode="export" priority="7">
-    <!-- toc link to chunks https://redmine.le-tex.de/issues/10166#note-5 -->
-    <xsl:attribute name="href" select="concat(replace((//*:export-root/*:html[not(contains(@xml:base, '/issue'))][descendant::*/@id = substring-after(current(), '#')]/@xml:base)[1], '^.+/', ''), .)"/>
-  </xsl:template>
-
-  <xsl:template match="*:html[not(contains(@xml:base, '/issue'))]//*:nav/*:ol//*:li" mode="export" priority="7">
-    <xsl:if test="substring-after(*:a/@href, '#') = //*:export-root/*:html[not(contains(@xml:base, '/issue'))]/descendant::*/@id">
-      <xsl:next-match/>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template match="*:html//*:nav/*:ol//*:li[matches(*:a/@href, '^#(epub-cover-image-container|halftitle|title-page|imprint|toc)$')]" mode="#default" priority="7"/>
-
-
-  <!--<xsl:template match="*[self::*:td | self::*:tr]/@style" mode="#default" priority="7">
-    <!-\- https://redmine.le-tex.de/issues/11058 discard default atts -\->
-    <xsl:variable name="regex" as="xs:string" select="'(border-(top|right|bottom|left)-width: 1px(; )?)|(border-(top|right|bottom|left)-style: solid(; )?)|(border-(top|right|bottom|left)-color: #000000(; )?)'"/>
-    <xsl:variable name="stripped-cell-atts">
-      <xsl:analyze-string select="." regex="{$regex}">
-        <xsl:matching-substring/>
-        <xsl:non-matching-substring><xsl:sequence select="."/></xsl:non-matching-substring>
-      </xsl:analyze-string>
-    </xsl:variable>
-    <xsl:if test="some $s in $stripped-cell-atts satisfies $s[normalize-space()]"><xsl:attribute name="{name()}" select="string-join($stripped-cell-atts)"></xsl:attribute></xsl:if>
-  </xsl:template>-->
 
   <xsl:template match="*:header[@class = 'chunk-meta-sec']" mode="#default"/>
   

@@ -11,11 +11,7 @@
   <xsl:param name="out-dir-uri" as="xs:string"/>
 
   <xsl:import href="http://transpect.io/xslt-util/xslt-based-catalog-resolver/xsl/resolve-uri-by-catalog.xsl"/>
-  <!--  <xsl:template match="@* | node()" mode="bits2klopotek">
-    <xsl:copy>
-    <xsl:apply-templates select="@*, node()" mode="#current"/>
-    </xsl:copy>
-    </xsl:template>-->
+  <!--  https://redmine.le-tex.de/issues/12579 -->
 
   <xsl:template match="@* | *" mode="bits2klopotek" priority="-0.25"/>
   
