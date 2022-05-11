@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2007 sp1 (http://www.altova.com) by ok (ok) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Components">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element name="Component">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="Level" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">Level is only taken into account if the component is newly created</xs:documentation>
+									<xs:documentation source="DBMS">prd_component_work.component_level</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Title" type="xs:string">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">Component Title</xs:documentation>
+									<xs:documentation source="DBMS">prd_component.component_title</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="SubTitle" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">Subtitle</xs:documentation>
+									<xs:documentation source="DBMS">prd_component.subtitle</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DOI" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">DOI</xs:documentation>
+									<xs:documentation source="DBMS">prd_component.doi</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Extent" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Extent" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation source="description" xml:lang="EN">Extent</xs:documentation>
+												<xs:documentation source="DBMS">prd_component.component_extent</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="From" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation source="description" xml:lang="EN">Extent from</xs:documentation>
+												<xs:documentation source="DBMS">prd_component_work.extent_from</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="To" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation source="description" xml:lang="EN">Extent to</xs:documentation>
+												<xs:documentation source="DBMS">prd_component_work.extent_to</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="SecondValue" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">Field Value</xs:documentation>
+									<xs:documentation source="DBMS">Depending on MDT COMPTYPE ac1 the value is saved in  prd_component.NO_OF_ILLUSTRATIONS, NO_OF_PICTURES, NO_OF_FIGURES, NO_OF_EQUATIONS or NO_OF_TABLES</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ExtRef">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">The unique number decides about create or update of component</xs:documentation>
+									<xs:documentation source="DBMS">prd_component.ext_ref_id</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:string"/>
+									</xs:simpleContent>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Language" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">Language</xs:documentation>
+									<xs:documentation source="DBMS">prd_edition.language</xs:documentation>
+									<xs:documentation source="MDT">LANG</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="MarketingEnabled" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">Marketing Enable Y/N</xs:documentation>
+									<xs:documentation source="DBMS">prd_component_work.MARKETING_ENABLED_YN</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="LicenseType" type="xs:string" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">Creative Commons License Type</xs:documentation>
+									<xs:documentation source="DBMS">prd_impression_table.CC_LICENSE_TYPE</xs:documentation>
+									<xs:documentation source="MDT">CCLIC</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="OpenAccess" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Route" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation source="description" xml:lang="EN">Open Access Route</xs:documentation>
+												<xs:documentation source="DBMS">prd_impression_table.OPEN_ACCESS_TYPE</xs:documentation>
+												<xs:documentation source="MDT">OATYPE</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="EmbargoPeriod" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation source="description" xml:lang="EN">Open Access Embargo Period</xs:documentation>
+												<xs:documentation source="DBMS">prd_impression_table.OPEN_ACCESS_EMBARGO_PERIOD</xs:documentation>
+												<xs:documentation source="MDT">OAEMBA</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PubDate" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="PlannedPubDate" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation source="description" xml:lang="EN">Planned Publication Date in format yyyy-MM-dd</xs:documentation>
+												<xs:documentation source="DBMS">prd_impression_table.planned_pub_date</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ActualPubDate" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation source="description" xml:lang="EN">Publication Date in format yyyy-MM-dd</xs:documentation>
+												<xs:documentation source="DBMS">prd_impression_table.pub_date</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Blurbs" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">Text elements get replaced by text type or deleted if text is empty</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence maxOccurs="unbounded">
+										<xs:element name="TextElement">
+											<xs:annotation>
+												<xs:documentation source="description" xml:lang="EN">Text</xs:documentation>
+												<xs:documentation source="DBMS">pbs_text.text_long</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:simpleContent>
+													<xs:extension base="xs:string">
+														<xs:attribute name="TextType" type="xs:string" use="required">
+															<xs:annotation>
+																<xs:documentation source="description" xml:lang="EN">Text Type</xs:documentation>
+																<xs:documentation source="DBMS">pbs_text.purpose</xs:documentation>
+																<xs:documentation source="MDT">COMPTXT</xs:documentation>
+															</xs:annotation>
+														</xs:attribute>
+													</xs:extension>
+												</xs:simpleContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Catchwords" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">If the node exists all catchwords are replaced</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence minOccurs="0" maxOccurs="unbounded">
+										<xs:element name="Catchword" type="xs:string">
+											<xs:annotation>
+												<xs:documentation source="description" xml:lang="EN">Catchword</xs:documentation>
+												<xs:documentation source="DBMS">prd_catchword_copyright.entry</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Originators" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation source="description" xml:lang="EN">If an author doesn't show an extRef he gets assigned with the name only.
+Without extRef an originator gets always created newly, there is no name check.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence maxOccurs="unbounded">
+										<xs:element name="Originator">
+											<xs:annotation>
+												<xs:documentation>Either a last name or a valid extRef is required</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:all>
+													<xs:element name="FirstName" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation source="description" xml:lang="EN">First Name</xs:documentation>
+															<xs:documentation source="DBMS">prd_work_originator.COPYRIGHT_HOLDER_FIRST_NAME</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="LastName" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation source="description" xml:lang="EN">Last Name</xs:documentation>
+															<xs:documentation source="DBMS">prd_work_originator.COPYRIGHT_HOLDER_NAME</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="Prefix" type="xs:string" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation source="description" xml:lang="EN">Prefix</xs:documentation>
+															<xs:documentation source="DBMS">prd_work_originator.COPYRIGHT_HOLDER_PREFIX</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="ExtRef" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation source="description" xml:lang="EN">Reference into ContactManager</xs:documentation>
+															<xs:documentation source="DBMS">ap_location.EXTERNAL_REFERENCE_NUMBER or , if  RefType is sent, ap_identifier_address_ref.IDENT_ADDRESS_REF</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:simpleContent>
+																<xs:extension base="xs:string">
+																	<xs:attribute name="RefType" type="xs:string">
+																		<xs:annotation>
+																			<xs:documentation source="description" xml:lang="EN">Reference Type</xs:documentation>
+																			<xs:documentation source="DBMS">ap_identifier_address_ref.IDENT_REF_TYPE</xs:documentation>
+																		</xs:annotation>
+																	</xs:attribute>
+																</xs:extension>
+															</xs:simpleContent>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="ContactID" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation source="description" xml:lang="EN">Contact ID</xs:documentation>
+															<xs:documentation source="DBMS">prd_work_originator.ID_JURISTIC_PERSON</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+													<xs:element name="AddressId" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation source="description" xml:lang="EN">Address ID</xs:documentation>
+															<xs:documentation source="DBMS">prd_work_originator.ID_LOCATION</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:all>
+												<xs:attribute name="OriginatorType" type="xs:string">
+													<xs:annotation>
+														<xs:documentation source="description" xml:lang="EN">Originator Type</xs:documentation>
+														<xs:documentation source="DBMS">prd_work_originator.COPYRIGHT_HOLDER_TYPE</xs:documentation>
+														<xs:documentation source="MDT">COPY</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:all>
+						<xs:attribute name="ComponentType" type="xs:string">
+							<xs:annotation>
+								<xs:documentation source="description" xml:lang="EN">Component Type</xs:documentation>
+								<xs:documentation source="DBMS">prd_component.component_type</xs:documentation>
+								<xs:documentation source="MDT">COMPTYPE</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
