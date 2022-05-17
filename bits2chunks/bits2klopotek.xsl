@@ -24,7 +24,7 @@
 
   <xsl:template match="/*" mode="bits2klopotek">
     <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
-    <xsl:result-document href="{replace(book[1]/@xml:base, '\.bits', '.klopotek')}">
+    <xsl:result-document href="{replace(book[1]/@xml:base, '(^.+)/(.+)\.xml$', '$1.klopotek.xml')}">
       <Components>
         <xsl:apply-templates select="book/body/book-part[@book-part-type='book-toc-page-order']/body/*" mode="#current"/>
       </Components>

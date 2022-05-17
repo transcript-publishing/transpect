@@ -50,18 +50,20 @@
                              if (descendant::*[self::*:header[@class = 'chunk-meta-sec']][*:ul/*:li[@class = 'chunk-doi'][matches(., '-0*\d+$')]])
                              then replace((descendant::*[self::*:header[@class = 'chunk-meta-sec']]/*:ul/*:li[@class = 'chunk-doi'])[1], '^.+/(.+)-.+$', '$1')
                              else $basename" name="filename" as="xs:string" />
+    <xsl:variable select="concat($filename, '/')" name="title-directory" as="xs:string" />
     <export-root>
       <!-- every book element with an xml:base will be exported there -->
       <!-- original BITS output-->
       <xsl:copy>
         <xsl:copy-of select="@*" copy-namespaces="no"/>
-        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-bits, $filename, '.bits.xml')"/>
+        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-chunk, $title-directory, $filename, '.xml')"/>
+        <!-- https://redmine.le-tex.de/issues/12650 move bits here-->
         <xsl:sequence select="node()"/>
       </xsl:copy>
       <!-- complete issue referencing book-parts only-->
       <book xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/">
         <xsl:copy-of select="/*/@xml:lang" copy-namespaces="no"/>
-        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.jats.xml')"/>
+        <xsl:attribute name="xml:base" select="concat($catalog-resolved-target-dir, $local-dir-chunk, $title-directory, $title-directory, $filename, '.xml')"/>
 <!--        <xsl:attribute name="dtd-version" select="'3.0'"/>-->
         <xsl:apply-templates select="book-meta" mode="#current">
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
@@ -73,6 +75,7 @@
                 <xsl:with-param name="book-atts" select="@*" as="attribute(*)*" tunnel="yes"/>
                 <xsl:with-param name="meta" select="$meta" as="element(*)?" tunnel="yes"/>
                 <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
+                <xsl:with-param name="title-directory" select="$title-directory" as="xs:string" tunnel="yes"/>
               </xsl:apply-templates>
             </body>
           </book-part>
@@ -83,6 +86,7 @@
         <xsl:with-param name="book-atts" select="@*" as="attribute(*)*" tunnel="yes"/>
         <xsl:with-param name="meta" select="$meta" as="element(*)?" tunnel="yes"/>
         <xsl:with-param name="in-issue" select="false()" as="xs:boolean" tunnel="yes"/>
+        <xsl:with-param name="title-directory" select="$title-directory" as="xs:string" tunnel="yes"/>
       </xsl:apply-templates>
     </export-root>
   </xsl:template>
@@ -207,6 +211,7 @@
   <xsl:template match="*:article" mode="#default">
     <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
     <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
+    <xsl:param name="title-directory" as="xs:string?" tunnel="yes"/>
     <xsl:variable name="temp-doi" select="(descendant::*:book-part-id[@book-part-id-type = 'doi'])[1]"/>
     <xsl:variable name="uri" select="if (matches($temp-doi, '\d')) 
                                      then replace($temp-doi, '^.+/', '') 
@@ -218,7 +223,7 @@
     </xsl:variable>
     <xsl:call-template name="bts:create-chunk">
       <xsl:with-param name="nodes" as="element(*)+" select="*"/>
-      <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-chunk, $uri, '.jats.xml')"/>
+      <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-chunk, $title-directory, $uri, '/', $uri, '.xml')"/>
       <xsl:with-param name="id" as="xs:string" select="(*/@id, generate-id())[1]"/>
       <xsl:with-param name="book-atts" select="$book-atts" as="attribute(*)*" tunnel="yes"/>
       <xsl:with-param name="meta" select="$head-with-title" as="element(*)?" tunnel="yes"/>
