@@ -97,7 +97,7 @@
 
 \tpDeclareHeading{0}{chapter}{%
   \tpSetProperty{before-heading}{\cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax}%
-  \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
+  \tpSetProperty{title-format}{\Huge\sbseries}%
   \tpSetProperty{toc-margin-right}{2em}%
   \tpSetProperty{after-skip}{\tpIfComp{Author}{1.68\baselineskip}{3.68\baselineskip}}%
   \tpSetProperty{heading-block}{%
@@ -109,8 +109,7 @@
       \raggedright
       \tpIfComp{Number}{\leftskip-\tpUseProperty{indent}}{}%
       \tpUseProperty{title-format}%
-      {\sfchapfamily
-       \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
+      {\tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
        \tpUseComp{Title}}%
       \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\tpUseComp{Subtitle}}{}%
       \par\nobreak
@@ -164,8 +163,8 @@
       {\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
       {\leftskip\z@}%
     \tpTocLink{\tpUseComp{TocTitle}}%
-    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-    \tpIfComp{TocAuthor}{\newline{\normalfont\sffamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
+    \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+    \tpIfComp{TocAuthor}{\nopagebreak\newline{\normalfont\sffamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
     \tpUseProperty{toc-page-sep}\tpTocLink{\tpUseComp{TocPage}}%
   }%
   %% Format PDF-Bookmarks
