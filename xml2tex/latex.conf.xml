@@ -432,12 +432,10 @@
     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
   </template>
   
-  <template context="dbk:chapter[$notes-type eq 'endnotes' and $notes-per-chapter eq 'yes']
+  <!--<template context="dbk:chapter[$notes-type eq 'endnotes' and $notes-per-chapter eq 'yes']
                                 [.//dbk:footnote]
                                 [not(.//dbk:para[matches(@role, $endnotes-heading-style)])]">
-
-    <xsl:next-match/>
-
+    
     <rule name="heading" type="env" break-after="2" break-before="1">
       <param select="'section'"/>
       <xsl:value-of select="concat('&#xa;\tpTitle{', 
@@ -445,8 +443,7 @@
                                  '}')"/>
     </rule>
     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
-    
-  </template>
+  </template>-->
   
   <!--<template context="dbk:dedication[@role eq 'tsded']">
     <rule name="wid" type="env"  break-after="1" break-before="1">
