@@ -12,6 +12,8 @@
   <xsl:param name="s9y3-path" as="xs:string?"/>
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
+  <xsl:variable name="create-customer-toctitles" select="true()" as="xs:boolean"/>
+  
   <xsl:variable name="is-collection" select="matches($basename,  'ts_[a-z]{3}_anth_')" as="xs:boolean"/>
 
   <!-- see the wiki link below for details
@@ -968,6 +970,41 @@
       </xsl:non-matching-substring>
     </xsl:analyze-string>
   </xsl:template>
+  
+  <!-- override toc-templates to allow newlines -->
+  
+  <template name="customer-toctitles">
+    <rule name="tpTocTitle" type="cmd" break-after="0" break-before="1">
+      <param select="dbk:title/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+        <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
+        <with-param name="remove-newline" select="false()" as="xs:boolean" tunnel="yes"/>
+      </param>
+    </rule>
+    <xsl:if test="dbk:title[dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
+      <rule name="tpTocNumber" type="cmd" break-after="0" break-before="1">
+        <param select="dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/text()">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+    <xsl:if test="dbk:subtitle">
+      <rule name="tpTocSubtitle" type="cmd" break-after="0" break-before="1">
+        <param select="dbk:subtitle/node()">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-newline" select="false()" as="xs:boolean" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+    <xsl:if test="dbk:author">
+      <rule name="tpTocAuthor" type="cmd" break-after="0" break-before="1">
+        <param select="dbk:author/dbk:personname/dbk:othername">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+  </template>
 
   <!-- override of common function to allow section jumps -->
   
