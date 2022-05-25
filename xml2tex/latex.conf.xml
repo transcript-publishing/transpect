@@ -105,7 +105,7 @@
   <xsl:variable name="print-note" as="xs:string?" 
                 select="$metadata/dbk:keyword[@role eq 'Druckhinweis']"/>
   <xsl:variable name="environmental-note" as="element(dbk:keyword)?"
-                select="$metadata/dbk:keyword[@role eq 'Umweltschutzhinweis']"/>
+                select="$metadata/dbk:keyword[@role eq 'Papier']"/>
   <!-- Contributor Meta -->
   <xsl:variable name="lectorate" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Lektorat']"/>
@@ -397,6 +397,13 @@
         <xsl:text>&#xa;\end{tpFunding}&#xa;</xsl:text>
       </xsl:for-each>  
     </xsl:if>
+    <!-- transcript-specific metadata -->
+    <xsl:variable name="bibl-issn" as="xs:string?" 
+                  select="$metadata/dbk:keyword[@role eq 'BiblISSN']"/>
+    <xsl:variable name="bible-issn" as="xs:string?" 
+                  select="$metadata/dbk:keyword[@role eq 'BibleISSN']"/>
+    <xsl:variable name="advertisement" as="xs:string?" 
+                  select="$metadata/dbk:keyword[@role eq 'Werbung']"/>
     <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
     <xsl:for-each select="//dbk:index">
       <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
