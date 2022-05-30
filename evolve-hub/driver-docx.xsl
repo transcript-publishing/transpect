@@ -16,6 +16,7 @@
   
 
   <xsl:import href="http://transpect.io/xslt-util/isbn/xsl/isbncheck.xsl"/>
+  <xsl:import href="http://transpect.io/xslt-util/isbn/xsl/isbnformat.xsl"/>
   <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
   <xsl:import href="http://this.transpect.io/a9s/ts/xsl/shared-variables.xsl"/>
 
@@ -56,12 +57,101 @@
 
   <xsl:template match="*[self::table | self::informaltable]/@css:padding-left | *[self::table | self::informaltable]/@css:padding-right | *[self::table | self::informaltable]/@css:width" mode="hub:clean-hub"/>
   
-  <xsl:template match="/hub/info/*[last()]" mode="custom-2">
-    <xsl:next-match/>
+  <xsl:template match="/hub/info/css:rules" mode="custom-1">
+    <xsl:copy>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </xsl:copy>
     <xsl:variable name="temp-isbn" as="xs:string?" select="replace($basename, '^.+\d(\d{4}).*$', '97838394$10')"/>
+    <xsl:variable name="meta-doi" as="xs:string?" select="if (/hub/info/keywordset/keyword[@role = 'DOI'][normalize-space()]) 
+                                                          then replace(string-join(/hub/info/keywordset/keyword[@role = 'DOI']), '^.*doi\.org/', '') 
+                                                          else ()"/>
     <!--  <xsl:message select="'temp-isbn: ', $temp-isbn, ' calc isbn: ', tr:check-isbn($temp-isbn, 13), 'ges: ', concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>-->
-    <!-- https://redmine.le-tex.de/issues/12499 add doi for chunking later -->
-    <biblioid class="doi"><xsl:value-of select="concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/></biblioid>
+    <!-- https://redmine.le-tex.de/issues/12499 add doi for chunking later (for calculate chunk DOIs) -->
+    <biblioid class="doi">
+      <xsl:choose>
+        <xsl:when test="$meta-doi[matches(., '\S')]">
+          <xsl:value-of select="$meta-doi"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </biblioid>
+    <biblioid class="isbn">
+      <xsl:choose>
+        <xsl:when test="/hub/info/keywordset/keyword[@role = 'PDF-ISBN'][matches(., '\S')]">
+          <xsl:value-of select="replace(string-join(/hub/info/keywordset/keyword[@role = 'PDF-ISBN']), '^PDF-ISBN\s+', '')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="tr:format-isbn(concat(replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13)))"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </biblioid>
+  </xsl:template>
+
+  <xsl:template match="bibliography[preceding-sibling::*[1][self::bridgehead]]" mode="custom-2">
+    <xsl:copy>
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <info>
+        <title>
+          <xsl:copy-of select="preceding-sibling::*[1][self::bridgehead]/@*,
+                               preceding-sibling::*[1][self::bridgehead]/node()"/>
+        </title>
+        <xsl:call-template name="create-chunk-DOI"/>
+      </info>
+      <xsl:apply-templates mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
+
+  <xsl:template match="  chapter/info[not(biblioset[@role='chunk-metadata'])] 
+                       | part/info[not(biblioset[@role='chunk-metadata'])] 
+                       | /*/appendix/info[not(biblioset[@role='chunk-metadata'])]" mode="custom-2">
+    <xsl:copy>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <xsl:call-template name="create-chunk-DOI">
+        <xsl:with-param name="context" as="element(*)" select="." tunnel="yes"/>
+      </xsl:call-template>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="biblioset[@role='chunk-metadata'][empty(biblioid[@role='tsmetachunkdoi'])]" mode="custom-2">
+    <xsl:copy>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <xsl:call-template name="create-chunk-DOI">
+        <xsl:with-param name="context" as="element(*)" select="." tunnel="yes"/>
+      </xsl:call-template>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:variable name="book-part-chapters" select="/*/part/*[exists(info) or self::bibliography] |
+                                                  /*/*[self::chapter|self::bibliography|self::appendix|self::colophon|self::preface|
+                                                       self::glossary|self::article|self::acknowledgements]"/>
+
+  <xsl:template name="create-chunk-DOI">
+    <xsl:param name="context" as="element(*)?" tunnel="yes"/>
+    <xsl:variable name="ancestor" select="ancestor-or-self::*[not(self::biblioset | self::info)][1]"/>
+    <xsl:variable name="counter" select="if ($ancestor[self::part]) 
+                                          then concat('NO-DOI-', $ancestor/info/title)
+                                          else xs:string(format-number(index-of($book-part-chapters, $ancestor), '000'))" as="xs:string?"/>
+    <xsl:choose>
+      <xsl:when test="empty($context) or $context[self::info]">
+        <!-- create whole biblioset if it doesn’t exist-->
+        <biblioset role="chunk-metadata">
+          <biblioid role="tsmetachunkdoi" otherclass="chunk-doi" srcpath="{generate-id()}">
+           <xsl:value-of select="concat(if ($ancestor[self::part]) 
+                                        then /*/info/biblioid[@class= 'isbn'] 
+                                        else /*/info/biblioid[@class= 'doi'], '-', $counter)"/>
+          </biblioid>
+        </biblioset>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- if biblioset exists but not chunk DOI, it is inserted-->
+        <biblioid role="tsmetachunkdoi" otherclass="chunk-doi" srcpath="{generate-id()}">
+          <xsl:value-of select="concat(/*/info/biblioid[@class= 'doi'], '-', $counter)"/>
+        </biblioid>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>
