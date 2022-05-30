@@ -63,30 +63,34 @@
     </xsl:copy>
     <xsl:variable name="temp-isbn" as="xs:string?" select="replace($basename, '^.+\d(\d{4}).*$', '97838394$10')"/>
     <xsl:variable name="meta-doi" as="xs:string?" select="if (/hub/info/keywordset/keyword[@role = 'DOI'][normalize-space()]) 
-                                                          then replace(string-join(/hub/info/keywordset/keyword[@role = 'DOI']), '^.*doi\.org/', '') 
-                                                          else ()"/>
+      then replace(string-join(/hub/info/keywordset/keyword[@role = 'DOI']), '^.*doi\.org/', '') 
+      else ()"/>
     <!--  <xsl:message select="'temp-isbn: ', $temp-isbn, ' calc isbn: ', tr:check-isbn($temp-isbn, 13), 'ges: ', concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>-->
     <!-- https://redmine.le-tex.de/issues/12499 add doi for chunking later (for calculate chunk DOIs) -->
-    <biblioid class="doi">
-      <xsl:choose>
-        <xsl:when test="$meta-doi[matches(., '\S')]">
-          <xsl:value-of select="$meta-doi"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </biblioid>
-    <biblioid class="isbn">
-      <xsl:choose>
-        <xsl:when test="/hub/info/keywordset/keyword[@role = 'PDF-ISBN'][matches(., '\S')]">
-          <xsl:value-of select="replace(string-join(/hub/info/keywordset/keyword[@role = 'PDF-ISBN']), '^PDF-ISBN\s+', '')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="tr:format-isbn(concat(replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13)))"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </biblioid>
+    <xsl:if test="not(biblioid[@class='doi'])">
+      <biblioid class="doi">
+        <xsl:choose>
+          <xsl:when test="$meta-doi[matches(., '\S')]">
+            <xsl:value-of select="$meta-doi"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </biblioid>
+    </xsl:if>
+    <xsl:if test="not(biblioid[@class='isbn'])">
+      <biblioid class="isbn">
+        <xsl:choose>
+          <xsl:when test="/hub/info/keywordset/keyword[@role = 'PDF-ISBN'][matches(., '\S')]">
+            <xsl:value-of select="replace(string-join(/hub/info/keywordset/keyword[@role = 'PDF-ISBN']), '^PDF-ISBN\s+', '')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="tr:format-isbn(concat(replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13)))"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </biblioid>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="bibliography[preceding-sibling::*[1][self::bridgehead]]" mode="custom-2">
@@ -139,9 +143,9 @@
         <!-- create whole biblioset if it doesn’t exist-->
         <biblioset role="chunk-metadata">
           <biblioid role="tsmetachunkdoi" otherclass="chunk-doi" srcpath="{generate-id()}">
-           <xsl:value-of select="concat(if ($ancestor[self::part]) 
-                                        then /*/info/biblioid[@class= 'isbn'] 
-                                        else /*/info/biblioid[@class= 'doi'], '-', $counter)"/>
+           <xsl:value-of select="if ($ancestor[self::part]) 
+                                        then concat(/*/info/biblioid[@class= 'isbn'], '/', $counter) 
+                                        else concat(/*/info/biblioid[@class= 'doi'], '-', $counter)"/>
           </biblioid>
         </biblioset>
       </xsl:when>
