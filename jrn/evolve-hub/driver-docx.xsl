@@ -16,7 +16,7 @@
   <xsl:import href="../../evolve-hub/driver-docx.xsl"/>  
     
   <xsl:template match="para[@role = ('tsmetadoi', 'tsmetachunkdoi')]" mode="hub:process-meta-sidebar">
-    <biblioid otherclass="{if(@role eq 'tsmetadoi') then 'journal-doi' else 'chunk-doi'}">
+    <biblioid class="doi" otherclass="{if(@role eq 'tsmetadoi') then 'journal-doi' else 'chunk-doi'}">
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:value-of select="normalize-space(.)"/>
     </biblioid>
@@ -76,29 +76,36 @@
                                                           else ()"/>
     <!--  <xsl:message select="'temp-isbn: ', $temp-isbn, ' calc isbn: ', tr:check-isbn($temp-isbn, 13), 'ges: ', concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>-->
     <!-- https://redmine.le-tex.de/issues/12499 add doi for chunking later (for calculate chunk DOIs) -->
-    <biblioid class="doi">
-      <xsl:choose>
-        <xsl:when test="$meta-doi[matches(., '\S')] or exists(/hub//biblioset[@role='chunk-metadata']/biblioid[@role= 'tsmetadoi'])">
-          <xsl:value-of select="((/hub//biblioset[@role='chunk-metadata'][biblioid[@role= 'tsmetadoi']])[1]/biblioid[@role= 'tsmetadoi'][normalize-space()], $meta-doi)[1]"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </biblioid>
-    <biblioid class="isbn">
-      <xsl:choose>
-        <xsl:when test="/hub/info/keywordset/keyword[@role = 'PDF-ISBN'][matches(., '\S')]">
-          <xsl:value-of select="replace(string-join(/hub/info/keywordset/keyword[@role = 'PDF-ISBN']), '^PDF-ISBN\s+', '')"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="tr:format-isbn(concat(replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13)))"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </biblioid>
-
+    <!--<biblioid class="doi"><xsl:value-of select="if (exists(/hub//biblioset[@role='chunk-metadata']/biblioid[@role= 'tsmetadoi']))
+                                                then (/hub//biblioset[@role='chunk-metadata'][biblioid[@role= 'tsmetadoi']])[1]/biblioid[@role= 'tsmetadoi']
+                                                else concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>
+   </biblioid>
+    <biblioid class="isbn"><xsl:value-of select="tr:format-isbn(concat(replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13)))"/></biblioid>-->
+    <xsl:if test="not(biblioid[@class='doi']) and empty(/hub/descendant::biblioset[1]/biblioid[@role = 'tsmetadoi'])">  
+      <biblioid class="doi">
+        <xsl:choose>
+          <xsl:when test="$meta-doi[matches(., '\S')] or exists(/hub//biblioset[@role='chunk-metadata']/biblioid[@role= 'tsmetadoi'])">
+            <xsl:value-of select="((/hub//biblioset[@role='chunk-metadata'][biblioid[@role= 'tsmetadoi']])[1]/biblioid[@role= 'tsmetadoi'][normalize-space()], $meta-doi)[1]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </biblioid>
+    </xsl:if>
+    <!--<xsl:if test="not(biblioid[@class='isbn']) and empty(/hub/descendant::biblioset[1]/biblioid[@role = 'tsmetadoi'])">  
+      <biblioid class="isbn">
+        <xsl:choose>
+          <xsl:when test="/hub/info/keywordset/keyword[@role = 'PDF-ISBN'][matches(., '\S')]">
+            <xsl:value-of select="replace(string-join(/hub/info/keywordset/keyword[@role = 'PDF-ISBN']), '^PDF-ISBN\s+', '')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="tr:format-isbn(concat(replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13)))"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </biblioid>
+    </xsl:if>-->
   </xsl:template>
-
 
   <xsl:template name="create-chunk-DOI">
     <xsl:param name="context" as="element(*)?" tunnel="yes"/>
