@@ -81,8 +81,8 @@
                                                 else concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>
    </biblioid>
     <biblioid class="isbn"><xsl:value-of select="tr:format-isbn(concat(replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13)))"/></biblioid>-->
-    <xsl:if test="not(biblioid[@class='doi']) and empty(/hub/descendant::biblioset[1]/biblioid[@role = 'tsmetadoi'])">  
-      <biblioid class="doi">
+    <xsl:if test="not(biblioid[@class='doi'])">  
+      <biblioid class="doi" otherclass="temp">
         <xsl:choose>
           <xsl:when test="$meta-doi[matches(., '\S')] or exists(/hub//biblioset[@role='chunk-metadata']/biblioid[@role= 'tsmetadoi'])">
             <xsl:value-of select="((/hub//biblioset[@role='chunk-metadata'][biblioid[@role= 'tsmetadoi']])[1]/biblioid[@role= 'tsmetadoi'][normalize-space()], $meta-doi)[1]"/>
@@ -93,7 +93,7 @@
         </xsl:choose>
       </biblioid>
     </xsl:if>
-    <!--<xsl:if test="not(biblioid[@class='isbn']) and empty(/hub/descendant::biblioset[1]/biblioid[@role = 'tsmetadoi'])">  
+    <xsl:if test="not(biblioid[@class='isbn'])">  
       <biblioid class="isbn">
         <xsl:choose>
           <xsl:when test="/hub/info/keywordset/keyword[@role = 'PDF-ISBN'][matches(., '\S')]">
@@ -104,7 +104,7 @@
           </xsl:otherwise>
         </xsl:choose>
       </biblioid>
-    </xsl:if>-->
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="create-chunk-DOI">
@@ -120,17 +120,20 @@
           <biblioid role="tsmetachunkdoi" otherclass="chunk-doi" srcpath="{generate-id()}">
            <xsl:value-of select="concat(if ($ancestor[self::part]) 
                                         then /*/info/biblioid[@class= 'isbn'] 
-                                        else replace(replace(replace(/*/info/biblioid[@class= 'doi'], '\.issue-(\d)$', '0$1'), '\.issue-(\d)$', '$1'), '\.', '-'), '-', $counter)"/>
+                                        else replace(replace(replace(/*/info/biblioid[@class= 'doi'], '\.issue-(\d)$', '0$1'), '\.issue-(\d)$', '$1'), '\.', '-'), $counter)"/>
           </biblioid>
         </biblioset>
       </xsl:when>
       <xsl:otherwise>
         <!-- if biblioset exists but not chunk DOI, it is inserted-->
         <biblioid role="tsmetachunkdoi" otherclass="chunk-doi" srcpath="{generate-id()}">
-          <xsl:value-of select="concat(/*/info/biblioid[@class= 'doi'], '-', $counter)"/>
+          <xsl:value-of select="concat(/*/info/biblioid[@class= 'doi'], $counter)"/>
         </biblioid>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="biblioid[@class='doi'][@otherclass='temp']" mode="custom-2"/>
+
+<!-- to do: tei2bits. fm und toc bei ZS 10.14361/dak-2021-toc01 statt zig.2020.11.issue-1-toc-->
 </xsl:stylesheet>
