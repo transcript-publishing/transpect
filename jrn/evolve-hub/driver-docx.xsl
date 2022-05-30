@@ -119,7 +119,7 @@
         <biblioset role="chunk-metadata">
           <biblioid role="tsmetachunkdoi" otherclass="chunk-doi" srcpath="{generate-id()}">
            <xsl:value-of select="concat(if ($ancestor[self::part]) 
-                                        then /*/info/biblioid[@class= 'isbn'] 
+                                        then concat(/*/info/biblioid[@class= 'isbn'], '/')
                                         else replace(replace(replace(/*/info/biblioid[@class= 'doi'], '\.issue-(\d)$', '0$1'), '\.issue-(\d)$', '$1'), '\.', '-'), $counter)"/>
           </biblioid>
         </biblioset>
@@ -136,4 +136,5 @@
   <xsl:template match="biblioid[@class='doi'][@otherclass='temp']" mode="custom-2"/>
 
 <!-- to do: tei2bits. fm und toc bei ZS 10.14361/dak-2021-toc01 statt zig.2020.11.issue-1-toc-->
+<!-- Parts haben keine IDs -> DOIS falsch, bzw. werden sie nicht richtig zugeordnet. -->
 </xsl:stylesheet>
