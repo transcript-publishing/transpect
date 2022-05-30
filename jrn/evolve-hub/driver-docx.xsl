@@ -7,6 +7,7 @@
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:functx="http://www.functx.com"
   xmlns:ts="http://www.transcript-verlag.de/transpect"
+  xmlns:tr="http://transpect.io"
   xmlns="http://docbook.org/ns/docbook" 
   xpath-default-namespace="http://docbook.org/ns/docbook"
   exclude-result-prefixes="xs hub dbk ts xlink functx" 
@@ -61,6 +62,66 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="/hub/info/css:rules" mode="custom-1">
+    <xsl:copy>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </xsl:copy>
+    <xsl:variable name="temp-isbn" as="xs:string?" select="replace($basename, '^.+\d(\d{4}).*$', '97838394$10')"/>
+    <xsl:variable name="meta-doi" as="xs:string?" select="if (/hub/info/keywordset/keyword[@role = 'DOI'][normalize-space()]) 
+                                                          then replace(string-join(/hub/info/keywordset/keyword[@role = 'DOI']), '^.*doi\.org/', '') 
+                                                          else ()"/>
+    <!--  <xsl:message select="'temp-isbn: ', $temp-isbn, ' calc isbn: ', tr:check-isbn($temp-isbn, 13), 'ges: ', concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>-->
+    <!-- https://redmine.le-tex.de/issues/12499 add doi for chunking later (for calculate chunk DOIs) -->
+    <biblioid class="doi">
+      <xsl:choose>
+        <xsl:when test="$meta-doi[matches(., '\S')] or exists(/hub//biblioset[@role='chunk-metadata']/biblioid[@role= 'tsmetadoi'])">
+          <xsl:value-of select="((/hub//biblioset[@role='chunk-metadata'][biblioid[@role= 'tsmetadoi']])[1]/biblioid[@role= 'tsmetadoi'][normalize-space()], $meta-doi)[1]"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </biblioid>
+    <biblioid class="isbn">
+      <xsl:choose>
+        <xsl:when test="/hub/info/keywordset/keyword[@role = 'PDF-ISBN'][matches(., '\S')]">
+          <xsl:value-of select="replace(string-join(/hub/info/keywordset/keyword[@role = 'PDF-ISBN']), '^PDF-ISBN\s+', '')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="tr:format-isbn(concat(replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13)))"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </biblioid>
+
+  </xsl:template>
+
+
+  <xsl:template name="create-chunk-DOI">
+    <xsl:param name="context" as="element(*)?" tunnel="yes"/>
+    <xsl:variable name="ancestor" select="ancestor-or-self::*[not(self::biblioset | self::info)][1]"/>
+    <xsl:variable name="counter" select="if ($ancestor[self::part]) 
+                                          then concat('NO-DOI-', $ancestor/info/title)
+                                          else xs:string(format-number(index-of($book-part-chapters, $ancestor), '00'))" as="xs:string?"/>
+    <xsl:choose>
+      <xsl:when test="empty($context) or $context[self::info]">
+        <!-- create whole biblioset if it doesn’t exist-->
+        <biblioset role="chunk-metadata">
+          <biblioid role="tsmetachunkdoi" otherclass="chunk-doi" srcpath="{generate-id()}">
+           <xsl:value-of select="concat(if ($ancestor[self::part]) 
+                                        then /*/info/biblioid[@class= 'isbn'] 
+                                        else replace(replace(replace(/*/info/biblioid[@class= 'doi'], '\.issue-(\d)$', '0$1'), '\.issue-(\d)$', '$1'), '\.', '-'), '-', $counter)"/>
+          </biblioid>
+        </biblioset>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- if biblioset exists but not chunk DOI, it is inserted-->
+        <biblioid role="tsmetachunkdoi" otherclass="chunk-doi" srcpath="{generate-id()}">
+          <xsl:value-of select="concat(/*/info/biblioid[@class= 'doi'], '-', $counter)"/>
+        </biblioid>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
