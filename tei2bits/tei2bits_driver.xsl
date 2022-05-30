@@ -164,16 +164,6 @@
   <xsl:template match="*[local-name() = ('title-group', 'book-title-group')]
                         [parent::*[local-name() = ('book-part-meta', 'book-meta')]]" mode="clean-up" priority="3">
     <!-- move abstract title or alt title to title group -->
-    <xsl:if test="..[self::*:book-part-meta] and not(..[*:book-part-id])">
-      <xsl:variable name="counter" select="if (../..[@book-part-type = 'part']) 
-                                          then concat('NO-DOI-', *:title)
-                                          else xs:string(format-number(index-of($book-part-chapters, ../..), '000'))" as="xs:string?"/>
-      <xsl:variable name="counter-with-fm" select="if (../..[self::*:front-matter-part][@book-part-type= 'toc']) 
-                                                    then 'toc'
-                                                    else $counter"/>
-      <book-part-id book-part-id-type="doi"><xsl:value-of select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'], '-', $counter-with-fm)"/></book-part-id>
-      <xsl:message select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'], '-', $counter)"/>
-    </xsl:if>
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
       <xsl:if test="parent::*[local-name() = ('book-part-meta', 'book-meta')]
@@ -193,15 +183,27 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="*:front-matter-part[@book-part-type='title-page']/*:named-book-part-body" mode="clean-up" priority="2">
+  <xsl:template match="*:front-matter-part[@book-part-type='title-page']/*:named-book-part-body |
+                       *:front-matter-part[@book-part-type='toc'][empty(*:book-part-meta)]/*:named-book-part-body" mode="clean-up" priority="2">
     <book-part-meta>
       <book-part-id book-part-id-type="doi">
-        <xsl:value-of select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'], '-fm')"/>
+        <xsl:value-of select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'][1], if (@book-part-type='toc') then '-toc' else '-fm')"/>
       </book-part-id>
       <xsl:call-template name="page-range"/>
       <xsl:call-template name="page-count"/>
     </book-part-meta>
     <xsl:next-match/>
+  </xsl:template>
+
+  <xsl:template match="*:front-matter-part[@book-part-type='toc']/*:book-part-meta[empty(*:book-part-id[@book-part-id-type = 'doi'])]" mode="clean-up" priority="2">
+    <xsl:copy>
+      ´  <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <book-part-id book-part-id-type="doi">
+        <xsl:value-of select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'][1], '-toc')"/>
+      </book-part-id>
+      <xsl:call-template name="page-range"/>
+      <xsl:call-template name="page-count"/>
+    </xsl:copy>
   </xsl:template>
 
   <xsl:template match="*:book-part-meta" mode="clean-up">
@@ -222,14 +224,18 @@
 
 
   <xsl:template name="page-count">
-    <counts>
-      <page-count count=""/>
-    </counts>
+    <xsl:if test="empty(*:counts)">
+      <counts>
+        <page-count count=""/>
+      </counts>
+    </xsl:if>
   </xsl:template> 
 
   <xsl:template name="page-range">
-    <fpage></fpage>
-    <lpage></lpage>
+    <xsl:if test="empty(*:fpage)">
+      <fpage></fpage>
+      <lpage></lpage>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="titleStmt" mode="tei2bits">
