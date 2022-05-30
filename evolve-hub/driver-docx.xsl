@@ -158,4 +158,26 @@
     </xsl:choose>
   </xsl:template>
 
+
+  <xsl:template match="part" mode="hub:ids">
+    <xsl:copy>
+      <xsl:apply-templates select="." mode="hub:ids-atts"/>
+      <xsl:apply-templates select="@* except @xml:id | node()" mode="#current"/>
+    </xsl:copy>
+   <!-- add id to part to allow DOIs  -->
+  </xsl:template>
+  
+  <xsl:template match="part" mode="hub:ids-atts">
+    <xsl:attribute name="xml:id" 
+      select="concat(
+                'Part', 
+                string(
+                  count( 
+                    ( //part ) [. &lt;&lt; current()]
+                  ) 
+                  + 1 
+                )
+              )"/>
+  </xsl:template>
+
 </xsl:stylesheet>
