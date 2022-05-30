@@ -240,9 +240,9 @@
 
   <xsl:template match="titleStmt" mode="tei2bits">
 
-    <xsl:if test="$metadata/term[@key = 'DOI'][normalize-space()]">
+<!--    <xsl:if test="$metadata/term[@key = 'DOI'][normalize-space()]">
       <book-id book-id-type="doi"><xsl:value-of select="$metadata/term[@key = 'DOI'][normalize-space()]"/></book-id>
-    </xsl:if>
+    </xsl:if>-->
 
     <contrib-group>
       <xsl:for-each select="$metadata/term[@key = ('Autor', 'Herausgeber')][normalize-space()]">
@@ -307,7 +307,7 @@
 
   <xsl:template match="keywords[@rendition = ('titlepage', 'custom-meta')]" mode="tei2bits"/>
 
-  <xsl:template match="keywords[@rendition = 'chunk-meta']/term[@key='chunk-doi']" mode="tei2bits">
+  <xsl:template match="keywords[@rendition = 'chunk-meta']/term[@key='chunk-doi']" mode="tei2bits" priority="2">
     <book-part-id book-part-id-type="doi"><xsl:apply-templates select="node()" mode="#current"/></book-part-id>
   </xsl:template>
 
