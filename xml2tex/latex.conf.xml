@@ -147,6 +147,12 @@
                 select="$metadata/dbk:keyword[@role eq 'Fordertext']"/>
   <xsl:variable name="funder-posttext" as="xs:string?" 
                 select="$metadata/dbk:keyword[@role eq 'Fordertextpost']"/>
+  <xsl:variable name="bibl-issn" as="xs:string?" 
+                select="$metadata/dbk:keyword[@role eq 'BiblISSN']"/>
+  <xsl:variable name="bible-issn" as="xs:string?" 
+                select="$metadata/dbk:keyword[@role eq 'BibleISSN']"/>
+  <xsl:variable name="advertisement" as="element(dbk:keyword)?" 
+                select="$metadata/dbk:keyword[@role eq 'Werbung']"/>
   
   <xsl:variable name="new-common"                 select="true()" as="xs:boolean"/>
   <xsl:variable name="create-customer-toctitles"  select="true()" as="xs:boolean"/>
@@ -398,12 +404,17 @@
       </xsl:for-each>  
     </xsl:if>
     <!-- transcript-specific metadata -->
-    <xsl:variable name="bibl-issn" as="xs:string?" 
-                  select="$metadata/dbk:keyword[@role eq 'BiblISSN']"/>
-    <xsl:variable name="bible-issn" as="xs:string?" 
-                  select="$metadata/dbk:keyword[@role eq 'BibleISSN']"/>
-    <xsl:variable name="advertisement" as="xs:string?" 
-                  select="$metadata/dbk:keyword[@role eq 'Werbung']"/>
+    <xsl:if test="normalize-space($bibl-issn)">
+      <xsl:value-of select="concat('&#xa;\tpBiblISSN{', $bibl-issn, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($bible-issn)">
+      <xsl:value-of select="concat('&#xa;\tpBibleISSN{', $bible-issn, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="normalize-space($advertisement)">
+      <xsl:text>&#xa;\tpAdvertise{</xsl:text>
+      <xsl:apply-templates select="$advertisement/*" mode="#current"/>
+      <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>    
     <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
     <xsl:for-each select="//dbk:index">
       <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
