@@ -307,8 +307,8 @@
     </xsl:if>
     <xsl:if test="normalize-space($biblio-info)">
       <xsl:value-of select="concat('&#xa;\tpBiblio{', 
-                                   string-join(xml2tex:meta-remove-links-etc($biblio-info/*), '\\&#xa;'),
-                                   '}&#xa;')"/>
+                                   string-join($biblio-info/*/xml2tex:meta-remove-links-etc(.), '\\&#xA;'),
+                                   '}&#xA;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($print-note)">
       <xsl:value-of select="concat('&#xa;\tpPrintNote{', $print-note, '}&#xa;')"/>
