@@ -195,9 +195,9 @@
       <xsl:text>&#xa;\begin{tpAuthor}</xsl:text>
       <xsl:value-of select="concat('&#xa;\tpFullName{', replace(., '[\p{Zs}&#xa;]', '~'), '}')"/>
       <xsl:if test="$author-info">
-        <xsl:value-of select="concat('&#xa;\tpBio{', 
-                                     normalize-space(if(count($authors/*) gt 1) then $author-info/*[$pos] else $author-info), 
-                                     '}&#xa;')"/>
+        <xsl:text>&#xa;\tpBio{</xsl:text>
+        <xsl:apply-templates select="if(count($authors/*) gt 1) then $author-info/*[$pos] else $author-info" mode="#current"/>
+        <xsl:text>}&#xa;</xsl:text>
       </xsl:if>
       <xsl:text>\end{tpAuthor}&#xa;</xsl:text>
     </xsl:for-each>
