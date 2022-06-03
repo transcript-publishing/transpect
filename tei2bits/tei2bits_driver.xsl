@@ -344,4 +344,15 @@
     <xsl:attribute name="ext-link-type" select="$type"/>
   </xsl:function>
 
+  <xsl:template match="note/@n | note[not(@n)]/p[1]/label[1]" mode="tei2bits">
+    <!--http://www.wiki.degruyter.de/production/files/dg_xml_guidelines.xhtml#footnotes
+        https://redmine.le-tex.de/issues/12757-->
+      <xsl:attribute name="symbol" select="."/>
+  </xsl:template>
+
+  <xsl:template match="note[@type = 'endnote']/@type" mode="tei2bits" priority="3">
+    <!--http://www.wiki.degruyter.de/production/files/dg_xml_guidelines.xhtml#footnotes -->
+    <xsl:attribute name="fn-type" select="."/>
+  </xsl:template>
+
 </xsl:stylesheet>
