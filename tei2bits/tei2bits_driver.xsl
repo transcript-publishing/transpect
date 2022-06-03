@@ -312,7 +312,8 @@
   </xsl:template>
 
   <xsl:template match="keywords[not(@rendition = ('titlepage', 'docProps'))]/@rendition" mode="tei2bits">
-    <xsl:attribute name="kwd-group-type" select="'author-generated'"/>
+    <title><xsl:value-of select="."/></title>
+    <!--<xsl:attribute name="kwd-group-type" select="'author-generated'"/>-->
     <!-- https://redmine.le-tex.de/issues/12464 -->
   </xsl:template>
 
@@ -330,5 +331,17 @@
   </xsl:template>
 
   <xsl:template match="@source-dir-uri" mode="clean-up"/>
+
+  <xsl:function name="tr:determine-link-type" as="attribute(ext-link-type)?">
+    <xsl:param name="target" as="xs:string"/>
+    <!-- https://redmine.le-tex.de/issues/12756 -->
+    <xsl:variable name="type">
+      <xsl:choose>
+      <xsl:when test="matches($target, 'doi\.')"><xsl:value-of select="'doi'"/></xsl:when>
+      <xsl:otherwise><xsl:value-of select="'uri'"/></xsl:otherwise>
+    </xsl:choose>
+    </xsl:variable>
+    <xsl:attribute name="ext-link-type" select="$type"/>
+  </xsl:function>
 
 </xsl:stylesheet>
