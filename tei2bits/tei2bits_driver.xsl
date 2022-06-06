@@ -311,7 +311,7 @@
     <book-part-id book-part-id-type="doi"><xsl:apply-templates select="node()" mode="#current"/></book-part-id>
   </xsl:template>
 
-  <xsl:template match="keywords[not(@rendition = ('titlepage', 'docProps'))]/@rendition" mode="tei2bits">
+  <xsl:template match="keywords[not(@rendition = ('titlepage', 'docProps'))]/@rendition" mode="tei2bits" priority="3">
     <title><xsl:value-of select="."/></title>
     <!--<xsl:attribute name="kwd-group-type" select="'author-generated'"/>-->
     <!-- https://redmine.le-tex.de/issues/12464 -->
@@ -330,7 +330,7 @@
     </front-matter-part>
   </xsl:template>
 
-  <xsl:template match="@source-dir-uri" mode="clean-up"/>
+  <xsl:template match="@source-dir-uri | @kwd-group-type" mode="clean-up"/>
 
   <xsl:function name="tr:determine-link-type" as="attribute(ext-link-type)?">
     <xsl:param name="target" as="xs:string"/>
@@ -344,15 +344,18 @@
     <xsl:attribute name="ext-link-type" select="$type"/>
   </xsl:function>
 
-  <xsl:template match="note/@n | note[not(@n)]/p[1]/label[1]" mode="tei2bits">
+  <xsl:template match="note/@xml:id" mode="tei2bits" priority="5">
     <!--http://www.wiki.degruyter.de/production/files/dg_xml_guidelines.xhtml#footnotes
-        https://redmine.le-tex.de/issues/12757-->
-      <xsl:attribute name="symbol" select="."/>
+      https://redmine.le-tex.de/issues/12757-->
+    <xsl:next-match/>
+    <xsl:attribute name="symbol" select="if (..[@n]) then ../@n else ../p[1]/label[1]"/>
   </xsl:template>
 
   <xsl:template match="note[@type = 'endnote']/@type" mode="tei2bits" priority="3">
     <!--http://www.wiki.degruyter.de/production/files/dg_xml_guidelines.xhtml#footnotes -->
     <xsl:attribute name="fn-type" select="."/>
   </xsl:template>
+
+  <xsl:template match="note/@n | note/p[1]/label[1]" mode="tei2bits" priority="2"/>
 
 </xsl:stylesheet>
