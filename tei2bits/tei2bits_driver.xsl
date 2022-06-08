@@ -364,6 +364,9 @@
     <!-- move @id from tab to table-wrap-->
     <table-wrap>
       <xsl:apply-templates select="@xml:id" mode="#current"/>
+      <xsl:attribute name="position" select="if ((every $e in * satisfies $e[self::*:thead|self::*:tbody|self::*:tfoot|self::*:colgroup])
+                                                  and 
+                                                  not(preceding-sibling::*[1][matches(., ':\p{Zs}*$')])) then 'float' else 'anchor'"/>
       <xsl:if test="head or note">
         <caption>
           <xsl:apply-templates select="head, note" mode="#current"/>
