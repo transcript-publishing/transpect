@@ -414,7 +414,9 @@
     <!--http://www.wiki.degruyter.de/production/files/dg_xml_guidelines.xhtml#images-media-files -->
     <xsl:attribute name="{name()}" select="'figure'"/>
     <!-- https://redmine.le-tex.de/issues/12771 -->
-    <xsl:attribute name="position" select="'anchor'"/>
+    <xsl:attribute name="position" select="if ((every $e in ../* satisfies $e[self::*:graphic])
+                                                and 
+                                                not(../preceding-sibling::*[1][matches(., ':\p{Zs}*$')])) then 'float' else 'anchor'"/>
   </xsl:template>
 
 
