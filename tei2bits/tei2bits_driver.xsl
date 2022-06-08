@@ -197,7 +197,7 @@
 
   <xsl:template match="*:front-matter-part[@book-part-type='toc']/*:book-part-meta[empty(*:book-part-id[@book-part-id-type = 'doi'])]" mode="clean-up" priority="2">
     <xsl:copy>
-      ´  <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
       <book-part-id book-part-id-type="doi">
         <xsl:value-of select="concat(/*:book/*:book-meta/*:book-id[@book-id-type ='doi'][1], '-toc')"/>
       </book-part-id>
@@ -348,7 +348,9 @@
     <!--http://www.wiki.degruyter.de/production/files/dg_xml_guidelines.xhtml#footnotes
       https://redmine.le-tex.de/issues/12757-->
     <xsl:next-match/>
-    <xsl:attribute name="symbol" select="if (..[@n]) then ../@n else ../p[1]/label[1]"/>
+    <xsl:attribute name="symbol" select="if (..[@n]) 
+                                         then normalize-space(../@n) 
+                                         else normalize-space(../p[1]/label[1])"/>
   </xsl:template>
 
   <xsl:template match="note[@type = 'endnote']/@type" mode="tei2bits" priority="3">
@@ -357,5 +359,61 @@
   </xsl:template>
 
   <xsl:template match="note/@n | note/p[1]/label[1]" mode="tei2bits" priority="2"/>
+
+  <xsl:template match="table" mode="tei2bits" priority="2">
+    <!-- move @id from tab to table-wrap-->
+    <table-wrap>
+      <xsl:apply-templates select="@xml:id" mode="#current"/>
+      <xsl:if test="head or note">
+        <caption>
+          <xsl:apply-templates select="head, note" mode="#current"/>
+        </caption>
+      </xsl:if>
+      <table>
+        <xsl:apply-templates select="@* except (@rend, @rendition, @xml:id)" mode="#current"/>
+        <xsl:apply-templates select="@rendition" mode="#current"/>
+        <xsl:apply-templates select="node() except (head, note, postscript)" mode="#current"/>
+      </table>
+      <xsl:apply-templates select="postscript" mode="#current"/>
+    </table-wrap>
+  </xsl:template>
+
+  <xsl:template match="*:book-part[@book-part-type='chapter']" priority="5" mode="clean-up">
+    <!--https://redmine.le-tex.de/issues/12762-->
+    <xsl:next-match>
+    <xsl:with-param name="book-part-id" select="replace(*:book-part-meta/*:book-part-id[@book-part-id-type='doi'], '^.+/', '')" as="xs:string" tunnel="yes"/>
+    </xsl:next-match>
+  </xsl:template> 
+
+  <xsl:template match="*:fn/@id | *:fig/@id | *:table-wrap/@id | *:boxed-text/@id | *:sec/@id | *:book-part[not(@book-part-type='part')]/@id |*:ref/@id" mode="clean-up" priority="2">
+    <xsl:param name="book-part-id" as="xs:string?" tunnel="yes"/>
+    <xsl:variable name="type" as="xs:string?" select="if (..[self::*:fn|self::*:fig|self::*:sec|self::*:boxed-tex|self::*:table-wrap]) 
+                                                     then substring(local-name(..), 1, 3) 
+                                                     (:else if (..[self::*:boxed-tex|self::*:table-wrap]) then 'box':)
+                                                     else ()" />
+    <xsl:variable name="normalized-id" select="if (..[self::*:book-part[@book-part-type='chapter']]) then () else format-number(xs:integer(replace(., '^\p{L}+', '')), '000')" as="xs:string?"/>
+    <!--https://redmine.le-tex.de/issues/12762, http://www.wiki.degruyter.de/production/files/dg_variables_and_id.xhtml#ids-->
+    <xsl:attribute name="{name()}" select="string-join(('b', $book-part-id, $type, $normalized-id), '_')"/>
+   <!--check chapter id, boxes not yet handled -->
+   <!-- sections should be handled to see level b_9783110302639-005_s_001_s_002_s_003-->
+   <!-- also change link to this target -->
+  </xsl:template>
+
+  <xsl:template match="*:ref[key('by-id', @xlink:href)
+                                 [self::*:fn|self::*:fig|self::*:sec|self::*:boxed-tex|self::*:table-wrap|self::*:book-part[not(@book-part-type='part')]]]/@xlink:href" mode="clean-up" priority="2">
+    <!--  <xsl:key name="by-id" match="*[@id | @xml:id]" use="@id | @xml:id"/>
+      <xsl:key name="link-by-anchor" match="ref" use="@target"/>-->
+    <!--<xref ref-type="fig"-->
+    <xsl:variable name="new-target" as="attribute(id)">
+      <xsl:apply-templates select="key('by-id',.)[1]/@id" mode="#current"/>
+    </xsl:variable>
+    <xsl:attribute name="{name()}" select="$new-target"/>
+  </xsl:template> 
+
+  <xsl:template match="*:fig/@fig-type" mode="clean-up" priority="3">
+    <!--http://www.wiki.degruyter.de/production/files/dg_xml_guidelines.xhtml#images-media-files -->
+    <xsl:attribute name="{name()}" select="'figure'"/>
+  </xsl:template>
+
 
 </xsl:stylesheet>
