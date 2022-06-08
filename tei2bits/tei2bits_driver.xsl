@@ -413,6 +413,8 @@
   <xsl:template match="*:fig/@fig-type" mode="clean-up" priority="3">
     <!--http://www.wiki.degruyter.de/production/files/dg_xml_guidelines.xhtml#images-media-files -->
     <xsl:attribute name="{name()}" select="'figure'"/>
+    <!-- https://redmine.le-tex.de/issues/12771 -->
+    <xsl:attribute name="position" select="'anchor'"/>
   </xsl:template>
 
 
