@@ -387,23 +387,23 @@
 
   <xsl:template match="*:fn/@id | *:fig/@id | *:table-wrap/@id | *:boxed-text/@id | *:sec/@id | *:book-part[not(@book-part-type='part')]/@id |*:ref/@id" mode="clean-up" priority="2">
     <xsl:param name="book-part-id" as="xs:string?" tunnel="yes"/>
-    <xsl:variable name="type" as="xs:string?" select="if (..[self::*:fn|self::*:fig|self::*:sec|self::*:boxed-tex|self::*:table-wrap]) 
+    <xsl:variable name="type" as="xs:string?" select="if (..[self::*:fn|self::*:fig|self::*:boxed-tex|self::*:table-wrap]) 
                                                      then substring(local-name(..), 1, 3) 
                                                      (:else if (..[self::*:boxed-tex|self::*:table-wrap]) then 'box':)
                                                      else ()" />
-    <xsl:variable name="normalized-id" select="if (..[self::*:book-part[@book-part-type='chapter']]) then () else format-number(xs:integer(replace(., '^\p{L}+', '')), '000')" as="xs:string?"/>
+    <xsl:variable name="normalized-id" select="if (..[self::*:book-part[@book-part-type='chapter']]) 
+                                               then () 
+                                               else if (..[self::*:sec])
+                                                    then string-join((for $s in ancestor-or-self::*:sec return concat('s_', xs:string(format-number((count($s/preceding-sibling::*:sec) + 1), '000')))),'_')
+                                                    else format-number(xs:integer(replace(., '^\p{L}+', '')), '000')" as="xs:string?"/>
     <!--https://redmine.le-tex.de/issues/12762, http://www.wiki.degruyter.de/production/files/dg_variables_and_id.xhtml#ids-->
     <xsl:attribute name="{name()}" select="string-join(('b', $book-part-id, $type, $normalized-id), '_')"/>
-   <!--check chapter id, boxes not yet handled -->
-   <!-- sections should be handled to see level b_9783110302639-005_s_001_s_002_s_003-->
-   <!-- also change link to this target -->
+   <!-- boxes not yet checked -->
   </xsl:template>
 
   <xsl:template match="*:ref[key('by-id', @xlink:href)
                                  [self::*:fn|self::*:fig|self::*:sec|self::*:boxed-tex|self::*:table-wrap|self::*:book-part[not(@book-part-type='part')]]]/@xlink:href" mode="clean-up" priority="2">
-    <!--  <xsl:key name="by-id" match="*[@id | @xml:id]" use="@id | @xml:id"/>
-      <xsl:key name="link-by-anchor" match="ref" use="@target"/>-->
-    <!--<xref ref-type="fig"-->
+    <!--perhaps create crossref like <xref ref-type="fig"-->
     <xsl:variable name="new-target" as="attribute(id)">
       <xsl:apply-templates select="key('by-id',.)[1]/@id" mode="#current"/>
     </xsl:variable>
