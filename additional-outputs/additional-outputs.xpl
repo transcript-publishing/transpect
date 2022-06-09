@@ -201,13 +201,21 @@
     <p:choose>
       <p:when test="ends-with(base-uri(), 'html')">
         <p:delete match="@srcpath"/>
+        <p:namespace-rename from="http://www.w3.org/ns/xproc-step" to=""/>
+        <p:namespace-rename from="http://xmlcalabash.com/ns/extensions" to=""/>
         <p:store include-content-type="true" name="export" indent="true" omit-xml-declaration="false" method="html" version="5.0">
           <p:with-option name="href" select="base-uri()"/>
         </p:store>
       </p:when>
       <p:otherwise>
         <p:delete match="@srcpath"/>
-        <p:store include-content-type="true" name="export" indent="true" omit-xml-declaration="false" method="xml">
+        <p:namespace-rename from="http://www.w3.org/ns/xproc-step" to=""/>
+        <p:namespace-rename from="http://xmlcalabash.com/ns/extensions" to=""/>
+        <p:store include-content-type="true" 
+                 name="export" 
+                 indent="true" 
+                 omit-xml-declaration="false" 
+                 method="xml">
           <p:with-option name="href" select="base-uri()"/>
 <!--          <p:with-option name="doctype-system" select="'atypon-book3.dtd'"/>
           <p:with-option name="doctype-public" select="'-//Atypon//DTD Atypon Systems NCBI Book DTD Suite v3.0.2 20110228//EN'"/>-->
