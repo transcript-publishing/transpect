@@ -9,7 +9,7 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" 
   xmlns:mml="http://www.w3.org/1998/Math/MathML" 
   xmlns:ali="http://www.niso.org/schemas/ali/1.0/"
-  exclude-result-prefixes="xs c cat tr"
+  exclude-result-prefixes="xs c cat tr bts epub"
   version="2.0">
 
   <xsl:import href="http://transpect.io/xslt-util/xslt-based-catalog-resolver/xsl/resolve-uri-by-catalog.xsl"/>
@@ -26,7 +26,7 @@
   <xsl:variable name="local-dir-issue" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/chunks-atypon/issue/' else 'chunks-atypon/issue/'"/>
   <xsl:variable name="local-dir-bits" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/chunks-atypon/bits/' else 'chunks-atypon/bits/'"/>
  
-  <xsl:template match="@* | node()" mode="#default export create-column-titles">
+  <xsl:template match="@* | node()" mode="#default create-column-titles">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </xsl:copy>
@@ -35,7 +35,7 @@
   <xsl:template match="@srcpath" mode="#default"/>
   <xsl:key name="elt-by-uri" match="*" use="@xml:base"/>
 
-  <xsl:template match="/*[self::*:book]" mode="#default">
+  <xsl:template match="/*[self::*:book]" mode="#default" exclude-result-prefixes="c">
     <xsl:variable name="meta" select="*:book-meta" as="element(*)"/>
     <xsl:variable name="articles" as="element(*)*">
       <xsl:for-each select="(*:front-matter/*:front-matter-part | *:book-body//*:book-part[@book-part-type=('chapter', 'article')] | *:book-back//*:book-part)">
@@ -260,6 +260,12 @@
     </xsl:for-each>
   </xsl:function>
 
+ 
+  <xsl:template match="@* | node()" mode="export">
+    <xsl:copy copy-namespaces="yes">
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
 
   <xsl:template match="/*:export-root" mode="export">
     <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
