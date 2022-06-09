@@ -204,6 +204,7 @@
   \tpSetProperty{title-format}{\sffamily\LARGE\sbseries}%
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
   \tpSetProperty{heading-block}{%
+    \savenotes
     \bgroup
       \normalfont
       \interlinepenalty\@M
@@ -224,6 +225,7 @@
         \tpUseComp{Quote}}%
       %\spewnotes
       \par}{}%
+    \spewnotes
   }%
   \tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
   \tpSetProperty{bookmark}{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\enskip}{}\tpUseComp{TocTitle}}%
