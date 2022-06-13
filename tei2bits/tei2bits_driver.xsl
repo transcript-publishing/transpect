@@ -146,11 +146,24 @@
       <publisher-loc><xsl:value-of select="if ($metadata/term[@key eq 'Verlagsort']) then $metadata/term[@key eq 'Verlagsort'] else 'Bielefeld'"/></publisher-loc>
     </publisher>
     <xsl:if test="date or publisher or $metadata/term[@key = 'Copyright']">
-      <xsl:variable name="copyright" select="replace($metadata/term[@key = 'Copyright']/text(), ', .+$', '')" as="xs:string?"/>
+      <xsl:variable name="copyright" select="if ($metadata/term[@key = 'Copyright'][normalize-space()]) 
+                                             then replace($metadata/term[@key = 'Copyright']/text(), ', .+$', '')  
+                                             else ()" as="xs:string?"/>
       <permissions>
         <copyright-statement><xsl:value-of select="($copyright, concat('© ', format-date(current-date(), '[Y]'), ' transcript Verlag'))[1]"/></copyright-statement>
-        <copyright-year><xsl:value-of select="if ($metadata/term[@key eq 'Jahr']) then $metadata/term[@key eq 'Jahr'] else (replace($copyright, '^.+?(\d{4}).*$', '$1'), format-date(current-date(), '[Y]'))[1]"/></copyright-year>
-        <copyright-holder><xsl:value-of select="if ($metadata/term[@key eq 'Verlagsname']) then $metadata/term[@key eq 'Verlagsname'] else (replace($copyright, '^.+?\d{4}\p{Zs}*(.+)$', '$1'), 'transcript Verlag')[1]"/></copyright-holder>
+        <copyright-year><xsl:value-of select="if ($metadata/term[@key eq 'Jahr'][normalize-space()]) 
+                                              then $metadata/term[@key eq 'Jahr'] 
+                                              else 
+                                                if ($copyright[normalize-space()]) 
+                                                then (replace($copyright, '^.+?(\d{4}).*$', '$1')) 
+                                                else format-date(current-date(), '[Y]')"/></copyright-year>
+        <copyright-holder><xsl:value-of select="if ($metadata/term[@key eq 'Verlagsname'][normalize-space()]) 
+                                                then $metadata/term[@key eq 'Verlagsname'] 
+                                                else 
+                                                  if ($copyright[normalize-space()]) 
+                                                  then replace($copyright, '^.+?\d{4}\p{Zs}*(.+)$', '$1') 
+                                                  else 'transcript Verlag'"/>
+        </copyright-holder>
         <license>
           <!--will be filled later-->
         </license>
