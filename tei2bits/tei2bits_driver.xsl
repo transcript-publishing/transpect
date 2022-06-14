@@ -233,6 +233,7 @@
   <xsl:template match="*:book-part-meta" mode="clean-up">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
+      <xsl:call-template name="permissions"/>
       <xsl:call-template name="page-range"/>
       <xsl:call-template name="page-count"/>
     </xsl:copy>
@@ -246,6 +247,11 @@
     </xsl:copy>
   </xsl:template>
 
+  <xsl:template name="permissions">
+    <xsl:if test="empty(*:permissions) and not(..[@book-part-type=('toc', 'fm', 'title-page')])">
+      <xsl:apply-templates select="/*:book/*:book-meta/*:permissions" mode="#current"/>
+    </xsl:if>
+  </xsl:template> 
 
   <xsl:template name="page-count">
     <xsl:if test="empty(*:counts)">
