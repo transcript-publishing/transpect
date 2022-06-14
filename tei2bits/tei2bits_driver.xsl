@@ -140,46 +140,62 @@
     <xsl:attribute name="book-part-id-type" select="lower-case(.)"/>
   </xsl:template>
 
+  <xsl:template match="keywords/term/seg | keywords/term/seg/seg" mode="tei2bits">
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+
   <xsl:template match="publicationStmt" mode="tei2bits">
     <publisher>
       <publisher-name><xsl:value-of select="if ($metadata/term[@key eq 'Verlagsname']) then $metadata/term[@key eq 'Verlagsname'] else 'transcript Verlag'"/></publisher-name>
       <publisher-loc><xsl:value-of select="if ($metadata/term[@key eq 'Verlagsort']) then $metadata/term[@key eq 'Verlagsort'] else 'Bielefeld'"/></publisher-loc>
     </publisher>
-    <xsl:if test="date or publisher or $metadata/term[@key = 'Copyright']">
+    <!--<xsl:if test="date or publisher or $metadata/term[@key = 'Copyright'][normalize-space()] or $metadata/term[@key = 'Lizenz'][normalize-space()]">-->
       <xsl:variable name="copyright" select="if ($metadata/term[@key = 'Copyright'][normalize-space()]) 
-                                             then replace($metadata/term[@key = 'Copyright']/text(), ', .+$', '')  
-                                             else ()" as="xs:string?"/>
+                                             then $metadata/term[@key = 'Copyright']/node()[normalize-space()]
+                                             else ()" as="node()*"/>
       <permissions>
-        <copyright-statement><xsl:value-of select="($copyright, concat('© ', format-date(current-date(), '[Y]'), ' transcript Verlag'))[1]"/></copyright-statement>
+        <xsl:choose>
+          <xsl:when test="$copyright[normalize-space()]">
+            <xsl:for-each select="$copyright/node()[normalize-space()]">
+              <copyright-statement><xsl:apply-templates select="." mode="#current"/></copyright-statement>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise><copyright-statement><xsl:value-of select="concat('© ', format-date(current-date(), '[Y]'), ' transcript Verlag')"/></copyright-statement></xsl:otherwise>
+        </xsl:choose>
+        <!--<copyright-statement><xsl:value-of select="($copyright, concat('© ', format-date(current-date(), '[Y]'), ' transcript Verlag'))[1]"/></copyright-statement>-->
         <copyright-year><xsl:value-of select="if ($metadata/term[@key eq 'Jahr'][normalize-space()]) 
                                               then $metadata/term[@key eq 'Jahr'] 
                                               else 
                                                 if ($copyright[normalize-space()]) 
-                                                then (replace($copyright, '^.+?(\d{4}).*$', '$1')) 
+                                                then (replace(string-join($copyright, ''), '^.+?(\d{4}).*$', '$1', 's')) 
                                                 else format-date(current-date(), '[Y]')"/></copyright-year>
         <copyright-holder><xsl:value-of select="if ($metadata/term[@key eq 'Verlagsname'][normalize-space()]) 
                                                 then $metadata/term[@key eq 'Verlagsname'] 
                                                 else 
                                                   if ($copyright[normalize-space()]) 
-                                                  then replace($copyright, '^.+?\d{4}\p{Zs}*(.+)$', '$1') 
+                                                  then replace(string-join($copyright/node()[normalize-space()], ''), '^.*©\p{Zs}*(\d{4}\p{Zs}*)?(.+)$', '$2', 's') 
                                                   else 'transcript Verlag'"/>
         </copyright-holder>
-        <xsl:if test="$metadata/term[@key eq 'Lizenz'][not(normalize-space())]">
+        <xsl:if test="$metadata/term[@key eq 'Lizenz'][normalize-space()]">
           <license>
             <xsl:if test="$metadata/term[@key eq 'Lizenz'][normalize-space()]">
               <xsl:attribute name="license-type" select="'open-access'"/>
               <xsl:attribute name="specific-use" select="'rights-object-archive-dnb'"/>
             </xsl:if>
             <xsl:if test="$metadata/term[@key eq 'Lizenzlink'][normalize-space()]">
-              <xsl:attribute name="license-type" select="$metadata/term[@key eq 'Lizenzlink']"></xsl:attribute>
+              <xsl:attribute name="xlink:href" select="string-join($metadata/term[@key eq 'Lizenzlink']/node()[normalize-space()], '')"></xsl:attribute>
             </xsl:if>
             <xsl:if test="$metadata/term[@key eq 'Lizenztext'][normalize-space()]">
-              <license-p><xsl:apply-templates select="$metadata/term[@key eq 'Lizenztext']" mode="#current"/></license-p>
+              <xsl:for-each select="$metadata/term[@key eq 'Lizenztext']/node()[normalize-space()]">
+                <license-p>
+                  <xsl:apply-templates select="." mode="#current"/>
+                </license-p>
+              </xsl:for-each>
             </xsl:if>
           </license>
         </xsl:if>
       </permissions>
-    </xsl:if>
+    <!--</xsl:if>-->
   </xsl:template>
 
   <xsl:variable name="book-part-chapters" select="/*:book/*[self::*:book-body|*:book-back]//*:book-part[not(@book-part-type = 'part')]"/>
@@ -275,8 +291,13 @@
     </xsl:if>-->
 
     <contrib-group>
-      <xsl:for-each select="$metadata/term[@key = ('Autor', 'Herausgeber')][normalize-space()]">
-        <contrib contrib-type="{if (.[@key = 'Autor']) then 'author' else 'editor'}"><xsl:value-of select="."/></contrib>
+<!--s-->
+      <xsl:for-each select="if ($metadata/term[@key = ('Autor', 'Herausgeber')][count(seg[@type='remap-para']) gt 1])
+                            then $metadata/term[@key = ('Autor', 'Herausgeber')]/seg[@type='remap-para']
+                            else $metadata/term[@key = ('Autor', 'Herausgeber')][normalize-space()]">
+        <contrib contrib-type="{if (.[@key = 'Autor'] or ..[@key = 'Autor']) then 'author' else 'editor'}">
+          <xsl:apply-templates select="node()" mode="#current"/>
+        </contrib>
       </xsl:for-each>
     </contrib-group>
 
