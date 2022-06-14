@@ -164,9 +164,20 @@
                                                   then replace($copyright, '^.+?\d{4}\p{Zs}*(.+)$', '$1') 
                                                   else 'transcript Verlag'"/>
         </copyright-holder>
-        <license>
-          <!--will be filled later-->
-        </license>
+        <xsl:if test="$metadata/term[@key eq 'Lizenz'][not(normalize-space())]">
+          <license>
+            <xsl:if test="$metadata/term[@key eq 'Lizenz'][normalize-space()]">
+              <xsl:attribute name="license-type" select="'open-access'"/>
+              <xsl:attribute name="specific-use" select="'rights-object-archive-dnb'"/>
+            </xsl:if>
+            <xsl:if test="$metadata/term[@key eq 'Lizenzlink'][normalize-space()]">
+              <xsl:attribute name="license-type" select="$metadata/term[@key eq 'Lizenzlink']"></xsl:attribute>
+            </xsl:if>
+            <xsl:if test="$metadata/term[@key eq 'Lizenztext'][normalize-space()]">
+              <license-p><xsl:apply-templates select="$metadata/term[@key eq 'Lizenztext']" mode="#current"/></license-p>
+            </xsl:if>
+          </license>
+        </xsl:if>
       </permissions>
     </xsl:if>
   </xsl:template>
