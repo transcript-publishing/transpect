@@ -122,13 +122,13 @@
         <title-group>
           <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="'Frontmatter'"/></title>
         </title-group>
-        <xsl:apply-templates select="book-part-meta/(fpage|lpage)" mode="#current"/>
-        <permissions>
+        <xsl:apply-templates select="book-part-meta/(fpage|lpage), $meta/permissions" mode="#current"/>
+<!--        <permissions>
           <copyright-statement>© <xsl:value-of select="format-date(current-date(), '[Y]')"/> transcript Verlag</copyright-statement>
           <copyright-year><xsl:value-of select="format-date(current-date(), '[Y]')"/></copyright-year>
           <copyright-holder>transcript Verlag</copyright-holder>
           <ali:free_to_read/>
-        </permissions>
+        </permissions>-->
         <!-- <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>-->
         <!--<alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>-->
         <xsl:apply-templates select="book-part-meta/counts" mode="#current"/>
@@ -140,6 +140,7 @@
   <xsl:template match="front-matter-part[@book-part-type='toc']" mode="#default" priority="3">
     <xsl:param name="doi" as="xs:string?" tunnel="yes"/>
     <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
+    <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
     <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
     <xsl:variable name="new-doi" select="($doi, replace(book-part-meta/book-part-id, '^.+/(.+)-.+$', '$1-toc'))[1]"/>
     <book-part book-part-type="contents" id="{concat('b_', $new-doi)}" >
@@ -151,13 +152,13 @@
         <title-group>
           <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="if ($book-atts[name() = 'xml:lang'][contains(., 'de')]) then 'Inhalt' else 'Content'"/></title>
         </title-group>
-        <xsl:apply-templates select="book-part-meta/(fpage|lpage)" mode="#current"/>
-        <permissions>
+        <xsl:apply-templates select="book-part-meta/(fpage|lpage), $meta/permissions" mode="#current"/>
+<!--        <permissions>
           <copyright-statement>© <xsl:value-of select="format-date(current-date(), '[Y]')"/> transcript Verlag</copyright-statement>
           <copyright-year><xsl:value-of select="format-date(current-date(), '[Y]')"/></copyright-year>
           <copyright-holder>transcript Verlag</copyright-holder>
           <ali:free_to_read/>
-        </permissions>
+        </permissions>-->
         <!--  <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>
         <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>-->
         <xsl:apply-templates select="book-part-meta/counts" mode="#current"/>
