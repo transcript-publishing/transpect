@@ -186,6 +186,16 @@
 
   <p:sink/>
 
+  <tr:store-debug pipeline-step="difftest/out-bits" extension="xml">
+    <p:input port="source">
+      <p:pipe step="postprocess-bits" port="result"/>
+    </p:input>
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </tr:store-debug>
+
+  <p:sink/>
+
   <p:for-each name="splitting-bits">
     <p:iteration-source>
       <p:pipe port="secondary" step="split-articles"/>
