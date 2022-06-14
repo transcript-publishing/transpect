@@ -123,13 +123,16 @@
           <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="'Frontmatter'"/></title>
         </title-group>
         <xsl:apply-templates select="book-part-meta/(fpage|lpage)" mode="#current"/>
-        <permissions>
-          <xsl:apply-templates select="$meta/permissions/*" mode="#current"/>
-          <!-- if open-access license ist granted, use that. otherwise insert free-to-read-->
-          <xsl:if test="empty($meta/permissions/license)">
-            <ali:free_to_read/>
-          </xsl:if>
-        </permissions>
+        <xsl:if test="not($in-issue)">
+          <!-- put only in chunk, not in toc -->
+          <permissions>
+            <xsl:apply-templates select="$meta/permissions/*" mode="#current"/>
+            <!-- if open-access license ist granted, use that. otherwise insert free-to-read-->
+            <xsl:if test="empty($meta/permissions/license)">
+              <ali:free_to_read/>
+            </xsl:if>
+          </permissions>
+        </xsl:if>
         <!-- <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>-->
         <!--<alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>-->
         <xsl:apply-templates select="book-part-meta/counts" mode="#current"/>
@@ -154,13 +157,16 @@
           <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="if ($book-atts[name() = 'xml:lang'][contains(., 'de')]) then 'Inhalt' else 'Content'"/></title>
         </title-group>
         <xsl:apply-templates select="book-part-meta/(fpage|lpage)" mode="#current"/>
-        <permissions>
-          <xsl:apply-templates select="$meta/permissions/*" mode="#current"/>
-          <!-- if open-access license ist granted, ist granted, use that. otherwise insert free-to-read-->
-          <xsl:if test="empty($meta/permissions/license)">
-            <ali:free_to_read/>
-          </xsl:if>
-        </permissions>
+        <xsl:if test="not($in-issue)">
+          <!-- put only in chunk, not in toc -->
+          <permissions>
+            <xsl:apply-templates select="$meta/permissions/*" mode="#current"/>
+            <!-- if open-access license ist granted, ist granted, use that. otherwise insert free-to-read-->
+            <xsl:if test="empty($meta/permissions/license)">
+              <ali:free_to_read/>
+            </xsl:if>
+          </permissions>
+        </xsl:if>
         <!--  <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>
         <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>-->
         <xsl:apply-templates select="book-part-meta/counts" mode="#current"/>
@@ -188,27 +194,6 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="*:header[@class = 'chunk-meta-sec']" mode="#default"/>
-  
-  <xsl:template match="*:head" mode="#default">
-    <xsl:param name="context" as="element(*)?" tunnel="yes"/>
-    <xsl:variable name="meta-elements" as="element()*">
-      <xsl:if test="$context">
-        <xsl:apply-templates select="$context/descendant::*:header[@class = 'chunk-meta-sec'][1]/*, $context/descendant::*:p[@class = 'tsmetaalternativeheadline'][1]" mode="generate-chunk-meta-tags"/>
-      </xsl:if>
-    </xsl:variable>
-    <xsl:copy copy-namespaces="no">
-      <xsl:apply-templates select="@*" mode="#current"/>
-      <meta charset="utf-8"/>
-      <xsl:apply-templates select="node()[not(self::*:meta[@name = $meta-elements/@name]) and not(self::*:link)], *:link[1], $meta-elements" mode="#current">
-        <xsl:with-param name="context" select="$context" tunnel="yes"/>
-        <xsl:sort select="name()" />
-        <xsl:sort select="(@name, @href)[1]" />
-      </xsl:apply-templates>
-    </xsl:copy>
-  </xsl:template>
-
- 
   <xsl:variable name="short-isbn" select="replace(replace(/*/@xml:base, '^.+/.+?(\d+).+$', '$1'), '^[0]', '')"/>
  
   <xsl:template match="*:article" mode="#default">
