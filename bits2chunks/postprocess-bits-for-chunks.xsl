@@ -75,6 +75,7 @@
                 <xsl:with-param name="book-atts" select="@*" as="attribute(*)*" tunnel="yes"/>
                 <xsl:with-param name="meta" select="$meta" as="element(*)?" tunnel="yes"/>
                 <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
+                <xsl:with-param name="in-toc" select="true()" as="xs:boolean" tunnel="yes"/>
                 <xsl:with-param name="title-directory" select="$title-directory" as="xs:string" tunnel="yes"/>
               </xsl:apply-templates>
             </body>
@@ -112,6 +113,7 @@
     <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
     <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
     <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
+    <xsl:param name="in-toc" as="xs:boolean?" tunnel="yes"/>
     <xsl:variable name="new-doi" select="replace(book-part-meta/book-part-id, '^.+/(.+)-.+$', '$1-fm')"/>
      <book-part book-part-type="frontmatter">
       <xsl:if test="not($in-issue)"><xsl:attribute name="id" select="concat('b_', $new-doi)"/></xsl:if>
@@ -123,7 +125,7 @@
           <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="'Frontmatter'"/></title>
         </title-group>
         <xsl:apply-templates select="book-part-meta/(fpage|lpage)" mode="#current"/>
-        <xsl:if test="not($in-issue)">
+        <xsl:if test="not($in-toc)">
           <!-- put only in chunk, not in toc -->
           <permissions>
             <xsl:apply-templates select="$meta/permissions/*" mode="#current"/>
@@ -146,8 +148,11 @@
     <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
     <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
     <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
+    <xsl:param name="in-toc" as="xs:boolean?" tunnel="yes"/>
     <xsl:variable name="new-doi" select="($doi, replace(book-part-meta/book-part-id, '^.+/(.+)-.+$', '$1-toc'))[1]"/>
-    <book-part book-part-type="contents" id="{concat('b_', $new-doi)}" >
+    <xsl:if test="not($in-issue)">
+      <!-- render toc only in chunk, not in toc, http://www.wiki.degruyter.de/production/files/dg_xml_guidelines.xhtml#toc-b-archive -->
+      <book-part book-part-type="contents" id="{concat('b_', $new-doi)}" >
       <xsl:if test="not($in-issue)"><xsl:attribute name="id" select="concat('b_', $new-doi)"/></xsl:if>
       <!-- <xsl:if test="$in-issue"><xsl:attribute name="book-part-number" select="'2'"/></xsl:if>-->
       <book-part-meta>
@@ -157,8 +162,7 @@
           <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="if ($book-atts[name() = 'xml:lang'][contains(., 'de')]) then 'Inhalt' else 'Content'"/></title>
         </title-group>
         <xsl:apply-templates select="book-part-meta/(fpage|lpage)" mode="#current"/>
-        <xsl:if test="not($in-issue)">
-          <!-- put only in chunk, not in toc -->
+        <xsl:if test="not($in-toc)">
           <permissions>
             <xsl:apply-templates select="$meta/permissions/*" mode="#current"/>
             <!-- if open-access license ist granted, ist granted, use that. otherwise insert free-to-read-->
@@ -171,12 +175,10 @@
         <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>-->
         <xsl:apply-templates select="book-part-meta/counts" mode="#current"/>
       </book-part-meta>
-			<xsl:if test="not($in-issue)"><body/></xsl:if>
+			<body/>
     </book-part>
+</xsl:if>
   </xsl:template>
-
-
-  <!-- TODO: permission handling--> 
 
   <xsl:template match="title-group/title" mode="#default" priority="3">
     <xsl:param name="in-issue" as="xs:boolean?" tunnel="yes"/>
@@ -184,6 +186,14 @@
     <xsl:copy>
       <xsl:apply-templates select="$book-atts[name() = 'xml:lang'], @*, node()" mode="#current"></xsl:apply-templates>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="book-part-meta/permissions" mode="#default" priority="3">
+   <xsl:param name="in-toc" as="xs:boolean?" tunnel="yes"/>
+  <!-- no permissions in toc -->
+    <xsl:if test="not($in-toc)">
+      <xsl:copy copy-namespaces="no"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="body" mode="#default" priority="3">
