@@ -318,6 +318,13 @@
     <xsl:apply-templates select="$author" mode="heading-content"/>
   </xsl:template>
   
+  <xsl:template match="head/label" mode="tei2html">
+    <xsl:next-match/>
+    <xsl:if test="following-sibling::node()[1][self::seg[@type='tab'] or self::text()[matches(., '\P{Zs}')]]">
+      <xsl:text> </xsl:text>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:function name="tei2html:heading-level" as="xs:integer?">
     <xsl:param name="elt" as="element(*)"/>
     <xsl:variable name="level" as="xs:integer?">
