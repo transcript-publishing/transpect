@@ -821,6 +821,7 @@
     \ifcollection
       \vskip \baselineskip
       \begingroup
+      \interlinepenalty\@M
       \parindent \z@
       \raggedright
       \rightskip \@pnumwidth \@plus 1fil
