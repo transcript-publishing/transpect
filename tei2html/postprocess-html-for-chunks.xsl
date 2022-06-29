@@ -38,7 +38,7 @@
     <xsl:variable name="articles" as="element(*)*">
       <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | descendant::*:div[contains(@class, 'chapter')])">
         <article>
-          <xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"></xsl:sequence>
+          <xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"/>
         </article>
       </xsl:for-each>
     </xsl:variable>
@@ -56,10 +56,16 @@
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
         </xsl:apply-templates>
       </xsl:element>
-    <xsl:call-template name="create-meta-elt">
+<!--    <xsl:call-template name="create-bib-elt">
+      <xsl:with-param name="nodes" select="node()"/>
+      <xsl:with-param name="doi" select="$filename"/>
+      <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.html')"/>
+      <xsl:with-param name="issue" select="true()"/>
+    </xsl:call-template>-->
+<!--    <xsl:call-template name="create-meta-elt">
       <xsl:with-param name="nodes" select="node()"/>
       <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.html')"/>
-    </xsl:call-template>
+    </xsl:call-template>-->
       <xsl:apply-templates select="$articles" mode="#current">
         <xsl:with-param name="head" select="$head" as="element(*)?" tunnel="yes"/>
       </xsl:apply-templates>
@@ -252,6 +258,12 @@
       <xsl:choose>
         <xsl:when test="descendant::*:header[@class = 'chunk-meta-sec'][*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi']]">
           <xsl:value-of select="replace(descendant::*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1], '^.+/', '')"/>
+        </xsl:when>
+        <xsl:when test="@epub:type='titlepage'">
+          <xsl:value-of select="replace(//*:header[@class = 'chunk-meta-sec'][1]/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1], '^(.+/.+-)(\d{2})\d+$', '$1frontmatter$2')"/>
+        </xsl:when>
+        <xsl:when test="@epub:type='toc'">
+          <xsl:value-of select="replace(//*:header[@class = 'chunk-meta-sec'][1]/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1], '^(.+/.+-)(\d{2})\d+$', '$1toc$2')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="(*/@id, generate-id())[1]"/>
@@ -464,7 +476,7 @@
         <!--</xsl:element>-->
       </xsl:element>
     </xsl:element>
-    <xsl:call-template name="create-bib-elt">
+<!--    <xsl:call-template name="create-bib-elt">
       <xsl:with-param name="nodes" select="$nodes"/>
       <xsl:with-param name="doi" select="$doi"/>
       <xsl:with-param name="uri" select="$uri"/>
@@ -472,7 +484,7 @@
     <xsl:call-template name="create-meta-elt">
       <xsl:with-param name="nodes" select="$nodes"/>
       <xsl:with-param name="uri" select="$uri"/>
-    </xsl:call-template>
+    </xsl:call-template>-->
   </xsl:template>
 
   <xsl:template name="add-modal-container">
@@ -499,10 +511,11 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="create-bib-elt">
+<!--  <xsl:template name="create-bib-elt">
     <xsl:param name="nodes" as="node()*"/>
     <xsl:param name="uri" as="xs:string"/>
     <xsl:param name="doi" as="xs:string?"/>
+    <xsl:param name="issue" as="xs:boolean?"/>
     <xsl:if test="$nodes[.//*[self::*:div[@role = ('doc-bibliography')]]]">
       <xsl:element name="doi" namespace="">
         <xsl:attribute name="xml:base" select="replace($uri, '\.html', '.bibl.xml')"/>
@@ -510,13 +523,13 @@
         <xsl:apply-templates select="$nodes//*[self::*:div[@role = ('doc-bibliography')]]" mode="bib-chunks"/>
       </xsl:element>
     </xsl:if>
-  </xsl:template>
+  </xsl:template>-->
 <!--  <xsl:variable name="tei-file" as="document-node()" select="document('file:///C:/cygwin/home/mpufe/transcript/content/ts/std/mono/05018/ts_std_mono_05018.debug/hub2tei/99.hub2tei_tidy.xml')"/>-->
 <!--  <xsl:variable name="tei-file" as="document-node()" select="document('file:///C:/cygwin/home/mpufe/transcript/content/ts/jrn/dak/ts_jrn_dak_01000_Muster.debug/hub2tei/99.hub2tei_tidy.xml')"/>-->
 <!--  <xsl:variable name="tei-file" as="document-node()" select="document('file:///C:/cygwin/home/mpufe/transcript/content/ts/jrn/inge/05419/docx/ts_jrn_inge_05419_DHR.debug/hub2tei/99.hub2tei_tidy.xml')"/>-->
-  <xsl:variable name="tei-file" as="document-node()" select="collection()[/*[self::*:TEI]]"/>
+<!--  <xsl:variable name="tei-file" as="document-node()" select="collection()[/*[self::*:TEI]]"/>-->
 
-  <xsl:template name="create-meta-elt" exclude-result-prefixes="#all">
+  <!--<xsl:template name="create-meta-elt" exclude-result-prefixes="#all">
     <xsl:param name="nodes" as="node()*"/>
     <xsl:param name="uri" as="xs:string"/>
     <xsl:variable name="book-part" select="$tei-file//*[@xml:id = $nodes/@id]" as="element(*)?"/>
@@ -567,7 +580,7 @@
         <xsl:value-of select="if ($nodes/@id = ('toc', 'title-page') and not($tei-meta/*:term[@key = 'Lizenz'][matches(., '\S')])) then 'This content is free.' else normalize-space($tei-meta/*:term[@key = 'Lizenz'])"/></xsl:element> 
       <xsl:sequence select="tr:determine-meta-chunk-authors($tei-meta, $nodes)"/>
     </xsl:element>
-  </xsl:template>
+  </xsl:template>-->
 
   <xsl:function name="tr:determine-meta-chunk-authors" as="element(*)*">
     <xsl:param name="tei-meta" as="element()?"/>
@@ -579,21 +592,21 @@
     </xsl:for-each>
   </xsl:function>
 
-  <xsl:template match="*:div[@role = 'doc-bibliography']" mode="bib-chunks">
+<!--  <xsl:template match="*:div[@role = 'doc-bibliography']" mode="bib-chunks">
     <xsl:apply-templates select="*:p" mode="#current"/>
   </xsl:template>
 
   <xsl:template match="*:div[@role = 'doc-bibliography']//*:p" mode="bib-chunks">
     <xsl:element name="bibl" namespace=""><xsl:apply-templates select="node()" mode="#current"/></xsl:element>
-  </xsl:template>
+  </xsl:template>-->
 
-  <xsl:template match="*" mode="bib-chunks">
+<!--  <xsl:template match="*" mode="bib-chunks">
     <xsl:apply-templates mode="#current"/>
-  </xsl:template>
+  </xsl:template>-->
 
   <xsl:template match="/*:export-root" mode="export">
     <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
-    <xsl:apply-templates select="*:html | *:doi | *:chunk-meta" mode="#current"/>
+    <xsl:apply-templates select="*:html (:| *:doi | *:chunk-meta:)" mode="#current"/>
   </xsl:template>
 
   <xsl:template match="*:html" mode="export">
@@ -602,7 +615,7 @@
     </xsl:result-document>
   </xsl:template>
 
-  <xsl:template match="*:doi[not(..[self::*:chunk-meta])]" mode="export">
+<!--  <xsl:template match="*:doi[not(..[self::*:chunk-meta])]" mode="export">
     <xsl:result-document href="{@xml:base}">
       <xsl:next-match/>
     </xsl:result-document>
@@ -612,6 +625,6 @@
     <xsl:result-document href="{@xml:base}">
       <xsl:next-match/>
     </xsl:result-document>
-  </xsl:template> 
+  </xsl:template> -->
 
 </xsl:stylesheet>

@@ -18,7 +18,9 @@
     <xsl:variable name="head" select="/*/*:head" as="element(*)"/>
     <xsl:variable name="articles" as="element(*)*">
       <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | descendant::*:div[contains(@class, 'article')])">
-        <article><xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"></xsl:sequence></article>
+        <article>
+          <xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"/>
+        </article>
       </xsl:for-each>
     </xsl:variable>
     <xsl:variable select="if (/*/*:head/*:meta[@name = 'doi'][@content]) 
@@ -35,10 +37,10 @@
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
         </xsl:apply-templates>
       </xsl:element>
-    <xsl:call-template name="create-meta-elt">
+<!--    <xsl:call-template name="create-meta-elt">
       <xsl:with-param name="nodes" select="node()"/>
       <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.html')"/>
-    </xsl:call-template>
+    </xsl:call-template>-->
       <xsl:apply-templates select="$articles" mode="#current">
         <xsl:with-param name="head" select="$head" as="element(*)?" tunnel="yes"/>
       </xsl:apply-templates>
@@ -51,6 +53,12 @@
       <xsl:choose>
         <xsl:when test="descendant::*:header[@class = 'chunk-meta-sec'][*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi']]">
           <xsl:value-of select="replace(descendant::*:header[@class = 'chunk-meta-sec']/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1], '^.+/', '')"/>
+        </xsl:when>
+        <xsl:when test="@epub:type='titlepage'">
+          <xsl:value-of select="replace(//*:header[@class = 'chunk-meta-sec'][1]/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1], '^(.+/.+-)(\d{2})\d+$', '$1frontmatter$2')"/>
+        </xsl:when>
+        <xsl:when test="@epub:type='toc'">
+          <xsl:value-of select="replace(//*:header[@class = 'chunk-meta-sec'][1]/*:ul[@class = 'chunk-metadata']/*:li[@class = 'chunk-doi'][1], '^(.+/.+-)(\d{2})\d+$', '$1toc$2')"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="(*/@id, generate-id())[1]"/>
@@ -91,7 +99,7 @@
         </xsl:element>
       </xsl:element>
     </xsl:element>
-    <xsl:call-template name="create-bib-elt">
+<!--    <xsl:call-template name="create-bib-elt">
       <xsl:with-param name="nodes" select="$nodes"/>
       <xsl:with-param name="doi" select="$doi"/>
       <xsl:with-param name="uri" select="$uri"/>
@@ -99,7 +107,7 @@
     <xsl:call-template name="create-meta-elt">
       <xsl:with-param name="nodes" select="$nodes"/>
       <xsl:with-param name="uri" select="$uri"/>
-    </xsl:call-template>
+    </xsl:call-template>-->
   </xsl:template>
 
 </xsl:stylesheet>

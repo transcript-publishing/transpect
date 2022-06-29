@@ -18,7 +18,10 @@
     <xsl:variable name="head" select="/*/*:head" as="element(*)"/>
     <xsl:variable name="articles" as="element(*)*">
       <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | descendant::*:div[@epub:type= ('chapter')])">
-        <article><xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"></xsl:sequence></article>
+        <article>
+          <xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"/>
+          
+        </article>
       </xsl:for-each>
     </xsl:variable>
     <xsl:variable name="whole-doi" select="if (*:head/*:meta[@name = 'doi'][@content]) 
@@ -37,47 +40,23 @@
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
         </xsl:apply-templates>
       </xsl:element>
-      <xsl:call-template name="create-bib-elt">
+      <!--<xsl:call-template name="create-bib-elt">
         <xsl:with-param name="nodes" select="node()"/>
         <xsl:with-param name="doi" select="$whole-doi"/>
         <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.html')"/>
+        <xsl:with-param name="issue" select="true()"/>
       </xsl:call-template>
     <xsl:call-template name="create-meta-elt">
       <xsl:with-param name="nodes" select="node()"/>
       <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.html')"/>
-    </xsl:call-template>
+    </xsl:call-template>-->
       <xsl:apply-templates select="$articles" mode="#current">
         <xsl:with-param name="head" select="$head" as="element(*)?" tunnel="yes"/>
       </xsl:apply-templates>
     </export-root>
   </xsl:template>
 
-  <xsl:template name="html:create-chunk">
-    <xsl:param name="nodes" as="element(*)+"/>
-    <xsl:param name="uri" as="xs:string"/>
-    <xsl:param name="id" as="xs:string"/>
-    <xsl:param name="head" as="element(*)?" tunnel="yes"/>
-    <xsl:param name="doi" as="xs:string?"/>
-    <xsl:element name="html" namespace="http://www.w3.org/1999/xhtml">
-      <xsl:attribute name="xml:base" select="$uri"/>
-      <!-- CSS -->
-      <xsl:sequence select="$head" />
-      <xsl:element name="body" namespace="http://www.w3.org/1999/xhtml">
-        <xsl:element name="article" namespace="http://www.w3.org/1999/xhtml">
-<!--          <xsl:attribute name="class" select="'article'"/>-->
-          <xsl:apply-templates select="$nodes" mode="#current"/>
-          <xsl:call-template name="add-modal-container">
-            <xsl:with-param name="nodes" as="node()*" select="$nodes"/>
-      </xsl:call-template>
-        </xsl:element>
-      </xsl:element>
-    </xsl:element>
-    <xsl:call-template name="create-meta-elt">
-      <xsl:with-param name="nodes" select="$nodes"/>
-      <xsl:with-param name="uri" select="$uri"/>
-    </xsl:call-template>
-  </xsl:template>
-
+<!--
   <xsl:function name="tr:determine-meta-chunk-authors" as="element(*)*">
     <xsl:param name="tei-meta" as="element()?"/>
     <xsl:param name="book-part" as="node()*"/>
@@ -86,6 +65,6 @@
         <xsl:value-of select="normalize-space(replace(., '\s*\(.+?\)', ''))"/>
       </xsl:element>
     </xsl:for-each>
-  </xsl:function>
+  </xsl:function>-->
 
 </xsl:stylesheet>

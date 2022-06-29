@@ -35,6 +35,8 @@
   <xsl:template match="@srcpath" mode="#default"/>
   <xsl:key name="elt-by-uri" match="*" use="@xml:base"/>
 
+  <xsl:variable name="root" select="/*[self::*:book]" as="element()"/>
+
   <xsl:template match="/*[self::*:book]" mode="#default" exclude-result-prefixes="c">
     <xsl:variable name="meta" select="*:book-meta" as="element(*)"/>
     <xsl:variable name="articles" as="element(*)*">
@@ -246,14 +248,24 @@
         <xsl:apply-templates select="$nodes" mode="#current" />
       </body>
     </book>
+   <xsl:call-template name="create-bib-elt">
+      <xsl:with-param name="nodes" select="$nodes"/>
+      <xsl:with-param name="doi" select="$doi"/>
+      <xsl:with-param name="uri" select="$uri"/>
+    </xsl:call-template>
+    <xsl:call-template name="create-meta-elt">
+      <xsl:with-param name="nodes" select="$nodes"/>
+      <xsl:with-param name="uri" select="$uri"/>
+      <xsl:with-param name="meta" select="$meta" tunnel="yes"/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:function name="tr:determine-meta-chunk-authors" as="element(*)*">
-    <xsl:param name="tei-meta" as="element()?"/>
-    <xsl:param name="book-part-nodes" as="node()*"/>
-    <xsl:for-each select="tokenize($book-part-nodes/*:p[@content-type = 'heading-author'], '([,;] |[au]nd )')">
+    <xsl:param name="meta" as="element()?"/>
+    <xsl:param name="nodes" as="node()*"/>
+    <xsl:for-each select="($meta/*:contrib-group, $nodes/*:book-part-meta/*:contrib-group)[last()]/*:contrib">
       <xsl:element name="contrib"  namespace="">
-        <xsl:value-of select="normalize-space(replace(., '\s*\(.+?\)', ''))"/>
+        <xsl:value-of select="normalize-space(.)"/>
       </xsl:element>
     </xsl:for-each>
   </xsl:function>
@@ -267,7 +279,17 @@
 
   <xsl:template match="/*:export-root" mode="export">
     <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
-    <xsl:apply-templates select="*:book" mode="#current"/>
+
+    <xsl:variable name="all-bibls">
+      <xsl:if test="exists(*:doi) and not($basename[contains(., 'mono')])">
+        <xsl:element name="biblographic-information">
+          <xsl:attribute name="xml:base" select="replace(*:doi[1]/@xml:base, '-\d{3}.bibl.xml', '.bibl.xml')"/>
+          <xsl:attribute name="name" select="replace(*:doi[1]/@name, '-\d{3}$', '')"/>
+          <xsl:sequence select="*:doi"/>
+        </xsl:element>
+      </xsl:if>
+    </xsl:variable>
+    <xsl:apply-templates select="(*:book | *:doi | *:chunk-meta), $all-bibls" mode="#current"/>
   </xsl:template>
 
   <xsl:template match="*:book" mode="export">
@@ -276,4 +298,98 @@
     </xsl:result-document>
   </xsl:template>
 
+  <xsl:template name="create-bib-elt">
+    <xsl:param name="nodes" as="node()*"/>
+    <xsl:param name="uri" as="xs:string"/>
+    <xsl:param name="doi" as="xs:string?"/>
+    <xsl:param name="issue" as="xs:boolean?"/>
+    <xsl:if test="$nodes[.//*[self::*:ref-list]]">
+      <xsl:element name="doi" namespace="">
+        <xsl:attribute name="xml:base" select="replace(replace($uri, '^(.+/)chunks-atypon/.+/([^/]+)\.xml$', '$1chunks-bibl/$2.bibl.xml'), 'title-page', 'fm')"/>
+        <xsl:attribute name="name" select="$doi"/>
+        <xsl:apply-templates select="$nodes//*[self::*:ref-list]" mode="bib-chunks"/>
+      </xsl:element>
+    </xsl:if>
+  </xsl:template>
+  <!--strip whitespaces in result -->
+
+  <xsl:template name="create-meta-elt" exclude-result-prefixes="#all">
+    <xsl:param name="nodes" as="node()*"/>
+    <xsl:param name="uri" as="xs:string"/>
+    <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
+    <xsl:variable name="corresp-part" as="element()?" select=" $root/descendant::*:book-part[@book-part-type = 'part'][descendant::*[*:book-part-meta/*:book-part-id[@book-part-id-type='doi'] = $nodes/*:book-part-meta/*:book-part-id[@book-part-id-type='doi']]]"/>
+    <xsl:element name="chunk-meta" namespace="">
+      <xsl:attribute name="xml:base" select="replace(replace($uri, '^(.+/)chunks-atypon/.+/([^/]+)\.xml$', '$1chunks-meta/chunk-meta-$2.xml'), 'title-page', 'fm')"/>
+      <xsl:attribute name="id" select="$nodes/@id"/>
+      <xsl:element name="doi" namespace=""><xsl:value-of select="$nodes/*:book-part-meta/*:book-part-id[@book-part-id-type='doi']"/></xsl:element> 
+      <xsl:element name="eisbn" namespace=""><xsl:value-of select="$meta/*:book-id[@book-id-type='isbn']"/></xsl:element> 
+      <xsl:element name="book-title" namespace=""><xsl:value-of select="$meta/*:book-title-group/*:book-title"/></xsl:element> 
+      <xsl:element name="book-subtitle" namespace=""><xsl:value-of select="$meta/*:book-title-group/*:subtitle[not(@content-type)]"/></xsl:element> 
+      <xsl:element name="chunk-part-title" namespace="">
+        <xsl:choose>
+          <xsl:when test="exists($corresp-part)">
+            <xsl:value-of select="normalize-space(
+                                          string-join(
+                                               ($corresp-part/*:book-part-meta/*:title-group/*:label, 
+                                               string-join($corresp-part/*:book-part-meta/*:title-group/*:title/node()[not(self::*:fn | self::*:index-entry)])
+                                               )
+                                               , ' '
+                                               ))"/>
+          </xsl:when>
+          <xsl:when test="$nodes/@book-part-type='title-page'"><xsl:value-of select="'Frontmatter'"/></xsl:when>
+          <xsl:when test="$nodes/@book-part-type = 'toc'"><xsl:value-of select="string-join(*[@class = 'toc-title'][1])"/></xsl:when>
+        </xsl:choose>
+      </xsl:element> 
+      <xsl:element name="chunk-title" namespace="">
+        <xsl:value-of select="normalize-space(
+                               string-join(
+                                            ($nodes/*:book-part-meta/*:title-group/*:label, 
+                                            string-join($nodes/*:book-part-meta/*:title-group/*:title/node()[not(self::*:fn | self::*:index-entry)])
+                                            )
+                                            , ' '
+                                          )
+                              )"/>
+      </xsl:element>  
+      <xsl:element name="chunk-subtitle" namespace=""><xsl:value-of select="normalize-space(string-join($nodes/*:book-part-meta/*:title-group/*:subtitle/node()[not(self::*:fn | self::*:index-entry)]))"/></xsl:element>  
+      <xsl:element name="fpage" namespace=""/>
+      <xsl:element name="lpage" namespace=""/> 
+      <xsl:element name="license" namespace="">
+        <xsl:attribute name="type" select="if ($meta/*:permission/*:license/@license-type = 'open-access') 
+                                           then 'open-access' 
+                                           else 
+                                             if ($nodes/@book-part-type = ('toc', 'title-page')) then 'free'
+                                             else 'restricted'"/>
+        <xsl:value-of select="if ($nodes/@book-part-type = ('toc', 'title-page') and not($meta/*:permission/*:license[@license-type = 'open-access']))
+                              then 'This content is free.' 
+                              else normalize-space($meta/*:permission/*:license/*:license-p)"/>
+      </xsl:element> 
+      <xsl:sequence select="tr:determine-meta-chunk-authors($meta, $nodes)"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="*:ref-list[not(..[self::*:ref-list])]" mode="bib-chunks">
+    <xsl:apply-templates select=".//*:ref" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="*:ref-list//*:ref" mode="bib-chunks">
+    <xsl:element name="bibl" namespace=""><xsl:apply-templates select="*:mixed-citation/node()" mode="#current"/></xsl:element>
+  </xsl:template>
+
+  <xsl:template match="*" mode="bib-chunks">
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="text()[not(matches(., '\S', 's'))][. is ../node()[1] or . is ../node()[last()]]"  priority="3" mode="bib-chunks"/>
+  <!--<xsl:template match="text()[not(matches(., '\S', 's'))][preceding-sibling::node()[1][. instance of element()] and following-sibling::node()[1][. instance of element()]]"  priority="2" mode="bib-chunks"/>-->
+
+  <xsl:template match="text()[not(matches(., '\S', 's'))]" mode="bib-chunks">
+    <xsl:value-of select="normalize-space(.)"/>
+  </xsl:template>
+    
+  <xsl:template match="*:chunk-meta | *:doi[not(..[self::*:chunk-meta|self::*:biblographic-information])] | *:biblographic-information" mode="export">
+    <xsl:result-document href="{@xml:base}">
+      <xsl:next-match/>
+    </xsl:result-document>
+  </xsl:template>
+ 
 </xsl:stylesheet>
