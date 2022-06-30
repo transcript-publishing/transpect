@@ -376,7 +376,7 @@
     <xsl:variable name="all-bibls">
       <xsl:if test="exists(*:doi)(: and not($basename[contains(., 'mono')]):)">
         <xsl:element name="biblographic-information">
-          <xsl:attribute name="xml:base" select="replace(*:doi[1]/@xml:base, '(chunks-bibl/)(.+)-\d{3}$', '$1issue/$2')"/>
+          <xsl:attribute name="xml:base" select="replace(replace(*:doi[1]/@xml:base, '-\d{3}$', ''), '(chunks-bibl/)', '$1issue/')"/>
           <xsl:attribute name="name" select="replace(*:doi[1]/@name, '-\d{3}\.bibl\.xml', '.bibl.xml')"/>
           <xsl:sequence select="*:doi"/>
         </xsl:element>
