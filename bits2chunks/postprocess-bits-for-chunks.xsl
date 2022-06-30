@@ -26,7 +26,7 @@
   <xsl:variable name="local-dir-issue" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/chunks-atypon/issue/' else 'chunks-atypon/issue/'"/>
   <xsl:variable name="local-dir-bits" as="xs:string" select="if (contains($catalog-resolved-target-dir, 'davomat')) then '/chunks-atypon/bits/' else 'chunks-atypon/bits/'"/>
  
-  <xsl:template match="@* | node()" mode="#default create-column-titles">
+  <xsl:template match="@* | node()" mode="#default">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </xsl:copy>
@@ -155,31 +155,31 @@
     <xsl:if test="not($in-issue)">
       <!-- render toc only in chunk, not in toc, http://www.wiki.degruyter.de/production/files/dg_xml_guidelines.xhtml#toc-b-archive -->
       <book-part book-part-type="contents" id="{concat('b_', $new-doi)}" >
-      <xsl:if test="not($in-issue)"><xsl:attribute name="id" select="concat('b_', $new-doi)"/></xsl:if>
-      <!-- <xsl:if test="$in-issue"><xsl:attribute name="book-part-number" select="'2'"/></xsl:if>-->
-      <book-part-meta>
-       <!-- <book-part-id pub-id-type="doi"><xsl:value-of select="replace($doi, '-.+$', '-toc')"/></book-part-id>-->
-        <xsl:apply-templates select="book-part-meta/book-part-id" mode="#current"/>
-        <title-group>
-          <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="if ($book-atts[name() = 'xml:lang'][contains(., 'de')]) then 'Inhalt' else 'Content'"/></title>
-        </title-group>
-        <xsl:apply-templates select="book-part-meta/(fpage|lpage)" mode="#current"/>
-        <xsl:if test="not($in-toc)">
-          <permissions>
-            <xsl:apply-templates select="$meta/permissions/*" mode="#current"/>
-            <!-- if open-access license ist granted, ist granted, use that. otherwise insert free-to-read-->
-            <xsl:if test="empty($meta/permissions/license)">
-              <ali:free_to_read/>
-            </xsl:if>
-          </permissions>
-        </xsl:if>
-        <!--  <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>
-        <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>-->
-        <xsl:apply-templates select="book-part-meta/counts" mode="#current"/>
-      </book-part-meta>
-			<body/>
-    </book-part>
-</xsl:if>
+        <xsl:if test="not($in-issue)"><xsl:attribute name="id" select="concat('b_', $new-doi)"/></xsl:if>
+        <!-- <xsl:if test="$in-issue"><xsl:attribute name="book-part-number" select="'2'"/></xsl:if>-->
+        <book-part-meta>
+          <!-- <book-part-id pub-id-type="doi"><xsl:value-of select="replace($doi, '-.+$', '-toc')"/></book-part-id>-->
+          <xsl:apply-templates select="book-part-meta/book-part-id" mode="#current"/>
+          <title-group>
+            <title xml:lang="{$book-atts[name() = 'xml:lang']}"><xsl:value-of select="if ($book-atts[name() = 'xml:lang'][contains(., 'de')]) then 'Inhalt' else 'Content'"/></title>
+          </title-group>
+          <xsl:apply-templates select="book-part-meta/(fpage|lpage)" mode="#current"/>
+          <xsl:if test="not($in-toc)">
+            <permissions>
+              <xsl:apply-templates select="$meta/permissions/*" mode="#current"/>
+              <!-- if open-access license ist granted, ist granted, use that. otherwise insert free-to-read-->
+              <xsl:if test="empty($meta/permissions/license)">
+                <ali:free_to_read/>
+              </xsl:if>
+            </permissions>
+          </xsl:if>
+          <!--  <xsl:if test="$in-issue"><alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.xml" alternate-form-type="xml"/></xsl:if>
+            <alternate-form xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{$new-doi}.pdf" alternate-form-type="pdf"/>-->
+          <xsl:apply-templates select="book-part-meta/counts" mode="#current"/>
+        </book-part-meta>
+        <body/>
+      </book-part>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="title-group/title" mode="#default" priority="3">
@@ -240,21 +240,24 @@
     <xsl:param name="book-atts" as="attribute(*)*" tunnel="yes"/>
     <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
     <xsl:param name="doi" as="xs:string?" tunnel="yes"/>
+    <xsl:variable name="content" as="element()*">
+      <xsl:apply-templates select="$nodes" mode="#current" />
+    </xsl:variable>
     <book xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:ali="http://www.niso.org/schemas/ali/1.0/">
 <!--      <xsl:attribute name="dtd-version" select="'3.0'"/>-->
       <xsl:attribute name="xml:base" select="$uri"/>
       <xsl:sequence select="$book-atts[not(local-name() = ('base')(:, 'dtd-version'):))], $meta"/>
       <body>
-        <xsl:apply-templates select="$nodes" mode="#current" />
+        <xsl:sequence select="$content" />
       </body>
     </book>
    <xsl:call-template name="create-bib-elt">
-      <xsl:with-param name="nodes" select="$nodes"/>
+      <xsl:with-param name="nodes" select="$content"/>
       <xsl:with-param name="doi" select="$doi"/>
       <xsl:with-param name="uri" select="$uri"/>
     </xsl:call-template>
     <xsl:call-template name="create-meta-elt">
-      <xsl:with-param name="nodes" select="$nodes"/>
+      <xsl:with-param name="nodes" select="$content"/>
       <xsl:with-param name="uri" select="$uri"/>
       <xsl:with-param name="meta" select="$meta" tunnel="yes"/>
     </xsl:call-template>
@@ -275,27 +278,6 @@
     <xsl:copy copy-namespaces="yes">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </xsl:copy>
-  </xsl:template>
-
-  <xsl:template match="/*:export-root" mode="export">
-    <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
-
-    <xsl:variable name="all-bibls">
-      <xsl:if test="exists(*:doi) and not($basename[contains(., 'mono')])">
-        <xsl:element name="biblographic-information">
-          <xsl:attribute name="xml:base" select="replace(*:doi[1]/@xml:base, '-\d{3}.bibl.xml', '.bibl.xml')"/>
-          <xsl:attribute name="name" select="replace(*:doi[1]/@name, '-\d{3}$', '')"/>
-          <xsl:sequence select="*:doi"/>
-        </xsl:element>
-      </xsl:if>
-    </xsl:variable>
-    <xsl:apply-templates select="(*:book | *:doi | *:chunk-meta), $all-bibls" mode="#current"/>
-  </xsl:template>
-
-  <xsl:template match="*:book" mode="export">
-    <xsl:result-document href="{@xml:base}">
-      <xsl:next-match/>
-    </xsl:result-document>
   </xsl:template>
 
   <xsl:template name="create-bib-elt">
@@ -321,7 +303,9 @@
     <xsl:element name="chunk-meta" namespace="">
       <xsl:attribute name="xml:base" select="replace(replace($uri, '^(.+/)chunks-atypon/.+/([^/]+)\.xml$', '$1chunks-meta/chunk-meta-$2.xml'), 'title-page', 'fm')"/>
       <xsl:attribute name="id" select="$nodes/@id"/>
-      <xsl:element name="doi" namespace=""><xsl:value-of select="$nodes/*:book-part-meta/*:book-part-id[@book-part-id-type='doi']"/></xsl:element> 
+      <xsl:element name="doi" namespace="">
+        <xsl:value-of select="$nodes/*:book-part-meta/*:book-part-id[@book-part-id-type='doi']"/>
+      </xsl:element> 
       <xsl:element name="eisbn" namespace=""><xsl:value-of select="$meta/*:book-id[@book-id-type='isbn']"/></xsl:element> 
       <xsl:element name="book-title" namespace=""><xsl:value-of select="$meta/*:book-title-group/*:book-title"/></xsl:element> 
       <xsl:element name="book-subtitle" namespace=""><xsl:value-of select="$meta/*:book-title-group/*:subtitle[not(@content-type)]"/></xsl:element> 
@@ -337,7 +321,7 @@
                                                ))"/>
           </xsl:when>
           <xsl:when test="$nodes/@book-part-type='title-page'"><xsl:value-of select="'Frontmatter'"/></xsl:when>
-          <xsl:when test="$nodes/@book-part-type = 'toc'"><xsl:value-of select="string-join(*[@class = 'toc-title'][1])"/></xsl:when>
+          <xsl:when test="$nodes/@book-part-type = 'toc'"><xsl:value-of select="string-join($nodes/*:book-part-meta/*:title-group/*:title[@content-type = 'toctitle']/node()[not(self::*:fn | self::*:index-entry)])"/></xsl:when>
         </xsl:choose>
       </xsl:element> 
       <xsl:element name="chunk-title" namespace="">
@@ -386,7 +370,23 @@
     <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
     
-  <xsl:template match="*:chunk-meta | *:doi[not(..[self::*:chunk-meta|self::*:biblographic-information])] | *:biblographic-information" mode="export">
+  <xsl:template match="/*:export-root" mode="export">
+    <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
+
+    <xsl:variable name="all-bibls">
+      <xsl:if test="exists(*:doi) and not($basename[contains(., 'mono')])">
+        <xsl:element name="biblographic-information">
+          <xsl:attribute name="xml:base" select="replace(*:doi[1]/@xml:base, '-\d{3}\.bibl\.xml', '.bibl.xml')"/>
+          <xsl:attribute name="name" select="replace(*:doi[1]/@name, '-\d{3}$', '')"/>
+          <xsl:sequence select="*:doi"/>
+        </xsl:element>
+      </xsl:if>
+    </xsl:variable>
+<!--   <xsl:message select="'#####', $all-bibls"></xsl:message>-->
+    <xsl:apply-templates select="(*:book | *:doi | *:chunk-meta), $all-bibls" mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="*:chunk-meta | *:doi[..[self::*:export-root]] | *:biblographic-information | *:book" mode="export">
     <xsl:result-document href="{@xml:base}">
       <xsl:next-match/>
     </xsl:result-document>
