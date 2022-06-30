@@ -374,10 +374,10 @@
     <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
 
     <xsl:variable name="all-bibls">
-      <xsl:if test="exists(*:doi) and not($basename[contains(., 'mono')])">
+      <xsl:if test="exists(*:doi)(: and not($basename[contains(., 'mono')]):)">
         <xsl:element name="biblographic-information">
           <xsl:attribute name="xml:base" select="replace(*:doi[1]/@xml:base, '-\d{3}\.bibl\.xml', '.bibl.xml')"/>
-          <xsl:attribute name="name" select="replace(*:doi[1]/@name, '-\d{3}$', '')"/>
+          <xsl:attribute name="name" select="replace(*:doi[1]/@name, '(chunks-bibl/)(.+)-\d{3}$', '$1issue/$2')"/>
           <xsl:sequence select="*:doi"/>
         </xsl:element>
       </xsl:if>
