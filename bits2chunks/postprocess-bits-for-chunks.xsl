@@ -355,7 +355,7 @@
     <xsl:apply-templates select=".//*:ref" mode="#current"/>
   </xsl:template>
 
-  <xsl:template match="*:ref-list//*:ref" mode="bib-chunks">
+  <xsl:template match="*:ref-list//*:ref[*:mixed-citation]" mode="bib-chunks">
     <xsl:element name="bibl" namespace=""><xsl:apply-templates select="*:mixed-citation/node()" mode="#current"/></xsl:element>
   </xsl:template>
 
