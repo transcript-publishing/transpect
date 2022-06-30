@@ -20,8 +20,8 @@
     <xsl:variable name="all-bibls">
       <xsl:if test="exists(*:doi) and not($basename[contains(., 'mono')])">
         <xsl:element name="biblographic-information">
-          <xsl:attribute name="xml:base" select="replace(*:doi[1]/@xml:base, '-\d+\.bibl\.xml', '.bibl.xml')"/>
-          <xsl:attribute name="name" select="replace(*:doi[1]/@name, '-\d+$', '')"/>
+          <xsl:attribute name="xml:base" select="replace(*:doi[1][not(matches(@xml:base, 'toc|frontmatter|fm'))]/@xml:base, '-\d+\.bibl\.xml', '.bibl.xml')"/>
+          <xsl:attribute name="name" select="replace(*:doi[not(matches(@xml:base, 'toc|frontmatter|fm'))][1]/@name, '-\d+$', '')"/>
           <xsl:sequence select="*:doi"/>
         </xsl:element>
       </xsl:if>
