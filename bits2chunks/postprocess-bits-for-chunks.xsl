@@ -352,7 +352,7 @@
   </xsl:template>
 
   <xsl:template match="*:ref-list[not(..[self::*:ref-list])]" mode="bib-chunks">
-    <xsl:apply-templates select=".//*:ref" mode="#current"/>
+    <xsl:apply-templates select=".//*:ref[*:mixed-citation]" mode="#current"/>
   </xsl:template>
 
   <xsl:template match="*:ref-list//*:ref[*:mixed-citation]" mode="bib-chunks">
