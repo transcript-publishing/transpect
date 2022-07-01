@@ -37,10 +37,6 @@
             <xsl:with-param name="in-issue" select="true()" as="xs:boolean" tunnel="yes"/>
         </xsl:apply-templates>
       </xsl:element>
-<!--    <xsl:call-template name="create-meta-elt">
-      <xsl:with-param name="nodes" select="node()"/>
-      <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-issue, $filename, '.html')"/>
-    </xsl:call-template>-->
       <xsl:apply-templates select="$articles" mode="#current">
         <xsl:with-param name="head" select="$head" as="element(*)?" tunnel="yes"/>
       </xsl:apply-templates>
@@ -99,15 +95,6 @@
         </xsl:element>
       </xsl:element>
     </xsl:element>
-<!--    <xsl:call-template name="create-bib-elt">
-      <xsl:with-param name="nodes" select="$nodes"/>
-      <xsl:with-param name="doi" select="$doi"/>
-      <xsl:with-param name="uri" select="$uri"/>
-    </xsl:call-template>
-    <xsl:call-template name="create-meta-elt">
-      <xsl:with-param name="nodes" select="$nodes"/>
-      <xsl:with-param name="uri" select="$uri"/>
-    </xsl:call-template>-->
   </xsl:template>
 
 </xsl:stylesheet>

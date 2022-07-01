@@ -386,10 +386,20 @@
     <xsl:apply-templates select="(*:book | *:doi | *:chunk-meta), $all-bibls" mode="#current"/>
   </xsl:template>
 
+  <xsl:variable name="export-paths" select="//(*:chunk-meta | *:doi[..[self::*:export-root]] | *:biblographic-information | *:book)/@xml:base" as="attribute(xml:base)*"/>
+
   <xsl:template match="*:chunk-meta | *:doi[..[self::*:export-root]] | *:biblographic-information | *:book" mode="export">
-    <xsl:result-document href="{@xml:base}">
-      <xsl:next-match/>
-    </xsl:result-document>
+    <xsl:variable name="context" select="." as="element()"/>
+    <xsl:choose>   
+      <xsl:when test="count($export-paths[. = $context/@xml:base]) le 1">
+        <xsl:result-document href="{@xml:base}">
+          <xsl:next-match/>
+        </xsl:result-document>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message select="'###### ERROR: Export path ', @xml:base, ' is not unique and result cannot be written'"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
  
 </xsl:stylesheet>
