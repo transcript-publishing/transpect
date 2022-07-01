@@ -301,11 +301,11 @@
       </xsl:for-each>
     </contrib-group>
 
-    <xsl:if test="title[@type = 'title'] or $metadata/term[@key = 'Titel'][normalize-space()]">
+    <xsl:if test="title[@type = 'title'][normalize-space()] or $metadata/term[@key = 'Titel'][normalize-space()] or ../seriesStmt[title[normalize-space()]]">
       <book-title-group>
         <book-title>
           <xsl:apply-templates select="title[@type = 'main']/@*" mode="#current"/>
-          <xsl:value-of select="($metadata/term[@key = 'Titel'][normalize-space()], title[@type = 'sub'])[1]"/>
+          <xsl:value-of select="($metadata/term[@key = 'Titel'][normalize-space()], title[@type = 'main'], ../seriesStmt/title)[1]"/>
         </book-title>
         <xsl:if test="title[@type = 'sub'] or $metadata/term[@key = 'Untertitel'][normalize-space()]">
           <xsl:apply-templates select="title[@type = 'main']/@*" mode="#current"/>
