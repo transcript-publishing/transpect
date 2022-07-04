@@ -8,7 +8,6 @@
   xmlns:functx="http://www.functx.com"
   xmlns:ts="http://www.transcript-verlag.de/transpect"
   xmlns:tr="http://transpect.io"
-
   xmlns="http://docbook.org/ns/docbook" 
   xpath-default-namespace="http://docbook.org/ns/docbook"
   exclude-result-prefixes="xs hub dbk ts tr xlink functx" 
