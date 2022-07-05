@@ -12,6 +12,8 @@
   <xsl:param name="s9y3-path" as="xs:string?"/>
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
+  <xsl:param name="control-pos" as="xs:string"/>
+  
   <xsl:variable name="create-customer-toctitles" select="true()" as="xs:boolean"/>
   
   <xsl:variable name="is-collection" select="matches($basename,  'ts_[a-z]{3}_anth_')" as="xs:boolean"/>
@@ -189,6 +191,8 @@
     </xsl:for-each>
     <xsl:value-of select="concat('\usepackage[lay=',
                                  lower-case($layout),
+                                 ',captions=',
+                                 if($caption-pos eq 'bottom') then 'bottom' else '',
                                  ']{transcript}&#xa;')"/>
     
     <xsl:if test="$langs = 'zh'">
