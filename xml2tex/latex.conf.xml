@@ -12,7 +12,7 @@
   <xsl:param name="s9y3-path" as="xs:string?"/>
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
-  <xsl:param name="control-pos" as="xs:string"/>
+  <xsl:param name="caption-pos" as="xs:string"/>
   
   <xsl:variable name="create-customer-toctitles" select="true()" as="xs:boolean"/>
   
