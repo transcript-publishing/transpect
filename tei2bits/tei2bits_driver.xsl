@@ -291,7 +291,6 @@
     </xsl:if>-->
 
     <contrib-group>
-<!--s-->
       <xsl:for-each select="if ($metadata/term[@key = ('Autor', 'Herausgeber')][count(seg[@type='remap-para']) gt 1])
                             then $metadata/term[@key = ('Autor', 'Herausgeber')]/seg[@type='remap-para']
                             else $metadata/term[@key = ('Autor', 'Herausgeber')][normalize-space()]">
@@ -431,6 +430,11 @@
       <xsl:apply-templates select="postscript" mode="#current"/>
     </table-wrap>
   </xsl:template>
+
+  <xsl:template match="*:caption/*:title/*:label[matches(., '[:\.–]\p{Zs}*$')]/text()" priority="5" mode="clean-up">
+    <!--https://redmine.le-tex.de/issues/12770-->
+    <xsl:value-of select="replace(., '\p{Zs}*[:\.–]\p{Zs}*$', '')"/>
+  </xsl:template> 
 
   <xsl:template match="*:book-part[@book-part-type='chapter']" priority="5" mode="clean-up">
     <!--https://redmine.le-tex.de/issues/12762-->
