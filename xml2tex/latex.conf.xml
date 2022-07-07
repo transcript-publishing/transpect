@@ -192,7 +192,7 @@
     <xsl:value-of select="concat('\usepackage[lay=',
                                  lower-case($layout),
                                  ',captions=',
-                                 if($caption-pos eq 'bottom') then 'bottom' else '',
+                                 if($caption-pos eq 'bottom') then 'bottom' else 'top',
                                  ']{transcript}&#xa;')"/>
     
     <xsl:if test="$langs = 'zh'">
