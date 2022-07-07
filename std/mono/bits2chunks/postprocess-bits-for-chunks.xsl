@@ -72,7 +72,7 @@
       </xsl:apply-templates>
       <xsl:call-template name="create-bib-elt">
       <xsl:with-param name="nodes" select="node()"/>
-      <xsl:with-param name="doi" select="$filename"/>
+      <xsl:with-param name="doi" select="if (*:book-meta/*:book-id[@book-id-type= 'doi'][normalize-space()]) then *:book-meta/*:book-id[@book-id-type= 'doi'] else generate-id()"/>
       <xsl:with-param name="uri" select="concat($catalog-resolved-target-dir, $local-dir-chunk,  $title-directory, $filename, '.xml')"/>
       <xsl:with-param name="issue" select="true()"/>
     </xsl:call-template>
