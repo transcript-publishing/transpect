@@ -178,11 +178,17 @@
       </p:with-param>
     </p:xslt>
 
-    <tr:store-debug name="store-klopotek" pipeline-step="bits2chunks/klopotek-chunks">
-      <p:with-option name="active" select="$debug"/>
-      <p:with-option name="base-uri" select="$debug-dir-uri"/>
-      <p:with-option name="indent" select="true()"/>
-    </tr:store-debug>
+
+  <p:sink/>
+
+  <tr:store-debug name="store-klopotek" pipeline-step="bits2chunks/klopotek-chunks">
+    <p:input port="source">
+      <p:pipe port="secondary" step="create-kloptek-xml"/>
+    </p:input>
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+    <p:with-option name="indent" select="true()"/>
+  </tr:store-debug>
 
   <p:sink/>
 
