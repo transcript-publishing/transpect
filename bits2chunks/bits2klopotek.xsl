@@ -19,10 +19,13 @@
     <xsl:copy-of select="."/>
   </xsl:template>
 
+  <xsl:template match="text()[not(matches(., '\S'))]" mode="bits2klopotek" priority="2"/>
+
   <xsl:variable name="catalog-resolved-target-dir" as="xs:string" 
     select="concat(tr:resolve-uri-by-catalog($out-dir-uri, doc('http://this.transpect.io/xmlcatalog/catalog.xml')), '/')"/>
 
   <xsl:template match="/*" mode="bits2klopotek">
+    <xsl:message select="'export uri klopotek:', book[1]/@xml:base"/>
     <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
     <xsl:result-document href="{replace(book[1]/@xml:base, '(^.+)/(.+)\.xml$', '$1.klopotek.xml')}">
       <Components>
@@ -34,7 +37,44 @@
   <xsl:template match="book-part" mode="bits2klopotek">
     <Component>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
-      <ExtRef></ExtRef>
+      <xsl:variable name="cg" select="if (exists(book-part-meta/contrib-group[contrib])) 
+                                      then book-part-meta/contrib-group[contrib]
+                                      else /*/book[1]/book-meta/contrib-group"/>
+      <Originators>
+        <xsl:choose>
+          <xsl:when test="exists($cg[contrib])">
+            <xsl:for-each select="$cg/contrib">
+              <Originator>
+                <OriginatorType><xsl:value-of select="./@contrib-type"/></OriginatorType>
+                <ExtRef></ExtRef>
+                <xsl:choose >          
+                  <xsl:when test="./name[given-names and surname]">
+                    <FirstName><xsl:value-of select="./name/given-names"/></FirstName>
+                    <LastName><xsl:value-of select="./name/surname"/></LastName>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:variable name="regex" select="'^(.+)\p{Zs}([\P{Zs}]+)$'" as="xs:string"/>
+                    <xsl:analyze-string select="./string-name" regex="{$regex}">
+                      <xsl:matching-substring>
+                        <xsl:if test="regex-group(1)"><FirstName><xsl:value-of select="normalize-space(translate(regex-group(1), ',;', ''))"/></FirstName></xsl:if>
+                        <xsl:if test="regex-group(2)"><LastName><xsl:value-of select="normalize-space(regex-group(2))"/></LastName></xsl:if>
+                      </xsl:matching-substring>
+                    </xsl:analyze-string>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </Originator>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <Originator>
+              <OriginatorType/>
+              <ExtRef/>
+              <FirstName/>
+              <LastName/>
+            </Originator>
+          </xsl:otherwise>
+        </xsl:choose>
+      </Originators>
       <xsl:apply-templates select="book-part-meta/title-group/title/@xml:lang" mode="#current"/>
       <Language><xsl:value-of select="book-part-meta/title-group/title/@xml:lang"/></Language> 
     </Component>
