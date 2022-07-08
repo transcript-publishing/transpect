@@ -25,7 +25,6 @@
     select="concat(tr:resolve-uri-by-catalog($out-dir-uri, doc('http://this.transpect.io/xmlcatalog/catalog.xml')), '/')"/>
 
   <xsl:template match="/*" mode="bits2klopotek">
-    <xsl:message select="'export uri klopotek:', book[1]/@xml:base"/>
     <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
     <xsl:result-document href="{replace(book[1]/@xml:base, '(^.+)/(.+)\.xml$', '$1.klopotek.xml')}">
       <Components>
