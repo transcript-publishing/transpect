@@ -185,7 +185,7 @@
     \definecolor{color-1}{rgb}{0,0,0}
     \definecolor{color-2}{rgb}{0.85,0.85,0.85}
     <xsl:for-each select="xml2tex:rgb-to-tex-color( $colors )">
-      <xsl:if test="not(matches(., 'color-(1|2)'))">        
+      <xsl:if test="not(matches(., 'color-(1|2)$'))">        
         <xsl:value-of select="concat('\define', ., '&#xa;')"/>
       </xsl:if>
     </xsl:for-each>
@@ -1052,6 +1052,9 @@
       <xsl:when test="$style = 'tsheading5'">
         <xsl:sequence select="'paragraph'"/>
       </xsl:when>
+     <xsl:when test="$style = 'tsheadheadword'">
+        <xsl:sequence select="'subparagraph'"/>
+      </xsl:when>
       <xsl:when test="($heading/local-name() = 'chapter' and $heading[@renderas = 'subhead'])
                        or
                       ($heading/local-name() = 'part' and $heading[@renderas = 'subhead'])">
@@ -1112,5 +1115,24 @@
                                then concat('class=', upper-case(replace($elt/@role, '^figure-', '')))
                                else ()"/>
   </xsl:function>
+
+  <template context="dbk:bridgehead">
+    <rule name="heading" type="env" break-after="2" break-before="1">
+      <option select="'notoc,noBM'"/>
+      <param select="'subparagraph'"/>
+      <xsl:text>&#xa;\tpTitle{</xsl:text>
+      <xsl:apply-templates select="node()" mode="#current"/>
+      <xsl:text>}</xsl:text>
+      <xsl:if test="descendant::*[self::dbk:footnote | self::dbk:br | self::dbk:indexterm]">
+        <rule name="tpRunTitle" type="cmd" break-before="1">
+          <param select="node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+            <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+            <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+            <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+          </param>
+        </rule>
+      </xsl:if>
+    </rule>
+  </template>
 
 </set>
