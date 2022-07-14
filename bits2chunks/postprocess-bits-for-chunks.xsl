@@ -377,7 +377,7 @@
         <xsl:element name="biblographic-information">
           <xsl:attribute name="xml:base" select="if (exists(*:doi)) 
                                                  then replace(replace(*:doi[1]/@xml:base, '-\d{3}\.bibl\.xml', '.bibl.xml'), '(chunks-bibl/)', '$1issue/')
-                                                 else replace(*:book[*:body/*:book-part[@book-part-type = 'book-toc-page-order']]/@xml:base, 'chunks-atypon/.+/(.+\.xml)$', 'chunks-bibl/issue/$1')"/>
+                                                 else replace(*:book[*:body/*:book-part[@book-part-type = 'book-toc-page-order']]/@xml:base, 'chunks-atypon/.+/(.+)\.xml$', 'chunks-bibl/issue/$1.bibl.xml')"/>
           <xsl:attribute name="name" select="if (exists(*:doi)) 
                                              then replace(*:doi[1]/@name, '-\d{3}(\.bibl\.xml)?$', '')
                                              else *:book[*:body/*:book-part[@book-part-type = 'book-toc-page-order']]/*:book-meta/*:book-id[@book-id-type = 'doi']"/>
