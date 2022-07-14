@@ -374,13 +374,15 @@
     <c:result target-dir="{$catalog-resolved-target-dir}" xmlns="http://www.w3.org/ns/xproc-step"/>
 
     <xsl:variable name="all-bibls">
-      <xsl:if test="exists(*:doi)(: and not($basename[contains(., 'mono')]):)">
         <xsl:element name="biblographic-information">
-          <xsl:attribute name="xml:base" select="replace(replace(*:doi[1]/@xml:base, '-\d{3}\.bibl\.xml', '.bibl.xml'), '(chunks-bibl/)', '$1issue/')"/>
-          <xsl:attribute name="name" select="replace(*:doi[1]/@name, '-\d{3}\.bibl\.xml', '.bibl.xml')"/>
+          <xsl:attribute name="xml:base" select="if (exists(*:doi)) 
+                                                 then replace(replace(*:doi[1]/@xml:base, '-\d{3}\.bibl\.xml', '.bibl.xml'), '(chunks-bibl/)', '$1issue/')
+                                                 else replace(*:book[*:body/*:book-part[@book-part-type = 'book-toc-page-order']]/@xml:base, 'chunks-atypon/.+/(.+\.xml)$', 'chunks-bibl/issue/$1')"/>
+          <xsl:attribute name="name" select="if (exists(*:doi)) 
+                                             then replace(*:doi[1]/@name, '-\d{3}(\.bibl\.xml)?$', '')
+                                             else *:book[*:body/*:book-part[@book-part-type = 'book-toc-page-order']]/*:book-meta/*:book-id[@book-id-type = 'doi']"/>
           <xsl:sequence select="*:doi"/>
         </xsl:element>
-      </xsl:if>
     </xsl:variable>
 <!--   <xsl:message select="'#####', $all-bibls"></xsl:message>-->
     <xsl:apply-templates select="(*:book | *:doi | *:chunk-meta), $all-bibls" mode="#current"/>
