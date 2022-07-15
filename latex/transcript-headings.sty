@@ -179,15 +179,15 @@
   %% Abstract
   \tpSetProperty{extended-heading}{%
     \tpIfComp{Abstract}
-      {\par\vskip\baselineskip
+      {\par\vskip2\baselineskip
        \rightskip\z@
-       {\bfseries\tpIfComp{AbstractTitle}{\tpUseComp{AbstractTitle}}{Abstract}}\par
-       {\itshape\small\tpUseComp{Abstract}}\par}
+       {\mdseries\sffamily\tpIfComp{AbstractTitle}{\tpUseComp{AbstractTitle}}{Abstract}:}\enskip
+       {\itshape\tpUseComp{Abstract}}\par}
       {}%
     \tpIfComp{Keywords}
-      {\par\vskip.5\baselineskip
-       {\bfseries\tpIfComp{KeywordsTtitle}{\tpUseComp{KeywordsTitle}}{Keywords}}\par
-       {\itshape\small\tpUseComp{Keywords}\par}}
+      {\par\vskip\baselineskip
+       {\mdseries\sffamily\tpIfComp{KeywordsTtitle}{\tpUseComp{KeywordsTitle}}{Keywords}:}\enskip
+       {\itshape\tpUseComp{Keywords}\par}}
      {}%
    }%
 }
