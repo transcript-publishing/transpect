@@ -86,6 +86,7 @@
   }%
   \tpSetProperty{titlepage-iv}{%
     \bgroup
+      \justify
       \tpUseProperty{funding-block}%
       \vfill
       \tpUseProperty{imprint-format}%
@@ -100,7 +101,7 @@
   }%
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
-    \tpIfComp{Copyright}{\tpUseComp{Copyright}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
+    \tpIfComp{Copyright}{{\sffamily\sbseries\tpUseComp{Copyright}}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
     \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}%
   }
   %% Format Impressum
@@ -109,14 +110,14 @@
     \tpUseProperty{imprint-sep}
     \tpGetComp{Qualification}%%
     \tpGetComp{Conversion}%%
-    \tpGetComp{CoverDesign}%%
-    \tpGetComp{CoverImage}%%
-    \tpGetComp{Lectorate}%%
-    \tpGetComp{QA}%%
+    {\leftskip5mm\hskip-5mm\tpGetComp{CoverImage}}%%
+    {\leftskip5mm\hskip-5mm\tpGetComp{CoverDesign}}%%
+    {\leftskip5mm\hskip-5mm\tpGetComp{Lectorate}}%%
+    {\leftskip5mm\hskip-5mm\tpGetComp{QA}}%%
     \tpGetComp{Translator}%%
     \tpGetComp{Appraiser}%%
     \tpGetComp{Discussion}%%
-    \tpGetComp{Typesetter}%%
+    {\leftskip5mm\hskip-5mm\tpGetComp{Typesetter}}%%
     \tpGetComp{Print}%%
     \tpGetComp{DOI}%%
     \tpGetComp{Keywords}%%
