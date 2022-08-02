@@ -90,6 +90,7 @@
       \tpUseProperty{funding-block}%
       \vfill
       \tpUseProperty{imprint-format}%
+      \tpSetComp{BiblioTitle}{Bibliografische Information der Deutschen Nationalbibliothek}
       \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
       \tpUseProperty{licence}%
       \vskip2\baselineskip
@@ -110,14 +111,14 @@
     \tpUseProperty{imprint-sep}
     \tpGetComp{Qualification}%%
     \tpGetComp{Conversion}%%
-    {\leftskip5mm\hskip-5mm\tpGetComp{CoverImage}}%%
-    {\leftskip5mm\hskip-5mm\tpGetComp{CoverDesign}}%%
-    {\leftskip5mm\hskip-5mm\tpGetComp{Lectorate}}%%
-    {\leftskip5mm\hskip-5mm\tpGetComp{QA}}%%
+    {\tpIfComp{CoverImage}{\leftskip5mm\hskip-5mm}{}\tpGetComp{CoverImage}}%%
+    {\tpIfComp{CoverDesign}{\leftskip5mm\hskip-5mm}{}\tpGetComp{CoverDesign}}%%
+    {\tpIfComp{Lectorate}{\leftskip5mm\hskip-5mm}{}\tpGetComp{Lectorate}}%%
+    {\tpIfComp{QA}{\leftskip5mm\hskip-5mm}{}\tpGetComp{QA}}%%
     \tpGetComp{Translator}%%
     \tpGetComp{Appraiser}%%
     \tpGetComp{Discussion}%%
-    {\leftskip5mm\hskip-5mm\tpGetComp{Typesetter}}%%
+    {\tpIfComp{TypeSetter}{\leftskip5mm\hskip-5mm}{}\tpGetComp{Typesetter}}%%
     \tpGetComp{Print}%%
     \tpGetComp{DOI}%%
     \tpGetComp{Keywords}%%
