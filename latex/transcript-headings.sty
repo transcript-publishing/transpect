@@ -142,6 +142,22 @@
       \spewnotes
     }{}%
   }%
+  
+  \tpSetProperty{after-heading-block}{%
+    % Berechnung verbleibenden Abstands.
+    \tpIfProp{after-skip}%
+      {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace-\tpUseProperty{after-skip}\relax}%
+      {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace\relax}%
+    % Aktualisiere verbleibenden vertikalen Restplatz unter Berücksichtigung des Afterskips.
+    \global\tp@remainingVSpace=\the\tp@remainingVSpaceAfterChapterHeading
+    % Verbleibende Zeilenanzahl nach der Kapitelüberschrift ermitteln.
+    \tp@getRemainingLines
+    % Diese Zeilenanzahl global speichern.
+    \global\tp@remainingLinesAfterChapterHeading=\tp@remainingLines\relax%
+    % Seite, auf der das Kapitel beginnt, speichern.
+    \global\tp@chapterPage=\value{page}%
+  }
+  
   %% Format Kolumnentitel
   \tpSetProperty{running-extra}{%
     \tpIfComp{RunAuthor}
@@ -258,8 +274,57 @@
   \fi
 }
 
+% BEGIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Codeergänzung für Anpassung in Überschriftenebene 4. \minusvspace in before-heading erzeugt fehlerhaften Abstand. %
+% Ermittlung, ob Überschrift auf Überschrift folgt, indem verbleibende Zeilen auf der Seite berechnet werden.       %
+% Berechnung erfordert Ergänzung in after-heading-block bei chapter.                                                %
+%                                                                                                                   % 
+\newcommand\normalskip{\baselineskip}
+% Maß für auf der Seite verbleibenden vertikalen Platz.
+\global\newdimen\tp@remainingVSpace
+% Maß für den verbleibenden vertikalen Platz auf der Seite nach dem Überschriftenblock eines Chapters.
+\global\newdimen\tp@remainingVSpaceAfterChapterHeading
+\global\newcount\tp@remainingLinesAfterChapterHeading
+% Maß für den verbleibenden vertikalen Platz auf der Seite am Beginn einer Section.
+\global\newdimen\tp@remainingVSpaceAtSectionBeginning
+\global\newcount\tp@remainingLinesAtSectionBeginning
+% Counter für die Seite, auf der das Kapitel beginnt. Für den Abgleich mit Seite der ersten Section des Kapitels.
+\global\newcount\tp@chapterPage
+
+\gdef\tp@stripFracPart#1.#2\@nil{#1}
+
+\gdef\tp@getRemainingVSpace{\the\dimexpr\pagegoal-\pagetotal-\normalskip\relax}
+
+% Verbleibender Platz auf der Seite in Zeilenhöhen.
+\global\newcount\tp@remainingLines
+\gdef\tp@getRemainingLines{%
+  \edef\tp@remainingLinesFrac{\CalcRatio{\tp@remainingVSpace}{\normalskip}}%
+  \def\tp@numberFloored{\expandafter\tp@stripFracPart\tp@remainingLinesFrac.\relax\@nil\relax}
+  \global\tp@remainingLines=\the\numexpr\expandafter\tp@stripFracPart\tp@remainingLinesFrac.\relax\@nil+1\relax%
+}
+
+% Bedingter vspace.
+\gdef\tp@spaceIfAfterChapterHeading#1{%
+  \global\tp@remainingVSpace=\tp@getRemainingVSpace\relax%
+  \global\tp@remainingVSpaceAtSectionBeginning=\the\tp@remainingVSpace%
+  \tp@getRemainingLines%
+  \global\tp@remainingLinesAtSectionBeginning=\tp@remainingLines%
+  % vspace wird nur eingefügt, wenn Abstände auf derselben Seite berechnet wurden.
+  \ifnum\tp@chapterPage=\thepage\relax%
+    \ifnum\tp@remainingLinesAfterChapterHeading=\tp@remainingLinesAtSectionBeginning\relax%
+      \vskip#1%
+    \fi%
+  \fi%
+}
+%                                                                                                                   %
+% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \tpDeclareHeading[section]{3}{subsubsection}{%
-  \tpSetProperty{before-heading}{\minusvspace{12.8bp}}%
+  \tpSetProperty{before-heading}{%
+    \tp@spaceIfAfterChapterHeading{-1\baselineskip}% Ticket 13181, 2022-08-09
+    \vskip1\baselineskip%
+  }%
   %\tpSetProperty{after-skip}{1sp}% Ticket 12534, 2022-04-25
   \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
   \ifcollection\else
