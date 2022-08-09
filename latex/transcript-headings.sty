@@ -272,6 +272,20 @@
     \tpSetProperty{toc-indent}{2em}%
     \tpSetProperty{toc-margin-left}{4em}%
   \fi
+  \tpSetProperty{after-heading-block}{%
+    % Berechnung verbleibenden Abstands.
+    \tpIfProp{after-skip}%
+      {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace-\tpUseProperty{after-skip}-1\baselineskip\relax}%
+      {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace-1\baselineskip\relax}%
+    % Aktualisiere verbleibenden vertikalen Restplatz unter Berücksichtigung des Afterskips.
+    \global\tp@remainingVSpace=\the\tp@remainingVSpaceAfterChapterHeading
+    % Verbleibende Zeilenanzahl nach der Kapitelüberschrift ermitteln.
+    \tp@getRemainingLines
+    % Diese Zeilenanzahl global speichern.
+    \global\tp@remainingLinesAfterChapterHeading=\tp@remainingLines\relax%
+    % Seite, auf der das Kapitel beginnt, speichern.
+    \global\tp@chapterPage=\value{page}%
+  }
 }
 
 % BEGIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
