@@ -105,7 +105,7 @@
     <p:input port="conf">
       <p:document href="http://this.transpect.io/conf/conf.xml"/>
     </p:input>
-    <p:with-option name="filenames" select="concat($basename, '.meta.xml')"/>
+    <p:with-option name="filenames" select="concat(replace($basename, '^(.+_\d{5})(_.+)?$', '$1'), '.meta.xml')"/>
   </tr:paths-for-files-xml>
   
   <tr:file-uri name="meta-file-uri">
