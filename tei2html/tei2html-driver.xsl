@@ -149,7 +149,7 @@
   </xsl:template>
   
   <xsl:template name="toc">
-    <nav class="toc" epub:type="toc" id="toc">
+    <nav class="toc" epub:type="toc" id="tei2html_rendered_toc">
       <xsl:call-template name="generate-toc-headline"/>
       <xsl:apply-templates select="/TEI/text/front/divGen[@type = 'toc']/*:header[@rend = 'chunk-meta-sec']" mode="tei2html"/>
       <xsl:call-template name="generate-toc-body">
@@ -343,8 +343,8 @@
           <xsl:sequence select="3"/>
         </xsl:when>-->
        <xsl:when test="$elt/parent::div/@type = ('part', 'appendix', 'imprint', 'acknowledgements', 'dedication', 'glossary', 'preface') or
-                       $elt/parent::divGen/@type = ('index', 'toc') or
-                       $elt/parent::listBibl">
+                       $elt/parent::divGen/@type = ('index', 'toc')(: or
+                       $elt/parent::listBibl:)">
           <xsl:sequence select="3"/>
         </xsl:when>
         <xsl:when test="$elt/parent::div/@type = ('chapter', 'article')">
@@ -355,6 +355,11 @@
               else
                 3"
           />
+        </xsl:when>
+        <xsl:when test="$elt/parent::listBibl">
+          <xsl:sequence select="if ($elt/ancestor::div/@type = 'part') 
+                                then count($elt/ancestor::*[self::div[@type eq 'section'] | self::listBibl]) + 4
+                                else count($elt/ancestor::*[self::div[@type eq 'section'] | self::listBibl]) + 3"/>
         </xsl:when>
         <!--<xsl:when test="$elt/parent::div[@type = ('section')] or $elt/parent::listBibl">
           <xsl:sequence select="if ($elt/ancestor::div/@type = 'part') 
