@@ -15,5 +15,5 @@
   <c:param name="evolve-hub-driver-idml-path" value="evolve-hub/driver-idml"/>
   <c:param name="clade-role" value="publisher"/>
   <c:param name="rule-category-span-class" value="category"/>
-  
+  <c:param name="epub-version" value="EPUB3"/>
 </c:param-set>
