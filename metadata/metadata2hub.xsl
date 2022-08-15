@@ -56,6 +56,12 @@
     <xsl:apply-templates/>
   </xsl:template>
   
+  <xsl:template match="*|processing-instruction()">
+    <xsl:copy>
+      <xsl:apply-templates select="*|processing-instruction()"/>
+    </xsl:copy>
+  </xsl:template>
+  
   <xsl:function name="css:compatible-name" as="xs:string">
     <xsl:param name="input" as="xs:string"/>
     <xsl:sequence select="replace(  

@@ -220,44 +220,39 @@
                                                 '}&#xa;')"/>
       <xsl:text>\end{tpEditor}&#xa;</xsl:text>
     </xsl:for-each>
-    <xsl:if test="normalize-space($title) or normalize-space($title-for-running-head)">
-      <xsl:value-of select="concat('&#xa;\tpTitle{', ($title, $title-for-running-head)[1], '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="$title-for-running-head">
-      <xsl:value-of select="concat('&#xa;\tpRunTitle{', $title-for-running-head, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($subtitle)">
-      <xsl:value-of select="concat('&#xa;\tpSubtitle{', $subtitle, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($shorttitle)">
-      <xsl:value-of select="concat('&#xa;\tpShortTitle{', $shorttitle, '}&#xa;')"/>
-    </xsl:if>
-    <!-- cover image -->
+    <xsl:sequence select="
+      xml2tex:meta2tex(($title, $title-for-running-head)[1], (), 'tpTitle'),
+      xml2tex:meta2tex(($title-for-running-head, $title-for-running-head)[1], (), 'tpRunTitle'),
+      xml2tex:meta2tex($subtitle, (), 'tpSubtitle'),
+      xml2tex:meta2tex($shorttitle, (), 'tpShortTitle'),
+      xml2tex:meta2tex($series-number, (), 'tpNumber'),
+      xml2tex:meta2tex($series-name, (), 'tpSeries'),
+      xml2tex:meta2tex($subseries-name, (), 'tpSubSeries'),
+      xml2tex:meta2tex($volume, (), 'tpVolume'),
+      xml2tex:meta2tex($publisher-name, (), 'tpPublisher'),
+      xml2tex:meta2tex($publisher-imprint-name, (), 'tpPubDivision'),
+      xml2tex:meta2tex($publisher-imprint-info, (), 'tpPubDivInfo'),
+      xml2tex:meta2tex($publisher-note, (), 'tpPubNote'),
+      xml2tex:meta2tex($publisher-location, (), 'tpPubPlace'),
+      xml2tex:meta2tex($print-isbn, (), 'tpISBN'),
+      xml2tex:meta2tex($epdf-isbn, (), 'tpEISBN'),
+      xml2tex:meta2tex($epub-isbn, (), 'tpEpubISBN'),
+      xml2tex:meta2tex($isbn-text, (), 'tpEpubPreText'),
+      xml2tex:meta2tex($issn, (), 'tpISSN'),
+      xml2tex:meta2tex($biblio-info, (), 'tpBiblio'),
+      xml2tex:meta2tex($print-note, (), 'tpPrintNote'),
+      xml2tex:meta2tex($environmental-note, (), 'tpEnvDisclaimer'),
+      xml2tex:meta2tex($acknowledgements, (), 'tpAcknowledgements'),
+      xml2tex:meta2tex($dedication, (), 'tpDedication'),
+      xml2tex:meta2tex($editorial, (), 'tpEditorial'),
+      xml2tex:meta2tex($edition-note, (), 'tpEditionNote'),
+      xml2tex:meta2tex($statement, (), 'tpStatement')
+      
+      
+      "/>
+    <!-- logos image -->
     <xsl:if test="normalize-space($cover-href)">
       <xsl:value-of select="concat('&#xa;\tpCover{', $cover-href, '}&#xa;')"/>
-    </xsl:if>
-    <!-- series metadata -->
-    <xsl:if test="normalize-space($series-number)">
-      <xsl:value-of select="concat('&#xa;\tpNumber{', $series-number, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($series-name)">
-      <xsl:value-of select="concat('&#xa;\tpSeries{', $series-name, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($subseries-name)">
-      <xsl:value-of select="concat('&#xa;\tpSubSeries{', $subseries-name, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($volume)">
-      <xsl:value-of select="concat('&#xa;\tpVolume{', $volume, '}&#xa;')"/>
-    </xsl:if>
-    <!-- publisher metadata -->
-    <xsl:if test="normalize-space($publisher-name)">
-      <xsl:value-of select="concat('&#xa;\tpPublisher{', $publisher-name, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($publisher-imprint-name)">
-      <xsl:value-of select="concat('&#xa;\tpPubDivision{', $publisher-imprint-name, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($publisher-imprint-info)">
-      <xsl:value-of select="concat('&#xa;\tpPubDivInfo{', $publisher-imprint-info, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($series-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpSeries{\includegraphics{logos/series/', $series-logo-href, '}}&#xa;')"/>
@@ -265,66 +260,18 @@
     <xsl:if test="normalize-space($publisher-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpPubLogo{logos/', $publisher-logo-href, '}&#xa;')"/>
     </xsl:if>
-    <xsl:if test="normalize-space($publisher-note)">
-      <xsl:value-of select="concat('&#xa;\tpPubNote{', $publisher-note, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($publisher-location)">
-      <xsl:value-of select="concat('&#xa;\tpPubPlace{', $publisher-location, '}&#xa;')"/>
-    </xsl:if>
+    <!-- links -->
     <xsl:if test="normalize-space($publisher-website)">
       <xsl:value-of select="concat('&#xa;\tpPubWeb{', $publisher-website, '}&#xa;')"/>
     </xsl:if>
-    <!-- publication meta -->
     <xsl:if test="normalize-space($doi)">
       <xsl:value-of select="concat('&#xa;\tpDOI{', $doi, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($print-isbn)">
-      <xsl:value-of select="concat('&#xa;\tpISBN{', $print-isbn, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($epdf-isbn)">
-      <xsl:value-of select="concat('&#xa;\tpEISBN{', $epdf-isbn, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($epub-isbn)">
-      <xsl:value-of select="concat('&#xa;\tpEpubISBN{', $epub-isbn, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($isbn-text)">
-      <xsl:value-of select="concat('&#xa;\tpEpubPreText{', $isbn-text, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($issn)">
-      <xsl:value-of select="concat('&#xa;\tpISSN{', $issn, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($dedication)">
-      <xsl:text>&#xa;\tpDedication{</xsl:text>
-      <xsl:apply-templates select="$dedication" mode="#current"/>
-      <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="normalize-space($acknowledgements)">
-      <xsl:value-of select="concat('&#xa;\tpAcknowledgements{', $acknowledgements, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($editorial)">
-      <xsl:text>&#xa;\tpEditorial{</xsl:text>
-      <xsl:apply-templates select="xml2tex:meta-remove-links-etc($editorial)" mode="#current"/>
-      <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="normalize-space($edition-note)">
-      <xsl:value-of select="concat('&#xa;\tpEditionNote{', $edition-note, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($pub-year)">
       <xsl:value-of select="concat('&#xa;\tpYear{', $pub-year, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($statement)">
       <xsl:value-of select="concat('&#xa;\tpStatement{', $statement, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($biblio-info)">
-      <xsl:value-of select="concat('&#xa;\tpBiblio{', 
-                                   string-join($biblio-info/*/xml2tex:meta-remove-links-etc(.), '\\&#xA;'),
-                                   '}&#xA;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($print-note)">
-      <xsl:value-of select="concat('&#xa;\tpPrintNote{', $print-note, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($environmental-note)">
-      <xsl:value-of select="concat('&#xa;\tpEnvDisclaimer{', $environmental-note, '}&#xa;')"/>
     </xsl:if>
     <!-- contributor meta -->
     <xsl:if test="normalize-space($lectorate)">
