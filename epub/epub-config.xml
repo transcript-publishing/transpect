@@ -39,7 +39,7 @@
     Please note that due to limitations of Relax NG (or of the schema designer),
     the required order of type declarations is toc, landmarks, everything else.
     -->
-	  <type name="toc" heading="Table of Contents" hidden="true" fallback-id-for-landmark="rendered_toc"/>
+	  <type name="toc" heading="Table of Contents" hidden="true" file="nav"/>
 	  <!--
       There may be an optional hidden attribute for landmarks and toc (values: true|false,
       default: true). It applies only to generated nav elements.
@@ -52,45 +52,51 @@
       will be considered when generating the landmarks. 
 	    fallback-id-for-landmark: See the embedded documentation in the Relax NG schema. 
 	  --> 
-    <type name="landmarks" heading="Übersicht" hidden="true" types="bodymatter toc"/>
+    <type name="landmarks" heading="Übersicht" types="cover titlepage toc epigraph loi lot imprint copyright-page"/>
     <type name="cover" heading="Cover" file="cover" guide-type="text"/>
     <type name="frontmatter" heading="Vorspann"/>
     <type name="bodymatter" heading="Hauptteil"/>
     <type name="backmatter" heading="Anhang"/>
     <type name="glossary" heading="Glossar"/>
     <type name="tr:bio" file="author"/>
+    <type name="contributors" file="author" heading="Über die Autoren"/>
     <type name="tr:about-the-book" file="about-the-book"/>
+    <type name="preamble" heading="Über das Buch" file="about-the-book"/>
+    <type name="titlepage" heading="Titel" file="title"/>
+    <type name="epigraph" heading="Motto"/>
+<!--    <type name="halftitlepage" file="halftitle" title="Frontmatter"/>-->
     <type name="abstract" file="about-the-content"/>
     <type name="fulltitle" file="title"/>
-    <type name="copyright-page" file="copyright"/>
+    <type name="imprint" file="imprint" heading="Impressum"/>
     <type name="part" file="part"/>
     <type name="chapter" file="chapter"/>
     <type name="appendix" file="appendix"/>
     <type name="glossary" file="glossary"/>
+    <type name="lot" file="lot" heading="List of Tables"/>
+    <type name="loi" file="loi" heading="List of Figures"/>
     <type name="other-credits" file="other-credits"/>
     <type name="tr:popup" file="popup"/>
     <type name="tr:advertisement" file="advertisement"/>
   </types>
 
   <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <dc:identifier format="EPUB3">97831XXXXXXXX</dc:identifier>
-    <dc:identifier format="KF8">97831XXXXXXXX</dc:identifier>
-    <dc:title>Tiny title</dc:title>
-    <dc:description>Any description</dc:description>
-    <dc:creator>Any author</dc:creator>
-    <dc:publisher>Transcript Verlag</dc:publisher>
-    <dc:language>de</dc:language>
-    <dc:rights>This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 License (CC BY-NC-ND 4.0)</dc:rights>
+    <dc:identifier format="EPUB3"/>
+    <dc:identifier format="KF8"/>
+    <dc:title/>
+    <dc:description/>
+    <dc:creator/>
+    <dc:publisher/>
+    <dc:language/>
+    <dc:rights/>
   </metadata>
 
   <hierarchy media-type="application/xhtml+xml" max-population="40" max-text-length="200000" generated-frontmatter-title="">
     <!-- see schema heading-conf.rng for generated-frontmatter-title -->
     <unconditional-split elt="div" attr="id" attval="epub-cover-image-container"/>
     <unconditional-split elt="section" attr="class" attval="halftitle"/>
-    <unconditional-split elt="section" attr="class" attval="fulltitle"/>
-    <unconditional-split elt="nav" attr="class" attval="toc"/>
+    <unconditional-split elt="section" attr="epub:type" attval="titlepage"/>
+<!--    <unconditional-split elt="nav" attr="epub:type" attval="toc"/>-->
     <unconditional-split elt="section" attr="class" attval="imprint"/>
-    <unconditional-split elt="nav" attr="class" attval="toc"/>
     <unconditional-split elt="div" attr="class" attval="loi"/>
     <unconditional-split elt="div" attr="class" attval="lot"/>
     <unconditional-split elt="div" attr="class" attval="dedication"/>
@@ -98,11 +104,18 @@
     <unconditional-split elt="div" attr="class" attval="part"/>
     <unconditional-split elt="div" attr="class" attval="chapter"/>
     <unconditional-split elt="div" attr="class" attval="notes"/>
-    <unconditional-split attr="epub:type" attval="cover"/>
-    <unconditional-split attr="epub:type" attval="rearnotes"/>
+<!--    <unconditional-split attr="epub:type" attval="cover"/>-->
+    <unconditional-split attr="epub:type" attval="endnotes"/>
     <heading elt="h1"/>
     <heading elt="h2"/>
     <heading elt="h3"/>
+    <heading elt="h4" level="4"/>
+    <heading elt="h5" level="5"/>
+    <heading elt="p" attr="class" attval="TOC1" level="1"/>
+    <heading elt="p" attr="class" attval="TOC2" level="2"/>
+    <heading elt="p" attr="class" attval="TOC3" level="3"/>
+    <heading elt="p" attr="class" attval="TOC4" level="4"/>
+    <heading elt="p" attr="class" attval="TOC5" level="5"/>
   </hierarchy>
   
   <checks>
