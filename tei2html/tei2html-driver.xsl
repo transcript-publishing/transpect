@@ -142,9 +142,16 @@
   
   <xsl:template match="term[@key eq 'Lizenzlink']" mode="tei2html">
     <p class="{lower-case(translate(@key, ' ', '-'))}">
-      <a href="{.}">
-        <xsl:apply-templates mode="#current"/>
-      </a>
+      <xsl:choose>
+        <xsl:when test="ref">
+          <xsl:apply-templates mode="#current"/>
+        </xsl:when>
+        <xsl:ohterwise>    
+          <a href="{.}">
+            <xsl:apply-templates mode="#current"/>
+          </a>
+        </xsl:ohterwise>
+      </xsl:choose>
     </p>
   </xsl:template>
   
