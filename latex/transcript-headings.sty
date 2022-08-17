@@ -145,17 +145,7 @@
   
   \tpSetProperty{after-heading-block}{%
     % Berechnung verbleibenden Abstands.
-    \tpIfProp{after-skip}%
-      {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace-\tpUseProperty{after-skip}\relax}%
-      {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace\relax}%
-    % Aktualisiere verbleibenden vertikalen Restplatz unter Berücksichtigung des Afterskips.
-    \global\tp@remainingVSpace=\the\tp@remainingVSpaceAfterChapterHeading
-    % Verbleibende Zeilenanzahl nach der Kapitelüberschrift ermitteln.
-    \tp@getRemainingLines
-    % Diese Zeilenanzahl global speichern.
-    \global\tp@remainingLinesAfterChapterHeading=\tp@remainingLines\relax%
-    % Seite, auf der das Kapitel beginnt, speichern.
-    \global\tp@chapterPage=\value{page}%
+    \tp@saveRemainingSpace
   }
   
   %% Format Kolumnentitel
@@ -274,17 +264,7 @@
   \fi
   \tpSetProperty{after-heading-block}{%
     % Berechnung verbleibenden Abstands.
-    \tpIfProp{after-skip}%
-      {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace-\tpUseProperty{after-skip}-1\baselineskip\relax}%
-      {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace-1\baselineskip\relax}%
-    % Aktualisiere verbleibenden vertikalen Restplatz unter Berücksichtigung des Afterskips.
-    \global\tp@remainingVSpace=\the\tp@remainingVSpaceAfterChapterHeading
-    % Verbleibende Zeilenanzahl nach der Kapitelüberschrift ermitteln.
-    \tp@getRemainingLines
-    % Diese Zeilenanzahl global speichern.
-    \global\tp@remainingLinesAfterChapterHeading=\tp@remainingLines\relax%
-    % Seite, auf der das Kapitel beginnt, speichern.
-    \global\tp@chapterPage=\value{page}%
+    \tp@saveRemainingSpace
   }
 }
 
@@ -307,11 +287,12 @@
 
 \gdef\tp@stripFracPart#1.#2\@nil{#1}
 
-\gdef\tp@getRemainingVSpace{\the\dimexpr\pagegoal-\pagetotal-\normalskip\relax}
+\gdef\tp@getRemainingVSpace{\the\dimexpr\pagegoal-\pagetotal\relax}
 
 % Verbleibender Platz auf der Seite in Zeilenhöhen.
 \global\newcount\tp@remainingLines
 \gdef\tp@getRemainingLines{%
+  \typeout{DIVIDING \the\tp@remainingVSpace\space by \the\normalskip}
   \edef\tp@remainingLinesFrac{\CalcRatio{\tp@remainingVSpace}{\normalskip}}%
   \def\tp@numberFloored{\expandafter\tp@stripFracPart\tp@remainingLinesFrac.\relax\@nil\relax}
   \global\tp@remainingLines=\the\numexpr\expandafter\tp@stripFracPart\tp@remainingLinesFrac.\relax\@nil+1\relax%
@@ -319,16 +300,34 @@
 
 % Bedingter vspace.
 \gdef\tp@spaceIfAfterChapterHeading#1{%
+  \typeout{\the\pagegoal; \the\pagetotal}
   \global\tp@remainingVSpace=\tp@getRemainingVSpace\relax%
   \global\tp@remainingVSpaceAtSectionBeginning=\the\tp@remainingVSpace%
   \tp@getRemainingLines%
   \global\tp@remainingLinesAtSectionBeginning=\tp@remainingLines%
-  % vspace wird nur eingefügt, wenn Abstände auf derselben Seite berechnet wurden.
+  %\typeout{tp@chapterPage: \the\tp@chapterPage; \the\tp@remainingLinesAfterChapterHeading; \the\tp@remainingLinesAtSectionBeginning}
+  \typeout{\tp@heading@Title}
+  \typeout{\the\tp@remainingLinesAfterChapterHeading; \the\tp@remainingLinesAtSectionBeginning}
+  \typeout{tp@remainingVSpaceAtSectionBeginning: \the\tp@remainingVSpaceAtSectionBeginning}
   \ifnum\tp@chapterPage=\thepage\relax%
     \ifnum\tp@remainingLinesAfterChapterHeading=\tp@remainingLinesAtSectionBeginning\relax%
       \vskip#1%
     \fi%
   \fi%
+}
+
+\gdef\tp@saveRemainingSpace{%
+  \tpIfProp{after-skip}%
+    {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace-\tpUseProperty{after-skip}\relax}%
+    {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace\relax}%
+  % Aktualisiere verbleibenden vertikalen Restplatz unter Berücksichtigung des Afterskips.
+  \global\tp@remainingVSpace=\the\tp@remainingVSpaceAfterChapterHeading
+  % Verbleibende Zeilenanzahl nach der Kapitelüberschrift ermitteln.
+  \tp@getRemainingLines
+  % Diese Zeilenanzahl global speichern.
+  \global\tp@remainingLinesAfterChapterHeading=\tp@remainingLines\relax%
+  % Seite, auf der das Kapitel beginnt, speichern.
+  \global\tp@chapterPage=\value{page}%
 }
 %                                                                                                                   %
 % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
