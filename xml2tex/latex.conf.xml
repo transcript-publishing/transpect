@@ -252,7 +252,7 @@
       "/>
     <!-- logos image -->
     <xsl:if test="normalize-space($cover-href)">
-      <xsl:value-of select="concat('&#xa;\tpCover{', $cover-href, '}&#xa;')"/>
+      <xsl:value-of select="concat('&#xa;\tpCover{cover/', $cover-href, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($series-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpSeries{\includegraphics{logos/series/', $series-logo-href, '}}&#xa;')"/>
