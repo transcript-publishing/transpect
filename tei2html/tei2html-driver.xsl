@@ -146,11 +146,11 @@
         <xsl:when test="ref">
           <xsl:apply-templates mode="#current"/>
         </xsl:when>
-        <xsl:ohterwise>    
+        <xsl:otherwise>    
           <a href="{.}">
             <xsl:apply-templates mode="#current"/>
           </a>
-        </xsl:ohterwise>
+        </xsl:otherwise>
       </xsl:choose>
     </p>
   </xsl:template>
