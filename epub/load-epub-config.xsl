@@ -50,9 +50,11 @@
       </xsl:if>
 
       <dc:date>
-        <xsl:value-of select="(replace(($epub-metadata//string[preceding-sibling::*[1][. eq 'Copyright']],
-                                        string-join($epub-metadata//array[preceding-sibling::*[1][. eq 'Copyright']]//string/replace(., '\s+', ' '), ' ')[1])
-                                      , '^\s*©\s+(\d{4}).+$', '$1'), current-date())[1]"/>
+        <xsl:value-of select="(replace(normalize-space(string-join($epub-metadata//key[. = 'Copyright']/following-sibling::*[1]/descendant-or-self::string, ' '))[normalize-space()], 
+                                            '^\s*©\s+(\d{4}).+$', 
+                                            '$1'), 
+                                    format-date(current-date(), '[Y]')
+                                   )[1]"/>
       </dc:date>
       <dc:publisher>
         <xsl:value-of select="($epub-metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Verlag']], 'transcript Verlag')[1]"/>
@@ -64,9 +66,7 @@
 
       <xsl:if test="$epub-metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Copyright']]">
       <dc:rights>
-        <xsl:value-of select="($epub-metadata//string[preceding-sibling::*[1][. eq 'Copyright']],
-                               string-join($epub-metadata//array[preceding-sibling::*[1][. eq 'Copyright']]//string/replace(., '\s+', ' '), ' ')
-                              )[1]"/>
+        <xsl:value-of select="normalize-space(string-join($epub-metadata//key[. = ('Copyright')]/following-sibling::*[1][normalize-space()]/descendant-or-self::string, ' '))"/>
       </dc:rights>
       </xsl:if>
       <xsl:if test="$epub-metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Schlagworte']]">
