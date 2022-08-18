@@ -107,11 +107,41 @@
     </p:input>
     <p:with-option name="filenames" select="concat(replace($basename, '^(.+_\d{5})(_.+)?$', '$1'), '.meta.xml')"/>
   </tr:paths-for-files-xml>
-  
+
   <tr:file-uri name="meta-file-uri">
     <p:with-option name="filename" select="/c:files/c:file/@name"/>
   </tr:file-uri>
-  
+
+  <p:sink/>
+
+  <p:choose name="ci-conf">
+    <p:variable name="current-local-href" select="/c:result/@local-href">
+      <p:pipe port="result" step="meta-file-uri"/>
+    </p:variable>
+    <p:variable name="local-dir" select="/c:param-set/c:param[@name='out-dir-uri']/@value">
+     <p:pipe port="source" step="load-meta"/>
+    </p:variable>
+    <p:variable name="target-dir" select="concat($local-dir, replace($current-local-href, '^.+/\d{5}(/.+)$', '$1'))"/>
+    <p:when test="/c:param-set/c:param[@name='out-dir-uri'][contains(@value, 'test_after')]">
+      <p:xpath-context><p:pipe port="source" step="load-meta"/></p:xpath-context>
+      <p:identity name="i1">
+        <p:input port="source">
+          <p:pipe port="result" step="meta-file-uri"/>
+        </p:input>
+      </p:identity>
+      <p:add-attribute attribute-name="local-href" match="/c:result" name="change-path">
+        <p:with-option name="attribute-value" select="$target-dir"/>
+      </p:add-attribute>
+    </p:when>
+    <p:otherwise>
+      <p:identity name="i2">
+        <p:input port="source">
+          <p:pipe port="result" step="meta-file-uri"/>
+        </p:input>
+      </p:identity>
+    </p:otherwise>
+  </p:choose>
+
   <tr:store-debug pipeline-step="metadata/02_path">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
