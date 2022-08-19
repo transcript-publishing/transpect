@@ -4,16 +4,21 @@
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:tr="http://transpect.io"
-  exclude-result-prefixes="cx xs"
+  xmlns:html="http://www.w3.org/1999/xhtml"  
+  xmlns:epub="http://www.idpf.org/2007/ops"
+  exclude-result-prefixes="cx xs html epub"
   version="2.0">
   
   <xsl:import href="http://transpect.io/xslt-util/iso-lang/xsl/iso-lang.xsl"/>
   
   <xsl:param name="cover-path" as="xs:string?"/>
   
-  <xsl:variable name="epub-metadata" as="document-node(element(cx:documents))?"
+  <xsl:variable name="metadatadoc" as="document-node(element())?"
                 select="collection()[2]"/>
   
+  <xsl:variable name="html" as="document-node(element())?"
+                select="collection()[/html:html]"/>
+
   <xsl:template match="@*|*">
     <xsl:copy>
       <xsl:apply-templates select="@*, node()"/>
@@ -28,55 +33,85 @@
   <xsl:template match="/epub-config/metadata">
     <xsl:copy>
       <dc:identifier format="EPUB3">
-        <xsl:value-of select="$epub-metadata//string[preceding-sibling::*[1][. eq 'ePUB-ISBN']]"/>
+        <xsl:value-of select="$html//html:head/html:meta[@name = 'DC.identifier']/@content"/>
       </dc:identifier>
-      <dc:title>
-        <xsl:value-of select="($epub-metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Titel']],
-                                string-join($epub-metadata//array[preceding-sibling::*[1][. eq 'Titel']]//string[normalize-space()]/replace(., '\s+', ' '), ' ')
-                              )[1]"/>
-      </dc:title>
-      <xsl:if test="$epub-metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Kurztext']]">
-        <dc:description>
-          <xsl:value-of select="($epub-metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Kurztext']], 
-                                 string-join($epub-metadata//array[preceding-sibling::*[1][. eq 'Kurztext']]//string[normalize-space()]/replace(., '\s+', ' '), ' ')
-            )[1]"/>
-        </dc:description>
-      </xsl:if>
-      <xsl:if test="$epub-metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. = ('Autor', 'Herausgeber')]]">
-      <dc:creator>
-        <xsl:value-of select="($epub-metadata//string[normalize-space()][preceding-sibling::*[1][. = ('Autor', 'Herausgeber')]],
-                              string-join($epub-metadata//array[preceding-sibling::*[1][. = ('Autor', 'Herausgeber')]]//string[normalize-space()]/replace(., '\s+', ' '), ' '))[1]"/>
-      </dc:creator>
-      </xsl:if>
-
-      <dc:date>
-        <xsl:value-of select="(replace(normalize-space(string-join($epub-metadata//key[. = 'Copyright']/following-sibling::*[1]/descendant-or-self::string, ' '))[normalize-space()], 
-                                            '^\s*©\s+(\d{4}).+$', 
-                                            '$1'), 
-                                    format-date(current-date(), '[Y]')
-                                   )[1]"/>
-      </dc:date>
-      <dc:publisher>
-        <xsl:value-of select="($epub-metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Verlag']], 'transcript Verlag')[1]"/>
-      </dc:publisher>
-
       <dc:language>
-        <xsl:value-of select="($epub-metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Sprache']], 'de-DE')[1]"/>
+        <xsl:value-of select="($html//html:head/html:meta[@name = 'lang']/@content, $html//html:html/@xml:lang)[1]"/>
       </dc:language>
-
-      <xsl:if test="$epub-metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Copyright']]">
-      <dc:rights>
-        <xsl:value-of select="normalize-space(string-join($epub-metadata//key[. = ('Copyright')]/following-sibling::*[1][normalize-space()]/descendant-or-self::string, ' '))"/>
-      </dc:rights>
-      </xsl:if>
-      <xsl:if test="$epub-metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Schlagworte']]">
-        <xsl:for-each select="tokenize($epub-metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Schlagworte']], ';')[normalize-space()]">
-          <dc:subject>
-            <xsl:value-of select="."/>
-          </dc:subject>
-        </xsl:for-each>
-      </xsl:if>
+      <xsl:for-each select="$html//html:head/html:meta[@name[starts-with(.,  'DC')][. ne 'DC.identifier']]">
+        <xsl:element name="{translate(lower-case(@name), '.', ':')}">
+          <xsl:value-of select="@content"/>
+        </xsl:element>
+      </xsl:for-each>
     </xsl:copy>
   </xsl:template>
   
+
+      <xsl:variable name="footnote-heading-title_de" select="'Anmerkungen'" />
+      <xsl:variable name="footnote-heading-title_en" select="'Notes'" />
+      
+      <xsl:variable name="toc-heading-title_de" select="'Inhaltsverzeichnis'" />
+      <xsl:variable name="toc-heading-title_en" select="'Table of Contents'" />
+      
+      <xsl:variable name="imprint-heading-title_de" select="'Impressum'" />
+      <xsl:variable name="imprint-heading-title_en" select="'Copyright notice'" />
+         
+      <xsl:variable name="book-heading-title_de" select="'Über das Buch'" />
+      <xsl:variable name="book-heading-title_en" select="'About the book'" />
+      
+      <xsl:variable name="landmarks-heading-title_de" select="'Übersicht'" />
+      <xsl:variable name="landmarks-heading-title_en" select="'Overview'" />
+
+      <xsl:variable name="motto-heading-title_de" select="'Motto'" />
+      <xsl:variable name="motto-heading-title_en" select="'Epigraph'" />
+      
+      
+      <xsl:variable name="titlepage-heading-title_de" select="'Titel'" />
+      <xsl:variable name="titlepage-heading-title_en" select="'Title'" />
+      
+  <xsl:variable name="main-lang" select="$html/*:html/*:head/*:meta[@name eq 'lang']/@content"/>
+
+  <xsl:template match="epub-config/types/type/@generate-heading[. = ('true', 'yes')]">
+    <xsl:variable name="type" select="../@name"/>
+    <xsl:variable name="target-heading" select="$html//*[@epub:type = $type]/descendant::*[local-name() = ('h1', 'h2')][1]/@title"/>
+    <xsl:if test="$target-heading[normalize-space()]"><xsl:attribute name="heading" select="$target-heading"/></xsl:if>
+  </xsl:template> 
+
+  <xsl:template match="epub-config/types/type[@name = 'titlepage']/@generate-heading[. = ('true', 'yes')]" priority="3">
+    <xsl:variable name="type" select="../@name"/>
+    <xsl:variable name="title" select="$html//*[@epub:type = $type][1]//descendant::*[local-name() = ('h1', 'h2')][1]/@title" as="xs:string?"/>
+    <xsl:attribute name="heading" select="if ($main-lang = 'en') then $titlepage-heading-title_en else $titlepage-heading-title_de" separator=" "/>
+  </xsl:template> 
+
+  <xsl:template match="epub-config/types/type[@name = 'preamble']/@generate-heading[. = ('true', 'yes')]" priority="3">
+    <xsl:variable name="type" select="../@name"/>
+    <xsl:variable name="title" select="$html//*[@epub:type = $type][1]//descendant::*[local-name() = ('h1', 'h2')][1]/@title" as="xs:string?"/>
+    <xsl:attribute name="heading" select="if (matches($title, '\S')) 
+                                          then $title 
+                                          else 
+                                            if ($main-lang = 'en') then $book-heading-title_en else $book-heading-title_de" separator=" "/>
+  </xsl:template>
+  
+  <xsl:template  match="epub-config/types/type[@name = 'imprint']/@generate-heading[. = ('true', 'yes')]" priority="3">
+    <xsl:variable name="type" select="../@name"/>
+    <xsl:variable name="title" select="$html//*[@epub:type = $type][1]//descendant::*[local-name() = ('h1', 'h2')][1]/@title" as="xs:string?"/>
+    <xsl:attribute name="heading" select="if (matches($title, '\S')) 
+                                          then $title 
+                                          else 
+                                            if ($main-lang = 'en') then $imprint-heading-title_en else $imprint-heading-title_de" separator=" "/>
+  </xsl:template> 
+
+  <xsl:template match="epub-config/types/type[@name = 'landmarks']/@generate-heading[. = ('true', 'yes')]" priority="3">
+    <xsl:attribute name="heading" select="if ($main-lang = 'en') then $landmarks-heading-title_en else $landmarks-heading-title_de" separator=" "/>
+  </xsl:template> 
+
+  <xsl:template  match="epub-config/types/type[@name = 'toc']/@generate-heading[. = ('true', 'yes')]" priority="3">
+    <xsl:variable name="type" select="../@name"/>
+    <xsl:variable name="title" select="$html//*[@epub:type = $type][1]//descendant::*[local-name() = ('h1', 'h2')][1]/@title" as="xs:string?"/>
+    <xsl:attribute name="heading" select="if (matches($title, '\S')) 
+                                          then $title 
+                                          else 
+                                            if ($main-lang = 'en') then $toc-heading-title_en else $toc-heading-title_de" separator=" "/>
+  </xsl:template> 
+
 </xsl:stylesheet>

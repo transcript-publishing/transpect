@@ -39,7 +39,7 @@
     Please note that due to limitations of Relax NG (or of the schema designer),
     the required order of type declarations is toc, landmarks, everything else.
     -->
-	  <type name="toc" heading="Table of Contents" hidden="true" file="nav"/>
+	  <type name="toc" generate-heading="yes" hidden="true"/>
 	  <!--
       There may be an optional hidden attribute for landmarks and toc (values: true|false,
       default: true). It applies only to generated nav elements.
@@ -52,7 +52,7 @@
       will be considered when generating the landmarks. 
 	    fallback-id-for-landmark: See the embedded documentation in the Relax NG schema. 
 	  --> 
-    <type name="landmarks" heading="Übersicht" types="cover titlepage toc epigraph loi lot imprint copyright-page"/>
+    <type name="landmarks" generate-heading="yes" types="cover titlepage toc epigraph loi lot imprint copyright-page"/>
     <type name="cover" heading="Cover" file="cover" guide-type="text"/>
     <type name="frontmatter" heading="Vorspann"/>
     <type name="bodymatter" heading="Hauptteil"/>
@@ -61,19 +61,19 @@
     <type name="tr:bio" file="author"/>
     <type name="contributors" file="author" heading="Über die Autoren"/>
     <type name="tr:about-the-book" file="about-the-book"/>
-    <type name="preamble" heading="Über das Buch" file="about-the-book"/>
-    <type name="titlepage" heading="Titel" file="title"/>
-    <type name="epigraph" heading="Motto"/>
+    <type name="preamble" generate-heading="yes" heading="Über das Buch" file="about-the-book"/>
+    <type name="titlepage" generate-heading="yes" heading="Titel" file="title"/>
+    <type name="epigraph" generate-heading="yes" heading="Motto"/>
 <!--    <type name="halftitlepage" file="halftitle" title="Frontmatter"/>-->
     <type name="abstract" file="about-the-content"/>
     <type name="fulltitle" file="title"/>
-    <type name="imprint" file="imprint" heading="Impressum"/>
+    <type name="imprint" generate-heading="yes" file="imprint" heading="Impressum"/>
     <type name="part" file="part"/>
     <type name="chapter" file="chapter"/>
     <type name="appendix" file="appendix"/>
     <type name="glossary" file="glossary"/>
-    <type name="lot" file="lot" heading="List of Tables"/>
-    <type name="loi" file="loi" heading="List of Figures"/>
+    <type name="lot" file="lot" generate-heading="yes" heading="List of Tables"/>
+    <type name="loi" file="loi" generate-heading="yes" heading="List of Figures"/>
     <type name="other-credits" file="other-credits"/>
     <type name="tr:popup" file="popup"/>
     <type name="tr:advertisement" file="advertisement"/>
@@ -95,7 +95,8 @@
     <unconditional-split elt="div" attr="id" attval="epub-cover-image-container"/>
     <unconditional-split elt="section" attr="class" attval="halftitle"/>
     <unconditional-split elt="section" attr="epub:type" attval="titlepage"/>
-<!--    <unconditional-split elt="nav" attr="epub:type" attval="toc"/>-->
+    <unconditional-split elt="nav" attr="epub:type" attval="toc"/>
+<!--    <unconditional-split elt="nav" attr="id" attval="landmarks-navigation"/>-->
     <unconditional-split elt="section" attr="class" attval="imprint"/>
     <unconditional-split elt="div" attr="class" attval="loi"/>
     <unconditional-split elt="div" attr="class" attval="lot"/>

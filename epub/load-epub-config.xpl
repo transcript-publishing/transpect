@@ -19,6 +19,10 @@
   
   <p:input port="parameters" kind="parameter" primary="true"/>
   
+  <p:input port="htmltemplates" sequence="true">
+     <p:documentation>htmltemplates document</p:documentation>
+  </p:input>
+
   <p:output port="result" primary="true" sequence="true">
     <p:documentation>
       The patched epub-config document
@@ -152,6 +156,7 @@
     <p:input port="source">
       <p:pipe port="result" step="load-epub-config-template"/>
       <p:pipe port="source" step="load-epub-config"/>
+      <p:pipe port="htmltemplates" step="load-epub-config"/>
     </p:input>
     <p:input port="stylesheet">
       <p:pipe port="stylesheet" step="load-epub-config"/>
