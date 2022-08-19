@@ -223,9 +223,23 @@
 
 
 \newenvironment{authorbio}{%
-  \noindent%
+  \parskip1\baselineskip\noindent%
 }{%
-  \vskip1\baselineskip%
+  \par%
+}
+
+\newenvironment{emphPar}[1][\relax]{%
+  \def\tp@temp{#1}%
+  \parskip1\baselineskip\noindent\textbf{\tp@temp}%
+  \if\tp@temp\relax%
+  \else%
+    \ifx\empty\tp@temp\empty%
+    \else%
+      \space%
+    \fi%
+  \fi%
+}{%
+  \par%
 }
 
 % \def\@abstract#1{%
