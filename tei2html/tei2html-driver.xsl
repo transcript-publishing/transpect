@@ -164,7 +164,7 @@
       </xsl:call-template>
     </nav>
   </xsl:template>
-  
+<!--  
   <xsl:template name="landmarks">
     <nav class="landmarks" epub:type="landmarks" id="landmarks">
       <ol>
@@ -192,7 +192,7 @@
         </li>
       </ol>
     </nav>
-  </xsl:template>
+  </xsl:template>-->
   
   <xsl:template name="generate-toc-headline">
     <h3 class="toc-title">
@@ -451,8 +451,8 @@
     <xsl:variable name="subtitle" select="preceding-sibling::head[@type eq 'sub']" as="element(head)?"/>
     <xsl:element name="{if(matches($tei2html:epub-type, '3')) then 'li' else 'p'}">
       <xsl:attribute name="class" select="concat('toc', tei2html:heading-level(.))"/>
-      <xsl:apply-templates select="$author" mode="#current"/>
       <a href="#{(@xml:id, generate-id())[1]}">
+        <xsl:apply-templates select="$author" mode="#current"/>
         <xsl:if test="label">
           <xsl:apply-templates select="label/node()" mode="strip-indexterms-etc"/>
           <xsl:apply-templates select="label" mode="label-sep"/>
