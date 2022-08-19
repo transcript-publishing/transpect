@@ -112,9 +112,9 @@
     <xsl:if test="$metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Kurztext']]">
       <meta name="DC.description" content="{normalize-space(string-join($metadata//key[. = ('Kurztext')]/following-sibling::*[1]/descendant-or-self::string, ' '))}"/>
     </xsl:if>
-    <meta name="DC.date" content="{(replace(normalize-space(string-join($metadata//key[. = 'Copyright']/following-sibling::*[1]/descendant-or-self::string, ' '))[normalize-space()], 
+    <meta name="DC.date" content="{(replace(normalize-space(string-join($metadata//key[. = 'Copyright']/following-sibling::*[1]/descendant-or-self::string, ' ')), 
                                             '^\s*©\s+(\d{4}).+$', 
-                                            '$1'), 
+                                            '$1')[normalize-space()], 
                                     format-date(current-date(), '[Y]')
                                    )[1]}"/>
     <xsl:if test="$metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Copyright']]">
