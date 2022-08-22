@@ -126,7 +126,7 @@
     <xsl:attribute name="heading" select="if (matches($title, '\S')) 
                                           then $title 
                                           else 
-                                            if ($main-lang = 'en') then $book-heading-title_en else $book-heading-title_de" separator=" "/>
+                                            if ($main-lang = 'en') then $lot-heading-title_en else $lot-heading-title_de" separator=" "/>
   </xsl:template>
   
     <xsl:template match="epub-config/types/type[@name = 'loi']/@generate-heading[. = ('true', 'yes')]" priority="3">
@@ -135,7 +135,7 @@
     <xsl:attribute name="heading" select="if (matches($title, '\S')) 
                                           then $title 
                                           else 
-                                            if ($main-lang = 'en') then $book-heading-title_en else $book-heading-title_de" separator=" "/>
+                                            if ($main-lang = 'en') then $loi-heading-title_en else $loi-heading-title_de" separator=" "/>
   </xsl:template>
   
 </xsl:stylesheet>
