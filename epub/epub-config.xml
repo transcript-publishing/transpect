@@ -72,8 +72,8 @@
     <type name="chapter" file="chapter"/>
     <type name="appendix" file="appendix"/>
     <type name="glossary" file="glossary"/>
-    <type name="lot" file="lot" generate-heading="yes" heading="List of Tables"/>
-    <type name="loi" file="loi" generate-heading="yes" heading="List of Figures"/>
+    <type name="lot" file="lot" generate-heading="yes"/>
+    <type name="loi" file="loi" generate-heading="yes"/>
     <type name="other-credits" file="other-credits"/>
     <type name="tr:popup" file="popup"/>
     <type name="tr:advertisement" file="advertisement"/>

@@ -68,6 +68,12 @@
       
       <xsl:variable name="titlepage-heading-title_de" select="'Titel'" />
       <xsl:variable name="titlepage-heading-title_en" select="'Title'" />
+  
+      <xsl:variable name="lot-heading-title_de" select="'Tabellenverzeichnis'" />
+      <xsl:variable name="lot-heading-title_en" select="'List of images'" />
+  
+      <xsl:variable name="loi-heading-title_de" select="'Abbildungsverzeichnis'" />
+      <xsl:variable name="loi-heading-title_en" select="'List of tables'" />
       
   <xsl:variable name="main-lang" select="$html/*:html/*:head/*:meta[@name eq 'lang']/@content"/>
 
@@ -114,4 +120,22 @@
                                             if ($main-lang = 'en') then $toc-heading-title_en else $toc-heading-title_de" separator=" "/>
   </xsl:template> 
 
+  <xsl:template match="epub-config/types/type[@name = 'lot']/@generate-heading[. = ('true', 'yes')]" priority="3">
+    <xsl:variable name="type" select="../@name"/>
+    <xsl:variable name="title" select="$html//*[@epub:type = $type][1]//descendant::*[local-name() = ('h1', 'h2')][1]/@title" as="xs:string?"/>
+    <xsl:attribute name="heading" select="if (matches($title, '\S')) 
+                                          then $title 
+                                          else 
+                                            if ($main-lang = 'en') then $book-heading-title_en else $book-heading-title_de" separator=" "/>
+  </xsl:template>
+  
+    <xsl:template match="epub-config/types/type[@name = 'loi']/@generate-heading[. = ('true', 'yes')]" priority="3">
+    <xsl:variable name="type" select="../@name"/>
+    <xsl:variable name="title" select="$html//*[@epub:type = $type][1]//descendant::*[local-name() = ('h1', 'h2')][1]/@title" as="xs:string?"/>
+    <xsl:attribute name="heading" select="if (matches($title, '\S')) 
+                                          then $title 
+                                          else 
+                                            if ($main-lang = 'en') then $book-heading-title_en else $book-heading-title_de" separator=" "/>
+  </xsl:template>
+  
 </xsl:stylesheet>
