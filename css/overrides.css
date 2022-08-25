@@ -250,6 +250,7 @@ p.dnb-headline {
 /* 
  * toc
  */
+nav#landmarks-navigation {display:none;}
 nav ol li {list-style-type:none;}
 
 #toc ol {
