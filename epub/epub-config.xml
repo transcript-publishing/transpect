@@ -39,7 +39,7 @@
     Please note that due to limitations of Relax NG (or of the schema designer),
     the required order of type declarations is toc, landmarks, everything else.
     -->
-	  <type name="toc" generate-heading="yes" hidden="true"/>
+	  <type name="toc" generate-heading="yes"/>
 	  <!--
       There may be an optional hidden attribute for landmarks and toc (values: true|false,
       default: true). It applies only to generated nav elements.
@@ -52,7 +52,7 @@
       will be considered when generating the landmarks. 
 	    fallback-id-for-landmark: See the embedded documentation in the Relax NG schema. 
 	  --> 
-    <type name="landmarks" generate-heading="yes" types="cover titlepage toc epigraph loi lot imprint copyright-page"/>
+    <type name="landmarks" generate-heading="yes" types="cover titlepage toc epigraph loi lot imprint copyright-page" hidden="true"/>
     <type name="cover" heading="Cover" file="cover" guide-type="text"/>
     <type name="frontmatter" heading="Vorspann"/>
     <type name="bodymatter" heading="Hauptteil"/>
