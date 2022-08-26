@@ -40,7 +40,7 @@
     \par\vfill
     \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
     \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
-    \tpIfComp{Volume}{{\hskip1.5em\lower.5\dp\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\hskip1.5em\ignorespaces\tpUseComp{Volume}}}{}%
+    \tpIfComp{Volume}{{\enskip\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip\ignorespaces\tpUseComp{Volume}}}{}%
   }%
   \tpSetProperty{titlepage-ii}{%
     \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
