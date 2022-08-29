@@ -1056,11 +1056,9 @@
 
   <xsl:function name="tr:determine-fig-class" as="xs:string?">
     <xsl:param name="elt" as="element(*)"/>
-    <xsl:sequence select="if (matches($elt/@role, '^figure-d$')) 
-                          then 'class=wide' 
-                          else if (matches($elt/@role, '^figure-[a-z]$'))
-                               then concat('class=', upper-case(replace($elt/@role, '^figure-', '')))
-                               else ()"/>
+    <xsl:sequence select="if (matches($elt/@role, '^figure-[a-z]$'))
+                          then concat('class=', upper-case(replace($elt/@role, '^figure-', '')))
+                          else ()"/>
   </xsl:function>
 
   <template context="dbk:bridgehead">
