@@ -1,6 +1,12 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-fonts}[2021/04/09 transcript]\relax
 
+\if@altFonts
+  \typeout{ALTERNATIVE FONTS}
+\else
+  \typeout{STANDARD FONTS}
+\fi
+
 \babelfont{rm}[%
   Path=fonts/Alegreya/Alegreya/,%
   BoldFont = Alegreya-Bold.ttf,%
@@ -28,7 +34,7 @@
   ItalicFont = BarlowCondensed-Italic.ttf,%
   BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
   WordSpace=1.1,%
-  LetterSpace=1.1,%
+  LetterSpace=3,%
   FakeStretch=1.02,%
   Color=353132]{BarlowCondensed-Regular.ttf}
 \DeclareRobustCommand{\ltseries}{\fontseries{lt}\selectfont}
@@ -74,7 +80,7 @@
   FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},%
   ItalicFont = BarlowCondensed-Italic.ttf,%
   BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
-  WordSpace=2.0,%
+  WordSpace=1.0,%
   LetterSpace=5.0,%
   FakeStretch=1.02,%
   Color=353132]{BarlowCondensed-Regular.ttf}
