@@ -910,21 +910,6 @@
     </xsl:if>
   </template>
   
-  <!--  * 
-        * preliminary common override, hoping to have a standard solution here, soonish
-        * https://redmine.le-tex.de/issues/12178
-        * -->
-  
-  <template context="/dbk:*/dbk:colophon[@role = 'dedication']
-                    |/dbk:*/dbk:dedication">
-    <xsl:param name="keep" as="xs:boolean?" tunnel="yes"/>
-    <xsl:if test="$keep">
-      <rule name="widmung" type="env" break-after="2" break-before="2">
-        <param/>
-      </rule>
-    </xsl:if>
-  </template>
-  
   <xsl:template match="dbk:title//text()[matches(., '[&#x1e24;&#x1e25;&#x1e6f;&#x1e0d;&#x1e2a;]+')]" mode="xml2tex" priority="100000">
     <xsl:variable name="style" as="attribute()*" 
                   select="parent::*/(@css:font-weight, @css:font-style)"/>
