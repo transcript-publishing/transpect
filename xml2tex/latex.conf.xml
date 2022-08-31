@@ -13,6 +13,7 @@
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
   <xsl:param name="caption-pos" as="xs:string?"/>
+  <xsl:param name="sans-font"   as="xs:string?"/>
   
   <xsl:variable name="create-customer-toctitles" select="true()" as="xs:boolean"/>
   
@@ -178,6 +179,7 @@
                                  else if($notes-type eq 'endnotes') 
                                                                      then ',endnotes' 
                                  else (),
+                                 if($sans-font eq 'noto-condensed') then ',altFonts' else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  xml2tex:foreign-scripts(root()),
                                  ']{transpect}&#xa;')"/>
