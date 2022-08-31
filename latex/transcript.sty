@@ -10,12 +10,18 @@
 \ProvidesPackage{transcript}[2021/04/09 transcript]\relax
 
 %% Paketoptionen
-%% durchreichen der script-Optionen
+%% Durchreichen der script-Optionen
 \define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}}
 \def\ts@caps{top}%
 \define@key{transcript.sty}{captions}[top]{\gdef\ts@caps{#1}}
+
+%% Alternative Fonts, zuschaltbar im Falle fehlender Zeichen in den Standardfonts.
+\newif\if@altFonts \@altFontsfalse
+\DeclareOptionX{altFonts}{\@altFontstrue}
+
 \DeclareOptionX{nohead}{\global\let\n@head\relax}
 \ProcessOptionsX\relax
+
 
 %% Seitenzähler unter der Annahme, dass keine Titelei erzeugt wird.
 %% Das Titeleimodul setzt den Seitenzähler bei Aufruf auf 1.
