@@ -50,9 +50,10 @@
   
   <!-- https://redmine.le-tex.de/issues/13098 -->
   
-  <xsl:template match="array[preceding-sibling::*[1][self::key][. eq 'Bibliografische Information']]/string[1]" priority="5"/>
+ <!--  <xsl:template match="array[preceding-sibling::*[1][self::key][. eq 'Bibliografische Information']]/string[1]" priority="5"/>-->
     
-  <xsl:template match="string[preceding-sibling::*[1][self::key][. eq 'Copyright']]/b" priority="5">
+  <xsl:template match="string[preceding-sibling::*[1][self::key][. eq 'Copyright']]/b | 
+                       array[preceding-sibling::*[1][self::key][. eq 'Copyright']]/string/b" priority="5">
     <xsl:apply-templates/>
   </xsl:template>
   
