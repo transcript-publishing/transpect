@@ -1,0 +1,208 @@
+<div class="form-group">
+  <label for="title_param" class="col-sm-3 control-label">
+    Titelei
+  </label>
+  <div class="col-sm-1">
+    <input id="title_param" type="radio" name="add_params[TITLEPAGES]" value="yes"/>
+    <p>Ja</p>
+  </div>
+  <div class="col-sm-1">
+    <input id="title_param_no" type="radio" name="add_params[TITLEPAGES]" value="no" checked="checked"/>
+    <p>Nein</p>
+  </div>
+</div>
+<div class="form-group">
+  <label for="tocdepth_param" class="col-sm-3 control-label">
+    Inhaltsverzeichnisebenen
+  </label>
+  <div class="col-sm-4">
+      <select name="add_params[TOCDEPTH]" size="1">
+	<option>1</option>
+	<option>2</option>
+	<option selected="selected">3</option>
+	<option>4</option>
+	<option>5</option>
+      </select>
+  </div>
+</div>
+<div class="form-group">
+  <label for="numberingdepth_param" class="col-sm-3 control-label">
+    Nummerierungstiefe
+  </label>
+  <div class="col-sm-4">
+      <select name="add_params[NUMBERINGDEPTH]" size="1">
+	<option>1</option>
+	<option>2</option>
+	<option>3</option>
+	<option selected="selected">4</option>
+	<option>5</option>
+      </select>
+  </div>
+</div>
+<div class="form-group">
+  <label for="notes_type_param" class="col-sm-3 control-label">
+    Anmerkungen
+  </label>
+  <div class="col-sm-1">
+    <input id="notes_type_param" type="radio" name="add_params[NOTES_TYPE]" value="footnotes" checked="checked"/>
+    <p>Fußnoten</p>
+  </div>
+  <div class="col-sm-1">
+    <input id="notes_type_param_no" type="radio" name="add_params[NOTES_TYPE]" value="endnotes"/>
+    <p>Endnoten</p>
+  </div>
+</div>
+<div class="form-group">
+  <label for="notes_per_chapter_param" class="col-sm-3 control-label">
+    Kapitelweise Endnoten
+  </label>
+  <div class="col-sm-4">
+    <input id="notes_per_chapter_param" type="checkbox" name="add_params[NOTES_PER_CHAPTER]" value="yes"/>
+  </div>
+</div>
+<div class="form-group">
+  <label for="endnotes_with_chapter_param" class="col-sm-3 control-label">
+    Endnotenverzeichnis mit Kapitelüberschriften
+  </label>
+  <div class="col-sm-4">
+    <input id="endnotes_with_chapter_param" type="checkbox" name="add_params[ENDNOTES_WITH_CHAPTER]" value="yes"/>
+  </div>
+</div>
+<div class="form-group">
+  <label for="captionpos_param" class="col-sm-3 control-label">
+    Captions
+  </label>
+  <div class="col-sm-4">
+    <select name="add_params[CAPTION_POS]" size="1">
+      <option value="top">oben</option>
+      <option value="bottom">unten</option>
+    </select>
+  </div>
+</div>
+<div class="form-group">
+  <label for="layout_param" class="col-sm-3 control-label">
+    Layout
+  </label>
+  <div class="col-sm-4">
+      <select name="add_params[LAYOUT]" size="1">
+	<option>A</option>
+	<option>B</option>
+	<option>C</option>
+	<option>E</option>
+      </select>
+  </div>
+</div>
+<div class="form-group">
+  <label for="export_chunks_param" class="col-sm-3 control-label" title="Hierfür müssen Metadaten-Absätze enthalten sein">
+    Chunks exportierten
+  </label>
+  <div class="col-sm-4">
+    <input id="export_chunks_param" type="checkbox" name="add_params[EXPORT_CHUNKS]" value="yes"/>
+  </div>
+</div>
+<div class="form-group">
+  <label for="gen_idml_param" class="col-sm-3 control-label">
+    IDML generieren
+  </label>
+  <div class="col-sm-4">
+    <input id="gen_idml_param" type="checkbox" name="add_params[GEN_IDML]" value="yes"/>
+  </div>
+</div>
+<div class="form-group">
+  <label for="timeout_param" class="col-sm-3 control-label">
+    Timeout Konvertierung (sek.)
+  </label>
+  <div class="col-sm-4">
+    <input id="timeout_param" type="text" name="add_params[TIMEOUT]" size="4" minlength="1" maxlength="6" value="3600">
+  </div>
+</div>
+<!--
+<h2>Zusätzliche Outputs</h2>
+<div class="form-group">
+  <label for="output_imagezip_param" class="col-sm-3 control-label">
+    Bild-Archiv
+  </label>
+  <div class="col-sm-4">
+    <input id="output_imagezip_param" type="checkbox" name="add_params[OUTPUT_IMAGEZIP]" value="yes"/>
+  </div>
+</div>
+<div class="form-group">
+  <label for="output_dgonline_param" class="col-sm-3 control-label">
+    DG-Online-Data-Paket
+  </label>
+  <div class="col-sm-4">
+    <input id="output_dgonline_param" type="checkbox" name="add_params[OUTPUT_DGONLINE]" value="yes"/>
+  </div>
+</div>
+<div class="form-group">
+  <label for="output_dgbits_param" class="col-sm-3 control-label">
+    DG-BITS-Paket
+  </label>
+  <div class="col-sm-4">
+    <input id="output_dgbits_param" type="checkbox" name="add_params[OUTPUT_DGBITS]" value="yes"/>
+  </div>
+</div>
+<div class="form-group">
+  <label for="output_epub_param" class="col-sm-3 control-label">
+    EPUB
+  </label>
+  <div class="col-sm-4">
+    <input id="output_epub_param" type="checkbox" name="add_params[OUTPUT_EPUB]" value="yes"/>
+  </div>
+</div>
+<div class="form-group">
+  <label for="output_html_param" class="col-sm-3 control-label">
+    HTML
+  </label>
+  <div class="col-sm-4">
+    <input id="output_html_param" type="checkbox" name="add_params[OUTPUT_HTML]" value="yes"/>
+  </div>
+</div>
+<div class="form-group">
+  <label for="output_bibl_param" class="col-sm-3 control-label">
+    BIBL
+  </label>
+  <div class="col-sm-4">
+    <input id="output_bibl_param" type="checkbox" name="add_params[OUTPUT_BIBL]" value="yes"/>
+  </div>
+</div>-->
+<script type="text/javascript">
+  $(document).ready(function () {
+    const form = document.querySelector('form');
+    const localData = JSON.parse(localStorage.getItem('transpect-form'))
+    if (localData != null) {
+      for (let i = 0; i < localData.length;++ i) {
+        const name = localData[i][0];
+        const val = localData[i][1];
+        if (name.match('^add_params')) {
+          var nodes = form.querySelectorAll("*[name='" + name + "']");
+          for (const el of nodes) {
+            if (el.tagName == 'SELECT') {
+              const selected = el.querySelector("option[selected='selected']");
+              if (selected != null) {
+                selected.removeAttribute('selected')
+              };
+              for (let i = 0; i < el.children.length; i++) {
+                if (el.children[i].innerHTML == val) {
+                  el.children[i].setAttribute('selected', 'selected');
+                }
+              }
+            } else if (el.tagName == 'INPUT') {
+              if (el.getAttribute('value') == val) {
+                el.setAttribute('checked', 'checked');
+              } else {
+                el.removeAttribute('checked')
+              }
+            }
+          }
+        }
+      }
+    }
+    form.addEventListener('submit', function () {
+      const data = new FormData(form);
+      const arr = Array. from (data);
+      localStorage.removeItem('transpect-form');
+      localStorage.setItem('transpect-form', JSON.stringify(arr));
+    });
+  });
+</script>
