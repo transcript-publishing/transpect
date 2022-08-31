@@ -125,7 +125,21 @@
       <xsl:apply-templates mode="#current"/>
     </p>
   </xsl:template>
-  
+
+  <xsl:template match="term[@key]/seg[@type='remap-para']" mode="tei2html" priority="-1">
+    <xsl:apply-templates mode="#current"/>
+    <xsl:if test="following-sibling::*[1][self::seg[@type='remap-para']]">
+      <br/>
+    </xsl:if>
+  </xsl:template>
+
+    
+  <xsl:template match="term[@key eq 'Lizenzlogo']" mode="tei2html">
+     <p class="{lower-case(translate(../@key, ' ', '-'))}">
+      <img src="{concat('http://this.transpect.io/a9s/ts/logos/cc/', replace(., '\.eps', '.png', 'i'))}" alt="Logo {normalize-space(../term[@key eq 'Lizenz'])}"/>
+    </p>
+  </xsl:template>
+
   <!-- title-page -->
   
   <xsl:template match="term[@key eq 'Titel']" mode="tei2html">
