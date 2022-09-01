@@ -145,7 +145,7 @@
   <xsl:variable name="funder-name" as="xs:string?" 
                 select="$metadata/dbk:keyword[@role eq 'Fordername']"/>
   <xsl:variable name="funder-logo" as="xs:string*" 
-                select="$metadata/dbk:keyword[@role eq 'Forderlogos']/text()"/>
+                select="$metadata/dbk:keyword[@role eq 'Forderlogos']//text()"/>
   <xsl:variable name="funder-pretext" as="xs:string?" 
                 select="$metadata/dbk:keyword[@role eq 'Fordertext']"/>
   <xsl:variable name="funder-posttext" as="xs:string?" 
