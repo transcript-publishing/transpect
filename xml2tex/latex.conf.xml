@@ -179,7 +179,6 @@
                                  else if($notes-type eq 'endnotes') 
                                                                      then ',endnotes' 
                                  else (),
-                                 if($sans-font eq 'noto-condensed') then ',altFonts' else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  xml2tex:foreign-scripts(root()),
                                  ']{transpect}&#xa;')"/>
@@ -195,6 +194,7 @@
                                  lower-case($layout),
                                  ',captions=',
                                  if($caption-pos eq 'bottom') then 'bottom' else 'top',
+                                 if($sans-font eq 'noto-condensed') then ',altFonts' else (),
                                  ']{transcript}&#xa;')"/>
     
     <xsl:if test="$langs = 'zh'">
@@ -1066,5 +1066,9 @@
       </xsl:if>
     </rule>
   </template>
+
+  <xsl:template match="dbk:keyword[@role='Bibliografische_Information']/dbk:para[1][matches(., '^Bibliogra')]" mode="strip-meta" priority="500">
+    <!-- is set via style but kept until here to be used in epub/bits. https://redmine.le-tex.de/issues/13098#note-4 -->
+  </xsl:template>
 
 </set>
