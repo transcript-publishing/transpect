@@ -174,7 +174,7 @@
       <xsl:call-template name="generate-toc-headline"/>
       <xsl:apply-templates select="/TEI/text/front/divGen[@type = 'toc']/*:header[@rend = 'chunk-meta-sec']" mode="tei2html"/>
       <xsl:call-template name="generate-toc-body">
-        <xsl:with-param name="toc_level" select="$toc-depth"/>
+        <xsl:with-param name="toc_level" select="$toc-depth + 2"/>
       </xsl:call-template>
     </nav>
   </xsl:template>
@@ -621,5 +621,23 @@
     </xsl:for-each-group>
   </xsl:template>
   
+  <xsl:template name="lot">
+    <xsl:if test="//table/head[normalize-space()]">
+      <div epub:type="lot" class="lox lot">
+        <h3>List of Tables</h3>
+        <xsl:apply-templates select="//table[head[normalize-space()]]" mode="lox"/>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="lof">
+    <xsl:if test="//figure[normalize-space(head)]">
+      <div epub:type="loi" class="lox loi">
+        <h3>List of Figures</h3>
+        <xsl:apply-templates select="//figure[normalize-space(string-join(head, ' '))]" mode="lox"/>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
 
 </xsl:stylesheet>
