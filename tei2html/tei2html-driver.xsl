@@ -134,8 +134,8 @@
   </xsl:template>
 
     
-  <xsl:template match="term[@key eq 'Lizenzlogo']" mode="tei2html">
-     <p class="{lower-case(translate(../@key, ' ', '-'))}">
+  <xsl:template match="term[@key eq 'Lizenzlogo'][normalize-space()]" mode="tei2html">
+     <p class="{lower-case(translate(@key, ' ', '-'))}">
       <img src="{concat('http://this.transpect.io/a9s/ts/logos/cc/', replace(., '\.eps', '.png', 'i'))}" alt="Logo {normalize-space(../term[@key eq 'Lizenz'])}"/>
     </p>
   </xsl:template>
