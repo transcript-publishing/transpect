@@ -1071,4 +1071,10 @@
     <!-- is set via style but kept until here to be used in epub/bits. https://redmine.le-tex.de/issues/13098#note-4 -->
   </xsl:template>
 
+  <xsl:template match="dbk:keywordset[@role='titlepage']/dbk:keyword[not(@role = ('Herausgeber', 'Autor', 'Herausgeberinformationen'))]/dbk:para[not(position() eq last())]" mode="strip-meta" priority="4">
+    <xsl:apply-templates mode="#current"/>
+    <!-- https://redmine.le-tex.de/issues/13334#note-5-->
+    <xsl:text>\par </xsl:text>
+  </xsl:template>
+
 </set>
