@@ -45,7 +45,7 @@
   \tpSetProperty{titlepage-ii}{%
     \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
     \tpIfComp{Acknowledgements}{{\itshape\large\tpUseComp{Acknowledgements}}\par\vskip\baselineskip}{}%
-    \tpIfComp{Editorial}{{\justify\tpUseComp{Editorial}\par\vskip\baselineskip}}{}%
+    \tpIfComp{Editorial}{{\justify{\sffamily\sbseries\large Editorial}\par\vskip\baselineskip\tpUseComp{Editorial}\par\vskip\baselineskip}}{}%
     \vspace*{\fill}%
     \bgroup
       {\justify\tpUseProperty{bio-block}}%
