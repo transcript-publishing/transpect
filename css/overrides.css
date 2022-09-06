@@ -346,3 +346,8 @@ div.tsboxgrey{
 div.tsboxborder { 
   border:1px solid black;
 }
+
+p.tsauthordescription {
+  margin: 1em 0 0 0;
+  text-indent: 0em;
+}
