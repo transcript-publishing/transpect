@@ -351,3 +351,7 @@ p.tsauthordescription {
   margin: 1em 0 0 0;
   text-indent: 0em;
 }
+
+p.tstablecaption {
+  margin-top: 1em;
+}
