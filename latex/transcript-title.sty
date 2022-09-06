@@ -67,14 +67,14 @@
       \tpUseComp{AuthorNameList}%
     \fi}%
     \par
-    \vskip5bp
+    \vskip\dimexpr5bp-0.65mm\relax
     {\raggedright
       \leavevmode
       \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{Title}%
       \tpIfComp{Subtitle}{%
         \par
         \normalfont\Large
-        \sffamily\vskip5bp
+        \sffamily\vskip\dimexpr5bp+0.65mm\relax
         \Large
         \topsep0pt \partopsep0pt % no space before
         \flushleft\tpUseComp{Subtitle}\endflushleft}{}%
