@@ -182,17 +182,19 @@
   ItalicFont = Alegreya-Italic.ttf,%
   BoldItalicFont = Alegreya-BoldItalic.ttf]{Alegreya-Regular.ttf}
 
+%% temporary fix for non-resetting word spacing with \foreignlanguage{greek} on document-level:
 \tpDeclareBabelFont{greek}{[%
     BoldFont = NotoSerif-Bold.ttf,%
     ItalicFont = NotoSerif-Italic.ttf,%
     BoldItalicFont = NotoSerif-BoldItalic.ttf,%
     Path = ./fonts/Noto/,%
+    %WordSpace = 1.25
     ]{NotoSerif-Regular.ttf}}
   {[BoldFont = NotoSans-Bold.ttf,%
     ItalicFont = NotoSans-Italic.ttf,%
     BoldItalicFont = NotoSans-BoldItalic.ttf,%
     Path = ./fonts/Noto/,%
-    WordSpace = 1.25%
+    %WordSpace = 1.25%
     ]{NotoSans-Regular.ttf}%
   }
 
