@@ -180,9 +180,21 @@
   FontFace = {sb}{n}{Alegreya-Medium.ttf},%
   FontFace = {sb}{it}{Alegreya-MediumItalic.ttf},%
   ItalicFont = Alegreya-Italic.ttf,%
-  WordSpace = 1.25,%
   BoldItalicFont = Alegreya-BoldItalic.ttf]{Alegreya-Regular.ttf}
 
+\tpDeclareBabelFont{greek}{[%
+    BoldFont = NotoSerif-Bold.ttf,%
+    ItalicFont = NotoSerif-Italic.ttf,%
+    BoldItalicFont = NotoSerif-BoldItalic.ttf,%
+    Path = ./fonts/Noto/,%
+    ]{NotoSerif-Regular.ttf}}
+  {[BoldFont = NotoSans-Bold.ttf,%
+    ItalicFont = NotoSans-Italic.ttf,%
+    BoldItalicFont = NotoSans-BoldItalic.ttf,%
+    Path = ./fonts/Noto/,%
+    WordSpace = 1.25%
+    ]{NotoSans-Regular.ttf}%
+  }
 
 \DeclareRobustCommand{\ltseries}{\fontseries{lt}\selectfont}
 \DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
