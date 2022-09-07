@@ -11,6 +11,11 @@
   <xsl:variable name="tei2html:epub-type" as="xs:string" select="'3'"/>
   <xsl:variable name="tei2html:chapterwise-footnote" select="true()" as="xs:boolean"/>
   <xsl:variable name="tei2html:generate-ol-type" select="true()" as="xs:boolean"/>
+  <xsl:variable name="hub:figure-caption-start-regex" as="xs:string" 
+                select="if (exists(//*:figure/*:title[matches(normalize-space(.), '^(Bild|Abbildung|Abbildungen|Abb\.|Figures?|Figs?\.?)')])) 
+                        then 'Bild|Abbildung|Abbildungen|Abb\.|Figures?|Figs?\.?' 
+                        else '[^\p{Zs}]+'"/>
+
   <!-- the code below was commented since the heading2 with keyword is not used anymore -->
 
   <!--<xsl:variable name="hub:hierarchy-role-regexes-x" as="xs:string+" 

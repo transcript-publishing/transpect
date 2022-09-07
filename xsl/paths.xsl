@@ -56,7 +56,7 @@
     </xsl:analyze-string>
   </xsl:function>
 
-  <xsl:template match="@ext[. = ('cover.png', 'cover.jpg')]" mode="tr:ext-to-target-subdir">
+  <xsl:template match="@ext[. = ('cover.png', 'cover.jpg', 'cover.eps')]" mode="tr:ext-to-target-subdir">
     <xsl:sequence select="'epub/cover'"/>
   </xsl:template>
 
