@@ -241,7 +241,8 @@
       xml2tex:meta2tex($epub-isbn, (), 'tpEpubISBN'),
       xml2tex:meta2tex($isbn-text, (), 'tpEpubPreText'),
       xml2tex:meta2tex($issn, (), 'tpISSN'),
-      xml2tex:meta2tex($biblio-info, (), 'tpBiblio'),
+      xml2tex:meta2tex($biblio-info/*:para[1], (), 'tpBiblioTitle'),
+      xml2tex:meta2tex($biblio-info/*:para[not(position() = 1)], (), 'tpBiblio'), 
       xml2tex:meta2tex($print-note, (), 'tpPrintNote'),
       xml2tex:meta2tex($environmental-note, (), 'tpEnvDisclaimer'),
       xml2tex:meta2tex($acknowledgements, (), 'tpAcknowledgements'),
@@ -1067,11 +1068,7 @@
     </rule>
   </template>
 
-  <xsl:template match="dbk:keyword[@role='Bibliografische_Information']/dbk:para[1][matches(., '^Bibliogra')]" mode="strip-meta" priority="500">
-    <!-- is set via style but kept until here to be used in epub/bits. https://redmine.le-tex.de/issues/13098#note-4 -->
-  </xsl:template>
-
-  <xsl:template match="dbk:keywordset[@role='titlepage']/dbk:keyword[not(@role = ('Herausgeber', 'Autor', 'Herausgeberinformationen'))]/dbk:para[not(position() eq last())]" mode="strip-meta" priority="4">
+  <xsl:template match="dbk:keywordset[@role='titlepage']/dbk:keyword[not(@role = ('Herausgeber', 'Autor', 'Herausgeberinformationen', 'Bibliografische_Information'))]/dbk:para[not(position() eq last())]" mode="strip-meta" priority="4">
     <xsl:apply-templates mode="#current"/>
     <!-- https://redmine.le-tex.de/issues/13334#note-5-->
     <xsl:text>\par </xsl:text>
