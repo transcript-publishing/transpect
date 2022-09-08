@@ -112,10 +112,12 @@
     \tpIfComp{TocNumber}
       {\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
       {\leftskip\z@}%
-    \tpTocLink{\tpUseComp{TocTitle}}%
-    \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\begin{minipage}{\hsize}\tpUseComp{TocSubtitle}\end{minipage}}}}{}%
-    \tpIfComp{TocAuthor}{\nopagebreak\newline{\normalfont\sffamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
-    \tpUseProperty{toc-page-sep}\tpTocLink{\tpUseComp{TocPage}}%
+    \begin{minipage}{\hsize}
+      \tpTocLink{\tpUseComp{TocTitle}}%
+      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpIfComp{TocAuthor}{\nopagebreak\newline{\normalfont\sffamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
+      \tpUseProperty{toc-page-sep}\tpTocLink{\tpUseComp{TocPage}}%
+    \end{minipage}
   }%
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
