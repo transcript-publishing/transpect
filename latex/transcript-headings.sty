@@ -108,16 +108,17 @@
   \tpSetProperty{toc-indent}{2em}%
   \tpSetProperty{toc-margin-left}{2em}%
   \tpSetProperty{toc-heading}{%
-    \tpUseProperty{toc-title-format}%
-    \tpIfComp{TocNumber}
-      {\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
-      {\leftskip\z@}%
-    \begin{minipage}{\hsize}
+    \vtop{\strut%
+      \tpUseProperty{toc-title-format}%
+      \tpIfComp{TocNumber}
+        {\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
+        {\leftskip\z@}%
       \tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
       \tpIfComp{TocAuthor}{\nopagebreak\newline{\normalfont\sffamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
       \tpUseProperty{toc-page-sep}\tpTocLink{\tpUseComp{TocPage}}%
-    \end{minipage}
+      \strut%
+    }
   }%
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
