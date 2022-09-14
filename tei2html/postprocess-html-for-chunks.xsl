@@ -290,7 +290,7 @@
           
           <xsl:choose>
             <xsl:when test="current-grouping-key()">
-              <xsl:for-each-group select="current-group()" group-ending-with=".[self::*:div[starts-with(@class, 'tsfigure')][following-sibling::*[1][self::*:p[[matches(@class, 'tsmedia(source|url|caption)')]]]]]">
+              <xsl:for-each-group select="current-group()" group-ending-with=".[self::*:figure[starts-with(@class, 'tsfigure')][following-sibling::*[1][self::*:p[[matches(@class, 'tsmedia(source|url|caption)')]]]]]">
                 <xsl:choose>
                   <xsl:when test="current-group()[self::*:p[matches(@class, 'tsmedia(url|caption)')]]">
                     <xsl:call-template name="create-collapseContainer">
@@ -416,7 +416,7 @@
     </xsl:if>
   </xsl:template>-->
 
-  <xsl:template match="*:div[starts-with(@class, 'tsfigure')]" mode="#default">
+  <xsl:template match="*:figure[starts-with(@class, 'tsfigure')]" mode="#default">
     <xsl:param name="preserve" as="xs:boolean?" />
     <xsl:param name="container-id" as="xs:integer?"/>
     <xsl:choose>

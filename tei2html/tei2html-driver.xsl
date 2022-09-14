@@ -21,12 +21,13 @@
   
   <xsl:param name="toc-depth" select="3" as="xs:integer"/>
   <xsl:param name="verbose" select="'no'"/>
-  
+
   <xsl:param name="basename" as="xs:string"/>
   <xsl:param name="generate-note-link-title" select="true()" as="xs:boolean"/>
   
   <xsl:variable name="divify-sections" select="'no'"/>
-  
+  <xsl:variable name="xhtml-version " select="'5'"/>
+
   <xsl:variable name="metadata" as="element(term)*"
                 select="/TEI/teiHeader/profileDesc/textClass/keywords[@rendition eq 'titlepage']/term" />
   
@@ -639,5 +640,14 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="html:figure[html:p]" mode="clean-up">
+    <!-- https://redmine.le-tex.de/issues/13415 -->
+    <xsl:copy copy-namespaces="no">
+      <xsl:apply-templates select="@*, *:img" mode="#current"/>
+      <figcaption>
+        <xsl:apply-templates select="node()[not(self::*:img)]" mode="#current"/>
+      </figcaption>
+    </xsl:copy>
+  </xsl:template>
 
 </xsl:stylesheet>
