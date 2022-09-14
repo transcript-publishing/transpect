@@ -35,7 +35,8 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="para[matches(@role, $hub:figure-copyright-statement-role-regex)]" mode="hub:figure-captions">
+  <xsl:template match="para[matches(@role, $hub:figure-copyright-statement-role-regex)]
+                           [not(..[self::caption])]" mode="hub:figure-captions">
     <caption>
       <xsl:copy>
         <xsl:apply-templates select="node()" mode="#current"/>
