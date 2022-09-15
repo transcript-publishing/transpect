@@ -103,8 +103,8 @@
   %% Format IHV-Eintrag
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-title-format}{\sbseries\sfwidefamily\ifcollection\Large\fi}%
-  \tpSetProperty{toc-subtitle-format}{\normalfont\sffamily}%
+  \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\ifcollection\Large\fi}%
+  \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapfamily}%
   \tpSetProperty{toc-indent}{2em}%
   \tpSetProperty{toc-margin-left}{2em}%
   \tpSetProperty{toc-heading}{%
@@ -115,7 +115,7 @@
         {\leftskip\z@}%
       \tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpIfComp{TocAuthor}{\nopagebreak\newline{\normalfont\sffamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
+      \tpIfComp{TocAuthor}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
       \tpUseProperty{toc-page-sep}\tpTocLink{\tpUseComp{TocPage}}%
       \strut%
     }
