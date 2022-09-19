@@ -650,4 +650,12 @@
     </xsl:copy>
   </xsl:template>
 
+  <xsl:template match="html:figure/html:p" mode="clean-up">
+    <!-- https://redmine.le-tex.de/issues/13415 -->
+    <xsl:element name="span">
+      <xsl:attribute name="class" select="if (@class = 'tsfiguresource') then 'fig-source' else 'fig-title'"/>
+      <xsl:apply-templates select="@* except @class, node()" mode="#current"/>
+    </xsl:element>
+  </xsl:template>
+  
 </xsl:stylesheet>

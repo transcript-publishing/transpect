@@ -207,7 +207,7 @@
 
   <xsl:function name="tr:alt-text" as="xs:string">
     <xsl:param name="img" as="node()*"/>
-    <xsl:sequence select="string-join($img/../*:p[@class = 'tsfigurecaption' or *:span[contains(@class,'caption-text')]]//text()[not(..[self::*:a][contains(@href, 'fn_')])], '')"></xsl:sequence>
+    <xsl:sequence select="string-join($img/../*:p[@class = ('tsfigurecaption') or *:span[matches(@class,'caption-text|fig-title')]]//text()[not(..[self::*:a][contains(@href, 'fn_')])], '')"></xsl:sequence>
   </xsl:function>
 
   <xsl:template match="*:img/@src" mode="#default">
@@ -216,7 +216,7 @@
       <img alt="" src="http://transpect.io/content-repo/ts/jrn/inge/00002/images/ts_jrn_zig_00002_image2.jpg"/>
     -->
     <xsl:attribute name="{name()}" select="concat('images/', replace(., '^.+/', ''))"/>
-    <xsl:if test="not(../@alt) and ../../*:p[@class = 'tsfigurecaption' or *:span[contains(@class,'caption-text')]]">
+    <xsl:if test="not(../@alt) and ../../*:p[@class = 'tsfigurecaption' or *:span[matches(@class,'caption-text|fig-title')]]">
       <xsl:attribute name="alt" select="tr:alt-text(..)"/>
     </xsl:if>
   </xsl:template>
