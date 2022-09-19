@@ -37,8 +37,11 @@
   }%
 }
 
+
 \tpDeclareHeading{-1}{part}{%
   %% ToC
+  \tpSetProperty{toc-before-hook-part}{\nobreak}
+  \tpSetProperty{toc-after-hook-part}{\nobreak}
   \tpSetProperty{toc-margin-top}{2.25em}%
   \tpSetProperty{toc-indent}{}%
   \tpSetProperty{toc-title-format}{\sffamily\sbseries\huge}%
@@ -53,10 +56,12 @@
     \let\\\@centercr
     \rightskip\z@skip\relax
     \parfillskip\@flushglue
-    \edef\measurepage{\the\dimexpr\pagegoal-\pagetotal-\baselineskip\relax}%
-    \ifdim\measurepage<7\baselineskip\relax\newpage\fi%
+    %\par
+    %\edef\measurepage{\the\dimexpr\pagegoal-\pagetotal-\baselineskip\relax}%
+    %\typeout{TOC BEFORE ENTRY: \measurepage}
+    %\ifdim\measurepage<7\baselineskip\relax\newpage\fi%
   }%
-  \tpSetProperty{toc-after-entry}{\par\nobreak\addvspace{\tpUseProperty{toc-margin-bottom}}}% Thing at the end of the entry, after the page number
+  \tpSetProperty{toc-after-entry}{\par\nobreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nobreak}% Thing at the end of the entry, after the page number
 
   \tpSetProperty{before-heading}{%
     \cleardoublepage
@@ -71,6 +76,7 @@
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{title-format}{\sffamily\sbseries\fontsize{17.5bp}{25.6bp}\selectfont}%
   \tpSetProperty{heading-block}{%
+    \typeout{TITLE: \tpUseComp{Title}}
     \tpUseProperty{title-format}%
     %\vskip.5\baselineskip
     \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
@@ -98,10 +104,12 @@
   \tpSetProperty{after-heading-block}{\vfill}%
 }
 
+\tpAddToHook{toc-after-hook-part}{\nopagebreak}%
 
 \tpDeclareHeading{0}{chapter}{%
   %% Format IHV-Eintrag
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
+  \tpSetProperty{toc-margin-right}{2em}%
   \tpSetProperty{toc-number-sep}{\enskip}%
   \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\ifcollection\Large\fi}%
   \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapfamily}%
@@ -130,7 +138,6 @@
 
   \tpSetProperty{before-heading}{\cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
-  \tpSetProperty{toc-margin-right}{2em}%
   \tpSetProperty{after-skip}{\tpIfComp{Author}{1.68\baselineskip}{3.68\baselineskip}}%
   \tpSetProperty{heading-block}{%
     %% Titel
@@ -209,9 +216,9 @@
    }%
 }
 
-
-\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
-\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
+% Mit 13475 auskommentiert, gegengeprüft mit 13412.
+%\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
+%\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
 
 
 \tpDeclareHeading{1}{section}{%
