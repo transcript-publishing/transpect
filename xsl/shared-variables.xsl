@@ -3,6 +3,7 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:tei2html="http://transpect.io/tei2html"
   xmlns:hub="http://transpect.io/hub"
+  xmlns:css="http://www.w3.org/1996/css"
   exclude-result-prefixes="xs"
   version="2.0">
   
@@ -11,6 +12,11 @@
   <xsl:variable name="tei2html:epub-type" as="xs:string" select="'3'"/>
   <xsl:variable name="tei2html:chapterwise-footnote" select="true()" as="xs:boolean"/>
   <xsl:variable name="tei2html:generate-ol-type" select="true()" as="xs:boolean"/>
+  <xsl:variable name="css:bold-elt-name" as="xs:string?" select="'strong'"/>
+  <xsl:variable name="hub:figure-caption-start-regex" as="xs:string" 
+                select="if (exists(//*:figure/*:title[matches(normalize-space(.), '^(Bild|Abbildung|Abbildungen|Abb\.|Figures?|Figs?\.?)')])) 
+                        then 'Bild|Abbildung|Abbildungen|Abb\.|Figures?|Figs?\.?' 
+                        else '[^\p{Zs}]+'"/>
 
   <!-- the code below was commented since the heading2 with keyword is not used anymore -->
 
