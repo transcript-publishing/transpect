@@ -495,13 +495,16 @@
   </xsl:template>
   
   <xsl:template name="footnote-heading">
-    <p>
+    <xsl:variable name="level" select="if (self::div[@type = ('chapter', 'article', 'appendix', 'preface')][not(..[@type = 'appendix'])]) 
+                                      then (tei2html:heading-level(head[@type = 'main'][1])) 
+                                      else 2" />
+    <xsl:element name="h{$level + 1}">
       <xsl:attribute name="class" select="'notes-headline'"/>
       <xsl:value-of select="(//p[@rend eq 'tsendnotesheading'],
         /TEI[@xml:lang eq 'de']/'Endnoten',
         'Endnotes')[1]"/>
-    </p>
-    <!-- https://redmine.le-tex.de/issues/8785 -->    
+    </xsl:element>
+    <!-- https://redmine.le-tex.de/issues/8785; https://redmine.le-tex.de/issues/13460 -->    
   </xsl:template>
   
   <xsl:template match="p[@rend eq 'tsendnotesheading']" mode="tei2html"/>  
