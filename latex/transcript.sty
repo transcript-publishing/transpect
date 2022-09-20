@@ -124,7 +124,7 @@
 
 \let\oldhref\href
 \def\@nohyphen#1\@nil#2#3\relax{\oldhref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\@nohyphen#1\@nil#3\relax\fi}
-%\protected\def\href#1#2{{\let↩\@empty\@nohyphen#1\@nil#2\relax\relax}}% Darf so nicht bleiben. Verschluckt sämtliche Leerzeichen im zweiten \href-Argument und erzeugt Konvertierungsfehler bei Diakritika (u. a. \'{u}, was doppelte Klammerung benötigt, um zu laufen ({{\'{u}})).
+\protected\def\href#1#2{{\let↩\@empty\@nohyphen#1\@nil#2\relax\relax}}% Darf so nicht bleiben. Verschluckt sämtliche Leerzeichen im zweiten \href-Argument und erzeugt Konvertierungsfehler bei Diakritika (u. a. \'{u}, was doppelte Klammerung benötigt, um zu laufen ({{\'{u}})).
 \let\fn@href\href
 % \bgroup
 % \let↩\relax
