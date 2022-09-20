@@ -36,7 +36,7 @@
     \fi%
     \par
     \tpUseComp{Title}%
-    \tpIfComp{Statement}{\par\vskip\baselineskip{\fontsize{10.5}{11}\selectfont\tpUseComp{EditionNote}}}{}%
+    \tpIfComp{Statement}{\par\vskip\baselineskip{\fontsize{10.5}{11}\selectfont\tpUseComp{Statement}}}{}%
     \par\vfill
     \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
     \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
@@ -80,6 +80,9 @@
         \flushleft\tpUseComp{Subtitle}\endflushleft}{}%
     }%
     \par
+    \tpIfComp{AddNoteIII}{%
+      \tpUseComp{AddNoteIII}%
+    }{}
     \vskip\baselineskip
     \vfill
     \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
@@ -109,16 +112,16 @@
   \tpSetProperty{imprint}{%
     \tpUseProperty{publisher}%
     \tpUseProperty{imprint-sep}
-    \tpGetComp{Qualification}%%
-    \tpGetComp{Conversion}%%
-    {\tpIfComp{CoverImage}{\leftskip5mm\hskip-5mm}{}\tpGetComp{CoverImage}}%%
-    {\tpIfComp{CoverDesign}{\leftskip5mm\hskip-5mm}{}\tpGetComp{CoverDesign}}%%
-    {\tpIfComp{Lectorate}{\leftskip5mm\hskip-5mm}{}\tpGetComp{Lectorate}}%%
-    {\tpIfComp{QA}{\leftskip5mm\hskip-5mm}{}\tpGetComp{QA}}%%
-    \tpGetComp{Translator}%%
-    \tpGetComp{Appraiser}%%
-    \tpGetComp{Discussion}%%
-    {\tpIfComp{TypeSetter}{\leftskip5mm\hskip-5mm}{}\tpGetComp{Typesetter}}%%
+    \tpGetComp{Qualification}%
+    \tpGetComp{Conversion}%
+    \tpIfComp{CoverImage}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverImage}}}{}%
+    \tpIfComp{CoverDesign}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverDesign}}}{}%
+    \tpIfComp{Lectorate}{{\leftskip5mm\hskip-5mm\tpGetComp{Lectorate}}}{}%
+    \tpIfComp{QA}{{\leftskip5mm\hskip-5mm\tpGetComp{QA}}}{}%
+    \tpIfComp{Translator}{{\leftskip5mm\hskip-5mm\tpGetComp{Translator}}}{}%
+    \tpGetComp{Appraiser}%
+    \tpGetComp{Discussion}%
+    \tpIfComp{TypeSetter}{{\leftskip5mm\hskip-5mm\tpGetComp{Typesetter}}}{}%
     \tpGetComp{Print}%%
     \tpGetComp{DOI}%%
     \tpGetComp{Keywords}%%
