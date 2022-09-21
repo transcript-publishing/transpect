@@ -60,6 +60,9 @@
     <xsl:sequence select="'epub/cover'"/>
   </xsl:template>
 
+  <xsl:template match="@ext[. = ('klopotek.xml')]" mode="tr:ext-to-target-subdir">
+    <xsl:sequence select="'meta.xml'"/>
+  </xsl:template>
 
   <xsl:template match="@ext[. = ('eps')]" mode="tr:ext-to-target-subdir">
     <xsl:sequence select="'images'"/>
