@@ -76,7 +76,6 @@
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{title-format}{\sffamily\sbseries\fontsize{17.5bp}{25.6bp}\selectfont}%
   \tpSetProperty{heading-block}{%
-    \typeout{TITLE: \tpUseComp{Title}}
     \tpUseProperty{title-format}%
     %\vskip.5\baselineskip
     \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
@@ -243,6 +242,7 @@
       \vskip\tpUseProperty{before-quote-skip}%
       %\savenotes
       \hfill\vbox{%
+        \justify
         \hsize.5\textwidth
         \normalsize\nsfwiderfamily\mdseries
         \noindent
@@ -310,7 +310,6 @@
 % Verbleibender Platz auf der Seite in Zeilenhöhen.
 \global\newcount\tp@remainingLines
 \gdef\tp@getRemainingLines{%
-  \typeout{DIVIDING \the\tp@remainingVSpace\space by \the\normalskip}
   \edef\tp@remainingLinesFrac{\CalcRatio{\tp@remainingVSpace}{\normalskip}}%
   \def\tp@numberFloored{\expandafter\tp@stripFracPart\tp@remainingLinesFrac.\relax\@nil\relax}
   \global\tp@remainingLines=\the\numexpr\expandafter\tp@stripFracPart\tp@remainingLinesFrac.\relax\@nil+1\relax%
@@ -318,15 +317,11 @@
 
 % Bedingter vspace.
 \gdef\tp@spaceIfAfterChapterHeading#1{%
-  \typeout{\the\pagegoal; \the\pagetotal}
   \global\tp@remainingVSpace=\tp@getRemainingVSpace\relax%
   \global\tp@remainingVSpaceAtSectionBeginning=\the\tp@remainingVSpace%
   \tp@getRemainingLines%
   \global\tp@remainingLinesAtSectionBeginning=\tp@remainingLines%
   %\typeout{tp@chapterPage: \the\tp@chapterPage; \the\tp@remainingLinesAfterChapterHeading; \the\tp@remainingLinesAtSectionBeginning}
-  \typeout{\tp@heading@Title}
-  \typeout{\the\tp@remainingLinesAfterChapterHeading; \the\tp@remainingLinesAtSectionBeginning}
-  \typeout{tp@remainingVSpaceAtSectionBeginning: \the\tp@remainingVSpaceAtSectionBeginning}
   \ifnum\tp@chapterPage=\thepage\relax%
     \ifnum\tp@remainingLinesAfterChapterHeading=\tp@remainingLinesAtSectionBeginning\relax%
       \vskip#1%
