@@ -43,6 +43,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Untertitel']"/>
   <xsl:variable name="shorttitle" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Kurztitel']"/>
+  <xsl:variable name="additional-info" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role eq 'Zusatzinfos']"/>
   <!-- cover image -->
   <xsl:variable name="cover-href" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Cover']"/>
@@ -173,7 +175,7 @@
     %
     <xsl:value-of select="concat('\documentclass[',
                                  string-join(($babel-langs[position() ne 1],
-                                              $babel-langs[1]), (: 1st lang is main lang and comes last :)
+                                              replace($babel-langs[1], '(spanish)', '$1,es-noindentfirst')), (: 1st lang is main lang and comes last, if spanish no indent #13453 :)
                                  ','),
                                  if($is-collection) then ',pubtype=collection' else (),
                                  if($notes-per-chapter = ('yes', 'true') or $notes-type = 'footnotes') then ',resetnotesperchapter' else (),
@@ -252,9 +254,8 @@
       xml2tex:meta2tex($dedication, (), 'tpDedication'),
       xml2tex:meta2tex($editorial, (), 'tpEditorial'),
       xml2tex:meta2tex($edition-note, (), 'tpEditionNote'),
-      xml2tex:meta2tex($statement, (), 'tpStatement')
-      
-      
+      xml2tex:meta2tex($statement, (), 'tpStatement'),
+      xml2tex:meta2tex($additional-info, (), 'tpAddNoteIII')
       "/>
     <!-- logos image -->
     <xsl:if test="normalize-space($cover-href)">
@@ -314,9 +315,9 @@
     <xsl:if test="$copyright-holder[normalize-space()]">
       <xsl:text>&#xa;\tpCopyrightDisclaimer{</xsl:text>
       <xsl:for-each select="$copyright-holder">
-<xsl:apply-templates select="./node()"  mode="#current"/>
-<xsl:if test="not(. is $copyright-holder[last()])"><text>\par </text></xsl:if>
-</xsl:for-each>
+        <xsl:apply-templates select="./node()"  mode="#current"/>
+        <xsl:if test="not(. is $copyright-holder[last()])"><text>\par </text></xsl:if>
+      </xsl:for-each>
       <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="normalize-space($license-logo-href)">
