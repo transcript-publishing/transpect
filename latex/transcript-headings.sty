@@ -221,6 +221,23 @@
 
 
 \tpDeclareHeading{1}{section}{%
+  \ifcollection\else
+    \tpSetProperty{toc-indent}{2em}%
+    \tpSetProperty{toc-margin-left}{2em}%
+    \tpSetProperty{toc-heading}{%
+      \tpUseProperty{toc-title-format}%
+      \tpIfComp{TocNumber}
+      {\tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\newline}{}%
+        \hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
+      {%\leftskip\z@%
+        \tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\space}{}%
+      }%
+      \tpTocLink{\tpUseComp{TocTitle}}%
+      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+    }%
+  \fi
+  
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
   \tpSetProperty{number-sep}{\enskip}%
   \tpSetProperty{after-skip}{12.8bp}%
@@ -234,7 +251,7 @@
       \tpUseProperty{title-format}%
       \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
       \tpUseComp{Title}\par
-      \tpIfComp{Subtitle}{\normalfont\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
+      \tpIfComp{Subtitle}{\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
       \tpIfComp{Author}{\itshape\tpUseComp{Author}\par}{}%
     \egroup
     \nopagebreak
@@ -253,22 +270,6 @@
   }%
   \tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
   \tpSetProperty{bookmark}{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\enskip}{}\tpUseComp{TocTitle}}%
-  \ifcollection\else
-    \tpSetProperty{toc-indent}{2em}%
-    \tpSetProperty{toc-margin-left}{2em}%
-    \tpSetProperty{toc-heading}{%
-      \tpUseProperty{toc-title-format}%
-      \tpIfComp{TocNumber}
-      {\tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\newline}{}%
-        \hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
-      {%\leftskip\z@%
-        \tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\space}{}%
-      }%
-      \tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
-    }%
-  \fi
 }
 
 \tpDeclareHeading[section]{2}{subsection}{%
