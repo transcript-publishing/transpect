@@ -21,6 +21,9 @@
       \hskip-\fnumwidth\hb@xt@\fnumwidth{{\nsfwiderfamily\@thefnmark}\hss}%
       \let\href\fn@href%
       \justify%
+      % Preserve the justified alignment for footnotes which the language changes within.
+      \let\originalSelectlanguage\selectlanguage%
+      \def\selectlanguage##1{\originalSelectlanguage{##1}\justify}%
       #1%
     \egroup}
 
