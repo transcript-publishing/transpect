@@ -77,13 +77,17 @@
         \sffamily\vskip\dimexpr5bp+0.65mm\relax
         \Large
         \topsep0pt \partopsep0pt % no space before
-        \flushleft\tpUseComp{Subtitle}\endflushleft}{}%
+        \flushleft\tpUseComp{Subtitle}\endflushleft%
+      }{%
+        \vskip\baselineskip
+      }%
     }%
     \par
-    \tpIfComp{AddNoteIII}{%
-      \tpUseComp{AddNoteIII}%
-    }{}
     \vskip\baselineskip
+    \tpIfComp{AddNoteIII}{%
+      \Large\sfwidefamily\tpUseComp{AddNoteIII}%
+    }{}
+    \par
     \vfill
     \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
     \clearpage
