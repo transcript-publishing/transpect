@@ -22,7 +22,6 @@
 \DeclareOptionX{nohead}{\global\let\n@head\relax}
 \ProcessOptionsX\relax
 
-
 %% Seitenzähler unter der Annahme, dass keine Titelei erzeugt wird.
 %% Das Titeleimodul setzt den Seitenzähler bei Aufruf auf 1.
 \setcounter{page}{5}
@@ -143,5 +142,7 @@
     \def\tpRunBookTitle{--~book title not defined~--}%
   \fi
 }
+
+\PassOptionsToPackage{es-noindentfirst}{babel}
 
 \endinput
