@@ -103,8 +103,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Edition-Note']"/>
   <xsl:variable name="pub-year" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Jahr']"/>
-  <xsl:variable name="statement" as="element(dbk:keyword)?"
-                select="$metadata/dbk:keyword[@role eq 'Qualifikationsnachweis']"/>
+  <xsl:variable name="statement" as="element(dbk:keyword)*"
+                select="($metadata/dbk:keyword[@role eq 'Qualifikationsnachweis'], $metadata/dbk:keyword[@role eq 'Gutachter'])"/>
   <xsl:variable name="biblio-info" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Bibliografische_Information']"/>
   <xsl:variable name="print-note" as="xs:string?" 
@@ -254,12 +254,19 @@
       xml2tex:meta2tex($dedication, (), 'tpDedication'),
       xml2tex:meta2tex($editorial, (), 'tpEditorial'),
       xml2tex:meta2tex($edition-note, (), 'tpEditionNote'),
-      xml2tex:meta2tex($statement, (), 'tpStatement'),
       xml2tex:meta2tex($additional-info, (), 'tpAddNoteIII')
       "/>
     <!-- logos image -->
     <xsl:if test="normalize-space($cover-href)">
       <xsl:value-of select="concat('&#xa;\tpCover{cover/', $cover-href, '}&#xa;')"/>
+    </xsl:if>
+    <xsl:if test="matches(string-join($statement, ''), '\S')">
+      <xsl:text>&#xa;\tpStatement{</xsl:text>
+       <xsl:for-each select="$statement[normalize-space()]">
+        <xsl:apply-templates select="."  mode="strip-meta"/>
+        <xsl:if test="not(. is $statement[last()])"><text>\par </text></xsl:if>
+      </xsl:for-each>
+      <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="normalize-space($series-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpSeries{\includegraphics{logos/series/', $series-logo-href, '}}&#xa;')"/>
@@ -276,9 +283,6 @@
     </xsl:if>
     <xsl:if test="normalize-space($pub-year)">
       <xsl:value-of select="concat('&#xa;\tpYear{', $pub-year, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($statement)">
-      <xsl:value-of select="concat('&#xa;\tpStatement{', $statement, '}&#xa;')"/>
     </xsl:if>
     <!-- contributor meta -->
     <xsl:if test="normalize-space($lectorate)">
