@@ -1115,4 +1115,17 @@
 
   </xsl:template>
 
+  <xsl:template match="text()[ancestor::*[self::dbk:keyword[matches(., 'file:|http|www|(\.(png|PNG|jpe?g|pdf|JPE?G|PDF|eps|EPS)\p{Zs}*$)')] ]]" mode="escape-bad-chars" priority="300">
+    <!-- prevent filename replacement in keywords -->
+    <xsl:choose>
+      <xsl:when test="matches(., 'file:|\.(png|PNG|jpe?g|pdf|JPE?G|PDF|eps|EPS)\p{Zs}*$') and not(ancestor::*[self::dbk:link])">
+        <xsl:value-of select="."/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="content" select="xml2tex:escape-for-tex(replace( ., '\\', '\\textbackslash ' ))" as="xs:string"/>
+        <xsl:value-of select="$content"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 </set>
