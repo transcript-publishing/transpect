@@ -46,6 +46,7 @@
   <p:import href="http://transpect.io/xproc-util/load/xpl/load.xpl"/>
   <p:import href="http://transpect.io/xproc-util/store-debug/xpl/store-debug.xpl"/>
   <p:import href="http://transpect.io/xproc-util/xslt-mode/xpl/xslt-mode.xpl"/>
+  <p:import href="http://transpect.io/xproc-util/recursive-directory-list/xpl/recursive-directory-list.xpl"/>
 
   <p:variable name="basename" select="/c:param-set/c:param[@name eq 'basename']/@value"/>
 
@@ -108,9 +109,34 @@
     <p:with-option name="filenames" select="concat(replace($basename, '^(.+_\d{5})(_.+)?$', '$1'), '.meta.xml')"/>
   </tr:paths-for-files-xml>
 
+<!--  <tr:store-debug pipeline-step="metadata/00_paths-fo-files">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </tr:store-debug>-->
+
+      <tr:recursive-directory-list name="image-list">
+        <p:with-option name="path" select="replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:///$1')"/>
+<!--          <p:pipe port="result" step="params"/>-->
+<!--        </p:with-option>-->
+      </tr:recursive-directory-list>
+
+
+  <tr:store-debug pipeline-step="metadata/01_meta-dir-content">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </tr:store-debug>
+
   <tr:file-uri name="meta-file-uri">
-    <p:with-option name="filename" select="/c:files/c:file/@name"/>
+    <p:with-option name="filename" select="concat(/c:directory/@xml:base, 
+                                                  (/c:directory/c:file[contains(@name, 'klopotek.xml')]/@name, /c:directory/c:file[contains(@name, 'meta.xml')]/@name)[1]
+                                                  )"/>
   </tr:file-uri>
+
+
+  <tr:store-debug pipeline-step="metadata/01_file-uri">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </tr:store-debug>
 
   <p:sink/>
 
@@ -152,19 +178,32 @@
       <p:output port="result"/>
       <p:variable name="titlepage-meta-href" select="/c:result/@local-href"/>
       <p:variable name="titlepage-meta-dir-href" select="replace($titlepage-meta-href, '^(.+/).+?$', '$1')"/>
-      
+
       <cx:message>
         <p:with-option name="message" select="'[info] load titlepage-meta: ', $titlepage-meta-href"/>
       </cx:message>
+
+      <p:choose name="which-meta">
       
-      <cxf:copy name="copy-dtd" href="../schema/PropList-1.0.dtd" fail-on-error="true"> 
-        <p:with-option name="target" select="concat($titlepage-meta-dir-href, 'PropList-1.0.dtd')"/>
-      </cxf:copy>
-      
-      <p:load name="load-titlepage-meta" dtd-validate="true" cx:depends-on="copy-dtd">
-        <p:with-option name="href" select="$titlepage-meta-href"/>
-      </p:load>
-      
+        <p:when test="/c:result/@local-href[contains(., '.meta.xml')]"> 
+        <p:xpath-context><p:pipe port="result" step="meta-file-uri"></p:pipe></p:xpath-context>
+          <p:documentation>meta.xml</p:documentation>
+
+          <cxf:copy name="copy-dtd" href="../schema/PropList-1.0.dtd" fail-on-error="true"> 
+            <p:with-option name="target" select="concat($titlepage-meta-dir-href, 'PropList-1.0.dtd')"/>
+          </cxf:copy>
+          
+          <p:load name="load-titlepage-meta" dtd-validate="true" cx:depends-on="copy-dtd">
+            <p:with-option name="href" select="$titlepage-meta-href"/>
+          </p:load>
+        </p:when>
+        <p:otherwise>
+          <p:load name="load-titlepage-meta-klopotek">
+            <p:with-option name="href" select="$titlepage-meta-href"/>
+          </p:load>
+        </p:otherwise>
+      </p:choose>
+
     </p:group>
     <p:catch>
       <p:output port="result"/>
