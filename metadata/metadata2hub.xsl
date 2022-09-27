@@ -7,9 +7,16 @@
   version="2.0" exclude-result-prefixes="#all">
   
   <xsl:import href="http://this.transpect.io/a9s/common/metadata/metadata2hub.xsl"/>
-  
+  <xsl:import href="metadata2hub-klopotek.xsl"/>
+
   <xsl:output indent="yes"/>
-  
+
+   <xsl:template match="*:product_export" priority="15">
+    <keywordset role="titlepage">
+      <xsl:apply-templates select="*:product/*" mode="klopotek-to-keyword"/>
+    </keywordset>
+  </xsl:template>
+
   <xsl:template match="plist">
     <keywordset role="titlepage">
       <xsl:apply-templates select="array/dict/key"/>
@@ -57,7 +64,7 @@
     <xsl:apply-templates/>
   </xsl:template>
   
-  <xsl:template match="*|processing-instruction()">
+  <xsl:template match="*|processing-instruction()" priority="-0.5">
     <xsl:copy>
       <xsl:apply-templates select="*|processing-instruction()"/>
     </xsl:copy>
@@ -81,4 +88,6 @@
                                   )"/>
   </xsl:function>
   
+
+
 </xsl:stylesheet>
