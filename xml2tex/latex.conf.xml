@@ -264,7 +264,6 @@
       <xsl:text>&#xa;\tpStatement{</xsl:text>
        <xsl:for-each select="$statement[normalize-space()]">
         <xsl:apply-templates select="."  mode="strip-meta"/>
-        <xsl:if test="not(. is $statement[last()])"><text>\par </text></xsl:if>
       </xsl:for-each>
       <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
@@ -320,7 +319,6 @@
       <xsl:text>&#xa;\tpCopyrightDisclaimer{</xsl:text>
       <xsl:for-each select="$copyright-holder">
         <xsl:apply-templates select="./node()"  mode="#current"/>
-        <xsl:if test="not(. is $copyright-holder[last()])"><text>\par </text></xsl:if>
       </xsl:for-each>
       <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
@@ -1086,6 +1084,16 @@
     <xsl:apply-templates mode="#current"/>
     <!-- https://redmine.le-tex.de/issues/13334#note-5-->
     <xsl:text>\par </xsl:text>
+  </xsl:template>
+
+
+  <xsl:template match="dbk:keywordset[@role='titlepage']
+                                     [dbk:keyword[@role = ('Qualifikationsnachweis')][normalize-space()]]/dbk:keyword
+                                     [@role = ('Gutachter')][normalize-space()]" mode="strip-meta" priority="4">
+    <xsl:text>\par </xsl:text>   
+    <xsl:apply-templates mode="#current"/>
+    <!-- https://redmine.le-tex.de/issues/13508-->
+
   </xsl:template>
 
 </set>
