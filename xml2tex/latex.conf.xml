@@ -254,7 +254,26 @@
       xml2tex:meta2tex($dedication, (), 'tpDedication'),
       xml2tex:meta2tex($editorial, (), 'tpEditorial'),
       xml2tex:meta2tex($edition-note, (), 'tpEditionNote'),
-      xml2tex:meta2tex($additional-info, (), 'tpAddNoteIII')
+      xml2tex:meta2tex($additional-info, (), 'tpAddNoteIII'),
+      xml2tex:meta2tex($publisher-website, (), 'tpPubWeb'),
+      xml2tex:meta2tex($doi, (), 'tpDOI'),
+      xml2tex:meta2tex($pub-year, (), 'tpYear'),
+      xml2tex:meta2tex($lectorate, (), 'tpLectorate'),
+      xml2tex:meta2tex($translator, (), 'tpTranslator'),
+      xml2tex:meta2tex($copy-editing, (), 'tpQA'),
+      xml2tex:meta2tex($cover-credit, (), 'tpCoverDesign'),
+      xml2tex:meta2tex($cover-art, (), 'tpCoverImage'),
+      xml2tex:meta2tex($typesetter, (), 'tpTypesetter'),
+      xml2tex:meta2tex($printer, (), 'tpPrint'),
+      xml2tex:meta2tex($used-font, (), 'tpUsedFont'),
+      xml2tex:meta2tex($converter, (), 'tpConversion'),
+      xml2tex:meta2tex($license-link, (), 'tpLicenceLink'),
+      xml2tex:meta2tex($license-name, (), 'tpLicenceName'),
+      xml2tex:meta2tex($funder-pretext, (), 'tpFundingPreText'),
+      xml2tex:meta2tex($funder-posttext, (), 'tpFundingPostText'),
+      xml2tex:meta2tex($bibl-issn, (), 'tpBiblISSN'),
+      xml2tex:meta2tex($bible-issn, (), 'tpBibleISSN'),
+      xml2tex:meta2tex($advertisement, (), 'tpAdvertise')
       "/>
     <!-- logos image -->
     <xsl:if test="normalize-space($cover-href)">
@@ -274,7 +293,7 @@
       <xsl:value-of select="concat('&#xa;\tpPubLogo{logos/', $publisher-logo-href, '}&#xa;')"/>
     </xsl:if>
     <!-- links -->
-    <xsl:if test="normalize-space($publisher-website)">
+<!--    <xsl:if test="normalize-space($publisher-website)">
       <xsl:value-of select="concat('&#xa;\tpPubWeb{', $publisher-website, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($doi)">
@@ -282,9 +301,9 @@
     </xsl:if>
     <xsl:if test="normalize-space($pub-year)">
       <xsl:value-of select="concat('&#xa;\tpYear{', $pub-year, '}&#xa;')"/>
-    </xsl:if>
+    </xsl:if>-->
     <!-- contributor meta -->
-    <xsl:if test="normalize-space($lectorate)">
+<!--    <xsl:if test="normalize-space($lectorate)">
       <xsl:value-of select="concat('&#xa;\tpLectorate{', $lectorate, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($translator)">
@@ -310,7 +329,7 @@
     </xsl:if>
     <xsl:if test="normalize-space($converter)">
       <xsl:value-of select="concat('&#xa;\tpConversion{', $converter, '}&#xa;')"/>
-    </xsl:if>
+    </xsl:if>-->
     <!-- licensing meta -->
     <xsl:if test="normalize-space($copyright-note)">
       <xsl:sequence select="xml2tex:meta2tex($copyright-note, (), 'tpCopyright')"/>
@@ -335,22 +354,22 @@
                                    string-join($license-text/*, '\\&#xa;'),
                                    '}&#xA;')"/>
     </xsl:if>
-    <xsl:if test="normalize-space($license-link)">
+<!--    <xsl:if test="normalize-space($license-link)">
       <xsl:value-of select="concat('&#xa;\tpLicenceLink{', $license-link, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($license-name)">
       <xsl:value-of select="concat('&#xa;\tpLicenceName{', $license-name, '}&#xa;')"/>
-    </xsl:if>
+    </xsl:if>-->
     <!-- funding statement, \tpFundingPreText and \tpFundingPostText are placed before and
          below one or more \begin{tpFunding} environment. One of which may contain a \tpFundName
          and \tpFundLogo macro. Implement this according to the customer-specific metadata model.
     -->
-    <xsl:if test="normalize-space($funder-pretext)">
+<!--    <xsl:if test="normalize-space($funder-pretext)">
       <xsl:value-of select="concat('&#xa;\tpFundingPreText{', $funder-pretext, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($funder-posttext)">
       <xsl:value-of select="concat('&#xa;\tpFundingPostText{', $funder-posttext, '}&#xa;')"/>
-    </xsl:if>
+    </xsl:if>-->
     <xsl:if test="normalize-space($funder-name) or exists($funder-logo)">
       <xsl:for-each select="$funder-logo[normalize-space()]">
         <xsl:text>&#xa;\begin{tpFunding}</xsl:text>
@@ -367,7 +386,7 @@
       </xsl:for-each>  
     </xsl:if>
     <!-- transcript-specific metadata -->
-    <xsl:if test="normalize-space($bibl-issn)">
+<!--    <xsl:if test="normalize-space($bibl-issn)">
       <xsl:value-of select="concat('&#xa;\tpBiblISSN{', $bibl-issn, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($bible-issn)">
@@ -377,7 +396,7 @@
       <xsl:text>&#xa;\tpAdvertise{</xsl:text>
       <xsl:apply-templates select="$advertisement/*" mode="#current"/>
       <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>    
+    </xsl:if>-->    
     <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
     <xsl:for-each select="//dbk:index">
       <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
