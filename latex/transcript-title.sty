@@ -36,7 +36,6 @@
     \fi%
     \par
     \tpUseComp{Title}%
-    \tpIfComp{Statement}{\par\vskip\baselineskip{\fontsize{10.5}{11}\selectfont\tpUseComp{Statement}}}{}%
     \par\vfill
     \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
     \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
@@ -90,10 +89,10 @@
     \par
     \vfill
     \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
-    \clearpage
   }%
   \tpSetProperty{titlepage-iv}{%
     \bgroup
+      \tpIfComp{Statement}{\tpUseComp{Statement}\par}{}%
       \justify
       \tpUseProperty{funding-block}%
       \vfill
@@ -105,7 +104,6 @@
         \tpUseProperty{imprint}%
       \egroup
     \egroup
-    \clearpage
   }%
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
