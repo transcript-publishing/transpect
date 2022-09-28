@@ -49,6 +49,14 @@
   <p:import href="http://transpect.io/xproc-util/recursive-directory-list/xpl/recursive-directory-list.xpl"/>
 
   <p:variable name="basename" select="/c:param-set/c:param[@name eq 'basename']/@value"/>
+  <p:variable name="ci-test" select="if (/c:param-set/c:param[@name='out-dir-uri'][@value[contains(., 'test_after')]]) then true() else false()"/>
+  <p:variable name="local-dir" select="/c:param-set/c:param[@name='out-dir-uri']/@value">
+      <!-- example: file:/data/svncompat/.jenkins/workspace/svncompat_https_subversion_le_tex_de_customers_transcript_branches_common_tex_migration/test_after/std/anth/05013 -->
+  </p:variable>
+
+      <cx:message>
+        <p:with-option name="message" select="'[info] vars: ci-test: ', $ci-test, ' local-dir: ', $local-dir"/>
+      </cx:message>
 
   <!-- Determine paths for ONIX document in content repository. 
        It is expected that ONIX file has the same repo-href-local as the source file. -->
@@ -109,16 +117,17 @@
     <p:with-option name="filenames" select="concat(replace($basename, '^(.+_\d{5})(_.+)?$', '$1'), '.meta.xml')"/>
   </tr:paths-for-files-xml>
 
-<!--  <tr:store-debug pipeline-step="metadata/00_paths-fo-files">
+  <tr:store-debug pipeline-step="metadata/00_paths-fo-files">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
-  </tr:store-debug>-->
+  </tr:store-debug>
 
-      <tr:recursive-directory-list name="image-list">
-        <p:with-option name="path" select="replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:///$1')"/>
-<!--          <p:pipe port="result" step="params"/>-->
-<!--        </p:with-option>-->
-      </tr:recursive-directory-list>
+
+  <tr:recursive-directory-list name="meta-list">
+    <p:with-option name="path" select="if ($ci-test = true())
+                                       then concat(replace($local-dir, 'file:/', 'file:///'), '/meta.xml')
+                                       else replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:///$1')"/>
+  </tr:recursive-directory-list>
 
 
   <tr:store-debug pipeline-step="metadata/01_meta-dir-content">
@@ -126,10 +135,14 @@
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
 
-  <tr:file-uri name="meta-file-uri">
+  <p:sink/>
+
+  <tr:file-uri name="meta-file-uri" cx:depends-on="meta-list">
     <p:with-option name="filename" select="concat(/c:directory/@xml:base, 
-                                                  (/c:directory/c:file[contains(@name, 'klopotek.xml')]/@name, /c:directory/c:file[contains(@name, 'meta.xml')]/@name)[1]
-                                                  )"/>
+                                                  (/c:directory/c:file[contains(@name, '.klopotek.xml')]/@name, /c:directory/c:file[contains(@name, '.meta.xml')]/@name)[1]
+                                                  )">
+     <p:pipe port="result" step="meta-list"/>
+    </p:with-option>
   </tr:file-uri>
 
 
@@ -144,12 +157,8 @@
     <p:variable name="current-local-href" select="/c:result/@local-href">
       <p:pipe port="result" step="meta-file-uri"/>
     </p:variable>
-    <p:variable name="local-dir" select="/c:param-set/c:param[@name='out-dir-uri']/@value">
-     <p:pipe port="source" step="load-meta"/>
-    </p:variable>
     <p:variable name="target-dir" select="concat($local-dir, replace($current-local-href, '^.+/\d{5}(/.+)$', '$1'))"/>
-    <p:when test="/c:param-set/c:param[@name='out-dir-uri'][contains(@value, 'test_after')]">
-      <p:xpath-context><p:pipe port="source" step="load-meta"/></p:xpath-context>
+    <p:when test="$ci-test = true()">
       <p:identity name="i1">
         <p:input port="source">
           <p:pipe port="result" step="meta-file-uri"/>
