@@ -30,9 +30,17 @@
   \tpSetProperty{titlepage-i}{%
     \ifcollection
       \topsep0pt \partopsep0pt % no space before
-      \flushleft\tpUseProperty{EditorNameList}\endflushleft%
+      \bgroup
+        \righthyphenmin62
+        \lefthyphenmin62
+        \flushleft\tpUseProperty{EditorNameList}\endflushleft%
+      \egroup
     \else
-      \tpUseComp{AuthorNameList}%
+      \bgroup
+        \righthyphenmin62
+        \lefthyphenmin62
+        \raggedright\tpUseComp{AuthorNameList}%
+      \egroup
     \fi%
     \par
     \tpUseComp{Title}%
