@@ -1,0 +1,183 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-title}[2021/04/09 transcript]\relax
+
+\renewcommand\justify{%
+  \rightskip=0pt
+  \spaceskip=0pt
+  \xspaceskip=0pt
+  \relax%
+}
+
+\tpDeclareTitlepage{%
+  \tpSetProperty{coverpage}{%
+    \bgroup
+      \def\thepage{\@alph\c@page}%
+      \smash{\rlap{%
+          \raise\dimexpr\topskip+\headheight+\headsep+\topmargin-\paperheight\relax
+          \vtop{%
+            \hspace*{-\oddsidemargin}\relax
+            \includegraphics[width=\paperwidth,height=\paperheight]{\tpUseComp{Cover}}%
+          }}}%
+      \clearpage
+    \egroup
+  }%
+  \tpSetProperty{before-titlepage-roman}{%
+    \setcounter{page}{1}%
+    \def\thepage{\roman{page}}%
+    \def\UrlFont{\rmfamily}%
+    \fontsize{9.3}{12.5}\selectfont
+  }%
+  \tpSetProperty{titlepage-i}{%
+    \ifcollection
+      \topsep0pt \partopsep0pt % no space before
+      \flushleft\tpUseProperty{EditorNameList}\endflushleft%
+    \else
+      \tpUseComp{AuthorNameList}%
+    \fi%
+    \par
+    \tpUseComp{Title}%
+    \tpIfComp{Statement}{\par\vskip\baselineskip{\fontsize{10.5}{11}\selectfont\tpUseComp{EditionNote}}}{}%
+    \par\vfill
+    \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
+    \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
+    \tpIfComp{Volume}{{\hskip1.5em\lower.5\dp\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\hskip1.5em\ignorespaces\tpUseComp{Volume}}}{}%
+  }%
+  \tpSetProperty{titlepage-ii}{%
+    \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
+    \tpIfComp{Acknowledgements}{{\itshape\large\tpUseComp{Acknowledgements}}\par\vskip\baselineskip}{}%
+    \tpIfComp{Editorial}{{\justify\tpUseComp{Editorial}\par\vskip\baselineskip}}{}%
+    \vspace*{\fill}%
+    \bgroup
+      {\justify\tpUseProperty{bio-block}}%
+    \egroup
+  }%
+    % Bio
+  \tpSetProperty{bio-block}{%
+    \ifcollection
+      \tpGetComp{EditorMetaBlock}%
+      %\tpGetComp{SeriesEditorMetaBlock}% Erzeugt ein Fundinglogo.
+    \else
+      \tpGetComp{AuthorMetaBlock}% Erzeugt ein Fundinglogo.
+    \fi
+  }%
+  \tpSetProperty{titlepage-iii}{%
+    {\Large\sffamily\ifcollection
+      \tpUseProperty{EditorNameList}%
+    \else
+      \tpUseComp{AuthorNameList}%
+    \fi}%
+    \par
+    \vskip5bp
+    {\raggedright
+      \leavevmode
+      {\sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{Title}}%
+      \tpIfComp{Subtitle}{%
+        \par
+        \sffamily\vskip5bp
+        \Large
+        \topsep0pt \partopsep0pt % no space before
+        \flushleft\tpUseComp{Subtitle}\endflushleft}{}%
+    }%
+    \par
+    \vskip\baselineskip
+    \vfill
+    \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
+    \clearpage
+  }%
+  \tpSetProperty{titlepage-iv}{%
+    \bgroup
+      \justify
+      \tpUseProperty{funding-block}%
+      \vfill
+      \tpUseProperty{imprint-format}%
+      \tpSetComp{BiblioTitle}{Bibliografische Information der Deutschen Nationalbibliothek}
+      \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
+      \tpUseProperty{licence}%
+      \vskip2\baselineskip
+      \bgroup
+        \tpUseProperty{imprint}%
+      \egroup
+    \egroup
+    \clearpage
+  }%
+  %% Format Copyright-Zeile
+  \tpSetProperty{copyright}{%
+    \tpIfComp{Copyright}{{\sffamily\sbseries\tpUseComp{Copyright}}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
+    \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}%
+  }
+  %% Format Impressum
+  \tpSetProperty{imprint}{%
+    \tpUseProperty{publisher}%
+    \tpUseProperty{imprint-sep}
+    \tpGetComp{Qualification}%%
+    \tpGetComp{Conversion}%%
+    {\tpIfComp{CoverImage}{\leftskip5mm\hskip-5mm}{}\tpGetComp{CoverImage}}%%
+    {\tpIfComp{CoverDesign}{\leftskip5mm\hskip-5mm}{}\tpGetComp{CoverDesign}}%%
+    {\tpIfComp{Lectorate}{\leftskip5mm\hskip-5mm}{}\tpGetComp{Lectorate}}%%
+    {\tpIfComp{QA}{\leftskip5mm\hskip-5mm}{}\tpGetComp{QA}}%%
+    \tpGetComp{Translator}%%
+    \tpGetComp{Appraiser}%%
+    \tpGetComp{Discussion}%%
+    {\tpIfComp{TypeSetter}{\leftskip5mm\hskip-5mm}{}\tpGetComp{Typesetter}}%%
+    \tpGetComp{Print}%%
+    \tpGetComp{DOI}%%
+    \tpGetComp{Keywords}%%
+    \tpGetComp{ISBN}%
+    \tpGetComp{EpubPreText}%
+    \tpGetComp{EISBN}%
+    \tpGetComp{EpubISBN}%
+    \tpGetComp{BiblISSN}%
+    \tpGetComp{BibleISSN}%
+    \tpUseProperty{imprint-sep}%
+    \tpGetComp{EnvDisclaimer}%
+    \tpGetComp{Advertise}%
+  }%
+  %% Format Biographien
+  \tpSetProperty{imprint-format}{}%
+  \tpSetProperty{counted-meta-sep}{}%
+  \tpSetProperty{name-meta-format}{%
+    \tpIfComp{Bio}
+      {%{\sbseries\tpUseComp{FullName}}\space% Ticket 12562; 2022-05-02.
+       \tpUseComp{Bio}\par%
+       \tpUseProperty{counted-meta-sep}%
+     }{}%
+  }
+  %% Format CC-Lizenz
+  \tpSetProperty{licence}{%
+    \bgroup
+      \tpIfComp{LicenceLogo}{%
+        \fontsize{8.5}{10}\selectfont
+        \vskip.5\baselineskip
+        \includegraphics{\tpUseComp{LicenceLogo}}\par\vskip1mm}{}%
+      \tpGetComp{LicenceText}%
+    \egroup
+  }
+  %% Format Förderer-Logos
+  \tpSetProperty{fund-vsep}{1mm}% vert. Abstand zwischen Fördererlogos
+  \tpSetProperty{fund-format}{%
+    \tpIfComp{FundName}
+      {\tpUseComp{FundName}\par\vskip-\parskip%% sonst doppelter Abstand
+       \includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}\par\vskip-\parskip\leavevmode}
+      {%
+        \setbox\@tempboxa\hbox{\includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}}%
+        \vbox{\hsize\wd\@tempboxa \box\@tempboxa}\hskip5mm%
+      }%
+  }%
+  \tpSetProperty{funding-block}{%
+    \bgroup
+      \tpIfComp{FundingPreText}{\tpUseComp{FundingPreText}\par}{}%
+      \bgroup
+        \raggedright
+        \lineskip\tpUseProperty{fund-vsep}% vertikaler Abstand zwischen Logos
+        \parskip\tpUseProperty{fund-vsep}%
+        \leavevmode
+        \tpUseComp{FundingBlock}\par%
+      \egroup
+      \tpIfComp{FundingPostText}{\vskip.5\baselineskip\tpUseComp{FundingPostText}\par}{}%
+    \egroup
+  }
+  \tpSetProperty{counted-name-sep}{\ifnum\tpCurCount<\tpTotalCount\relax,\space\fi}%
+  \tpSetProperty{editor-suffix}{~(Hg.)}
+}
+
+

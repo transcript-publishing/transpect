@@ -1,0 +1,104 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-floats}[2021/04/09 transcript]\relax
+\ProcessOptionsX\relax
+
+%% gedrehte Gleitobjekte immer in die gleiche Richtung drehen:
+\@rot@twosidefalse
+\def\rot@LR{-1}%
+\usepackage{ragged2e}
+\usepackage{tabularx}
+\usepackage{multirow}
+
+\usepackage{htmltabs}
+\expandafter\def\csname ht@font-family@sans-serif\endcsname{\ht@apply@prop{internal-font-family}{\nsffamily}}
+
+%% default-Klasse für Tabellen:
+\SetHTClass{}{%
+  \SetClassProp{td}{font-family}{sans-serif}%
+  \SetClassProp{td}{font-size}{x-small}%
+  \SetClassProp[thead]{td}{font-weight}{bold}%
+  \SetClassProp{td}{padding}{0.9mm 2.15mm 0.3mm}%
+  \SetClassProp{table}{break-table}{true}%
+}
+
+
+\intextsep\baselineskip
+%% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
+\tpAddToDefault{float}{%
+  \tpSetProperty{number-format}{}% Format of number, additional to caption-format
+  \tpSetProperty{caption-sep-top}{3mm}%
+  \tpSetProperty{caption-sep-bottom}{\dimexpr3mm\relax}%
+  \tpSetProperty{subcaption-add-sep-top}{-2mm}%
+  \tpSetProperty{caption-valign-top}{bottom}%
+  \tpSetProperty{caption-valign-bottom}{top}%
+  \tpSetProperty{caption-format-top}{\itshape\RaggedRight}%
+  \tpSetProperty{caption-format-bottom}{\footnotesize\upshape\RaggedRight}%
+  \tpSetProperty{subfloat-sep}{2mm}%
+  \tpSetProperty{intext-skip-top}{2\baselineskip}%
+  \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
+  \tpSetProperty{numbering}{}% keine automatische Nummerierung von Gleitobjekten!
+  \ifx\ts@caps\tp@str@bottom
+    \tpSetProperty{caption-top}{}%
+    \tpSetProperty{caption-bottom}{%
+      \tpIfComp{Number}{{\tpUseProperty{number-format}\tpUseComp{Number}\tpUseProperty{number-sep}}}{}%
+      \tpUseComp{Caption}\par%
+      \tpIfComp{Legend}{{\tpUseProperty{legend-format}\tpUseComp{Legend}}}{}%
+      \tpIfComp{Source}{%
+        \tpIfComp{Legend}{\par\nopagebreak}{}%
+        {\tpUseProperty{source-format}%
+          \tpUseComp{Source}}}{}}%
+  \fi
+  %% Parameter für Abbindungs- und Tabellenverzeichnisse
+  \tpSetProperty{list-of-caption-format}{\sffamily}%
+  \tpSetProperty{list-of-indent}{0pt}%
+  \tpSetProperty{list-of-margin-left}{0pt}%
+  \tpSetProperty{list-of-margin-right}{5em}%
+  \tpSetProperty{list-of-page-sep}{\mydotfill\kern.5\p@}% siehe transcript-headings.sty für Def von \mydotfill
+  \tpSetProperty{list-of-caption-format}{\sffamily}%
+  \tpSetProperty{list-of-number-sep}{:\enskip}%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}
+      {\tpUseComp{list-of-hang-number}}
+      {\leftskip0pt}%
+    \tpUseComp{ListofCaption}%
+    \tpUseProperty{list-of-page-sep}\tpUseComp{ListofPage}%
+  }%
+}
+
+\setcounter{lofdepth}{0}%% Tiefe des Abb.-Verzeichnisses: 0 = nur Haupteinträge; 1 = auch (echte) sub-floats inkludieren!
+
+%% gilt nur für Abbildungen:
+\tpDeclareFloat{tpFigure}{figure}{lof}{%
+}
+
+%% gilt nur für Tabellen:
+\tpDeclareFloat{tpTable}{table}{lot}{%
+}
+
+%% Klassen für Abbildungen:
+\tpDeclareClass{A}{\tpSetProperty{margin-left}{0mm}\tpSetProperty{margin-right}{0mm}}
+\tpDeclareClass{B}{\tpSetProperty{margin-left}{10mm}\tpSetProperty{margin-right}{10mm}}
+\tpDeclareClass{C}{\tpSetProperty{margin-left}{15mm}\tpSetProperty{margin-right}{15mm}}
+\tpDeclareClass{D}{\tpSetProperty{margin-left}{30mm}\tpSetProperty{margin-right}{30mm}}
+
+\tpDeclareClass{wide}{%
+  \tpSetProperty{margin-outer}{\dimexpr-\evensidemargin+10mm\relax}%
+  %\tpSetProperty{margin-inner}{-\oddsidemargin}%
+}
+
+\def\ht@min@p@rows{2}%
+\def\ht@min@b@rows{4}%
+
+
+%% Abbildungsverzeichnis
+\renewcommand\listoffigures{%
+  \@starttoc{lof}%
+  \clearpage
+  }
+
+%% Tabellenverzeichnis
+\renewcommand\listoftables{%
+  \@starttoc{lot}%
+  \clearpage
+  }

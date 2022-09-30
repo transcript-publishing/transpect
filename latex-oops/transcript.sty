@@ -1,0 +1,136 @@
+%%
+%% Pusblisher specific style sheet for transcript
+%% To be used with le-tex cocotex.cls.
+%%
+%% Maintainer: p.schulz@le-tex.de
+%%
+%% lualatex  -  texlive > 2019
+%%
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript}[2021/04/09 transcript]\relax
+
+%% Paketoptionen
+%% durchreichen der script-Optionen
+\define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}}
+\DeclareOptionX{nohead}{\global\let\n@head\relax}
+\ProcessOptionsX\relax
+
+%% Seitenzähler unter der Annahme, dass keine Titelei erzeugt wird.
+%% Das Titeleimodul setzt den Seitenzähler bei Aufruf auf 1.
+\setcounter{page}{5}
+
+%%%%%%%%%%
+% Fonts  %
+%%%%%%%%%%
+\usepackage{transcript-fonts}
+
+\usepackage{newunicodechar}
+%\newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
+\newunicodechar{‐}{\penalty\@M-\hskip\z@skip}% 8617
+\newunicodechar{‑}{\hbox{-}\penalty\@M\hskip\z@skip}% 8617
+\newunicodechar{↩}{\hskip\z@skip}
+\newunicodechar{。}{\hbox{$_\circ$\enskip\ignorespaces}}
+\newunicodechar{、}{,\enskip\ignorespaces}
+\newunicodechar{；}{;\enskip\ignorespaces}
+\newunicodechar{：}{:\enskip\ignorespaces}
+\newunicodechar{，}{,\enskip\ignorespaces}
+\newunicodechar{ǀ}{|}
+
+\DeclareRobustCommand\unichar[1]{\textfallback{#1}}
+
+%%%%%%%%%%%%%%
+% Font sizes %
+%%%%%%%%%%%%%%
+
+\usepackage{transcript-fontsizes}
+
+%%%%%%%%%%%%%%%
+% page layout %
+%%%%%%%%%%%%%%%
+\usepackage[\lay]{transcript-pagelayout}
+
+%%%%%%%%%%%%%%%
+% Page Styles %
+%%%%%%%%%%%%%%%
+
+\usepackage{transcript-pagestyles}
+
+\gdef\cleardoublepage{%
+  \clearpage
+  \ifodd\c@page\relax\else
+    \hbox{}\thispagestyle{empty}\newpage
+    \if@twocolumn\hbox{}\thispagestyle{empty}\newpage\fi
+  \fi}
+
+%%%%%%%%%%%%%%%%%
+% Überschriften %
+%%%%%%%%%%%%%%%%%
+
+\usepackage{transcript-headings}
+
+%%%%%%%
+% TOC %
+%%%%%%%
+
+\usepackage{transcript-toc}
+
+%%%%%%%%%%%%%
+% Footnotes %
+%%%%%%%%%%%%%
+
+\usepackage{transcript-notes}
+
+%%%%%%%%%%%%%%%%
+% Gleitobjekte %
+%%%%%%%%%%%%%%%%
+
+\usepackage{transcript-floats}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Gestaltungselemente %
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{transcript-envs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Literaturverzeichnis %
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{transcript-bib}
+
+\def\source#1{\leavevmode\par#1}
+
+%%%%%%%%%%%
+% Titelei %
+%%%%%%%%%%%
+\usepackage{transcript-title}
+
+\def\flq{‹}
+\def\frq{›}
+
+%%%%%%%%%%%%
+% Register %
+%%%%%%%%%%%%
+
+\usepackage{transcript-index}
+
+\let\oldhref\href
+\def\@nohyphen#1\@nil#2#3\relax{\oldhref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\@nohyphen#1\@nil#3\relax\fi}
+\protected\def\href#1#2{{\let↩\@empty\@nohyphen#1\@nil#2\relax\relax}}
+\let\fn@href\href
+% \bgroup
+% \let↩\relax
+% \gdef\fn@href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
+% \gdef\href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
+% \gdef\@fn@href #1\@nil #2↩#3↩\@nil{\oldhref{#1}{#2}\hskip\z@skip\if!#3!\else\@fn@href #1\@nil #3↩\@nil\fi}
+% \egroup
+\usepackage{ulem}
+\let\ul\uline
+\AtBeginDocument{%
+  \ifx\tpRunBookTitle\@undefined
+    \PackageError{transcript.sty}{No BookTitle given!}{}%
+    \def\tpRunBookTitle{--~book title not defined~--}%
+  \fi
+}
+
+\endinput

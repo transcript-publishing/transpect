@@ -1,0 +1,88 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-pagestyles}[2021/04/09 transcript]\relax
+
+\def\ps@empty{%
+  \let\@oddhead\@empty
+  \let\@oddfoot\@empty
+  \let\@evenhead\@empty
+  \let\@evenfoot\@empty
+}
+
+\def\ps@headings{%
+  \def\left@mark{%
+    \def\numberline####1{####1\enskip}%
+    \ifx\@chaptername\contentsname\else
+      \ifx\has@parts\relax
+        \ifx\@partmark\@undefined
+          \tpRunBookTitle
+        \else
+          \ifx\@chaptermark\@undefined
+            \tpRunBookTitle
+          \else
+            \@partmark
+          \fi
+        \fi
+      \else
+        \ifcollection
+          \@authormark
+        \else
+          \tpRunBookTitle
+        \fi
+      \fi
+    \fi
+  }%
+  \def\right@mark{%
+    \def\numberline####1{####1\enskip}%
+    \ifx\@chaptername\contentsname\else
+      \ifx\has@parts\relax
+        \ifcollection
+          \ifx\@authormark\@empty
+          \else
+            \@authormark:
+          \fi
+        \fi
+        \ifx\@partmark\@undefined
+          \ifx\@chaptermark\@undefined
+            \tpRunBookTitle
+          \else
+            \@chaptermark
+          \fi
+        \else
+          \ifx\@chaptermark\@undefined
+            \@partmark
+          \else
+            \@chaptermark
+          \fi
+        \fi
+      \else
+        \ifx\@chaptermark\@undefined
+          \tpRunBookTitle
+        \else
+          \@chaptermark
+        \fi
+      \fi
+    \fi
+  }%
+  \def\@oddhead{\hfill{\small\sffamily\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
+      % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
+    }}%
+  \def\@evenhead{%
+    % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
+    {\small\sffamily\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
+  \let\@oddfoot\@empty
+  \let\@evenfoot\@empty
+  \def\partmark##1{%
+    \gdef\@partmark{##1}%
+  }%
+  \def\chaptermark##1{%
+    \gdef\@chaptermark{##1}%
+  }%
+}
+
+\def\ps@articlehead{%
+  \ps@headings
+  \def\@oddhead{\smash{\vtop{\hfill\small\sffamily\@journalMark\@@par\hfill\@articleDOI}}}%
+  \def\@oddfoot{\ifvoid\@articlefootbox\else\smash{\vbox{\vss\unvbox\@articlefootbox}}\fi}
+}
+
+\pagestyle{headings}

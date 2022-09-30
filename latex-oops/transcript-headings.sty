@@ -1,0 +1,340 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-headings}[2021/08/18 transcript]\relax
+
+
+\def\mydotfill{%
+  \nobreak\leaders\hbox{$\m@th
+    \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
+    mu$}\hskip 2pt plus 1fill% Space of at least 2pt; prevents empty dotfills with page number directly after the toc heading.
+  \nobreak}
+
+\newdimen\chaphskip \chaphskip7mm %% default
+%% Globale Settings: gelten für alle ÜS-Ebenen
+\tpAddToDefault{heading}{%
+  \tpSetProperty{numbering}{}%
+  \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
+  \tpSetProperty{indent}{auto}%
+  \tpSetProperty{toc-margin-right}{6em}%
+  \ifcollection
+    \tpSetProperty{toc-margin-left}{}%
+    \tpSetProperty{toc-indent}{}%
+  \else
+    \tpSetProperty{toc-margin-left}{\tpIfComp{TocNumber}{auto}{0mm}}%
+    \tpSetProperty{toc-indent}{auto}%
+  \fi
+  \tpSetProperty{toc-number-align}{left}%
+  \tpSetProperty{toc-number-sep}{\enskip}%
+  \tpSetProperty{toc-page-sep}{\mydotfill}%
+  \tpSetProperty{toc-title-format}{\sffamily\normalsize}%
+  \tpSetProperty{toc-page-format}{\normalfont\sfwidefamily\normalsize}%
+  \tpSetProperty{toc-heading}{%
+    \tpUseProperty{toc-title-format}%
+    \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
+    \tpIfComp{TocNumber}{\tpUseProperty{toc-hang-number}}{}%
+    \tpTocLink{%
+      \tpUseComp{TocTitle}%
+      \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+  }%
+  \tpSetProperty{counted-name-sep}{/}%
+}
+
+\tpDeclareHeading{-1}{part}{%
+  \tpSetProperty{before-heading}{%
+    \cleardoublepage
+    \null\vskip\headingsep
+    \thispagestyle{empty}%
+    \global\let\@chaptermark\@undefined
+    \global\let\has@parts\relax
+    \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
+    \ifcollection \global\let\@authormark\@empty\fi
+  }%
+  \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
+  \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
+  \tpSetProperty{title-format}{\sffamily\sbseries\fontsize{17.5bp}{25.6bp}\selectfont}%
+  \tpSetProperty{heading-block}{%
+    \tpUseProperty{title-format}%
+    %\vskip.5\baselineskip
+    \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
+    \tpUseComp{Title}\par%
+    \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
+    %% Zitat
+    \tpIfComp{Quote}{%
+      \vskip2\baselineskip
+      \savenotes
+      \hfill\hbox{\vbox{%
+          \rightskip\z@
+          \hsize.5\textwidth
+          \normalfont
+          \normalsize
+          \nsfwiderfamily
+          \tpUseComp{Quote}\par
+          %% Zitat-Quelle
+          \tpIfComp{QuoteSource}{%
+            {\itshape
+            \tpUseComp{QuoteSource}}}{}}}%
+      \spewnotes
+      \vskip-2\baselineskip
+    }{}%
+  }%
+  \tpSetProperty{after-heading-block}{\vfill}%
+  %% ToC
+  \tpSetProperty{toc-margin-top}{2.25em}%
+  \tpSetProperty{toc-indent}{}%
+  \tpSetProperty{toc-title-format}{\sffamily\sbseries\huge}%
+  \tpSetProperty{toc-heading}{%
+    \tpUseProperty{toc-title-format}%
+    \tpTocLink{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}%
+      \tpUseComp{TocTitle}}\nobreak}%
+  \tpSetProperty{toc-before-entry}{%
+    \addvspace{\tpUseProperty{toc-margin-top}}
+    \parindent \z@
+    \hyphenpenalty=\@M
+    \let\\\@centercr
+    \rightskip\z@skip\relax
+    \parfillskip\@flushglue
+  }%
+  \tpSetProperty{toc-after-entry}{\par\nobreak\addvspace{\tpUseProperty{toc-margin-bottom}}}% Thing at the end of the entry, after the page number
+}
+
+\tpDeclareHeading{0}{chapter}{%
+  \tpSetProperty{before-heading}{\cleardoublepage\null\nobreak\thispagestyle{empty}}%
+  \tpSetProperty{before-skip}{\dimexpr\headingsep-.45mm\relax}%
+  \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
+  \tpSetProperty{toc-margin-right}{2em}%
+  \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}%
+  \tpSetProperty{heading-block}{%
+    %% Titel
+    \leftskip\z@
+    \leavevmode
+    \bgroup
+      \raggedright
+      \tpIfComp{Number}{\leftskip-\tpUseProperty{indent}}{}%
+      \tpUseProperty{title-format}%
+      {\sfchapfamily
+       \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
+       \tpUseComp{Title}}%
+      \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\tpUseComp{Subtitle}}{}%
+      \par\nobreak
+    \egroup
+    %% Linie
+    \vskip\dimexpr-1\baselineskip\relax
+    \smash{\rlap{\lower3.25mm\vbox{\rule{\textwidth}{.4\p@}}}}\par%
+    %% Autor
+    \tpIfComp{AuthorNameList}{%
+      \vskip\baselineskip
+      {\large\sfwidefamily\itshape\tpUseComp{AuthorNameList}}%
+      \par%\vskip\baselineskip
+    }{}%
+    %% Zitat
+    \tpIfComp{Quote}{%
+      \vskip2\baselineskip
+      \savenotes
+      \hfill\hbox{\vbox{%
+          \rightskip\z@
+          \hsize.5\textwidth
+          \normalfont
+          \normalsize
+          \nsfwiderfamily
+          \tpUseComp{Quote}\par
+          %% Zitat-Quelle
+          \tpIfComp{QuoteSource}{%
+            {\itshape
+            \tpUseComp{QuoteSource}}}{}}}%
+      \spewnotes
+    }{}%
+  }%
+  %% Format Kolumnentitel
+  \tpSetProperty{running-extra}{%
+    \tpIfComp{RunAuthorNameList}
+      {\protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}}
+      {\global\let\@authormark\@empty}%
+  }%
+  \tpSetProperty{running-heading}{%
+    \tpIfComp{RunNumber}{\tpUseComp{RunNumber}\enskip}{}\tpUseComp{RunTitle}}%
+  %% Format IHV-Eintrag
+  \tpSetProperty{toc-margin-top}{1\baselineskip}%
+  \tpSetProperty{toc-number-sep}{\enskip}%
+  \tpSetProperty{toc-title-format}{\sbseries\sfwidefamily\ifcollection\Large\fi}%
+  \tpSetProperty{toc-subtitle-format}{\normalfont\sffamily}%
+  \tpSetProperty{toc-indent}{2em}%
+  \tpSetProperty{toc-margin-left}{2em}%
+  \tpSetProperty{toc-heading}{%
+    \tpUseProperty{toc-title-format}%
+    \tpIfComp{TocNumber}
+      {\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
+      {\leftskip\z@}%
+    \tpTocLink{\tpUseComp{TocTitle}}%
+    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+    \tpIfComp{TocAuthorNameList}{\newline{\normalfont\sffamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
+    \tpUseProperty{toc-page-sep}\tpTocLink{\tpUseComp{TocPage}}%
+  }%
+  %% Format PDF-Bookmarks
+  \tpSetProperty{bookmark}{%
+    % \tpIfComp{TocAuthorNameList}{\tpUseComp{TocAuthorNameList}:\space}{}%
+    \tpIfComp{BMNumber}{\tpUseComp{BMNumber}\space}{}\tpUseComp{BMTitle}%
+  }%
+}
+
+\tpDeclareHeading[chapter]{0}{contribution}{%
+  \tpSetProperty{extended}{true}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
+  \tpSetProperty{before-heading}{\cleardoublepage\null\nobreak\thispagestyle{articlehead}}%
+  \tpSetProperty{running-level}{chapter}%
+  \tpSetProperty{running-extra}{%
+    \tpIfComp{RunAuthorNameList}
+      {\protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}}
+      {\global\let\@authormark\@empty}%
+    \tpIfGComp{titlepage}{JournalName}
+      {\protected@xdef\@journalMark{\tpUseGComp{titlepage}{JournalName}\space\tpUseGComp{titlepage}{Year}\space\tpUseGComp{titlepage}{Volume}/\tpUseGComp{titlepage}{Issue}\space\oaSymbol}}
+      {\global\let\@journalMark\@empty}%
+    \tpIfComp{DOI}
+      {\protected@xdef\@articleDOI{\tpUseComp{DOI}}}
+      {\global\let\@articleDOI\@empty}%
+  }%
+  \tpSetProperty{after-heading-par}{\par}%
+  \tpSetProperty{extended-heading}{%
+    \articlefoot{{%
+      \tpUseProperty{affil-block-face}%
+      \tpIfComp{AuthorContactBlock}{Corresponding authors: \tpUseComp{AuthorContactBlock}\par}{}%
+      \oaSymbol\space\tpIfComp{Copyright}{\tpUseComp{Copyright}\par}{}%
+    }}%
+    \tpIfComp{Abstract}
+      {{\par\vskip\baselineskip\small
+       \rightskip\z@
+       {\bfseries\tpIfComp{AbstractTitle}{\tpUseComp{AbstractTitle}}{Abstract}}\par\nobreak
+       {\itshape\leavevmode\tpUseComp{Abstract}}\par}}
+      {}%
+    \tpIfComp{TitleEn}
+      {{\par\vskip\baselineskip\small
+       {\bfseries Title}\par\nobreak
+       {\itshape\leavevmode\tpUseComp{TitleEn}\par}}}
+      {}%
+    \tpIfComp{Keywords}
+      {{\par\vskip\baselineskip\small
+       {\bfseries\tpIfComp{KeywordsTtitle}{\tpUseComp{KeywordsTitle}}{Keywords}}\par\nobreak
+       {\itshape\leavevmode\tpUseComp{Keywords}\par}}}
+      {}%
+    }%
+  \tpSetProperty{author-contact-block-format}{\tpUseComp{AuthorContact}}%
+  \tpSetProperty{author-contact-format}{%Format of a single author's contact information
+    \tpUseComp{FullName}%
+    \tpIfComp{Affil}{{\tpUseGroupProp{tpAffil}{\tpUseComp{Affil}}{affil-block-format}\par}}{}%
+    \tpIfComp{Email}{E-Mail: \tpUseComp{Email}\par}{}%
+    \tpIfComp{ORCID}{\tpUseProperty{orcid-link}\par}{}%
+  }%
+  \tpSetProperty{affil-block-face}{\sfwidefamily\small}
+  \tpSetProperty{affil-block-format}{\space(\tpUseComp{Affiliation});}
+  \tpSetProperty{orcid-link}{\tpUseComp{ORCID}}%
+  \tpSetProperty{affil-sep}{}%
+}
+
+%% We need an additional TitleEn Component which seems to be specific
+%% to transcript and its contribution heading. This is how it's done:
+\tpAddToType{Components}{contribution}{\tpDeclareComp{TitleEn}{}{}}
+% If we instead need it in any heading level, we could change the
+% second argument to {tpHeading}. Then, the new component would be
+% available to *all* heading levels.
+
+%% Wir können die Fusszeile bei Articles nicht in \@oddfoot
+%% reinstecken, weil die ggf den Satzspiegel verkleiner müssen, was
+\newbox\@articlefootbox \setbox\@articlefootbox\box\voidb@x
+\long\def\articlefoot#1{%
+  \global\setbox\@articlefootbox\vbox{#1}%
+  \global\enlargethispage{-\dimexpr\ht\@articlefootbox+\dp\@articlefootbox\relax}%
+}
+\def\oaSymbol{\includegraphics[height=1em]{logos/oasymbol.pdf}}
+
+\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
+\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
+
+
+\tpDeclareHeading{1}{section}{%
+  \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
+  \tpSetProperty{number-sep}{\enskip}%
+  \tpSetProperty{after-skip}{12.8bp}%
+  \tpSetProperty{title-format}{\sffamily\LARGE\sbseries}%
+  \tpSetProperty{before-quote-skip}{1\baselineskip}%
+  \tpSetProperty{heading-block}{%
+    \bgroup
+      \normalfont
+      \interlinepenalty\@M
+      \tpUseProperty{title-format}%
+      \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
+      \tpUseComp{Title}\par
+      \tpIfComp{Subtitle}{\normalfont\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
+      \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
+    \egroup
+    \tpIfComp{Quote}{%
+      \vskip\tpUseProperty{before-quote-skip}%
+      %\savenotes
+      \hfill\vbox{%
+        \hsize.5\textwidth
+        \normalsize\nsfwiderfamily\mdseries
+        \noindent
+        \tpUseComp{Quote}}%
+      %\spewnotes
+      \par}{}%
+  }%
+  \tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
+  \tpSetProperty{bookmark}{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\enskip}{}\tpUseComp{TocTitle}}%
+  \ifcollection\else
+    \tpSetProperty{toc-indent}{2em}%
+    \tpSetProperty{toc-margin-left}{2em}%
+    \tpSetProperty{toc-heading}{%
+      \tpUseProperty{toc-title-format}%
+      \tpIfComp{TocNumber}
+      {\tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
+        \hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
+      {%\leftskip\z@%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+      }%
+      \tpTocLink{\tpUseComp{TocTitle}}%
+      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+    }%
+  \fi
+}
+
+\tpDeclareHeading[section]{2}{subsection}{%
+  \tpSetProperty{before-heading}{\addvspace{11.5bp}}%
+  \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
+  \tpSetProperty{before-quote-skip}{.5\baselineskip}%
+  \tpSetProperty{running-heading}{}% da subsection sonst die Kolumnentitel ebenfalls von section erben würde
+  \ifcollection\else
+    \tpSetProperty{toc-indent}{2em}%
+    \tpSetProperty{toc-margin-left}{4em}%
+  \fi
+}
+
+\tpDeclareHeading[section]{3}{subsubsection}{%
+  \tpSetProperty{before-heading}{\minusvspace{12.8bp}}%
+  %\tpSetProperty{after-skip}{1sp}% Ticket 12534, 2022-04-25
+  \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
+  \ifcollection\else
+    %\tpSetProperty{toc-indent}{8em}%
+    \tpSetProperty{toc-margin-left}{6.5em}%
+  \fi
+  \tpSetProperty{toc-heading}{%
+    \tpUseProperty{toc-title-format}%
+    \tpIfComp{TocNumber}
+    {\tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
+      \hskip-2.5em\hbox to 2.5em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
+    {%\leftskip\z@%
+      \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+    }%
+    \tpTocLink{\tpUseComp{TocTitle}}%
+    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+    \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+  }%
+}
+
+\tpDeclareHeading[section]{4}{paragraph}{%
+  \tpSetProperty{before-heading}{\minusvspace{12.8bp}}%
+  \tpSetProperty{after-skip}{1sp}%
+  \tpSetProperty{title-format}{\normalfont\sfwidefamily\normalsize}%
+}
+
+\tpDeclareHeading{5}{subparagraph}{%
+  \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
+  \tpSetProperty{after-skip}{-.5em}%
+  \tpSetProperty{title-format}{\normalfont\sffamily\normalsize\mdseries}%
+}
