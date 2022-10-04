@@ -1,7 +1,6 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-fonts}[2021/04/09 transcript]\relax
 
-\usepackage{fontspec}
 \babelfont{rm}[%
   Path=fonts/Alegreya/Alegreya/,%
   BoldFont = Alegreya-Bold.ttf,%
@@ -101,7 +100,29 @@
   FakeStretch=1.02,
   Color=353132]{BarlowCondensed-Regular.ttf}
 
-\babelfont{nsffamily}[%
+\babelfont{sfchapwide}[%
+  Path=fonts/Barlow/Barlow Condensed/,%
+  BoldFont = BarlowCondensed-Bold.ttf,%
+  FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},%
+  FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},%
+  FontFace = {lt}{n}{BarlowCondensed-Light.ttf},%
+  FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},%
+  FontFace = {md}{n}{BarlowCondensed-Medium.ttf},%
+  FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},%
+  FontFace = {eb}{n}{BarlowCondensed-Black.ttf},%
+  FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},%
+  FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},%
+  FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},%
+  ItalicFont = BarlowCondensed-Italic.ttf,%
+  BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
+  WordSpace=2.0,%
+  LetterSpace=2.0,%
+  FakeStretch=1.02,%
+  Color=353132%
+]{BarlowCondensed-Regular.ttf}
+
+
+\babelfont{nsf}[%
   Path=fonts/Alegreya/Alegreya Sans/,%
   BoldFont = AlegreyaSans-Bold.ttf,%
   FontFace = {eb}{n}{AlegreyaSans-ExtraBold.ttf},
