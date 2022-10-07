@@ -14,6 +14,7 @@
 \define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}}
 \DeclareOptionX{nohead}{\global\let\n@head\relax}
 \ProcessOptionsX\relax
+\ifjournal\collectiontrue\fi
 
 %% Seitenzähler unter der Annahme, dass keine Titelei erzeugt wird.
 %% Das Titeleimodul setzt den Seitenzähler bei Aufruf auf 1.
