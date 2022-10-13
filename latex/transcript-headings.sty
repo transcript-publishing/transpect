@@ -111,21 +111,20 @@
   \tpSetProperty{toc-margin-right}{2em}%
   \tpSetProperty{toc-number-sep}{\enskip}%
   \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\ifcollection\Large\fi}%
-  \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapfamily}%
+  \tpSetProperty{toc-subtitle-format}{\normalfont\normalsize\sfchapfamily}%
+  \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
   \tpSetProperty{toc-indent}{2em}%
   \tpSetProperty{toc-margin-left}{2em}%
   \tpSetProperty{toc-heading}{%
-    \vtop{\strut%
-      \tpUseProperty{toc-title-format}%
-      \tpIfComp{TocNumber}
-        {\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
-        {\leftskip\z@}%
-      \tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpIfComp{TocAuthor}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
-      \tpUseProperty{toc-page-sep}\tpTocLink{\tpUseComp{TocPage}}%
-      \strut%
-    }
+    \tpUseProperty{toc-title-format}%
+    \tpIfComp{TocNumber}
+    {\leavevmode\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
+    {\leftskip\z@\leavevmode}%
+    \strut\tpTocLink{\tpUseComp{TocTitle}}%
+    \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
+    \tpIfComp{TocAuthor}{\nopagebreak\newline{\tpUseProperty{toc-author-format}\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
+    \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
+    \strut%
   }%
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
