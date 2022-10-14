@@ -535,10 +535,10 @@
 
 <!--    <xsl:choose>
       <xsl:when test="$is-collection">-->
-<!--        links: tpAuthor/tpRunAuthor, wenn es den nicht gibt: \tp(Run)Title | Rechts: \tp(Run)Title-->
+<!--        links: tpAuthor/tpRunAuthorNameList, wenn es den nicht gibt: \tp(Run)Title | Rechts: \tp(Run)Title-->
 
         <xsl:if test="dbk:abbrev[matches(@role, $col-author-style)] or dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]">
-          <rule name="tpRunAuthor" type="cmd" break-before="1">
+          <rule name="tpRunAuthorNameList" type="cmd" break-before="1">
             <param select="(dbk:abbrev[matches(@role, $col-author-style)], 
                             dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]
                             )[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
@@ -626,7 +626,7 @@
       </rule>
     </xsl:if>
     <xsl:if test="dbk:author or dbk:authorgroup/dbk:author">
-      <rule name="tpTocAuthor" type="cmd" break-after="0" break-before="1">
+      <rule name="tpTocAuthorNameList" type="cmd" break-after="0" break-before="1">
         <param select="(dbk:author|dbk:authorgroup/dbk:author)/dbk:personname/dbk:othername">
           <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
