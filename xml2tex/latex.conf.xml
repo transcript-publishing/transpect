@@ -610,6 +610,7 @@
         <param select="dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/text()">
           <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
           <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
@@ -619,6 +620,7 @@
         <param select="dbk:subtitle/node()">
           <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-newline" select="false()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
           <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
@@ -628,6 +630,7 @@
         <param select="(dbk:author|dbk:authorgroup/dbk:author)/dbk:personname/dbk:othername">
           <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
           <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
