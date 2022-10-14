@@ -18,6 +18,7 @@
   <xsl:variable name="create-customer-toctitles" select="true()" as="xs:boolean"/>
   
   <xsl:variable name="is-collection" select="matches($basename,  'ts_[a-z]{3}_anth_')" as="xs:boolean"/>
+  <xsl:variable name="is-journal" select="matches($basename,  'ts_jrn_[a-z]{3,4}_')" as="xs:boolean"/>
 
   <!-- see the wiki link below for details
        https://redmine.le-tex.de/projects/transpect-typesetter/wiki/Titelei -->
@@ -177,7 +178,7 @@
                                  string-join(($babel-langs[position() ne 1],
                                               replace($babel-langs[1], '(spanish)', '$1,es-noindentfirst')), (: 1st lang is main lang and comes last, if spanish no indent #13453 :)
                                  ','),
-                                 if($is-collection) then ',pubtype=collection' else (),
+                                 if($is-collection) then ',pubtype=collection' else if ($is-journal) then ',pubtype=journal' else (),
                                  if($notes-per-chapter = ('yes', 'true') or $notes-type = 'footnotes') then ',resetnotesperchapter' else (),
                                  if($notes-type eq 'endnotes' and $endnotes-with-chapter eq 'yes')  
                                                                      then ',endnoteswithchapters'
@@ -433,38 +434,7 @@
     <xsl:value-of select="concat('&#xa;\def\notesname{', . ,'}')"/>
     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
   </template>
-  
-  <!--<template context="dbk:chapter[$notes-type eq 'endnotes' and $notes-per-chapter eq 'yes']
-                                [.//dbk:footnote]
-                                [not(.//dbk:para[matches(@role, $endnotes-heading-style)])]">
-    
-    <rule name="heading" type="env" break-after="2" break-before="1">
-      <param select="'section'"/>
-      <xsl:value-of select="concat('&#xa;\tpTitle{', 
-                                 ('Anmerkungen', 'Notes', 'Notes')[index-of(('de', 'en', 'fr'), $main-lang)] ,
-                                 '}')"/>
-    </rule>
-    <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
-  </template>-->
-  
-  <!--<template context="dbk:dedication[@role eq 'tsded']">
-    <rule name="wid" type="env"  break-after="1" break-before="1">
-      <param/>
-    </rule>
-  </template>-->
-  
-    <!--<template context="dbk:abbrev[matches(@role, $col-head-right-style)]">
-    <rule name="chaptermark" type="cmd" break-after="1">
-      <param/>
-    </rule>
-  </template>
-  
-  <template context="dbk:abbrev[matches(@role, concat($col-head-short-style, '|', $col-head-left-style))]">    
-    <rule name="def\partmarkoverride" type="cmd" break-after="1" break-before="1">
-      <param/>
-    </rule>
-  </template>-->
-  
+   
     <!-- suppress additional underline markup in titles -->
   
   <template context="dbk:part/dbk:title/dbk:phrase[matches(@role, '^[a-z]{2,3}underline$')]
@@ -489,142 +459,7 @@
       <text/>
     </rule>
   </template>
-   
-  <!-- headings -->
-  <!--<template context="dbk:part/dbk:info | dbk:section/dbk:info | dbk:chapter/dbk:info | dbk:preface/dbk:info | dbk:appendix/dbk:info | dbk:bibliogaphy/dbk:info">
-    <xsl:apply-templates select="node()" mode="#current"/>
-  </template>-->
 
-  <!--<xsl:template name="option-for-headlines">
-    <xsl:if test=".//dbk:footnote
-                 |parent::*/dbk:subtitle
-                 |parent::*/dbk:info/dbk:subtitle">
-      <xsl:text>[</xsl:text>
-      <xsl:apply-templates select="node()" mode="#current">
-        <xsl:with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
-      </xsl:apply-templates>
-      <xsl:text>]</xsl:text>
-    </xsl:if>
-  </xsl:template>-->
-
-  <!--<template context="dbk:title[matches(@role, $genereral-heading-style)]/dbk:phrase[@role eq 'hub:identifier']"/>-->
-
-  <!--<template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?1$')]">
-    <xsl:choose>
-      <xsl:when test="dbk:phrase[@role eq 'hub:identifier']">
-        <xsl:value-of select="concat('\setcounter{secnumdepth}{', $secnumdepth, '}&#xa;')"/>
-        <xsl:value-of select="string-join(('\def\thechapter{', dbk:phrase[@role eq 'hub:identifier'], '}&#xa;'), '')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>\setcounter{secnumdepth}{-2}</xsl:text>    
-      </xsl:otherwise>
-    </xsl:choose>
-    <rule name="chapter" type="cmd" break-after="2" break-before="2">
-      <xsl:call-template name="option-for-headlines"/>
-      <param/>
-    </rule>
-    <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>-->
-    
-  <!--<template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?2$')]">
-    <xsl:choose>
-      <xsl:when test="dbk:phrase[@role eq 'hub:identifier']">
-        <xsl:value-of select="concat('\setcounter{secnumdepth}{', $secnumdepth, '}&#xa;')"/>
-        <xsl:value-of select="string-join(('\def\thesection{', dbk:phrase[@role eq 'hub:identifier'], '}&#xa;'), '')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>\setcounter{secnumdepth}{-1}</xsl:text>    
-      </xsl:otherwise>
-    </xsl:choose>
-    <rule name="section" type="cmd" break-after="2" break-before="2">
-      <xsl:call-template name="option-for-headlines"/>
-      <param/>
-    </rule>
-    <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>-->
-  
-  <!--<template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?3$')]">
-    <xsl:choose>
-      <xsl:when test="dbk:phrase[@role eq 'hub:identifier']">
-        <xsl:value-of select="concat('\setcounter{secnumdepth}{', $secnumdepth, '}&#xa;')"/>
-        <xsl:value-of select="string-join(('\def\thesubsection{', dbk:phrase[@role eq 'hub:identifier'], '}&#xa;'), '')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>\setcounter{secnumdepth}{0}</xsl:text>    
-      </xsl:otherwise>
-    </xsl:choose>
-    <rule name="subsection" type="cmd" break-after="2" break-before="2">
-      <xsl:call-template name="option-for-headlines"/>
-      <param/>
-    </rule>
-    <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>-->
-  
-  <!--<template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?4$')]">
-    <xsl:choose>
-      <xsl:when test="dbk:phrase[@role eq 'hub:identifier']">
-        <xsl:value-of select="concat('\setcounter{secnumdepth}{', $secnumdepth, '}&#xa;')"/>
-        <xsl:value-of select="string-join(('\def\thesubsubsection{', dbk:phrase[@role eq 'hub:identifier'], '}&#xa;'), '')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>\setcounter{secnumdepth}{1}</xsl:text>    
-      </xsl:otherwise>
-    </xsl:choose>
-    <rule name="subsubsection" type="cmd" break-after="2" break-before="2">
-      <xsl:call-template name="option-for-headlines"/>
-      <param/>
-    </rule>
-    <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>-->
-  
-  <!--<template context="dbk:title[matches(@role, '^[a-z]{2,3}heading(enumerated)?5$')]">
-    <xsl:choose>
-      <xsl:when test="dbk:phrase[@role eq 'hub:identifier']">
-        <xsl:value-of select="concat('\setcounter{secnumdepth}{', $secnumdepth, '}&#xa;')"/>
-        <xsl:value-of select="concat('\def\theparagraph{', dbk:phrase[@role eq 'hub:identifier'], '}&#xa;')"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>\setcounter{secnumdepth}{2}</xsl:text>    
-      </xsl:otherwise>
-    </xsl:choose>
-    <rule name="paragraph" type="cmd" break-after="2" break-before="2">
-      <param/>
-    </rule>
-    <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>-->
-
-  <!--<template context="dbk:preface/dbk:title
-                    |dbk:preface/dbk:info/dbk:title">
-    <rule name="chapter*" type="cmd"  break-after="2" break-before="2">
-      <xsl:call-template name="option-for-headlines"/>
-      <param/>
-      <text select="concat('\addcontentsline{toc}{chapter}{', ., '}')"/>
-    </rule>
-  </template>-->
-  
-  <!--<template context="dbk:dedication">
-    <rule name="widmung" type="env"  break-after="1" break-before="1">
-      <param/>
-    </rule>
-  </template>-->
-  
-  <!--<template context="dbk:dedication//dbk:br">
-    <xsl:text>\\</xsl:text>
-  </template>-->
-  
-  <!--<template context="dbk:part/dbk:title
-                    |dbk:part/dbk:info/dbk:title">
-      <rule name="part" type="cmd" break-after="2" break-before="2">
-        <xsl:text>{</xsl:text>
-        <xsl:if test="dbk:phrase[@role eq 'hub:identifier']">
-          <xsl:value-of select="concat('\protect\numberline{', dbk:phrase[@role eq 'hub:identifier'] ,'&#x20;}')"/>
-        </xsl:if>
-        <xsl:apply-templates mode="#current"/>
-        <xsl:text>}</xsl:text>
-      </rule>
-      <xsl:apply-templates select=".//dbk:anchor" mode="#current"/>
-  </template>-->
-  
   <template context="dbk:blockquote[dbk:para][not(matches(@role, '^[a-z]+_?verse.*$'))]
                     |dbk:blockquote[matches(@role, $dialogue-style)]">
     <rule name="quotation" type="env">
@@ -649,114 +484,6 @@
     <!-- copied from common to reinstall template priorities-->
   </template>
   
-  <!--<template context="dbk:table">
-    <rule name="transcriptTab" type="cmd" break-after="2" break-before="1">
-      <param select="dbk:title, 
-                     dbk:caption"/>  
-      <param select="dbk:tgroup"/>
-    </rule>
-  </template>-->
-  
-  <!-- copied from ../a9s/common/xml2tex/latex.conf.xml -->
-  
-  <!--<template context="*[local-name() = ('table', 'informaltable')]
-                      [   matches(@role, $rotated-table-style)
-                       or exists(.//dbk:entry[   matches(@css:transform, 'rotate\((90|270)deg\)')
-                                 or @css:writing-mode eq 'bt-lr']
-                                 )]">
-    <rule name="sidewaystable" type="env">
-      <param select="dbk:title, 
-                     dbk:caption"/>
-      <param select="dbk:tgroup"/>
-    </rule>
-  </template>-->
-  
-  <!--<template context="dbk:figure">
-    <rule name="transcriptBild" type="cmd" break-after="1" break-before="1">
-      <param select="dbk:title, 
-                     dbk:caption"/>
-      <param select="dbk:mediaobject"/>
-    </rule>
-  </template>-->
-
-  <!--<template context="dbk:figure[matches(@role, $fig-style)]">
-    <rule name="figure" type="env" break-after="1" break-before="1">
-      <option>h!</option>
-      <text>&#xa;\transcriptFixedFigure</text>
-      <param select="dbk:title, 
-                     dbk:caption"/>
-      <param select="replace(@role, '^[a-z]{2,3}figure([A-Z])(\d)$', '$1')"/>
-      <xsl:text>{%</xsl:text>
-        <xsl:for-each select="dbk:mediaobject">
-          <xsl:text>&#xa;</xsl:text>
-          <xsl:apply-templates mode="#current"/>
-        </xsl:for-each>
-      <xsl:text>}</xsl:text>
-    </rule>
-  </template>-->
-
-  <!--<template context="dbk:figure/dbk:title|dbk:table/dbk:title">
-    <rule break-after="1" break-before="1" name="caption" type="cmd">
-      <param/>
-    </rule>
-  <!-\- copied from docx2tex/conf for compatibility reasons-\->
-  </template>-->
-  
-  <!--<template context="dbk:figure/dbk:title[not(matches(., '^[\S\r\n]+$'))]
-                    |dbk:table/dbk:title[not(matches(., '^[\S\r\n]+$'))]">
-    <rule name="caption" type="cmd">
-      <xsl:if test=".//dbk:footnote
-                   |.//dbk:link">
-        <xsl:text>[</xsl:text>
-        <xsl:apply-templates mode="figure-titles"/>
-        <xsl:text>]</xsl:text>
-      </xsl:if>
-      <param/>
-    </rule>
-  </template>-->
-  
-  <!--<template context="dbk:imagedata[@fileref]">
-    <rule name="includegraphics" type="cmd">
-      <option select="concat('width=', 
-                             1 div count(ancestor::*[dbk:mediaobject
-                                                    |dbk:inlinemediaobject]/*[local-name() = ('mediaobject', 
-                                                                                              'inlinemediaobject')]),'\textwidth')"/>
-      <param select="replace(@fileref, '^.+/(.+?)$', concat($image-dir, '$1'))"/>
-    </rule>
-  </template>-->
-  
-  <!--<template context="dbk:figure[matches(@role, $fig-style)]//dbk:imagedata">
-    <rule name="includesubgraphics" type="cmd">
-      <param/>
-      <param select="replace(@fileref, '^.+/(.+?)$', concat($image-dir, '$1'))"/>
-    </rule>
-  </template>-->
-  
-  <!--<template context="dbk:figure/dbk:caption
-                    |dbk:table/dbk:caption">
-    <rule name="capsource" type="cmd">
-      <param/>
-    </rule>
-  </template>-->
-  
-  <!--<template context="/dbk:hub/*[self::dbk:part | self::dbk:chapter | self::dbk:section][1]">
-    <xsl:next-match/>
-  </template>-->
-
-  <!--<template context="dbk:section[count(ancestor::dbk:section) eq 0]/dbk:subtitle
-                    |dbk:section[count(ancestor::dbk:section) eq 0]/dbk:info/dbk:subtitle">
-    <rule name="subheading" type="cmd" break-after="2" break-before="2">
-      <param/>
-    </rule>
-  </template>-->
-  
-  <!--<template context="dbk:section[count(ancestor::dbk:section) gt 0]/dbk:subtitle
-                    |dbk:section[count(ancestor::dbk:section) gt 0]/dbk:info/dbk:subtitle">
-    <rule name="subsubheading" type="cmd" break-after="2" break-before="2">
-      <param/>
-    </rule>
-  </template>-->
-
   <template context="*[not(local-name() = ('part', 'chapter', 'section'))][@css:page-break-before='always']">
     <xsl:text>\pagebreak&#xa;</xsl:text>
     <xsl:next-match/>
@@ -789,50 +516,6 @@
     </rule>
   </template>
   
-  <!--<template context="*[self::dbk:chapter | self::dbk:section | self::dbk:part | self::dbk:appendix][dbk:info[dbk:title[matches(@role, $list-of-figures-style)]]]">
-    <xsl:apply-templates select="dbk:info" mode="#current"/>
-    <rule name="listoffigures" type="cmd" break-after="1"/>
-  </template>
-  
-  
-   <template context="*[self::dbk:chapter 
-                       |self::dbk:section 
-                       |self::dbk:part
-                       |self::dbk:appendix]
-                       [dbk:info[dbk:title[matches(@role, $list-of-figures-style)]]]">
-    <rule>
-      <text/>
-    </rule>
-  </template>
-  
-  <template context="*[self::dbk:chapter 
-                      |self::dbk:section 
-                      |self::dbk:part
-                      |self::dbk:appendix]
-                      [dbk:info[dbk:title[matches(@role, $list-of-tables-style)]]]">
-    <rule>
-      <text/>
-    </rule>
-  </template>-->
-  
-  <!--<template context="dbk:para[matches(@role, $list-of-figures-style)]
-                    |dbk:title[matches(@role, $list-of-figures-style)]">
-    <rule name="renewcommand" type="cmd" break-after="1" break-before="1">
-      <param>\listfigurename</param>
-      <param/>
-    </rule>
-    <rule name="listoffigures" type="cmd" break-after="1"/>
-  </template>
-  
-  <template context="dbk:para[matches(@role, $list-of-tables-style)]
-                    |dbk:title[matches(@role, $list-of-tables-style)]">
-    <rule name="renewcommand" type="cmd" break-after="1" break-before="1">
-      <param>\listtablename</param>
-      <param/>
-    </rule>
-    <rule name="listoftables" type="cmd" break-after="1"/>
-  </template>-->
-  
   <template context="dbk:para[matches(@role, 'tsmedia(caption|url|source)')]" priority="300"/>
   
   <template context="dbk:link[@xlink:href][matches(@xlink:href, '^(https?|ftp):') or matches(., '^(https?|ftp):')]">
@@ -841,18 +524,7 @@
       <param select="xml2tex:add-tactical-break-chars-in-linktext(.)"/>
     </rule>
   </template>
-  
-  <!--<template context="dbk:info/dbk:epigraph[@role eq 'motto']">
-    <rule name="quote" type="cmd" break-before="1">
-      <xsl:text>{</xsl:text>
-      <xsl:apply-templates select="dbk:*[not(matches(@role, $motto-source-style))]" mode="#current"/>
-      <xsl:text>}</xsl:text>
-    </rule>
-    <rule name="quotesource" type="cmd" break-before="1">
-      <param/>
-    </rule>
-  </template>-->
-  
+   
   <template context="dbk:title[matches(@role, $general-heading-style)]/dbk:tab[preceding-sibling::dbk:phrase[@role eq 'hub:identifier']]"/>
 
   <xsl:variable name="col-author-style" select="'^[a-z]{1,3}headline(author)$'" as="xs:string"/>
@@ -897,39 +569,6 @@
             </param>
           </rule>
         </xsl:if>
-<!--      </xsl:when>-->
-      <!--<xsl:otherwise>
-       MONO: links: tsheadlineleft bzw. Titel des Buches.  | rechts Kapitelüberschrift 1 oder ts_headline_right. (= tpRunTitle)
-        <xsl:if test="dbk:abbrev[matches(@role, $col-head-right-style)] or dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]">
-          <rule name="tpRunAuthor" type="cmd" break-before="1">
-            <param select="(dbk:abbrev[matches(@role, $col-head-left-style)], dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]])[1]/node()
-              [not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
-              <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
-            </param>
-          </rule>
-        </xsl:if>
-        <xsl:if test="dbk:abbrev[matches(@role, $col-head-right-style)] or dbk:title[descendant::*[self::dbk:footnote]]">
-          <rule name="tpRunTitle" type="cmd" break-before="1">
-            <param select="dbk:title/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
-              <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
-            </param>
-          </rule>
-        </xsl:if>
-        <xsl:if test="(dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:abbrev[matches(@role, $col-head-left-style)]))
-                      or 
-                      dbk:abbrev[matches(@role, $col-head-left-style)][dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
-          <rule name="tpRunNumber" type="cmd" break-before="1">
-            <param select="(dbk:abbrev[matches(@role, $col-head-left-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')],
-                            dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')])[1]/node()">
-              <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
-            </param>
-          </rule>
-        </xsl:if>
-      </xsl:otherwise>-->
-<!--    </xsl:choose>-->
 
     <xsl:if test="dbk:subtitle[descendant::*[self::dbk:footnote | self::dbk:br]]">
       <rule name="tpRunSubtitle" type="cmd" break-before="1">
@@ -963,6 +602,7 @@
       <param select="dbk:title/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
         <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
         <with-param name="remove-newline" select="false()" as="xs:boolean" tunnel="yes"/>
+        <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
       </param>
     </rule>
     <xsl:if test="dbk:title[dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
@@ -970,6 +610,7 @@
         <param select="dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/text()">
           <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
     </xsl:if>
@@ -978,14 +619,16 @@
         <param select="dbk:subtitle/node()">
           <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-newline" select="false()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
     </xsl:if>
-    <xsl:if test="dbk:author">
+    <xsl:if test="dbk:author or dbk:authorgroup/dbk:author">
       <rule name="tpTocAuthor" type="cmd" break-after="0" break-before="1">
-        <param select="dbk:author/dbk:personname/dbk:othername">
+        <param select="(dbk:author|dbk:authorgroup/dbk:author)/dbk:personname/dbk:othername">
           <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
     </xsl:if>
@@ -1001,7 +644,7 @@
         <xsl:sequence select="'part'"/>
       </xsl:when>
       <xsl:when test="$style = 'tsheading1'">
-        <xsl:sequence select="'chapter'"/>
+        <xsl:sequence select="if ($is-collection or $is-journal) then 'contribution' else 'chapter'"/>
       </xsl:when>
       <xsl:when test="$style = 'tsheading2'">
         <xsl:sequence select="'section'"/>
@@ -1044,7 +687,9 @@
              level is called contribution and allows integration of abstracts and keywords -->
         <xsl:sequence select="if ($pubtype = ('collection', 'anth', '') 
                                               or contains($basename, '_anth_')
-                                              or $heading[dbk:info[dbk:abstract | dbk:keywordset]]) 
+                                              or $heading[dbk:info[dbk:abstract | dbk:keywordset]]
+                                              or $is-collection 
+                                              or $is-journal) 
                               then 'contribution' 
                               else 'chapter'"/>
       </xsl:when>
