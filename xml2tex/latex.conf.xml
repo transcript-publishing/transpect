@@ -58,6 +58,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Reihenuntertitel']"/>
   <xsl:variable name="volume" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Bandnummer']"/>
+  <xsl:variable name="issue" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role eq 'Ausgabe']"/>
   <!-- publisher -->
   <xsl:variable name="publisher-name" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Verlagsname']"/>
@@ -104,6 +106,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Edition-Note']"/>
   <xsl:variable name="pub-year" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Jahr']"/>
+  <xsl:variable name="journal-title" as="xs:string?"
+                select="$metadata/dbk:keyword[@role eq 'Zeitschriftentitel']"/>
   <xsl:variable name="statement" as="element(dbk:keyword)*"
                 select="($metadata/dbk:keyword[@role eq 'Qualifikationsnachweis'], $metadata/dbk:keyword[@role eq 'Gutachter'])"/>
   <xsl:variable name="biblio-info" as="element(dbk:keyword)?"
@@ -237,6 +241,7 @@
       xml2tex:meta2tex($series-name, (), 'tpSeries'),
       xml2tex:meta2tex($subseries-name, (), 'tpSubSeries'),
       xml2tex:meta2tex($volume, (), 'tpVolume'),
+      xml2tex:meta2tex($issue, (), 'tpIssue'),
       xml2tex:meta2tex($publisher-name, (), 'tpPublisher'),
       xml2tex:meta2tex($publisher-imprint-name, (), 'tpPubDivision'),
       xml2tex:meta2tex($publisher-imprint-info, (), 'tpPubDivInfo'),
@@ -259,6 +264,7 @@
       xml2tex:meta2tex($publisher-website, (), 'tpPubWeb'),
       xml2tex:meta2tex($doi, (), 'tpDOI'),
       xml2tex:meta2tex($pub-year, (), 'tpYear'),
+      xml2tex:meta2tex($journal-title, (), 'tpJournalName'),
       xml2tex:meta2tex($lectorate, (), 'tpLectorate'),
       xml2tex:meta2tex($translator, (), 'tpTranslator'),
       xml2tex:meta2tex($copy-editing, (), 'tpQA'),
@@ -544,6 +550,7 @@
                             )[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
             </param>
           </rule>
         </xsl:if>
@@ -554,6 +561,7 @@
             <param select="(dbk:abbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
             </param>
           </rule>
         </xsl:if>
@@ -566,6 +574,7 @@
                            else dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()">
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
             </param>
           </rule>
         </xsl:if>
@@ -575,6 +584,7 @@
         <param select="dbk:subtitle/node()">
           <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
           <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
         </param>
       </rule>
     </xsl:if>
@@ -627,7 +637,7 @@
     </xsl:if>
     <xsl:if test="dbk:author or dbk:authorgroup/dbk:author">
       <rule name="tpTocAuthorNameList" type="cmd" break-after="0" break-before="1">
-        <param select="(dbk:author|dbk:authorgroup/dbk:author)/dbk:personname/dbk:othername">
+        <param select="(dbk:author|dbk:authorgroup/dbk:author)/dbk:personname/dbk:othername/node()">
           <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
