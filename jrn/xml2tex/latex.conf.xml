@@ -5,7 +5,18 @@
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   
   <import href="../../xml2tex/latex.conf.xml"/>
-  
+
+  <xsl:param name="cocotex" as="xs:boolean" select="true()"/>
+
+  <xsl:variable name="volume" as="xs:string?"
+                select="replace(/dbk:hub/dbk:info/dbk:issuenum, '^(\d+)[/\p{Zs}-](\d+)$', '$1')"/>
+  <xsl:variable name="issue" as="xs:string?"
+                select="replace(/dbk:hub/dbk:info/dbk:issuenum, '^(\d+)[/\p{Zs}-](\d+)$', '$2')"/>
+  <xsl:variable name="pub-year" as="xs:string?"
+                select="/dbk:hub/dbk:info/dbk:pubdate"/>
+  <xsl:variable name="journal-title" as="xs:string?"
+                select="/dbk:hub/dbk:info/dbk:productname[@otherclass= 'journal-title']"/>
+<!--  
   <preamble>%
     % transcript journal
     %
@@ -28,11 +39,13 @@
     <xsl:if test="$langs = 'zh'">
       <xsl:value-of select="'\usepackage{CJK}&#xa;'"/>
     </xsl:if>
-  </preamble>
+  </preamble>-->
   
+
+
   <front>
     <xsl:if test="$title-pages eq 'yes'">
-      <xsl:text>\maketitle&#xa;</xsl:text>
+      <xsl:text>\tpMaketitle&#xa;</xsl:text>
     </xsl:if>
     <xsl:value-of select="'\setcounter{secnumdepth}{-1}&#xa;'"/>
     <xsl:value-of select="concat('\setcounter{tocdepth}{', 
@@ -61,4 +74,135 @@
     </rule>
   </template>-->
   
+  <template context="*[not(self::dbk:hub)]/dbk:info//*[self::dbk:author|self::dbk:editor]">
+
+      <xsl:if test="not(@role = 'override')">
+        <!-- if author contains only name → tpAuthorNamelist. If name is structured though or if other metadata is present generate environment -->
+        <rule name="tpAuthor" type="env" break-after="1" break-before="2">
+          <param select="node()">
+            <with-param name="in-author" tunnel="yes" as="xs:boolean" select="true()"/>
+          </param>
+        </rule>
+      </xsl:if>
+      <xsl:if test="@role = 'override'">
+        <rule name="tpAuthorNameList" type="cmd" break-before="1">
+          <param select="for $a in dbk:personname/dbk:othername return normalize-space($a)"/>
+        </rule>
+      </xsl:if>
+    
+  </template>
+
+  <template name="customer-toctitles">
+    <rule name="tpTocTitle" type="cmd" break-after="0" break-before="1">
+      <param select="dbk:title/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+        <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
+        <with-param name="remove-newline" select="false()" as="xs:boolean" tunnel="yes"/>
+        <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+      </param>
+    </rule>
+    <xsl:if test="dbk:title[dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
+      <rule name="tpTocNumber" type="cmd" break-after="0" break-before="1">
+        <param select="dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/text()">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+    <xsl:if test="dbk:subtitle">
+      <rule name="tpTocSubtitle" type="cmd" break-after="0" break-before="1">
+        <param select="dbk:subtitle/node()">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-newline" select="false()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+    <xsl:if test="dbk:author or dbk:authorgroup/dbk:author">
+      <rule name="tpTocAuthorNameList" type="cmd" break-after="0" break-before="1">
+        <param select="if ((dbk:author|dbk:authorgroup/dbk:author)[@role = 'override']) 
+                       then (dbk:author|dbk:authorgroup/dbk:author)[@role = 'override']/dbk:personname/dbk:othername/node()
+                       else string-join((dbk:author|dbk:authorgroup/dbk:author)[@role = 'override']/dbk:personname/dbk:othername/node(), '/')">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+  </template>
+
+  <template name="col-titles">
+    <!-- use col-style para for runtitle. if it doesn't exist and heading contains footnotes or linebreaks:
+         discard those and use as column title. otherwise do not create an element-->
+
+<!--    <xsl:choose>
+      <xsl:when test="$is-collection">-->
+<!--        links: tpAuthor/tpRunAuthorNameList, wenn es den nicht gibt: \tp(Run)Title | Rechts: \tp(Run)Title-->
+<!--
+        <xsl:if test="dbk:abbrev[matches(@role, $col-author-style)] or dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]">
+          <rule name="tpRunAuthorNameList" type="cmd" break-before="1">
+            <param select="(dbk:abbrev[matches(@role, $col-author-style)], 
+                            dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]
+                            )[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+              <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+            </param>
+          </rule>
+        </xsl:if>-->
+        <xsl:if test="dbk:abbrev[matches(@role, $col-head-style)] 
+                      or  
+                      dbk:title[descendant::*[self::dbk:footnote | self::dbk:br]]">
+          <rule name="tpRunTitle" type="cmd" break-before="1">
+            <param select="(dbk:abbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+              <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+            </param>
+          </rule>
+        </xsl:if>
+        <xsl:if test="(dbk:title[descendant::*[self::dbk:footnote]]/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:abbrev[matches(@role, $col-head-style)]))
+                      or 
+                      dbk:abbrev[matches(@role, $col-head-style)]">
+          <rule name="tpRunNumber" type="cmd" break-before="1">
+            <param select="if (dbk:abbrev[matches(@role, $col-head-style)])
+                           then dbk:abbrev[matches(@role, $col-head-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()
+                           else dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()">
+              <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+            </param>
+          </rule>
+        </xsl:if>
+
+    <xsl:if test="dbk:subtitle[descendant::*[self::dbk:footnote | self::dbk:br]]">
+      <rule name="tpRunSubtitle" type="cmd" break-before="1">
+        <param select="dbk:subtitle/node()">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+  </template>
+
+  <template context="dbk:info/dbk:biblioset/dbk:biblioid[@role = 'tsmetachunkdoi']">
+   <!-- tpDOITitle also available-->
+    <rule name="tpDOI" type="cmd" break-before="1" break-after="0">
+      <param select="concat('https://doi.org/', .)"/>
+    </rule>
+  </template>
+
+  <xsl:function name="xml2tex:use-author" as="xs:boolean">
+    <xsl:param name="author" as="element()"/>
+    <xsl:param name="all-authors" as="element()+"/>
+    <xsl:choose>
+      <xsl:when test="count($authors = 1) or $author[@role = 'override']"><xsl:sequence select="true()"/></xsl:when>
+      <xsl:when test="every $a in $all-authors satisfies not($a/@role = 'override')"><xsl:sequence select="true()"/></xsl:when>
+      <xsl:otherwise><xsl:sequence select="false()"/></xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
 </set>
