@@ -295,7 +295,7 @@
                             then $metadata/term[@key = ('Autor', 'Herausgeber')]/seg[@type='remap-para']
                             else $metadata/term[@key = ('Autor', 'Herausgeber')][normalize-space()]">
         <contrib contrib-type="{if (.[@key = 'Autor'] or ..[@key = 'Autor']) then 'author' else 'editor'}">
-          <xsl:apply-templates select="node()" mode="#current"/>
+          <string-name><xsl:apply-templates select="node()" mode="#current"/></string-name>
         </contrib>
       </xsl:for-each>
     </contrib-group>
