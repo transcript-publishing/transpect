@@ -33,6 +33,7 @@
   <css:rule layout-type="para" native-name="ts_meta_journal_issue" name="tsmetajournalissue"/>
   <css:rule layout-type="para" native-name="ts_meta_contribution_author_affiliation" name="tsmetacontributionauthoraffiliation"/>
   <css:rule layout-type="para" native-name="ts_meta_contribution_author_contact" name="tsmetacontributionauthorcontact"/>
+  <css:rule layout-type="para" native-name="ts_meta_contribution_author_name" name="tsmetacontributionauthorname"/>
   <css:rule layout-type="para" native-name="ts_meta_contribution_orcid" name="tsmetacontributionorcid"/>
   <css:rule layout-type="para" native-name="ts_meta_contribution_licence" name="tsmetacontributionlicence"/>
   <css:rule layout-type="para" native-name="ts_meta_contribution_year" name="tsmetacontributionyear"/>
