@@ -54,9 +54,6 @@
       <!-- example: file:/data/svncompat/.jenkins/workspace/svncompat_https_subversion_le_tex_de_customers_transcript_branches_common_tex_migration/test_after/std/anth/05013 -->
   </p:variable>
 
-      <cx:message>
-        <p:with-option name="message" select="'[info] vars: ci-test: ', $ci-test, ' local-dir: ', $local-dir"/>
-      </cx:message>
 
   <!-- Determine paths for ONIX document in content repository. 
        It is expected that ONIX file has the same repo-href-local as the source file. -->
@@ -117,10 +114,10 @@
     <p:with-option name="filenames" select="concat(replace($basename, '^(.+_\d{5})(_.+)?$', '$1'), '.meta.xml')"/>
   </tr:paths-for-files-xml>
 
-  <tr:store-debug pipeline-step="metadata/00_paths-fo-files">
+<!--  <tr:store-debug pipeline-step="metadata/00_paths-fo-files">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
-  </tr:store-debug>
+  </tr:store-debug>-->
 
 
   <tr:recursive-directory-list name="meta-list">
