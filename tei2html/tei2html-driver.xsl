@@ -552,8 +552,9 @@
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="*:blockquote//*:p[matches(@class,'tsquotation')]/@class" mode="clean-up">
-    <!--https://redmine.le-tex.de/issues/11749-->
+  <xsl:template match="*:blockquote//*:p[matches(@class,'tsquotation')]/@class | 
+                       *:blockquote/@class" mode="clean-up">
+    <!--https://redmine.le-tex.de/issues/11749, https://redmine.le-tex.de/issues/13605-->
   </xsl:template>
 
   <xsl:template match="abstract" mode="tei2html"/>
