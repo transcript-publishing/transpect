@@ -79,9 +79,9 @@
       <xsl:if test="not(@role = 'override')">
         <!-- if author contains only name → tpAuthorNamelist. If name is structured though or if other metadata is present generate environment -->
         <rule name="tpAuthor" type="env" break-after="1" break-before="2">
-          <param select="node()">
+          <text select="node()">
             <with-param name="in-author" tunnel="yes" as="xs:boolean" select="true()"/>
-          </param>
+          </text>
         </rule>
       </xsl:if>
       <xsl:if test="@role = 'override'">
