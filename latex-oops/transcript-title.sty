@@ -77,11 +77,17 @@
     \fi
   }%
   \tpSetProperty{titlepage-iii}{%
-    {\Large\sfwidefamily\ifcollection
-      \tpUseProperty{EditorNameList}%
-    \else
-      \tpUseComp{AuthorNameList}%
-    \fi}%
+    {\Large\sfwidefamily%
+      \ifcollection
+        \righthyphenmin62
+        \lefthyphenmin62
+        \flushleft\tpUseProperty{EditorNameList}\endflushleft%
+      \else
+        \righthyphenmin62
+        \lefthyphenmin62
+        \flushleft\tpUseComp{AuthorNameList}\endflushleft%
+      \fi%
+    }%
     \par
     \vskip\dimexpr5bp-0.65mm\relax
     {\raggedright
