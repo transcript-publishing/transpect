@@ -124,7 +124,7 @@
       <rule name="tpTocAuthorNameList" type="cmd" break-after="0" break-before="1">
         <param select="if ((dbk:author|dbk:authorgroup/dbk:author)[@role = 'override']) 
                        then (dbk:author|dbk:authorgroup/dbk:author)[@role = 'override']/dbk:personname/dbk:othername/node()
-                       else string-join((dbk:author|dbk:authorgroup/dbk:author)[@role = 'override']/dbk:personname/dbk:othername/node(), '/')">
+                       else string-join((dbk:author|dbk:authorgroup/dbk:author)[not(@role = 'override')]/dbk:personname/dbk:othername/node(), '/')">
           <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
@@ -166,7 +166,7 @@
         </xsl:if>
         <xsl:if test="(dbk:title[descendant::*[self::dbk:footnote]]/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:abbrev[matches(@role, $col-head-style)]))
                       or 
-                      dbk:abbrev[matches(@role, $col-head-style)]">
+                      dbk:abbrev[matches(@role, $col-head-style)][dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
           <rule name="tpRunNumber" type="cmd" break-before="1">
             <param select="if (dbk:abbrev[matches(@role, $col-head-style)])
                            then dbk:abbrev[matches(@role, $col-head-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()
