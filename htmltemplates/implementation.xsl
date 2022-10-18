@@ -75,7 +75,7 @@
                                                        $htmlinput[1]/html:html/html:body/*[@epub:type = 'halftitlepage'],
                                                        $htmlinput[1]/html:html/html:body/*[@epub:type = 'toc']" as="element(*)*"/>
   <xsl:variable name="language" as="xs:string?" select="(
-                                                         $htmlinput[1]/html:html/@xml:lang, $metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Sprache']],
+                                                         $htmlinput[1]/html:html/@lang, $metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Sprache']],
                                                          'de'
                                                          )[1]"/>
   
@@ -125,7 +125,7 @@
            <meta name="DC.subject" content="{.}"/>
         </xsl:for-each>
       </xsl:if>
-    <meta name="lang" content="{$htmlinput[1]/html:html/@xml:lang}"/>
+    <meta name="lang" content="{$htmlinput[1]/html:html/@lang}"/>
   </xsl:template>
   
    
