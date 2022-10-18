@@ -8,7 +8,16 @@
   \relax%
 }
 
+\tpSetBabelLabel{german}{editorsuffixsgl}{(Hrsg.)}
+\tpSetBabelLabel{english}{editorsuffixsgl}{(ed.)}
+
+\tpSetBabelLabel{german}{editorsuffixpl}{(Hrsg.)}
+\tpSetBabelLabel{english}{editorsuffixpl}{(eds.)}
+
 \tpDeclareTitlepage{%
+  \tpSetProperty{editor-suffix-sgl}{\editorsuffixsglname}
+  \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}
+
   \tpSetProperty{coverpage}{%
     \bgroup
       \def\thepage{\@alph\c@page}%
@@ -30,22 +39,29 @@
   \tpSetProperty{titlepage-i}{%
     \ifcollection
       \topsep0pt \partopsep0pt % no space before
-      \flushleft\tpUseProperty{EditorNameList}\endflushleft%
+      \bgroup
+        \righthyphenmin62
+        \lefthyphenmin62
+        \flushleft\tpUseProperty{EditorNameList}\endflushleft%
+      \egroup
     \else
-      \tpUseComp{AuthorNameList}%
+      \bgroup
+        \righthyphenmin62
+        \lefthyphenmin62
+        \raggedright\tpUseComp{AuthorNameList}%
+      \egroup
     \fi%
     \par
     \tpUseComp{Title}%
-    \tpIfComp{Statement}{\par\vskip\baselineskip{\fontsize{10.5}{11}\selectfont\tpUseComp{EditionNote}}}{}%
     \par\vfill
     \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
     \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
-    \tpIfComp{Volume}{{\hskip1.5em\lower.5\dp\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\hskip1.5em\ignorespaces\tpUseComp{Volume}}}{}%
+    \tpIfComp{Volume}{{\enskip\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip\ignorespaces\tpUseComp{Volume}}}{}%
   }%
   \tpSetProperty{titlepage-ii}{%
     \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
     \tpIfComp{Acknowledgements}{{\itshape\large\tpUseComp{Acknowledgements}}\par\vskip\baselineskip}{}%
-    \tpIfComp{Editorial}{{\justify\tpUseComp{Editorial}\par\vskip\baselineskip}}{}%
+    \tpIfComp{Editorial}{{\justify{\sffamily\sbseries\large Editorial}\par\vskip\baselineskip\tpUseComp{Editorial}\par\vskip\baselineskip}}{}%
     \vspace*{\fill}%
     \bgroup
       {\justify\tpUseProperty{bio-block}}%
@@ -61,36 +77,43 @@
     \fi
   }%
   \tpSetProperty{titlepage-iii}{%
-    {\Large\sffamily\ifcollection
+    {\Large\sfwidefamily\ifcollection
       \tpUseProperty{EditorNameList}%
     \else
       \tpUseComp{AuthorNameList}%
     \fi}%
     \par
-    \vskip5bp
+    \vskip\dimexpr5bp-0.65mm\relax
     {\raggedright
       \leavevmode
-      {\sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{Title}}%
+      \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{Title}%
       \tpIfComp{Subtitle}{%
         \par
-        \sffamily\vskip5bp
+        \normalfont\Large
+        \sffamily\vskip\dimexpr5bp+0.65mm\relax
         \Large
         \topsep0pt \partopsep0pt % no space before
-        \flushleft\tpUseComp{Subtitle}\endflushleft}{}%
+        \flushleft\tpUseComp{Subtitle}\endflushleft%
+      }{%
+        \vskip\baselineskip
+      }%
     }%
     \par
     \vskip\baselineskip
+    \tpIfComp{AddNoteIII}{%
+      {\Large\sfwidefamily\tpUseComp{AddNoteIII}}%
+    }{}
+    \par
     \vfill
     \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
-    \clearpage
   }%
   \tpSetProperty{titlepage-iv}{%
     \bgroup
+      \tpIfComp{Statement}{\tpUseComp{Statement}\par}{}%
       \justify
       \tpUseProperty{funding-block}%
       \vfill
       \tpUseProperty{imprint-format}%
-      \tpSetComp{BiblioTitle}{Bibliografische Information der Deutschen Nationalbibliothek}
       \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
       \tpUseProperty{licence}%
       \vskip2\baselineskip
@@ -98,7 +121,6 @@
         \tpUseProperty{imprint}%
       \egroup
     \egroup
-    \clearpage
   }%
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
@@ -109,16 +131,16 @@
   \tpSetProperty{imprint}{%
     \tpUseProperty{publisher}%
     \tpUseProperty{imprint-sep}
-    \tpGetComp{Qualification}%%
-    \tpGetComp{Conversion}%%
-    {\tpIfComp{CoverImage}{\leftskip5mm\hskip-5mm}{}\tpGetComp{CoverImage}}%%
-    {\tpIfComp{CoverDesign}{\leftskip5mm\hskip-5mm}{}\tpGetComp{CoverDesign}}%%
-    {\tpIfComp{Lectorate}{\leftskip5mm\hskip-5mm}{}\tpGetComp{Lectorate}}%%
-    {\tpIfComp{QA}{\leftskip5mm\hskip-5mm}{}\tpGetComp{QA}}%%
-    \tpGetComp{Translator}%%
-    \tpGetComp{Appraiser}%%
-    \tpGetComp{Discussion}%%
-    {\tpIfComp{TypeSetter}{\leftskip5mm\hskip-5mm}{}\tpGetComp{Typesetter}}%%
+    \tpGetComp{Qualification}%
+    \tpGetComp{Conversion}%
+    \tpIfComp{CoverImage}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverImage}}}{}%
+    \tpIfComp{CoverDesign}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverDesign}}}{}%
+    \tpIfComp{Lectorate}{{\leftskip5mm\hskip-5mm\tpGetComp{Lectorate}}}{}%
+    \tpIfComp{QA}{{\leftskip5mm\hskip-5mm\tpGetComp{QA}}}{}%
+    \tpIfComp{Translator}{{\leftskip5mm\hskip-5mm\tpGetComp{Translator}}}{}%
+    \tpGetComp{Appraiser}%
+    \tpGetComp{Discussion}%
+    \tpIfComp{TypeSetter}{{\leftskip5mm\hskip-5mm\tpGetComp{Typesetter}}}{}%
     \tpGetComp{Print}%%
     \tpGetComp{DOI}%%
     \tpGetComp{Keywords}%%
@@ -177,7 +199,5 @@
     \egroup
   }
   \tpSetProperty{counted-name-sep}{\ifnum\tpCurCount<\tpTotalCount\relax,\space\fi}%
-  \tpSetProperty{editor-suffix}{~(Hg.)}
+  %\tpSetProperty{editor-suffix}{~(Hg.)}
 }
-
-
