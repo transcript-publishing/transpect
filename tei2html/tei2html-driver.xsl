@@ -553,7 +553,7 @@
   </xsl:template>
 
   <xsl:template match="*:blockquote//*:p[matches(@class,'tsquotation')]/@class | 
-                       *:blockquote/@class" mode="clean-up">
+                       *:blockquote/@class[. = 'tsquotation']" mode="clean-up">
     <!--https://redmine.le-tex.de/issues/11749, https://redmine.le-tex.de/issues/13605-->
   </xsl:template>
 
@@ -662,4 +662,8 @@
     </xsl:element>
   </xsl:template>
   
+  <xsl:template match="@xml:lang" mode="clean-up">
+    <!--https://redmine.le-tex.de/issues/13609-->
+  </xsl:template>
+
 </xsl:stylesheet>
