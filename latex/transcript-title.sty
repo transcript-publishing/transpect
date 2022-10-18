@@ -8,7 +8,16 @@
   \relax%
 }
 
+\tpSetBabelLabel{german}{editorsuffixsgl}{(Hrsg.)}
+\tpSetBabelLabel{english}{editorsuffixsgl}{(ed.)}
+
+\tpSetBabelLabel{german}{editorsuffixpl}{(Hrsg.)}
+\tpSetBabelLabel{english}{editorsuffixpl}{(eds.)}
+
 \tpDeclareTitlepage{%
+  \tpSetProperty{editor-suffix-sgl}{\editorsuffixsglname}
+  \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}
+
   \tpSetProperty{coverpage}{%
     \bgroup
       \def\thepage{\@alph\c@page}%
@@ -190,7 +199,7 @@
     \egroup
   }
   \tpSetProperty{counted-name-sep}{\ifnum\tpCurCount<\tpTotalCount\relax,\space\fi}%
-  \tpSetProperty{editor-suffix}{~(Hg.)}
+  %\tpSetProperty{editor-suffix}{~(Hg.)}
 }
 
 
