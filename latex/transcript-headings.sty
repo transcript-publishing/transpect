@@ -111,7 +111,7 @@
   \tpSetProperty{toc-margin-right}{2em}%
   \tpSetProperty{toc-number-sep}{\enskip}%
   \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\ifcollection\Large\fi}%
-  \tpSetProperty{toc-subtitle-format}{\normalfont\normalsize\sfchapfamily}%
+  \tpSetProperty{toc-subtitle-format}{\normalfont\fontsize{8.7bp}{12.8bp}\selectfont\sfchapsubtocfamily}%
   \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
   \tpSetProperty{toc-indent}{2em}%
   \tpSetProperty{toc-margin-left}{2em}%
@@ -148,7 +148,7 @@
       \tpUseProperty{title-format}%
       {\tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
        \tpUseComp{Title}}%
-      \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sfchapfamily\tpUseComp{Subtitle}}{}%
+      \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{13.7bp}{17.2bp}\selectfont\sfchapsubfamily\tpUseComp{Subtitle}}{}%
       \par\nobreak
     \egroup
     %% Linie
