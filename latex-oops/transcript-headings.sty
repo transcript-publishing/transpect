@@ -29,7 +29,7 @@
   \tpSetProperty{toc-page-format}{\normalfont\sfwidefamily\normalsize}%
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
-    \tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\newline}{}%
+    \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
     \tpIfComp{TocNumber}{\tpUseProperty{toc-hang-number}}{}%
     \tpTocLink{%
       \tpUseComp{TocTitle}%
@@ -122,7 +122,7 @@
     {\leftskip\z@\leavevmode}%
     \strut\tpTocLink{\tpUseComp{TocTitle}}%
     \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
-    \tpIfComp{TocAuthor}{\nopagebreak\newline{\tpUseProperty{toc-author-format}\tpTocLink{\tpUseComp{TocAuthor}}}}{}%
+    \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\tpUseProperty{toc-author-format}\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
     \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
     \strut%
   }%
@@ -136,7 +136,7 @@
 
   \tpSetProperty{before-heading}{\cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
-  \tpSetProperty{after-skip}{\tpIfComp{Author}{1.68\baselineskip}{3.68\baselineskip}}%
+  \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}%
   \tpSetProperty{heading-block}{%
     %% Titel
     \thispagestyle{empty}%
@@ -155,9 +155,9 @@
     \vskip\dimexpr-1\baselineskip\relax
     \smash{\rlap{\lower3.25mm\vbox{\rule{\textwidth}{.4\p@}}}}\par%
     %% Autor
-    \tpIfComp{Author}{%
+    \tpIfComp{AuthorNameList}{%
       \vskip\baselineskip
-      {\large\sfwidefamily\itshape\tpUseComp{Author}}%
+      {\large\sfwidefamily\itshape\tpUseComp{AuthorNameList}}%
       \par%\vskip\baselineskip
     }{}%
     %% Zitat
@@ -189,8 +189,8 @@
   \tpSetProperty{running-heading}{%
     \tpIfComp{RunNumber}{\tpUseComp{RunNumber}\enskip}{}\tpUseComp{RunTitle}}%
   \tpSetProperty{running-extra}{%
-    \tpIfComp{RunAuthor}
-      {\protected@xdef\@authormark{\tpUseComp{RunAuthor}}}
+    \tpIfComp{RunAuthorNameList}
+      {\protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}}
       {\global\let\@authormark\@empty}%
   }%
   %
@@ -226,10 +226,10 @@
     \tpSetProperty{toc-heading}{%
       \tpUseProperty{toc-title-format}%
       \tpIfComp{TocNumber}
-      {\tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\newline}{}%
+      {\tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
         \hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
       {%\leftskip\z@%
-        \tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\space}{}%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
       }%
       \tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
@@ -251,7 +251,7 @@
       \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
       \tpUseComp{Title}\par
       \tpIfComp{Subtitle}{\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
-      \tpIfComp{Author}{\itshape\tpUseComp{Author}\par}{}%
+      \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
     \egroup
     \nopagebreak
     \tpIfComp{Quote}{%
@@ -360,10 +360,10 @@
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}
-    {\tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\newline}{}%
+    {\tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
       \hskip-2.5em\hbox to 2.5em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
     {%\leftskip\z@%
-      \tpIfComp{TocAuthor}{\tpTocLink{\tpUseComp{TocAuthor}:}\space}{}%
+      \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
     }%
     \tpTocLink{\tpUseComp{TocTitle}}%
     \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
