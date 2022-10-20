@@ -654,6 +654,11 @@
     </xsl:copy>
   </xsl:template>
 
+  <xsl:template match="figure/head//*[self::seg[starts-with(@rend, 'hub:')]|self::label]" mode="tei2html" priority="5">
+    <!-- https://redmine.le-tex.de/issues/13415 -->
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+
   <xsl:template match="html:figure/html:p" mode="clean-up">
     <!-- https://redmine.le-tex.de/issues/13415 -->
     <xsl:element name="span">
