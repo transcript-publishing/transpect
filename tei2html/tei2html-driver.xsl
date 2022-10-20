@@ -552,7 +552,7 @@
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:template match="*:blockquote//*:p[matches(@class,'tsquotation')]/@class | 
+  <xsl:template match="*:blockquote//*:p[matches(@class,'tsquotation|tsverse|tsdialogue')]/@class | 
                        *:blockquote/@class[. = 'tsquotation']" mode="clean-up">
     <!--https://redmine.le-tex.de/issues/11749, https://redmine.le-tex.de/issues/13605-->
   </xsl:template>
