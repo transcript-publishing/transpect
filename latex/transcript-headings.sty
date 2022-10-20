@@ -114,11 +114,11 @@
   \tpSetProperty{toc-subtitle-format}{\normalfont\fontsize{8.7bp}{12.8bp}\selectfont\sfchapsubtocfamily}%
   \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
   \tpSetProperty{toc-indent}{2em}%
-  \tpSetProperty{toc-margin-left}{2em}%
+  \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}
-    {\leavevmode\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
+    {\leavevmode\leftskip2em\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
     {\leftskip\z@\leavevmode}%
     \strut\tpTocLink{\tpUseComp{TocTitle}}%
     \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
