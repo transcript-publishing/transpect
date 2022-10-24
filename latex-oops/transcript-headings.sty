@@ -133,13 +133,13 @@
   }
 
 
-
+  \thispagestyle{empty}%
+    
   \tpSetProperty{before-heading}{\cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
   \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}%
   \tpSetProperty{heading-block}{%
     %% Titel
-    \thispagestyle{empty}%
     \leftskip\z@
     \leavevmode
     \bgroup
@@ -198,20 +198,30 @@
 
 \tpDeclareHeading[chapter]{0}{contribution}{%
   \tpSetProperty{extended}{true}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
-  %% Abstract
+  \thispagestyle{articlehead}
+    %% Abstract
   \tpSetProperty{extended-heading}{%
-    \tpIfComp{Abstract}
-      {\par\vskip2\baselineskip
-       \rightskip\z@
-       {\mdseries\sffamily\tpIfComp{AbstractTitle}{\tpUseComp{AbstractTitle}}{Abstract}:}\enskip
-       {\itshape\tpUseComp{Abstract}}\par}
+    \tpIfComp{Abstract}{%
+      \par\vskip2\baselineskip
+        \rightskip\z@
+        {\mdseries\sffamily\tpIfComp{AbstractTitle}{\tpUseComp{AbstractTitle}}{Abstract}:}\enskip
+        {\itshape\tpUseComp{Abstract}}\par%
+      }
       {}%
-    \tpIfComp{Keywords}
-      {\par\vskip\baselineskip
-       {\mdseries\sffamily\tpIfComp{KeywordsTtitle}{\tpUseComp{KeywordsTitle}}{Keywords}:}\enskip
-       {\itshape\tpUseComp{Keywords}\par}}
-     {}%
-   }%
+    \tpIfComp{TitleEn}{%
+      \par\vskip\baselineskip
+      {\mdseries\sffamily\tpIfComp{TitleEnTitle}{\tpUseComp{TitleEnTitle}}{Title}:}\enskip
+      {\itshape\tpUseComp{TitleEn}\par}%
+    }{}
+    \tpIfComp{Keywords}{%
+      \par\vskip\baselineskip
+      {\mdseries\sffamily\tpIfComp{KeywordsTitle}{\tpUseComp{KeywordsTitle}}{Keywords}:}\enskip
+      {\itshape\tpUseComp{Keywords}\par}%
+    }
+    {}%
+    \vfill
+    Journal: \tp@title@macro{JournalName}
+  }%
 }
 
 % Mit 13475 auskommentiert, gegengeprüft mit 13412.
