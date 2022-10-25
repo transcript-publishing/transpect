@@ -489,11 +489,6 @@
     </rule>
     <!-- copied from common to reinstall template priorities-->
   </template>
-  
-  <template context="*[not(local-name() = ('part', 'chapter', 'section'))][@css:page-break-before='always']">
-    <xsl:text>\pagebreak&#xa;</xsl:text>
-    <xsl:next-match/>
-  </template>
 
   <template context="dbk:para[dbk:personname[@role eq 'speaker']]">
     <rule name="item" type="cmd" break-before="1">
