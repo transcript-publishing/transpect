@@ -157,7 +157,6 @@ p.tsliterature {
  */ 
 p.note, p.endnote { 
   font-size:0.9em;
-  margin-left:1.5em;
 }
 a.fn-m, a.en-m { 
   float:left; 
@@ -187,7 +186,8 @@ span.fn-t.next {
   text-indent:1em;
 }
 span.fn-p { 
-  display:block
+  display:block;
+  text-indent: 0;
 }
 /* 
  * halftitle
