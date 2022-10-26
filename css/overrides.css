@@ -157,6 +157,10 @@ p.tsliterature {
  */ 
 p.note, p.endnote { 
   font-size:0.9em;
+  margin-left: 1.5em;
+}
+p.note + p {
+  text-indent:0; 
 }
 a.fn-m, a.en-m { 
   float:left; 
@@ -171,7 +175,6 @@ a.fn-m.large, a.en-m.large {
 }
 span.fn-t {
   margin-top:0;
-  margin-left:1.5em;
   vertical-align:top;
   padding-left:0.5em;
   display:block;
