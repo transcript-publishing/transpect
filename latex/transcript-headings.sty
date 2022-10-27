@@ -116,15 +116,18 @@
   \tpSetProperty{toc-indent}{2em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
-    \tpUseProperty{toc-title-format}%
-    \tpIfComp{TocNumber}
-    {\leavevmode\leftskip2em\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
-    {\leftskip\z@\leavevmode}%
-    \strut\tpTocLink{\tpUseComp{TocTitle}}%
-    \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
-    \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\tpUseProperty{toc-author-format}\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
-    \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
-    \strut%
+    % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
+    \vbox{
+      \tpUseProperty{toc-title-format}%
+      \tpIfComp{TocNumber}
+      {\leavevmode\leftskip2em\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
+      {\leftskip\z@\leavevmode}%
+      \strut\tpTocLink{\tpUseComp{TocTitle}}%
+      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
+      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\tpUseProperty{toc-author-format}\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
+      \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
+      \strut%
+    }
   }%
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
