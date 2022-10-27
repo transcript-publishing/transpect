@@ -157,7 +157,13 @@
     %% Autor
     \tpIfComp{AuthorNameList}{%
       \vskip\baselineskip
-      {\large\sfwidefamily\itshape\tpUseComp{AuthorNameList}}%
+      {\large\sfwidefamily\itshape
+        \ifjournal
+          \tpUseComp{AuthorContactBlock}
+        \else
+          \tpUseComp{AuthorNameList}
+        \fi
+      }%
       \par%\vskip\baselineskip
     }{}%
     %% Zitat
@@ -219,8 +225,7 @@
       {\itshape\tpUseComp{Keywords}\par}%
     }
     {}%
-    \vfill
-    Journal: \tp@title@macro{JournalName}
+    \insert\footins{\tpUseComp{AffilBlock}}%
   }%
 }
 
