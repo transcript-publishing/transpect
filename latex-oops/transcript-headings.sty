@@ -134,6 +134,8 @@
 
 
   \thispagestyle{empty}%
+  
+  \typeout{RUNTITLE_OUTSIDE: \tp@heading@Title}
     
   \tpSetProperty{before-heading}{\cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
@@ -157,13 +159,7 @@
     %% Autor
     \tpIfComp{AuthorNameList}{%
       \vskip\baselineskip
-      {\large\sfwidefamily\itshape
-        \ifjournal
-          \tpUseComp{AuthorContactBlock}
-        \else
-          \tpUseComp{AuthorNameList}
-        \fi
-      }%
+      {\large\sfwidefamily\itshape\tpUseComp{AuthorNameList}}%
       \par%\vskip\baselineskip
     }{}%
     %% Zitat
@@ -193,20 +189,68 @@
   
   %% Format Kolumnentitel
   \tpSetProperty{running-heading}{%
-    \tpIfComp{RunNumber}{\tpUseComp{RunNumber}\enskip}{}\tpUseComp{RunTitle}}%
-  \tpSetProperty{running-extra}{%
-    \tpIfComp{RunAuthorNameList}
-      {\protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}}
-      {\global\let\@authormark\@empty}%
+    \tpIfComp{RunNumber}{%
+      \tpUseComp{RunNumber}\enskip\tpUseComp{RunTitle}%
+    }{%
+      \tpUseComp{Number}\enskip\tpUseComp{Title}%
+    }
   }%
-  %
+  
+  \tpSetProperty{running-extra}{%
+    \tpIfComp{RunAuthorNameList}{%
+      \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
+    }{%
+      \global\let\@authormark\@empty%
+    }%
+  }%
 }
 
+% Für Zeitschriften.
+\global\newcount\@currAffilCnt \global\@currAffilCnt=1
+\global\newbox\@articlefooterbox%
+
 \tpDeclareHeading[chapter]{0}{contribution}{%
-  \tpSetProperty{extended}{true}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
-  \thispagestyle{articlehead}
+  \tpSetProperty{extended}{false}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
+  
+  % Artikel-DOI für die Zeitschriftenauftaktseite. Aus den Makros der Überschrift übernommen.
+  % Muss global und ausgewertet sein, damit das Seitenlayout ps@articlehead darauf zugreifen kann.
+  \xdef\@articleDOI{\tpUseComp{DOI}}%
+  
+  \tpSetProperty{affiliation-format}{}%
+  \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
+  \tpSetProperty{affil-block-face}{\small\sffamily}
+  \tpSetProperty{author-contact-format}{%Format of a single author's contact information
+    \tpIfComp{Affil}{%
+      \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{Affil}}{affil-block-format});\par%
+      \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
+      \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
+    }{}%
+  }
+  \tpSetProperty{counted-name-sep}{}
+  \tpSetProperty{before-heading}{%
+    \typeout{AFFIL CNT: \tpAffilCnt}
+    \cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax
+    \xdef\@headingTitle{\tpUseComp{Title}}
+    \xdef\@headingDOI{\tpUseComp{DOI}}
+    \xdef\@headingCopyright{\tpUseComp{Copyright}}
+    
+    \global\setbox\@articlefooterbox = \vbox{%
+        \parindent\z@%
+        \tpUseProperty{affil-block-face}%
+        \tpUseComp{AuthorContactBlock}\par
+        \@headingTitle\par
+        \@headingDOI\par
+        \@headingCopyright%
+    }
+    \@tempdima = \the\ht\@articlefooterbox
+    % Verkleinere die Seite um die Höhe der Fußzeileninformationen.
+    \enlargethispage{-\@tempdima}
+    %\tpIfComp{AffilBlock}{{\tpUseProperty{affil-block-face}\tpUseComp{AffilBlock}}\par}{}
+  }
+  
     %% Abstract
   \tpSetProperty{extended-heading}{%
+    \thispagestyle{articlehead}
     \tpIfComp{Abstract}{%
       \par\vskip2\baselineskip
         \rightskip\z@
@@ -225,7 +269,6 @@
       {\itshape\tpUseComp{Keywords}\par}%
     }
     {}%
-    \insert\footins{\tpUseComp{AffilBlock}}%
   }%
 }
 

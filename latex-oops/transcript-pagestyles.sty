@@ -81,8 +81,8 @@
 
 \def\ps@articlehead{%
   \ps@headings
-  \def\@oddhead{\smash{\vtop{\hfill\small\sffamily\tpNamespace{titlepage}\tpUseComp{JournalName}\@@par\hfill\tpUseComp{ArticleDOI}}}}%
-  %\def\@oddfoot{\ifvoid\@articlefootbox\else\smash{\vbox{\vss\unvbox\@articlefootbox}}\fi}
+  \def\@oddhead{\smash{\vtop{\hfill\small\sffamily\tpNamespace{titlepage}\tpUseComp{JournalName}\@@par\hfill \@articleDOI}}}%
+  \def\@oddfoot{\smash{\parskip\z@\parindent\z@\small\sffamily\vbox{\box\@articlefooterbox}}}
 }
 
 \pagestyle{headings}
