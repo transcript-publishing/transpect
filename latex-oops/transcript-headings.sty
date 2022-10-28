@@ -218,7 +218,7 @@
   
   \tpSetProperty{affiliation-format}{}%
   \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
-  \tpSetProperty{affil-block-face}{\small\sffamily}
+  \tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
   \tpSetProperty{author-contact-format}{%Format of a single author's contact information
     \tpIfComp{Affil}{%
       \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{Affil}}{affil-block-format});\par%
@@ -226,21 +226,24 @@
       \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
     }{}%
   }
+  
   \tpSetProperty{counted-name-sep}{}
   \tpSetProperty{before-heading}{%
-    \typeout{AFFIL CNT: \tpAffilCnt}
     \cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax
-    \xdef\@headingTitle{\tpUseComp{Title}}
+    
+    % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
+    \global\setbox\@licenceTextFooter = \hbox{\tpNamespace{titlepage}\tpIfComp{LicenceLogo}{\includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space\footnotesize\nsffamily\tpUseComp{LicenceName}}{}}
+    
     \xdef\@headingDOI{\tpUseComp{DOI}}
-    \xdef\@headingCopyright{\tpUseComp{Copyright}}
+    \xdef\@headingCopyright{\unhbox\@licenceTextFooter\space\tpUseComp{Copyright}}
+    
     
     \global\setbox\@articlefooterbox = \vbox{%
-        \parindent\z@%
-        \tpUseProperty{affil-block-face}%
-        \tpUseComp{AuthorContactBlock}\par
-        \@headingTitle\par
-        \@headingDOI\par
-        \@headingCopyright%
+      \parindent\z@%
+      \tpUseProperty{affil-block-face}%
+      \tpUseComp{AuthorContactBlock}\par
+      \@headingDOI\par
+      \@headingCopyright%
     }
     \@tempdima = \the\ht\@articlefooterbox
     % Verkleinere die Seite um die Höhe der Fußzeileninformationen.

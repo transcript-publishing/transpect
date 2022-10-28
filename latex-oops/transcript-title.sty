@@ -14,9 +14,11 @@
 \tpSetBabelLabel{german}{editorsuffixpl}{(Hrsg.)}
 \tpSetBabelLabel{english}{editorsuffixpl}{(eds.)}
 
+\global\newbox\@licenceTextFooter
+
 \tpDeclareTitlepage{%
   \tpSetProperty{editor-suffix-sgl}{\editorsuffixsglname}
-  \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}
+  \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}    
 
   \tpSetProperty{coverpage}{%
     \bgroup
@@ -30,6 +32,7 @@
       \clearpage
     \egroup
   }%
+  
   \tpSetProperty{before-titlepage-roman}{%
     \setcounter{page}{1}%
     \def\thepage{\roman{page}}%
