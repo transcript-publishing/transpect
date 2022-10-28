@@ -230,9 +230,10 @@
   \tpSetProperty{counted-name-sep}{}
   \tpSetProperty{before-heading}{%
     \cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax
+    \thispagestyle{articlehead}
     
     % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
-    \global\setbox\@licenceTextFooter = \hbox{\tpNamespace{titlepage}\tpIfComp{LicenceLogo}{\includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space\footnotesize\nsffamily\tpUseComp{LicenceName}}{}}
+    \global\setbox\@licenceTextFooter = \hbox{\tpIfComp{LicenceLogo}{\includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space\footnotesize\nsffamily\tpUseComp{LicenceName}}{}}
     
     \xdef\@headingDOI{\tpUseComp{DOI}}
     \xdef\@headingCopyright{\unhbox\@licenceTextFooter\space\tpUseComp{Copyright}}
@@ -253,7 +254,6 @@
   
     %% Abstract
   \tpSetProperty{extended-heading}{%
-    \thispagestyle{articlehead}
     \tpIfComp{Abstract}{%
       \par\vskip2\baselineskip
         \rightskip\z@
