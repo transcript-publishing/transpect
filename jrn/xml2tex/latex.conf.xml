@@ -41,7 +41,8 @@
     </xsl:if>
   </preamble>-->
   
-
+  <xsl:variable name="license-logo-href" as="xs:string?" 
+                select="$metadata/dbk:keyword[@role eq 'Lizenzlogo']"/>
 
   <front>
     <xsl:if test="$title-pages eq 'yes'">
@@ -56,6 +57,26 @@
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
   
+  
+  <xsl:template name="xml2tex:add-publicationtype-specific-meta">
+    <xsl:variable name="open-access" as="xs:boolean" 
+                 select="some $c in //dbk:chapter/dbk:info/dbk:biblioset/dbk:legalnotice satisfies matches($c, 'Creative\p{Zs}+Commons', 'i') 
+                         or 
+                         $license-logo-href[normalize-space()]"/>
+   <xsl:if test="not($license-name[normalize-space()](:already applied in main template then:)) 
+                 and 
+                 $open-access">
+     <xsl:value-of select="concat('&#xa;\tpLicenceName{',
+                                  replace((//dbk:chapter[dbk:info/dbk:biblioset/dbk:legalnotice[matches(., 'Creative\p{Zs}+Commons', 'i')]])[1]/
+                                            dbk:info/dbk:biblioset/dbk:legalnotice[matches(., 'Creative\p{Zs}+Commons', 'i')][1], 
+                                          '^.*(Creative\p{Zs}+Commons.+?\)).*$', '$1'),
+                                  '}')"/>
+    </xsl:if> 
+    <xsl:if test="$open-access">
+      <xsl:value-of select="'&#xa;\tpLicenceLogo{logos/oasymbol.pdf}'"/>
+    </xsl:if>
+  </xsl:template>
+
 <!--  <template context="dbk:dedication[@role eq 'tsded']">
     <rule name="wid" type="env"  break-after="1" break-before="1">
       <param/>
@@ -77,7 +98,7 @@
   <template context="*[not(self::dbk:hub)]/dbk:info//*[self::dbk:author|self::dbk:editor]">
 
       <xsl:if test="not(@role = 'override')">
-        <!-- if author contains only name → tpAuthorNamelist. If name is structured though or if other metadata is present generate environment -->
+        <!-- if author contains only name → tpAuthorNameList. If name is structured though or if other metadata is present generate environment -->
         <rule name="tpAuthor" type="env" break-after="0" break-before="1">
           <text select="node()">
             <with-param name="in-author" tunnel="yes" as="xs:boolean" select="true()"/>
