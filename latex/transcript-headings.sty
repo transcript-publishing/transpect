@@ -113,16 +113,18 @@
   \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\Large}%
   \tpSetProperty{toc-subtitle-format}{\normalfont\fontsize{11bp}{12.8bp}\selectfont\sfchapsubtocfamily}%
   \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
-  \tpSetProperty{toc-indent}{2em}%
+  \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
     % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
-    \vbox{
-      \def\@numberWidth{\dimexpr\csname tp-heading-toc-number-maxwd\endcsname+4pt}
+    \vbox{%
+      \def\@numberWidth{\dimexpr\csname tp-heading-toc-number-maxwd\endcsname\relax}%
       \tpUseProperty{toc-title-format}%
-      \tpIfComp{TocNumber}
-      {\leavevmode\leftskip\@numberWidth\hskip-\@numberWidth\hbox to \@numberWidth{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
-      {\leftskip\z@\leavevmode}%
+      \tpIfComp{TocNumber}{%
+        \leftskip\@numberWidth\hskip-\@numberWidth\hbox to \@numberWidth{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+      }{%
+        \leftskip\z@\leavevmode%
+      }%
       \strut\tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
       \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\tpUseProperty{toc-author-format}\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
@@ -225,15 +227,15 @@
 
 \tpDeclareHeading{1}{section}{%
   \ifcollection\else
-    \tpSetProperty{toc-indent}{2em}%
-    \tpSetProperty{toc-margin-left}{2em}%
+    \tpSetProperty{toc-indent}{0em}%
+    \tpSetProperty{toc-margin-left}{0em}%
     \tpSetProperty{toc-heading}{%
-      \def\@numberWidth{\dimexpr\csname tp-heading-toc-number-maxwd\endcsname+4pt}
+      \def\@numberWidth{\dimexpr\csname tp-heading-toc-number-maxwd\endcsname}
       \tpUseProperty{toc-title-format}%
-      \tpIfComp{TocNumber}
-      {\tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-        \hskip-\@numberWidth\hbox to \@numberWidth{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
-      {%\leftskip\z@%
+      \tpIfComp{TocNumber}{%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
+        \leftskip\@numberWidth\hskip-\@numberWidth\hbox to \@numberWidth{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+      }{%\leftskip\z@%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
       }%
       \tpTocLink{\tpUseComp{TocTitle}}%
