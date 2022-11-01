@@ -299,44 +299,6 @@
     <xsl:if test="normalize-space($publisher-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpPubLogo{logos/', $publisher-logo-href, '}&#xa;')"/>
     </xsl:if>
-    <!-- links -->
-<!--    <xsl:if test="normalize-space($publisher-website)">
-      <xsl:value-of select="concat('&#xa;\tpPubWeb{', $publisher-website, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($doi)">
-      <xsl:value-of select="concat('&#xa;\tpDOI{', $doi, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($pub-year)">
-      <xsl:value-of select="concat('&#xa;\tpYear{', $pub-year, '}&#xa;')"/>
-    </xsl:if>-->
-    <!-- contributor meta -->
-<!--    <xsl:if test="normalize-space($lectorate)">
-      <xsl:value-of select="concat('&#xa;\tpLectorate{', $lectorate, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($translator)">
-      <xsl:value-of select="concat('&#xa;\tpTranslator{', $translator, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($copy-editing)">
-      <xsl:value-of select="concat('&#xa;\tpQA{', $copy-editing, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($cover-credit)">
-      <xsl:value-of select="concat('&#xa;\tpCoverDesign{', $cover-credit, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($cover-art)">
-      <xsl:value-of select="concat('&#xa;\tpCoverImage{', $cover-art, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($typesetter)">
-      <xsl:value-of select="concat('&#xa;\tpTypesetter{', $typesetter, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($printer)">
-      <xsl:value-of select="concat('&#xa;\tpPrint{', $printer, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($used-font)">
-      <xsl:value-of select="concat('&#xa;\tpUsedFont{', $used-font, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($converter)">
-      <xsl:value-of select="concat('&#xa;\tpConversion{', $converter, '}&#xa;')"/>
-    </xsl:if>-->
     <!-- licensing meta -->
     <xsl:if test="normalize-space($copyright-note)">
       <xsl:sequence select="xml2tex:meta2tex($copyright-note, (), 'tpCopyright')"/>
@@ -361,22 +323,6 @@
                                    string-join($license-text/*, '\\&#xa;'),
                                    '}&#xA;')"/>
     </xsl:if>
-<!--    <xsl:if test="normalize-space($license-link)">
-      <xsl:value-of select="concat('&#xa;\tpLicenceLink{', $license-link, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($license-name)">
-      <xsl:value-of select="concat('&#xa;\tpLicenceName{', $license-name, '}&#xa;')"/>
-    </xsl:if>-->
-    <!-- funding statement, \tpFundingPreText and \tpFundingPostText are placed before and
-         below one or more \begin{tpFunding} environment. One of which may contain a \tpFundName
-         and \tpFundLogo macro. Implement this according to the customer-specific metadata model.
-    -->
-<!--    <xsl:if test="normalize-space($funder-pretext)">
-      <xsl:value-of select="concat('&#xa;\tpFundingPreText{', $funder-pretext, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($funder-posttext)">
-      <xsl:value-of select="concat('&#xa;\tpFundingPostText{', $funder-posttext, '}&#xa;')"/>
-    </xsl:if>-->
     <xsl:if test="normalize-space($funder-name) or exists($funder-logo)">
       <xsl:for-each select="$funder-logo[normalize-space()]">
         <xsl:text>&#xa;\begin{tpFunding}</xsl:text>
@@ -392,18 +338,8 @@
         <xsl:text>&#xa;\end{tpFunding}&#xa;</xsl:text>
       </xsl:for-each>  
     </xsl:if>
-    <!-- transcript-specific metadata -->
-<!--    <xsl:if test="normalize-space($bibl-issn)">
-      <xsl:value-of select="concat('&#xa;\tpBiblISSN{', $bibl-issn, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($bible-issn)">
-      <xsl:value-of select="concat('&#xa;\tpBibleISSN{', $bible-issn, '}&#xa;')"/>
-    </xsl:if>
-    <xsl:if test="normalize-space($advertisement)">
-      <xsl:text>&#xa;\tpAdvertise{</xsl:text>
-      <xsl:apply-templates select="$advertisement/*" mode="#current"/>
-      <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>-->    
+    <!-- journal-specific metadata -->
+    <xsl:call-template name="xml2tex:add-publicationtype-specific-meta"/>
     <xsl:text>&#xa;\end{tpMeta}&#xa;</xsl:text>
     <xsl:for-each select="//dbk:index">
       <xsl:variable name="index-index" as="attribute(remap)" select="@remap"/>
@@ -424,7 +360,7 @@
                                    '}&#xa;')"/>
     </xsl:if>
   </preamble>
-  
+
   <front>
     <xsl:if test="$title-pages eq 'yes'">
       <xsl:text>\tpMaketitle&#xa;</xsl:text>  
@@ -436,6 +372,11 @@
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
   
+  
+  <xsl:template name="xml2tex:add-publicationtype-specific-meta">
+    <!-- placeholder-->
+  </xsl:template>
+
   <template context="dbk:para[matches(@role, $endnotes-heading-style)]">
     <xsl:value-of select="concat('&#xa;\def\notesname{', . ,'}')"/>
     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
