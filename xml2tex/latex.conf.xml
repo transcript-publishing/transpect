@@ -526,14 +526,33 @@
     </xsl:if>
   </template>
   
-  <xsl:template match="dbk:title//text()[matches(., '[&#x1e24;&#x1e25;&#x1e6f;&#x1e0d;&#x1e2a;]+')]" mode="xml2tex" priority="100000">
+  <xsl:template match="dbk:title//text()[matches(., '[&#x1e24;&#x1e25;&#x1e6f;&#x1e0d;&#x1e2a;&amp;&#x9;&#xa0;&#x2000;-&#x200a;]+')]" mode="xml2tex" priority="100000">
+    <xsl:param name="toc-override" as="xs:boolean?" tunnel="yes"/>
+    <xsl:param name="bm-override" as="xs:boolean?" tunnel="yes"/>
+    <xsl:param name="run-override" as="xs:boolean?" tunnel="yes"/>
     <xsl:variable name="style" as="attribute()*" 
                   select="parent::*/(@css:font-weight, @css:font-style)"/>
-    <xsl:analyze-string select="." regex="([&#x1e24;&#x1e25;&#x1e6f;&#x1e0d;&#x1e2a;]+)">
+    <xsl:analyze-string select="." regex="([&#x1e24;&#x1e25;&#x1e6f;&#x1e0d;&#x1e2a;]+)|([&amp;&#x9;&#xa0;&#x2000;-&#x200a;]+)">
       <xsl:matching-substring>
-        <xsl:text>\textsffallback{</xsl:text>
-        <xsl:value-of select="."/>
-        <xsl:text>}</xsl:text>
+          <xsl:if test="regex-group(1)[normalize-space()]">
+            <xsl:if test="not($toc-override eq true()) and not($bm-override eq true()) and not($run-override eq true())"><xsl:text>\textsffallback{</xsl:text></xsl:if>
+            <xsl:value-of select="regex-group(1)"/>
+            <xsl:if test="not($toc-override eq true()) and not($bm-override eq true()) and not($run-override eq true())"><xsl:text>}</xsl:text></xsl:if>
+          </xsl:if>
+          <xsl:if test="exists(regex-group(2))">
+            <xsl:value-of select="if ($toc-override eq true() or $bm-override eq true() or $run-override eq true()) 
+                                  then 
+                                       replace(
+                                         replace(
+                                          translate(regex-group(2), '&#xa0;', '~'),
+                                            '\\(&amp;)',
+                                            '\\string$1'
+                                            ),
+                                            '\p{Zs}+',
+                                         '&#x20;'
+                                         ) 
+                                      else regex-group(2)"/>
+          </xsl:if>
       </xsl:matching-substring>
       <xsl:non-matching-substring>
         <xsl:value-of select="."/>
@@ -546,38 +565,31 @@
   <template name="customer-toctitles">
     <rule name="tpTocTitle" type="cmd" break-after="0" break-before="1">
       <param select="dbk:title/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
-        <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
-        <with-param name="remove-newline" select="false()" as="xs:boolean" tunnel="yes"/>
         <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+        <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
       </param>
     </rule>
     <xsl:if test="dbk:title[dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
       <rule name="tpTocNumber" type="cmd" break-after="0" break-before="1">
         <param select="dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/text()">
-          <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
-          <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
-          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
           <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
     </xsl:if>
     <xsl:if test="dbk:subtitle">
       <rule name="tpTocSubtitle" type="cmd" break-after="0" break-before="1">
         <param select="dbk:subtitle/node()">
-          <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
-          <with-param name="remove-newline" select="false()" as="xs:boolean" tunnel="yes"/>
-          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
           <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
     </xsl:if>
     <xsl:if test="dbk:author or dbk:authorgroup/dbk:author">
       <rule name="tpTocAuthorNameList" type="cmd" break-after="0" break-before="1">
         <param select="(dbk:author|dbk:authorgroup/dbk:author)/dbk:personname/dbk:othername/node()">
-          <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
-          <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
-          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
           <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
     </xsl:if>
