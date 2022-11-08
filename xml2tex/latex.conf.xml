@@ -422,14 +422,15 @@
     </rule>
   </template>
   
- <template context="dbk:para[following-sibling::*[1][self::dbk:blockquote]]
+<!-- <template context="dbk:para[following-sibling::*[1][self::dbk:blockquote]]
                    |dbk:blockquote/dbk:para[last()]
                    |dbk:caption/dbk:para[last()]">
+    <!-\- this prevents processing on para’s attributes. testing results if commented out. -\->
     <rule break-after="0">
       <text/>
     </rule>
-    <!-- copied from common to reinstall template priorities-->
-  </template>
+    <!-\- copied from common to reinstall template priorities-\->
+  </template>-->
 
   <template context="dbk:para[dbk:personname[@role eq 'speaker']]">
     <rule name="item" type="cmd" break-before="1">
