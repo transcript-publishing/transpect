@@ -654,9 +654,15 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="figure/head//*[self::seg[starts-with(@rend, 'hub:')]|self::label]" mode="tei2html" priority="5">
+  <xsl:template match="(table|figure)/head//*[self::seg[starts-with(@rend, 'hub:')]|self::label]" mode="tei2html" priority="5">
     <!-- https://redmine.le-tex.de/issues/13415 -->
     <xsl:apply-templates select="node()" mode="#current"/>
+    <xsl:if test=".[self::seg[@rend='hub:caption-number'] 
+                    or 
+                    self::label[not(..[self::seg[@rend='hub:caption-number']])]]
+                   [following-sibling::node()[1][not(matches(., '^\p{Zs}'))]]">
+      <xsl:text> </xsl:text>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="html:figure/html:p" mode="clean-up">
