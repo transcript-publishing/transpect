@@ -311,7 +311,7 @@
         \unless\ifnum\@tempcnta>1\relax
       \repeat
       \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname
-      \leftskip\@tempdima\hskip-\@tempdimb\hbox to \@tempdimb{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+      \leftskip\@tempdima\hskip-\@tempdimb\hbox to \@tempdimb{\tpTocLink{\tpUseComp{TocNumber}}\hss}\tpUseProperty{toc-number-sep}%
     }{%\leftskip\z@%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
     }%
