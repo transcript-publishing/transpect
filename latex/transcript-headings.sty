@@ -240,9 +240,9 @@
             \@tempdima=\dimexpr\@tempdima+\expandafter\csname tp-heading-toc-number-\the\@tempcnta -maxwd\endcsname\relax%
           \fi
           \advance\@tempcnta by \@ne
-          \unless\ifnum\@tempcnta>1\relax
+          \unless\ifnum\@tempcnta>0\relax
         \repeat
-        \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname
+        \@tempdimb=\csname tp-heading-toc-number-0-maxwd\endcsname
         \leftskip\@tempdima\hskip-\@tempdimb\hbox to \@tempdimb{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
       }{%\leftskip\z@%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
