@@ -351,6 +351,29 @@
     \tpSetProperty{toc-indent}{2em}%
     \tpSetProperty{toc-margin-left}{4em}%
   \fi
+  \tpSetProperty{toc-heading}{%
+    \tpUseProperty{toc-title-format}%
+    \tpIfComp{TocNumber}{%
+      \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
+      \@tempdima=0\p@%
+      \@tempcnta=0%
+      \loop
+        \expandafter\ifx\csname tp-heading-toc-number-\the\@tempcnta -maxwd\endcsname\relax%
+        \else
+          \@tempdima=\dimexpr\@tempdima+\expandafter\csname tp-heading-toc-number-\the\@tempcnta -maxwd\endcsname\relax%
+        \fi
+        \advance\@tempcnta by \@ne
+        \unless\ifnum\@tempcnta>1\relax
+      \repeat
+      \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname
+      \leftskip\@tempdima\hskip-\@tempdimb\hbox to \@tempdimb{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+    }{%\leftskip\z@%
+      \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+    }%
+    \tpTocLink{\tpUseComp{TocTitle}}%
+    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+    \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+  }%
   % \tpSetProperty{after-heading-block}{%
   %   % Berechnung verbleibenden Abstands.
   %   \tp@saveRemainingSpace
