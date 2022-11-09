@@ -108,37 +108,36 @@
 \tpDeclareHeading{0}{chapter}{%
   %% Format IHV-Eintrag
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
-  \tpSetProperty{toc-margin-right}{2em}%
+  \tpSetProperty{toc-margin-right}{2em}% Begrenzt die Breite, auf der Titel und Untertitel erscheinen können. 2 em sind dann der Platz, auf dem die Seitenzahl »übersteht«.
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\normalsize}%
-  \tpSetProperty{toc-subtitle-format}{\normalfont\normalsize\sfchapsubtocfamily}%
+  \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\large}%
+  \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapsubtocfamily\large}%
   \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
   \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
     % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
-    \vbox{%
-      \def\@numberWidth{\dimexpr\csname tp-heading-toc-number-maxwd\endcsname\relax}%
+    \vtop{\strut%
       \tpUseProperty{toc-title-format}%
       \tpIfComp{TocNumber}{%
-        \leftskip\@numberWidth\hskip-\@numberWidth\hbox to \@numberWidth{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+        \@tempdima=\csname tp-heading-toc-number-0-maxwd\endcsname%
+        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
       }{%
-        \leftskip\z@\leavevmode%
+        \leftskip\z@%
       }%
       \strut\tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
-      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\tpUseProperty{toc-author-format}\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
-      \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
+      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
+      \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
     }
   }%
+
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
     %\tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
     \tpIfComp{BMNumber}{\tpUseComp{BMNumber}\space}{}\tpUseComp{BMTitle}%
   }
-
-
 
   \tpSetProperty{before-heading}{\cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
@@ -230,11 +229,21 @@
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
     \tpSetProperty{toc-heading}{%
-      \def\@numberWidth{\dimexpr\csname tp-heading-toc-number-maxwd\endcsname}
       \tpUseProperty{toc-title-format}%
       \tpIfComp{TocNumber}{%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-        \leftskip\@numberWidth\hskip-\@numberWidth\hbox to \@numberWidth{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+        \@tempdima=0\p@%
+        \@tempcnta=0%
+        \loop
+          \expandafter\ifx\csname tp-heading-toc-number-\the\@tempcnta -maxwd\endcsname\relax%
+          \else
+            \@tempdima=\dimexpr\@tempdima+\expandafter\csname tp-heading-toc-number-\the\@tempcnta -maxwd\endcsname\relax%
+          \fi
+          \advance\@tempcnta by \@ne
+          \unless\ifnum\@tempcnta>1\relax
+        \repeat
+        \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname
+        \leftskip\@tempdima\hskip-\@tempdimb\hbox to \@tempdimb{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
       }{%\leftskip\z@%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
       }%
@@ -394,506 +403,3 @@
 
 
 \endinput
-
-
-
-\def\tsToC{%
-  \tpToCAlign{\tsToCAlign}%
-  \tpToCPageSep{\tsToCPageSep}%
-  \tpToCPageOut{\tsToCPageOut}%
-}
-\def\tsToCAlign{%
-  \raggedright
-  \rightskip \@pnumwidth \@plus 1fil
-  \hyphenpenalty=\@M
-  \parfillskip -\@pnumwidth
-}%
-\def\tsToCPageSep{%
-  \nobreak\leaders\hbox{$\m@th
-    \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
-    mu$}\hfill
-}%
-\def\tsToCPageOut{\normalfont\sfwidefamily\normalsize\kern.5\p@\tp@toc@the@page\@par}%
-
-\tpDeclareHeading{-1}{part}{%
-  \tpHeadingProperty{BlockFormat}{%
-    %\markboth{}{}%
-    \thispagestyle{empty}%
-    \global\c@footnote0\relax
-  }%
-  \tpHeadingProperty{BeforeHeading}{\cleardoublepage\null\vskip\headingsep}%
-  \tpHeadingProperty{AfterHeading}{\vfill}%
-  \tpHeadingProperty{TitleFormat}{\HUGE\sffamily\sbseries}%
-  \tpHeadingProperty{BeforeSubtitle}{\@@par\vskip\baselineskip}%
-  \tpHeadingProperty{SubtitleFormat}{\leavevmode\vskip\baselineskip\large\bfseries}%
-  \tpHeadingProperty{AfterNumber}{\space}%
-  \tpToCBefore{\addvspace{2.25em}}%
-  \tpToCFormat{\sfwidefamily\sbseries\huge}%
-  \tpToCNumSep{\space}%
-  \tpToCNoPage
-  \tpToCHangNumber
-  \tsToC
-}
-
-\newdimen\chaphskip \chaphskip7mm %% default
-\tpDeclareHeading{0}{chapter}{%
-  \tpHeadingProperty{BlockFormat}{%
-    \thispagestyle{empty}%
-    \raggedright \normalfont
-    \interlinepenalty\@M
-    \global\c@footnote0\relax
-  }%
-  \tpHeadingProperty{AfterTitles}{%
-    \@@par\vskip\dimexpr-1\baselineskip\relax
-    \smash{\rlap{\lower3.25mm\vbox{\rule{\textwidth}{.4\p@}}}}\@@par%
-  }%
-  \tpHangNumber
-  \tpAuthorAfterIndent
-  % \tpHangFixed{\chaphskip}%
-  \tpHeadingProperty{BeforeHeading}{%
-    \cleardoublepage
-    \null\vskip\headingsep\vskip-.45mm\relax
-    \global\let\tp@starred\@undefined
-    \ifx\tp@notoc\relax\global\let\tp@starred\relax\fi
-  }%
-  \tpHeadingProperty{AfterHeading}{%
-    \vskip1.68\baselineskip
-    \ifx\heading@Author\relax\ifx\heading@Quote\relax\ifx\tp@starred\relax\vskip\baselineskip\else\vskip2\baselineskip\fi\fi\fi
-    }%
-  \tpHeadingProperty{BeforeNumber}{\setbox\@tempboxa\hbox\bgroup}%
-  \tpHeadingProperty{AfterNumber}{\egroup
-    \@tempdima\wd\@tempboxa \advance\@tempdima.5em
-    \ifdim\@tempdima>\chaphskip\chaphskip\@tempdima\fi
-    \hb@xt@\chaphskip{\box\@tempboxa\hss}%
-  }%
-  \tpHeadingProperty{BlockFormat}{\Huge\sbseries}%
-  \tpHeadingProperty{TitleFormat}{\ifx\tp@starred\relax\sffamily\else\sfchapfamily\fi}%
-  \tpHeadingProperty{BeforeSubtitle}{\@@par}%
-  \tpHeadingProperty{AfterSubtitle}{\@@par}%
-  \tpHeadingProperty{SubtitleFormat}{\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily}%
-  \tpHeadingProperty{BeforeAuthor}{\@@par\vskip\baselineskip}%
-  \tpHeadingProperty{AuthorFormat}{\large\sfwidefamily\itshape}%
-  \tpHeadingProperty{AfterAuthor}{\@@par\vskip\baselineskip}%
-  \tpHeadingProperty{BeforeQuote}{\vskip\baselineskip\hfill\hbox\bgroup\vbox\bgroup\hsize.5\textwidth}%
-  \tpHeadingProperty{QuoteFormat}{\normalfont\normalsize\nsfwiderfamily}%
-  \tpHeadingProperty{AfterQuote}{\egroup\egroup}%
-  \tpHeadingProperty{BeforeQuoteSource}{\@par\vskip.5\baselineskip\hfill\hbox\bgroup\vbox\bgroup\hsize.5\textwidth}%
-  \tpHeadingProperty{QuoteSourceFormat}{\normalfont\normalsize\nsfwiderfamily}%
-  \tpHeadingProperty{AfterQuoteSource}{\egroup\egroup}%
-  \tpToCBefore{\addvspace{1\baselineskip}}%
-  \tpToCSubTitle%
-  \tpToCSubTitleBefore{\@par\nopagebreak}%
-  \tpToCSubTitleFormat{\normalfont\sfwidefamily}%
-  \tpToCFormat{%
-    \sbseries\Large\sfwidefamily%
-  }%
-  \ifcollection\tpToCNoNumber\else
-    \tpToCHangNumber
-    \tpToCHangFixed{3em}
-  \fi
-  %%
-  \tsToC
-}
-
-
-
-
-\tpDeclareHeading{1}{section}{%
-  \tpAuthorAfter
-  \tpHangNumber
-  %\tpHangFixed{12mm}%
-  \tpHeadingProperty{BlockFormat}{%
-    \raggedright \normalfont
-    \interlinepenalty\@M
-  }%
-  \tpHeadingProperty{BeforeHeading}{\addvspace{24.2bp}}%
-  \tpHeadingProperty{AfterSkip}{12.8bp}%
-  \tpHeadingProperty{AfterNumber}{\quad}%
-  \tpHeadingProperty{TitleFormat}{\sffamily\LARGE\sbseries}%
-  \tpHeadingProperty{BeforeSubtitle}{\@@par}%
-  \tpHeadingProperty{AfterSubtitle}{\addvspace{12.8bp}}%
-  \tpHeadingProperty{BeforeAuthor}{\@@par}%
-  \tpHeadingProperty{AuthorFormat}{\itshape}%
-  \tpHeadingProperty{AfterAuthor}{\@@par}%
-  \tpHeadingProperty{SubtitleFormat}{\LARGE\sffamily}%
-  \tpHeadingProperty{BeforeQuote}{\@@par
-    \vskip\baselineskip
-    \hfill\vbox\bgroup\hsize.5\textwidth%
-      \normalsize\nsfwiderfamily\mdseries
-      \noindent
-    }%
-  \tpHeadingProperty{AfterQuote}{\egroup}%
-  \tpToCHangNumber
-  \tpToCHangFixed{2em}
-  \tsToC
-}
-
-\tpDeclareHeading{2}{subsection}{%
-  \tpHeadingProperty{BlockFormat}{%
-    \raggedright \normalfont
-    \interlinepenalty\@M
-  }%
-  \tpHangNumber
-  \tpHeadingProperty{BeforeHeading}{\addvspace{11.5bp}}%
-  \tpHeadingProperty{AfterSkip}{12.8bp}%
-  \tpHeadingProperty{AfterNumber}{\quad}%
-  \tpHeadingProperty{TitleFormat}{\sffamily\mdseries\Large}%
-  \tpHeadingProperty{BeforeSubtitle}{\@@par\addvspace{12.8}}%
-  \tpHeadingProperty{AfterSubtitle}{\@@par\vskip\addvspace{12.8}}%
-  \tpHeadingProperty{AfterAuthor}{\@@par}%
-  \tpHeadingProperty{SubtitleFormat}{\sffamily\LARGE}%
-  \tpHeadingProperty{BeforeQuote}{\@@par\vskip.5\baselineskip}%
-  \tpToCHangNumber
-    \tpToCHangFixed{2em}
-  \tsToC
-}
-
-\tpDeclareHeading{3}{subsubsection}{%
-  \tpHangNumber
-  \tpHeadingProperty{BeforeHeading}{\vskip12.8bp}%
-  \tpHeadingProperty{AfterNumber}{\quad}%
-  \tpHeadingProperty{AfterSkip}{1sp}%
-  \tpHeadingProperty{TitleFormat}{\sffamily\mdseries\Large}%
-  \tpToCHangNumber
-    \tpToCHangFixed{3em}
-  \tsToC
-}
-
-\tpDeclareHeading{4}{paragraph}{%
-  \tpHangNumber
-  \tpHeadingProperty{BeforeHeading}{\vskip12.8bp}%
-  \tpHeadingProperty{AfterNumber}{\quad}%
-  \tpHeadingProperty{AfterSkip}{1sp}%
-  \tpHeadingProperty{TitleFormat}{\normalfont\sfwidefamily\normalsize}%
-  \tpToCHangNumber
-    \tpToCHangFixed{2em}
-  \tsToC
-}
-
-\tpDeclareHeading{4}{subparagraph}{%
-  \tpHeadingProperty{BeforeHeading}{\vskip12.8bp}%
-  \tpHeadingProperty{AfterSkip}{-.5em}%
-  \tpHeadingProperty{TitleFormat}{\normalfont\sffamily\normalsize\mdseries}%
-  \tsToC
-}
-
-
-
-
-
-\renewcommand\thepart{\@Roman\c@part}
-\renewcommand\part{%
-  \cleardoublepage
-  \pagestyle{empty}%
-  \@tempswafalse
-  \secdef\@part\@spart}
-
-\def\partmark{}%
-\let\oldaddcontentsline\addcontentsline
-
-\def\@part[#1]#2{%
-    \ifnum \c@secnumdepth >-2\relax
-      \refstepcounter{part}%
-    \fi
-    \addcontentsline{toc}{part}{{#1}}%
-    \def\partmark{#2}%
-    \global\let\partmarkoverride\@undefined
-    \markboth{}{}%
-    {\interlinepenalty \@M
-     \parindent\z@
-     \raggedright
-     \null\vskip\headingsep%
-     \sffamily\sbseries\HUGE
-     \def\numberline##1{##1}%
-     \HUGE #2\par}%
-    \global\c@footnote0\relax
-    \@endpart}
-
-\def\@spart#1{%
-    {\interlinepenalty \@M
-     \parindent\z@
-     \null\vskip\headingsep%
-     \raggedright
-     \normalfont
-     \sffamily\sbseries\HUGE
-     #1\par}%
-    \@endpart}
-
-\newcount\real@chap \real@chap\z@
-\renewcommand\chapter{\cleardoublepage
-                    \pagestyle{headings}%
-                    \thispagestyle{empty}%
-                    \global\@topnum\z@
-                    \@afterindentfalse
-                    \global\c@footnote0\relax
-                    \secdef\@chapter\@schapter}
-
-\ifcollection\c@tocdepth=0\relax\else\c@tocdepth=3\relax\fi
-
-\let\old@thechapter\thechapter
-\newcount\realchap\realchap\z@
-
-\def\@chapter[#1]#2{%
-  \ifx\endnotes@per@chapter\relax
-    \ifnum\c@endnote>\z@
-      \expandafter\global\expandafter\let\csname enotes@in@\the\realchap\endcsname\@empty
-    \fi
-    \advance\realchap\@ne
-    \global\c@endnote\z@
-    \addtoendnotes{\noexpand\expandafter\noexpand\ifx\noexpand\csname enotes@in@\the\realchap\noexpand\endcsname\noexpand\@empty\bgroup\leftskip\z@\protect\section*{#1}\egroup\noexpand\fi}%
-  \fi
-  \hypersetup{bookmarksdepth=-1}%
-  \ifx\@subtitle\@empty\else
-    \addcontentsline{toc}{chapsub}{\@subtitle}%
-  \fi
-  \ifx\@author\@empty\else
-    \addcontentsline{toc}{chapauthor}{\@author}%
-  \fi
-  \hypersetup{bookmarksdepth}%
-  \ifnum \c@secnumdepth >\m@ne
-    \if@mainmatter
-      \refstepcounter{chapter}%
-      \typeout{\@chapapp\space\thechapter.}%
-      \ifcollection
-        \addcontentsline{toc}{chapter}{#1}%
-      \else
-        \addtocontents{toc}{\protect\let\string\usenumberline\protect\relax}%
-        \addcontentsline{toc}{chapter}{\numberline{\thechapter}#1}%
-      \fi
-    \else
-      \addcontentsline{toc}{chapter}{#1}%
-    \fi
-  \else
-    \addcontentsline{toc}{chapter}{#1}%
-  \fi
-  \chaptermark{#1}%
-  \if@twocolumn
-    \@topnewpage[\@makechapterhead{#2}]%
-  \else
-    \@makechapterhead{#2}%
-    \@afterheading
-  \fi
-  %\let\thechapter\old@thechapter
-}
-
-\long\def\chapterquote#1{\long\gdef\@chapterquote{#1}}
-
-\newdimen\chaphskip \chaphskip7mm %% default
-
-\def\@makechapterhead#1{{%
-  \parindent\z@
-  \null\vskip\headingsep\vskip-.45mm\relax%
-  {\parindent \z@ \raggedright \normalfont
-    \Huge\sbseries
-    \interlinepenalty\@M
-    \if@mainmatter
-      \bgroup
-        \par
-        \ifnum \c@secnumdepth >\m@ne
-          \settowidth\@tempdima{\sfchapfamily\thechapter}%
-          \ifdim\@tempdima>\chaphskip\relax
-            \immediate\write\@auxout{\string\global\string\chaphskip=\the\@tempdima}%
-            \global\chaphskip=\the\@tempdima
-          \fi
-          \leftskip\chaphskip
-          {\sfchapfamily
-            \hskip-\chaphskip\hb@xt@\chaphskip{\thechapter\hfill}#1}\par%
-          \ifx\@subtitle\@empty\else
-            % \vskip.25\baselineskip
-            {\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\@subtitle}\par
-          \fi
-          \global\let\partmarkoverride\@undefined
-        \else
-          {\sfchapfamily#1}\par%
-          \ifx\@subtitle\@empty\else
-            {\normalfont\fontsize{14.7bp}{17.2bp}\selectfont\sffamily\@subtitle}\par%\vskip2mm
-          \fi
-        \fi
-      \egroup
-    \else
-      {\sfchapfamily#1}\par\nobreak
-    \fi
-  }%
-  \vskip\dimexpr-1\baselineskip\relax\smash{\rlap{\lower3.5mm\vbox{\rule{\textwidth}{.4\p@}}}}\par%
-  \global\let\@authormark\@empty
-  % \ifcollection
-    \ifx\@author\@empty\else
-      \bgroup\large
-        \vskip\baselineskip
-        \sfwidefamily\itshape\@author%
-        \xdef\@authormark{\@author}%
-      \egroup
-    \fi
-  % \fi
-  \par%
-  \ifx\@chapterquote\@undefined\else
-    \ifx\@author\@empty\vskip\baselineskip\par\fi
-    \savenotes
-    \hfill\vbox{\hsize.5\textwidth%
-      \vskip\baselineskip
-      \normalsize\nsfwiderfamily
-      \@chapterquote
-    }%
-    \spewnotes
-  \fi
-  \vskip1.68\baselineskip\relax
-  \ifx\@author\@empty\ifx\@chapterquote\@undefined\vskip2\baselineskip\fi\fi
-  \global\let\@subtitle\@empty
-  \global\let\@author\@empty
-  \global\let\@chapterquote\@undefined
-}}
-
-% \def\@schapter[#1]#2{\if@twocolumn
-%                    \@topnewpage[\@makeschapterhead{#1}]%
-%                  \else
-%                    \@makeschapterhead{#1}%
-%                    \@afterheading
-%                  \fi}
-
-\def\@makeschapterhead#1{%
-  % \@makechapterhead{#1}%
-  \null\vskip\headingsep\vskip-.45mm\relax%
-  {\parindent \z@ \raggedright
-    \Huge\sbseries\sffamily
-    \interlinepenalty\@M
-    #1\par\nobreak
-    \vskip-\baselineskip\rlap{\lower3.1mm\vbox{\rule{\textwidth}{.4\p@}}}\par%
-    \vskip1.62\baselineskip\relax
-  }%
-}
-
-\long\def\secquote#1{%
-    \savenotes
-    \hfill\vbox{\hsize.5\textwidth%
-      \normalsize\nsfwiderfamily\mdseries
-      \noindent
-      #1}%
-    \vskip\baselineskip
-    \spewnotes
-    \@afterheading
-    \ignorespaces}
-
-\def\subheading{\@startsection{section}{1}{\z@}%
-  {-1sp}%
-  {12.8bp}%
-  {\vskip-\lastskip\sffamily\LARGE}*}
-\def\subsubheading{\@startsection{subsection}{1}{\z@}%
-  {-12.8bp}%
-  {\baselineskip}%
-  {\vskip-\lastskip\sffamily\LARGE}*}
-
-\renewcommand\section{\@startsection {section}{1}{\z@}%
-  {-24.2bp}%
-  {12.8bp}%
-  {\sffamily\LARGE\sbseries
-    % \ifx\lay b\relax \scshape\fi
-  }}
-\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
-  {-11.5\p@}%
-  {12.8bp}%
-  {\sffamily\mdseries\Large}}
-\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
-  {-12.8bp}%
-  {1sp}%
-  {\sffamily\Large\mdseries}}
-\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
-  {-12.8bp}%
-  {1sp}%
-  {\normalfont\sfwidefamily\normalsize}}
-\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\z@}%
-  {-12.8bp}%
-  {-.5em}%
-  {\sffamily\normalsize\mdseries}}
-
-\let\old@thesection\thesection
-\let\old@thesubsection\thesubsection
-\let\old@thesubsubsection\thesubsubsection
-
-\def\@startsection#1#2#3#4#5#6{%
-  \expandafter\expandafter\expandafter\def\expandafter\expandafter\expandafter\@tempa\expandafter\expandafter\expandafter{\expandafter\expandafter\expandafter\global\expandafter\expandafter\expandafter\let\expandafter\expandafter\csname the#1\endcsname\csname old@the#1\endcsname}%
-  \if@noskipsec \leavevmode \fi
-  \par
-  \@tempskipa #4\relax
-  \@afterindenttrue
-  \ifdim \@tempskipa <\z@
-    \@tempskipa -\@tempskipa \@afterindentfalse
-  \fi
-  \if@nobreak
-    \everypar{}%
-  \else
-    \addpenalty\@secpenalty\addvspace\@tempskipa
-  \fi
-  \@ifstar
-    {\@ssect{#3}{#4}{#5}{#6}}%
-    {\@dblarg{\@sect{#1}{#2}{#3}{#4}{#5}{#6}}}}
-
-\def\@sect#1#2#3#4#5#6[#7]#8{%
-  \ifnum #2>\c@secnumdepth
-    \let\@svsec\@empty
-  \else
-    \refstepcounter{#1}%
-    \protected@edef\@svsec{\@seccntformat{#1}\relax}%
-  \fi
-  \@tempskipa #5\relax
-  \ifdim \@tempskipa>\z@
-    \begingroup
-      \raggedright
-      #6{%
-        \@hangfrom{\hskip #3\relax\@svsec}%
-          \interlinepenalty \@M #8\@@par}%
-    \endgroup
-    \csname #1mark\endcsname{#7}%
-    \ifnum #2>\c@secnumdepth \else
-      \addtocontents{toc}{\protect\let\string\usenumberline\protect\relax}%
-    \fi
-    \ifnum #2>\c@tocdepth \else
-      \addcontentsline{toc}{#1}{%
-        \ifnum #2>\c@secnumdepth \else
-          \protect\numberline{\csname the#1\endcsname}%
-        \fi
-        #7}%
-    \fi
-  \else
-    \def\@svsechd{%
-      #6{\hskip #3\relax
-      \@svsec #8}%
-      \csname #1mark\endcsname{#7}%
-      \ifnum #2>\c@tocdepth \else
-        \ifnum #2>\c@secnumdepth \else
-          \addtocontents{toc}{\protect\let\string\usenumberline\protect\relax}%
-        \fi
-        \addcontentsline{toc}{#1}{%
-          \ifnum #2>\c@secnumdepth \else
-            \protect\numberline{\csname the#1\endcsname}%
-          \fi
-          #7}%
-      \fi
-    }%
-  \fi
-  \@xsect{#5}}
-
-\def\@xsect#1{%
-  \@tempskipa #1\relax
-  \ifdim \@tempskipa>\z@
-    \par \nobreak
-    \vskip \@tempskipa
-    \@afterheading
-  \else
-    \@nobreakfalse
-    \global\@noskipsectrue
-    \everypar{%
-      \if@noskipsec
-        \global\@noskipsecfalse
-       {\setbox\z@\lastbox}%
-        \clubpenalty\@M
-        \begingroup \@svsechd \endgroup
-        \unskip
-        \@tempskipa #1\relax
-        \hskip -\@tempskipa
-      \else
-        \clubpenalty \@clubpenalty
-        \everypar{}%
-      \fi}%
-  \fi
-  \@tempa
-  \ignorespaces}
