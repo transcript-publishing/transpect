@@ -108,23 +108,29 @@
 \tpDeclareHeading{0}{chapter}{%
   %% Format IHV-Eintrag
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
-  \tpSetProperty{toc-margin-right}{2em}%
+  \tpSetProperty{toc-margin-right}{2em}% Begrenzt die Breite, auf der Titel und Untertitel erscheinen können. 2 em sind dann der Platz, auf dem die Seitenzahl »übersteht«.
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\ifcollection\fontsize{8.7bp}{12.8bp}\selectfont\fi}%
-  \tpSetProperty{toc-subtitle-format}{\normalfont\fontsize{8.7bp}{12.8bp}\selectfont\sfchapsubtocfamily}%
+  \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\large}%
+  \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapsubtocfamily\large}%
   \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
-  \tpSetProperty{toc-indent}{2em}%
+  \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
-    \tpUseProperty{toc-title-format}%
-    \tpIfComp{TocNumber}
-    {\leavevmode\leftskip2em\hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
-    {\leftskip\z@\leavevmode}%
-    \strut\tpTocLink{\tpUseComp{TocTitle}}%
-    \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
-    \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\tpUseProperty{toc-author-format}\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
-    \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}%
-    \strut%
+    % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
+    \vtop{\strut%
+      \tpUseProperty{toc-title-format}%
+      \tpIfComp{TocNumber}{%
+        \@tempdima=\csname tp-heading-toc-number-0-maxwd\endcsname%
+        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+      }{%
+        \leftskip\z@%
+      }%
+      \strut\tpTocLink{\tpUseComp{TocTitle}}%
+      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
+      \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+      \strut%
+    }
   }%
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
@@ -275,14 +281,25 @@
 
 \tpDeclareHeading{1}{section}{%
   \ifcollection\else
-    \tpSetProperty{toc-indent}{2em}%
-    \tpSetProperty{toc-margin-left}{2em}%
+    \tpSetProperty{toc-indent}{0em}%
+    \tpSetProperty{toc-margin-left}{0em}%
     \tpSetProperty{toc-heading}{%
       \tpUseProperty{toc-title-format}%
-      \tpIfComp{TocNumber}
-      {\tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-        \hskip-2em\hbox to 2em{\tpTocLink{\tpUseComp{TocNumber}}\hss}}
-      {%\leftskip\z@%
+      \tpIfComp{TocNumber}{%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
+        \@tempdima=0\p@%
+        \@tempcnta=0%
+        \loop
+          \expandafter\ifx\csname tp-heading-toc-number-\the\@tempcnta -maxwd\endcsname\relax%
+          \else
+            \@tempdima=\dimexpr\@tempdima+\expandafter\csname tp-heading-toc-number-\the\@tempcnta -maxwd\endcsname\relax%
+          \fi
+          \advance\@tempcnta by \@ne
+          \unless\ifnum\@tempcnta>1\relax
+        \repeat
+        \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname
+        \leftskip\@tempdima\hskip-\@tempdimb\hbox to \@tempdimb{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+      }{%\leftskip\z@%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
       }%
       \tpTocLink{\tpUseComp{TocTitle}}%
