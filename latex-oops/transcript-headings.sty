@@ -138,7 +138,7 @@
     \tpIfComp{BMNumber}{\tpUseComp{BMNumber}\space}{}\tpUseComp{BMTitle}%
   }
 
-  \tpSetProperty{before-heading}{\cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax}%
+  \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
   \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}%
   \tpSetProperty{heading-block}{%
@@ -230,7 +230,11 @@
   
   \tpSetProperty{counted-name-sep}{,\space}
   \tpSetProperty{before-heading}{%
-    \cleardoublepage\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax
+    \cleardoublepage%
+    \if@twocolumn% Kein vspace vor Überschriften zweispaltiger Kapitel.
+    \else%
+      \null\nobreak\vskip\dimexpr\headingsep-.45mm\relax%
+    \fi
     \thispagestyle{articlehead}
     
     % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
