@@ -121,6 +121,14 @@
       \tpUseProperty{toc-title-format}%
       \tpIfComp{TocNumber}{%
         \@tempdima=\csname tp-heading-toc-number-0-maxwd\endcsname%
+        \@tempdimb=0\p@\relax
+        \expandafter\ifx\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+        \else%
+          \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+        \fi
+        \ifdim\@tempdima<\@tempdimb\relax
+          \@tempdima=\@tempdimb%
+        \fi%
         \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
       }{%
         \leftskip\z@%
@@ -292,7 +300,7 @@
       \tpIfComp{TocNumber}{%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
         \@tempdima=0\p@%
-        \@tempcnta=0%
+        \@tempcnta=1%
         \loop
           \expandafter\ifx\csname tp-heading-toc-number-\the\@tempcnta -maxwd\endcsname\relax%
           \else
@@ -301,8 +309,11 @@
           \advance\@tempcnta by \@ne
           \unless\ifnum\@tempcnta>1\relax
         \repeat
-        \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname
-        \leftskip\@tempdima\hskip-\@tempdimb\hbox to \@tempdimb{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+        %\@tempdimb=\csname tp-heading-toc-number-0-maxwd\endcsname
+        %\ifdim\@tempdimb=0\p@
+        %  \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname
+        %\fi
+        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
       }{%\leftskip\z@%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
       }%
@@ -359,17 +370,17 @@
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}{%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-      \@tempdima=0.5em%
-      \@tempcnta=0%
+      \@tempdima=0\p@%.5em%
+      \@tempcnta=1%
       \loop
         \expandafter\ifx\csname tp-heading-toc-number-\the\@tempcnta -maxwd\endcsname\relax%
         \else
           \@tempdima=\dimexpr\@tempdima+\expandafter\csname tp-heading-toc-number-\the\@tempcnta -maxwd\endcsname\relax%
         \fi
         \advance\@tempcnta by \@ne
-        \unless\ifnum\@tempcnta>1\relax
+        \unless\ifnum\@tempcnta>2\relax
       \repeat
-      \@tempdimb=\dimexpr\csname tp-heading-toc-number-1-maxwd\endcsname+0.5em\relax
+      \@tempdimb=\dimexpr\csname tp-heading-toc-number-2-maxwd\endcsname\relax
       \leftskip\@tempdima\hskip-\@tempdimb\hbox to \@tempdimb{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
     }{%\leftskip\z@%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
