@@ -358,3 +358,24 @@ p.tsauthordescription {
 p.tstablecaption {
   margin-top: 1em;
 }
+
+dl {
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+dt {
+  float: left;
+  width: 30%;
+  padding: 0;
+  margin: 0;
+}
+dd {
+  float: left;
+  width: 70%;
+  padding: 0;
+  margin: 0;
+  display: list-item;
+  list-style: none;
+}
