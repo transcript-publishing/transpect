@@ -24,6 +24,7 @@
 
   <xsl:param name="basename" as="xs:string"/>
   <xsl:param name="generate-note-link-title" select="true()" as="xs:boolean"/>
+  <xsl:param name="also-consider-rule-atts" select="false()" as="xs:boolean"/>
   
   <xsl:variable name="divify-sections" select="'no'"/>
   <xsl:variable name="xhtml-version " select="'5'"/>
@@ -49,8 +50,8 @@
         <xsl:call-template name="full-title"/>
         <xsl:call-template name="imprint"/>
         <xsl:call-template name="toc"/>
-        <xsl:call-template name="lof"/>
-        <xsl:call-template name="lot"/>
+        <xsl:if test="not(//head[matches(@rend, $list-of-figures-regex)])"><xsl:call-template name="lof"/></xsl:if>
+        <xsl:if test="not(//head[matches(@rend, $list-of-tables-regex)])"><xsl:call-template name="lot"/></xsl:if>
         <xsl:call-template name="html-body"/>
       </body>
     </html>
@@ -626,24 +627,6 @@
     </xsl:for-each-group>
   </xsl:template>
   
-  <xsl:template name="lot">
-    <xsl:if test="//table/head[normalize-space()]">
-      <div epub:type="lot" class="lox lot">
-        <h3>List of Tables</h3>
-        <xsl:apply-templates select="//table[head[normalize-space()]]" mode="lox"/>
-      </div>
-    </xsl:if>
-  </xsl:template>
-
-  <xsl:template name="lof">
-    <xsl:if test="//figure[normalize-space(head)]">
-      <div epub:type="loi" class="lox loi">
-        <h3>List of Figures</h3>
-        <xsl:apply-templates select="//figure[normalize-space(string-join(head, ' '))]" mode="lox"/>
-      </div>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template match="html:figure[html:p]" mode="clean-up">
     <!-- https://redmine.le-tex.de/issues/13415 -->
     <xsl:copy copy-namespaces="no">
@@ -676,5 +659,70 @@
   <xsl:template match="@xml:lang" mode="clean-up">
     <!--https://redmine.le-tex.de/issues/13609-->
   </xsl:template>
+
+  
+  <xsl:template name="lof" match="*[head[matches(@rend, $list-of-figures-regex)]]" mode="tei2html" priority="5">
+    <xsl:if test="//figure[normalize-space(head)]">
+      <xsl:variable name="list-type" as="xs:string" 
+                  select="if (some $fig in //figure[normalize-space(head)] satisfies $fig/head/label[normalize-space()]) then 'dl' else 'ul'"/>
+      <div epub:type="loi" class="lox loi">
+        <xsl:choose>
+          <xsl:when test="head">
+            <xsl:apply-templates select="head" mode="#current"/>
+          </xsl:when>
+          <xsl:otherwise><h3>List of Figures</h3></xsl:otherwise>
+        </xsl:choose>
+        <xsl:element name="{$list-type}">
+          <xsl:apply-templates select="//figure[normalize-space(head)]" mode="lox">
+            <xsl:with-param name="list-type" select="$list-type" as="xs:string" tunnel="yes"/>
+          </xsl:apply-templates>
+        </xsl:element>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
+   <xsl:template name="lot" match="*[head[matches(@rend, $list-of-tables-regex)]]" mode="tei2html" priority="5">
+    <xsl:if test="//table[normalize-space(head)]">
+      <xsl:variable name="list-type" as="xs:string" 
+                  select="if (some $tab in //table[normalize-space(head)] satisfies $tab/head/label[normalize-space()]) then 'dl' else 'ul'"/>
+      <div epub:type="lot" class="lox lot">
+        <xsl:choose>
+          <xsl:when test="head">
+            <xsl:apply-templates select="head" mode="#current"/>
+          </xsl:when>
+          <xsl:otherwise><h3>List of Tables</h3></xsl:otherwise>
+        </xsl:choose>
+        <xsl:element name="{$list-type}">
+          <xsl:apply-templates select="//table[head[normalize-space()]]" mode="lox">
+            <xsl:with-param name="list-type" select="$list-type" as="xs:string" tunnel="yes"/>
+          </xsl:apply-templates>
+        </xsl:element>
+      </div>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="figure | table" mode="lox">
+    <xsl:param name="list-type" as="xs:string" tunnel="yes"/>
+    <xsl:choose><xsl:when test="$list-type = 'dl'">
+      <xsl:variable name="label" as="node()*">
+        <xsl:apply-templates select="(head[@type = 'titleabbrev'], head[not(@type), head])[1]/label" mode="strip-indexterms-etc"/>
+      </xsl:variable>
+      <dt><xsl:sequence select="if (string-join($label, '')[normalize-space()]) then $label else '$arr;'"/></dt>
+      <dd>
+        <a href="#{@xml:id}">
+          <xsl:apply-templates select="(head[@type = 'titleabbrev'], head[not(@type), head])[1]/node()[not(self::label)]" mode="strip-indexterms-etc"/>
+        </a>
+      </dd>
+    </xsl:when>
+      <xsl:otherwise>
+        <li>
+          <a href="#{@xml:id}">
+            <xsl:apply-templates select="(head[@type = 'titleabbrev'], head[not(@type), head])[1]/node()" mode="strip-indexterms-etc"/>
+          </a>
+        </li>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 
 </xsl:stylesheet>
