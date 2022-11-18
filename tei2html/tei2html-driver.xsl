@@ -664,7 +664,8 @@
   <xsl:template name="lof" match="*[head[matches(@rend, $list-of-figures-regex)]]" mode="tei2html" priority="5">
     <xsl:if test="//figure[normalize-space(head)]">
       <xsl:variable name="list-type" as="xs:string" 
-                  select="if (some $fig in //figure[normalize-space(head)] satisfies $fig/head/label[normalize-space()]) then 'dl' else 'ul'"/>
+                  select="if (some $fig in //figure[normalize-space(head)] satisfies $fig/head/*[self::label|self::seg[@rend = ('hub:caption-number', 'hub:identifier')]
+                                                                                                                         [normalize-space()]]) then 'dl' else 'ul'"/>
       <div epub:type="loi" class="lox loi">
         <xsl:choose>
           <xsl:when test="head">
@@ -684,7 +685,8 @@
    <xsl:template name="lot" match="*[head[matches(@rend, $list-of-tables-regex)]]" mode="tei2html" priority="5">
     <xsl:if test="//table[normalize-space(head)]">
       <xsl:variable name="list-type" as="xs:string" 
-                  select="if (some $tab in //table[normalize-space(head)] satisfies $tab/head/label[normalize-space()]) then 'dl' else 'ul'"/>
+                  select="if (some $tab in //table[normalize-space(head)] satisfies $tab/head/*[self::label|self::seg[@rend = ('hub:caption-number', 'hub:identifier')]
+                                                                                                                        [normalize-space()]]) then 'dl' else 'ul'"/>
       <div epub:type="lot" class="lox lot">
         <xsl:choose>
           <xsl:when test="head">
@@ -705,12 +707,12 @@
     <xsl:param name="list-type" as="xs:string" tunnel="yes"/>
     <xsl:choose><xsl:when test="$list-type = 'dl'">
       <xsl:variable name="label" as="node()*">
-        <xsl:apply-templates select="(head[@type = 'titleabbrev'], head[not(@type), head])[1]/label" mode="strip-indexterms-etc"/>
+        <xsl:apply-templates select="(head[@type = 'titleabbrev'], head[not(@type), head])[1]/*[self::label|self::seg[@rend = ('hub:caption-number', 'hub:identifier')]]" mode="strip-indexterms-etc"/>
       </xsl:variable>
-      <dt><xsl:sequence select="if (string-join($label, '')[normalize-space()]) then $label else '$arr;'"/></dt>
+      <dt><xsl:sequence select="if (string-join($label, '')[normalize-space()]) then $label else '→'"/></dt>
       <dd>
         <a href="#{@xml:id}">
-          <xsl:apply-templates select="(head[@type = 'titleabbrev'], head[not(@type), head])[1]/node()[not(self::label)]" mode="strip-indexterms-etc"/>
+          <xsl:apply-templates select="(head[@type = 'titleabbrev'], head[not(@type), head])[1]/node()[not(self::label|self::seg[@rend = ('hub:caption-number', 'hub:identifier')])]" mode="strip-indexterms-etc"/>
         </a>
       </dd>
     </xsl:when>
