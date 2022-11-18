@@ -726,5 +726,10 @@
     </xsl:choose>
   </xsl:template>
 
+  <xsl:template match="html:div[contains(@class, 'lox')]/html:dl/html:dd/html:a/descendant::text()[1]" mode="clean-up">
+    <!-- clean text of tabs etc. -->
+    <xsl:value-of select="replace(., '^\p{Zs}+', '')"/>
+  </xsl:template>
+
 
 </xsl:stylesheet>
