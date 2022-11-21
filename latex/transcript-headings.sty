@@ -120,6 +120,16 @@
 \tpAddToHook{toc-after-hook-part}{\nopagebreak}%
 
 \tpDeclareHeading{0}{chapter}{%
+  % Ticket 13717.
+  \if@frontmatter%
+  \else
+    \if@mainmatter
+    \else
+      \tpSetProperty{bookmark-level}{-1}
+      \tpSetProperty{toc-level}{part}
+    \fi
+  \fi
+
   %% Format IHV-Eintrag
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-margin-right}{2em}% Begrenzt die Breite, auf der Titel und Untertitel erscheinen können. 2 em sind dann der Platz, auf dem die Seitenzahl »übersteht«.
@@ -248,6 +258,16 @@
 
 
 \tpDeclareHeading{1}{section}{%
+  % Ticket 13717.
+  \if@frontmatter%
+  \else
+    \if@mainmatter
+    \else
+      \tpSetProperty{bookmark-level}{0}
+      \tpSetProperty{toc-level}{chapter}
+    \fi
+  \fi
+
   \ifcollection\else
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
@@ -314,6 +334,16 @@
 }
 
 \tpDeclareHeading[section]{2}{subsection}{%
+  % Ticket 13717.
+  \if@frontmatter%
+  \else
+    \if@mainmatter
+    \else
+      \tpSetProperty{bookmark-level}{1}
+      \tpSetProperty{toc-level}{section}
+    \fi
+  \fi
+
   \tpSetProperty{before-heading}{\addvspace{11.5bp}}%
   \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
   \tpSetProperty{before-quote-skip}{.5\baselineskip}%
