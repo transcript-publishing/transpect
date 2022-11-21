@@ -158,7 +158,6 @@
 
   \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
-  \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}%
   \tpSetProperty{heading-block}{%
     %% Titel
     \leftskip\z@
@@ -186,7 +185,8 @@
     \tpIfComp{Quote}{%
       \vskip2\baselineskip
       \savenotes
-      \hfill\hbox{\vbox{%
+      \hfill\hbox{%
+        \vbox{%
           \rightskip\z@
           \hsize.5\textwidth
           \normalfont
@@ -195,11 +195,16 @@
           \tpUseComp{Quote}\par
           %% Zitat-Quelle
           \tpIfComp{QuoteSource}{%
-            {\itshape
-            \tpUseComp{QuoteSource}}}{}}}%
+            {\itshape\tpUseComp{QuoteSource}}%
+          }{}%
+        }%
+      }%
+      \vskip-1.68\baselineskip%
       \spewnotes
     }{}%
   }%
+  
+  \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}%
   
   % \tpSetProperty{after-heading-block}{%
   %   % Berechnung verbleibenden Abstands.
@@ -213,8 +218,7 @@
     }{%
       \tpUseComp{Number}\enskip\tpUseComp{Title}%
     }
-  }%
-  
+  }%  
   \tpSetProperty{running-extra}{%
     \tpIfComp{RunAuthorNameList}{%
       \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
