@@ -606,19 +606,19 @@
       <xsl:when test="$style = 'tsheadingpart'">
         <xsl:sequence select="'part'"/>
       </xsl:when>
-      <xsl:when test="$style = 'tsheading1'">
+      <xsl:when test="$style = ('tsheading1', 'tsbackmatter1')">
         <xsl:sequence select="if ($is-collection or $is-journal) then 'contribution' else 'chapter'"/>
       </xsl:when>
-      <xsl:when test="$style = 'tsheading2'">
+      <xsl:when test="$style = ('tsheading2', 'tsbackmatter2')">
         <xsl:sequence select="'section'"/>
       </xsl:when>
-      <xsl:when test="$style = 'tsheading3'">
+      <xsl:when test="$style = ('tsheading3', 'tsbackmatter3')">
         <xsl:sequence select="'subsection'"/>
       </xsl:when>
-      <xsl:when test="$style = 'tsheading4'">
+      <xsl:when test="$style = ('tsheading4', 'tsbackmatter4')">
         <xsl:sequence select="'subsubsection'"/>
       </xsl:when>
-      <xsl:when test="$style = 'tsheading5'">
+      <xsl:when test="$style = ('tsheading5', 'tsbackmatter5')">
         <xsl:sequence select="'paragraph'"/>
       </xsl:when>
      <xsl:when test="$style = 'tsheadheadword'">
