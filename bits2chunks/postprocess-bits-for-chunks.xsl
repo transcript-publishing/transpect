@@ -40,7 +40,7 @@
   <xsl:template match="/*[self::*:book]" mode="#default" exclude-result-prefixes="c">
     <xsl:variable name="meta" select="*:book-meta" as="element(*)"/>
     <xsl:variable name="articles" as="element(*)*">
-      <xsl:for-each select="(*:front-matter/*:front-matter-part | *:book-body//*:book-part[@book-part-type=('chapter', 'article')] | *:book-back//*:book-part)">
+      <xsl:for-each select="(*:front-matter/*:front-matter-part | *:book-body//*:book-part[@book-part-type=('chapter', 'article')] | *:book-back//*:book-part | *:book-back//*:book-app)">
         <article>
           <xsl:sequence select="."></xsl:sequence>
         </article>
