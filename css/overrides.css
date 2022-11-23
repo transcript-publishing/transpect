@@ -379,3 +379,7 @@ dd {
   display: list-item;
   list-style: none;
 }
+
+blockquote > p {
+  font-size: 1rem !important;
+}
