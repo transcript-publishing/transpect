@@ -214,7 +214,11 @@
           }{}%
         }%
       }%
-      \vskip-1.68\baselineskip%
+      \tpIfComp{AuthorNameList}{%
+        \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
+      }{%
+        \vskip-1.68\baselineskip%
+      }
       \spewnotes%
     }{}%
   }%
