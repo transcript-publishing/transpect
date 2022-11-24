@@ -480,14 +480,15 @@
       <xsl:when test="$is-collection">-->
 <!--        links: tpAuthor/tpRunAuthorNameList, wenn es den nicht gibt: \tp(Run)Title | Rechts: \tp(Run)Title-->
 
-        <xsl:if test="dbk:abbrev[matches(@role, $col-author-style)] or dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]">
+        <xsl:if test="dbk:abbrev[matches(@role, $col-author-style)] or (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]">
           <rule name="tpRunAuthorNameList" type="cmd" break-before="1">
             <param select="(dbk:abbrev[matches(@role, $col-author-style)], 
-                            dbk:author[descendant::*[self::dbk:footnote | self::dbk:br]]
+                            (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]/dbk:personname/dbk:othername
                             )[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
-              <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
+              <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
+              <with-param name="remove-indexterm" select="true()" as="xs:boolean" tunnel="yes"/>
+              <with-param name="run-override" select="true()" as="xs:boolean" tunnel="yes"/>
             </param>
           </rule>
         </xsl:if>
@@ -496,9 +497,10 @@
                       dbk:title[descendant::*[self::dbk:footnote | self::dbk:br]]">
           <rule name="tpRunTitle" type="cmd" break-before="1">
             <param select="(dbk:abbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
-              <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
+              <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
+              <with-param name="remove-indexterm" select="true()" as="xs:boolean" tunnel="yes"/>
+              <with-param name="run-override" select="true()" as="xs:boolean" tunnel="yes"/>
             </param>
           </rule>
         </xsl:if>
@@ -512,6 +514,7 @@
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+              <with-param name="run-override" select="true()" as="xs:boolean" tunnel="yes"/>
             </param>
           </rule>
         </xsl:if>
@@ -522,6 +525,7 @@
           <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
           <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
           <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="run-override" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
     </xsl:if>
