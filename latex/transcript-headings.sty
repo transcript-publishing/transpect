@@ -231,19 +231,28 @@
   % }
   
   %% Format Kolumnentitel
+  % Running heading: ungerade Seiten.
   \tpSetProperty{running-heading}{%
     \tpIfComp{RunNumber}{%
       \tpUseComp{RunNumber}\enskip%
     }{}
     \tpUseComp{RunTitle}%
   }%
+  % Running extra: gerade Seiten.
   \tpSetProperty{running-extra}{%
     \tpIfComp{RunAuthorNameList}{%
       \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
     }{%
       \global\let\@authormark\@empty%
+      \if@frontmatter%
+      \else
+        \if@mainmatter
+        \else
+          \xdef\@partmark{\tpUseComp{Title}}
+        \fi
+      \fi
     }%
-  }%
+  }
 }
 
 \tpDeclareHeading[chapter]{0}{contribution}{%
