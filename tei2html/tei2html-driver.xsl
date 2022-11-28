@@ -326,11 +326,8 @@
     <xsl:variable name="author" select="preceding-sibling::byline/persName" as="element(persName)*"/>
     <xsl:variable name="subtitle" select="preceding-sibling::head[@type eq 'sub']" as="element(head)?"/>    
     <xsl:element name="{if ($heading-level) then concat('h', $heading-level) else 'p'}">
+      <xsl:apply-templates select="." mode="class-att"/>
       <xsl:apply-templates select="@* except @rend" mode="#current"/>
-      <xsl:attribute name="class"
-        select="if (parent::div[@type] or parent::divGen[@type]) 
-                then (parent::div, parent::divGen)[1]/@type
-                else local-name()"/>
       <xsl:attribute name="title" select="tei2html:heading-title(.)"/>
       <xsl:if test="not($in-toc)">
         <a id="{generate-id()}"/>
@@ -341,6 +338,18 @@
     <xsl:apply-templates select="$author" mode="heading-content"/>
   </xsl:template>
   
+  <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))]
+                           [not(ancestor::*[self::figure or self::table or self::floatingText or self::lg or self::spGrp])]" mode="class-att">
+    <xsl:attribute name="class" select="if (parent::div[@type] or parent::divGen[@type]) 
+                                        then (parent::div, parent::divGen)[1]/@type
+                                        else @rend"/>
+  </xsl:template>
+
+  <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))][matches(@rend, 'tsmeta(keyword|abstract)s?heading')]" 
+                priority="3" mode="class-att">
+    <xsl:attribute name="class" select="@rend"/>
+  </xsl:template>
+
   <xsl:template match="head/label" mode="tei2html">
     <xsl:next-match/>
     <xsl:if test="following-sibling::node()[1][self::seg[@type='tab'] or self::text()[matches(., '\P{Zs}')]]">
@@ -392,10 +401,19 @@
         <xsl:when test="$elt/parent::div[@type = ('section')]">
           <xsl:sequence select="count($elt/ancestor::div[@type eq 'section']) + 3"/>
         </xsl:when>
-        <xsl:when test="$elt/parent::div/@type = ('bibliography', 'abstract','keywords')">
+        <xsl:when test="$elt/parent::div/@type = ('bibliography')">
           <xsl:sequence
             select="
               if ($elt/ancestor::div/@type = ('chapter', 'article')) then
+                5
+              else
+                4"
+          />
+        </xsl:when>
+        <xsl:when test="$elt/parent::div/@type = ('abstract','keywords')">
+          <xsl:sequence
+            select="
+              if ($elt/ancestor::div/@type = ('part')) then
                 5
               else
                 4"
@@ -407,7 +425,7 @@
         <xsl:when test="$elt/parent::argument">
          <xsl:sequence
             select="
-              if ($elt/ancestor::div/@type = ('chapter', 'article')) then
+              if ($elt/ancestor::div/@type = ('part')) then
                 5
               else
                 4"
@@ -730,6 +748,7 @@
     <!-- clean text of tabs etc. -->
     <xsl:value-of select="replace(., '^\p{Zs}+', '')"/>
   </xsl:template>
+
 
 
 </xsl:stylesheet>
