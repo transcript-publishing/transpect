@@ -181,8 +181,13 @@
   </xsl:template>
 
   <xsl:template match="/hub[@xml:lang = 'en']/info/keywordset[@role = 'titlepage']/keyword//text()" mode="custom-2">
-    <!-- replace quotation marks in english titles, https://redmine.le-tex.de/issues/13838 -->
+    <!-- replace quotation marks in title pages in english titles, https://redmine.le-tex.de/issues/13838 -->
     <xsl:sequence select="translate(., '»«›‹',  '“”ʻʼ')"/>
   </xsl:template>
+
+  <xsl:template match="footnote/para/phrase[@role = 'hub:identifier']/phrase" mode="custom-2">
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+
 
 </xsl:stylesheet>
