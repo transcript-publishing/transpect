@@ -622,7 +622,7 @@
     <xsl:variable name="context" select="."/>
     <xsl:for-each-group select="node()" group-starting-with="tei:lb">
       <p xmlns="http://www.tei-c.org/ns/1.0">
-        <xsl:apply-templates select="$context/@*, current-group()" mode="#current"/>
+        <xsl:apply-templates select="$context/@*, current-group()[not(self::tei:lb)]" mode="#current"/>
       </p>
     </xsl:for-each-group>
   </xsl:template>
