@@ -75,6 +75,19 @@
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{title-format}{\sffamily\sbseries\fontsize{17.5bp}{25.6bp}\selectfont}%
+  \tpSetzProperty{quote-block-format}{%
+    \hfill\hbox{\vbox{%
+        \rightskip\z@
+        \hsize.5\textwidth
+        \normalfont
+        \normalsize
+        \nsfwiderfamily
+        \tpUseComp{QuoteText}\par
+        %% Zitat-Quelle
+        \tpIfComp{QuoteSource}{%
+          {\itshape
+            \tpUseComp{QuoteSource}}}{}}}%
+  }
   \tpSetProperty{heading-block}{%
     \tpUseProperty{title-format}%
     %\vskip.5\baselineskip
@@ -82,20 +95,10 @@
     \tpUseComp{Title}\par%
     \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
     %% Zitat
-    \tpIfComp{Quote}{%
+    \tpIfComp{QuoteBlock}{%
       \vskip2\baselineskip
       \savenotes
-      \hfill\hbox{\vbox{%
-          \rightskip\z@
-          \hsize.5\textwidth
-          \normalfont
-          \normalsize
-          \nsfwiderfamily
-          \tpUseComp{Quote}\par
-          %% Zitat-Quelle
-          \tpIfComp{QuoteSource}{%
-            {\itshape
-            \tpUseComp{QuoteSource}}}{}}}%
+      \tpUseComp{QuoteBlock}
       \spewnotes
       \vskip-2\baselineskip
     }{}%
@@ -157,6 +160,22 @@
 
   \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
+  \tpSetProperty{quote-block-format}{%
+      \hfill\hbox{%
+        \vbox{%
+          \rightskip\z@
+          \hsize.5\textwidth
+          \normalfont
+          \normalsize
+          \nsfwiderfamily
+          \tpUseComp{QuoteText}\par
+          %% Zitat-Quelle
+          \tpIfComp{QuoteSource}{%
+            {\itshape\tpUseComp{QuoteSource}}%
+          }{}%
+        }%
+      }%
+    }%
   \tpSetProperty{heading-block}{%
     %% Titel
     \leftskip\z@
@@ -181,23 +200,10 @@
     }{}%
     %% Zitat
     \par
-    \tpIfComp{Quote}{%
+    \tpIfComp{QuoteBlock}{%
       \vskip2\baselineskip
       \savenotes
-      \hfill\hbox{%
-        \vbox{%
-          \rightskip\z@
-          \hsize.5\textwidth
-          \normalfont
-          \normalsize
-          \nsfwiderfamily
-          \tpUseComp{Quote}\par
-          %% Zitat-Quelle
-          \tpIfComp{QuoteSource}{%
-            {\itshape\tpUseComp{QuoteSource}}%
-          }{}%
-        }%
-      }%
+      \tpUseComp{QuoteBlock}
       \tpIfComp{AuthorNameList}{%
         \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
       }{%
@@ -353,6 +359,14 @@
   \tpSetProperty{after-skip}{12.8bp}%
   \tpSetProperty{title-format}{\sffamily\LARGE\sbseries}%
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
+  \tpSetProperty{quote-block-format}{%
+    \hfill\vbox{%
+      \justify
+      \hsize.5\textwidth
+      \normalsize\nsfwiderfamily\mdseries
+      \noindent
+      \tpUseComp{QuoteText}}% LUP: kein tpQuoteSource?
+    }{}
   \tpSetProperty{heading-block}{%
     \savenotes
     \bgroup
@@ -365,15 +379,10 @@
       \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
     \egroup
     \nopagebreak
-    \tpIfComp{Quote}{%
+    \tpIfComp{QuoteBlock}{%
       \vskip\tpUseProperty{before-quote-skip}%
       %\savenotes
-      \hfill\vbox{%
-        \justify
-        \hsize.5\textwidth
-        \normalsize\nsfwiderfamily\mdseries
-        \noindent
-        \tpUseComp{Quote}}%
+      \tpUseComp{QuoteBlock}
       %\spewnotes
       \par}{}%
     \spewnotes
