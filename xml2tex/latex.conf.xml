@@ -74,7 +74,7 @@
                                 '$1')"/>
   <xsl:variable name="publisher-logo-href" as="xs:string?" 
                 select="replace(
-                                lower-case(replace(($metadata/dbk:keyword[@role eq 'Verlagslogo'], 'transcript_logo.png')[1], '\\(.)', '$1')), 
+                                lower-case(replace(($metadata/dbk:keyword[@role eq 'Verlagslogo'], 'transcriptb_neu.pdf')[1], '\\(.)', '$1')), 
                                 '^.*/(.+?)$',
                                 '$1')"/>
   <xsl:variable name="publisher-note" as="element(dbk:keyword)?"
@@ -135,12 +135,18 @@
                 select="$metadata/dbk:keyword[@role eq 'Korrektorat']"/>
   <xsl:variable name="converter" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Konvertierung']"/>
-  <!-- Licencing meta -->
+  <!-- Licencing meta, https://redmine.le-tex.de/issues/13870 -->
   <xsl:variable name="copyright-note" as="element()?"
-                select="if ($metadata/dbk:keyword[@role eq 'Copyright'][dbk:para]) then $metadata/dbk:keyword[@role eq 'Copyright']/*:para[1] else $metadata/dbk:keyword[@role eq 'Copyright']"/>
+                select="if ($metadata/dbk:keyword[@role eq 'Copyright'][dbk:para] 
+                            and 
+                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY-')])) 
+                        then $metadata/dbk:keyword[@role eq 'Copyright']/*:para[1] 
+                        else $metadata/dbk:keyword[@role eq 'Copyright']"/>
 <!--    https://redmine.le-tex.de/issues/13098#change-72104-->
   <xsl:variable name="copyright-holder" as="element(dbk:para)*" 
-                select="if ($metadata/dbk:keyword[@role eq 'Copyright'][count(dbk:para[normalize-space()]) gt 1]) 
+                select="if ($metadata/dbk:keyword[@role eq 'Copyright'][count(dbk:para[normalize-space()]) gt 1] 
+                            and 
+                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY-')])) 
                         then $metadata/dbk:keyword[@role eq 'Copyright']/dbk:para[not(position() = 1)]
                         else ()"/>
   <xsl:variable name="license-logo-href" as="xs:string?" 
@@ -156,9 +162,9 @@
                 select="$metadata/dbk:keyword[@role eq 'Fordername']"/>
   <xsl:variable name="funder-logo" as="xs:string*" 
                 select="$metadata/dbk:keyword[@role eq 'Forderlogos']//text()"/>
-  <xsl:variable name="funder-pretext" as="xs:string?" 
+  <xsl:variable name="funder-pretext" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Fordertext']"/>
-  <xsl:variable name="funder-posttext" as="xs:string?" 
+  <xsl:variable name="funder-posttext" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Fordertextpost']"/>
   <xsl:variable name="bibl-issn" as="xs:string?" 
                 select="$metadata/dbk:keyword[@role eq 'BiblISSN']"/>
@@ -299,16 +305,22 @@
     <xsl:if test="normalize-space($publisher-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpPubLogo{logos/', $publisher-logo-href, '}&#xa;')"/>
     </xsl:if>
-    <!-- licensing meta -->
+    <!-- licensing meta, https://redmine.le-tex.de/issues/13870. cannot use xml2tex:meta2tex() here because several paras might occur  -->
     <xsl:if test="normalize-space($copyright-note)">
+<!--      <xsl:text>&#xa;\tpCopyright{</xsl:text>
+      <xsl:for-each select="$copyright-note">
+        <xsl:apply-templates select="." mode="strip-meta"/>
+      </xsl:for-each>
+      <xsl:text>}&#xa;</xsl:text>-->
       <xsl:sequence select="xml2tex:meta2tex($copyright-note, (), 'tpCopyright')"/>
     </xsl:if>
     <xsl:if test="$copyright-holder[normalize-space()]">
-      <xsl:text>&#xa;\tpCopyrightDisclaimer{</xsl:text>
+  <xsl:sequence select="xml2tex:meta2tex($copyright-holder, (), 'tpCopyrightDisclaimer')"/>
+<!--      <xsl:text>&#xa;\tpCopyrightDisclaimer{</xsl:text>
       <xsl:for-each select="$copyright-holder">
-        <xsl:apply-templates select="./node()"  mode="#current"/>
+        <xsl:apply-templates select="." mode="strip-meta"/>
       </xsl:for-each>
-      <xsl:text>}&#xa;</xsl:text>
+      <xsl:text>}&#xa;</xsl:text>-->
     </xsl:if>
     <xsl:if test="normalize-space($license-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpLicenceLogo{logos/cc/', 
@@ -711,7 +723,7 @@
   <xsl:template match="dbk:keywordset[@role='titlepage']/dbk:keyword
                           [not(@role = ('Herausgeber', 'Autor', 'Herausgeberinformationen', 'Bibliografische_Information', 'Copyright'))]/dbk:para[not(position() eq last())] |
                        dbk:keywordset[@role='titlepage']/dbk:keyword
-                          [@role = ('Copyright')]/dbk:para[not(position() eq last())][not(position() eq 1)]" mode="strip-meta" priority="4">
+                          [@role = ('Copyright')]/dbk:para[not(position() eq last())][not(position() eq 1) or $license-name[contains(., 'BY-')]]" mode="strip-meta" priority="4">
     <xsl:apply-templates mode="#current"/>
     <!-- https://redmine.le-tex.de/issues/13334#note-5-->
     <xsl:text>\par </xsl:text>
