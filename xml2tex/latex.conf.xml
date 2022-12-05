@@ -139,14 +139,14 @@
   <xsl:variable name="copyright-note" as="element()?"
                 select="if ($metadata/dbk:keyword[@role eq 'Copyright'][dbk:para] 
                             and 
-                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY-')])) 
+                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')])) 
                         then $metadata/dbk:keyword[@role eq 'Copyright']/*:para[1] 
                         else $metadata/dbk:keyword[@role eq 'Copyright']"/>
 <!--    https://redmine.le-tex.de/issues/13098#change-72104-->
   <xsl:variable name="copyright-holder" as="element(dbk:para)*" 
                 select="if ($metadata/dbk:keyword[@role eq 'Copyright'][count(dbk:para[normalize-space()]) gt 1] 
                             and 
-                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY-')])) 
+                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')])) 
                         then $metadata/dbk:keyword[@role eq 'Copyright']/dbk:para[not(position() = 1)]
                         else ()"/>
   <xsl:variable name="license-logo-href" as="xs:string?" 
@@ -723,7 +723,7 @@
   <xsl:template match="dbk:keywordset[@role='titlepage']/dbk:keyword
                           [not(@role = ('Herausgeber', 'Autor', 'Herausgeberinformationen', 'Bibliografische_Information', 'Copyright'))]/dbk:para[not(position() eq last())] |
                        dbk:keywordset[@role='titlepage']/dbk:keyword
-                          [@role = ('Copyright')]/dbk:para[not(position() eq last())][not(position() eq 1) or $license-name[contains(., 'BY-')]]" mode="strip-meta" priority="4">
+                          [@role = ('Copyright')]/dbk:para[not(position() eq last())][not(position() eq 1) or $license-name[contains(., 'BY')]]" mode="strip-meta" priority="4">
     <xsl:apply-templates mode="#current"/>
     <!-- https://redmine.le-tex.de/issues/13334#note-5-->
     <xsl:text>\par </xsl:text>
