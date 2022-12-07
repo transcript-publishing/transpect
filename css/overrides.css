@@ -383,3 +383,6 @@ dd {
 blockquote > p {
   font-size: 0.8rem !important;
 }
+blockquote > p+p {
+  text-indent: 0;
+}
