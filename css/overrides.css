@@ -146,7 +146,7 @@ div.lox p.indent {
   text-indent:0;
 }
 blockquote {
-  margin: 2em 0 2em 2em;
+  margin: 1.2em 0 1.2em 2em;
 }
 p.tsliterature {
   margin: 0 0 0 2em;
@@ -381,7 +381,7 @@ dd {
 }
 
 blockquote > p {
-  font-size: 0.8rem !important;
+  font-size: 0.95rem !important;
 }
 blockquote > p+p {
   text-indent: 0;
