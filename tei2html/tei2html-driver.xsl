@@ -749,6 +749,9 @@
     <xsl:value-of select="replace(., '^\p{Zs}+', '')"/>
   </xsl:template>
 
-
+  <xsl:template match="argument[@rend = 'abstract'] | div[@type = 'section'][@rend = 'keywords']" mode="tei2html">
+    <!-- dissolve, https://redmine.le-tex.de/issues/13842 -->
+    <xsl:apply-templates select="node()"  mode="#current"/>
+  </xsl:template>
 
 </xsl:stylesheet>
