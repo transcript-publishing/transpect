@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <css:rules xmlns:css="http://www.w3.org/1996/css">
 
-  <css:rule layout-type="para" native-name="ts_abstracts" name="tsabstracts"/>
-  <css:rule layout-type="para" native-name="ts_abstracts_heading" name="tsabstractsheading"/>
+  <css:rule layout-type="para" native-name="ts_abstract" name="tsabstract"/>
+  <css:rule layout-type="para" native-name="ts_abstract_heading" name="tsabstractheading"/>
 
   <css:rule layout-type="para" native-name="ts_author" name="tsauthor"/>
   <css:rule layout-type="para" native-name="ts_author_name" name="tsauthorname" />
