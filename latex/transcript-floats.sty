@@ -41,7 +41,13 @@
   \ifx\ts@caps\tp@str@bottom
     \tpSetProperty{caption-top}{}%
     \tpSetProperty{caption-bottom}{%
-      \tpIfComp{Number}{{\tpUseProperty{number-format}\tpUseComp{Number}\tpUseProperty{number-sep}}}{}%
+      \tpIfComp{Number}{%
+        {%
+          \tpUseProperty{number-format}\tpUseComp{Number}\tpIfComp{Caption}{%
+            \tpUseProperty{number-sep}%
+          }{}%
+        }%
+      }{}%
       \tpUseComp{Caption}\par%
       \tpIfComp{Legend}{{\tpUseProperty{legend-format}\tpUseComp{Legend}}}{}%
       \tpIfComp{Source}{%
