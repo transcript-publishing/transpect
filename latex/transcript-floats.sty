@@ -48,13 +48,44 @@
           }{}%
         }%
       }{}%
-      \tpUseComp{Caption}\par%
-      \tpIfComp{Legend}{{\tpUseProperty{legend-format}\tpUseComp{Legend}}}{}%
+      \tpIfComp{Caption}{%
+        \tpUseComp{Caption}\par%
+      }{}%
+      \tpIfComp{Legend}{%
+        {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
+      }{}%
       \tpIfComp{Source}{%
-        \tpIfComp{Legend}{\par\nopagebreak}{}%
-        {\tpUseProperty{source-format}%
-          \tpUseComp{Source}}}{}}%
+        \tpIfComp{Legend}{%
+          \par\nopagebreak%
+        }{}%
+        {\tpUseProperty{source-format}\tpUseComp{Source}}%
+      }{}%
+    }%
+  \else
+    \tpSetProperty{caption-bottom}{}%
+    \tpSetProperty{caption-top}{%
+      \tpIfComp{Number}{%
+        {%
+          \tpUseProperty{number-format}\tpUseComp{Number}\tpIfComp{Caption}{%
+            \tpUseProperty{number-sep}%
+          }{}%
+        }%
+      }{}%
+      \tpIfComp{Caption}{%
+        \tpUseComp{Caption}\par%
+      }{}%
+      \tpIfComp{Legend}{%
+        {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
+      }{}%
+      \tpIfComp{Source}{%
+        \tpIfComp{Legend}{%
+          \par\nopagebreak%
+        }{}%
+        {\tpUseProperty{source-format}\tpUseComp{Source}}%
+      }{}%
+    }%
   \fi
+    
   %% Parameter für Abbindungs- und Tabellenverzeichnisse
   \tpSetProperty{list-of-caption-format}{\sffamily}%
   \tpSetProperty{list-of-indent}{0pt}%
