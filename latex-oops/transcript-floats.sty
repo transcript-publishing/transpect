@@ -62,26 +62,28 @@
       }{}%
     }%
   \else
-    \tpSetProperty{caption-bottom}{}%
-    \tpSetProperty{caption-top}{%
-      \tpIfComp{Number}{%
-        {%
-          \tpUseProperty{number-format}\tpUseComp{Number}\tpIfComp{Caption}{%
-            \tpUseProperty{number-sep}%
-          }{}%
-        }%
-      }{}%
-      \tpIfComp{Caption}{%
-        \tpUseComp{Caption}\par%
-      }{}%
-      \tpIfComp{Legend}{%
-        {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
-      }{}%
+    \tpSetProperty{caption-bottom}{%
       \tpIfComp{Source}{%
         \tpIfComp{Legend}{%
           \par\nopagebreak%
         }{}%
         {\tpUseProperty{source-format}\tpUseComp{Source}}%
+      }{}%
+    }%
+    \tpSetProperty{caption-top}{%
+      \tpIfComp{Number}{%
+        {%
+          \tpUseProperty{number-format}\tpUseComp{Number}%
+          \tpIfComp{Caption}{%
+            \tpUseProperty{number-sep}%
+          }{}%
+        }%
+      }{}%
+      \tpIfComp{Caption}{%
+        \tpUseComp{Caption}%
+      }{}%
+      \tpIfComp{Legend}{%
+        {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
       }{}%
     }%
   \fi
