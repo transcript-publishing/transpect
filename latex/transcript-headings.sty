@@ -243,12 +243,13 @@
     \tpIfComp{RunAuthorNameList}{%
       \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
     }{%
-      \global\let\@authormark\@empty%
+      \global\let\@authormark\@empty
+      \xdef\@authormark{\tpRunBookTitle}%
       \if@frontmatter%
       \else
         \if@mainmatter
         \else
-          \xdef\@partmark{\tpUseComp{Title}}
+          \xdef\@authormark{\tpUseComp{Title}}
         \fi
       \fi
     }%
