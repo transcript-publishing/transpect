@@ -41,19 +41,25 @@
   \ifx\ts@caps\tp@str@bottom
     \tpSetProperty{caption-top}{}%
     \tpSetProperty{caption-bottom}{%
-      \tpIfComp{Number}{%
-        {%
-          \tpUseProperty{number-format}\tpUseComp{Number}\tpIfComp{Caption}{%
-            \tpUseProperty{number-sep}%
-          }{}%
-        }%
-      }{}%
-      \tpIfComp{Caption}{%
-        \tpUseComp{Caption}\par%
-      }{}%
-      \tpIfComp{Legend}{%
-        {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
-      }{}%
+      \bgroup
+        \normalsize\itshape%
+        \tpIfComp{Number}{%
+          {%
+            \tpUseProperty{number-format}\tpUseComp{Number}%
+            \tpIfComp{Caption}{%
+              \tpUseProperty{number-sep}%
+            }{%
+              \par%
+            }%
+          }%
+        }{}%
+        \tpIfComp{Caption}{%
+          \tpUseComp{Caption}\par%
+        }{}%
+        \tpIfComp{Legend}{%
+          {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
+        }{}%
+      \egroup
       \tpIfComp{Source}{%
         \tpIfComp{Legend}{%
           \par\nopagebreak%
@@ -87,7 +93,6 @@
       }{}%
     }%
   \fi
-    
   %% Parameter für Abbindungs- und Tabellenverzeichnisse
   \tpSetProperty{list-of-caption-format}{\sffamily}%
   \tpSetProperty{list-of-indent}{0pt}%
