@@ -125,6 +125,7 @@
   \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\large}%
   \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapsubtocfamily\large}%
   \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
+  \tpSetProperty{toc-number-format}{\normalfont\normalsize\sfchapwidefamily}%
   \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
@@ -148,7 +149,7 @@
       \strut\tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
       \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
-      \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+      \tpUseProperty{toc-number-format}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
     }
   }%
@@ -161,23 +162,24 @@
   \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
   \tpSetProperty{quote-block-format}{%
-      \hfill\hbox{%
-        \vbox{%
-          \rightskip\z@
-          \hsize.5\textwidth
-          \normalfont
-          \normalsize
-          \nsfwiderfamily
-          \tpUseComp{QuoteText}\par
-          %% Zitat-Quelle
-          \tpIfComp{QuoteSource}{%
-            {\itshape\tpUseComp{QuoteSource}}%
-          }{}%
-        }%
+    \hfill\hbox{%
+      \vbox{%
+        \rightskip\z@
+        \hsize.5\textwidth
+        \normalfont
+        \normalsize
+        \nsfwiderfamily
+        \tpUseComp{QuoteText}\par
+        %% Zitat-Quelle
+        \tpIfComp{QuoteSource}{%
+          {\itshape\tpUseComp{QuoteSource}}%
+        }{}%
       }%
     }%
+  }%
   \tpSetProperty{heading-block}{%
     %% Titel
+    \thispagestyle{empty}%
     \leftskip\z@
     \leavevmode
     \bgroup
