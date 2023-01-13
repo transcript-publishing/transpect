@@ -115,11 +115,46 @@
 
 %% gilt nur für Abbildungen:
 \tpDeclareFloat{tpFigure}{figure}{lof}{%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}{%
+      \@tempdima=\csname tp-tpFigure-list-of-number-maxwd\endcsname
+      \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
+        \tpUseComp{ListofNumber}%
+        \tpIfComp{ListofCaption}{%
+          \tpUseProperty{list-of-number-sep}%
+        }{}%
+        \hss%
+      }%
+      \tpIfComp{ListofCaption}{\tpUseComp{ListofCaption}}{}%
+    }{%
+      \leftskip0pt \tpUseComp{ListofCaption}%
+    }%
+    \tpUseProperty{list-of-page-sep}\tpUseComp{ListofPage}%
+  }%
 }
 
 %% gilt nur für Tabellen:
 \tpDeclareFloat{tpTable}{table}{lot}{%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}{%
+      \@tempdima=\csname tp-tpTable-list-of-number-maxwd\endcsname
+      \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
+        \tpUseComp{ListofNumber}%
+        \tpIfComp{ListofCaption}{%
+          \tpUseProperty{list-of-number-sep}%
+        }{}%
+        \hss%
+      }%
+      \tpIfComp{ListofCaption}{\tpUseComp{ListofCaption}}{}%
+    }{%
+      \leftskip0pt \tpUseComp{ListofCaption}%
+    }%
+    \tpUseProperty{list-of-page-sep}\tpUseComp{ListofPage}%
+  }%
 }
+
 
 %% Klassen für Abbildungen:
 \tpDeclareClass{A}{\tpSetProperty{margin-left}{0mm}\tpSetProperty{margin-right}{0mm}}
