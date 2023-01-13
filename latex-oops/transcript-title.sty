@@ -39,6 +39,9 @@
     \def\UrlFont{\rmfamily}%
     \fontsize{9.3}{12.5}\selectfont
   }%
+  %%%%%%%%%%%
+  % Seite I %
+  %%%%%%%%%%%
   \tpSetProperty{titlepage-i}{%
     \ifcollection
       \topsep0pt \partopsep0pt % no space before
@@ -61,6 +64,9 @@
     \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
     \tpIfComp{Volume}{{\enskip\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip\ignorespaces\tpUseComp{Volume}}}{}%
   }%
+  %%%%%%%%%%%%
+  % Seite II %
+  %%%%%%%%%%%%
   \tpSetProperty{titlepage-ii}{%
     \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
     \tpIfComp{Acknowledgements}{{\itshape\large\tpUseComp{Acknowledgements}}\par\vskip\baselineskip}{}%
@@ -73,12 +79,14 @@
     % Bio
   \tpSetProperty{bio-block}{%
     \ifcollection
-      \tpGetComp{EditorMetaBlock}%
-      %\tpGetComp{SeriesEditorMetaBlock}% Erzeugt ein Fundinglogo.
+      \tpGetComp{EditorBioBlock}%
     \else
-      \tpGetComp{AuthorMetaBlock}% Erzeugt ein Fundinglogo.
+      \tpGetComp{AuthorBioBlock}%
     \fi
   }%
+  %%%%%%%%%%%%%
+  % Seite III %
+  %%%%%%%%%%%%%
   \tpSetProperty{titlepage-iii}{%
     {\Large\sfwidefamily%
       \ifcollection
@@ -116,6 +124,9 @@
     \vfill
     \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
   }%
+  %%%%%%%%%%%%
+  % Seite IV %
+  %%%%%%%%%%%%
   \tpSetProperty{titlepage-iv}{%
     \bgroup
       \tpIfComp{Statement}{\tpUseComp{Statement}\par}{}%
@@ -131,6 +142,10 @@
       \egroup
     \egroup
   }%
+  
+  %%%%%%%%%%%%%%%%%%%%%%%%
+  % Propertydefinitionen %
+  %%%%%%%%%%%%%%%%%%%%%%%%
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
     \tpIfComp{Copyright}{{\sffamily\sbseries\tpUseComp{Copyright}}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
