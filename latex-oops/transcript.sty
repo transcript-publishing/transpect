@@ -121,8 +121,10 @@
 
 \usepackage{transcript-index}
 
-\let\oldhref\href
-\def\@nohyphen#1\@nil#2#3\relax{\oldhref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\@nohyphen#1\@nil#3\relax\fi}
+% Makro für verlinkte Bilder.
+\let\imgHref\href
+
+\def\@nohyphen#1\@nil#2#3\relax{\imgHref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\@nohyphen#1\@nil#3\relax\fi}
 \protected\def\href#1#2{{\let↩\@empty\@nohyphen#1\@nil#2\relax\relax}}
 \let\fn@href\href
 % \bgroup
