@@ -125,8 +125,10 @@
 % \def\@nohyphen#1\@nil#2#3\relax{\href{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\ts@url{#1}{#3}\fi}
 % \protected\def\ts@url#1#2{{\let↩\@empty\@nohyphen#1\@nil#2 \relax\relax}}%
 % \protected\def\tsUrl#1{\ts@url{#1}{#1}}
-\let\oldhref\href
-\def\@nohyphen#1\@nil#2#3\relax{\oldhref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\href{#1}{#3}\fi}
+% Makro für verlinkte Bilder.
+\let\imgHref\href
+
+\def\@nohyphen#1\@nil#2#3\relax{\imgHref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\href{#1}{#3}\fi}
 \protected\def\href#1#2{{\let↩\@empty\@nohyphen#1\@nil#2 \relax\relax}}%
 \let\fn@href\href
 % \bgroup
