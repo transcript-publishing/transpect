@@ -93,11 +93,11 @@
       }{}%
     }%
   \fi
-  %% Parameter für Abbindungs- und Tabellenverzeichnisse
+  %% Parameter für Abbildungs- und Tabellenverzeichnisse
   \tpSetProperty{list-of-caption-format}{\sffamily}%
   \tpSetProperty{list-of-indent}{0pt}%
   \tpSetProperty{list-of-margin-left}{0pt}%
-  \tpSetProperty{list-of-margin-right}{5em}%
+  \tpSetProperty{list-of-margin-right}{1.2em plus 1fil}%
   \tpSetProperty{list-of-page-sep}{\mydotfill\kern.5\p@}% siehe transcript-headings.sty für Def von \mydotfill
   \tpSetProperty{list-of-caption-format}{\sffamily}%
   \tpSetProperty{list-of-number-sep}{:\enskip}%
@@ -107,7 +107,7 @@
       {\tpUseComp{list-of-hang-number}}
       {\leftskip0pt}%
     \tpUseComp{ListofCaption}%
-    \tpUseProperty{list-of-page-sep}\tpTocLink{\tpUseComp{ListofPage}}%
+    \tpUseProperty{list-of-page-sep}\tpUseComp{ListofPage}%
   }%
 }
 
@@ -115,10 +115,44 @@
 
 %% gilt nur für Abbildungen:
 \tpDeclareFloat{tpFigure}{figure}{lof}{%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}{%
+      \@tempdima=\csname tp-tpFigure-list-of-number-maxwd\endcsname
+      \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
+        \tpUseComp{ListofNumber}%
+        \tpIfComp{ListofCaption}{%
+          \tpUseProperty{list-of-number-sep}%
+        }{}%
+        \hss%
+      }%
+      \tpIfComp{ListofCaption}{\tpUseComp{ListofCaption}}{}%
+    }{%
+      \leftskip0pt \tpUseComp{ListofCaption}%
+    }%
+    \nobreak\tpUseProperty{list-of-page-sep}\hbox to 1em{\hss\tpTocLink{\tpUseComp{ListofPage}}}%
+  }%
 }
 
 %% gilt nur für Tabellen:
 \tpDeclareFloat{tpTable}{table}{lot}{%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}{%
+      \@tempdima=\csname tp-tpTable-list-of-number-maxwd\endcsname
+      \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
+        \tpUseComp{ListofNumber}%
+        \tpIfComp{ListofCaption}{%
+          \tpUseProperty{list-of-number-sep}%
+        }{}%
+        \hss%
+      }%
+      \tpIfComp{ListofCaption}{\tpUseComp{ListofCaption}}{}%
+    }{%
+      \leftskip0pt \tpUseComp{ListofCaption}%
+    }%
+    \nobreak\tpUseProperty{list-of-page-sep}\hbox to 1em{\hss\tpTocLink{\tpUseComp{ListofPage}}}%
+  }%
 }
 
 %% Klassen für Abbildungen:
