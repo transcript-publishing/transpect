@@ -222,6 +222,23 @@
 \RequirePackage{upgreek}
 
 
+\newenvironment{authorbio}{%
+  \parskip1\baselineskip\noindent%
+}{%
+  \par%
+}
+
+
+\newenvironment{emphPar}[1][]{%
+  \def\tp@temp{#1}%
+  \parskip1\baselineskip\noindent\textbf{\tp@temp}%
+  \ifx\empty\tp@temp\empty%
+  \else%
+    \space%
+  \fi%
+}{%
+  \par%
+}
 
 % \def\@abstract#1{%
 %   \vskip-\lastskip
