@@ -309,7 +309,7 @@
   FontFace = {sb}{n}{Alegreya-Medium.ttf},%
   FontFace = {sb}{it}{Alegreya-MediumItalic.ttf},%
   ItalicFont = Alegreya-Italic.ttf,%
-  %WordSpace = 1.25,% Commenting this line fixes hyphenation differences. \tpDeclareBabelFont{greek} block below not necessary.
+  %WordSpace = {1.25,1.0,1.25},% Commenting this line fixes hyphenation differences. \tpDeclareBabelFont{greek} block below not necessary.
   BoldItalicFont = Alegreya-BoldItalic.ttf]{Alegreya-Regular.ttf}
   
 % temporary fix for non-resetting word spacing with \foreignlanguage{greek} on document-level:
@@ -360,7 +360,7 @@
   FontFace = {sb}{it}{AlegreyaSans-MediumItalic.ttf},%
   ItalicFont = AlegreyaSans-Italic.ttf,%
   BoldItalicFont = AlegreyaSans-BoldItalic.ttf,%
-  WordSpace=1.2,%
+  WordSpace={1.2,1.0,1.2},%
   Path=fonts/Alegreya/Alegreya Sans/,%
   LetterSpace=1.2]{AlegreyaSans-Regular.ttf}
 
