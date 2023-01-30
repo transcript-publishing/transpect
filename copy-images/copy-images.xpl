@@ -249,7 +249,14 @@
         </p:output>
         
         <tr:file-uri name="file-uri2">
-          <p:with-option name="filename" select="replace(concat(c:directory[@name = 'cover']/@xml:base, c:directory[@name = 'cover']/c:file[1]/@name), 'file:///', 'file:/')"/>
+          <p:with-option name="filename" select="replace(
+                                                          concat(
+                                                                  c:directory[@name = 'cover']/@xml:base, 
+                                                                  c:directory[@name = 'cover']/(c:file[contains(@name, '.eps')], c:file[not(contains(@name, '.eps'))])[1]/@name
+                                                                 ), 
+                                                          'file:///', 
+                                                          'file:/'
+                                                         )"/>
         </tr:file-uri>
         
        <tr:store-debug pipeline-step="copy-images/cover-file-uri">
@@ -285,7 +292,7 @@
           <p:empty/>
         </p:output>
         <cx:message name="msg7">
-          <p:with-option name="message" select="'[error] Image copying from working copy failed for: ', c:directory[@name = 'cover']/c:file[1]/@name">
+          <p:with-option name="message" select="'[error] Image copying from working copy failed for: ', c:directory[@name = 'cover']/(c:file[contains(@name, '.eps')], c:file[not(contains(@name, '.eps'))])[1]/@name">
             <p:pipe port="current" step="copy-images-from-content-repo"/>
           </p:with-option>
         </cx:message>
