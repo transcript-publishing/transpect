@@ -130,7 +130,7 @@
           <figure>
               <!-- reference Cover as jpg on titlePage -->
               <!-- https://github.com/transcript-publishing/6246/issues/18-->
-            <graphic url="{replace($meta/term[@key = 'Cover'], '\.eps', '.jpg', 'i')}"/>
+            <graphic url="{concat('images/', replace($meta/term[@key = 'Cover'], '\.eps', '.jpg', 'i'))}"/>
           </figure>
         </xsl:if>
       </docTitle>
