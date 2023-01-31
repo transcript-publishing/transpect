@@ -234,4 +234,9 @@
     <xsl:attribute name="{name()}" select="upper-case(.)"></xsl:attribute>
   </xsl:template>
 
+  <xsl:template match="graphic/@url">
+    <xsl:attribute name="{name()}" select="replace(., '^.+/', 'images/')"></xsl:attribute>
+  </xsl:template>
+
+
 </xsl:stylesheet>
