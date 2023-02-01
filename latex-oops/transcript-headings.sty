@@ -179,7 +179,10 @@
   }%
   \tpSetProperty{heading-block}{%
     %% Titel
-    \thispagestyle{empty}%
+    \ifjournal
+    \else
+      \thispagestyle{empty}
+    \fi
     \leftskip\z@
     \leavevmode
     \bgroup
@@ -253,7 +256,9 @@
 \global\newbox\@articlefooterbox%
 
 \tpDeclareHeading[chapter]{0}{contribution}{%
-  \tpSetProperty{extended}{false}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
+
+  \tpSetProperty{extended}{true}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
+  %\thispagestyle{articlehead}
   
   % Artikel-DOI für die Zeitschriftenauftaktseite. Aus den Makros der Überschrift übernommen.
   % Muss global und ausgewertet sein, damit das Seitenlayout ps@articlehead darauf zugreifen kann.
@@ -278,7 +283,6 @@
       \null\nobreak\vskip\dimexpr\headingsep-.45mm\relax%
     \fi
     \thispagestyle{articlehead}
-    
     % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
     \global\setbox\@licenceTextFooter = \hbox{}
     
