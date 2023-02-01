@@ -419,16 +419,17 @@
   \fi
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
+    \@tempdima=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
+    \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+    \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
+    \ifdim\@tempdimb<\@tempdimc\relax
+      \@tempdimb=\@tempdimc\relax%
+    \fi%
     \tpIfComp{TocNumber}{%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-      \@tempdima=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
-      \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
-      \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
-      \ifdim\@tempdimb<\@tempdimc\relax
-        \@tempdimb=\@tempdimc\relax%
-      \fi%
       \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
     }{%\leftskip\z@%
+      \leftskip\@tempdimb%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
     }%
     \tpTocLink{\tpUseComp{TocTitle}}%
