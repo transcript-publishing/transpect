@@ -15,6 +15,8 @@
     </xsl:copy>
   </xsl:template>
 
+  <xsl:template match="@*" mode="style-rend"/>
+
   <xsl:template match="TEI">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/></xsl:copy>
@@ -22,7 +24,7 @@
 
   <xsl:variable name="meta" select="/TEI/teiHeader/profileDesc/textClass/keywords[@rendition='titlepage']"/>
   
-  <xsl:template match="/*/@xml:base | /*/@source-dir-uri  | @rend">
+  <xsl:template match="/*/@xml:base | /*/@source-dir-uri  | @rend[not(..[self::hi])]">
     <!--https://github.com/transcript-publishing/6246/issues/5-->
     <!--https://github.com/transcript-publishing/6246/issues/6-->
     <!--https://github.com/transcript-publishing/6246/issues/11-->
@@ -52,40 +54,52 @@
     <!--https://github.com/transcript-publishing/6246/issues/10-->
   </xsl:template>
 
-  <xsl:template match="seg[@css:font-style = ('italic', 'oblique')]">
+  <xsl:template match="@css:font-style[. = ('italic', 'oblique')]" mode="style-rend" priority="2">
     <!--https://github.com/transcript-publishing/6246/issues/21-->
-    <hi rend='italic'>
-      <xsl:apply-templates select="@*, node()" mode="#current"/>
-    </hi>
-    <!-- TODO Auch, wenn in ZF!-->
+    <xsl:attribute name="rend" select="'italic'"/>
   </xsl:template>
 
-  <xsl:template match="seg[@css:font-weight = ('bold', '900', '800', '700', '600', '500', '400')] | seg[matches(@rend, 'fett|hervorgehoben')]">
+  <xsl:template match="@css:font-weight[. = ('bold', 'black', '900', '800', '700', '600', '500', '400')]"  mode="style-rend"  priority="2">
     <!--https://github.com/transcript-publishing/6246/issues/21-->
-    <hi rend='bold'>
-      <xsl:apply-templates select="@*, node()" mode="#current"/>
-    </hi>
-    <!-- TODO Auch, wenn in ZF!-->
+    <xsl:attribute name="rend" select="'bold'"/>
   </xsl:template>
 
-
-  <xsl:template match="seg[@css:text-decorationt = ('underline')]">
+  <xsl:template match="@css:text-decorationt[. = ('underline')]"  mode="style-rend"  priority="2">
     <!--https://github.com/transcript-publishing/6246/issues/21-->
-    <hi rend='underline'>
-      <xsl:apply-templates select="@*, node()" mode="#current"/>
-    </hi>
+    <xsl:attribute name="rend" select="'underline'"/>
     <!-- TODO Auch, wenn in ZF -->
   </xsl:template>
 
-  <xsl:template match="seg[@css:text-decorationt = ('strike-through')]">
+  <xsl:template match="@css:text-decorationt[. = ('strike-through')]"  mode="style-rend"  priority="2">
     <!--https://github.com/transcript-publishing/6246/issues/21-->
-    <hi rend='strike-through'>
-      <xsl:apply-templates select="@*, node()" mode="#current"/>
-    </hi>
+    <xsl:attribute name="rend" select="'strike-through'"/>
     <!-- TODO Auch, wenn in ZF? -->
   </xsl:template>
 
+  <xsl:template match="hi[@rend = ('superscript', 'subscript')] | 
+                       seg[matches(@rend, 'fett|hervorgehoben')] | 
+                       seg[@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration')]]">
+    <!--https://github.com/transcript-publishing/6246/issues/21-->
+    <xsl:variable name="classes" as="xs:string*">
+      <xsl:apply-templates select="@*" mode="style-rend"/>
+    </xsl:variable>
 
+    <xsl:choose>
+      <xsl:when test="   self::hi 
+                      or self::seg[matches(@rend, 'fett|hervorgehoben')]
+                      or string-join($classes, '')[normalize-space()]">
+        <hi>
+          <xsl:attribute name="rend" select="replace(replace(string-join((@rend, $classes), ' '), 'fett', 'bold'), 'hervorgehoben', 'italic')"/>
+          <xsl:apply-templates select="@* except @rend, node()" mode="#current"/>
+        </hi>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy copy-namespaces="no">
+          <xsl:apply-templates select="@*, node()" mode="#current"/>
+        </xsl:copy>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <xsl:template match="*[key('elt-by-corresp', concat('#', @xml:id))
                                [self::keywords[@rendition='chunk-meta']/term[@key = 'chunk-doi'][normalize-space()]]
