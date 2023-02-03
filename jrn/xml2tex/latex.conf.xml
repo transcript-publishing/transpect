@@ -174,23 +174,23 @@
             </param>
           </rule>
         </xsl:if>-->
-        <xsl:if test="dbk:abbrev[matches(@role, $col-head-style)] 
+        <xsl:if test="dbk:titleabbrev[matches(@role, $col-head-style)] 
                       or  
                       dbk:title[descendant::*[self::dbk:footnote | self::dbk:br]]">
           <rule name="tpRunTitle" type="cmd" break-before="1">
-            <param select="(dbk:abbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+            <param select="(dbk:titleabbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
             </param>
           </rule>
         </xsl:if>
-        <xsl:if test="(dbk:title[descendant::*[self::dbk:footnote]]/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:abbrev[matches(@role, $col-head-style)]))
+        <xsl:if test="(dbk:title[descendant::*[self::dbk:footnote]]/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:titleabbrev[matches(@role, $col-head-style)]))
                       or 
-                      dbk:abbrev[matches(@role, $col-head-style)][dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
+                      dbk:titleabbrev[matches(@role, $col-head-style)][dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
           <rule name="tpRunNumber" type="cmd" break-before="1">
-            <param select="if (dbk:abbrev[matches(@role, $col-head-style)])
-                           then dbk:abbrev[matches(@role, $col-head-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()
+            <param select="if (dbk:titleabbrev[matches(@role, $col-head-style)])
+                           then dbk:titleabbrev[matches(@role, $col-head-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()
                            else dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()">
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
