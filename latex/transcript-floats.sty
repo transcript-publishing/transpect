@@ -38,60 +38,62 @@
   \tpSetProperty{intext-skip-top}{2\baselineskip}%
   \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
   \tpSetProperty{numbering}{}% keine automatische Nummerierung von Gleitobjekten!
-  \ifx\ts@caps\tp@str@bottom
-    \tpSetProperty{caption-top}{}%
-    \tpSetProperty{caption-bottom}{%
-      \bgroup
-        \normalsize\itshape%
+  \ifcsname tp@captype\endcsname
+    \expandafter\ifx\csname ts@caps@\tp@captype\endcsname\tp@str@bottom
+      \tpSetProperty{caption-top}{}%
+      \tpSetProperty{caption-bottom}{%
+        \bgroup
+          \normalsize\itshape%
+          \tpIfComp{Number}{%
+            {%
+              \tpUseProperty{number-format}\tpUseComp{Number}%
+              \tpIfComp{Caption}{%
+                \tpUseProperty{number-sep}%
+              }{%
+                \par%
+              }%
+            }%
+          }{}%
+          \tpIfComp{Caption}{%
+            \tpUseComp{Caption}\par%
+          }{}%
+          \tpIfComp{Legend}{%
+            {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
+          }{}%
+        \egroup
+        \tpIfComp{Source}{%
+          \tpIfComp{Legend}{%
+            \par\nopagebreak%
+          }{}%
+          {\tpUseProperty{source-format}\tpUseComp{Source}}%
+        }{}%
+      }%
+    \else
+      \tpSetProperty{caption-bottom}{%
+        \tpIfComp{Source}{%
+          \tpIfComp{Legend}{%
+            \par\nopagebreak%
+          }{}%
+          {\tpUseProperty{source-format}\tpUseComp{Source}}%
+        }{}%
+      }%
+      \tpSetProperty{caption-top}{%
         \tpIfComp{Number}{%
           {%
             \tpUseProperty{number-format}\tpUseComp{Number}%
             \tpIfComp{Caption}{%
               \tpUseProperty{number-sep}%
-            }{%
-              \par%
-            }%
+            }{}%
           }%
         }{}%
         \tpIfComp{Caption}{%
-          \tpUseComp{Caption}\par%
+          \tpUseComp{Caption}%
         }{}%
         \tpIfComp{Legend}{%
           {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
         }{}%
-      \egroup
-      \tpIfComp{Source}{%
-        \tpIfComp{Legend}{%
-          \par\nopagebreak%
-        }{}%
-        {\tpUseProperty{source-format}\tpUseComp{Source}}%
-      }{}%
-    }%
-  \else
-    \tpSetProperty{caption-bottom}{%
-      \tpIfComp{Source}{%
-        \tpIfComp{Legend}{%
-          \par\nopagebreak%
-        }{}%
-        {\tpUseProperty{source-format}\tpUseComp{Source}}%
-      }{}%
-    }%
-    \tpSetProperty{caption-top}{%
-      \tpIfComp{Number}{%
-        {%
-          \tpUseProperty{number-format}\tpUseComp{Number}%
-          \tpIfComp{Caption}{%
-            \tpUseProperty{number-sep}%
-          }{}%
-        }%
-      }{}%
-      \tpIfComp{Caption}{%
-        \tpUseComp{Caption}%
-      }{}%
-      \tpIfComp{Legend}{%
-        {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
-      }{}%
-    }%
+      }%
+    \fi
   \fi
   %% Parameter für Abbildungs- und Tabellenverzeichnisse
   \tpSetProperty{list-of-caption-format}{\sffamily}%
