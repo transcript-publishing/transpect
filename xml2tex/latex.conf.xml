@@ -419,6 +419,10 @@
     </rule>
   </template>
 
+
+
+  <xsl:variable name="dialogue-style" select="'^[a-z]+dialogue'" as="xs:string"/>
+
   <template context="dbk:blockquote[dbk:para][not(matches(@role, '^[a-z]+_?verse.*$'))]
                     |dbk:blockquote[matches(@role, $dialogue-style)]">
     <rule name="quotation" type="env">
@@ -617,7 +621,7 @@
   
   <xsl:function name="tr:heading-level" as="xs:string?">
     <xsl:param    name="heading" as="element()"/>
-    <xsl:variable name="style"   as="attribute(role)?" select="$heading/dbk:info/dbk:title/@role"/>
+    <xsl:variable name="style"   as="attribute(role)?" select="$heading/dbk:info/dbk:title[1]/@role"/>
     <xsl:choose>
       <xsl:when test="$style = 'tsheadingpart'">
         <xsl:sequence select="'part'"/>
