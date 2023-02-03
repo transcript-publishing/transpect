@@ -12,7 +12,8 @@
   <xsl:param name="s9y3-path" as="xs:string?"/>
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
-  <xsl:param name="caption-pos" as="xs:string?"/>
+  <xsl:param name="table-caption-pos" as="xs:string?"/>
+  <xsl:param name="figure-caption-pos" as="xs:string?"/>
   <xsl:param name="sans-font"   as="xs:string?"/>
   
   <xsl:variable name="create-customer-toctitles" select="true()" as="xs:boolean"/>
@@ -208,8 +209,10 @@
     </xsl:for-each>
     <xsl:value-of select="concat('\usepackage[lay=',
                                  lower-case($layout),
-                                 ',captions=',
-                                 if($caption-pos eq 'bottom') then 'bottom' else 'top',
+                                 ',captions_figure=',
+                                 if($figure-caption-pos eq 'bottom') then 'bottom' else 'top',
+                                 ',captions_table=',
+                                 if($table-caption-pos eq 'bottom') then 'bottom' else 'top',
                                  if($sans-font eq 'noto-condensed') then ',altFonts' else (),
                                  ']{transcript}&#xa;')"/>
     
