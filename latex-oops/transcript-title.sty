@@ -132,7 +132,7 @@
   %%%%%%%%%%%%
   \tpSetProperty{titlepage-iv}{%
     \bgroup
-      \tpIfComp{Statement}{\tpUseComp{Statement}\par}{}%
+      \tpIfComp{Statement}{\tpUseComp{Statement}\par\vskip\baselineskip}{}%
       \justify
       \tpUseProperty{funding-block}%
       \vfill
