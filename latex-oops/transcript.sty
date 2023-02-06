@@ -17,15 +17,6 @@
 \define@key{transcript.sty}{captions_figure}[top]{\gdef\ts@caps@figure{#1}}
 \define@key{transcript.sty}{captions_table}[top]{\gdef\ts@caps@table{#1}}
 
-\ifcsname ts@caps@figure\endcsname%
-\else
-  \let\ts@caps@figure\ts@caps%
-\fi
-
-\ifcsname ts@caps@table\endcsname%
-\else
-  \let\ts@caps@table\ts@caps
-\fi
 
 %% Alternative Fonts, zuschaltbar im Falle fehlender Zeichen in den Standardfonts.
 \newif\if@altFonts \@altFontsfalse

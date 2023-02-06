@@ -38,6 +38,14 @@
   \tpSetProperty{intext-skip-top}{2\baselineskip}%
   \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
   \tpSetProperty{numbering}{}% keine automatische Nummerierung von Gleitobjekten!
+  \ifcsname ts@caps@figure\endcsname%
+  \else
+    \let\ts@caps@figure\ts@caps%
+  \fi
+  \ifcsname ts@caps@table\endcsname%
+  \else
+    \let\ts@caps@table\ts@caps%
+  \fi
   \ifcsname tp@captype\endcsname
     \expandafter\ifx\csname ts@caps@\tp@captype\endcsname\tp@str@bottom
       \tpSetProperty{caption-top}{}%
