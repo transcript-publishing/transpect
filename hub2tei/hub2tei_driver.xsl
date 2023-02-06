@@ -62,4 +62,30 @@
 
   </xsl:function>
 
+  <xsl:template name="publication-stm">
+    <xsl:if test="not(info/publisher)">
+      <publisher>transcript</publisher>
+      <pubPlace>Bielefeld</pubPlace>
+    </xsl:if>
+    <xsl:apply-templates select="info/publisher,
+                                 info/legalnotice,
+                                 info/copyright, info/pubdate" mode="meta"/>
+    <!--<distributor>
+      <address>
+        <addrLine>
+          <name type="organisation"/>
+        </addrLine>
+        <addrLine>
+          <name type="place"/>
+        </addrLine>
+      </address>
+    </distributor>
+    <idno type="book"/>
+    <date>
+      <xsl:apply-templates select="/*/dbk:info/dbk:date" mode="#current"/>  
+    </date>
+    <pubPlace/>
+    <publisher/>-->
+  </xsl:template> 
+
 </xsl:stylesheet>
