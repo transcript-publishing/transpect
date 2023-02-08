@@ -164,6 +164,7 @@
       \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
     }
+    \goodbreak%
   }%
 
   %% Format PDF-Bookmarks
@@ -292,9 +293,11 @@
     \fi
   \fi
 
-  \ifcollection\else
+  \ifcollection%
+  \else%
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
+    \tpSetProperty{toc-before-entry}{\nopagebreak}%
     \tpSetProperty{toc-heading}{%
       \tpUseProperty{toc-title-format}%
       \tpIfComp{TocNumber}{%
