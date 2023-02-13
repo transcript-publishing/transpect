@@ -46,6 +46,9 @@
   \tpSetProperty{toc-indent}{}%
   \tpSetProperty{toc-title-format}{\sffamily\sbseries\huge}%
   \tpSetProperty{toc-heading}{%
+    \ifdim\dimexpr\pagegoal-\pagetotal<7\baselineskip\relax%
+      \clearpage%
+    \fi
     \tpUseProperty{toc-title-format}%
     \tpTocLink{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}%
       \tpUseComp{TocTitle}}\nobreak}%
@@ -129,6 +132,9 @@
   \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
+    \ifdim\dimexpr\pagegoal-\pagetotal\relax<4\baselineskip\relax
+      \clearpage%
+    \fi
     % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
     \vtop{\strut%
       \tpUseProperty{toc-title-format}%
@@ -325,8 +331,10 @@
 }
 
 % Mit 13475 auskommentiert, gegengeprüft mit 13412.
-%\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
-%\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
+% Mit 14272 wieder reingenommen. Gegengeprüft mit Ticketnummer darüber.
+\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
+\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
+\tpAddToHook{toc-after-hook-part}{\nopagebreak}%
 
 
 \tpDeclareHeading{1}{section}{%
