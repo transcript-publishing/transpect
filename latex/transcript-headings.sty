@@ -46,6 +46,9 @@
   \tpSetProperty{toc-indent}{}%
   \tpSetProperty{toc-title-format}{\sffamily\sbseries\huge}%
   \tpSetProperty{toc-heading}{%
+    \ifdim\dimexpr\pagegoal-\pagetotal<7\baselineskip\relax%
+      \clearpage%
+    \fi
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}{%
       \@tempdima=\csname tp-heading-toc-number--1-maxwd\endcsname%
@@ -70,12 +73,8 @@
     \let\\\@centercr
     \rightskip\z@skip\relax
     \parfillskip\@flushglue
-    %\par
-    %\edef\measurepage{\the\dimexpr\pagegoal-\pagetotal-\baselineskip\relax}%
-    %\typeout{TOC BEFORE ENTRY: \measurepage}
-    %\ifdim\measurepage<7\baselineskip\relax\newpage\fi%
   }%
-  \tpSetProperty{toc-after-entry}{\par\nobreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nobreak}% Thing at the end of the entry, after the page number
+  \tpSetProperty{toc-after-entry}{\par\nobreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nobreak\nopagebreak}% Thing at the end of the entry, after the page number
 
   \tpSetProperty{before-heading}{%
     \cleardoublepage
@@ -86,6 +85,7 @@
     \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
     \ifcollection \global\let\@authormark\@empty\fi
   }%
+  
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{title-format}{\sffamily\sbseries\fontsize{17.5bp}{25.6bp}\selectfont}%
@@ -114,10 +114,12 @@
       \vskip-2\baselineskip
     }{}%
   }%
+  
   \tpSetProperty{after-heading-block}{\vfill}%
 }
 
-\tpAddToHook{toc-after-hook-part}{\nopagebreak}%
+\tpAddToHook{toc-after-hook-part}{\nopagebreak}% Wirkt leider nicht zuverlässig.
+
 
 \tpDeclareHeading{0}{chapter}{%
   % Ticket 13717.
@@ -141,6 +143,9 @@
   \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
+    \ifdim\dimexpr\pagegoal-\pagetotal\relax<4\baselineskip\relax
+      \clearpage%
+    \fi
     % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
     \vtop{\strut%
       \tpUseProperty{toc-title-format}%
@@ -163,8 +168,7 @@
       \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
       \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
-    }
-    \goodbreak%
+    }%
   }%
 
   %% Format PDF-Bookmarks
@@ -279,8 +283,8 @@
 }
 
 % Mit 13475 auskommentiert, gegengeprüft mit 13412.
-%\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
-%\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
+\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
+\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}% Mindestens eine Sectionüberschrift nach Kapitelüberschrift und vor Seitenumbruch.
 
 
 \tpDeclareHeading{1}{section}{%
@@ -297,7 +301,6 @@
   \else%
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
-    \tpSetProperty{toc-before-entry}{\nopagebreak}%
     \tpSetProperty{toc-heading}{%
       \tpUseProperty{toc-title-format}%
       \tpIfComp{TocNumber}{%
