@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <css:rules xmlns:css="http://www.w3.org/1996/css">
-  <css:rule layout-type="para" native-name="ts_abstracts" name="tsabstracts"/>
+  <css:rule layout-type="para" native-name="ts_abstract" name="tsabstract"/>
+  <css:rule layout-type="para" native-name="ts_trans_title" name="tstranstitle"/>
   <css:rule layout-type="para" native-name="ts_author" name="tsauthor"/>
   <css:rule layout-type="para" native-name="ts_author_name" name="tsauthorname"/>
   <css:rule layout-type="para" native-name="ts_author_description" name="tsauthordescription"/>
@@ -26,7 +27,7 @@
   <css:rule layout-type="para" native-name="ts_subheading_3" name="tssubheading3"/>
   <css:rule layout-type="para" native-name="ts_subheading_4" name="tssubheading4"/>
   <css:rule layout-type="para" native-name="ts_subheading_5" name="tssubheading5"/>
-  <css:rule layout-type="para" native-name="ts_meta_keywords" name="tsmeta"/>
+  <css:rule layout-type="para" native-name="ts_keywords" name="tskeywords"/>
   <css:rule layout-type="para" native-name="ts_meta_doi" name="tsmetadoi"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_title" name="tsmetajournaltitle"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_year" name="tsmetajournalyear"/>

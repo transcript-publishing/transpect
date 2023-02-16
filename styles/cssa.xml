@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <css:rules xmlns:css="http://www.w3.org/1996/css">
   <css:rule layout-type="para" native-name="ts_abstract" name="tsabstract"/>
-  <css:rule layout-type="para" native-name="ts_abstract_heading" name="tsabstractheading"/>
-
+  <css:rule layout-type="para" native-name="ts_headword" name="tsheadword"/>
+  <css:rule layout-type="para" native-name="ts_trans_title" name="tstranstitle"/>
   <css:rule layout-type="para" native-name="ts_author" name="tsauthor"/>
   <css:rule layout-type="para" native-name="ts_author_name" name="tsauthorname"/>
   <css:rule layout-type="para" native-name="ts_author_description" name="tsauthordescription"/>
@@ -53,8 +53,8 @@
   <css:rule layout-type="para" native-name="ts_dedication" name="tsdedication"/>
   
 
-  <css:rule layout-type="para" native-name="ts_meta_keywords" name="tsmetakeywords"/>
-  <css:rule layout-type="para" native-name="ts_meta_keywords_heading" name="tsmetakeywordsheading"/>
+  <css:rule layout-type="para" native-name="ts_keywords" name="tskeywords"/>
+<!--  <css:rule layout-type="para" native-name="ts_keywords_heading" name="tskeywordsheading"/>-->
   <css:rule layout-type="para" native-name="ts_meta_doi" name="tsmetadoi"/>
   <css:rule layout-type="para" native-name="ts_meta_book_title" name="tsmetabooktitle"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_title" name="tsmetajournaltitle"/>
