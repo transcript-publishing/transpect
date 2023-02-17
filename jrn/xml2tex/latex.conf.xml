@@ -174,31 +174,31 @@
             </param>
           </rule>
         </xsl:if>-->
-        <xsl:if test="dbk:titleabbrev[matches(@role, $col-head-style)] 
-                      or  
-                      dbk:title[descendant::*[self::dbk:footnote | self::dbk:br]]">
-          <rule name="tpRunTitle" type="cmd" break-before="1">
-            <param select="(dbk:titleabbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
-              <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
-            </param>
-          </rule>
-        </xsl:if>
-        <xsl:if test="(dbk:title[descendant::*[self::dbk:footnote]]/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:titleabbrev[matches(@role, $col-head-style)]))
-                      or 
-                      dbk:titleabbrev[matches(@role, $col-head-style)][dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
-          <rule name="tpRunNumber" type="cmd" break-before="1">
-            <param select="if (dbk:titleabbrev[matches(@role, $col-head-style)])
-                           then dbk:titleabbrev[matches(@role, $col-head-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()
-                           else dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()">
-              <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
-              <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
-            </param>
-          </rule>
-        </xsl:if>
-
+    <xsl:if test="dbk:titleabbrev[matches(@role, $col-head-style)] 
+      or  
+      dbk:title[descendant::*[self::dbk:footnote | self::dbk:br]]">
+      <rule name="tpRunTitle" type="cmd" break-before="1">
+        <param select="(dbk:titleabbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+    <xsl:if test="(dbk:title[descendant::*[self::dbk:footnote]]/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:titleabbrev[matches(@role, $col-head-style)]))
+      or 
+      dbk:titleabbrev[matches(@role, $col-head-style)][dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
+      <rule name="tpRunNumber" type="cmd" break-before="1">
+        <param select="if (dbk:titleabbrev[matches(@role, $col-head-style)])
+          then dbk:titleabbrev[matches(@role, $col-head-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()
+          else dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+    
     <xsl:if test="dbk:subtitle[descendant::*[self::dbk:footnote | self::dbk:br]]">
       <rule name="tpRunSubtitle" type="cmd" break-before="1">
         <param select="dbk:subtitle/node()">
@@ -207,6 +207,80 @@
           <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
         </param>
       </rule>
+    </xsl:if>
+  </template>
+
+<template name="create-bookmark-content">
+    <xsl:if test="exists(*[not(self::dbk:footnote
+                          |self::dbk:br
+                          |self::dbk:phrase[@role = ('identifier', 'hub:identifier')]
+                          |self::dbk:tab
+                          |self::dbk:anchor)])
+                  and 
+                  exists(dbk:phrase[@role = ('identifier', 'hub:identifier')])">
+      <!-- if title contains markup, create \tpBM-Makros. if \tpBMTitle is created, also a \tpNumber is generated. empty or -->
+      <rule name="tpBMNumber" type="cmd" break-before="1">
+        <xsl:variable name="content">
+          <xsl:apply-templates select="dbk:phrase[@role = ('identifier', 'hub:identifier')]" mode="bookmark-contents"/>
+        </xsl:variable>
+        <param select="replace(string-join($content, ''), '\s+$', '')"/>
+      </rule>
+    </xsl:if>
+    <xsl:if test="exists(*[not(self::dbk:footnote
+                              |self::dbk:br
+                              |self::dbk:phrase[@role = ('identifier', 'hub:identifier')]
+                              |self::dbk:tab
+                              |self::dbk:anchor)])
+                  or 
+                  matches(., '[&amp;&#x9;&#xa0;&#x2000;-&#x200a;]')">
+      <rule name="tpBMTitle" type="cmd" break-before="1">
+        <!-- Newlines in title items are discarded by default (remove-newline). 
+             If they are preserved in your project remove '|self::dbk:br' from if-condition. 
+             Special characters like ampersands are not displayed correctly in bookmarks 
+             and therefore have to be escaped, https://redmine.le-tex.de/issues/11930 -->
+        <xsl:variable name="content">
+          <xsl:apply-templates select="node() except dbk:phrase[@role = ('identifier', 'hub:identifier')]" mode="bookmark-contents"/>
+        </xsl:variable>
+        <param select="replace(
+                               replace(
+                                       replace(string-join($content, ''), '\s+$', ''),
+                                       '\\(&amp;)',
+                                       '\\string$1'
+                                       ),
+                               '\p{Zs}',
+                               '&#x20;'
+                               )"/>
+      </rule>
+    </xsl:if>
+    <xsl:if test="../*[self::dbk:author|self::dbk:authorgroup[dbk:author]]
+                      [descendant::dbk:personname/dbk:othername/*[not(self::dbk:footnote
+                                                         |self::dbk:br
+                                                         |self::dbk:tab
+                                                         |self::dbk:anchor)]]">
+      <rule name="tpBMAuthorNameList" type="cmd" break-before="1">
+          <xsl:variable name="content">
+            <xsl:choose>
+              <xsl:when test="exists((dbk:author|dbk:authorgroup/dbk:author)[@role = 'override'])">
+                  <xsl:apply-templates select="(dbk:author|dbk:authorgroup/dbk:author)[@role = 'override']/dbk:personname/dbk:othername/node()" mode="bookmark-contents"/>
+               </xsl:when>
+               <xsl:otherwise>
+                  <xsl:sequence select="string-join((dbk:author|dbk:authorgroup/dbk:author)[not(@role = 'override')]/dbk:personname/dbk:othername/node(), '/')"/>
+               </xsl:otherwise>
+              </xsl:choose>
+          </xsl:variable>
+          <param select="replace(string-join($content, ''), '\s+$', '')"/>
+        </rule>
+    </xsl:if>
+    <xsl:if test="../*[self::dbk:subtitle][*[not(self::dbk:footnote
+                                                |self::dbk:br
+                                                |self::dbk:tab
+                                                |self::dbk:anchor)]]">
+      <rule name="tpBMSubtitle" type="cmd" break-before="1">
+          <xsl:variable name="content">
+            <xsl:apply-templates select="../*[self::dbk:subtitle]" mode="bookmark-contents"/>
+          </xsl:variable>
+          <param select="replace(string-join($content, ''), '\s+$', '')"/>
+        </rule>
     </xsl:if>
   </template>
 
@@ -226,4 +300,5 @@
       <xsl:otherwise><xsl:sequence select="false()"/></xsl:otherwise>
     </xsl:choose>
   </xsl:function>
+
 </set>
