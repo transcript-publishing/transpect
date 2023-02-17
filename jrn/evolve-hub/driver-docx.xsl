@@ -43,7 +43,7 @@
     </issuenum>
   </xsl:template>
 
-  <xsl:template match="para[matches(@role, $hub:article-keywords-role-regex)]" mode="hub:process-meta-sidebar" priority="2">
+  <xsl:template match="para[matches(@role, $hub:keywords-role-regex)]" mode="hub:process-meta-sidebar" priority="2">
     <xsl:param name="process-meta" tunnel="yes" as="xs:boolean?"/>
     <xsl:choose>
       <xsl:when test="$process-meta">
