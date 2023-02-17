@@ -16,6 +16,24 @@
 
 \global\newbox\@licenceTextFooter
 
+\def\tp@create@editor@string#1{%
+  % Name lists need further expansion than \tpIfComp to detect \relax correctly.
+  \expandafter\expandafter\expandafter\ifx\csname tp@\tp@namespace @#1NameList\endcsname\relax%
+    % This assignment is needed for \tpIfComp{#1NameList}{…}{…} to work correctly for non-existing NameLists.
+    \global\expandafter\let\csname tp@\tp@namespace @#1NameList\endcsname\relax%
+  \else%
+    \def\@tempa{Author}%
+    \edef\@argi{#1}%
+    \ifx\@tempa\@argi%
+    \else%
+      \expandafter\xdef\csname tp@\tp@namespace @#1NameList\endcsname{%
+        % 14238: Umbrüche vor Herausgeberkürzel verhindern.
+        \tpUseComp{#1NameList}~\tpUseProperty{editor-suffix}%
+      }%
+    \fi%
+  \fi%
+}%
+
 \tpDeclareTitlepage{%
   \tpSetProperty{editor-suffix-sgl}{\editorsuffixsglname}
   \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}    
@@ -95,14 +113,13 @@
       \ifcollection
         \righthyphenmin62
         \lefthyphenmin62
-        \raggedright\tpUseProperty{EditorNameList}%
+        \raggedright\tpUseProperty{EditorNameList}\par%
       \else
         \righthyphenmin62
         \lefthyphenmin62
-        \raggedright\tpUseComp{AuthorNameList}%
+        \raggedright\tpUseComp{AuthorNameList}\par%
       \fi%
     }%
-    \par
     \vskip\dimexpr5bp-0.65mm\relax
     {\raggedright
       \leavevmode
