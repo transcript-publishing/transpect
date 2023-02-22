@@ -323,7 +323,7 @@
                 mode="tei2html" priority="2">
     <xsl:param name="in-toc" as="xs:boolean?" tunnel="yes"/>
     <xsl:variable name="heading-level" select="tei2html:heading-level(.)"/>
-    <xsl:variable name="author" select="preceding-sibling::byline/persName" as="element(persName)*"/>
+    <xsl:variable name="author" select="preceding-sibling::byline[not(@rend = 'override')]/persName" as="element(persName)*"/>
     <xsl:variable name="subtitle" select="preceding-sibling::head[@type eq 'sub']" as="element(head)?"/>    
     <xsl:element name="{if ($heading-level) then concat('h', $heading-level) else 'p'}">
       <xsl:apply-templates select="." mode="class-att"/>
@@ -633,7 +633,7 @@
 
   <xsl:template match="seriesStmt/*" mode="tei2html" priority="2"/>
 
-  <xsl:template match="byline/affiliation | byline/email | byline/ref" mode="tei2html"/>
+  <xsl:template match="byline/affiliation | byline/email | byline/ref | byline/idno | byline[@rend='override']" mode="tei2html"/>
   
   <xsl:template match="tei:p[matches(@rend, 'tsquotation')][descendant::tei:lb]" mode="epub-alternatives">
     <!-- https://redmine.le-tex.de/issues/12371-->
