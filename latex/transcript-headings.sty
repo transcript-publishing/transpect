@@ -324,6 +324,7 @@
   \tpSetProperty{number-sep}{\enskip}%
   \tpSetProperty{after-skip}{12.8bp}%
   \tpSetProperty{title-format}{\sffamily\LARGE\sbseries}%
+  \tpSetProperty{subtitle-format}{\normalfont\sffamily\LARGE}%
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
   \tpSetProperty{heading-block}{%
     \savenotes
@@ -333,7 +334,7 @@
       \tpUseProperty{title-format}%
       \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
       \tpUseComp{Title}\par
-      \tpIfComp{Subtitle}{\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
+      \tpIfComp{Subtitle}{\tpUseComp{subtitle-format}\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
       \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
     \egroup
     \nopagebreak
