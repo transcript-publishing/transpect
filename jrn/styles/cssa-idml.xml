@@ -52,6 +52,9 @@
 
   <!--<css:rule layout-type="inline" native-name="footnote reference" name="Funotenzeichen"/>-->
   <css:rule layout-type="inline" native-name="ts_superscript" name="tssuperscript"/>
+  <css:rule layout-type="inline" native-name="ts_pi" name="tspi"/>
+  <css:rule layout-type="inline" native-name="ts_italic" name="tsitalic"/>
+  <css:rule layout-type="inline" native-name="ts_bold" name="tsbold"/>
   <css:rule layout-type="inline" native-name="Hyperlink" name="Hyperlink"/>
   <css:rule layout-type="object" native-name="ts_box_grey" name="tsboxgrey"/>
   <css:rule layout-type="object" native-name="ts_box_border" name="tsboxborder"/>
