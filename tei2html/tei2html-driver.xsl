@@ -781,7 +781,7 @@
   <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]" mode="create-style-elts" priority="1">
     <xsl:apply-templates select="@* except @rend" mode="tei2html"/>
     <xsl:if test="some $t in tokenize(@rend, '\s') satisfies $t[not(. = ('italic', 'bold', 'underline', 'superscript','subscript'))]">
-      <xsl:attribute name="class" select="replace(@rend, '(italic|bold|underline|superscript|subscript)\s?', '')"/>
+      <xsl:attribute name="class" select="normalize-space(replace(@rend, '(italic|bold|underline|superscript|subscript)\s?', ''))"/>
     </xsl:if>
     <xsl:apply-templates select="node()" mode="tei2html"/>
   </xsl:template>
