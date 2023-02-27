@@ -58,6 +58,9 @@
   <css:rule layout-type="inline" native-name="ts_subscript " name="tssubscript"/>
   <css:rule layout-type="inline" native-name="ts_smallcaps" name="tssmallcaps "/>
   <css:rule layout-type="inline" native-name="Hyperlink" name="Hyperlink"/>
+  <css:rule layout-type="inline" native-name="ts_pi" name="tspi"/>
+  <css:rule layout-type="inline" native-name="ts_italic" name="tsitalic"/>
+  <css:rule layout-type="inline" native-name="ts_bold" name="tsbold"/>
 
   <css:rule layout-type="object" native-name="ts_box_grey" name="tsboxgrey"/>
   <css:rule layout-type="object" native-name="ts_figure" name="tsfigure"/>

@@ -92,6 +92,7 @@
   <css:rule layout-type="para" native-name="ts_learning_outcome" name="tslearningoutcome"/>
   <css:rule layout-type="para" native-name="ts_literature_comment" name="tsliteraturecomment"/>
 
+  <css:rule layout-type="inline" native-name="ts_pi" name="tspi"/>
   <css:rule layout-type="inline" native-name="ts_italic" name="tsitalic"/>
   <css:rule layout-type="inline" native-name="ts_bold" name="tsbold"/>
   <css:rule layout-type="inline" native-name="footnote reference" name="Funotenzeichen"/>
