@@ -77,19 +77,19 @@
   </xsl:template>
 
   <xsl:template match="hi[@rend = ('superscript', 'subscript')] | 
-                       seg[matches(@rend, 'fett|hervorgehoben')] | 
+                       seg[matches(@rend, 'fett|hervorgehoben|bold|italic')] | 
                        seg[@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration')]]">
     <!--https://github.com/transcript-publishing/6246/issues/21-->
     <xsl:variable name="classes" as="xs:string*">
       <xsl:apply-templates select="@*" mode="style-rend"/>
     </xsl:variable>
-
+    <xsl:variable name="rend" as="xs:string?" select="if (@rend) then replace(replace(@rend, 'fett|tsbold', 'bold', 'i'), 'hervorgehoben|tsitalic', 'italic', 'i') else ()"/>
     <xsl:choose>
       <xsl:when test="   self::hi 
-                      or self::seg[matches(@rend, 'fett|hervorgehoben')]
+                      or self::seg[matches(@rend, 'fett|hervorgehoben|bold|italic')]
                       or string-join($classes, '')[normalize-space()]">
         <hi>
-          <xsl:attribute name="rend" select="replace(replace(string-join((@rend, $classes), ' '), 'fett', 'bold'), 'hervorgehoben', 'italic')"/>
+          <xsl:attribute name="rend" select="string-join(distinct-values(($rend, $classes)), ' ')"/>
           <xsl:apply-templates select="@* except @rend, node()" mode="#current"/>
         </hi>
       </xsl:when>
