@@ -126,7 +126,7 @@
     <xsl:param name="context" as="element(*)?" tunnel="yes"/>
     <xsl:variable name="meta-elements" as="element()*">
       <xsl:if test="$context">
-        <xsl:apply-templates select="$context/descendant::*:header[@class = 'chunk-meta-sec'][1]/*, $context/descendant::*:p[@class = 'tsmetaalternativeheadline'][1]" mode="generate-chunk-meta-tags"/>
+        <xsl:apply-templates select="$context/descendant::*:header[@class = 'chunk-meta-sec'][1]/*, $context/descendant::*:p[@class = ('tsmetaalternativeheadline', 'tstranstitle')][1]" mode="generate-chunk-meta-tags"/>
       </xsl:if>
     </xsl:variable>
     <xsl:copy copy-namespaces="no">
@@ -140,7 +140,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="*:p[@class = 'tsmetaalternativeheadline']" mode="generate-chunk-meta-tags">
+  <xsl:template match="*:p[@class = ('tsmetaalternativeheadline', 'tstranstitle')]" mode="generate-chunk-meta-tags">
     <meta name="alternative-headline" content="{normalize-space(string-join(node()))}"/>
   </xsl:template>
 
