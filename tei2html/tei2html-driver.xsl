@@ -754,4 +754,44 @@
     <xsl:apply-templates select="node()"  mode="#current"/>
   </xsl:template>
 
+  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]" mode="tei2html" priority="5">
+    <xsl:apply-templates select="." mode="create-style-elts"/>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'subscript')]" mode="create-style-elts" priority="6">
+    <sub><xsl:next-match/></sub>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'superscript')]" mode="create-style-elts"  priority="5">
+    <sup><xsl:next-match/></sup>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'italic')]" mode="create-style-elts"  priority="4">
+    <i><xsl:next-match/></i>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'bold')]" mode="create-style-elts"  priority="3">
+    <b><xsl:next-match/></b>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'underline')]" mode="create-style-elts"  priority="2">
+    <u><xsl:next-match/></u>
+  </xsl:template>
+
+  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]" mode="create-style-elts" priority="1">
+    <xsl:apply-templates select="@* except @rend" mode="tei2html"/>
+    <xsl:if test="some $t in tokenize(@rend, '\s') satisfies $t[not(. = ('italic', 'bold', 'underline', 'superscript','subscript'))]">
+      <xsl:attribute name="class" select="replace(@rend, '(italic|bold|underline|superscript|subscript)\s?', '')"/>
+    </xsl:if>
+    <xsl:apply-templates select="node()" mode="tei2html"/>
+  </xsl:template>
+<!--
+  <xsl:template match="hi[@rend = 'bold']" mode="tei2html" priority="5">
+    <b>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </b>
+  </xsl:template>-->
+
+  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2html"/>
+
 </xsl:stylesheet>
