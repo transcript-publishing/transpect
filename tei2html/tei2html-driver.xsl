@@ -482,7 +482,7 @@
   <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))][not(parent::*[self::figure | self::table | self::lg])]" 
                 mode="toc" priority="3">
     <xsl:variable name="author" select="preceding-sibling::byline/persName" as="element(persName)*"/>
-    <xsl:variable name="subtitle" select="following-sibling::head[@type eq 'sub'] | preceding-sibling::head[@type eq 'sub']" as="element(head)?"/>
+    <xsl:variable name="subtitle" select="following-sibling::head[@type eq 'sub'], preceding-sibling::head[@type eq 'sub']" as="element(head)*"/>
     <xsl:element name="{if(matches($tei2html:epub-type, '3')) then 'li' else 'p'}">
       <xsl:attribute name="class" select="concat('toc', tei2html:heading-level(.))"/>
       <a href="#{(@xml:id, generate-id())[1]}">
