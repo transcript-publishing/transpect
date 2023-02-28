@@ -324,7 +324,7 @@
     <xsl:param name="in-toc" as="xs:boolean?" tunnel="yes"/>
     <xsl:variable name="heading-level" select="tei2html:heading-level(.)"/>
     <xsl:variable name="author" select="preceding-sibling::byline[not(@rend = 'override')]/persName" as="element(persName)*"/>
-    <xsl:variable name="subtitle" select="preceding-sibling::head[@type eq 'sub']" as="element(head)?"/>    
+    <xsl:variable name="subtitle" select="following-sibling::head[@type eq 'sub'], preceding-sibling::head[@type eq 'sub']" as="element(head)*"/>    
     <xsl:element name="{if ($heading-level) then concat('h', $heading-level) else 'p'}">
       <xsl:apply-templates select="." mode="class-att"/>
       <xsl:apply-templates select="@* except @rend" mode="#current"/>
