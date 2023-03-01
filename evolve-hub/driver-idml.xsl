@@ -20,5 +20,6 @@
   <xsl:import href="http://transpect.io/xslt-util/isbn/xsl/isbnformat.xsl"/>
 
  <xsl:template match="para[@role = 'Fuzeile'] | *[not(self::css:rule)]/@idml2xml:layer" mode="hub:split-at-tab"/>
+ <xsl:param name="hub:handle-several-images-per-caption" as="xs:boolean" select="true()"/>
 
 </xsl:stylesheet>
