@@ -46,9 +46,9 @@
   \tpSetProperty{toc-indent}{}%
   \tpSetProperty{toc-title-format}{\sffamily\sbseries\huge}%
   \tpSetProperty{toc-heading}{%
-    \ifdim\dimexpr\pagegoal-\pagetotal<7\baselineskip\relax%
-      \clearpage%
-    \fi
+    %\ifdim\dimexpr\pagegoal-\pagetotal<7\baselineskip\relax%
+    %  \clearpage%
+    %\fi
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}{%
       \@tempdima=\csname tp-heading-toc-number--1-maxwd\endcsname%
@@ -143,9 +143,9 @@
   \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
-    \ifdim\dimexpr\pagegoal-\pagetotal\relax<4\baselineskip\relax
-      \clearpage%
-    \fi
+    %\ifdim\dimexpr\pagegoal-\pagetotal\relax<4\baselineskip\relax
+    %  \clearpage%
+    %\fi
     % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
     \vtop{\strut%
       \tpUseProperty{toc-title-format}%
@@ -284,8 +284,8 @@
 }
 
 % Mit 13475 auskommentiert, gegengeprüft mit 13412.
-\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
-\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}% Mindestens eine Sectionüberschrift nach Kapitelüberschrift und vor Seitenumbruch.
+%\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
+%\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}% Mindestens eine Sectionüberschrift nach Kapitelüberschrift und vor Seitenumbruch.
 
 
 \tpDeclareHeading{1}{section}{%
