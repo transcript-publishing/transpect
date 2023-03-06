@@ -126,12 +126,12 @@
     <xsl:param name="context" as="element(*)?" tunnel="yes"/>
     <xsl:variable name="meta-elements" as="element()*">
       <xsl:if test="$context">
-        <xsl:apply-templates select="$context/descendant::*:header[@class = 'chunk-meta-sec'][1]/*, $context/descendant::*:p[@class = 'tsmetaalternativeheadline'][1]" mode="generate-chunk-meta-tags"/>
+        <xsl:apply-templates select="$context/descendant::*:header[@class = 'chunk-meta-sec'][1]/*, $context/descendant::*:p[@class = ('tsmetaalternativeheadline', 'tstranstitle')][1]" mode="generate-chunk-meta-tags"/>
       </xsl:if>
     </xsl:variable>
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*" mode="#current"/>
-      <meta charset="utf-8"/>
+      <!--<meta charset="utf-8"/> https://redmine.le-tex.de/issues/14335 discarded because it is autoamtically added while exporting -->
       <xsl:apply-templates select="node()[not(self::*:meta[@name = $meta-elements/@name]) and not(self::*:link)], *:link[1], $meta-elements" mode="#current">
         <xsl:with-param name="context" select="$context" tunnel="yes"/>
         <xsl:sort select="name()" />
@@ -140,7 +140,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="*:p[@class = 'tsmetaalternativeheadline']" mode="generate-chunk-meta-tags">
+  <xsl:template match="*:p[@class = ('tsmetaalternativeheadline', 'tstranstitle')]" mode="generate-chunk-meta-tags">
     <meta name="alternative-headline" content="{normalize-space(string-join(node()))}"/>
   </xsl:template>
 
@@ -445,7 +445,8 @@
     </xsl:if>
   </xsl:template>
 
- 
+  <xsl:template match="@epub:type" mode="#default"/>
+
   <xsl:template name="html:create-chunk">
     <xsl:param name="nodes" as="element(*)+"/>
     <xsl:param name="uri" as="xs:string"/>

@@ -14,6 +14,9 @@
 \define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}}
 \DeclareOptionX{nohead}{\global\let\n@head\relax}
 \define@key{transcript.sty}{captions}[top]{\gdef\ts@caps{#1}}
+\define@key{transcript.sty}{captions_figure}[top]{\gdef\ts@caps@figure{#1}}
+\define@key{transcript.sty}{captions_table}[top]{\gdef\ts@caps@table{#1}}
+
 
 %% Alternative Fonts, zuschaltbar im Falle fehlender Zeichen in den Standardfonts.
 \newif\if@altFonts \@altFontsfalse
@@ -121,8 +124,12 @@
 
 \usepackage{transcript-index}
 
-\let\oldhref\href
-\def\@nohyphen#1\@nil#2#3\relax{\oldhref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\@nohyphen#1\@nil#3\relax\fi}
+\def\tpNewTocPage{\addtocontents{toc}{\newpage}}
+
+% Makro für verlinkte Bilder.
+\let\imgHref\href
+
+\def\@nohyphen#1\@nil#2#3\relax{\imgHref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\@nohyphen#1\@nil#3\relax\fi}
 \protected\def\href#1#2{{\let↩\@empty\@nohyphen#1\@nil#2\relax\relax}}
 \let\fn@href\href
 % \bgroup

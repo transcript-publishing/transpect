@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <css:rules xmlns:css="http://www.w3.org/1996/css">
-  <css:rule layout-type="para" native-name="ts_abstracts" name="tsabstracts"/>
+  <css:rule layout-type="para" native-name="ts_abstract" name="tsabstract"/>
+  <css:rule layout-type="para" native-name="ts_trans_title" name="tstranstitle"/>
   <css:rule layout-type="para" native-name="ts_author" name="tsauthor"/>
   <css:rule layout-type="para" native-name="ts_author_name" name="tsauthorname"/>
   <css:rule layout-type="para" native-name="ts_author_description" name="tsauthordescription"/>
@@ -26,8 +27,9 @@
   <css:rule layout-type="para" native-name="ts_subheading_3" name="tssubheading3"/>
   <css:rule layout-type="para" native-name="ts_subheading_4" name="tssubheading4"/>
   <css:rule layout-type="para" native-name="ts_subheading_5" name="tssubheading5"/>
-  <css:rule layout-type="para" native-name="ts_meta_keywords" name="tsmeta"/>
+  <css:rule layout-type="para" native-name="ts_keywords" name="tskeywords"/>
   <css:rule layout-type="para" native-name="ts_meta_doi" name="tsmetadoi"/>
+  <css:rule layout-type="para" native-name="ts_meta_journal" name="tsmetajournal"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_title" name="tsmetajournaltitle"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_year" name="tsmetajournalyear"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_issue" name="tsmetajournalissue"/>
@@ -47,7 +49,8 @@
   <css:rule layout-type="para" native-name="ts_table_caption" name="tstablecaption"/>
   <css:rule layout-type="para" native-name="ts_table_text" name="tstabletext"/>
   <css:rule layout-type="para" native-name="ts_table_value" name="tstablevalue"/>
-  <css:rule layout-type="para" native-name="ts_journal_twocolumn" name="tsjournaltwocolumn" regex="tsjournaltwocolumn(end|start)"/>
+  <css:rule layout-type="para" native-name="ts_twocolumn" name="tstwocolumn"/>  
+  <css:rule layout-type="para" native-name="ts_onecolumn" name="tsonecolumn"/>  
   <css:rule layout-type="para" native-name="ts_head_word" name="tsheadword"/>
   <css:rule layout-type="para" native-name="ts_index_name" name="tsindexname"/>
   <css:rule layout-type="para" native-name="ts_list" name="tslist"/>
@@ -59,6 +62,11 @@
   <css:rule layout-type="para" native-name="ts_footnote" name="tsfootnote"/>
   <css:rule layout-type="para" native-name="ts_ded" name="tsded"/>
   <css:rule layout-type="para" native-name="ts_dedication" name="tsdedication"/>
+  <css:rule layout-type="para" native-name="ts_pi" name="tspi"/>
   <css:rule layout-type="inline" native-name="footnote reference" name="Funotenzeichen"/>
+  <css:rule layout-type="inline" native-name="ts_italic" name="tsitalic"/>
+  <css:rule layout-type="inline" native-name="ts_bold" name="tsbold"/>
+  <css:rule layout-type="inline" native-name="ts_italic" name="tsitalic"/>
+  <css:rule layout-type="inline" native-name="ts_pi" name="tspi"/>
   <css:rule layout-type="inline" native-name="Hyperlink" name="Hyperlink"/>
 </css:rules>

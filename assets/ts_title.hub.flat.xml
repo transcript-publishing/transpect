@@ -1,0 +1,367 @@
+
+<?xml-model href="http://www.le-tex.de/resource/schema/hub/1.2/hub.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.le-tex.de/resource/schema/hub/1.2/hub.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<hub xmlns="http://docbook.org/ns/docbook"
+     xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+     xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"
+     xmlns:ct="http://schemas.openxmlformats.org/package/2006/content-types"
+     xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex"
+     xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"
+     xmlns:customProps="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"
+     xmlns:docx2hub="http://transpect.io/docx2hub"
+     xmlns:extendedProps="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"
+     xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"
+     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+     xmlns:mml="http://www.w3.org/1998/Math/MathML"
+     xmlns:o="urn:schemas-microsoft-com:office:office"
+     xmlns:pkg="http://schemas.microsoft.com/office/2006/xmlPackage"
+     xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+     xmlns:rel="http://schemas.openxmlformats.org/package/2006/relationships"
+     xmlns:tr="http://transpect.io"
+     xmlns:v="urn:schemas-microsoft-com:vml"
+     xmlns:ve="http://schemas.openxmlformats.org/markup-compatibility/2006"
+     xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+     xmlns:w10="urn:schemas-microsoft-com:office:word"
+     xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+     xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml"
+     xmlns:w16cid="http://schemas.microsoft.com/office/word/2016/wordml/cid"
+     xmlns:w16se="http://schemas.microsoft.com/office/word/2015/wordml/symex"
+     xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml"
+     xmlns:word200x="http://schemas.microsoft.com/office/word/2003/wordml"
+     xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+     xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
+     xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
+     xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"
+     xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk"
+     xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+     xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+     xmlns:css="http://www.w3.org/1996/css"
+     xml:base="file:///C:/cygwin/home/mpufe/transcript/content/ts/std/anth/06353/docx/ts_std_anth_06353_master.hub.xml"
+     xml:lang="de"
+     css:rule-selection-attribute="role"
+     css:version="3.0-variant le-tex_Hub-1.2"
+     version="5.1-variant le-tex_Hub-1.2">
+   <info>
+      <keywordset role="hub">
+         <keyword role="formatting-deviations-only">true</keyword>
+         <keyword role="source-type">docx</keyword>
+         <keyword role="source-dir-uri">ts_title.docx</keyword>
+         <keyword role="archive-dir-uri">ts_title.docx</keyword>
+         <keyword role="archive-uri">ts_title.docx</keyword>
+         <keyword role="archive-uri-local">ts_title_master.docx</keyword>
+         <keyword role="source-basename">ts_title</keyword>
+         <keyword role="source-application">Microsoft Office Word</keyword>
+         <keyword role="mathtype2mml">true</keyword>
+      </keywordset>
+      <keywordset role="docProps">
+         <keyword role="dc:title">|</keyword>
+         <keyword role="dc:creator">os</keyword>
+         <keyword role="cp:lastModifiedBy">W7-User</keyword>
+         <keyword role="cp:revision">8</keyword>
+         <keyword role="cp:lastPrinted">2022-09-30T08:38:00Z</keyword>
+         <keyword role="dcterms:created">2022-11-03T15:33:00Z</keyword>
+         <keyword role="dcterms:modified">2022-12-14T06:47:00Z</keyword>
+         <keyword role="extendedProps:Template">Normal.dotm</keyword>
+         <keyword role="extendedProps:TotalTime">0</keyword>
+         <keyword role="extendedProps:Pages">407</keyword>
+         <keyword role="extendedProps:Words">89683</keyword>
+         <keyword role="extendedProps:Characters">565006</keyword>
+         <keyword role="extendedProps:Application">Microsoft Office Word</keyword>
+         <keyword role="extendedProps:DocSecurity">0</keyword>
+         <keyword role="extendedProps:Lines">4708</keyword>
+         <keyword role="extendedProps:Paragraphs">1306</keyword>
+         <keyword role="extendedProps:ScaleCrop">false</keyword>
+         <keyword role="extendedProps:Company">PC</keyword>
+         <keyword role="extendedProps:LinksUpToDate">false</keyword>
+         <keyword role="extendedProps:CharactersWithSpaces">653383</keyword>
+         <keyword role="extendedProps:SharedDoc">false</keyword>
+         <keyword role="extendedProps:HyperlinksChanged">false</keyword>
+         <keyword role="extendedProps:AppVersion">14.0000</keyword>
+      </keywordset>
+      <css:rules>
+         <css:rule layout-type="para"
+                   native-name="footnote text"
+                   css:line-height="1.15"
+                   css:text-align="left"
+                   css:font-size="10pt"
+                   css:margin-bottom="10pt"
+                   css:font-family="Calibri"
+                   name="Funotentext">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_author"
+                   css:line-height="20pt"
+                   css:text-align="left"
+                   css:font-size="10pt"
+                   css:hyphens="manual"
+                   css:margin-top="6pt"
+                   css:margin-bottom="26pt"
+                   css:letter-spacing="0.5pt"
+                   name="tsauthor">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_author_description"
+                   css:text-align="justify"
+                   css:font-family="Times New Roman"
+                   css:font-size="9.5pt"
+                   css:margin-top="4pt"
+                   css:margin-bottom="4pt"
+                   css:color="#000000"
+                   name="tsauthordescription"/>
+         <css:rule layout-type="para"
+                   native-name="ts_figure_A1"
+                   css:line-height="13pt"
+                   css:text-align="center"
+                   css:font-size="11pt"
+                   css:hyphens="manual"
+                   css:margin-top="18pt"
+                   css:margin-bottom="18pt"
+                   css:text-align-last="center"
+                   name="tsfigureA1">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_figure_A2"
+                   css:line-height="13pt"
+                   css:text-align="center"
+                   css:font-size="11pt"
+                   css:hyphens="manual"
+                   css:margin-top="18pt"
+                   css:margin-bottom="18pt"
+                   css:text-align-last="center"
+                   name="tsfigureA2">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_figure_A3"
+                   css:line-height="13pt"
+                   css:text-align="center"
+                   css:font-size="11pt"
+                   css:hyphens="manual"
+                   css:margin-top="18pt"
+                   css:margin-bottom="18pt"
+                   css:text-align-last="center"
+                   name="tsfigureA3">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_figure_B1"
+                   css:line-height="13pt"
+                   css:text-align="center"
+                   css:font-size="11pt"
+                   css:hyphens="manual"
+                   css:margin-top="18pt"
+                   css:margin-bottom="18pt"
+                   css:text-align-last="center"
+                   name="tsfigureB1">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_figure_B2"
+                   css:line-height="13pt"
+                   css:text-align="center"
+                   css:font-size="11pt"
+                   css:hyphens="manual"
+                   css:margin-top="18pt"
+                   css:margin-bottom="18pt"
+                   css:text-align-last="center"
+                   name="tsfigureB2">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_figure_caption"
+                   css:line-height="13pt"
+                   css:text-align="left"
+                   css:font-size="11pt"
+                   css:margin-top="12pt"
+                   css:font-style="italic"
+                   name="tsfigurecaption">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_footnote"
+                   css:line-height="13pt"
+                   css:margin-left="14.2pt"
+                   css:text-indent="-14.2pt"
+                   css:text-align="justify"
+                   css:font-family="Times New Roman"
+                   css:font-size="8.5pt"
+                   name="tsfootnote">
+            <tabs>
+               <tab align="left" horizontal-position="14.2pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_heading_1"
+                   css:margin-bottom="13pt"
+                   remap="h2"
+                   css:font-family="Arial"
+                   css:font-weight="bold"
+                   css:letter-spacing="0.2pt"
+                   css:font-size="13.5pt"
+                   name="tsheading1"/>
+         <css:rule layout-type="para"
+                   native-name="ts_heading_2"
+                   css:line-height="14pt"
+                   css:text-align="left"
+                   css:font-size="12pt"
+                   css:page-break-after="avoid"
+                   css:hyphens="manual"
+                   css:margin-top="26pt"
+                   css:margin-bottom="13pt"
+                   remap="h3"
+                   css:font-family="Arial"
+                   css:font-weight="bold"
+                   css:letter-spacing="0.5pt"
+                   name="tsheading2">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_heading_3"
+                   css:line-height="13.5pt"
+                   css:text-align="left"
+                   css:font-size="11pt"
+                   css:hyphens="manual"
+                   css:margin-top="13pt"
+                   remap="h4"
+                   css:font-family="Arial"
+                   css:font-weight="bold"
+                   css:letter-spacing="0.3pt"
+                   name="tsheading3">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_headline_left"
+                   css:line-height="13pt"
+                   css:text-align="justify"
+                   css:font-size="11pt"
+                   name="tsheadlineleft">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_lineskip_1"
+                   css:line-height="13pt"
+                   css:text-align="justify"
+                   css:font-size="9.5pt"
+                   css:font-family="Times New Roman"
+                   name="tslineskip1">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_literature"
+                   css:line-height="13pt"
+                   css:text-align="justify"
+                   css:font-size="11pt"
+                   css:margin-left="14.2pt"
+                   css:text-indent="-14.2pt"
+                   name="tsliterature">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_motto"
+                   css:line-height="13pt"
+                   css:text-align="justify"
+                   css:font-size="8pt"
+                   css:margin-top="13pt"
+                   css:margin-bottom="13pt"
+                   css:margin-left="141.75pt"
+                   name="tsmotto">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_quotation"
+                   css:line-height="13pt"
+                   css:text-align="justify"
+                   css:font-size="8pt"
+                   css:margin-top="13pt"
+                   css:margin-bottom="13pt"
+                   name="tsquotation">
+            <tabs>
+               <tab align="left" horizontal-position="19.85pt"/>
+               <tab align="left" horizontal-position="28.35pt"/>
+            </tabs>
+         </css:rule>
+         <css:rule layout-type="para"
+                   native-name="ts_subheading_1"
+                   css:margin-bottom="26pt"
+                   css:font-family="Arial"
+                   css:letter-spacing="0.1pt"
+                   css:font-size="11pt"
+                   name="tssubheading1"/>
+         <css:rule layout-type="inline"
+                   native-name="Footnote Text Char"
+                   css:font-size="9pt"
+                   name="FootnoteTextChar"/>
+         <css:rule remap="superscript"
+                   layout-type="inline"
+                   native-name="footnote reference"
+                   name="Funotenzeichen"/>
+         <css:rule layout-type="inline"
+                   native-name="Hyperlink"
+                   css:color="#0000FF"
+                   css:text-decoration-style="solid"
+                   css:text-decoration-line="underline"
+                   name="Hyperlink"/>
+         <css:rule layout-type="inline"
+                   native-name="ts_author_name"
+                   css:font-weight="bold"
+                   name="tsauthorname"/>
+         <css:rule layout-type="inline"
+                   native-name="ts_italic"
+                   css:font-style="italic"
+                   name="tsitalic"/>
+         <css:rule layout-type="inline"
+                   native-name="ts_smallcaps"
+                   css:text-transform="none"
+                   css:font-variant="small-caps"
+                   name="tssmallcaps"/>
+      </css:rules>
+   </info>
+   <para/>
+</hub>

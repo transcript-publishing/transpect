@@ -323,8 +323,8 @@
                 mode="tei2html" priority="2">
     <xsl:param name="in-toc" as="xs:boolean?" tunnel="yes"/>
     <xsl:variable name="heading-level" select="tei2html:heading-level(.)"/>
-    <xsl:variable name="author" select="preceding-sibling::byline/persName" as="element(persName)*"/>
-    <xsl:variable name="subtitle" select="preceding-sibling::head[@type eq 'sub']" as="element(head)?"/>    
+    <xsl:variable name="author" select="preceding-sibling::byline[not(@rend = 'override')]/persName" as="element(persName)*"/>
+    <xsl:variable name="subtitle" select="following-sibling::head[@type eq 'sub'], preceding-sibling::head[@type eq 'sub']" as="element(head)*"/>    
     <xsl:element name="{if ($heading-level) then concat('h', $heading-level) else 'p'}">
       <xsl:apply-templates select="." mode="class-att"/>
       <xsl:apply-templates select="@* except @rend" mode="#current"/>
@@ -482,7 +482,7 @@
   <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))][not(parent::*[self::figure | self::table | self::lg])]" 
                 mode="toc" priority="3">
     <xsl:variable name="author" select="preceding-sibling::byline/persName" as="element(persName)*"/>
-    <xsl:variable name="subtitle" select="preceding-sibling::head[@type eq 'sub']" as="element(head)?"/>
+    <xsl:variable name="subtitle" select="following-sibling::head[@type eq 'sub'], preceding-sibling::head[@type eq 'sub']" as="element(head)*"/>
     <xsl:element name="{if(matches($tei2html:epub-type, '3')) then 'li' else 'p'}">
       <xsl:attribute name="class" select="concat('toc', tei2html:heading-level(.))"/>
       <a href="#{(@xml:id, generate-id())[1]}">
@@ -633,7 +633,7 @@
 
   <xsl:template match="seriesStmt/*" mode="tei2html" priority="2"/>
 
-  <xsl:template match="byline/affiliation | byline/email | byline/ref" mode="tei2html"/>
+  <xsl:template match="byline/affiliation | byline/email | byline/ref | byline/idno | byline[@rend='override']" mode="tei2html"/>
   
   <xsl:template match="tei:p[matches(@rend, 'tsquotation')][descendant::tei:lb]" mode="epub-alternatives">
     <!-- https://redmine.le-tex.de/issues/12371-->
@@ -749,9 +749,49 @@
     <xsl:value-of select="replace(., '^\p{Zs}+', '')"/>
   </xsl:template>
 
-  <xsl:template match="argument[@rend = 'abstract'] | div[@type = 'section'][@rend = 'keywords']" mode="tei2html">
+  <xsl:template match="argument[@rend = 'abstract'] | div[@type = 'section'][@rend = ('keywords', 'alternative-title')]" mode="tei2html">
     <!-- dissolve, https://redmine.le-tex.de/issues/13842 -->
     <xsl:apply-templates select="node()"  mode="#current"/>
   </xsl:template>
+
+  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]" mode="tei2html" priority="5">
+    <xsl:apply-templates select="." mode="create-style-elts"/>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'subscript')]" mode="create-style-elts" priority="6">
+    <sub><xsl:next-match/></sub>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'superscript')]" mode="create-style-elts"  priority="5">
+    <sup><xsl:next-match/></sup>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'italic')]" mode="create-style-elts"  priority="4">
+    <i><xsl:next-match/></i>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'bold')]" mode="create-style-elts"  priority="3">
+    <b><xsl:next-match/></b>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'underline')]" mode="create-style-elts"  priority="2">
+    <u><xsl:next-match/></u>
+  </xsl:template>
+
+  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]" mode="create-style-elts" priority="1">
+    <xsl:apply-templates select="@* except @rend" mode="tei2html"/>
+    <xsl:if test="some $t in tokenize(@rend, '\s') satisfies $t[not(. = ('italic', 'bold', 'underline', 'superscript','subscript'))]">
+      <xsl:attribute name="class" select="normalize-space(replace(@rend, '(italic|bold|underline|superscript|subscript)\s?', ''))"/>
+    </xsl:if>
+    <xsl:apply-templates select="node()" mode="tei2html"/>
+  </xsl:template>
+<!--
+  <xsl:template match="hi[@rend = 'bold']" mode="tei2html" priority="5">
+    <b>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </b>
+  </xsl:template>-->
+
+  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2html"/>
 
 </xsl:stylesheet>

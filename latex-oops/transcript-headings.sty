@@ -46,6 +46,9 @@
   \tpSetProperty{toc-indent}{}%
   \tpSetProperty{toc-title-format}{\sffamily\sbseries\huge}%
   \tpSetProperty{toc-heading}{%
+    \ifdim\dimexpr\pagegoal-\pagetotal<7\baselineskip\relax%
+      \clearpage%
+    \fi
     \tpUseProperty{toc-title-format}%
     \tpTocLink{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}%
       \tpUseComp{TocTitle}}\nobreak}%
@@ -75,7 +78,7 @@
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{title-format}{\sffamily\sbseries\fontsize{17.5bp}{25.6bp}\selectfont}%
-  \tpSetzProperty{quote-block-format}{%
+  \tpSetProperty{quote-block-format}{%
     \hfill\hbox{\vbox{%
         \rightskip\z@
         \hsize.5\textwidth
@@ -125,9 +128,13 @@
   \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\large}%
   \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapsubtocfamily\large}%
   \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
+  \tpSetProperty{toc-number-format}{\normalfont\normalsize\sfchapwidefamily}%
   \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
+    \ifdim\dimexpr\pagegoal-\pagetotal\relax<4\baselineskip\relax
+      \clearpage%
+    \fi
     % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
     \vtop{\strut%
       \tpUseProperty{toc-title-format}%
@@ -148,7 +155,7 @@
       \strut\tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
       \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
-      \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+      \tpUseProperty{toc-number-format}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
     }
   }%
@@ -161,23 +168,27 @@
   \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
   \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
   \tpSetProperty{quote-block-format}{%
-      \hfill\hbox{%
-        \vbox{%
-          \rightskip\z@
-          \hsize.5\textwidth
-          \normalfont
-          \normalsize
-          \nsfwiderfamily
-          \tpUseComp{QuoteText}\par
-          %% Zitat-Quelle
-          \tpIfComp{QuoteSource}{%
-            {\itshape\tpUseComp{QuoteSource}}%
-          }{}%
-        }%
+    \hfill\hbox{%
+      \vbox{%
+        \rightskip\z@
+        \hsize.5\textwidth
+        \normalfont
+        \normalsize
+        \nsfwiderfamily
+        \tpUseComp{QuoteText}\par
+        %% Zitat-Quelle
+        \tpIfComp{QuoteSource}{%
+          {\itshape\tpUseComp{QuoteSource}}%
+        }{}%
       }%
     }%
+  }%
   \tpSetProperty{heading-block}{%
     %% Titel
+    \ifjournal
+    \else
+      \thispagestyle{empty}
+    \fi
     \leftskip\z@
     \leavevmode
     \bgroup
@@ -234,6 +245,7 @@
       \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
     }{%
       \global\let\@authormark\@empty%
+      \xdef\@authormark{\tpRunBookTitle}%
       \if@frontmatter%
       \else
         \if@mainmatter
@@ -250,7 +262,9 @@
 \global\newbox\@articlefooterbox%
 
 \tpDeclareHeading[chapter]{0}{contribution}{%
-  \tpSetProperty{extended}{false}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
+
+  \tpSetProperty{extended}{true}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
+  %\thispagestyle{articlehead}
   
   % Artikel-DOI für die Zeitschriftenauftaktseite. Aus den Makros der Überschrift übernommen.
   % Muss global und ausgewertet sein, damit das Seitenlayout ps@articlehead darauf zugreifen kann.
@@ -275,7 +289,6 @@
       \null\nobreak\vskip\dimexpr\headingsep-.45mm\relax%
     \fi
     \thispagestyle{articlehead}
-    
     % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
     \global\setbox\@licenceTextFooter = \hbox{}
     
@@ -312,14 +325,16 @@
       \par\vskip\baselineskip
       {\mdseries\sffamily\tpIfComp{KeywordsTitle}{\tpUseComp{KeywordsTitle}}{Keywords}:}\enskip
       {\itshape\tpUseComp{Keywords}\par}%
-    }
-    {}%
+    }{}%
+    \goodbreak%
   }%
 }
 
 % Mit 13475 auskommentiert, gegengeprüft mit 13412.
+% Mit 14272 wieder reingenommen. Gegengeprüft mit Ticketnummer darüber.
 %\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
 %\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
+\tpAddToHook{toc-after-hook-part}{\nopagebreak}%
 
 
 \tpDeclareHeading{1}{section}{%
@@ -335,6 +350,7 @@
   \ifcollection\else
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
+    \tpSetProperty{toc-before-entry}{\nopagebreak}%
     \tpSetProperty{toc-heading}{%
       \tpUseProperty{toc-title-format}%
       \tpIfComp{TocNumber}{%
@@ -358,6 +374,7 @@
   \tpSetProperty{number-sep}{\enskip}%
   \tpSetProperty{after-skip}{12.8bp}%
   \tpSetProperty{title-format}{\sffamily\LARGE\sbseries}%
+  \tpSetProperty{subtitle-format}{\normalfont\sffamily\LARGE}%
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
   \tpSetProperty{quote-block-format}{%
     \hfill\vbox{%
@@ -374,8 +391,8 @@
       \interlinepenalty\@M
       \tpUseProperty{title-format}%
       \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
-      \tpUseComp{Title}\par
-      \tpIfComp{Subtitle}{\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
+      \tpUseComp{Title}\par\nopagebreak%
+      \tpIfComp{Subtitle}{\tpUseComp{subtitle-format}\tpUseComp{Subtitle}\par\addvspace{12.8bp}\nopagebreak}{}%
       \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
     \egroup
     \nopagebreak
@@ -389,6 +406,7 @@
   }%
   \tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
   \tpSetProperty{bookmark}{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\enskip}{}\tpUseComp{TocTitle}}%
+  \tpSetProperty{after-heading-block}{\nopagebreak}
 }
 
 \tpDeclareHeading[section]{2}{subsection}{%
@@ -412,16 +430,17 @@
   \fi
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
+    \@tempdima=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
+    \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+    \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
+    \ifdim\@tempdimb<\@tempdimc\relax
+      \@tempdimb=\@tempdimc\relax%
+    \fi%
     \tpIfComp{TocNumber}{%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-      \@tempdima=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
-      \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
-      \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
-      \ifdim\@tempdimb<\@tempdimc\relax
-        \@tempdimb=\@tempdimc\relax%
-      \fi%
       \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
     }{%\leftskip\z@%
+      \leftskip\@tempdimb%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
     }%
     \tpTocLink{\tpUseComp{TocTitle}}%

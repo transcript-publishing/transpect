@@ -98,7 +98,7 @@
       </tr:store-debug>
       
       <tr:file-uri name="file-uri-from-cover-path">
-        <p:with-option name="filename" select="concat(/c:directory/@xml:base, //c:file[1]/@name)"/>
+        <p:with-option name="filename" select="concat(/c:directory/@xml:base, //(c:file[contains(@name, '.jpg')], c:file[contains(@name, '.png')], c:file[not(matches(@name, '\.(png|jpg)'))])[1]/@name)"/>
       </tr:file-uri>
       
       <tr:store-debug pipeline-step="epub/02_evaluated-cover-path">

@@ -477,5 +477,42 @@
                                                 not(../preceding-sibling::*[1][matches(., ':\p{Zs}*$')])) then 'float' else 'anchor'"/>
   </xsl:template>
 
+  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|line-?through|superscript|subscript')]" mode="tei2bits" priority="5">
+    <xsl:apply-templates select="." mode="create-style-elts"/>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'subscript')]" mode="create-style-elts" priority="7">
+    <sub><xsl:next-match/></sub>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'superscript')]" mode="create-style-elts"  priority="6">
+    <sup><xsl:next-match/></sup>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'italic')]" mode="create-style-elts"  priority="5">
+    <italic><xsl:next-match/></italic>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'bold')]" mode="create-style-elts"  priority="4">
+    <bold><xsl:next-match/></bold>
+  </xsl:template>
+
+  <xsl:template match="hi[matches(@rend, 'line-?through')]" mode="create-style-elts"  priority="2">
+    <strike><xsl:next-match/></strike>
+  </xsl:template>
+
+  <xsl:template match="hi[contains(@rend, 'underline')]" mode="create-style-elts"  priority="2">
+    <underline><xsl:next-match/></underline>
+  </xsl:template>
+
+  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]" mode="create-style-elts" priority="1">
+    <xsl:apply-templates select="@* except @rend" mode="tei2bits"/>
+    <xsl:if test="some $t in tokenize(@rend, '\s') satisfies $t[not(. = ('italic', 'bold', 'underline', 'superscript','subscript', 'line-through'))]">
+      <xsl:attribute name="class" select="normalize-space(replace(@rend, '(italic|bold|underline|superscript|subscript|line-through)\s?', ''))"/>
+    </xsl:if>
+    <xsl:apply-templates select="node()" mode="tei2bits"/>
+  </xsl:template>
+
+ <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript|line-through')]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2bits"/>
 
 </xsl:stylesheet>

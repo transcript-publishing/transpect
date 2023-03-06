@@ -12,7 +12,8 @@
   <xsl:param name="s9y3-path" as="xs:string?"/>
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
-  <xsl:param name="caption-pos" as="xs:string?"/>
+  <xsl:param name="table-caption-pos" as="xs:string?"/>
+  <xsl:param name="figure-caption-pos" as="xs:string?"/>
   <xsl:param name="sans-font"   as="xs:string?"/>
   
   <xsl:variable name="create-customer-toctitles" select="true()" as="xs:boolean"/>
@@ -33,6 +34,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Autoreninformationen']" />
   <xsl:variable name="editor-info" as="element(dbk:keyword)*"
                 select="$metadata/dbk:keyword[@role eq 'Herausgeberinformationen']" />
+  <xsl:variable name="series-editors" as="element(dbk:keyword)*"
+                select="$metadata/dbk:keyword[@role eq 'Reihenherausgeber'][normalize-space()]"/>
   <!-- title metadata -->
   <xsl:variable name="title" as="element(*)?"
                 select="$metadata/dbk:keyword[@role eq 'Titel'][not(. = 'Fallback')]" />
@@ -44,8 +47,14 @@
                 select="$metadata/dbk:keyword[@role eq 'Untertitel']"/>
   <xsl:variable name="shorttitle" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Kurztitel']"/>
-  <xsl:variable name="additional-info" as="element(dbk:keyword)?"
-                select="$metadata/dbk:keyword[@role eq 'Zusatzinfos']"/>
+  <xsl:variable name="additional-info1" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role = 'ZusatzinfosI']"/>
+  <xsl:variable name="additional-info2" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role eq 'ZusatzinfosII']"/>
+  <xsl:variable name="additional-info3" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role = ('Zusatzinfos', 'ZusatzinfosIII')]"/>
+  <xsl:variable name="additional-info4" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role eq 'ZusatzinfosIV']"/>
   <!-- cover image -->
   <xsl:variable name="cover-href" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Cover']"/>
@@ -208,8 +217,10 @@
     </xsl:for-each>
     <xsl:value-of select="concat('\usepackage[lay=',
                                  lower-case($layout),
-                                 ',captions=',
-                                 if($caption-pos eq 'bottom') then 'bottom' else 'top',
+                                 ',captions_figure=',
+                                 if($figure-caption-pos eq 'bottom') then 'bottom' else 'top',
+                                 ',captions_table=',
+                                 if($table-caption-pos eq 'bottom') then 'bottom' else 'top',
                                  if($sans-font eq 'noto-condensed') then ',altFonts' else (),
                                  ']{transcript}&#xa;')"/>
     
@@ -266,7 +277,10 @@
       xml2tex:meta2tex($dedication, (), 'tpDedication'),
       xml2tex:meta2tex($editorial, (), 'tpEditorial'),
       xml2tex:meta2tex($edition-note, (), 'tpEditionNote'),
-      xml2tex:meta2tex($additional-info, (), 'tpAddNoteIII'),
+      xml2tex:meta2tex($additional-info1, (), 'tpAddNoteI'),
+      xml2tex:meta2tex($additional-info2, (), 'tpAddNoteII'),
+      xml2tex:meta2tex($additional-info3, (), 'tpAddNoteIII'),
+      xml2tex:meta2tex($additional-info4, (), 'tpAddNoteIV'),
       xml2tex:meta2tex($publisher-website, (), 'tpPubWeb'),
       xml2tex:meta2tex($doi, (), 'tpDOI'),
       xml2tex:meta2tex($pub-year, (), 'tpYear'),
@@ -419,6 +433,10 @@
     </rule>
   </template>
 
+
+
+  <xsl:variable name="dialogue-style" select="'^[a-z]+dialogue'" as="xs:string"/>
+
   <template context="dbk:blockquote[dbk:para][not(matches(@role, '^[a-z]+_?verse.*$'))]
                     |dbk:blockquote[matches(@role, $dialogue-style)]">
     <rule name="quotation" type="env">
@@ -492,9 +510,9 @@
       <xsl:when test="$is-collection">-->
 <!--        links: tpAuthor/tpRunAuthorNameList, wenn es den nicht gibt: \tp(Run)Title | Rechts: \tp(Run)Title-->
 
-        <xsl:if test="dbk:abbrev[matches(@role, $col-author-style)] or (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]">
+        <xsl:if test="dbk:titleabbrev[matches(@role, $col-author-style)] or (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]">
           <rule name="tpRunAuthorNameList" type="cmd" break-before="1">
-            <param select="(dbk:abbrev[matches(@role, $col-author-style)], 
+            <param select="(dbk:titleabbrev[matches(@role, $col-author-style)], 
                             (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]/dbk:personname/dbk:othername
                             )[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
               <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
@@ -504,11 +522,11 @@
             </param>
           </rule>
         </xsl:if>
-        <xsl:if test="dbk:abbrev[matches(@role, $col-head-style)] 
+        <xsl:if test="dbk:titleabbrev[matches(@role, $col-head-style)] 
                       or  
                       dbk:title[descendant::*[self::dbk:footnote | self::dbk:br]]">
           <rule name="tpRunTitle" type="cmd" break-before="1">
-            <param select="(dbk:abbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+            <param select="(dbk:titleabbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
               <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
               <with-param name="remove-indexterm" select="true()" as="xs:boolean" tunnel="yes"/>
@@ -516,12 +534,12 @@
             </param>
           </rule>
         </xsl:if>
-        <xsl:if test="(dbk:title[descendant::*[self::dbk:footnote]]/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:abbrev[matches(@role, $col-head-style)]))
+        <xsl:if test="(dbk:title[descendant::*[self::dbk:footnote]]/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:titleabbrev[matches(@role, $col-head-style)]))
                       or 
-                      dbk:abbrev[matches(@role, $col-head-style)]">
+                      dbk:titleabbrev[matches(@role, $col-head-style)]">
           <rule name="tpRunNumber" type="cmd" break-before="1">
-            <param select="if (dbk:abbrev[matches(@role, $col-head-style)])
-                           then dbk:abbrev[matches(@role, $col-head-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()
+            <param select="if (dbk:titleabbrev[matches(@role, $col-head-style)])
+                           then dbk:titleabbrev[matches(@role, $col-head-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()
                            else dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()">
               <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
@@ -617,7 +635,7 @@
   
   <xsl:function name="tr:heading-level" as="xs:string?">
     <xsl:param    name="heading" as="element()"/>
-    <xsl:variable name="style"   as="attribute(role)?" select="$heading/dbk:info/dbk:title/@role"/>
+    <xsl:variable name="style"   as="attribute(role)?" select="$heading/dbk:info/dbk:title[1]/@role"/>
     <xsl:choose>
       <xsl:when test="$style = 'tsheadingpart'">
         <xsl:sequence select="'part'"/>

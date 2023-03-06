@@ -46,6 +46,9 @@
   \tpSetProperty{toc-indent}{}%
   \tpSetProperty{toc-title-format}{\sffamily\sbseries\huge}%
   \tpSetProperty{toc-heading}{%
+    %\ifdim\dimexpr\pagegoal-\pagetotal<7\baselineskip\relax%
+    %  \clearpage%
+    %\fi
     \tpUseProperty{toc-title-format}%
     \tpIfComp{TocNumber}{%
       \@tempdima=\csname tp-heading-toc-number--1-maxwd\endcsname%
@@ -70,12 +73,8 @@
     \let\\\@centercr
     \rightskip\z@skip\relax
     \parfillskip\@flushglue
-    %\par
-    %\edef\measurepage{\the\dimexpr\pagegoal-\pagetotal-\baselineskip\relax}%
-    %\typeout{TOC BEFORE ENTRY: \measurepage}
-    %\ifdim\measurepage<7\baselineskip\relax\newpage\fi%
   }%
-  \tpSetProperty{toc-after-entry}{\par\nobreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nobreak}% Thing at the end of the entry, after the page number
+  \tpSetProperty{toc-after-entry}{\par\nobreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nobreak\nopagebreak}% Thing at the end of the entry, after the page number
 
   \tpSetProperty{before-heading}{%
     \cleardoublepage
@@ -86,6 +85,7 @@
     \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
     \ifcollection \global\let\@authormark\@empty\fi
   }%
+  
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{title-format}{\sffamily\sbseries\fontsize{17.5bp}{25.6bp}\selectfont}%
@@ -114,10 +114,12 @@
       \vskip-2\baselineskip
     }{}%
   }%
+  
   \tpSetProperty{after-heading-block}{\vfill}%
 }
 
-\tpAddToHook{toc-after-hook-part}{\nopagebreak}%
+\tpAddToHook{toc-after-hook-part}{\nopagebreak}% Wirkt leider nicht zuverlässig.
+
 
 \tpDeclareHeading{0}{chapter}{%
   % Ticket 13717.
@@ -133,12 +135,17 @@
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-margin-right}{2em}% Begrenzt die Breite, auf der Titel und Untertitel erscheinen können. 2 em sind dann der Platz, auf dem die Seitenzahl »übersteht«.
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\large}%
-  \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapsubtocfamily\large}%
+% \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\large}%
+% \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapsubtocfamily\large}%
+  \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\normalsize}%
+  \tpSetProperty{toc-subtitle-format}{\normalfont\normalsize\sfchapsubtocfamily}%
   \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
   \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-heading}{%
+    %\ifdim\dimexpr\pagegoal-\pagetotal\relax<4\baselineskip\relax
+    %  \clearpage%
+    %\fi
     % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
     \vtop{\strut%
       \tpUseProperty{toc-title-format}%
@@ -161,7 +168,7 @@
       \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
       \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
-    }
+    }%
   }%
 
   %% Format PDF-Bookmarks
@@ -243,12 +250,13 @@
     \tpIfComp{RunAuthorNameList}{%
       \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
     }{%
-      \global\let\@authormark\@empty%
+      \global\let\@authormark\@empty
+      \xdef\@authormark{\tpRunBookTitle}%
       \if@frontmatter%
       \else
         \if@mainmatter
         \else
-          \xdef\@partmark{\tpUseComp{Title}}
+          \xdef\@authormark{\tpUseComp{Title}}
         \fi
       \fi
     }%
@@ -269,14 +277,15 @@
     \tpIfComp{Keywords}{%
       \par\vskip\baselineskip
       {\mdseries\sffamily\tpIfComp{KeywordsTtitle}{\tpUseComp{KeywordsTitle}}{Keywords}:}\enskip
-      {\itshape\tpUseComp{Keywords}\par}}
-      {}%
+      {\itshape\tpUseComp{Keywords}\par}%
+    }{}%
+    \goodbreak%
   }%
 }
 
 % Mit 13475 auskommentiert, gegengeprüft mit 13412.
 %\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
-%\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
+%\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}% Mindestens eine Sectionüberschrift nach Kapitelüberschrift und vor Seitenumbruch.
 
 
 \tpDeclareHeading{1}{section}{%
@@ -289,7 +298,8 @@
     \fi
   \fi
 
-  \ifcollection\else
+  \ifcollection%
+  \else%
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
     \tpSetProperty{toc-heading}{%
@@ -315,6 +325,7 @@
   \tpSetProperty{number-sep}{\enskip}%
   \tpSetProperty{after-skip}{12.8bp}%
   \tpSetProperty{title-format}{\sffamily\LARGE\sbseries}%
+  \tpSetProperty{subtitle-format}{\normalfont\sffamily\LARGE}%
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
   \tpSetProperty{heading-block}{%
     \savenotes
@@ -324,7 +335,7 @@
       \tpUseProperty{title-format}%
       \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
       \tpUseComp{Title}\par
-      \tpIfComp{Subtitle}{\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
+      \tpIfComp{Subtitle}{\tpUseComp{subtitle-format}\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
       \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
     \egroup
     \nopagebreak
@@ -366,16 +377,17 @@
   \fi
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
+    \@tempdima=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
+    \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+    \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
+    \ifdim\@tempdimb<\@tempdimc\relax
+      \@tempdimb=\@tempdimc\relax%
+    \fi%
     \tpIfComp{TocNumber}{%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-      \@tempdima=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
-      \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
-      \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
-      \ifdim\@tempdimb<\@tempdimc\relax
-        \@tempdimb=\@tempdimc\relax%
-      \fi%
       \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
     }{%\leftskip\z@%
+      \leftskip\@tempdimb%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
     }%
     \tpTocLink{\tpUseComp{TocTitle}}%

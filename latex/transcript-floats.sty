@@ -38,22 +38,76 @@
   \tpSetProperty{intext-skip-top}{2\baselineskip}%
   \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
   \tpSetProperty{numbering}{}% keine automatische Nummerierung von Gleitobjekten!
-  \ifx\ts@caps\tp@str@bottom
-    \tpSetProperty{caption-top}{}%
-    \tpSetProperty{caption-bottom}{%
-      \tpIfComp{Number}{{\tpUseProperty{number-format}\tpUseComp{Number}\tpUseProperty{number-sep}}}{}%
-      \tpUseComp{Caption}\par%
-      \tpIfComp{Legend}{{\tpUseProperty{legend-format}\tpUseComp{Legend}}}{}%
-      \tpIfComp{Source}{%
-        \tpIfComp{Legend}{\par\nopagebreak}{}%
-        {\tpUseProperty{source-format}%
-          \tpUseComp{Source}}}{}}%
+  \ifcsname ts@caps@figure\endcsname%
+  \else
+    \let\ts@caps@figure\ts@caps%
   \fi
-  %% Parameter für Abbindungs- und Tabellenverzeichnisse
+  \ifcsname ts@caps@table\endcsname%
+  \else
+    \let\ts@caps@table\ts@caps%
+  \fi
+  \ifcsname tp@captype\endcsname
+    \expandafter\ifx\csname ts@caps@\tp@captype\endcsname\tp@str@bottom
+      \tpSetProperty{caption-top}{}%
+      \tpSetProperty{caption-bottom}{%
+        \bgroup
+          \normalsize\itshape%
+          \tpIfComp{Number}{%
+            {%
+              \tpUseProperty{number-format}\tpUseComp{Number}%
+              \tpIfComp{Caption}{%
+                \tpUseProperty{number-sep}%
+              }{%
+                \par%
+              }%
+            }%
+          }{}%
+          \tpIfComp{Caption}{%
+            \tpUseComp{Caption}\par%
+          }{}%
+          \tpIfComp{Legend}{%
+            {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
+          }{}%
+        \egroup
+        \tpIfComp{Source}{%
+          \tpIfComp{Legend}{%
+            \par\nopagebreak%
+          }{}%
+          {\tpUseProperty{source-format}\tpUseComp{Source}}%
+        }{}%
+      }%
+    \else
+      \tpSetProperty{caption-bottom}{%
+        \tpIfComp{Source}{%
+          \tpIfComp{Legend}{%
+            \par\nopagebreak%
+          }{}%
+          {\tpUseProperty{source-format}\tpUseComp{Source}}%
+        }{}%
+      }%
+      \tpSetProperty{caption-top}{%
+        \tpIfComp{Number}{%
+          {%
+            \tpUseProperty{number-format}\tpUseComp{Number}%
+            \tpIfComp{Caption}{%
+              \tpUseProperty{number-sep}%
+            }{}%
+          }%
+        }{}%
+        \tpIfComp{Caption}{%
+          \tpUseComp{Caption}%
+        }{}%
+        \tpIfComp{Legend}{%
+          {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
+        }{}%
+      }%
+    \fi
+  \fi
+  %% Parameter für Abbildungs- und Tabellenverzeichnisse
   \tpSetProperty{list-of-caption-format}{\sffamily}%
   \tpSetProperty{list-of-indent}{0pt}%
   \tpSetProperty{list-of-margin-left}{0pt}%
-  \tpSetProperty{list-of-margin-right}{5em}%
+  \tpSetProperty{list-of-margin-right}{1.2em plus 1fil}%
   \tpSetProperty{list-of-page-sep}{\mydotfill\kern.5\p@}% siehe transcript-headings.sty für Def von \mydotfill
   \tpSetProperty{list-of-caption-format}{\sffamily}%
   \tpSetProperty{list-of-number-sep}{:\enskip}%
@@ -71,11 +125,46 @@
 
 %% gilt nur für Abbildungen:
 \tpDeclareFloat{tpFigure}{figure}{lof}{%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}{%
+      \@tempdima=\csname tp-tpFigure-list-of-number-maxwd\endcsname
+      \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
+        \tpUseComp{ListofNumber}%
+        \tpIfComp{ListofCaption}{%
+          \tpUseProperty{list-of-number-sep}%
+        }{}%
+        \hss%
+      }%
+      \tpIfComp{ListofCaption}{\tpUseComp{ListofCaption}}{}%
+    }{%
+      \leftskip0pt \tpUseComp{ListofCaption}%
+    }%
+    \nobreak\tpUseProperty{list-of-page-sep}\hbox to 1em{\hss\tpTocLink{\tpUseComp{ListofPage}}}%
+  }%
 }
 
 %% gilt nur für Tabellen:
 \tpDeclareFloat{tpTable}{table}{lot}{%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}{%
+      \@tempdima=\csname tp-tpTable-list-of-number-maxwd\endcsname
+      \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
+        \tpUseComp{ListofNumber}%
+        \tpIfComp{ListofCaption}{%
+          \tpUseProperty{list-of-number-sep}%
+        }{}%
+        \hss%
+      }%
+      \tpIfComp{ListofCaption}{\tpUseComp{ListofCaption}}{}%
+    }{%
+      \leftskip0pt \tpUseComp{ListofCaption}%
+    }%
+    \nobreak\tpUseProperty{list-of-page-sep}\hbox to 1em{\hss\tpTocLink{\tpUseComp{ListofPage}}}%
+  }%
 }
+
 
 %% Klassen für Abbildungen:
 \tpDeclareClass{A}{\tpSetProperty{margin-left}{0mm}\tpSetProperty{margin-right}{0mm}}
