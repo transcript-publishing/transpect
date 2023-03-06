@@ -189,5 +189,8 @@
     <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
 
+  <xsl:template match="para[matches(@role, '^ts(two|one)column$')]" mode="hub:split-at-tab">
+    <xsl:processing-instruction name="{$pi-xml-name}" select="replace(@role, '^ts', '\\')"/>
+  </xsl:template>
 
 </xsl:stylesheet>

@@ -31,15 +31,18 @@
   <css:rule layout-type="para" native-name="ts_footnote" name="tsfootnote"/>
   <css:rule layout-type="para" native-name="ts_ded" name="tsded"/>
   <css:rule layout-type="para" native-name="ts_dedication" name="tsdedication"/>
-  
+  <css:rule layout-type="para" native-name="ts_pi" name="tspi"/>
+  <css:rule layout-type="para" native-name="ts_twocolumn" name="tstwocolumn"/>  
+  <css:rule layout-type="para" native-name="ts_onecolumn" name="tsonecolumn"/>  
+
   <css:rule layout-type="para" native-name="ts_journal_review_bookinfo" name="tsjournalreviewbookinfo"/>
   <css:rule layout-type="para" native-name="ts_journal_review_author" name="tsjournalreviewauthor"/>
   <css:rule layout-type="para" native-name="ts_jorunal_review_heading" name="tsjorunalreviewheading"/>
   <css:rule layout-type="para" native-name="ts_jorunal_review_subheading" name="tsjorunalreviewsubheading"/>
 
-  <css:rule layout-type="para" native-name="ts_journal_twocolumn" name="tsjournaltwocolumn" regex="tsjournaltwocolumn(end|start)?"/>
   <css:rule layout-type="para" native-name="ts_keywords" name="tskeywords"/>
   <css:rule layout-type="para" native-name="ts_meta_doi" name="tsmetadoi"/>
+  <css:rule layout-type="para" native-name="ts_meta_journal" name="tsmetajournal"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_title" name="tsmetajournaltitle"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_year" name="tsmetajournalyear"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_issue" name="tsmetajournalissue"/>

@@ -34,6 +34,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Autoreninformationen']" />
   <xsl:variable name="editor-info" as="element(dbk:keyword)*"
                 select="$metadata/dbk:keyword[@role eq 'Herausgeberinformationen']" />
+  <xsl:variable name="series-editors" as="element(dbk:keyword)*"
+                select="$metadata/dbk:keyword[@role eq 'Reihenherausgeber'][normalize-space()]"/>
   <!-- title metadata -->
   <xsl:variable name="title" as="element(*)?"
                 select="$metadata/dbk:keyword[@role eq 'Titel'][not(. = 'Fallback')]" />
@@ -45,8 +47,14 @@
                 select="$metadata/dbk:keyword[@role eq 'Untertitel']"/>
   <xsl:variable name="shorttitle" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Kurztitel']"/>
-  <xsl:variable name="additional-info" as="element(dbk:keyword)?"
-                select="$metadata/dbk:keyword[@role eq 'Zusatzinfos']"/>
+  <xsl:variable name="additional-info1" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role = 'ZusatzinfosI']"/>
+  <xsl:variable name="additional-info2" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role eq 'ZusatzinfosII']"/>
+  <xsl:variable name="additional-info3" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role = ('Zusatzinfos', 'ZusatzinfosIII')]"/>
+  <xsl:variable name="additional-info4" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role eq 'ZusatzinfosIV']"/>
   <!-- cover image -->
   <xsl:variable name="cover-href" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Cover']"/>
@@ -269,7 +277,10 @@
       xml2tex:meta2tex($dedication, (), 'tpDedication'),
       xml2tex:meta2tex($editorial, (), 'tpEditorial'),
       xml2tex:meta2tex($edition-note, (), 'tpEditionNote'),
-      xml2tex:meta2tex($additional-info, (), 'tpAddNoteIII'),
+      xml2tex:meta2tex($additional-info1, (), 'tpAddNoteI'),
+      xml2tex:meta2tex($additional-info2, (), 'tpAddNoteII'),
+      xml2tex:meta2tex($additional-info3, (), 'tpAddNoteIII'),
+      xml2tex:meta2tex($additional-info4, (), 'tpAddNoteIV'),
       xml2tex:meta2tex($publisher-website, (), 'tpPubWeb'),
       xml2tex:meta2tex($doi, (), 'tpDOI'),
       xml2tex:meta2tex($pub-year, (), 'tpYear'),

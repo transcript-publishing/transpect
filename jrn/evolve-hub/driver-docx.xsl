@@ -14,7 +14,54 @@
   version="2.0">
   
   <xsl:import href="../../evolve-hub/driver-docx.xsl"/>  
-    
+
+  <xsl:template match="/hub/info/keywordset[@role = 'titlepage']" mode="hub:split-at-tab">
+    <!-- map meta table to keywords -->
+    <xsl:variable name="meta-table" as="element(informaltable)*" select="/hub/informaltable[some $p in descendant::para satisfies $p[@role = 'tsmetajournal']]"/>
+    <xsl:choose>
+      <xsl:when test="exists($meta-table)">
+        <keywordset role="titlepage">
+          <xsl:apply-templates select="$meta-table//row" mode="meta-to-keyword"/>
+        </keywordset>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="row" mode="meta-to-keyword">   
+    <keyword role="{css:compatible-name(normalize-space(string-join(entry[1]/node())))}">
+      <xsl:apply-templates select="entry[2]/node()" mode="hub:split-at-tab"/>
+    </keyword>
+  </xsl:template>
+
+  <xsl:function name="css:compatible-name" as="xs:string">
+    <xsl:param name="input" as="xs:string"/>
+    <xsl:sequence select="replace(  
+                                  replace(
+                                          replace(
+                                                  normalize-unicode($input, 'NFKD'), 
+                                                  '\p{Mn}', 
+                                                  ''
+                                                  ), 
+                                          '[^-_a-z0-9]', 
+                                          '_', 
+                                          'i'
+                                          ),
+                                  '^(\I)',
+                                  '_$1'
+                                  )"/>
+  </xsl:function>
+
+  <xsl:template match="para[@role = 'tsmetajournal']//@*[not(name() = ('css:font-weight', 'css:font-style', 'css:text-decoration'))]" priority="5" mode="hub:split-at-tab"/>
+
+  <xsl:template match="row[entry[1][matches(para[@role = 'tsmetajournal'], 'Copyright|Bibliografische\s+Information')]]/entry[2]/phrase[@css:font-weight = 'bold']" priority="5" mode="hub:split-at-tab">
+    <xsl:apply-templates mode="#current"/>
+  </xsl:template>
+
+  <xsl:template match="/hub/informaltable[some $p in descendant::para satisfies $p[@role = 'tsmetajournal']]" mode="hub:split-at-tab"/>
+
   <xsl:template match="para[@role = ('tsmetadoi', 'tsmetachunkdoi')]" mode="hub:process-meta-sidebar">
     <biblioid class="doi" otherclass="{if(@role eq 'tsmetadoi') then 'journal-doi' else 'chunk-doi'}">
       <xsl:apply-templates select="@*" mode="#current"/>
