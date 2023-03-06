@@ -32,7 +32,7 @@
     </xsl:if>
    <xsl:sequence select="xml2tex:meta2tex(($journal-name, $title-for-running-head)[1], (), 'tpJournalName'),
                          xml2tex:meta2tex($series-editors, (), 'tpSeriesEditorNameList')"/>
-   <xsl:sequence select="'&#xa;\tpSeries{\includegraphics{logos/series/REIHENLOGO_KUL_ZIG.png'}}&#xa;'"/>
+   <xsl:sequence select="'&#xa;\tpSeries{\includegraphics{logos/series/REIHENLOGO_KUL_ZIG.png}}&#xa;'"/>
   </xsl:template>
 
 </set>
