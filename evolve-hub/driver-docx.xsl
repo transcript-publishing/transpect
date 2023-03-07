@@ -190,7 +190,7 @@
   </xsl:template>
 
   <xsl:template match="para[matches(@role, '^ts(two|one)column$')]" mode="hub:split-at-tab">
-    <xsl:processing-instruction name="{$pi-xml-name}" select="replace(@role, '^ts', '\\')"/>
+    <xsl:processing-instruction name="{$pi-xml-name}" select="concat(replace(@role, '^ts', '\\'), ' ')"/>
   </xsl:template>
 
 </xsl:stylesheet>
