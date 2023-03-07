@@ -20,6 +20,9 @@
   
   <xsl:variable name="is-collection" select="matches($basename,  'ts_[a-z]{3}_anth_')" as="xs:boolean"/>
   <xsl:variable name="is-journal" select="matches($basename,  'ts_jrn_[a-z]{3,4}_')" as="xs:boolean"/>
+  <xsl:variable name="series-options" select="()" as="xs:string">
+    <!-- add series specific usepackage options. for example journal_series=zig -->
+  </xsl:variable>
 
   <!-- see the wiki link below for details
        https://redmine.le-tex.de/projects/transpect-typesetter/wiki/Titelei -->
@@ -148,7 +151,7 @@
   <xsl:variable name="copyright-note" as="element()?"
                 select="if ($metadata/dbk:keyword[@role eq 'Copyright'][dbk:para] 
                             and 
-                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')])) 
+                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')]))
                         then $metadata/dbk:keyword[@role eq 'Copyright']/*:para[1] 
                         else $metadata/dbk:keyword[@role eq 'Copyright']"/>
 <!--    https://redmine.le-tex.de/issues/13098#change-72104-->
@@ -222,6 +225,7 @@
                                  ',captions_table=',
                                  if($table-caption-pos eq 'bottom') then 'bottom' else 'top',
                                  if($sans-font eq 'noto-condensed') then ',altFonts' else (),
+                                 $series-options,
                                  ']{transcript}&#xa;')"/>
     
     <xsl:if test="$langs = 'zh'">
