@@ -39,6 +39,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Herausgeberinformationen']" />
   <xsl:variable name="series-editors" as="element(dbk:keyword)*"
                 select="$metadata/dbk:keyword[@role eq 'Reihenherausgeber'][normalize-space()]"/>
+  <xsl:variable name="series-editor-info" as="element(dbk:keyword)*"
+                select="$metadata/dbk:keyword[@role eq 'Reihenherausgeberinformationen'][normalize-space()]"/>
   <!-- title metadata -->
   <xsl:variable name="title" as="element(*)?"
                 select="$metadata/dbk:keyword[@role eq 'Titel'][not(. = 'Fallback')]" />
@@ -257,6 +259,9 @@
       <xsl:variable name="pos" select="position()" as="xs:integer"/>
       <xsl:text>&#xa;\begin{tpSeriesEditor}</xsl:text>
       <xsl:value-of select="concat('&#xa;\tpFullName{', replace(normalize-space(.), '[\p{Zs}&#xa;]', '~'), '}')"/>
+      <xsl:value-of select="concat('&#xa;\tpBio{', 
+                                                normalize-space(if(count($series-editors/*) gt 1) then xml2tex:meta-remove-links-etc($series-editor-info/*[$pos]) else xml2tex:meta-remove-links-etc($series-editor-info)), 
+                                                '}&#xa;')"/>
       <xsl:text>&#xa;\end{tpSeriesEditor}&#xa;</xsl:text>
     </xsl:for-each>
     <xsl:sequence select="
