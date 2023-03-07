@@ -113,7 +113,7 @@
         \justify
         {\itshape\tpUseProperty{funding-block}}%
         \tpIfComp{AddNoteII}{\tpUseComp{AddNoteII}\par\vskip\baselineskip}%
-        \vfill
+        \null\vfill
         \tpUseProperty{imprint-format}%
         \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
         \tpUseProperty{licence}%
@@ -238,7 +238,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
-    \tpIfComp{Copyright}{{\sffamily\sbseries\tpUseComp{Copyright}}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
+    \tpIfComp{Copyright}{{\sffamily\tpUseComp{Copyright}}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
     \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}% CopyrightDisclaimer enthält aktuell »© [Autorenname]«. Keine Leerzeile davor mit Ticket 13870. Beobachten.
   }
   \tpSetProperty{publisher}{%
