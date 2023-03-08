@@ -29,7 +29,7 @@
       \letcs\tpTotalCount{tp#1Cnt}%
       \expandafter\xdef\csname tp@\tp@cur@cont @#1NameList\endcsname{%
         % 14238: Umbrüche vor Herausgeberkürzel verhindern.
-        \tpUseComp{#1NameList}~\tpUseProperty{editor-suffix}%
+        \tpUseComp{#1NameList}~\ignorespaces\tpUseProperty{editor-suffix}%
       }%
     \fi%
   \fi%
@@ -37,7 +37,7 @@
 
 \tpDeclareTitlepage{%
   \tpSetProperty{editor-suffix-sgl}{\editorsuffixsglname}
-  \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}    
+  \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}
 
   \tpSetProperty{coverpage}{%
     \bgroup
@@ -59,6 +59,9 @@
     \fontsize{9.3}{12.5}\selectfont
   }%
   
+  %%%%%%%%%%
+  % ZiG – Zeitschrift für interkulturelle Germanistik
+  %%%%%%%%%%
   \ifx\ts@journal@series\ts@str@journal@zig
     \tpSetBabelLabel{german}{editorsuffixsgl}{}
     \tpSetBabelLabel{english}{editorsuffixsgl}{}
@@ -123,7 +126,124 @@
         \egroup
       \egroup
     }
+  \fi
   
+  %%%%%%%%%%
+  % AuA – Außeruniversitäre Aktion
+  %%%%%%%%%%
+  \ifx\ts@journal@series\ts@str@journal@aua
+    \tpSetBabelLabel{german}{editorsuffixsgl}{(Hg.)}
+    \tpSetBabelLabel{english}{editorsuffixsgl}{(ed.)}
+    \tpSetBabelLabel{german}{editorsuffixpl}{(Hg.)}
+    \tpSetBabelLabel{english}{editorsuffixpl}{(eds.)}
+    \tpSetBabelLabel{german}{nameand}{und}
+    \tpSetBabelLabel{english}{nameand}{and}
+    
+    \tpSetProperty{name-and}{,\space}%
+    \tpSetProperty{name-sep}{,\space}%
+    
+    \tpSetProperty{name-list-format}{%
+      \tpUseComp{FullName}%
+      \ifnum\tpCurCount<\numexpr\tpTotalCount-1\relax%
+        \tpUseProperty{name-sep}%
+      \else%
+        \ifnum\tpCurCount<\tpTotalCount\relax%
+          \tpUseProperty{name-and}%
+        \fi%
+      \fi%
+    }%
+    
+    \tpSetProperty{titlepage-roman}{%
+      \tpUsePropEnv{titlepage-i}%
+      \clearpage
+      \tpUsePropEnv{titlepage-ii}%
+      \clearpage
+      \tpUsePropEnv{titlepage-iii}%
+      \clearpage
+      \tpUsePropEnv{titlepage-iv}%
+      \clearpage
+    }%
+    
+    %%%%%%%%%%%
+    % Seite I %
+    %%%%%%%%%%%
+    \tpSetProperty{titlepage-i}{%
+      \tpUseComp{SeriesEditorNameList}\hfill\break
+      {\let\tpBreak\space\tpUseComp{JournalName}}%
+      \vfill
+      {\bfseries\sfchapwidefamily\large\let\tpBreak\space\tpUseComp{JournalName}}%
+    }
+    %%%%%%%%%%%%
+    % Seite II %
+    %%%%%%%%%%%%
+    \tpSetProperty{titlepage-ii}{%
+      \tpIfComp{Editorial}{{\justify{\sffamily\sbseries\large Editorial}\par\vskip\baselineskip\tpUseComp{Editorial}\par\vskip\baselineskip}}{}%
+      \vfill%
+      \bgroup
+        {\justify\tpUseProperty{bio-block}}%
+      \egroup
+    }%
+      % Bio
+    \tpSetProperty{bio-block}{%
+      \ifcollection
+        \tpUseComp{EditorBioBlock}%
+      \else
+        \tpUseComp{AuthorBioBlock}%
+      \fi
+    }%
+    \tpSetProperty{name-bio-format}{%
+      \tpUseComp{Bio}%
+    }%
+    %%%%%%%%%%%%%
+    % Seite III %
+    %%%%%%%%%%%%%
+    \tpSetProperty{titlepage-iii}{%
+      {\Large\sfwidefamily%
+        \ifcollection
+          \righthyphenmin62
+          \lefthyphenmin62
+          \raggedright\tpUseProperty{SeriesEditorNameList}\par%
+        \else
+          \righthyphenmin62
+          \lefthyphenmin62
+          \raggedright\tpUseComp{AuthorNameList}\par%
+        \fi%
+      }%
+      \vskip\dimexpr5bp-0.65mm\relax
+      {\raggedright
+        \leavevmode
+        \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{JournalName}\par
+      }%
+      \bgroup
+        \normalfont\Large
+        \sffamily\vskip\dimexpr5bp+0.65mm\relax
+        \topsep0pt \partopsep0pt % no space before
+        \flushleft Jg. \tpUseComp{Volume}, \tpUseComp{Issue}/\tpUseComp{Year}: \tpUseComp{Title}\endflushleft%
+      \egroup
+      \null\vfill
+      \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
+    }%    
+    %%%%%%%%%%%%
+    % Seite IV %
+    %%%%%%%%%%%%
+    \tpSetProperty{titlepage-iv}{%
+      \bgroup
+        \tpIfComp{Statement}{\tpUseComp{Statement}\par\vfill}{}%
+        \justify
+        \tpUseProperty{funding-block}%
+        \vfill
+        \tpUseProperty{imprint-format}%
+        \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
+        \tpIfComp{AddNoteIV}{\vskip1\baselineskip\tpUseComp{AddNoteIV}}{}%
+        \tpUseProperty{licence}%
+        \vfill
+        \bgroup
+          \tpSetProperty{imprint-sep}{\vfill}
+          \tpUseProperty{imprint}%
+        \egroup
+      \egroup
+    }
+    
   \else
   
     %%%%%%%%%%%
@@ -242,9 +362,9 @@
     \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}% CopyrightDisclaimer enthält aktuell »© [Autorenname]«. Keine Leerzeile davor mit Ticket 13870. Beobachten.
   }
   \tpSetProperty{publisher}{%
-    \tpGetComp{PubDivInfo}%
+    \tpIfComp{PubDivInfo}{\tpGetComp{PubDivInfo}}{}%
     \tpUseProperty{copyright}%
-    \tpGetComp{PubNote}%
+    \tpIfComp{PubNote}{\tpGetComp{PubNote}}{}%
     %\tpGetComp{PubWeb}% Entfernt mit Ticket 13870.
   }%
   %% Format Impressum
