@@ -30,8 +30,10 @@
     <xsl:if test="$open-access">
       <xsl:value-of select="'&#xa;\tpLicenceLogo{logos/oasymbol.pdf}'"/>
     </xsl:if>
-   <xsl:sequence select="xml2tex:meta2tex(($journal-name, $title-for-running-head)[1], (), 'tpJournalName')"/>
-   <xsl:sequence select="'&#xa;\tpSeries{\includegraphics[width=\hsize]{logos/series/REIHENLOGO_KUL_ZIG.png}}&#xa;'"/>
+   <xsl:sequence select="'&#xa;\tpSeries{\includegraphics[width=\hsize]{logos/series/REIHENLOGO_KUL_ZIG.png}}&#xa;',
+                         xml2tex:meta2tex($prices, (), 'tpPrices'),
+                         xml2tex:meta2tex($pub-cycle, (), 'tpPubCycle '),
+                         xml2tex:meta2tex($memberlist, (), 'tpMemberList ')"/>
   </xsl:template>
 
 </set>
