@@ -167,7 +167,7 @@
   <xsl:variable name="styles" as="element(styles)">
     <styles>
       <style target-name="ts_body" style-regex="^text$"/>
-      <style target-name="Überschriften:ts_heading_$1" style-regex="^ts_heading_([1-5])$"/>
+      <style target-name="Überschriften:ts_heading_$1" style-regex="^ts_heading_([1-5]|part)$"/>
       <style target-name="Überschriften:ts_author" style-regex="^ts_author$"/>
       <style target-name="ts_body~intended" style-regex="^ts_body_-_intended$"/>
       <style target-name="ts_box_$1" style-regex="^tsbox(grey|border)$"/>
