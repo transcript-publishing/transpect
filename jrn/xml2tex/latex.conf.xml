@@ -9,6 +9,8 @@
   <xsl:param name="cocotex" as="xs:boolean" select="true()"/>
   <xsl:param name="s9y2" as="xs:string?"><!-- journal series like zig--></xsl:param>
 
+  <xsl:variable name="title" as="element(*)?"
+                select="$metadata/dbk:keyword[@role = ('Hefttitel')]" />
   <xsl:variable name="volume" as="item()*"
                 select="($metadata/dbk:keyword[@role eq 'Bandnummer'][normalize-space()], replace(/dbk:hub/dbk:info/dbk:issuenum, '^(\d+)[/\p{Zs}-](\d+)$', '$1'))[1]"/>
   <xsl:variable name="issue" as="item()*"
