@@ -189,18 +189,6 @@
 
   <xsl:variable name="short-isbn" select="replace(replace(/*/@xml:base, '^.+/.+?(\d+).+$', '$1'), '^[0]', '')"/>
 
-  <xsl:template match="*:img" mode="#default">
-    <!--  https://redmine.le-tex.de/issues/10515 -->
-    <!-- <a class="imageLink" data-toggle="modal" data-target="#imageModal" data-src="images/{{image}}" data-caption="{{ts_figure_caption}}">
-           <img src="images/{{image}}" alt="{{ts_figure_caption}}" class="hover-shadow"/>
-         </a>
-    -->
-      <xsl:copy copy-namespaces="no">
-        <xsl:apply-templates select="@*" mode="#current"/>
-        <xsl:attribute name="class" select="'hover-shadow'"/>
-      </xsl:copy>
-  </xsl:template>
-
   <xsl:function name="tr:alt-text" as="xs:string">
     <xsl:param name="img" as="node()*"/>
     <xsl:sequence select="string-join($img/../*:p[@class = ('tsfigurecaption') or *:span[matches(@class,'caption-text|fig-title')]]//text()[not(..[self::*:a][contains(@href, 'fn_')])], '')"></xsl:sequence>
@@ -208,9 +196,6 @@
 
   <xsl:template match="*:img/@src" mode="#default">
     <!-- https://redmine.le-tex.de/issues/9545#note-8, https://redmine.le-tex.de/issues/10515 -->
-    <!-- <img alt="{{ts_figure_caption}}" src="/{{kurz-isbn}}/images/{{image}}" />
-      <img alt="" src="http://transpect.io/content-repo/ts/jrn/inge/00002/images/ts_jrn_zig_00002_image2.jpg"/>
-    -->
     <xsl:attribute name="{name()}" select="concat('images/', replace(., '^.+/', ''))"/>
     <xsl:if test="not(../@alt) and ../../*:p[@class = 'tsfigurecaption' or *:span[matches(@class,'caption-text|fig-title')]]">
       <xsl:attribute name="alt" select="tr:alt-text(..)"/>
