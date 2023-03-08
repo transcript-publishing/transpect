@@ -195,14 +195,10 @@
            <img src="images/{{image}}" alt="{{ts_figure_caption}}" class="hover-shadow"/>
          </a>
     -->
-    <a class="imageLink" data-toggle="modal" data-target="#imageModal">
-      <xsl:attribute name="data-src" select="concat('images/', replace(@src, '^.+/', ''))"/>
-      <xsl:attribute name="data-caption" select="tr:alt-text(.)"/>
       <xsl:copy copy-namespaces="no">
         <xsl:apply-templates select="@*" mode="#current"/>
         <xsl:attribute name="class" select="'hover-shadow'"/>
       </xsl:copy>
-    </a>
   </xsl:template>
 
   <xsl:function name="tr:alt-text" as="xs:string">
@@ -458,39 +454,9 @@
       <!-- CSS -->
       <xsl:sequence select="$head" />
       <xsl:element name="body" namespace="http://www.w3.org/1999/xhtml">
-        <!--        <xsl:element name="chapter" namespace="http://www.w3.org/1999/xhtml">-->
-        <!--          <xsl:attribute name="class" select="'article'"/>-->
-        <xsl:apply-templates select="$nodes" mode="#current"/>
-        <xsl:call-template name="add-modal-container">
-          <xsl:with-param name="nodes" as="node()*" select="$nodes"/>
-        </xsl:call-template>
-        <!--</xsl:element>-->
+         <xsl:apply-templates select="$nodes" mode="#current"/>
       </xsl:element>
     </xsl:element>
-  </xsl:template>
-
-  <xsl:template name="add-modal-container">
-    <xsl:param name="nodes" as="node()*"/>
-    <!--https://redmine.le-tex.de/issues/10515-->
-    <xsl:if test="$nodes[descendant-or-self::*:figure]">
-      <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModal" aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 80vw">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&#215;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <figure class="tr-img-figure">
-                <img id="modalImage" src="" alt="" loading="lazy" />
-                <figcaption id="modalCaption"/>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </div>
-    </xsl:if>
   </xsl:template>
 
   <xsl:function name="tr:determine-meta-chunk-authors" as="element(*)*">
