@@ -345,7 +345,7 @@
                                         else @rend"/>
   </xsl:template>
 
-  <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))][matches(@rend, 'tsmeta(keyword|abstract)s?heading')]" 
+  <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))][matches(@rend, 'tsmeta(keyword|abstract)s?heading|tsheadword')]" 
                 priority="3" mode="class-att">
     <xsl:attribute name="class" select="@rend"/>
   </xsl:template>
@@ -398,38 +398,25 @@
                                 then count($elt/ancestor::*[self::div[@type eq 'section'] | self::listBibl]) + 4
                                 else count($elt/ancestor::*[self::div[@type eq 'section'] | self::listBibl]) + 3"/>
         </xsl:when>-->
-        <xsl:when test="$elt/parent::div[@type = ('section')]">
-          <xsl:sequence select="count($elt/ancestor::div[@type eq 'section']) + 3"/>
+        <xsl:when test="$elt/parent::div[@type = ('section')] or $elt/parent::argument">
+          <xsl:choose>
+            <xsl:when test="$elt/parent::div/@rend = ('keywords', 'alternative-title') or $elt/parent::argument">
+              <xsl:sequence select="if ($elt/ancestor::div/@type = ('part')) 
+                                    then 5
+                                    else 4"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:sequence select="count($elt/ancestor::div[@type eq 'section']) + 3"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:when>
         <xsl:when test="$elt/parent::div/@type = ('bibliography')">
-          <xsl:sequence
-            select="
-              if ($elt/ancestor::div/@type = ('chapter', 'article')) then
-                5
-              else
-                4"
-          />
-        </xsl:when>
-        <xsl:when test="$elt/parent::div/@type = ('abstract','keywords')">
-          <xsl:sequence
-            select="
-              if ($elt/ancestor::div/@type = ('part')) then
-                5
-              else
-                4"
-          />
+          <xsl:sequence select="if ($elt/ancestor::div/@type = ('chapter', 'article')) 
+                                then 5
+                                else 4"/>
         </xsl:when>
         <xsl:when test="$elt/parent::*[matches(local-name(.), '^div\d')]">
           <xsl:sequence select="count($elt/ancestor::*[matches(local-name(.), '^div')])"/>
-        </xsl:when>
-        <xsl:when test="$elt/parent::argument">
-         <xsl:sequence
-            select="
-              if ($elt/ancestor::div/@type = ('part')) then
-                5
-              else
-                4"
-          />
         </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="custom" as="xs:integer?">
