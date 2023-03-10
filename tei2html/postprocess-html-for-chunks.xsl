@@ -189,22 +189,6 @@
 
   <xsl:variable name="short-isbn" select="replace(replace(/*/@xml:base, '^.+/.+?(\d+).+$', '$1'), '^[0]', '')"/>
 
-  <xsl:template match="*:img" mode="#default">
-    <!--  https://redmine.le-tex.de/issues/10515 -->
-    <!-- <a class="imageLink" data-toggle="modal" data-target="#imageModal" data-src="images/{{image}}" data-caption="{{ts_figure_caption}}">
-           <img src="images/{{image}}" alt="{{ts_figure_caption}}" class="hover-shadow"/>
-         </a>
-    -->
-    <a class="imageLink" data-toggle="modal" data-target="#imageModal">
-      <xsl:attribute name="data-src" select="concat('images/', replace(@src, '^.+/', ''))"/>
-      <xsl:attribute name="data-caption" select="tr:alt-text(.)"/>
-      <xsl:copy copy-namespaces="no">
-        <xsl:apply-templates select="@*" mode="#current"/>
-        <xsl:attribute name="class" select="'hover-shadow'"/>
-      </xsl:copy>
-    </a>
-  </xsl:template>
-
   <xsl:function name="tr:alt-text" as="xs:string">
     <xsl:param name="img" as="node()*"/>
     <xsl:sequence select="string-join($img/../*:p[@class = ('tsfigurecaption') or *:span[matches(@class,'caption-text|fig-title')]]//text()[not(..[self::*:a][contains(@href, 'fn_')])], '')"></xsl:sequence>
@@ -212,9 +196,6 @@
 
   <xsl:template match="*:img/@src" mode="#default">
     <!-- https://redmine.le-tex.de/issues/9545#note-8, https://redmine.le-tex.de/issues/10515 -->
-    <!-- <img alt="{{ts_figure_caption}}" src="/{{kurz-isbn}}/images/{{image}}" />
-      <img alt="" src="http://transpect.io/content-repo/ts/jrn/inge/00002/images/ts_jrn_zig_00002_image2.jpg"/>
-    -->
     <xsl:attribute name="{name()}" select="concat('images/', replace(., '^.+/', ''))"/>
     <xsl:if test="not(../@alt) and ../../*:p[@class = 'tsfigurecaption' or *:span[matches(@class,'caption-text|fig-title')]]">
       <xsl:attribute name="alt" select="tr:alt-text(..)"/>
@@ -458,39 +439,9 @@
       <!-- CSS -->
       <xsl:sequence select="$head" />
       <xsl:element name="body" namespace="http://www.w3.org/1999/xhtml">
-        <!--        <xsl:element name="chapter" namespace="http://www.w3.org/1999/xhtml">-->
-        <!--          <xsl:attribute name="class" select="'article'"/>-->
-        <xsl:apply-templates select="$nodes" mode="#current"/>
-        <xsl:call-template name="add-modal-container">
-          <xsl:with-param name="nodes" as="node()*" select="$nodes"/>
-        </xsl:call-template>
-        <!--</xsl:element>-->
+         <xsl:apply-templates select="$nodes" mode="#current"/>
       </xsl:element>
     </xsl:element>
-  </xsl:template>
-
-  <xsl:template name="add-modal-container">
-    <xsl:param name="nodes" as="node()*"/>
-    <!--https://redmine.le-tex.de/issues/10515-->
-    <xsl:if test="$nodes[descendant-or-self::*:figure]">
-      <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModal" aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 80vw">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&#215;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <figure class="tr-img-figure">
-                <img id="modalImage" src="" alt="" loading="lazy" />
-                <figcaption id="modalCaption"/>
-              </figure>
-            </div>
-          </div>
-        </div>
-      </div>
-    </xsl:if>
   </xsl:template>
 
   <xsl:function name="tr:determine-meta-chunk-authors" as="element(*)*">

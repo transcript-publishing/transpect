@@ -20,6 +20,9 @@
   
   <xsl:variable name="is-collection" select="matches($basename,  'ts_[a-z]{3}_anth_')" as="xs:boolean"/>
   <xsl:variable name="is-journal" select="matches($basename,  'ts_jrn_[a-z]{3,4}_')" as="xs:boolean"/>
+  <xsl:variable name="series-options" select="()" as="xs:string?">
+    <!-- add series specific usepackage options. for example journal_series=zig -->
+  </xsl:variable>
 
   <!-- see the wiki link below for details
        https://redmine.le-tex.de/projects/transpect-typesetter/wiki/Titelei -->
@@ -36,6 +39,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Herausgeberinformationen']" />
   <xsl:variable name="series-editors" as="element(dbk:keyword)*"
                 select="$metadata/dbk:keyword[@role eq 'Reihenherausgeber'][normalize-space()]"/>
+  <xsl:variable name="series-editor-info" as="element(dbk:keyword)*"
+                select="$metadata/dbk:keyword[@role eq 'Reihenherausgeberinformationen'][normalize-space()]"/>
   <!-- title metadata -->
   <xsl:variable name="title" as="element(*)?"
                 select="$metadata/dbk:keyword[@role eq 'Titel'][not(. = 'Fallback')]" />
@@ -91,7 +96,7 @@
   <xsl:variable name="publisher-location" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Verlagsort']"/>
   <xsl:variable name="publisher-website" as="element(dbk:keyword)?"
-                select="$metadata/dbk:keyword[@role eq 'transcript-Website']"/>
+                select="$metadata/dbk:keyword[@role = ('transcript-Website', 'Website')]"/>
   <!-- publication meta -->
   <xsl:variable name="doi" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'DOI']"/>
@@ -148,7 +153,7 @@
   <xsl:variable name="copyright-note" as="element()?"
                 select="if ($metadata/dbk:keyword[@role eq 'Copyright'][dbk:para] 
                             and 
-                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')])) 
+                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')]))
                         then $metadata/dbk:keyword[@role eq 'Copyright']/*:para[1] 
                         else $metadata/dbk:keyword[@role eq 'Copyright']"/>
 <!--    https://redmine.le-tex.de/issues/13098#change-72104-->
@@ -222,6 +227,7 @@
                                  ',captions_table=',
                                  if($table-caption-pos eq 'bottom') then 'bottom' else 'top',
                                  if($sans-font eq 'noto-condensed') then ',altFonts' else (),
+                                 $series-options,
                                  ']{transcript}&#xa;')"/>
     
     <xsl:if test="$langs = 'zh'">
@@ -248,6 +254,15 @@
                                                 normalize-space(if(count($editors/*) gt 1) then xml2tex:meta-remove-links-etc($editor-info/*[$pos]) else xml2tex:meta-remove-links-etc($editor-info)), 
                                                 '}&#xa;')"/>
       <xsl:text>\end{tpEditor}&#xa;</xsl:text>
+    </xsl:for-each>
+    <xsl:for-each select="if(count($series-editors/*) gt 1) then $series-editors/* else $series-editors">
+      <xsl:variable name="pos" select="position()" as="xs:integer"/>
+      <xsl:text>&#xa;\begin{tpSeriesEditor}</xsl:text>
+      <xsl:value-of select="concat('&#xa;\tpFullName{', replace(normalize-space(.), '[\p{Zs}&#xa;]', '~'), '}')"/>
+      <xsl:value-of select="concat('&#xa;\tpBio{', 
+                                                normalize-space(if(count($series-editors/*) gt 1) then xml2tex:meta-remove-links-etc($series-editor-info/*[$pos]) else xml2tex:meta-remove-links-etc($series-editor-info)), 
+                                                '}&#xa;')"/>
+      <xsl:text>&#xa;\end{tpSeriesEditor}&#xa;</xsl:text>
     </xsl:for-each>
     <xsl:sequence select="
       xml2tex:meta2tex(($title, $title-for-running-head)[1], (), 'tpTitle'),
