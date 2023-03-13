@@ -38,7 +38,9 @@
     <xsl:variable name="articles" as="element(*)*">
       <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | descendant::*:div[contains(@class, 'chapter')])">
         <article>
-          <xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"/>
+          <xsl:sequence select="tr:get-part-title(.), 
+                                ., 
+                                ./following-sibling::*[1][self::*:div[@class = 'notes']] (:add endnotes to chunk:)"/>
         </article>
       </xsl:for-each>
     </xsl:variable>
@@ -62,17 +64,25 @@
     </export-root>
   </xsl:template>
 
-  <xsl:function name="tr:get-part-title" as="element(*)?">
+  <xsl:function name="tr:get-part-title" as="element(*)*">
     <xsl:param name="book-part" as="element(*)"/>
-    <xsl:apply-templates select="$book-part/ancestor::*[self::*:div[@role = 'doc-part']]/*[local-name() = ('h1', 'h2', 'h3', 'h4', 'h5')]" mode="create-column-titles"/>
+    <!-- only create col title if it is directly before -->
+    <xsl:apply-templates select="$book-part/ancestor::*[self::*:div[@role = 'doc-part'][(*:div[not(@role= 'doc-pagebreak')])[1] is $book-part]]/*" mode="create-column-titles"/>
   </xsl:function>
 
   <xsl:template match="*[local-name() = ('h1', 'h2', 'h3', 'h4', 'h5')] " mode="create-column-titles" priority="7">
-    <xsl:element name="p" namespace="http://www.w3.org/1999/xhtml">
-      <xsl:attribute name="class" select="'chunk columntitle'"/>
+    <xsl:copy>
+      <xsl:attribute name="class" select="concat('chunk columntitle ', @class)"/>
       <xsl:apply-templates select="node()" mode="#current"/>
-    </xsl:element>
+    </xsl:copy>
   </xsl:template>
+
+
+  <xsl:template match="*" mode="create-column-titles" priority="3">
+    <xsl:copy-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="*:div" mode="create-column-titles" priority="7"/>
 
   <xsl:template match="*:br" mode="create-column-titles" priority="5">
     <xsl:if test="matches(preceding-sibling::node()[1], '\P{Zs}$') and matches(following-sibling::node()[1], '^\P{Zs}')">
