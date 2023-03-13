@@ -400,7 +400,7 @@
         </xsl:when>-->
         <xsl:when test="$elt/parent::div[@type = ('section')] or $elt/parent::argument">
           <xsl:choose>
-            <xsl:when test="$elt/parent::div/@rend = ('keywords', 'alternative-title') or $elt/parent::argument">
+            <xsl:when test="$elt/parent::argument">
               <xsl:sequence select="if ($elt/ancestor::div/@type = ('part')) 
                                     then 5
                                     else 4"/>
@@ -736,7 +736,7 @@
     <xsl:value-of select="replace(., '^\p{Zs}+', '')"/>
   </xsl:template>
 
-  <xsl:template match="argument[@rend = 'abstract'] | div[@type = 'section'][@rend = ('keywords', 'alternative-title')]" mode="tei2html">
+  <xsl:template match="argument[@rend = ('abstract', 'keywords', 'alternative-title')]" mode="tei2html">
     <!-- dissolve, https://redmine.le-tex.de/issues/13842 -->
     <xsl:apply-templates select="node()"  mode="#current"/>
   </xsl:template>
