@@ -287,7 +287,7 @@
     %%%%%%%%%%%
     \tpSetProperty{titlepage-i}{%
       \tpUseComp{SeriesEditorNameList}\hfill\break
-      {\let\tpBreak\space\tpUseComp{JournalName}}%
+      {\let\tpBreak\space\tpUseComp{JournalName}\space\tpUseComp{Volume}}%
     }
     %%%%%%%%%%%%
     % Seite II %
@@ -335,7 +335,7 @@
       \vskip\dimexpr5bp-0.65mm\relax
       {\raggedright
         \leavevmode
-        \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{JournalName}\par
+        \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{JournalName}\space\tpUseComp{Volume}\par
       }%
       \bgroup
         \normalfont\Large
@@ -344,7 +344,7 @@
         \flushleft\tpUseComp{Title}\endflushleft%
       \egroup
       \vskip\baselineskip
-      Jg. \tpUseComp{Year}/\tpUseComp{Volume}
+      Jg. \tpUseComp{Year}/\tpUseComp{Issue}
       \null\vfill
       \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
     }%    
