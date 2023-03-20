@@ -25,6 +25,7 @@
   <xsl:param name="basename" as="xs:string"/>
   <xsl:param name="generate-note-link-title" select="true()" as="xs:boolean"/>
   <xsl:param name="also-consider-rule-atts" select="false()" as="xs:boolean"/>
+  <xsl:param name="s9y1-path-canonical"/>
   
   <xsl:variable name="divify-sections" select="'no'"/>
   <xsl:variable name="xhtml-version " select="'5'"/>
@@ -105,7 +106,6 @@
                                                      'Bibliografische_Information', 
                                                      'Copyright', 
                                                      'Lizenzlogo', 
-                                                     'Lizenz', 
                                                      'Lizenzlink', 
                                                      'Lizenztext', 
                                                      'Umschlaggestaltung', 
@@ -116,6 +116,8 @@
                                                      'Konvertierung', 
                                                      'Print-ISBN', 
                                                      'PDF-ISBN', 
+                                                     'BiblISSN',
+                                                     'BibleISSN', 
                                                      'ePUB-ISBN')]" mode="#current"/>
     </section>
   </xsl:template>
@@ -135,10 +137,13 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="term[@key eq 'Forderlogos'][normalize-space()]" mode="tei2html">
+      <img src="{concat($s9y1-path-canonical, '/images/', replace(normalize-space(.), '\.eps', '.jpg', 'i'))}" alt="Funding Logo {replace(normalize-space(.), '\.eps', '.jpg', 'i'))}" class="funding logo"/>
+  </xsl:template>
     
   <xsl:template match="term[@key eq 'Lizenzlogo'][normalize-space()]" mode="tei2html">
      <p class="{lower-case(translate(@key, ' ', '-'))}">
-      <img src="{concat('http://this.transpect.io/a9s/ts/logos/cc/', replace(., '\.eps', '.png', 'i'))}" alt="Logo {normalize-space(../term[@key eq 'Lizenz'])}"/>
+      <img src="{concat('http://this.transpect.io/a9s/ts/logos/cc/', replace(., '\.eps', '.png', 'i'))}" alt="Logo {normalize-space(../term[@key eq 'Lizenz'])}" class="cc logo"/>
     </p>
   </xsl:template>
 
