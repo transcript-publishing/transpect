@@ -138,4 +138,11 @@
     </xsl:choose>
   </xsl:template>
 
+
+  <xsl:template match="dbk:caption/dbk:para[@role =  'tsfiguresource']" mode="hub2tei:dbk2tei" priority="2">
+    <bibl type="copyright"><!--https://redmine.le-tex.de/issues/14481-->
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </bibl>
+  </xsl:template>
+
 </xsl:stylesheet>
