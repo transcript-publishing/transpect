@@ -71,7 +71,7 @@
   }%
   
   
-  \expandafter\ifx\ts@journal@series\ts@str@journal@zig
+  \ifx\ts@journal@series\ts@str@journal@zig
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % ZiG – Zeitschrift für interkulturelle Germanistik %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -143,7 +143,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % AuA – Außeruniversitäre Aktion %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \expandafter\ifx\ts@journal@series\ts@str@journal@aua
+  \ifx\ts@journal@series\ts@str@journal@aua
     \tpSetBabelLabel{german}{editorsuffixsgl}{(Hg.)}
     \tpSetBabelLabel{english}{editorsuffixsgl}{(ed.)}
     \tpSetBabelLabel{german}{editorsuffixpl}{(Hg.)}
@@ -376,7 +376,7 @@
   %%%%%%%%%%%%%%%%%%%%%%
   % allgemeine Titelei %
   %%%%%%%%%%%%%%%%%%%%%%
-  \ifx\ts@journal@series\relax
+  \expandafter\ifx\ts@journal@series\relax
     %%%%%%%%%%%
     % Seite I %
     %%%%%%%%%%%
