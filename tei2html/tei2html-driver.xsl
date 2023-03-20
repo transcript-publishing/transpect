@@ -138,7 +138,7 @@
   </xsl:template>
 
   <xsl:template match="term[@key eq 'Forderlogos'][normalize-space()]" mode="tei2html">
-      <img src="{concat($s9y1-path-canonical, '/images/', replace(normalize-space(.), '\.eps', '.jpg', 'i'))}" alt="Funding Logo {replace(normalize-space(.), '\.eps', '.jpg', 'i'))}" class="funding logo"/>
+      <img src="{concat($s9y1-path-canonical, '/images/', replace(normalize-space(.), '\.eps', '.jpg', 'i'))}" alt="Funding Logo {replace(normalize-space(.), '\.eps', '.jpg', 'i')}" class="funding logo"/>
   </xsl:template>
     
   <xsl:template match="term[@key eq 'Lizenzlogo'][normalize-space()]" mode="tei2html">
