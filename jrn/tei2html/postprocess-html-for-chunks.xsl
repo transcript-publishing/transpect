@@ -19,7 +19,9 @@
     <xsl:variable name="articles" as="element(*)*">
       <xsl:for-each select="/*:html/*:body/(*[@epub:type= ('titlepage', 'toc')] | descendant::*:div[contains(@class, 'article')])">
         <article>
-          <xsl:sequence select="tr:get-part-title(.), ., ./following-sibling::*[1][self::*:div[@class = 'notes']]"/>
+          <xsl:sequence select="tr:get-part-title(.), 
+                                  ., 
+                                  ./following-sibling::*[1][self::*:div[@class = 'notes']]"/>
         </article>
       </xsl:for-each>
     </xsl:variable>

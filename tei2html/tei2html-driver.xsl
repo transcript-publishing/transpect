@@ -25,6 +25,7 @@
   <xsl:param name="basename" as="xs:string"/>
   <xsl:param name="generate-note-link-title" select="true()" as="xs:boolean"/>
   <xsl:param name="also-consider-rule-atts" select="false()" as="xs:boolean"/>
+  <xsl:param name="s9y1-path-canonical"/>
   
   <xsl:variable name="divify-sections" select="'no'"/>
   <xsl:variable name="xhtml-version " select="'5'"/>
@@ -78,7 +79,9 @@
   
   <xsl:template name="half-title">
     <section class="halftitle title-page" epub:type="halftitlepage" id="halftitle">
-      <xsl:apply-templates select="$metadata[@key = ('Kurztext', 'Autoreninformationen', 'Widmung')]" mode="#current"/>
+      <xsl:apply-templates select="$metadata[@key = ('Kurztext')], 
+                                   $metadata[@key = ('Widmung')],
+                                   $metadata[@key = ('Autoreninformationen')]" mode="#current"/>
     </section>
   </xsl:template>
   
@@ -105,7 +108,6 @@
                                                      'Bibliografische_Information', 
                                                      'Copyright', 
                                                      'Lizenzlogo', 
-                                                     'Lizenz', 
                                                      'Lizenzlink', 
                                                      'Lizenztext', 
                                                      'Umschlaggestaltung', 
@@ -116,6 +118,8 @@
                                                      'Konvertierung', 
                                                      'Print-ISBN', 
                                                      'PDF-ISBN', 
+                                                     'BiblISSN',
+                                                     'BibleISSN', 
                                                      'ePUB-ISBN')]" mode="#current"/>
     </section>
   </xsl:template>
@@ -135,10 +139,15 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="term[@key eq 'Forderlogos'][normalize-space()]" mode="tei2html">
+    <xsl:for-each select="text()[normalize-space()] | seg[normalize-space()]/text()">
+      <img src="{concat($s9y1-path-canonical, 'images/', replace(normalize-space(.), '\.eps', '.jpg', 'i'))}" alt="Funding Logo {replace(normalize-space(.), '\.eps', '.jpg', 'i')}" class="funding logo"/>
+    </xsl:for-each>
+  </xsl:template>
     
   <xsl:template match="term[@key eq 'Lizenzlogo'][normalize-space()]" mode="tei2html">
      <p class="{lower-case(translate(@key, ' ', '-'))}">
-      <img src="{concat('http://this.transpect.io/a9s/ts/logos/cc/', replace(., '\.eps', '.png', 'i'))}" alt="Logo {normalize-space(../term[@key eq 'Lizenz'])}"/>
+      <img src="{concat('http://this.transpect.io/a9s/ts/logos/cc/', replace(., '\.eps', '.png', 'i'))}" alt="Logo {normalize-space(../term[@key eq 'Lizenz'])}" class="cc logo"/>
     </p>
   </xsl:template>
 
@@ -400,7 +409,7 @@
         </xsl:when>-->
         <xsl:when test="$elt/parent::div[@type = ('section')] or $elt/parent::argument">
           <xsl:choose>
-            <xsl:when test="$elt/parent::div/@rend = ('keywords', 'alternative-title') or $elt/parent::argument">
+            <xsl:when test="$elt/parent::argument">
               <xsl:sequence select="if ($elt/ancestor::div/@type = ('part')) 
                                     then 5
                                     else 4"/>
@@ -736,7 +745,7 @@
     <xsl:value-of select="replace(., '^\p{Zs}+', '')"/>
   </xsl:template>
 
-  <xsl:template match="argument[@rend = 'abstract'] | div[@type = 'section'][@rend = ('keywords', 'alternative-title')]" mode="tei2html">
+  <xsl:template match="argument[@rend = ('abstract', 'keywords', 'alternative-title')]" mode="tei2html">
     <!-- dissolve, https://redmine.le-tex.de/issues/13842 -->
     <xsl:apply-templates select="node()"  mode="#current"/>
   </xsl:template>

@@ -35,7 +35,18 @@
   \fi%
 }%
 
+\def\tp@create@editor@string#1{%
+      \expandafter\ifx\csname tp@\tp@cur@cont @#1NameList\endcsname\relax\else
+        \csgappto{tp@\tp@cur@cont @#1NameList}{{\letcs\tpTotalCount{tp#1Cnt}\tpUseProperty{editor-suffix}}}%
+      \fi
+    }%
+
 \tpDeclareTitlepage{%
+  \ifcsname ts@journal@series\endcsname
+  \else
+    \let\ts@journal@series\relax%
+  \fi
+
   \tpSetProperty{editor-suffix-sgl}{\editorsuffixsglname}
   \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}
 
@@ -59,10 +70,11 @@
     \fontsize{9.3}{12.5}\selectfont
   }%
   
-  %%%%%%%%%%
-  % ZiG – Zeitschrift für interkulturelle Germanistik
-  %%%%%%%%%%
+  
   \ifx\ts@journal@series\ts@str@journal@zig
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % ZiG – Zeitschrift für interkulturelle Germanistik %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \tpSetBabelLabel{german}{editorsuffixsgl}{}
     \tpSetBabelLabel{english}{editorsuffixsgl}{}
     \tpSetBabelLabel{german}{editorsuffixpl}{}
@@ -128,9 +140,9 @@
     }
   \fi
   
-  %%%%%%%%%%
-  % AuA – Außeruniversitäre Aktion
-  %%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % AuA – Außeruniversitäre Aktion %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \ifx\ts@journal@series\ts@str@journal@aua
     \tpSetBabelLabel{german}{editorsuffixsgl}{(Hg.)}
     \tpSetBabelLabel{english}{editorsuffixsgl}{(ed.)}
@@ -243,9 +255,128 @@
         \egroup
       \egroup
     }
-    
-  \else
+  \fi
   
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % WSG – Werkstattgeschichte %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \ifx\ts@journal@series\ts@str@journal@wsg
+    \tpSetBabelLabel{german}{editorsuffixsgl}{(Hg.)}
+    \tpSetBabelLabel{english}{editorsuffixsgl}{(ed.)}
+    \tpSetBabelLabel{german}{editorsuffixpl}{(Hg.)}
+    \tpSetBabelLabel{english}{editorsuffixpl}{(eds.)}
+    \tpSetBabelLabel{german}{nameand}{und}
+    \tpSetBabelLabel{english}{nameand}{and}
+    
+    \tpSetProperty{name-and}{,\space}%
+    \tpSetProperty{name-sep}{,\space}%
+    
+    \tpSetProperty{titlepage-roman}{%
+      \tpUsePropEnv{titlepage-i}%
+      \clearpage
+      \tpUsePropEnv{titlepage-ii}%
+      \clearpage
+      \tpUsePropEnv{titlepage-iii}%
+      \clearpage
+      \tpUsePropEnv{titlepage-iv}%
+      \clearpage
+    }%
+    
+    %%%%%%%%%%%
+    % Seite I %
+    %%%%%%%%%%%
+    \tpSetProperty{titlepage-i}{%
+      \tpUseComp{SeriesEditorNameList}\hfill\break
+      {\let\tpBreak\space\tpUseComp{JournalName}\space\tpUseComp{Volume}}%
+    }
+    %%%%%%%%%%%%
+    % Seite II %
+    %%%%%%%%%%%%
+    \tpSetProperty{titlepage-ii}{%
+      
+      Die Zeitschrift wird herausgegeben vom\par
+      \bgroup%
+        \let\editorsuffixsglname\relax%
+        \let\editorsuffixplname\relax%
+        \tpSetProperty{editor-suffix}{}%
+        \itshape%
+        \tpUseComp{SeriesEditorNameList}%
+        \tpIfComp{MemberList}{%
+          :%
+        }{}%
+      \egroup\par
+      \tpIfComp{MemberList}{%
+        \bgroup%
+          \parskip1\baselineskip%
+          \tpUseComp{MemberList}%
+        \egroup%
+      }\par
+      \vfill
+      \tpUseComp{PubCycle}\par
+      \tpIfComp{Prices}{%
+        {\parskip\baselineskip\tpUseComp{Prices}}%
+      }{}
+    }%
+    %%%%%%%%%%%%%
+    % Seite III %
+    %%%%%%%%%%%%%
+    \tpSetProperty{titlepage-iii}{%
+      {\Large\sfwidefamily%
+        \ifcollection
+          \righthyphenmin62
+          \lefthyphenmin62
+          \raggedright\tpUseProperty{SeriesEditorNameList}\par%
+        \else
+          \righthyphenmin62
+          \lefthyphenmin62
+          \raggedright\tpUseComp{AuthorNameList}\par%
+        \fi%
+      }%
+      \vskip\dimexpr5bp-0.65mm\relax
+      {\raggedright
+        \leavevmode
+        \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{JournalName}\space\tpUseComp{Volume}\par
+      }%
+      \bgroup
+        \normalfont\Large
+        \sffamily\vskip\dimexpr5bp+0.65mm\relax
+        \topsep0pt \partopsep0pt % no space before
+        \flushleft\tpUseComp{Title}\endflushleft%
+      \egroup
+      \vskip\baselineskip
+      Jg. \tpUseComp{Year}/\tpUseComp{Issue}
+      \null\vfill
+      \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
+    }%    
+    %%%%%%%%%%%%
+    % Seite IV %
+    %%%%%%%%%%%%
+    \tpSetProperty{titlepage-iv}{%
+      \bgroup
+        {\parskip\baselineskip\tpUseComp{Editorial}}\par
+        \vskip2\baselineskip
+        \tpUseComp{PubWeb}\par
+        \vskip2\baselineskip
+        \vfill%
+        %\tpUseProperty{funding-block}%
+        \vfill
+        \tpUseProperty{imprint-format}%
+        \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
+        \tpIfComp{AddNoteIV}{\vskip1\baselineskip\tpUseComp{AddNoteIV}}{}%
+        \tpUseProperty{licence}%
+        \vfill
+        \bgroup
+          \tpSetProperty{imprint-sep}{\vfill}
+          \tpUseProperty{imprint}%
+        \egroup
+      \egroup
+    }
+  \fi
+  
+  %%%%%%%%%%%%%%%%%%%%%%
+  % allgemeine Titelei %
+  %%%%%%%%%%%%%%%%%%%%%%
+  \expandafter\ifx\ts@journal@series\relax
     %%%%%%%%%%%
     % Seite I %
     %%%%%%%%%%%

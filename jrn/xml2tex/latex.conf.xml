@@ -89,8 +89,15 @@
       <xsl:value-of select="'&#xa;\tpLicenceLogo{logos/oasymbol.pdf}'"/>
     </xsl:if>
    <xsl:sequence select="xml2tex:meta2tex($prices, (), 'tpPrices'),
-                         xml2tex:meta2tex($pub-cycle, (), 'tpPubCycle '),
-                         xml2tex:meta2tex($memberlist, (), 'tpMemberList ')"/>
+                         xml2tex:meta2tex($pub-cycle, (), 'tpPubCycle'),
+                         xml2tex:meta2tex($memberlist, (), 'tpMemberList')"/>
+  </xsl:template>
+
+
+  <xsl:template match="text()[ancestor::*[self::dbk:keyword[@role = 'Preise']]]" mode="xml2tex" priority="300">
+    <!-- prevent filename replacement in keywords -->
+    <xsl:variable name="content" select="replace( ., '&#xa0;', '~')" as="xs:string"/>
+    <xsl:value-of select="$content"/>
   </xsl:template>
 
 <!--  <template context="dbk:dedication[@role eq 'tsded']">
