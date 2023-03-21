@@ -79,9 +79,9 @@
   
   <xsl:template name="half-title">
     <section class="halftitle title-page" epub:type="halftitlepage" id="halftitle">
-      <xsl:apply-templates select="$metadata[@key = ('Kurztext')], 
-                                   $metadata[@key = ('Widmung')],
-                                   $metadata[@key = ('Autoreninformationen')]" mode="#current"/>
+      <xsl:apply-templates select="$metadata[@key = ('Widmung')],
+                                   $metadata[@key = ('Autoreninformationen'),
+                                   $metadata[@key = ('Kurztext')]]" mode="#current"/>
     </section>
   </xsl:template>
   
