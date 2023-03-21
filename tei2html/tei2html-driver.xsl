@@ -591,7 +591,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="*:keywords[@rendition='Keywords']" mode="meta">
+  <xsl:template match="*:keywords[contains(@rendition,'Keywords')]" mode="meta">
     <ul rend="chunk-keywords">
       <xsl:for-each select="*:term">
         <li><xsl:value-of select="."/></li>
