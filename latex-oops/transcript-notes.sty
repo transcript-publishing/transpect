@@ -15,13 +15,19 @@
 % \def\fnurlhref#1#2{\old@href{#1}{#2}}
 
 \renewcommand\@makefntext[1]{%
-    \parindent\z@%
-    \leftskip\fnumwidth
-    \bgroup\nsfwiderfamily
-      \hskip-\fnumwidth\hb@xt@\fnumwidth{{\nsfwiderfamily\@thefnmark}\hss}%
-      \let\href\fn@href
-      #1%
-    \egroup}
+  \parindent\z@%
+  \leftskip\fnumwidth
+  \bgroup%
+    \nsfwiderfamily%
+    \hskip-\fnumwidth\hb@xt@\fnumwidth{{\nsfwiderfamily\@thefnmark}\hss}%
+    \let\href\fn@href%
+    \justify%
+    % Preserve the justified alignment for footnotes which the language changes within.
+    \let\originalSelectlanguage\selectlanguage%
+    \def\selectlanguage##1{\originalSelectlanguage{##1}\justify}%
+    #1%
+  \egroup%
+}
 
 % \newif\if@enotesopen
 % \ifendnotes

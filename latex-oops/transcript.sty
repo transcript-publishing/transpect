@@ -128,13 +128,29 @@
 
 \usepackage{transcript-index}
 
+
+
+\gdef\tp@languageRules@arabic{%
+  \rmfamily% Andere Schriften (bspw. \nsfwidefamily) verursachen einen Konvertierungsabbruch.
+  \let\par\relax%
+}
+
+\let\@foreignNewLanguageRules\foreignlanguage
+\gdef\foreignlanguage#1#2{%
+  \protect\@foreignNewLanguageRules{#1}{%
+    \ifcsname tp@languageRules@\languagename\endcsname\csname tp@languageRules@\languagename\endcsname\fi
+    #2%
+  }%
+}
+
+
 \def\tpNewTocPage{\addtocontents{toc}{\newpage}}
 
 % Makro für verlinkte Bilder.
 \let\imgHref\href
 
 \def\@nohyphen#1\@nil#2#3\relax{\imgHref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\@nohyphen#1\@nil#3\relax\fi}
-\protected\def\href#1#2{{\let↩\@empty\@nohyphen#1\@nil#2\relax\relax}}
+\protected\def\href#1#2{{\let↩\@empty\@nohyphen#1\@nil#2{}\relax\relax}}
 \let\fn@href\href
 % \bgroup
 % \let↩\relax
