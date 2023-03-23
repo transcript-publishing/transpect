@@ -363,7 +363,7 @@
     <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
 
-  <xsl:template match="text()[not(matches(., '\S', 's'))][. is ../node()[1] or . is ../node()[last()]]"  priority="3" mode="bib-chunks"/>
+  <xsl:template match="text()[not(matches(., '\S', 's'))][. is ../node()[1] or . is ../node()[last()]] | *:index-term | *:fn"  priority="3" mode="bib-chunks"/>
   <!--<xsl:template match="text()[not(matches(., '\S', 's'))][preceding-sibling::node()[1][. instance of element()] and following-sibling::node()[1][. instance of element()]]"  priority="2" mode="bib-chunks"/>-->
 
   <xsl:template match="text()[not(matches(., '\S', 's'))]" mode="bib-chunks">
