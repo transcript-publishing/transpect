@@ -245,8 +245,8 @@
                  omit-xml-declaration="false" 
                  method="xml">
           <p:with-option name="href" select="base-uri()"/>
-          <p:with-option name="doctype-system" select="'BITS-book2.dtd'"/>
-          <p:with-option name="doctype-public" select="'https://jats.nlm.nih.gov/extensions/bits/2.0/BITS-book2.dtd'"/>
+<!--          <p:with-option name="doctype-system" select="'BITS-book2.dtd'"/>
+          <p:with-option name="doctype-public" select="'https://jats.nlm.nih.gov/extensions/bits/2.0/BITS-book2.dtd'"/>-->
         </p:store>
       </p:otherwise>
     </p:choose>
