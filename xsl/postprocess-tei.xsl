@@ -9,7 +9,7 @@
   
   <xsl:key name="elt-by-corresp" match="*[@corresp]" use="@corresp"/>  
 
-  <xsl:template match="@*|node()|processing-instruction()">
+  <xsl:template match="@*|node()|processing-instruction()" priority="-1">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()"/>
     </xsl:copy>
@@ -23,7 +23,7 @@
   </xsl:template>
 
   <xsl:variable name="meta" select="/TEI/teiHeader/profileDesc/textClass/keywords[@rendition='titlepage']"/>
-  
+
   <xsl:template match="/*/@xml:base | /*/@source-dir-uri  | @rend[not(..[self::hi])]">
     <!--https://github.com/transcript-publishing/6246/issues/5-->
     <!--https://github.com/transcript-publishing/6246/issues/6-->
@@ -48,6 +48,10 @@
         </keywords>
       </xsl:copy>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="TEI//processing-instruction()" priority="2">
+    <!--https://redmine.le-tex.de/issues/14518-->
   </xsl:template>
 
   <xsl:template match="@css:*">
