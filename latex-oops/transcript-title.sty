@@ -68,6 +68,7 @@
     \def\thepage{\roman{page}}%
     \def\UrlFont{\rmfamily}%
     \fontsize{9.3}{12.5}\selectfont
+    \topmargin=\dimexpr15.35mm-\headheight\relax
   }%
   
   
@@ -489,7 +490,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
-    \tpIfComp{Copyright}{{\sffamily\tpUseComp{Copyright}}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
+    \tpIfComp{Copyright}{{\sbseries\sffamily\tpUseComp{Copyright}}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
     \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}% CopyrightDisclaimer enthält aktuell »© [Autorenname]«. Keine Leerzeile davor mit Ticket 13870. Beobachten.
   }
   \tpSetProperty{publisher}{%
