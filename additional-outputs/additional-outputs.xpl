@@ -38,6 +38,7 @@
   <p:import href="http://transpect.io/xproc-util/simple-progress-msg/xpl/simple-progress-msg.xpl"/>
   <p:import href="http://transpect.io/tei2bits/xpl/tei2bits.xpl"/>
   <p:import href="http://transpect.io/cascade/xpl/load-cascaded.xpl"/>
+  <p:import href="http://transpect.io/xproc-util/xml-model/xpl/prepend-xml-model.xpl"/>
 
   <p:variable name="status-dir-uri" select="/*/c:param[@name = 'status-dir-uri']/@value">
     <p:pipe port="parameters" step="customer-output"/>
@@ -224,6 +225,17 @@
         </p:store>
       </p:when>
       <p:otherwise>
+        
+        <tr:prepend-xml-model name="prepend-model">
+          <p:input port="models">
+            <p:inline>
+              <c:models>
+                <c:model href="https://jats.nlm.nih.gov/extensions/bits/2.0/rng/BITS-book2.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"/>
+              </c:models>
+            </p:inline>
+          </p:input>
+        </tr:prepend-xml-model>
+
         <p:delete match="@srcpath"/>
         <p:namespace-rename from="http://www.w3.org/ns/xproc-step" to=""/>
         <p:namespace-rename from="http://xmlcalabash.com/ns/extensions" to=""/>
@@ -233,8 +245,8 @@
                  omit-xml-declaration="false" 
                  method="xml">
           <p:with-option name="href" select="base-uri()"/>
-<!--          <p:with-option name="doctype-system" select="'atypon-book3.dtd'"/>
-          <p:with-option name="doctype-public" select="'-//Atypon//DTD Atypon Systems NCBI Book DTD Suite v3.0.2 20110228//EN'"/>-->
+<!--          <p:with-option name="doctype-system" select="'BITS-book2.dtd'"/>
+          <p:with-option name="doctype-public" select="'https://jats.nlm.nih.gov/extensions/bits/2.0/BITS-book2.dtd'"/>-->
         </p:store>
       </p:otherwise>
     </p:choose>
