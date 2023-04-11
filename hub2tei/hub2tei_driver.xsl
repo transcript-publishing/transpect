@@ -145,4 +145,8 @@
     </bibl>
   </xsl:template>
 
+  <xsl:template match="dbk:para[not(normalize-space())][not(.//dbk:inlinemediaobject)][not(.//dbk:anchor)]" mode="hub2tei:dbk2tei" priority="2">
+    <!-- discard pagebreaks/empty paras, https://redmine.le-tex.de/issues/14550-->
+  </xsl:template>
+
 </xsl:stylesheet>
