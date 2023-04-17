@@ -128,7 +128,29 @@
 
 \usepackage{transcript-index}
 
+\renewcommand\frontmatter{%
+  \cleardoublepage
+  \@frontmattertrue%
+  \@mainmatterfalse%
+  \@backmatterfalse%
+  \pagenumbering{arabic}%
+}
 
+\renewcommand\mainmatter{%
+  \cleardoublepage
+  \@frontmatterfalse%
+  \@mainmattertrue%
+  \@backmatterfalse%
+}
+
+\newif\if@backmatter \@backmatterfalse
+\renewcommand\backmatter{%
+  \cleardoublepage
+  \@frontmatterfalse%
+  \@mainmatterfalse%
+  \@backmattertrue%
+  \pagestyle{backmatter}%
+}
 
 \gdef\tp@languageRules@arabic{%
   \rmfamily% Andere Schriften (bspw. \nsfwidefamily) verursachen einen Konvertierungsabbruch.
