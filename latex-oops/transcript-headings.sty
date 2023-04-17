@@ -111,6 +111,10 @@
 
 \tpAddToHook{toc-after-hook-part}{\nopagebreak}%
 
+
+\gdef\tp@runningHeadingLeft@backmatter{\relax}
+\gdef\tp@runningHeadingRight@backmatter{\relax}
+
 \tpDeclareHeading{0}{chapter}{%
   % Ticket 13717.
   \if@frontmatter%
@@ -242,6 +246,12 @@
   % Running extra: gerade Seiten.
   \tpSetProperty{running-extra}{%
     \tpIfComp{RunAuthorNameList}{%
+      \protected@xdef\tp@runningHeadingLeft@backmatter{\tpUseComp{RunAuthorNameList}}%
+    }{}%
+    \tpIfComp{RunTitle}{%
+      \protected@xdef\tp@runningHeadingRight@backmatter{\tpUseComp{RunTitle}}%
+    }{}%
+    \tpIfComp{RunAuthorNameList}{%
       \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
     }{%
       \global\let\@authormark\@empty%
@@ -347,7 +357,7 @@
     \fi
   \fi
   
-  \ifcollection\else
+  \ifcollection
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
     \tpSetProperty{toc-before-entry}{\nopagebreak}%

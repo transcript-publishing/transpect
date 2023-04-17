@@ -72,12 +72,39 @@
   \let\@oddfoot\@empty
   \let\@evenfoot\@empty
   \def\partmark##1{%
-    \gdef\@partmark{##1}%
+    \protected@xdef\@partmark{##1}%
   }%
   \def\chaptermark##1{%
-    \gdef\@chaptermark{##1}%
+    \protected@xdef\@chaptermark{##1}%
   }%
 }
+
+
+\def\ps@backmatter{% Ticket 14571.
+  \def\left@mark{%
+    \def\numberline####1{####1\enskip}%
+    \tp@runningHeadingLeft@backmatter%
+  }%
+  \def\right@mark{%
+    \def\numberline####1{####1\enskip}%
+    \tp@runningHeadingRight@backmatter%
+  }%
+  \def\@oddhead{\hfill{\small\sffamily\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
+      % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
+    }}%
+  \def\@evenhead{%
+    % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
+    {\small\sffamily\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
+  \let\@oddfoot\@empty
+  \let\@evenfoot\@empty
+  \def\partmark##1{%
+    \protected@xdef\@partmark{##1}%
+  }%
+  \def\chaptermark##1{%
+    \protected@xdef\@chaptermark{##1}%
+  }%
+}
+
 
 \def\ps@articlehead{%
   \ps@headings
