@@ -53,7 +53,7 @@
     </xsl:copy>
   </xsl:template>
   
-  <xsl:template match="caption[preceding-sibling::*[1][self::figure]]" mode="custom-1"/>
+  <xsl:template match="caption[preceding-sibling::*[1][self::figure]] | *[self::para[@role = 'tsdedication'] or self::css:rule/@name = 'tsdedication' ]/@css:text-align" mode="custom-1"/>
 
   <xsl:template match="*[self::table | self::informaltable]/@css:padding-left | *[self::table | self::informaltable]/@css:padding-right | *[self::table | self::informaltable]/@css:width" mode="hub:clean-hub"/>
   
