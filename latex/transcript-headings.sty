@@ -335,7 +335,7 @@
       \tpUseProperty{title-format}%
       \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
       \tpUseComp{Title}\par
-      \tpIfComp{Subtitle}{\tpUseComp{subtitle-format}\tpUseComp{Subtitle}\par\addvspace{12.8bp}}{}%
+      \tpIfComp{Subtitle}{\tpUseComp{subtitle-format}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}}{}% Ticket 14677.
       \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
     \egroup
     \nopagebreak
