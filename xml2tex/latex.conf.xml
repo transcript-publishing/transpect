@@ -496,7 +496,7 @@
       <option select="if(matches(parent::*/@mark, string-join($list-mark-map/@from, '|')))
                       then for $mark in parent::*/@mark
                            return $list-mark-map[@from eq $mark]/@to
-                      else parent::*/@mark"/>
+                      else replace(parent::*/@mark, '⚬', '\$\\circ\$')"/>
       <text select="' '"/>
       <text/>
     </rule>
