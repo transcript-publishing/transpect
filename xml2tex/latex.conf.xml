@@ -188,7 +188,6 @@
   <xsl:variable name="advertisement" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Werbung']"/>
   
-  <xsl:variable name="new-common"                 select="true()" as="xs:boolean"/>
   <xsl:variable name="create-customer-toctitles"  select="true()" as="xs:boolean"/>
 
   <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
