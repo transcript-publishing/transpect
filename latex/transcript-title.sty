@@ -33,15 +33,22 @@
 }%
 
 \tpDeclareTitlepage{%
-  % Alle Titeleien mit Layoutvariante c ausgeben, unabhängig vom Layout des restlichen Werks.
-  \topmargin=\dimexpr15.35mm-\headheight\relax%
-  \headsep=\dimexpr10.5mm-\topskip\relax%
-  \evensidemargin=21.5mm\relax%
-  \oddsidemargin=17.5mm\relax%
-  \textwidth=109mm\relax%
-  \hsize=109mm\relax%
-  \textheight=\dimexpr40\baselineskip+\topskip\relax%
-  \headingsep=16mm\relax%
+  \ifcsname ts@layout@type\endcsname
+  \else
+    \let\ts@layout@type\relax%
+  \fi
+  
+  % Alle Titeleien mit Layoutvariante c ausgeben, unabhängig vom Layout des restlichen Werks. Gilt nur für std-Layout, nicht für xtx.
+  \ifx\ts@layout@type\ts@str@layout@std
+    \topmargin=\dimexpr15.35mm-\headheight\relax%
+    \headsep=\dimexpr10.5mm-\topskip\relax%
+    \evensidemargin=21.5mm\relax%
+    \oddsidemargin=17.5mm\relax%
+    \textwidth=109mm\relax%
+    \hsize=109mm\relax%
+    \textheight=\dimexpr40\baselineskip+\topskip\relax%
+    \headingsep=16mm\relax%
+  \fi
   
   \tpSetProperty{editor-suffix-sgl}{\editorsuffixsglname}
   \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}
