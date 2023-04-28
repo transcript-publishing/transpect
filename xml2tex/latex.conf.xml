@@ -9,6 +9,7 @@
   
   <xsl:param name="s9y1-path" as="xs:string?"/>
   <xsl:param name="s9y2-path" as="xs:string?"/>
+  <xsl:param name="s9y3" as="xs:string?"><!-- series type like std--></xsl:param>
   <xsl:param name="s9y3-path" as="xs:string?"/>
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
@@ -20,8 +21,8 @@
   
   <xsl:variable name="is-collection" select="matches($basename,  'ts_[a-z]{3}_anth_')" as="xs:boolean"/>
   <xsl:variable name="is-journal" select="matches($basename,  'ts_jrn_[a-z]{3,4}_')" as="xs:boolean"/>
-  <xsl:variable name="series-options" select="()" as="xs:string?">
-    <!-- add series specific usepackage options. for example journal_series=zig -->
+  <xsl:variable name="series-options" select="concat(',lay_type=', $s9y3)" as="xs:string">
+    <!-- add series specific usepackage options. for example journal_series=zig or lay_type=std (https://redmine.le-tex.de/issues/14510#change-80305)-->
   </xsl:variable>
 
   <!-- see the wiki link below for details
