@@ -132,8 +132,11 @@
 % Sprachen %
 %%%%%%%%%%%%
 
+\newunicodechar{…}{\ldots}
 \gdef\tp@languageRules@arabic{%
   \rmfamily% Andere Schriften (bspw. \nsfwidefamily) verursachen einen Konvertierungsabbruch.
+  \let\par\relax%
+  \gdef\ldots{.\kern\fontdimen3\font.\kern\fontdimen3\font.\kern\fontdimen3\font}%
 }
 
 \let\@foreignNewLanguageRules\foreignlanguage
