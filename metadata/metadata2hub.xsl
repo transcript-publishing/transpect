@@ -9,7 +9,16 @@
   <xsl:import href="http://this.transpect.io/a9s/common/metadata/metadata2hub.xsl"/>
   <xsl:import href="metadata2hub-klopotek.xsl"/>
 
-  <xsl:output indent="yes"/>
+  <xsl:output indent="yes" />
+<!--
+  <xsl:output indent="yes" use-character-maps="no-control-characters" />-->
+<!--
+  <xsl:character-map name="no-control-characters">
+   <xsl:output-character character="&#127;" string=" "/>
+   <xsl:output-character character="&#128;" string=" "/>
+   <xsl:output-character character="&#129;" string=" "/>
+   <xsl:output-character character="&#159;" string=" "/>
+  </xsl:character-map>-->
 
    <xsl:template match="*:product_export" priority="15">
     <keywordset role="titlepage">
@@ -68,6 +77,11 @@
     <xsl:copy>
       <xsl:apply-templates select="*|processing-instruction()"/>
     </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="text()">
+    <!--  https://redmine.le-tex.de/issues/14747-->
+    <xsl:value-of select="replace(., '\p{Cc}', '')"/>
   </xsl:template>
   
   <xsl:function name="css:compatible-name" as="xs:string">
