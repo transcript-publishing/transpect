@@ -42,20 +42,30 @@
   \spewnotes
   \aftergroup\@afterbox}
 
-\renewenvironment{quotation}
-{\list{}{\listparindent\z@%
-    \itemindent    \listparindent
-    \leftmargin \parindent
-    \rightmargin   \z@
-    \nsfwiderfamily
-    \topsep6.4bp
-    \parsep        \z@}%
-\item\noindent\ignorespaces}
-{\endlist
+\renewenvironment{quotation}{%
+  \list{}{%
+    \listparindent \z@%
+    \itemindent    \listparindent%
+    \leftmargin    \parindent%
+    \rightmargin   \ifx\ts@layout@type\ts@str@layout@mdw\leftmargin\else\z@\fi%
+    \nsfwiderfamily%
+    \topsep        6.4bp%
+    \parsep        \z@%
+  }%
+  \ifx\ts@layout@type\ts@str@layout@mdw%
+    \footnotesize%
+  \fi%
+  \item\noindent\ignorespaces%
+}{%
+  \endlist
   \gdef\@doendpe{%
     \@endpetrue
-    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
-    \global\let\@doendpe\orig@doendpe}}
+    \everypar{%
+      {\setbox\z@\lastbox}\global\everypar{}\@endpefalse%
+    }%
+    \global\let\@doendpe\orig@doendpe%
+  }%
+}
 
 \renewenvironment{quote}
 {\noindent\par\list{}{\rightmargin\leftmargin\nsfwiderfamily}%
@@ -164,6 +174,9 @@
    \ifnum \@enumdepth=\@ne\topsep12.8bp\else\topsep\z@\fi
    \usecounter\@enumctr%
    \def\makelabel##1{\small##1\hss}}}
+
+\let\leftmarginii\leftmargini
+\let\leftmarginiii\leftmargini
 
 \def\itemize{%
   \ifnum \@itemdepth >\thr@@\@toodeep\else
