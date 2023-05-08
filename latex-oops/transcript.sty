@@ -19,9 +19,11 @@
 \define@key{transcript.sty}{journal_series}[]{\gdef\ts@journal@series{#1}}
 \define@key{transcript.sty}{lay_type}[]{\gdef\ts@layout@type{#1}}
 
+\gdef\ts@str@journal@aua{aua}
 \gdef\ts@str@journal@zig{zig}
 \gdef\ts@str@journal@zwg{zwg}
-\gdef\ts@str@journal@aua{aua}
+
+\gdef\ts@str@layout@mdw{mdw}
 \gdef\ts@str@layout@std{std}
 \gdef\ts@str@layout@xtx{xtx}
 
@@ -52,7 +54,11 @@
 \newunicodechar{；}{;\enskip\ignorespaces}
 \newunicodechar{：}{:\enskip\ignorespaces}
 \newunicodechar{，}{,\enskip\ignorespaces}
-\newunicodechar{ǀ}{|}
+%\newunicodechar{ǀ}{|}
+\newunicodechar{ǀ}{\unichar{ǀ}}
+\newunicodechar{ǁ}{\unichar{ǁ}}
+\newunicodechar{ǂ}{\unichar{ǂ}}
+\newunicodechar{ǃ}{\unichar{ǃ}}
 
 \DeclareRobustCommand\unichar[1]{\textfallback{#1}}
 
