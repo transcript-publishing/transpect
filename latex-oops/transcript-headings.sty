@@ -44,7 +44,7 @@
   \tpSetProperty{toc-after-hook-part}{\nobreak}
   \tpSetProperty{toc-margin-top}{2.25em}%
   \tpSetProperty{toc-indent}{}%
-  \tpSetProperty{toc-title-format}{\sffamily\sbseries\huge}%
+  \tpSetProperty{toc-title-format}{\sffamily\sbseries\ifx\ts@layout@type\ts@str@layout@mdw\LARGE\else\huge\fi}%
   \tpSetProperty{toc-heading}{%
     \ifdim\dimexpr\pagegoal-\pagetotal<7\baselineskip\relax%
       \clearpage%
@@ -77,7 +77,15 @@
   }%
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
-  \tpSetProperty{title-format}{\sffamily\sbseries\fontsize{17.5bp}{25.6bp}\selectfont}%
+  \tpSetProperty{title-format}{%
+    \sffamily\sbseries%
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \LARGE%
+    \else%
+      \HUGE%
+    \fi%
+    \selectfont%
+  }%
   \tpSetProperty{quote-block-format}{%
     \hfill\hbox{\vbox{%
         \rightskip\z@
@@ -170,7 +178,7 @@
   }
 
   \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
-  \tpSetProperty{title-format}{\Huge\sbseries\sfchapfamily}%
+  \tpSetProperty{title-format}{\ifx\ts@layout@type\ts@str@layout@mdw\huge\else\Huge\fi\sbseries\sfchapfamily}%
   \tpSetProperty{quote-block-format}{%
     \hfill\hbox{%
       \vbox{%
@@ -383,7 +391,7 @@
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
   \tpSetProperty{number-sep}{\enskip}%
   \tpSetProperty{after-skip}{12.8bp}%
-  \tpSetProperty{title-format}{\sffamily\LARGE\sbseries}%
+  \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
   \tpSetProperty{subtitle-format}{\normalfont\sffamily\LARGE}%
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
   \tpSetProperty{quote-block-format}{%
@@ -431,7 +439,7 @@
   \fi
 
   \tpSetProperty{before-heading}{\addvspace{11.5bp}}%
-  \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
+  \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\sbseries\else\mdseries\fi\Large}%
   \tpSetProperty{before-quote-skip}{.5\baselineskip}%
   \tpSetProperty{running-heading}{}% da subsection sonst die Kolumnentitel ebenfalls von section erben würde
   \ifcollection\else
@@ -529,7 +537,7 @@
     \addvspace{1\baselineskip}%
   }%
   %\tpSetProperty{after-skip}{1sp}% Ticket 12534, 2022-04-25
-  \tpSetProperty{title-format}{\sffamily\mdseries\Large}%
+  \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\large\itshape\else\Large\mdseries\fi}%
   \ifcollection\else
     %\tpSetProperty{toc-indent}{8em}%
     \tpSetProperty{toc-margin-left}{6.5em}%

@@ -33,7 +33,7 @@
   \tpSetProperty{subcaption-add-sep-top}{-2mm}%
   \tpSetProperty{caption-valign-top}{bottom}%
   \tpSetProperty{caption-valign-bottom}{top}%
-  \tpSetProperty{caption-format-top}{\itshape\RaggedRight}%
+  \tpSetProperty{caption-format-top}{\ifx\ts@layout@type\ts@str@layout@mdw\footnotesize\else\itshape\fi\RaggedRight}%
   \tpSetProperty{caption-format-bottom}{\footnotesize\upshape\RaggedRight}%
   \tpSetProperty{subfloat-sep}{2mm}%
   \tpSetProperty{intext-skip-top}{2\baselineskip}%

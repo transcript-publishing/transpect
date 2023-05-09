@@ -2,23 +2,36 @@
 \ProvidesPackage{transcript-fontsizes}[2021/04/09 transcript]\relax
 
 \renewcommand\normalsize{%
-   \@setfontsize\normalsize{9.2bp}{12.8bp}%
-   \abovedisplayskip 9.3\p@ \@plus2\p@ \@minus5\p@
-   \abovedisplayshortskip \z@ \@plus3\p@
-   \belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
-   \belowdisplayskip \abovedisplayskip
-   \let\@listi\@listI}
+  \ifx\ts@layout@type\ts@str@layout@mdw
+    \@setfontsize\normalsize{8.5bp}{12.8bp}%
+  \else
+    \@setfontsize\normalsize{9.2bp}{12.8bp}%
+  \fi%
+  \abovedisplayskip 9.3\p@ \@plus2\p@ \@minus5\p@
+  \abovedisplayshortskip \z@ \@plus3\p@
+  \belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
+  \belowdisplayskip \abovedisplayskip
+  \let\@listi\@listI%
+  \let\@listii\@listI%
+  \let\@listiii\@listI%
+}
 \normalsize
 \renewcommand\small{%
-   \@setfontsize\small{9bp}{11}% head
-   \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
-   \abovedisplayshortskip \z@ \@plus2\p@
-   \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
-   \def\@listi{\leftmargin\leftmargini
-               \topsep 6.4bp
-               \parsep 3.2bp
-               \itemsep \parsep}%
-   \belowdisplayskip \abovedisplayskip
+  \ifx\ts@layout@type\ts@str@layout@mdw
+    \@setfontsize\small{8.4bp}{11bp}%
+  \else
+    \@setfontsize\small{9bp}{11}% head
+  \fi%
+  \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+  \abovedisplayshortskip \z@ \@plus2\p@
+  \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+  \def\@listi{%
+    \leftmargin\leftmargini
+    \topsep 6.4bp
+    \parsep 3.2bp
+    \itemsep \parsep%
+  }%
+  \belowdisplayskip \abovedisplayskip
 }
 \renewcommand\footnotesize{% footnotes
    \@setfontsize\footnotesize{8bp}{11bp}%

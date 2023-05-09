@@ -8,8 +8,12 @@
 
 % \def\@makefnmark{\smash{\textsuperscript{\@thefnmark}}}
 \def\@makefnmark{\hbox{\@textsuperscript{\selectfont\@thefnmark}}}%(giovanni, 2019-07-30)
-\newlength\fnumwidth \fnumwidth2em
-
+\newlength\fnumwidth
+\ifx\ts@layout@type\ts@str@layout@mdw
+  \fnumwidth\parindent%
+\else
+  \fnumwidth2em%
+\fi
 
 % Define the \urlx command which works like \url, but with line brakes
 % \def\fnurlhref#1#2{\old@href{#1}{#2}}
@@ -18,8 +22,12 @@
   \parindent\z@%
   \leftskip\fnumwidth
   \bgroup%
-    \nsfwiderfamily%
-    \hskip-\fnumwidth\hb@xt@\fnumwidth{{\nsfwiderfamily\@thefnmark}\hss}%
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \rmfamily%
+    \else
+      \nsfwiderfamily%
+    \fi%
+    \hskip-\fnumwidth\hb@xt@\fnumwidth{{\ifx\ts@layout@type\ts@str@layout@mdw\rmfamily\else\nsfwiderfamily\fi\@thefnmark}\hss}%
     \let\href\fn@href%
     \justify%
     % Preserve the justified alignment for footnotes which the language changes within.
