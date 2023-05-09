@@ -165,20 +165,22 @@
 \def\itemize{%
   \ifnum \@itemdepth >\thr@@\@toodeep\else
     \advance\@itemdepth\@ne
+    \@tempdima=12.8bp
+    \ifnum\@itemdepth>\@ne\relax\@tempdima=0\p@\fi
     \@enumdepth=\@itemdepth
     \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
-    \expandafter
-    \list
-      \csname\@itemitem\endcsname
-      {\topsep12.8bp
-       \labelwidth\csname leftmargin\romannumeral\the\@itemdepth\endcsname
-       \leftmargin\labelwidth
-       \labelsep\z@
-       \itemsep\z@
-       \parsep\z@
-       \partopsep\z@
-       \def\makelabel##1{##1\hss}}%
-  \fi}
+    \expandafter\list\csname\@itemitem\endcsname{%
+      \topsep\the\@tempdima
+      \labelwidth\csname leftmargin\romannumeral\the\@itemdepth\endcsname
+      \leftmargin\labelwidth
+      \labelsep\z@
+      \itemsep\z@
+      \parsep\z@
+      \partopsep\z@
+      \def\makelabel##1{##1\hss}%
+    }%
+  \fi%
+}
 
 \renewenvironment{description}[1][]
 {\list{}{%
