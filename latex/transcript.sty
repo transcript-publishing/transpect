@@ -49,10 +49,26 @@
 \newunicodechar{：}{:\enskip\ignorespaces}
 \newunicodechar{，}{,\enskip\ignorespaces}
 %\newunicodechar{ǀ}{|}
-\newunicodechar{ǀ}{\unichar{ǀ}}
-\newunicodechar{ǁ}{\unichar{ǁ}}
-\newunicodechar{ǂ}{\unichar{ǂ}}
-\newunicodechar{ǃ}{\unichar{ǃ}}
+\newunicodechar{ǀ}{%
+  \setbox\@tempboxa = \hbox{K}% Beliebige Versalie.
+  \tp@majuscleHeight = \ht\@tempboxa%
+  {\fontsize{\the\tp@majuscleHeight}{0bp}\selectfont\raisebox{\the\dimexpr0.24\tp@majuscleHeight\relax}{\unichar{ǀ}}}%
+}
+\newunicodechar{ǁ}{%
+  \setbox\@tempboxa = \hbox{K}% Beliebige Versalie.
+  \tp@majuscleHeight = \ht\@tempboxa%
+  {\fontsize{\the\tp@majuscleHeight}{0bp}\selectfont\raisebox{\the\dimexpr0.24\tp@majuscleHeight\relax}{\unichar{ǁ}}}%
+}
+\newunicodechar{ǂ}{%
+  \setbox\@tempboxa = \hbox{K}% Beliebige Versalie.
+  \tp@majuscleHeight = \ht\@tempboxa%
+  {\fontsize{\the\tp@majuscleHeight}{0bp}\selectfont\raisebox{\the\dimexpr0.24\tp@majuscleHeight\relax}{\unichar{ǂ}}}%
+}
+\newunicodechar{ǃ}{%
+  \setbox\@tempboxa = \hbox{K}% Beliebige Versalie.
+  \tp@majuscleHeight = \ht\@tempboxa%
+  {\fontsize{\the\dimexpr1.4\tp@majuscleHeight\relax}{0bp}\selectfont\raisebox{\the\dimexpr0\tp@majuscleHeight\relax}{\unichar{ǃ}}}%
+}
 
 \DeclareRobustCommand\unichar[1]{\textfallback{#1}}
 
