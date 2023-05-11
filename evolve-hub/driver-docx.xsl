@@ -93,7 +93,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="bibliography[preceding-sibling::*[1][self::bridgehead]]" mode="custom-2">
+  <xsl:template match="bibliography[preceding-sibling::*[1][self::bridgehead]]" mode="custom-2" priority="3">
     <xsl:copy>
       <xsl:apply-templates select="@*" mode="#current"/>
       <info>
@@ -101,16 +101,27 @@
           <xsl:copy-of select="preceding-sibling::*[1][self::bridgehead]/@*,
                                preceding-sibling::*[1][self::bridgehead]/node()"/>
         </title>
-        <xsl:call-template name="create-chunk-DOI"/>
+        <xsl:if test="..[self::hub]"><xsl:call-template name="create-chunk-DOI"/></xsl:if>
       </info>
       <xsl:apply-templates mode="#current"/>
     </xsl:copy>
   </xsl:template>
 
 
+<!--  <xsl:template match="bibliography/info" mode="custom-2">
+    <xsl:copy>
+      <xsl:apply-templates select="node()" mode="#current"/>
+      <xsl:if test="../..[self::hub]">
+        <xsl:call-template name="create-chunk-DOI">
+          <xsl:with-param name="context" as="element(*)" select="." tunnel="yes"/>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:copy>
+  </xsl:template>-->
+
   <xsl:template match="  chapter/info[not(biblioset[@role='chunk-metadata'])] 
                        | part/info[not(biblioset[@role='chunk-metadata'])] 
-                       | /*/appendix/info[not(biblioset[@role='chunk-metadata'])]" mode="custom-2">
+                       | /*/*[self::appendix|self::bibliography]/info[not(biblioset[@role='chunk-metadata'])]" mode="custom-2">
     <xsl:copy>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
       <xsl:call-template name="create-chunk-DOI">
@@ -134,7 +145,8 @@
 
   <xsl:template name="create-chunk-DOI">
     <xsl:param name="context" as="element(*)?" tunnel="yes"/>
-    <xsl:variable name="ancestor" select="ancestor-or-self::*[not(self::biblioset | self::info)][1]"/>
+    <xsl:variable name="ancestor" select="ancestor-or-self::*[self::bibliography | self::chapter | self::appendix | self::colophon | 
+                                                              self::preface | self::glossary|self::article|self::acknowledgements][1]"/>
     <xsl:variable name="counter" select="if ($ancestor[self::part]) 
                                           then concat('NO-DOI-', $ancestor/info/title)
                                           else xs:string(format-number(index-of($book-part-chapters, $ancestor), '000'))" as="xs:string?"/>
