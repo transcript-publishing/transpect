@@ -145,7 +145,7 @@
 
   <xsl:template name="create-chunk-DOI">
     <xsl:param name="context" as="element(*)?" tunnel="yes"/>
-    <xsl:variable name="ancestor" select="ancestor-or-self::*[self::bibliography | self::chapter | self::appendix | self::colophon | 
+    <xsl:variable name="ancestor" select="ancestor-or-self::*[self::bibliography | self::part| self::chapter | self::appendix | self::colophon | 
                                                               self::preface | self::glossary|self::article|self::acknowledgements][1]"/>
     <xsl:variable name="counter" select="if ($ancestor[self::part]) 
                                           then concat('NO-DOI-', $ancestor/info/title)
