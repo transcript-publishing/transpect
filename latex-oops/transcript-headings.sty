@@ -261,14 +261,13 @@
     }{}%
     \tpIfComp{RunAuthorNameList}{%
       \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
-    }{%
-      \global\let\@authormark\@empty%
+    }{\global\let\@authormark\@empty%
       \xdef\@authormark{\tpRunBookTitle}%
       \if@frontmatter%
       \else
         \if@mainmatter
         \else
-          \xdef\@partmark{\tpUseComp{Title}}
+          \expandafter\gdef\expandafter\@partmark\expandafter{\tpUseComp{Title}}%
         \fi
       \fi
     }%
