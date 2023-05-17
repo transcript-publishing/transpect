@@ -84,6 +84,8 @@ body {
 a {
   font-size:0.9em;
   text-decoration:none;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 /* 
  * headlines
