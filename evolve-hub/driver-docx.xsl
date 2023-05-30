@@ -205,4 +205,8 @@
     <xsl:processing-instruction name="{$pi-xml-name}" select="concat(replace(@role, '^ts', '\\'), ' ')"/>
   </xsl:template>
 
+  <xsl:template match="annotation" mode="hub:dissolve-sidebars-without-purpose">
+    <!-- https://redmine.le-tex.de/issues/13166 -->
+  </xsl:template>
+
 </xsl:stylesheet>
