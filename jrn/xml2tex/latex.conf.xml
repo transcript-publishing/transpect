@@ -7,7 +7,7 @@
   <import href="../../xml2tex/latex.conf.xml"/>
 
   <xsl:param name="cocotex" as="xs:boolean" select="true()"/>
-  <xsl:param name="s9y2" as="xs:string?"><!-- journal series like zig--></xsl:param>
+  <xsl:param name="s9y2" as="xs:string?"><!-- journal series type like zig--></xsl:param>
 
   <xsl:variable name="title" as="element(*)?"
                 select="$metadata/dbk:keyword[@role = ('Hefttitel')]" />
@@ -68,14 +68,15 @@
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
   
+  <xsl:variable name="open-access" as="xs:boolean" 
+                select="$metadata/dbk:keyword[@role eq 'Lizenztext'][normalize-space()][matches(.,'BY')]
+                         or
+                         (some $c in //dbk:chapter/dbk:info/dbk:biblioset/dbk:legalnotice satisfies matches($c, 'Creative\p{Zs}+Commons', 'i'))
+                         or
+                         $metadata/dbk:keyword[@role eq 'Lizenzlogo'][normalize-space()][matches(., 'by', 'i')]"/>
+
   
   <xsl:template name="xml2tex:add-publicationtype-specific-meta">
-    <xsl:variable name="open-access" as="xs:boolean" 
-                 select="some $c in //dbk:chapter/dbk:info/dbk:biblioset/dbk:legalnotice satisfies matches($c, 'Creative\p{Zs}+Commons', 'i') 
-                         or 
-                         $license-logo-href[normalize-space()]
-                         or 
-                         $license-text[normalize-space()][matches(.,'BY-')]"/>
    <xsl:if test="not($license-name[normalize-space()](:already applied in main template then:)) 
                  and 
                  $open-access">
@@ -85,9 +86,6 @@
                                           '^.*(Creative\p{Zs}+Commons.+?\)).*$', '$1'),
                                   '}')"/>
     </xsl:if> 
-    <xsl:if test="$open-access">
-      <xsl:value-of select="'&#xa;\tpLicenceLogo{logos/oasymbol.pdf}'"/>
-    </xsl:if>
    <xsl:sequence select="xml2tex:meta2tex($prices, (), 'tpPrices'),
                          xml2tex:meta2tex($pub-cycle, (), 'tpPubCycle'),
                          xml2tex:meta2tex($memberlist, (), 'tpMemberList')"/>
@@ -323,5 +321,24 @@
       <xsl:otherwise><xsl:sequence select="false()"/></xsl:otherwise>
     </xsl:choose>
   </xsl:function>
+
+  <xsl:template match="dbk:info/dbk:biblioset" mode="xml2tex">
+    <!--<xsl:apply-templates select="dbk:biblioid[@role = 'tsmetachunkdoi']" mode="#current"/>-->
+        <xsl:apply-templates select="dbk:biblioid[@role = 'tsmetachunkdoi']" mode="xml2tex"/>
+    <xsl:if test="dbk:legalnotice[normalize-space()]">
+      <!-- several paras have to be merged to one makro -->
+      <xsl:text>&#xa;\tpCopyright{</xsl:text>
+      <xsl:for-each select="dbk:legalnotice[normalize-space()]">
+        <xsl:apply-templates select="node()" mode="#current"/>
+        <xsl:if test="not(. is ../dbk:legalnotice[last()])"><xsl:text>\tpBreak </xsl:text></xsl:if>
+      </xsl:for-each>
+      <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:if test="dbk:legalnotice[normalize-space()][matches(., 'BY')] or $open-access">
+      <xsl:value-of select="'&#xa;\tpLicenceLogo{logos/oasymbol.pdf}'"/>
+    </xsl:if>
+  </xsl:template>
+
+
 
 </set>

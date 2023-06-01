@@ -12,12 +12,6 @@
   
   
   <xsl:template name="xml2tex:add-publicationtype-specific-meta">
-    <xsl:variable name="open-access" as="xs:boolean" 
-                 select="some $c in //dbk:chapter/dbk:info/dbk:biblioset/dbk:legalnotice satisfies matches($c, 'Creative\p{Zs}+Commons', 'i') 
-                         or 
-                         $license-logo-href[normalize-space()]
-                         or 
-                         $license-text[normalize-space()][matches(.,'BY-')]"/>
    <xsl:if test="not($license-name[normalize-space()](:already applied in main template then:)) 
                  and 
                  $open-access">
@@ -27,9 +21,6 @@
                                           '^.*(Creative\p{Zs}+Commons.+?\)).*$', '$1'),
                                   '}')"/>
     </xsl:if> 
-    <xsl:if test="$open-access">
-      <xsl:value-of select="'&#xa;\tpLicenceLogo{logos/oasymbol.pdf}'"/>
-    </xsl:if>
    <xsl:sequence select="'&#xa;\tpSeries{\includegraphics[width=\hsize]{logos/series/REIHENLOGO_KUL_ZIG.png}}&#xa;',
                          xml2tex:meta2tex($prices, (), 'tpPrices'),
                          xml2tex:meta2tex($pub-cycle, (), 'tpPubCycle '),
