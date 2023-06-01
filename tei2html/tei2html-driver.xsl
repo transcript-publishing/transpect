@@ -185,7 +185,7 @@
       <xsl:call-template name="generate-toc-headline"/>
       <xsl:apply-templates select="/TEI/text/front/divGen[@type = 'toc']/*:header[@rend = 'chunk-meta-sec']" mode="tei2html"/>
       <xsl:call-template name="generate-toc-body">
-        <xsl:with-param name="toc_level" select="$toc-depth + 2"/>
+        <xsl:with-param name="toc_level" select="$toc-depth + 1"/>
       </xsl:call-template>
     </nav>
   </xsl:template>
@@ -475,6 +475,8 @@
                       |head[@type eq 'sub']" mode="tei2html"/>
   
   
+  <xsl:template match="head[matches(@rend, $tei2html:no-toc-style-regex)]" mode="toc" priority="5"/>
+
   <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))][not(parent::*[self::figure | self::table | self::lg])]" 
                 mode="toc" priority="3">
     <xsl:variable name="author" select="preceding-sibling::byline/persName" as="element(persName)*"/>
