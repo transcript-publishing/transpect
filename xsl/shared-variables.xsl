@@ -30,5 +30,14 @@
                          '^(berschrift7|[Hh]eading\s?7|[a-z]{1,3}heading6|[a-z]{1,3}headingenumerated6)$',
                          '^(berschrift8|[Hh]eading\s?8|[a-z]{1,3}heading7|[a-z]{1,3}headingenumerated7)$',
                          '^(berschrift9|[Hh]eading\s?9|[a-z]{1,3}heading8|[a-z]{1,3}headingenumerated8)$')"/>-->
+  
+  <xsl:variable name="info-author-role" as="xs:string"
+                select="'^tsmetacontributionauthorname$'"/>
+  
+  <xsl:variable name="info-author-affiliation-role" as="xs:string"
+                select="'^tsmetacontributionauthoraffiliation$'"/>
+  
+  <xsl:variable name="info-author-email-role" as="xs:string"
+                select="'^tsmetacontributionauthorcontact$'" />
 
 </xsl:stylesheet>
