@@ -31,8 +31,10 @@
                          '^(berschrift8|[Hh]eading\s?8|[a-z]{1,3}heading7|[a-z]{1,3}headingenumerated7)$',
                          '^(berschrift9|[Hh]eading\s?9|[a-z]{1,3}heading8|[a-z]{1,3}headingenumerated8)$')"/>-->
   
-  <xsl:variable name="info-meta-styles" as="xs:string" 
-                select="'^tsmeta'"/>
+
+  <xsl:variable name="info-meta-styles" as="xs:string"
+                select="'^tsmeta'" ><!-- all meta style names, if they do not all begin with meta in your a9s, 
+      concat the important ones (info-licence-style, info-doi, etc.)--></xsl:variable>
   
   <xsl:variable name="info-author-role" as="xs:string"
                 select="'^tsmetacontributionauthorname$'"/>
@@ -42,5 +44,12 @@
   
   <xsl:variable name="info-author-email-role" as="xs:string"
                 select="'^tsmetacontributionauthorcontact$'" />
+
+  <xsl:variable name="info-doi" as="xs:string"
+                select="'[a-z]{1,3}meta(chunk)?doi$'" />
+
+ <xsl:variable name="hub:preserve-abstract-as-text" as="xs:boolean" select="true()">
+    <!-- if set to true() abstract, keywords and alternatve-title section are preserved additionally to meta tags in info-->
+  </xsl:variable>
 
 </xsl:stylesheet>
