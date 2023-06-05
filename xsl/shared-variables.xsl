@@ -31,7 +31,7 @@
                          '^(berschrift8|[Hh]eading\s?8|[a-z]{1,3}heading7|[a-z]{1,3}headingenumerated7)$',
                          '^(berschrift9|[Hh]eading\s?9|[a-z]{1,3}heading8|[a-z]{1,3}headingenumerated8)$')"/>-->
   
-  <xsl:variable name="sect-info-roles-regex" as="xs:string" 
+  <xsl:variable name="info-meta-styles" as="xs:string" 
                 select="'^tsmeta'"/>
   
   <xsl:variable name="info-author-role" as="xs:string"
