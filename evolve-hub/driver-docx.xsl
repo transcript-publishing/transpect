@@ -209,4 +209,35 @@
     <!-- https://redmine.le-tex.de/issues/13166 -->
   </xsl:template>
 
+  <xsl:template match="para[matches(@role, $info-doi)]" mode="hub:process-meta-sidebar">
+    <biblioid otherclass="{if(@role eq 'tsmetadoi') then 'book-doi' else 'chunk-doi'}">
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:value-of select="normalize-space(.)"/>
+    </biblioid>
+  </xsl:template>
+
+  <xsl:template match="*[sidebar[@role = 'chunk-metadata']]" mode="hub:process-meta-sidebar" priority="5">
+    <xsl:copy>
+      <xsl:apply-templates select="@*, (title | titleabbrev | subtitle | author | para[@role[matches(.,'^(tsauthor|info-subtitle-role)')]])" mode="#current"/>
+      <xsl:apply-templates select="sidebar[@role = 'chunk-metadata']" mode="#current"/>
+      <xsl:apply-templates select="node() except (title | titleabbrev | subtitle | author | para[@role[matches(.,'^(tsauthor|tssubheading)')]] | sidebar[@role = 'chunk-metadata'])" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+
+ <!-- pull meta infos after headings -->
+  <xsl:template match="para[matches(@role, '^(tsheading|toctitle)')][preceding-sibling::*[1][@role = 'chunk-metadata']]" mode="hub:reorder-marginal-notes">
+    <xsl:next-match/>
+    <xsl:apply-templates select="preceding-sibling::*[1][@role = 'chunk-metadata']" mode="#current">
+      <xsl:with-param name="process-meta-section" tunnel="yes" as="xs:boolean" select="true()"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template match="sidebar[@role = 'chunk-metadata']" mode="hub:reorder-marginal-notes">
+    <xsl:param name="process-meta-section" tunnel="yes" as="xs:boolean?"/>
+    <xsl:if test="$process-meta-section or preceding-sibling::*[1][@role = ('tsheadlineleft', 'tsheadlineright', 'tsheading1', 'tsheading2', 'tsauthor')]">
+      <xsl:next-match/>
+    </xsl:if>
+  </xsl:template>
+
+
 </xsl:stylesheet>
