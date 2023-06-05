@@ -39,6 +39,31 @@
 %% Das Titeleimodul setzt den Seitenzähler bei Aufruf auf 1.
 \setcounter{page}{5}
 
+
+\long\def\tpIfCompAnd#1#2#3#4{%
+  \expandafter\ifcsname tp@\tp@cur@cont @#1\endcsname
+    \expandafter\ifcsname tp@\tp@cur@cont @#2\endcsname
+      #3%
+    \else
+      #4%
+    \fi
+  \else
+    #4%
+  \fi%
+}
+
+\long\def\tpIfCompOr#1#2#3#4{%
+  \expandafter\ifcsname tp@\tp@cur@cont @#1\endcsname
+    #3%
+  \else
+    \expandafter\ifcsname tp@\tp@cur@cont @#2\endcsname
+      #3%
+    \else
+      #4%
+    \fi
+  \fi%
+}
+
 %%%%%%%%%%
 % Fonts  %
 %%%%%%%%%%
