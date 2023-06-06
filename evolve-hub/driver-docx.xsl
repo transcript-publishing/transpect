@@ -218,7 +218,7 @@
 
   <xsl:template match="*[sidebar[@role = 'chunk-metadata']]" mode="hub:process-meta-sidebar" priority="5">
     <xsl:copy>
-      <xsl:apply-templates select="@*, (title | titleabbrev | subtitle | author | para[@role[matches(.,'^(tsauthor|info-subtitle-role)')]])" mode="#current"/>
+      <xsl:apply-templates select="@*, (title | titleabbrev | subtitle | author | para[@role[matches(.,'^(tsauthor|tssubheading)')]])" mode="#current"/>
       <xsl:apply-templates select="sidebar[@role = 'chunk-metadata']" mode="#current"/>
       <xsl:apply-templates select="node() except (title | titleabbrev | subtitle | author | para[@role[matches(.,'^(tsauthor|tssubheading)')]] | sidebar[@role = 'chunk-metadata'])" mode="#current"/>
     </xsl:copy>
@@ -239,7 +239,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="para[matches(@role, 'tsauthor')]" mode="hub:process-meta-sidebar">
+  <xsl:template match="para[matches(@role, '^tsauthor$')]" mode="hub:process-meta-sidebar">
     <author>
       <personname>
         <othername>  
