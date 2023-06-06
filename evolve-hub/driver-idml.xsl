@@ -22,4 +22,31 @@
  <xsl:template match="para[@role = 'Fuzeile'] | *[not(self::css:rule)]/@idml2xml:layer" mode="hub:split-at-tab"/>
  <xsl:param name="hub:handle-several-images-per-caption" as="xs:boolean" select="true()"/>
 
+ <!-- next 3 templates were rafactred to transcript and are no longer in common/evolve-hub. therefore the are copied here-->
+ <!-- pull meta infos after headings -->
+  <xsl:template match="para[matches(@role, '^(tsheading|toctitle)')][preceding-sibling::*[1][@role = 'chunk-metadata']]" mode="hub:reorder-marginal-notes">
+    <xsl:next-match/>
+    <xsl:apply-templates select="preceding-sibling::*[1][@role = 'chunk-metadata']" mode="#current">
+      <xsl:with-param name="process-meta-section" tunnel="yes" as="xs:boolean" select="true()"/>
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template match="sidebar[@role = 'chunk-metadata']" mode="hub:reorder-marginal-notes">
+    <xsl:param name="process-meta-section" tunnel="yes" as="xs:boolean?"/>
+    <xsl:if test="$process-meta-section or preceding-sibling::*[1][@role = ('tsheadlineleft', 'tsheadlineright', 'tsheading1', 'tsheading2', 'tsauthor')]">
+      <xsl:next-match/>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="para[matches(@role, 'tsauthor')]" mode="hub:process-meta-sidebar">
+    <author>
+      <personname>
+        <othername>  
+          <xsl:apply-templates select="@*" mode="#current"/>
+          <xsl:value-of select="normalize-space(.)"/>
+        </othername>
+      </personname>
+    </author>
+  </xsl:template>
+
 </xsl:stylesheet>
