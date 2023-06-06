@@ -319,7 +319,12 @@
     %\global\setbox\@licenceTextFooter = \hbox{}
     
     \xdef\@headingDOI{\tpUseComp{DOI}}
-    \def\@headingCopyright{\tpIfComp{LicenceLogo}{\includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space\footnotesize\nsffamily\tpUseComp{LicenceName}\space}{}\tpUseComp{Copyright}}    
+    \def\@headingCopyright{\tpIfComp{LicenceLogo}{\includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space\footnotesize\nsffamily\tpUseComp{LicenceName}\space}{}\tpUseComp{Copyright}}
+    \tpIfComp{LicenceLogo}{%
+      \xdef\@articleLicenceLogo{\tpUseComp{LicenceLogo}}%
+    }{
+      \global\let\@articleLicenceLogo\relax%
+    }
     
     \global\setbox\@articlefooterbox = \vbox{%
       \parindent\z@%
