@@ -239,5 +239,15 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="para[matches(@role, 'tsauthor')]" mode="hub:process-meta-sidebar">
+    <author>
+      <personname>
+        <othername>  
+          <xsl:apply-templates select="@*" mode="#current"/>
+          <xsl:value-of select="normalize-space(.)"/>
+        </othername>
+      </personname>
+    </author>
+  </xsl:template>
 
 </xsl:stylesheet>
