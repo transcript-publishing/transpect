@@ -121,6 +121,7 @@
   \bgroup
     \parindent\z@
     \thispagestyle{empty}%
+    \let\tpBreak\break%
     \null\vskip\dimexpr\headingsep+1\baselineskip-.45mm\relax%
     \parindent \z@
     \normalfont
@@ -131,8 +132,13 @@
         \@nolnerr
       \else
         \unskip \reserved@e {\reserved@f##1}\break
-      \fi}
-  }{\par\egroup\aftergroup\cleardoublepage}
+      \fi%
+    }
+}{%
+    \par%
+  \egroup%
+  \aftergroup\cleardoublepage%
+}
 
 
 \usepackage{enumerate}
