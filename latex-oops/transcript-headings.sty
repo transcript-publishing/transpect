@@ -467,6 +467,40 @@
   \tpSetProperty{after-heading-block}{\nopagebreak}
 }
 
+
+\tpDeclareHeading[section]{2}{review}{%
+  % Im Wesentlichen nur eine Section, aber mit der Möglichkeit, den Runtitle zu setzen.
+  %% Format Kolumnentitel
+  % Running heading: ungerade Seiten.
+  \tpSetProperty{running-heading}{%
+    \tpIfComp{RunNumber}{%
+      \tpUseComp{RunNumber}\enskip%
+    }{}
+    \tpUseComp{RunTitle}%
+  }%
+  % Running extra: Zusatzoptionen.
+  \tpSetProperty{running-extra}{%
+    \tpIfComp{RunAuthorNameList}{%
+      \protected@xdef\tp@runningHeadingLeft@backmatter{\tpUseComp{RunAuthorNameList}}%
+    }{}%
+    \tpIfComp{RunTitle}{%
+      \protected@xdef\tp@runningHeadingRight@backmatter{\tpUseComp{RunTitle}}%
+    }{}%
+    \tpIfComp{RunAuthorNameList}{%
+      \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
+    }{\global\let\@authormark\@empty%
+      \xdef\@authormark{\tpRunBookTitle}%
+      \if@frontmatter%
+      \else
+        \if@mainmatter
+        \else
+          \expandafter\gdef\expandafter\@partmark\expandafter{\tpUseComp{Title}}%
+        \fi
+      \fi
+    }%
+  }
+}
+
 \tpDeclareHeading[section]{2}{subsection}{%
   % Ticket 13717.
   \if@frontmatter%
