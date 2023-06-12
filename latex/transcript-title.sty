@@ -32,23 +32,23 @@
   \fi%
 }%
 
+\gdef\titleLayoutOverride{}
+
 \tpDeclareTitlepage{%
   \ifcsname ts@layout@type\endcsname
   \else
     \let\ts@layout@type\relax%
   \fi
   
-  % Alle Titeleien mit Layoutvariante c ausgeben, unabhängig vom Layout des restlichen Werks. Gilt nur für std-Layout, nicht für xtx.
+  % Titeleien des a- und b-Layouts mit Layoutvariante c ausgeben. Gilt nur für std-Layout, nicht für xtx.
   \ifx\ts@layout@type\ts@str@layout@std
-    \topmargin=\dimexpr15.35mm-\headheight\relax%
-    \headsep=\dimexpr10.5mm-\topskip\relax%
-    \evensidemargin=21.5mm\relax%
-    \oddsidemargin=17.5mm\relax%
-    \textwidth=109mm\relax%
-    \hsize=109mm\relax%
-    \textheight=\dimexpr40\baselineskip+\topskip\relax%
-    \headingsep=16mm\relax%
-  \fi
+    \if\layout a
+      \gdef\titleLayoutOverride{\csname layout-c\endcsname}%
+    \fi%
+    \if\layout b
+      \gdef\titleLayoutOverride{\csname layout-c\endcsname}%
+    \fi%
+  \fi%
   
   \tpSetProperty{editor-suffix-sgl}{\editorsuffixsglname}
   \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}
@@ -65,12 +65,21 @@
       \clearpage
     \egroup
   }%
+  
   \tpSetProperty{before-titlepage-roman}{%
+    \titleLayoutOverride%
+    \if\layout a
+      \enlargethispage{6\baselineskip}%
+    \fi
+    \if\layout b
+      \enlargethispage{3\baselineskip}%
+    \fi
     \setcounter{page}{1}%
     \def\thepage{\roman{page}}%
     \def\UrlFont{\rmfamily}%
-    \fontsize{9.3}{12.5}\selectfont
+    \fontsize{9.3}{12.5}\selectfont%
   }%
+  
   %%%%%%%%%%%%
   % Seite I. %
   %%%%%%%%%%%%
@@ -90,8 +99,8 @@
       \egroup
     \fi%
     \par
-    \tpUseComp{Title}%
-    \par\vfill
+    \tpUseComp{Title}\par%
+    \vfill
     \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
     \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
     \tpIfComp{Volume}{{\enskip\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip\ignorespaces\tpUseComp{Volume}}}{}%
