@@ -11,7 +11,7 @@
 
 %% Paketoptionen
 %% durchreichen der script-Optionen
-\define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}}
+\define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}\gdef\layout{#1}}
 \DeclareOptionX{nohead}{\global\let\n@head\relax}
 \define@key{transcript.sty}{captions}[top]{\gdef\ts@caps{#1}}
 \define@key{transcript.sty}{captions_figure}[top]{\gdef\ts@caps@figure{#1}}

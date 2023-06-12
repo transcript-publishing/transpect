@@ -113,3 +113,50 @@
 \vfuzz=\z@
 
 \ifx\ts@layout@type\ts@str@layout@mdw\linespread{1.02}\fi
+
+\expandafter\def\csname layout-e\endcsname{%
+  \paperwidth=155mm\relax%
+  \paperheight=225mm\relax%
+  \topmargin=\dimexpr15mm-\headheight\relax%
+  \headsep=\dimexpr9mm-\topskip\relax%
+  \evensidemargin=22mm\relax%
+  \oddsidemargin=18mm\relax%
+  \textwidth=115mm\relax%
+  \textheight=\dimexpr44\baselineskip+\topskip\relax%
+  \headingsep=35mm\relax%
+}
+
+\expandafter\def\csname layout-a\endcsname{%
+  \paperwidth=148mm\relax%
+  \paperheight=225mm\relax%
+  \topmargin=\dimexpr21.5mm-\headheight\relax%
+  \headsep=\dimexpr14mm-\topskip\relax%
+  \evensidemargin=32mm\relax%
+  \oddsidemargin=22mm\relax%
+  \textwidth=94mm\relax%
+  \textheight=\dimexpr34\baselineskip+\topskip\relax%
+  \headingsep=16mm\relax%
+}
+
+\expandafter\def\csname layout-b\endcsname{%
+  \paperwidth=148mm\relax%
+  \paperheight=225mm\relax%
+  \topmargin=\dimexpr17mm-\headheight\relax
+  \headsep=\dimexpr13.35mm-\topskip\relax%
+  \evensidemargin=27mm\relax%
+  \oddsidemargin=19mm\relax%
+  \textwidth=102mm\relax%
+  \textheight=\dimexpr37\baselineskip+\topskip\relax%
+  \headingsep=16mm\relax
+}
+
+\expandafter\def\csname layout-c\endcsname{%
+  \topmargin=\dimexpr15.35mm-\headheight\relax%
+  \headsep=\dimexpr10.5mm-\topskip\relax%
+  \evensidemargin=21.5mm\relax%
+  \oddsidemargin=17.5mm\relax%
+  \textwidth=109mm\relax%
+  \hsize=109mm\relax%
+  \textheight=\dimexpr40\baselineskip+\topskip\relax%
+  \headingsep=16mm\relax%
+}
