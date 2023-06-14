@@ -38,27 +38,27 @@
         \ifcollection
           \ifx\@authormark\@empty
           \else
-            \@authormark:
+            \@authormark:%
           \fi
         \fi
         \ifx\@partmark\@undefined
           \ifx\@chaptermark\@undefined
-            \tpRunBookTitle
+            \tpRunBookTitle%
           \else
-            \@chaptermark
+            \@chaptermark%
           \fi
         \else
           \ifx\@chaptermark\@undefined
-            \@partmark
+            \@partmark%
           \else
-            \@chaptermark
+            \@chaptermark%
           \fi
         \fi
       \else
         \ifx\@chaptermark\@undefined
-          \tpRunBookTitle
+          \tpRunBookTitle%
         \else
-          \@chaptermark
+          \@chaptermark%
         \fi
       \fi
     \fi
