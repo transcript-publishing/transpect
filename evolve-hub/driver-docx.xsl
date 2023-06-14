@@ -243,8 +243,7 @@
     <author>
       <personname>
         <othername>  
-          <xsl:apply-templates select="@*" mode="#current"/>
-          <xsl:value-of select="normalize-space(.)"/>
+          <xsl:apply-templates select="@*, node()" mode="#current"/>
         </othername>
       </personname>
     </author>
