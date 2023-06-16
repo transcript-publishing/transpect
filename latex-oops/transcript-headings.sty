@@ -256,8 +256,8 @@
   % Running heading: ungerade Seiten.
   \tpSetProperty{running-heading}{%
     \tpIfComp{RunNumber}{%
-      \tpUseComp{RunNumber}\enskip%
-    }{}
+      \tpUseComp{RunNumber}\space%
+    }{}%
     \tpUseComp{RunTitle}%
   }%
   % Running extra: gerade Seiten.
