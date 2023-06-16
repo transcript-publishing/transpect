@@ -457,6 +457,15 @@
     </rule>
   </template>
   
+  <template context="dbk:blockquote[matches(@role, $verse-misc-style)]/dbk:para">
+    <!-- add \tpBreak after every verse para. perhaps it might be better for future projcts 
+      to work with linebreaks and para if an empty line is desired-->
+    <rule break-after="1">
+      <text/>
+      <text>\tpBreak</text>
+    </rule>
+  </template>
+  
   <template context="dbk:blockquote[not(matches(@role, '^[a-z]+_?verse.*$'))]
                                    [count(dbk:para) gt 1]/dbk:para">
     <rule break-after="2">
