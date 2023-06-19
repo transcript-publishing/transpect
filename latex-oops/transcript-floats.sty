@@ -104,7 +104,7 @@
       }%
     \fi
   \fi
-  %% Parameter für Abbildungs- und Tabellenverzeichnisse
+  %% Parameter für Abbildungs- und Tabellenverzeichnisse.
   \tpSetProperty{list-of-caption-format}{\sffamily}%
   \tpSetProperty{list-of-indent}{0pt}%
   \tpSetProperty{list-of-margin-left}{0pt}%
@@ -164,6 +164,15 @@
     }%
     \nobreak\tpUseProperty{list-of-page-sep}\hbox to 1em{\hss\tpTocLink{\tpUseComp{ListofPage}}}%
   }%
+}
+
+\tpDeclareFloat{tpFigure}{figure}{lof}{%
+  \ifx\ts@layout@type\ts@str@layout@mdw
+    \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}% Ticket 14959.
+    \tpSetProperty{number-format}{\bfseries}% Ticket 14957.
+  \else
+    \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
+  \fi
 }
 
 %% Klassen für Abbildungen:
