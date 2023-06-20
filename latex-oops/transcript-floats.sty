@@ -167,12 +167,10 @@
 }
 
 \tpDeclareFloat{tpFigure}{figure}{lof}{%
+  \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}% Ticket 14959, 14989.
   \ifx\ts@layout@type\ts@str@layout@mdw
-    \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}% Ticket 14959.
     \tpSetProperty{number-format}{\bfseries}% Ticket 14957.
-  \else
-    \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
-  \fi
+  \fi%
 }
 
 %% Klassen für Abbildungen:
