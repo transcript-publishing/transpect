@@ -81,8 +81,7 @@
     <section class="halftitle title-page" epub:type="halftitlepage" id="halftitle">
       <!-- https://redmine.le-tex.de/issues/14982 -->
     <xsl:apply-templates select="$metadata[@key = ('Widmung')]" mode="#current"/>
-      <br/>
-      <xsl:choose>
+        <xsl:choose>
         <xsl:when test="contains($basename, '_mono_')">
           <xsl:apply-templates select="$metadata[@key = ('Autoreninformationen')],
                                        $metadata[@key = ('Kurztext')]" mode="#current"/>
