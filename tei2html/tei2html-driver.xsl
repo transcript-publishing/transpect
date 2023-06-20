@@ -79,9 +79,23 @@
   
   <xsl:template name="half-title">
     <section class="halftitle title-page" epub:type="halftitlepage" id="halftitle">
-      <xsl:apply-templates select="$metadata[@key = ('Widmung')],
-                                   $metadata[@key = ('Autoreninformationen')],
-                                   $metadata[@key = ('Kurztext')]" mode="#current"/>
+      <!-- https://redmine.le-tex.de/issues/14982 -->
+    <xsl:apply-templates select="$metadata[@key = ('Widmung')]" mode="#current"/>
+      <br/>
+      <xsl:choose>
+        <xsl:when test="contains($basename, '_mono_')">
+          <xsl:apply-templates select="$metadata[@key = ('Autoreninformationen')],
+                                       $metadata[@key = ('Kurztext')]" mode="#current"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:if test="$metadata[@key = ('Editorial')][matches(., '\S')]">
+            <h4>Editorial</h4>
+            <xsl:apply-templates select="$metadata[@key = ('Editorial')]" mode="#current"/>
+          </xsl:if>
+          <br/>
+          <xsl:apply-templates select="$metadata[@key = ('Herausgeberinformationen')]" mode="#current"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </section>
   </xsl:template>
   
@@ -91,7 +105,10 @@
   
   <xsl:template name="full-title">
     <section class="fulltitle title-page" epub:type="titlepage" id="title-page">
-      <xsl:apply-templates select="$metadata[@key = ('Autor', 'Herausgeber', 'Titel', 'Untertitel')]" mode="#current"/>
+      <xsl:apply-templates select="$metadata[@key = 'Autor'], 
+                                   $metadata[@key = 'Herausgeber'],
+                                   $metadata[@key = 'Titel'],
+                                   $metadata[@key = 'Untertitel']" mode="#current"/>
       <div class="logo">
         <img src="http://this.transpect.io/a9s/ts/logos/transcript_rgb.png" alt="Transcript Verlag"/>
       </div>
@@ -100,28 +117,28 @@
   
   <xsl:template name="imprint">
     <section class="title-page imprint" epub:type="imprint">
-      <xsl:apply-templates select="$metadata[@key = ('Qualifikationsnachweis', 
-                                                     'Gutachter', 
-                                                     'Dank', 
-                                                     'Fordertext', 
-                                                     'Forderlogos', 
-                                                     'Bibliografische_Information', 
-                                                     'Lizenzlogo', 
-                                                     'Lizenzlink', 
-                                                     'Lizenztext',
-                                                     'Copyright', 
-                                                     'Umschlaggestaltung', 
-                                                     'Umschlagcredit', 
-                                                     'Lektorat', 
-                                                     'Korrektorat', 
-                                                     'Satz', 
-                                                     'DOI',
-                                                     'Konvertierung', 
-                                                     'Print-ISBN', 
-                                                     'PDF-ISBN', 
-                                                     'BiblISSN',
-                                                     'BibleISSN', 
-                                                     'ePUB-ISBN')]" mode="#current"/>
+      <xsl:apply-templates select="$metadata[@key = 'Qualifikationsnachweis'], 
+                                   $metadata[@key = 'Gutachter'], 
+                                   $metadata[@key = 'Dank'], 
+                                   $metadata[@key = 'Fordertext'], 
+                                   $metadata[@key = 'Forderlogos'], 
+                                   $metadata[@key = 'Bibliografische_Information'],
+                                   $metadata[@key = 'Lizenzlogo'],
+                                   $metadata[@key = 'Lizenzlink'],
+                                   $metadata[@key = 'Lizenztext'],
+                                   $metadata[@key = 'Copyright'],
+                                   $metadata[@key = 'Umschlaggestaltung'],
+                                   $metadata[@key = 'Umschlagcredit'], 
+                                   $metadata[@key = 'Lektorat'],
+                                   $metadata[@key = 'Korrektorat'],
+                                   $metadata[@key = 'Satz'],
+                                   $metadata[@key = 'DOI'],
+                                  (: $metadata[@key = 'Konvertierung'],:)
+                                   $metadata[@key = 'Print-ISBN'],
+                                   $metadata[@key = 'PDF-ISBN'],
+                                   $metadata[@key = 'ePUB-ISBN'],
+                                   $metadata[@key = 'BiblISSN'],
+                                   $metadata[@key = 'BibleISSN']" mode="#current"/>
     </section>
   </xsl:template>
   
