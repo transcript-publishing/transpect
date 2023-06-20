@@ -91,7 +91,7 @@
   
   <xsl:template name="full-title">
     <section class="fulltitle title-page" epub:type="titlepage" id="title-page">
-      <xsl:apply-templates select="$metadata[@key = ('Autor', 'Titel', 'Untertitel')]" mode="#current"/>
+      <xsl:apply-templates select="$metadata[@key = ('Autor', 'Herausgeber', 'Titel', 'Untertitel')]" mode="#current"/>
       <div class="logo">
         <img src="http://this.transpect.io/a9s/ts/logos/transcript_rgb.png" alt="Transcript Verlag"/>
       </div>
