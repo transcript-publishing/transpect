@@ -97,6 +97,8 @@
       </xsl:choose>
     </section>
   </xsl:template>
+
+  <xsl:template match="html:section[@epub:type='halftitlepage'][not(matches(., '\S'))]" mode="clean-up" priority="2"/>
   
   <xsl:template name="frontispiece">
     <section class="{local-name()} title-page" epub:type="seriespage"/>
