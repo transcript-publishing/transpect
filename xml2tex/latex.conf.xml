@@ -8,9 +8,11 @@
   <xsl:import href="http://transpect.io/xslt-util/functx/Sequences/Sorting-and-Grouping/sort.xsl"/>
   
   <xsl:param name="s9y1-path" as="xs:string?"/>
+  <xsl:param name="s9y2" as="xs:string?"><!-- type type like mono/anth--></xsl:param>
   <xsl:param name="s9y2-path" as="xs:string?"/>
   <xsl:param name="s9y3" as="xs:string?"><!-- series type like std--></xsl:param>
   <xsl:param name="s9y3-path" as="xs:string?"/>
+  
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
   <xsl:param name="table-caption-pos" as="xs:string?"/>
@@ -264,9 +266,38 @@
                                                 '}&#xa;')"/>
       <xsl:text>&#xa;\end{tpSeriesEditor}&#xa;</xsl:text>
     </xsl:for-each>
+
+    <xsl:choose>
+      <xsl:when test="$s9y2 = 'mono'">
+        <!-- run titles, https://redmine.le-tex.de/issues/14963 -->
+        <xsl:value-of select="'&#xa;\tpRunTitle{'"/>
+        <!--  Autor, Doppelpunkt, LZ, Titel. Wenn eines oder beide leer sind: kein Doppelpunkt/LZ
+        erste Quelle: hub/info/title (vormals ts_meta_book_title) und keyword[@role = 'Run_Autor'] vormals ts_meta_headline_author
+        wenn nicht in docx, aus klopotek.xml/meta.xml (Autor/Titel). mehreren Autor:innen durch Komma trennen-->
+        <xsl:choose>
+          <xsl:when test="/dbk:*/dbk:info/dbk:title or /dbk:*/dbk:info/dbk:keywordset[@role = 'titlepage']/dbk:keyword[@role = 'Run_Autor']">
+            <xsl:sequence select="string-join(
+                                        (xml2tex:meta-remove-links-etc(/dbk:*/dbk:info/dbk:keywordset[@role = 'titlepage']/dbk:keyword[@role = 'Run_Autor'][normalize-space()]), 
+                                         xml2tex:meta-remove-links-etc(/dbk:*/dbk:info/dbk:title[normalize-space()])
+                                        ), 
+                                        ': ')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:sequence select="string-join(
+              (string-join(/dbk:*/dbk:info/dbk:keywordset[@role = 'titlepage']/dbk:keyword[@role = 'Autor']/node()[normalize-space()], ', '),
+              /dbk:*/dbk:info/dbk:keywordset[@role = 'titlepage']/dbk:keyword[@role = 'Titel'][normalize-space()]),
+              ': ')"/>
+          </xsl:otherwise>
+        </xsl:choose>
+        <xsl:value-of select="'}'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:sequence select="xml2tex:meta2tex($title-for-running-head, (), 'tpRunTitle')"/>
+      </xsl:otherwise> 
+    </xsl:choose>
+
     <xsl:sequence select="
       xml2tex:meta2tex(($title, $title-for-running-head)[1], (), 'tpTitle'),
-      xml2tex:meta2tex(($title-for-running-head, $title-for-running-head)[1], (), 'tpRunTitle'),
       xml2tex:meta2tex($subtitle, (), 'tpSubtitle'),
       xml2tex:meta2tex($shorttitle, (), 'tpShortTitle'),
       xml2tex:meta2tex($series-number, (), 'tpNumber'),
