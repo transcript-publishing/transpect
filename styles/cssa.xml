@@ -59,6 +59,7 @@
 <!--  <css:rule layout-type="para" native-name="ts_keywords_heading" name="tskeywordsheading"/>-->
   <css:rule layout-type="para" native-name="ts_meta_doi" name="tsmetadoi"/>
   <css:rule layout-type="para" native-name="ts_meta_book_title" name="tsmetabooktitle"/>
+  <css:rule layout-type="para" native-name="ts_meta_headline_author" name="tsheadlineauthor"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_title" name="tsmetajournaltitle"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_year" name="tsmetajournalyear"/>
   <css:rule layout-type="para" native-name="ts_meta_journal_issue" name="tsmetajournalissue"/>
