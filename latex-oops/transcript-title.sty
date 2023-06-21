@@ -81,19 +81,11 @@
   }%
 
   \tpSetProperty{before-titlepage-roman}{%
-    \titleLayoutOverride%
-    \if\layout a
-      \enlargethispage{6\baselineskip}%
-    \fi
-    \if\layout b
-      \enlargethispage{3\baselineskip}%
-    \fi
     \setcounter{page}{1}%
     \def\thepage{\roman{page}}%
     \def\UrlFont{\rmfamily}%
     \fontsize{9.3}{12.5}\selectfont%
   }%
-  
   
   \ifx\ts@journal@series\ts@str@journal@zig
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -121,6 +113,13 @@
     }%
     
     \tpSetProperty{titlepage-roman}{%
+      \titleLayoutOverride%
+      \if\layout a
+        \enlargethispage{5\baselineskip}%
+      \fi
+      \if\layout b
+        \enlargethispage{2\baselineskip}%
+      \fi
       \tpUsePropEnv{titlepage-i}%
       \clearpage
       \tpUsePropEnv{titlepage-ii}%
@@ -190,6 +189,13 @@
     }%
     
     \tpSetProperty{titlepage-roman}{%
+      \titleLayoutOverride%
+      \if\layout a
+        \enlargethispage{5\baselineskip}%
+      \fi
+      \if\layout b
+        \enlargethispage{2\baselineskip}%
+      \fi
       \tpUsePropEnv{titlepage-i}%
       \clearpage
       \tpUsePropEnv{titlepage-ii}%
@@ -296,6 +302,13 @@
     \tpSetProperty{name-sep}{,\space}%
     
     \tpSetProperty{titlepage-roman}{%
+      \titleLayoutOverride%
+      \if\layout a
+        \enlargethispage{5\baselineskip}%
+      \fi
+      \if\layout b
+        \enlargethispage{2\baselineskip}%
+      \fi
       \tpUsePropEnv{titlepage-i}%
       \clearpage
       \tpUsePropEnv{titlepage-ii}%
@@ -401,6 +414,25 @@
   % allgemeine Titelei %
   %%%%%%%%%%%%%%%%%%%%%%
   \expandafter\ifx\ts@journal@series\relax
+  
+    \tpSetProperty{titlepage-roman}{%
+      \titleLayoutOverride%
+      \if\layout a
+        \enlargethispage{5\baselineskip}%
+      \fi
+      \if\layout b
+        \enlargethispage{2\baselineskip}%
+      \fi
+      \tpUsePropEnv{titlepage-i}%
+      \clearpage
+      \tpUsePropEnv{titlepage-ii}%
+      \clearpage
+      \tpUsePropEnv{titlepage-iii}%
+      \clearpage
+      \tpUsePropEnv{titlepage-iv}%
+      \clearpage
+    }%  
+  
     %%%%%%%%%%%
     % Seite I %
     %%%%%%%%%%%
