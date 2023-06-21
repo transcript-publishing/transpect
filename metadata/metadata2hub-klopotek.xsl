@@ -35,17 +35,17 @@
 
   <xsl:template match="*:copyright_holders"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/14963 -->
-    <keyword role="{if (*:copyright_holder[1][cpr_type = 'VE']) then 'Autor' else 'Herausgeber'}">
+    <keyword role="{if (*:copyright_holder[cpr_type = ('VE', 'HG')][1][cpr_type = 'VE']) then 'Autor' else 'Herausgeber'}">
       <xsl:choose>
-        <xsl:when test="count(*:copyright_holder) gt 1">
-          <xsl:for-each select="*:copyright_holder">
+        <xsl:when test="count(*:copyright_holder[cpr_type = ('VE', 'HG')]) gt 1">
+          <xsl:for-each select="*:copyright_holder[cpr_type = ('VE', 'HG')]">
             <para>
               <xsl:sequence select="concat(*:first_name, ' ', *:last_name)"/>
             </para>
           </xsl:for-each>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:sequence select="concat(*:copyright_holder/*:first_name, ' ', *:copyright_holder/*:last_name)"/>
+          <xsl:sequence select="concat(*:copyright_holder[cpr_type = ('VE', 'HG')]/*:first_name, ' ', *:copyright_holder[cpr_type = ('VE', 'HG')]/*:last_name)"/>
         </xsl:otherwise>
       </xsl:choose>
     </keyword>
