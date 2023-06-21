@@ -33,4 +33,22 @@
   <xsl:template match="*"  mode="klopotek-to-keyword" priority="-0.5"/>
 
 
+  <xsl:template match="*:copyright_holders"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/14963 -->
+    <keyword role="{if (*:copyright_holder[1][cpr_type = 'VE']) then 'Autor' else 'Herausgeber'}">
+      <xsl:choose>
+        <xsl:when test="count(*:copyright_holder) gt 1">
+          <xsl:for-each select="*:copyright_holder">
+            <para>
+              <xsl:sequence select="concat(*:first_name, ' ', *:last_name)"/>
+            </para>
+          </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:sequence select="concat(*:copyright_holder/*:first_name, ' ', *:copyright_holder/*:last_name)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </keyword>
+  </xsl:template>
+
 </xsl:stylesheet>
