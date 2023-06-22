@@ -99,6 +99,13 @@
           {\itshape
             \tpUseComp{QuoteSource}}}{}}}%
   }
+  
+  \ifcollection\else
+    \tpSetProperty{running-heading}{%
+      \tp@titlepage@RunTitle
+    }%
+  \fi
+  
   \tpSetProperty{heading-block}{%
     \tpUseProperty{title-format}%
     %\vskip.5\baselineskip
