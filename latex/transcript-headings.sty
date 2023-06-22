@@ -247,19 +247,25 @@
   }%
   % Running extra: gerade Seiten.
   \tpSetProperty{running-extra}{%
-    \tpIfComp{RunAuthorNameList}{%
-      \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
-    }{%
-      \global\let\@authormark\@empty
-      \xdef\@authormark{\tpRunBookTitle}%
-      \if@frontmatter%
-      \else
-        \if@mainmatter
+    \ifcollection
+      \tpIfComp{RunAuthorNameList}{%
+        \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
+      }{%
+        \global\let\@authormark\@empty
+        \xdef\@authormark{\tpRunBookTitle}%
+        \if@frontmatter%
         \else
-          \xdef\@authormark{\tpUseComp{Title}}
+          \if@mainmatter
+          \else
+            \xdef\@authormark{\tpUseComp{Title}}
+          \fi
         \fi
+      }%
+    \else
+      \ifcsname tp@titlepage@RunTitle\endcsname
+        \protected@xdef\@authormark{\csname tp@titlepage@RunTitle\endcsname}%
       \fi
-    }%
+    \fi
   }
 }
 
