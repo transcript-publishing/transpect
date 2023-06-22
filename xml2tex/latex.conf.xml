@@ -266,19 +266,19 @@
                                                 '}&#xa;')"/>
       <xsl:text>&#xa;\end{tpSeriesEditor}&#xa;</xsl:text>
     </xsl:for-each>
-
-    <xsl:choose>
+  <!-- for oop only → will be restored if moving is complete -->
+<!--    <xsl:choose>
       <xsl:when test="$s9y2 = 'mono'">
-        <!-- run titles, https://redmine.le-tex.de/issues/14963 -->
+        <!-\- run titles, https://redmine.le-tex.de/issues/14963 -\->
         <xsl:value-of select="'&#xa;\tpRunTitle{'"/>
-        <!--  Autor, Doppelpunkt, LZ, Titel. Wenn eines oder beide leer sind: kein Doppelpunkt/LZ
+        <!-\-  Autor, Doppelpunkt, LZ, Titel. Wenn eines oder beide leer sind: kein Doppelpunkt/LZ
         erste Quelle: hub/info/title (vormals ts_meta_book_title) und keyword[@role = 'Run_Autor'] vormals ts_meta_headline_author
-        wenn nicht in docx, aus klopotek.xml/meta.xml (Autor/Titel). mehreren Autor:innen durch Komma trennen-->
+        wenn nicht in docx, aus klopotek.xml/meta.xml (Autor/Titel). mehreren Autor:innen durch Komma trennen-\->
         <xsl:choose>
           <xsl:when test="/dbk:*/dbk:info/dbk:title or /dbk:*/dbk:info/dbk:keywordset[@role = 'titlepage']/dbk:keyword[@role = 'Run_Autor']">
             <xsl:sequence select="string-join(
-                                        (xml2tex:meta-remove-links-etc(/dbk:*/dbk:info/dbk:keywordset[@role = 'titlepage']/dbk:keyword[@role = 'Run_Autor'][normalize-space()]), 
-                                         xml2tex:meta-remove-links-etc(/dbk:*/dbk:info/dbk:title[normalize-space()])
+                                        (xml2tex:meta-remove-links-etc(/dbk:*/dbk:info/dbk:keywordset[@role = 'titlepage']/dbk:keyword[@role = 'Run_Autor'])[normalize-space()], 
+                                         xml2tex:meta-remove-links-etc(/dbk:*/dbk:info/dbk:title)[normalize-space()]
                                         ), 
                                         ': ')"/>
           </xsl:when>
@@ -294,8 +294,8 @@
       <xsl:otherwise>
         <xsl:sequence select="xml2tex:meta2tex($title-for-running-head, (), 'tpRunTitle')"/>
       </xsl:otherwise> 
-    </xsl:choose>
-
+    </xsl:choose>-->
+    <xsl:sequence select="xml2tex:meta2tex($title-for-running-head, (), 'tpRunTitle')"/>
     <xsl:sequence select="
       xml2tex:meta2tex(($title, $title-for-running-head)[1], (), 'tpTitle'),
       xml2tex:meta2tex($subtitle, (), 'tpSubtitle'),
