@@ -261,24 +261,30 @@
   }%
   % Running extra: gerade Seiten.
   \tpSetProperty{running-extra}{%
-    \tpIfComp{RunAuthorNameList}{%
-      \protected@xdef\tp@runningHeadingLeft@backmatter{\tpUseComp{RunAuthorNameList}}%
-    }{}%
-    \tpIfComp{RunTitle}{%
-      \protected@xdef\tp@runningHeadingRight@backmatter{\tpUseComp{RunTitle}}%
-    }{}%
-    \tpIfComp{RunAuthorNameList}{%
-      \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
-    }{\global\let\@authormark\@empty%
-      \xdef\@authormark{\tpRunBookTitle}%
-      \if@frontmatter%
-      \else
-        \if@mainmatter
+    \ifcollection
+      \tpIfComp{RunAuthorNameList}{%
+        \protected@xdef\tp@runningHeadingLeft@backmatter{\tpUseComp{RunAuthorNameList}}%
+      }{}%
+      \tpIfComp{RunTitle}{%
+        \protected@xdef\tp@runningHeadingRight@backmatter{\tpUseComp{RunTitle}}%
+      }{}%
+      \tpIfComp{RunAuthorNameList}{%
+        \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
+      }{\global\let\@authormark\@empty%
+        \xdef\@authormark{\tpRunBookTitle}%
+        \if@frontmatter%
         \else
-          \expandafter\gdef\expandafter\@partmark\expandafter{\tpUseComp{Title}}%
+          \if@mainmatter
+          \else
+            \expandafter\gdef\expandafter\@partmark\expandafter{\tpUseComp{Title}}%
+          \fi
         \fi
+      }%
+    \else
+      \ifcsname tp@titlepage@RunTitle\endcsname
+        \protected@xdef\@authormark{\csname tp@titlepage@RunTitle\endcsname}%
       \fi
-    }%
+    \fi
   }
 }
 
