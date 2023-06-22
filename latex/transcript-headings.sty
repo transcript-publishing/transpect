@@ -86,6 +86,12 @@
     \ifcollection \global\let\@authormark\@empty\fi
   }%
   
+  \ifcollection\else
+    \tpSetProperty{running-heading}{%
+      \tp@titlepage@RunTitle
+    }%
+  \fi
+  
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{title-format}{\sffamily\sbseries\fontsize{17.5bp}{25.6bp}\selectfont}%
