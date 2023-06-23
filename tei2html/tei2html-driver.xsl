@@ -440,8 +440,8 @@
         </xsl:when>
         <xsl:when test="$elt/parent::div/@type = ('bibliography')">
           <xsl:sequence select="if ($elt/ancestor::div/@type = ('chapter', 'article')) 
-                                then 5
-                                else 4"/>
+                                then 4 + 1[$elt/ancestor::div/@type = ('part')]
+                                else 3 + 1[$elt/ancestor::div/@type = ('part')]"/>
         </xsl:when>
         <xsl:when test="$elt/parent::*[matches(local-name(.), '^div\d')]">
           <xsl:sequence select="count($elt/ancestor::*[matches(local-name(.), '^div')])"/>
@@ -557,7 +557,7 @@
     </xsl:element>
     <!-- https://redmine.le-tex.de/issues/8785; https://redmine.le-tex.de/issues/13460 -->    
   </xsl:template>
-  
+
   <xsl:template match="p[@rend eq 'tsendnotesheading']" mode="tei2html"/>  
 
   <xsl:template match="*:lb" mode="strip-indexterms-etc tei2html">
