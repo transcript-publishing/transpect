@@ -11,6 +11,12 @@
   \end{heading}%
   %\pdfbookmark[0]{\contentsname}{tableofcontents}%
   \pagestyle{empty}%
+  \if\layout a
+    \enlargethispage{-5\baselineskip}%
+  \fi
+  \if\layout b
+    \enlargethispage{-2\baselineskip}%
+  \fi
   \@starttoc{toc}%
   \clearpage\pagestyle{headings}%
 }
