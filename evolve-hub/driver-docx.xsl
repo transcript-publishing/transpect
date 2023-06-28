@@ -19,6 +19,8 @@
   <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
   <xsl:import href="http://this.transpect.io/a9s/ts/xsl/shared-variables.xsl"/>
 
+  <xsl:param name="s9y2" as="xs:string?"/>
+
   <xsl:template match="/" mode="custom-2">
     <xsl:variable name="out-dir" as="element(keyword)"
                   select="hub/info/keywordset[@role eq 'hub']/keyword[@role eq 'archive-dir-uri']"/>
@@ -234,7 +236,7 @@
 
   <xsl:template match="sidebar[@role = 'chunk-metadata']" mode="hub:reorder-marginal-notes">
     <xsl:param name="process-meta-section" tunnel="yes" as="xs:boolean?"/>
-    <xsl:if test="$process-meta-section or preceding-sibling::*[1][@role = ('tsheadlineleft', 'tsheadlineright', 'tsheading1', 'tsheading2', 'tsauthor')]">
+    <xsl:if test="$process-meta-section or preceding-sibling::*[1][@role = ('tsheadlineleft', 'tsheadlineright', 'tsheadlineauthor', 'tsheading1', 'tsheading2', 'tsauthor')]">
       <xsl:next-match/>
     </xsl:if>
   </xsl:template>
@@ -249,13 +251,15 @@
     </author>
   </xsl:template>
 
-  <xsl:template match="para[matches(@role, 'tsheadlineauthor')]" mode="hub:dissolve-sidebars-without-purpose"/>
+  <!--  <xsl:template match="para[matches(@role, 'tsheadlineauthor')][$s9y2 = 'mono']" mode="hub:dissolve-sidebars-without-purpose">
+    <!-\- https://redmine.le-tex.de/issues/14963 -\->
+  </xsl:template>
 
-  <xsl:template match="hub/info/keywordset[@role = 'titlepage']/*[last()]" mode="hub:dissolve-sidebars-without-purpose">
+  <xsl:template match="hub[$s9y2 = 'mono']/info/keywordset[@role = 'titlepage']/*[last()]" mode="hub:dissolve-sidebars-without-purpose">
     <xsl:next-match/>
     <xsl:if test="/hub/para[matches(@role, 'tsheadlineauthor')]">
       <keyword role="Run_Autor"><xsl:apply-templates select="/hub/para[matches(@role, 'tsheadlineauthor')][1]/node()" mode="#current"/></keyword>
     </xsl:if>
-  </xsl:template>
+  </xsl:template>-->
 
 </xsl:stylesheet>
