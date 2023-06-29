@@ -207,6 +207,11 @@
     <xsl:processing-instruction name="{$pi-xml-name}" select="concat(replace(@role, '^ts', '\\'), ' ')"/>
   </xsl:template>
 
+  <xsl:template match="para[not(@role)][not(matches(., '\S'))][@css:page-break-before]" mode="hub:split-at-tab">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:processing-instruction name="{$pi-xml-name}" select="'\newpage'"/>
+  </xsl:template>
+
   <xsl:template match="annotation" mode="hub:dissolve-sidebars-without-purpose">
     <!-- https://redmine.le-tex.de/issues/13166 -->
   </xsl:template>
@@ -252,7 +257,7 @@
   </xsl:template>
 
   <!--  <xsl:template match="para[matches(@role, 'tsheadlineauthor')][$s9y2 = 'mono']" mode="hub:dissolve-sidebars-without-purpose">
-    <!-\- https://redmine.le-tex.de/issues/14963 -\->
+    <!-\- https://redmine.le-tex.de/issues/15030 -\->
   </xsl:template>
 
   <xsl:template match="hub[$s9y2 = 'mono']/info/keywordset[@role = 'titlepage']/*[last()]" mode="hub:dissolve-sidebars-without-purpose">
