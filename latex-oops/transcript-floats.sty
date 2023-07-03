@@ -126,6 +126,10 @@
 
 %% gilt nur für Abbildungen:
 \tpDeclareFloat{tpFigure}{figure}{lof}{%
+  \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}% Ticket 14959, 14989.
+  \ifx\ts@layout@type\ts@str@layout@mdw
+    \tpSetProperty{number-format}{\bfseries}% Ticket 14957.
+  \fi%
   \tpSetProperty{list-of-block}{%
     \tpUseProperty{list-of-caption-format}%
     \tpIfComp{ListofNumber}{%
@@ -166,12 +170,6 @@
   }%
 }
 
-\tpDeclareFloat{tpFigure}{figure}{lof}{%
-  \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}% Ticket 14959, 14989.
-  \ifx\ts@layout@type\ts@str@layout@mdw
-    \tpSetProperty{number-format}{\bfseries}% Ticket 14957.
-  \fi%
-}
 
 %% Klassen für Abbildungen:
 \tpDeclareClass{A}{\tpSetProperty{margin-left}{0mm}\tpSetProperty{margin-right}{0mm}}
