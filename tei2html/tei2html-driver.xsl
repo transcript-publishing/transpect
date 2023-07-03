@@ -366,6 +366,17 @@
     <xsl:apply-templates select="$author" mode="heading-content"/>
   </xsl:template>
   
+  
+  <xsl:template match="graphic[exists((desc,../figDesc, ../desc)/ref)]" mode="epub-alternatives">
+    <!--    https://redmine.le-tex.de/issues/14053-->
+    <xsl:element name="ref" namespace="http://www.tei-c.org/ns/1.0">
+      <xsl:copy select="((desc,../figDesc, ../desc)/ref)[1]/@target"/>
+      <xsl:next-match/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="desc/ref | figDesc/ref | *[self::desc|self::figDesc][every $n in node() satisfies $n[self::ref]]" mode="epub-alternatives"/>
+  
   <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))]
                            [not(ancestor::*[self::figure or self::table or self::floatingText or self::lg or self::spGrp])]" mode="class-att">
     <xsl:attribute name="class" select="if (parent::div[@type] or parent::divGen[@type]) 
@@ -555,6 +566,7 @@
         /TEI[@xml:lang eq 'de']/'Endnoten',
         'Endnotes')[1]"/>
     </xsl:element>
+  
     <!-- https://redmine.le-tex.de/issues/8785; https://redmine.le-tex.de/issues/13460 -->    
   </xsl:template>
 
