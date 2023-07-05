@@ -442,7 +442,6 @@
   
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
   \tpSetProperty{number-sep}{\enskip}%
-  \tpSetProperty{after-skip}{12.8bp}%
   \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
   \tpSetProperty{subtitle-format}{\normalfont\sffamily\LARGE}%
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
@@ -477,6 +476,7 @@
   \tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
   \tpSetProperty{bookmark}{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\enskip}{}\tpUseComp{TocTitle}}%
   \tpSetProperty{after-heading-block}{\nopagebreak}
+  \tpSetProperty{after-skip}{12.8bp}%
 }
 
 
@@ -551,70 +551,7 @@
     \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
     \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
   }%
-  % \tpSetProperty{after-heading-block}{%
-  %   % Berechnung verbleibenden Abstands.
-  %   \tp@saveRemainingSpace
-  % }
 }
-
-% % BEGIN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % Codeergänzung für Anpassung in Überschriftenebene 4. \minusvspace in before-heading erzeugt fehlerhaften Abstand. %
-% % Ermittlung, ob Überschrift auf Überschrift folgt, indem verbleibende Zeilen auf der Seite berechnet werden.       %
-% % Berechnung erfordert Ergänzung in after-heading-block bei chapter.                                                %
-% %                                                                                                                   % 
-% \newcommand\normalskip{\baselineskip}
-% % Maß für auf der Seite verbleibenden vertikalen Platz.
-% \global\newdimen\tp@remainingVSpace
-% % Maß für den verbleibenden vertikalen Platz auf der Seite nach dem Überschriftenblock eines Chapters.
-% \global\newdimen\tp@remainingVSpaceAfterChapterHeading
-% \global\newcount\tp@remainingLinesAfterChapterHeading
-% % Maß für den verbleibenden vertikalen Platz auf der Seite am Beginn einer Section.
-% \global\newdimen\tp@remainingVSpaceAtSectionBeginning
-% \global\newcount\tp@remainingLinesAtSectionBeginning
-% % Counter für die Seite, auf der das Kapitel beginnt. Für den Abgleich mit Seite der ersten Section des Kapitels.
-% \global\newcount\tp@chapterPage
-
-% \gdef\tp@stripFracPart#1.#2\@nil{#1}
-
-% \gdef\tp@getRemainingVSpace{\the\dimexpr\pagegoal-\pagetotal\relax}
-
-% % Verbleibender Platz auf der Seite in Zeilenhöhen.
-% \global\newcount\tp@remainingLines
-% \gdef\tp@getRemainingLines{%
-%   \edef\tp@remainingLinesFrac{\CalcRatio{\tp@remainingVSpace}{\normalskip}}%
-%   \def\tp@numberFloored{\expandafter\tp@stripFracPart\tp@remainingLinesFrac.\relax\@nil\relax}
-%   \global\tp@remainingLines=\the\numexpr\expandafter\tp@stripFracPart\tp@remainingLinesFrac.\relax\@nil+1\relax%
-% }
-
-% % Bedingter vspace.
-% \gdef\tp@spaceIfAfterChapterHeading#1{%
-%   \global\tp@remainingVSpace=\tp@getRemainingVSpace\relax%
-%   \global\tp@remainingVSpaceAtSectionBeginning=\the\tp@remainingVSpace%
-%   \tp@getRemainingLines%
-%   \global\tp@remainingLinesAtSectionBeginning=\tp@remainingLines%
-%   %\typeout{tp@chapterPage: \the\tp@chapterPage; \the\tp@remainingLinesAfterChapterHeading; \the\tp@remainingLinesAtSectionBeginning}
-%   \ifnum\tp@chapterPage=\thepage\relax%
-%     \ifnum\tp@remainingLinesAfterChapterHeading=\tp@remainingLinesAtSectionBeginning\relax%
-%       \vskip#1%
-%     \fi%
-%   \fi%
-% }
-
-% \gdef\tp@saveRemainingSpace{%
-%   \tpIfProp{after-skip}%
-%     {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace-\tpUseProperty{after-skip}\relax}%
-%     {\global\tp@remainingVSpaceAfterChapterHeading=\dimexpr\tp@getRemainingVSpace\relax}%
-%   % Aktualisiere verbleibenden vertikalen Restplatz unter Berücksichtigung des Afterskips.
-%   \global\tp@remainingVSpace=\the\tp@remainingVSpaceAfterChapterHeading
-%   % Verbleibende Zeilenanzahl nach der Kapitelüberschrift ermitteln.
-%   \tp@getRemainingLines
-%   % Diese Zeilenanzahl global speichern.
-%   \global\tp@remainingLinesAfterChapterHeading=\tp@remainingLines\relax%
-%   % Seite, auf der das Kapitel beginnt, speichern.
-%   \global\tp@chapterPage=\value{page}%
-% }
-% %                                                                                                                   %
-% % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \tpDeclareHeading[section]{3}{subsubsection}{%
