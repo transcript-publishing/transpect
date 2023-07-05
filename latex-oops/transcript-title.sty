@@ -115,11 +115,13 @@
     
     \tpSetProperty{titlepage-roman}{%
       \titleLayoutOverride%
-      \if\layout a
-        \enlargethispage{5\baselineskip}%
-      \fi
-      \if\layout b
-        \enlargethispage{2\baselineskip}%
+      \ifx\ts@layout@type\ts@str@layout@std
+        \if\layout a
+          \enlargethispage{5\baselineskip}%
+        \fi
+        \if\layout b
+          \enlargethispage{2\baselineskip}%
+        \fi
       \fi
       \tpUsePropEnv{titlepage-i}%
       \clearpage
@@ -191,11 +193,13 @@
     
     \tpSetProperty{titlepage-roman}{%
       \titleLayoutOverride%
-      \if\layout a
-        \enlargethispage{5\baselineskip}%
-      \fi
-      \if\layout b
-        \enlargethispage{2\baselineskip}%
+      \ifx\ts@layout@type\ts@str@layout@std
+        \if\layout a
+          \enlargethispage{5\baselineskip}%
+        \fi
+        \if\layout b
+          \enlargethispage{2\baselineskip}%
+        \fi
       \fi
       \tpUsePropEnv{titlepage-i}%
       \clearpage
@@ -304,11 +308,13 @@
     
     \tpSetProperty{titlepage-roman}{%
       \titleLayoutOverride%
-      \if\layout a
-        \enlargethispage{5\baselineskip}%
-      \fi
-      \if\layout b
-        \enlargethispage{2\baselineskip}%
+      \ifx\ts@layout@type\ts@str@layout@std
+        \if\layout a
+          \enlargethispage{5\baselineskip}%
+        \fi
+        \if\layout b
+          \enlargethispage{2\baselineskip}%
+        \fi
       \fi
       \tpUsePropEnv{titlepage-i}%
       \clearpage
@@ -418,11 +424,13 @@
   
     \tpSetProperty{titlepage-roman}{%
       \titleLayoutOverride%
-      \if\layout a
-        \enlargethispage{5\baselineskip}%
-      \fi
-      \if\layout b
-        \enlargethispage{2\baselineskip}%
+      \ifx\ts@layout@type\ts@str@layout@std
+        \if\layout a
+          \enlargethispage{5\baselineskip}%
+        \fi
+        \if\layout b
+          \enlargethispage{2\baselineskip}%
+        \fi
       \fi
       \tpUsePropEnv{titlepage-i}%
       \clearpage
