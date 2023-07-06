@@ -99,8 +99,8 @@
   <xsl:template match="/" mode="meta">
     <xsl:apply-templates select="*//*:dict" mode="#current"/>
   </xsl:template>
-
-<key>ePUB-ISBN</key>
+<!--
+  <key>ePUB-ISBN</key>-->
   
   <xsl:template match="*:dict" mode="meta">
     <meta name="DC.creator" content="{normalize-space(string-join($metadata//key[. = ('Autor', 'Herausgeber')]/following-sibling::*[1][normalize-space()]/descendant-or-self::string, ' '))}"/>
@@ -112,19 +112,18 @@
     <xsl:if test="$metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Kurztext']]">
       <meta name="DC.description" content="{normalize-space(string-join($metadata//key[. = ('Kurztext')]/following-sibling::*[1]/descendant-or-self::string, ' '))}"/>
     </xsl:if>
-    <meta name="DC.date" content="{(replace(normalize-space(string-join($metadata//key[. = 'Copyright']/following-sibling::*[1]/descendant-or-self::string, ' ')), 
-                                            '^\s*©\s+(\d{4}).+$', 
-                                            '$1')[normalize-space()], 
-                                    format-date(current-date(), '[Y]')
-                                   )[1]}"/>
+    <xsl:variable name="copyright" select="normalize-space(string-join($metadata//key[. = 'Copyright']/following-sibling::*[1]/descendant-or-self::string, ' '))"/>
+    <meta name="DC.date">
+      <xsl:attribute name="content" select="if (matches($copyright, '^\s*©\s*\d{4}')) then replace($copyright, '^\s*©\s*(\d{4}).+$', '$1') else format-date(current-date(), '[Y]')"/>
+    </meta> 
     <xsl:if test="$metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Copyright']]">
-       <meta name="DC.rights" content="{normalize-space(string-join($metadata//key[. = ('Copyright')]/following-sibling::*[1][normalize-space()]/descendant-or-self::string, ' '))}"/>
+       <meta name="DC.rights" content="{$copyright}"/>
     </xsl:if>
-      <xsl:if test="$metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Schlagworte']]">
-        <xsl:for-each select="tokenize($metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Schlagworte']], ';')[normalize-space()]">
-           <meta name="DC.subject" content="{.}"/>
-        </xsl:for-each>
-      </xsl:if>
+    <xsl:if test="$metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Schlagworte']]">
+      <xsl:for-each select="tokenize($metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Schlagworte']], ';')[normalize-space()]">
+        <meta name="DC.subject" content="{.}"/>
+      </xsl:for-each>
+    </xsl:if>
     <meta name="lang" content="{$htmlinput[1]/html:html/@lang}"/>
   </xsl:template>
   
