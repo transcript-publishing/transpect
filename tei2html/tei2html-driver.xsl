@@ -164,6 +164,15 @@
     </xsl:for-each>
   </xsl:template>
     
+  <xsl:template match="term[@key eq 'Herausgeber'][normalize-space()]" mode="tei2html">
+     <p class="{lower-case(translate(@key, ' ', '-'))}">
+     <xsl:value-of select="concat(
+                                  string-join(node()[normalize-space()], ', '),
+                                  if (/*/@xml:lang = 'en') then ' (Ed.)' else ' (Hg.)'
+                            )"/>
+    </p>
+  </xsl:template>
+
   <xsl:template match="term[@key eq 'Lizenzlogo'][normalize-space()]" mode="tei2html">
      <p class="{lower-case(translate(@key, ' ', '-'))}">
       <img src="{concat('http://this.transpect.io/a9s/ts/logos/cc/', replace(., '\.eps', '.png', 'i'))}" alt="Logo {normalize-space(../term[@key eq 'Lizenz'])}" class="cc logo"/>
