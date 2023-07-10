@@ -37,15 +37,19 @@
 
   <xsl:template match="textClass">
     <!--https://github.com/transcript-publishing/6246/issues/8-->
-    <xsl:if test="$meta/term[@key = 'Schlagworte'][normalize-space()]">
+    <xsl:if test="$meta/term[@key = 'Schlagworte'][normalize-space()] or /TEI/teiHeader/profileDesc/textClass/classCode">
       <xsl:copy copy-namespaces="no">
-        <keywords>
-          <xsl:for-each select="tokenize($meta/term[@key = 'Schlagworte'], ';')">
-            <term>
-              <xsl:value-of select="."/>
-            </term>
-          </xsl:for-each>
-        </keywords>
+        <!-- https://redmine.le-tex.de/issues/15108 -->
+        <xsl:copy-of select="/TEI/teiHeader/profileDesc/textClass/classCode" copy-namespaces="no"/>
+        <xsl:if test="$meta/term[@key = 'Schlagworte'][normalize-space()]">
+          <keywords>
+            <xsl:for-each select="tokenize($meta/term[@key = 'Schlagworte'], ';')">
+              <term>
+                <xsl:value-of select="."/>
+              </term>
+            </xsl:for-each>
+          </keywords>
+        </xsl:if>
       </xsl:copy>
     </xsl:if>
   </xsl:template>
@@ -235,9 +239,15 @@
   <xsl:template match="seriesStmt">
     <!--https://github.com/transcript-publishing/6246/commit/6b53c4f0a8de375d57a232f693d838bd7b23b10f-->
     <xsl:copy copy-namespaces="no">
-      <xsl:if test="$meta/term[@key = 'Reihe'][normalize-space()]">
-        <title type="main"><xsl:value-of select="$meta/term[@key = 'Reihe']"/></title>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="$meta/term[@key = 'Reihe'][normalize-space()]">
+          <title type="main"><xsl:value-of select="$meta/term[@key = 'Reihe']"/></title>
+        </xsl:when>
+        <xsl:otherwise>
+          <!-- invalid withour p or title-->
+          <title type="main"/>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="$meta/term[@key = 'Bandnummer'][normalize-space()]">
         <biblScope unit="volume"><xsl:value-of select="replace($meta/term[@key = 'Bandnummer'], '^[^\d]+\s', '')"/></biblScope>
       </xsl:if>
