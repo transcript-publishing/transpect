@@ -455,3 +455,8 @@ p.editorial {
 span.article-title{
   font-weight: bold;
 }
+.tsmotto{
+  margin: 0 0 2em 40%;
+  font-size: 1rem !important;
+  line-height: 1.5em !important;
+}
