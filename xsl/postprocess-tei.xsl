@@ -109,9 +109,10 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="*[key('elt-by-corresp', concat('#', @xml:id))
+  <xsl:template match="*[@xml:id]
+                        [key('elt-by-corresp', concat('#', @xml:id))
                                [self::keywords[@rendition='chunk-meta']/term[@key = 'chunk-doi'][normalize-space()]]
-                           ]">
+                        ]">
     <!-- add opener for DOI -->
     <xsl:variable name="elt" select="." as="element(*)"/>  
      <xsl:copy copy-namespaces="no">
