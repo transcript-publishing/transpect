@@ -49,12 +49,15 @@
     \leftmargin    \parindent%
     \rightmargin   \ifx\ts@layout@type\ts@str@layout@mdw\leftmargin\else\z@\fi%
     \nsfwiderfamily%
-    \topsep        6.4bp%
+    \topsep        6.4bp
+    %\topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
     \parsep        \z@%
   }%
   \ifx\ts@layout@type\ts@str@layout@mdw%
     \footnotesize%
   \fi%
+  %\@tempdima=\baselineskip% Ticket 15122.
+  %\baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
   \item\noindent\ignorespaces%
 }{%
   \endlist
@@ -75,25 +78,31 @@
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
 
-\renewenvironment{verse}
-{\noindent\par\list{}{%
-    \listparindent\z@%
-    \parindent\z@
-    \partopsep\z@
+\renewenvironment{verse}{%
+  \noindent\par%
+  \list{%
+  }{%
+    \listparindent \z@%
+    \parindent     \z@
+    \partopsep     \z@
     \itemindent    \listparindent
-    \leftmargin 5mm
+    \leftmargin    5mm
     \rightmargin   \z@
-    \rightskip\rightmargin\@plus1fil
+    \rightskip     \rightmargin\@plus1fil
     \nsfwiderfamily
-    \topsep6.4bp
-    \parsep .5\baselineskip}%
-\item\noindent\ignorespaces}
-{\endlist
- \par
- \gdef\@doendpe{%
-   \@endpetrue
-   \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
-   \global\let\@doendpe\orig@doendpe}}
+    \topsep        6.4bp
+    \parsep       .5\baselineskip%
+  }%
+  \item\noindent\ignorespaces%
+}{%
+  \endlist
+  \par
+  \gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe%
+  }%
+}
 \newenvironment{versecentered}
 {\noindent\par\list{}{%
     \listparindent\z@%

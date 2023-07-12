@@ -191,6 +191,7 @@
       \vbox{%
         \rightskip\z@
         \hsize.5\textwidth
+        %\raggedright% Ticket 15122.
         \normalfont
         \normalsize
         \nsfwiderfamily
@@ -447,7 +448,7 @@
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
   \tpSetProperty{quote-block-format}{%
     \hfill\vbox{%
-      \justify
+      \justify% Auskommentiert mit Ticket 15122.
       \hsize.5\textwidth
       \normalsize\nsfwiderfamily\mdseries
       \noindent
