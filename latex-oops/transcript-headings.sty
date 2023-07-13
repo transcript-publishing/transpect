@@ -35,6 +35,8 @@
       \tpUseComp{TocTitle}%
       \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
   }%
+  \tpSetProperty{running-heading}{}%
+  \tpSetProperty{running-extra}{}%
 }
 
 
@@ -66,15 +68,7 @@
   }%
   \tpSetProperty{toc-after-entry}{\par\nobreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nobreak}% Thing at the end of the entry, after the page number
 
-  \tpSetProperty{before-heading}{%
-    \cleardoublepage
-    \null\vskip\headingsep
-    \thispagestyle{empty}%
-    \global\let\@chaptermark\@undefined
-    \global\let\has@parts\relax
-    \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
-    \ifcollection \global\let\@authormark\@empty\fi
-  }%
+  
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{title-format}{%
@@ -100,13 +94,24 @@
             \tpUseComp{QuoteSource}}}{}}}%
   }
   
-  \ifcollection\else
-    \tpSetProperty{running-heading}{%
-      \tp@titlepage@RunTitle
-    }%
-  \fi
+  \tpSetProperty{before-heading}{%
+    \cleardoublepage
+    \null\vskip\headingsep
+    \thispagestyle{empty}%
+    %\global\let\@chaptermark\@undefined
+    \global\let\has@parts\relax
+    \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
+    \ifcollection \global\let\@authormark\@empty\fi
+  }%
   
   \tpSetProperty{heading-block}{%
+    % Kolumnentitel setzen.
+    \tpIfComp{RunTitle}{%
+      \protected@xdef\tp@partmark{\tp@heading@RunTitle}%
+    }{
+      \protected@xdef\tp@partmark{\tp@heading@Title}%
+    }%
+    
     \tpUseProperty{title-format}%
     %\vskip.5\baselineskip
     \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
@@ -129,6 +134,8 @@
 
 \gdef\tp@runningHeadingLeft@backmatter{\relax}
 \gdef\tp@runningHeadingRight@backmatter{\relax}
+
+\gdef\tp@chaptermark{Test}
 
 \tpDeclareHeading{0}{chapter}{%
   % Ticket 13717.
@@ -184,7 +191,6 @@
     \tpIfComp{BMNumber}{\tpUseComp{BMNumber}\space}{}\tpUseComp{BMTitle}%
   }
 
-  \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
   \tpSetProperty{title-format}{\ifx\ts@layout@type\ts@str@layout@mdw\huge\else\Huge\fi\sbseries\sfchapfamily}%
   \tpSetProperty{quote-block-format}{%
     \hfill\hbox{%
@@ -202,8 +208,30 @@
         }{}%
       }%
     }%
-  }%
+  }%  
+  
+  \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
+  
   \tpSetProperty{heading-block}{%
+    \ifcollection
+      \tpIfComp{RunAuthorNameList}{%
+        \protected@xdef\tp@authormark{\tp@heading@RunAuthorNameList}%
+      }{%
+        \protected@xdef\tp@authormark{\tp@heading@AuthorNameList}%
+      }
+    \else
+      \protected@xdef\tp@authormark{\tp@titlepage@AuthorNameList}%
+    \fi      
+    \tpIfComp{RunNumber}{%
+      \protected@xdef\tp@chapternumber{\tp@heading@RunNumber}%
+    }{
+      \protected@xdef\tp@chapternumber{\tp@heading@Number}%
+    }%
+    \tpIfComp{RunTitle}{%
+      \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
+    }{
+      \protected@xdef\tp@chaptermark{\tp@heading@Title}%
+    }%
     %% Titel
     \ifjournal
     \else
@@ -261,39 +289,37 @@
   
   %% Format Kolumnentitel
   % Running heading: ungerade Seiten.
-  \tpSetProperty{running-heading}{%
-    \tpIfComp{RunNumber}{%
-      \tpUseComp{RunNumber}\space%
-    }{}%
-    \tpUseComp{RunTitle}%
-  }%
-  % Running extra: gerade Seiten.
-  \tpSetProperty{running-extra}{%
-    \ifcollection
-      \tpIfComp{RunAuthorNameList}{%
-        \protected@xdef\tp@runningHeadingLeft@backmatter{\tpUseComp{RunAuthorNameList}}%
-      }{}%
-      \tpIfComp{RunTitle}{%
-        \protected@xdef\tp@runningHeadingRight@backmatter{\tpUseComp{RunTitle}}%
-      }{}%
-      \tpIfComp{RunAuthorNameList}{%
-        \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
-      }{\global\let\@authormark\@empty%
-        \xdef\@authormark{\tpRunBookTitle}%
-        \if@frontmatter%
-        \else
-          \if@mainmatter
-          \else
-            \expandafter\gdef\expandafter\@partmark\expandafter{\tpUseComp{Title}}%
-          \fi
-        \fi
-      }%
-    \else
-      \ifcsname tp@titlepage@RunTitle\endcsname
-        \protected@xdef\@authormark{\csname tp@titlepage@RunTitle\endcsname}%
-      \fi
-    \fi
-  }
+  %\tpSetProperty{running-heading}{%
+    
+    %\tpUseComp{RunTitle}%
+  %}%
+  %% Running extra: gerade Seiten.
+  %\tpSetProperty{running-extra}{%
+  %  \ifcollection
+  %    \tpIfComp{RunAuthorNameList}{%
+  %      \protected@xdef\tp@runningHeadingLeft@backmatter{\tpUseComp{RunAuthorNameList}}%
+  %    }{}%
+  %    \tpIfComp{RunTitle}{%
+  %      \protected@xdef\tp@runningHeadingRight@backmatter{\tpUseComp{RunTitle}}%
+  %    }{}%
+  %    \tpIfComp{RunAuthorNameList}{%
+  %      \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
+  %    }{\global\let\@authormark\@empty%
+  %      \xdef\@authormark{\tpRunBookTitle}%
+  %      \if@frontmatter%
+  %      \else
+  %        \if@mainmatter
+  %        \else
+  %          \expandafter\gdef\expandafter\@partmark\expandafter{\tpUseComp{Title}}%
+  %        \fi
+  %      \fi
+  %    }%
+  %  \else
+  %    \ifcsname tp@titlepage@RunTitle\endcsname
+  %      \protected@xdef\@authormark{\csname tp@titlepage@RunTitle\endcsname}%
+  %    \fi
+  %  \fi
+  %}
 }
 
 % Für Zeitschriften.
@@ -474,7 +500,7 @@
       \par}{}%
     \spewnotes
   }%
-  \tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
+  %\tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
   \tpSetProperty{bookmark}{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\enskip}{}\tpUseComp{TocTitle}}%
   \tpSetProperty{after-heading-block}{\nopagebreak}
   \tpSetProperty{after-skip}{12.8bp}%
@@ -485,33 +511,33 @@
   % Im Wesentlichen nur eine Section, aber mit der Möglichkeit, den Runtitle zu setzen.
   %% Format Kolumnentitel
   % Running heading: ungerade Seiten.
-  \tpSetProperty{running-heading}{%
-    \tpIfComp{RunNumber}{%
-      \tpUseComp{RunNumber}\enskip%
-    }{}
-    \tpUseComp{RunTitle}%
-  }%
+  %\tpSetProperty{running-heading}{%
+  %  \tpIfComp{RunNumber}{%
+  %    \tpUseComp{RunNumber}\enskip%
+  %  }{}
+  %  \tpUseComp{RunTitle}%
+  %}%
   % Running extra: Zusatzoptionen.
-  \tpSetProperty{running-extra}{%
-    \tpIfComp{RunAuthorNameList}{%
-      \protected@xdef\tp@runningHeadingLeft@backmatter{\tpUseComp{RunAuthorNameList}}%
-    }{}%
-    \tpIfComp{RunTitle}{%
-      \protected@xdef\tp@runningHeadingRight@backmatter{\tpUseComp{RunTitle}}%
-    }{}%
-    \tpIfComp{RunAuthorNameList}{%
-      \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
-    }{\global\let\@authormark\@empty%
-      \xdef\@authormark{\tpRunBookTitle}%
-      \if@frontmatter%
-      \else
-        \if@mainmatter
-        \else
-          \expandafter\gdef\expandafter\@partmark\expandafter{\tpUseComp{Title}}%
-        \fi
-      \fi
-    }%
-  }
+  %\tpSetProperty{running-extra}{%
+  %  \tpIfComp{RunAuthorNameList}{%
+  %    \protected@xdef\tp@runningHeadingLeft@backmatter{\tpUseComp{RunAuthorNameList}}%
+  %  }{}%
+  %  \tpIfComp{RunTitle}{%
+  %    \protected@xdef\tp@runningHeadingRight@backmatter{\tpUseComp{RunTitle}}%
+  %  }{}%
+  %  \tpIfComp{RunAuthorNameList}{%
+  %    \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
+  %  }{\global\let\@authormark\@empty%
+  %    \xdef\@authormark{\tpRunBookTitle}%
+  %    \if@frontmatter%
+  %    \else
+  %      \if@mainmatter
+  %      \else
+  %        \expandafter\gdef\expandafter\@partmark\expandafter{\tpUseComp{Title}}%
+  %      \fi
+  %    \fi
+  %  }%
+  %}
 }
 
 \tpDeclareHeading[section]{2}{subsection}{%

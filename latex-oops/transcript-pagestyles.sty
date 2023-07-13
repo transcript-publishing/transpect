@@ -9,57 +9,48 @@
 }
 
 \def\ps@headings{%
+  % Gerade, linke Seiten.
   \def\left@mark{%
     \def\numberline####1{####1\enskip}%
+    % Das Inhaltsverzeichnis wird beim Erstellen von Kopfzeilen exkludiert.
     \ifx\@chaptername\contentsname\else
-      \ifx\has@parts\relax
-        \ifx\@partmark\@undefined
-          \tpRunBookTitle
-        \else
-          \ifx\@chaptermark\@undefined
-            \tpRunBookTitle
+      % Anthologien.
+      \ifcollection
+        % Respektseiten sind vorhanden.
+        \ifx\has@parts\relax
+          \ifx\tp@partmark\@undefined
+            % Falls bspw. eine Introduction vor dem ersten Part auftaucht, ist der Buchtitel Fallback.
+            \tpRunBookTitle%
           \else
-            \@partmark
+            \tp@partmark%
           \fi
-        \fi
-      \else
-        \ifcollection
-          \@authormark
+        % Respektseiten sind nicht vorhanden.
         \else
-          \tpRunBookTitle
+          \tpRunBookTitle%
         \fi
+      % Monographien.
+      \else
+        % Kolumnentitel unabhängig vom Vorhandensein von Respektseiten.
+        \tp@authormark:\space\tpRunBookTitle%
       \fi
     \fi
   }%
+  % Rechte, ungerade Seiten.
   \def\right@mark{%
     \def\numberline####1{####1\enskip}%
+    % Das Inhaltsverzeichnis wird beim Erstellen von Kopfzeilen exkludiert.
     \ifx\@chaptername\contentsname\else
-      \ifx\has@parts\relax
-        \ifcollection
-          \ifx\@authormark\@empty
-          \else
-            \@authormark:\space%
-          \fi
-        \fi
-        \ifx\@partmark\@undefined
-          \ifx\@chaptermark\@undefined
-            \tpRunBookTitle%
-          \else
-            \@chaptermark%
-          \fi
+      % Anthologien.
+      \ifcollection
+        % Kolumnentitel unabhängig vom Vorhandensein von Respektseiten.
+        \expandafter\ifx\tp@authormark\relax
         \else
-          \ifx\@chaptermark\@undefined
-            \@partmark%
-          \else
-            \@chaptermark%
-          \fi
-        \fi
+          \tp@authormark:\space%
+        \fi%
+        \tp@chaptermark%
+      % Monographien.
       \else
-        \ifx\@chaptermark\@undefined
-          \tpRunBookTitle%
-        \else
-          \@chaptermark%
-        \fi
+        \tp@chapternumber\space\tp@chaptermark%
       \fi
     \fi
   }%
