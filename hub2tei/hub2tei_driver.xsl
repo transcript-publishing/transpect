@@ -144,11 +144,11 @@
     </bibl>
   </xsl:template>
 
-  <xsl:template match="tei:textClass[tei:keywords[@rendition='titlepage'][tei:term[@key='Thema'][normalize-space()]]]" mode="hub2tei:tidy" priority="2">
+  <xsl:template match="tei:textClass[tei:keywords[@rendition='titlepage'][tei:term[@key='THEMA'][normalize-space()]]]" mode="hub2tei:tidy" priority="2">
     <xsl:copy>
       <xsl:apply-templates select="@*" mode="#current"/>
       <!-- https://redmine.le-tex.de/issues/15108 -->
-      <xsl:for-each select="tei:keywords[@rendition='titlepage']/tei:term[@key='Thema'][normalize-space()]/node()">
+      <xsl:for-each select="tei:keywords[@rendition='titlepage']/tei:term[@key='THEMA'][normalize-space()]/node()">
         <xsl:element name="classCode">
           <xsl:attribute name="scheme" select="'https://ns.editeur.org/thema/en'"/>
           <xsl:value-of select="."/>
@@ -158,7 +158,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="tei:textClass/tei:keywords[@rendition='titlepage']/tei:term[@key='Thema'][normalize-space()]" mode="hub2tei:tidy" priority="2"/>
+  <xsl:template match="tei:textClass/tei:keywords[@rendition='titlepage']/tei:term[@key='THEMA'][normalize-space()]" mode="hub2tei:tidy" priority="2"/>
 
   <xsl:template match="dbk:para[not(normalize-space())]
                                 [not(.//*[self::dbk:inlinemediaobject|self::dbk:mediaobject])][not(.//dbk:anchor)]" mode="hub2tei:dbk2tei" priority="2">
