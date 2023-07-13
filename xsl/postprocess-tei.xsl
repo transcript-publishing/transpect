@@ -168,7 +168,7 @@
 
 
   <xsl:template match="titleStmt">
-    <!-- https://github.com/transcript-publishing/6246/issues/19, 
+    <!-- https://github.com/transcript-publishing/6246/issues/19 / 
          https://github.com/transcript-publishing/6246/commit/7cddc715d61b2d12493088067908ada4d0d4a755-->
 
     <!-- Title -->
@@ -181,16 +181,27 @@
           <title type="sub"><xsl:value-of select="$meta/term[@key = 'Untertitel']"/></title>
         </xsl:if>
       </title>
-    <editor role="proofreading"><xsl:value-of select="$meta/term[@key = 'Korrektorat']"/></editor>
-    <editor role="cover design"><xsl:value-of select="replace($meta/term[@key = 'Umschlaggestaltung'], '^.+:\p{Zs}*', '')"/></editor>
-
+      <xsl:if test="$meta/term[@key = 'Korrektorat'][normalize-space()]">
+        <editor role="proofreading"><xsl:value-of select="$meta/term[@key = 'Korrektorat']"/></editor>
+      </xsl:if>
+      <xsl:if test="$meta/term[@key = 'Umschlaggestaltung'][normalize-space()]">
+        <editor role="cover design"><xsl:value-of select="replace($meta/term[@key = 'Umschlaggestaltung'], '^.+:\p{Zs}*', '')"/></editor>
+      </xsl:if>
    <!-- contributors -->
-    <xsl:if test="$meta/term[@key = 'Herausgeber'][normalize-space()]">
-      <editor><xsl:value-of select="$meta/term[@key = 'Herausgeber']"/></editor>
-    </xsl:if>
-    <xsl:if test="$meta/term[@key = 'Autor'][normalize-space()]">
-      <author><xsl:value-of select="$meta/term[@key = 'Autor']"/></author>
-    </xsl:if>
+      <xsl:if test="$meta/term[@key = 'Herausgeber'][normalize-space()]">
+        <xsl:for-each select="$meta/term[@key = 'Herausgeber']/node()[self::text()[normalize-space()] or self::seg]">
+          <editor>
+            <xsl:value-of select="."/>
+          </editor>
+        </xsl:for-each>
+      </xsl:if>
+      <xsl:if test="$meta/term[@key = 'Autor'][normalize-space()]">
+        <xsl:for-each select="$meta/term[@key = 'Autor']/node()[self::text()[normalize-space()] or self::seg]">
+          <author>
+            <xsl:value-of select="."/>
+          </author>
+        </xsl:for-each>
+      </xsl:if>
 
    <!-- funding -->
       <xsl:for-each select="$meta/term[@key = 'Fordertext'][normalize-space()]/node()[normalize-space()]">
