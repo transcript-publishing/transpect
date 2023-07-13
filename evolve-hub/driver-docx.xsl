@@ -256,8 +256,8 @@
     </author>
   </xsl:template>
 
-  <!--  <xsl:template match="para[matches(@role, 'tsheadlineauthor')][$s9y2 = 'mono']" mode="hub:dissolve-sidebars-without-purpose">
-    <!-\- https://redmine.le-tex.de/issues/15030 -\->
+  <xsl:template match="para[matches(@role, 'tsheadlineauthor')][$s9y2 = 'mono']" mode="hub:dissolve-sidebars-without-purpose">
+    <!-- https://redmine.le-tex.de/issues/15030 -->
   </xsl:template>
 
   <xsl:template match="hub[$s9y2 = 'mono']/info/keywordset[@role = 'titlepage']/*[last()]" mode="hub:dissolve-sidebars-without-purpose">
@@ -265,6 +265,6 @@
     <xsl:if test="/hub/para[matches(@role, 'tsheadlineauthor')]">
       <keyword role="Run_Autor"><xsl:apply-templates select="/hub/para[matches(@role, 'tsheadlineauthor')][1]/node()" mode="#current"/></keyword>
     </xsl:if>
-  </xsl:template>-->
+  </xsl:template>
 
 </xsl:stylesheet>
