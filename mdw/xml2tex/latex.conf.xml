@@ -1,0 +1,12 @@
+<?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<set xmlns="http://transpect.io/xml2tex" 
+     xmlns:xml2tex="http://transpect.io/xml2tex" 
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  
+  <import href="../../xml2tex/latex.conf.xml"/>
+ 
+  <xsl:variable name="series-logo-href" as="xs:string?" 
+                select="'mdw_logo.eps'"/>
+
+</set>
