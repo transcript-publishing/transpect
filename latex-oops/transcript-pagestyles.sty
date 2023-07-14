@@ -31,7 +31,8 @@
       % Monographien.
       \else
         % Kolumnentitel unabhängig vom Vorhandensein von Respektseiten.
-        \tp@authormark:\space\tpRunBookTitle%
+        %\tp@authormark:\space% Da \tpRunNames bisher ungekannt war, müssen Autoren nicht noch mal extra genannt werden, sondern stecken im \tpRunTitle.
+        \tpRunBookTitle%
       \fi
     \fi
   }%
