@@ -43,6 +43,7 @@
 }%
 
 \gdef\titleLayoutOverride{}
+\global\newif\if@unknownJournal \@unknownJournaltrue
 
 \tpDeclareTitlepage{%
   \ifcsname ts@journal@series\endcsname
@@ -88,10 +89,12 @@
     \fontsize{9.3}{12.5}\selectfont%
   }%
   
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % ZiG – Zeitschrift für interkulturelle Germanistik %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \ifx\ts@journal@series\ts@str@journal@zig
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % ZiG – Zeitschrift für interkulturelle Germanistik %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \global\@unknownJournalfalse
+    
     \tpSetBabelLabel{german}{editorsuffixsgl}{}
     \tpSetBabelLabel{english}{editorsuffixsgl}{}
     \tpSetBabelLabel{german}{editorsuffixpl}{}
@@ -170,6 +173,8 @@
   % AuA – Außeruniversitäre Aktion %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \ifx\ts@journal@series\ts@str@journal@aua
+    \global\@unknownJournalfalse
+    
     \tpSetBabelLabel{german}{editorsuffixsgl}{(Hg.)}
     \tpSetBabelLabel{english}{editorsuffixsgl}{(ed.)}
     \tpSetBabelLabel{german}{editorsuffixpl}{(Hg.)}
@@ -296,6 +301,8 @@
   % ZWG – Werkstattgeschichte %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \ifx\ts@journal@series\ts@str@journal@zwg
+    \global\@unknownJournalfalse
+    
     \tpSetBabelLabel{german}{editorsuffixsgl}{(Hg.)}
     \tpSetBabelLabel{english}{editorsuffixsgl}{(ed.)}
     \tpSetBabelLabel{german}{editorsuffixpl}{(Hg.)}
@@ -417,11 +424,14 @@
     }
   \fi
   
+  
   %%%%%%%%%%%%%%%%%%%%%%
   % allgemeine Titelei %
   %%%%%%%%%%%%%%%%%%%%%%
+  \if@unknownJournal
+    \let\ts@journal@series\relax
+  \fi
   \expandafter\ifx\ts@journal@series\relax
-  
     \tpSetProperty{titlepage-roman}{%
       \titleLayoutOverride%
       \ifx\ts@layout@type\ts@str@layout@std
