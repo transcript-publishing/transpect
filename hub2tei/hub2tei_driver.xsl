@@ -69,25 +69,15 @@
     </xsl:if>
     <xsl:apply-templates select="info/publisher,
                                  info/legalnotice,
-                                 info/copyright, info/pubdate" mode="meta"/>
-    <!--<distributor>
-      <address>
-        <addrLine>
-          <name type="organisation"/>
-        </addrLine>
-        <addrLine>
-          <name type="place"/>
-        </addrLine>
-      </address>
-    </distributor>
-    <idno type="book"/>
-    <date>
-      <xsl:apply-templates select="/*/dbk:info/dbk:date" mode="#current"/>  
-    </date>
-    <pubPlace/>
-    <publisher/>-->
+                                 info/copyright, (info/pubdate | /hub/info/keywordset[@role = 'titlepage']/keyword[@role='Copyright'][normalize-space()])" mode="meta"/>
   </xsl:template> 
 
+  <xsl:template match="/hub/info/keywordset[@role = 'titlepage']/keyword[@role='Copyright']" mode="meta">
+    <!-- https://redmine.le-tex.de/issues/15141-->
+    <date>
+      <xsl:value-of select="replace(node()[normalize-space()][matches(., '(19|20)\d{2}')][1], '^.+((19|20)\d{2}).+$', '$1')"/>  
+    </date>
+  </xsl:template>
 
   <xsl:template match="@*" mode="style-rend"/>
 
