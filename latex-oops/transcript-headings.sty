@@ -135,7 +135,7 @@
 \gdef\tp@runningHeadingLeft@backmatter{\relax}
 \gdef\tp@runningHeadingRight@backmatter{\relax}
 
-\gdef\tp@chaptermark{Test}
+\gdef\tp@chaptermark{UNKNOWN CHAPTERMARK}
 
 \tpDeclareHeading{0}{chapter}{%
   % Ticket 13717.
@@ -192,6 +192,7 @@
   }
 
   \tpSetProperty{title-format}{\ifx\ts@layout@type\ts@str@layout@mdw\huge\else\Huge\fi\sbseries\sfchapfamily}%
+  
   \tpSetProperty{quote-block-format}{%
     \hfill\hbox{%
       \vbox{%
