@@ -265,7 +265,7 @@ p.dnb-headline {
 nav#landmarks-navigation {display:none;}
 nav ol li {
   list-style-type:none;
-  margin-bottom: 1em;
+  line-height: 1.6em;
 }
 
 #toc ol {
