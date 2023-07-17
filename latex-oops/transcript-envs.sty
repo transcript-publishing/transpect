@@ -49,15 +49,15 @@
     \leftmargin    \parindent%
     \rightmargin   \ifx\ts@layout@type\ts@str@layout@mdw\leftmargin\else\z@\fi%
     \nsfwiderfamily%
-    \topsep        6.4bp
-    %\topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
+    %\topsep        6.4bp
+    \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
     \parsep        \z@%
   }%
   \ifx\ts@layout@type\ts@str@layout@mdw%
     \footnotesize%
   \fi%
-  %\@tempdima=\baselineskip% Ticket 15122.
-  %\baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
+  \@tempdima=\baselineskip% Ticket 15122.
+  \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
   \item\noindent\ignorespaces%
 }{%
   \endlist
