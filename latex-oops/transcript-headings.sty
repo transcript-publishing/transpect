@@ -42,18 +42,12 @@
 
 \tpDeclareHeading{-1}{part}{%
   %% ToC
-  \tpSetProperty{toc-before-hook-part}{\nobreak}
-  \tpSetProperty{toc-after-hook-part}{\nobreak}
+  %\tpSetProperty{toc-before-hook-part}{\nobreak}
+  \tpSetProperty{toc-after-hook-part}{\nopagebreak}
   \tpSetProperty{toc-margin-top}{2.25em}%
   \tpSetProperty{toc-indent}{}%
   \tpSetProperty{toc-title-format}{\sffamily\sbseries\ifx\ts@layout@type\ts@str@layout@mdw\LARGE\else\huge\fi}%
-  \tpSetProperty{toc-heading}{%
-    \ifdim\dimexpr\pagegoal-\pagetotal<7\baselineskip\relax%
-      \clearpage%
-    \fi
-    \tpUseProperty{toc-title-format}%
-    \tpTocLink{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\space}{}%
-      \tpUseComp{TocTitle}}\nobreak}%
+  
   \tpSetProperty{toc-before-entry}{%
     \addvspace{\tpUseProperty{toc-margin-top}}
     \parindent \z@
@@ -66,7 +60,26 @@
     %\typeout{TOC BEFORE ENTRY: \measurepage}
     %\ifdim\measurepage<7\baselineskip\relax\newpage\fi%
   }%
-  \tpSetProperty{toc-after-entry}{\par\nobreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nobreak}% Thing at the end of the entry, after the page number
+  
+  \tpSetProperty{toc-heading}{%
+    %\ifdim\dimexpr\pagegoal-\pagetotal<8\baselineskip\relax%
+    %  \clearpage%
+    %\fi%
+    \tpUseProperty{toc-title-format}%
+    \tpIfComp{TocNumber}{%
+      \ifcsname tp-heading-toc-number--1-maxwd\endcsname
+        \@tempdima=\csname tp-heading-toc-number--1-maxwd\endcsname%
+      \else
+        \@tempdima=\z@%
+      \fi%
+      \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}}\hss}%
+    }{%
+      \leftskip\z@%
+    }%    
+    \tpTocLink{\tpUseComp{TocTitle}}%
+  }%
+  
+  \tpSetProperty{toc-after-entry}{\nopagebreak\par\nopagebreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nopagebreak}% Thing at the end of the entry, after the page number
 
   
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
@@ -129,8 +142,6 @@
   \tpSetProperty{after-heading-block}{\vfill}%
 }
 
-\tpAddToHook{toc-after-hook-part}{\nopagebreak}%
-
 
 \gdef\tp@runningHeadingLeft@backmatter{\relax}
 \gdef\tp@runningHeadingRight@backmatter{\relax}
@@ -151,7 +162,7 @@
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-margin-right}{2em}% Begrenzt die Breite, auf der Titel und Untertitel erscheinen können. 2 em sind dann der Platz, auf dem die Seitenzahl »übersteht«.
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\large}%
+  \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\normalsize}%
   \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapsubtocfamily\large}%
   \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
   \tpSetProperty{toc-number-format}{\normalfont\normalsize\sfchapwidefamily}%
@@ -194,22 +205,20 @@
   \tpSetProperty{title-format}{\ifx\ts@layout@type\ts@str@layout@mdw\huge\else\Huge\fi\sbseries\sfchapfamily}%
   
   \tpSetProperty{quote-block-format}{%
-    \hfill\hbox{%
-      \vbox{%
-        \rightskip\z@
-        \hsize.5\textwidth
-        %\raggedright% Ticket 15122.
-        \normalfont
-        \normalsize
-        \nsfwiderfamily
-        \tpUseComp{QuoteText}\par
-        %% Zitat-Quelle
-        \tpIfComp{QuoteSource}{%
-          {\itshape\tpUseComp{QuoteSource}}%
-        }{}%
-      }%
-    }%
-  }%  
+    \parskip\baselineskip
+    \leftskip0.5\textwidth
+    \rightskip\z@
+    %\hsize.5\textwidth
+    %\raggedright% Ticket 15122.
+    \normalfont
+    \normalsize
+    \nsfwiderfamily
+    \tpUseComp{QuoteText}
+    %% Zitat-Quelle
+    \tpIfComp{QuoteSource}{%
+      {\hfill\break\itshape\tpUseComp{QuoteSource}}\par%
+    }{}%
+  }
   
   \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
   
@@ -401,12 +410,12 @@
       \tpIfComp{QuoteBlock}{%
         \vskip2\baselineskip
         \savenotes
-        \tpUseComp{QuoteBlock}
+        \tpUseComp{QuoteBlock}%
         \tpIfComp{AuthorNameList}{%
           \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
         }{%
           \vskip-1.68\baselineskip%
-        }
+        }%
         \spewnotes
       }{}%
     }{%
@@ -427,12 +436,6 @@
     \goodbreak%
   }%
 }
-
-% Mit 13475 auskommentiert, gegengeprüft mit 13412.
-% Mit 14272 wieder reingenommen. Gegengeprüft mit Ticketnummer darüber.
-%\tpAddToHook{toc-before-hook-chapter}{\goodbreak}%
-%\tpAddToHook{toc-after-hook-chapter}{\nopagebreak}%
-\tpAddToHook{toc-after-hook-part}{\nopagebreak}%
 
 
 \tpDeclareHeading{1}{section}{%
@@ -462,9 +465,13 @@
       }{%\leftskip\z@%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
       }%
+      \noindent%
+      \advance\leftskip by 2em%
+      \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
+      \rightskip\wd\@tempboxa%
       \tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+      \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\tpUseComp{TocPage}}}}%
     }%
   \fi
   
@@ -575,9 +582,13 @@
       \leftskip\@tempdimb%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
     }%
+    \noindent%
+    \advance\leftskip by 4em%
+    \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
+    \rightskip\wd\@tempboxa%
     \tpTocLink{\tpUseComp{TocTitle}}%
     \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-    \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+    \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\tpUseComp{TocPage}}}}%
   }%
 }
 
