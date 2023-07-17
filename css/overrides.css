@@ -63,7 +63,7 @@ html, body { margin:0; padding:0 }
 p, li, dd, dt {
   font-family: droidserif, 'Georgia', serif;
 }
-h1, h2, h3, h4, h5, blockquote *, a, section.title-page p.author, span.toc-author, p.heading-author {
+h1, h2, h3, h4, h5, h6, blockquote *, a, section.title-page p.author, span.toc-author, p.heading-author {
   font-family: 'roboto', sans-serif;
 }
 /* 
@@ -121,6 +121,9 @@ h4.section {
 }
 h5.section {
   font-size: 1.3em;
+}
+h6.section {
+  font-size: 1em;
 }
 span.heading-subtitle {
   font-weight:normal;
