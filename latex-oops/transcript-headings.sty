@@ -206,10 +206,12 @@
   
   \tpSetProperty{quote-block-format}{%
     \parskip\baselineskip
-    \leftskip0.5\textwidth
     \rightskip\z@
-    %\hsize.5\textwidth
-    \raggedright% Ticket 15122.
+    % BEGIN: Modifiziertes \raggedright aus der latex.ltx; Ticket 15122.
+    \let\\\@centercr\@rightskip\@flushglue \rightskip\@rightskip
+    \leftskip0.5\textwidth
+    \parindent\z@
+    % END.
     \normalfont
     \normalsize
     \nsfwiderfamily
