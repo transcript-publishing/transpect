@@ -216,7 +216,7 @@
          https://github.com/transcript-publishing/6246/commit/7cddc715d61b2d12493088067908ada4d0d4a755-->
 
     <xsl:copy copy-namespaces="no">
-      <xsl:apply-templates select="publisher, pubPlace" mode="#current"/>
+      <xsl:apply-templates select="publisher, pubPlace, date" mode="#current"/>
 
         <xsl:if test="$meta/term[@key = ('Lizenz', 'Copyright')][normalize-space()]">
           <availability>
