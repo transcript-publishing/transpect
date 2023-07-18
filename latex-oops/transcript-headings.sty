@@ -271,12 +271,12 @@
     }{}%
     %% Zitat
     \par
-    \tpIfCompOr{Abstract}{TitleEn}{%
-      %
-    }{
-      \tpIfComp{Keywords}{%
-        %
-      }{
+    %\tpIfCompOr{Abstract}{TitleEn}{%
+    %  %
+    %}{
+    %  \tpIfComp{Keywords}{%
+    %    %
+    %  }{
         \tpIfComp{QuoteBlock}{%
           \vskip2\baselineskip
           \savenotes
@@ -288,8 +288,8 @@
           }%
           \spewnotes
         }{}%
-      }%
-    }%
+    %  }%
+    %}%
   }%
   
   \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}%
@@ -408,33 +408,33 @@
       {\mdseries\sffamily\tpIfComp{KeywordsTitle}{\tpUseComp{KeywordsTitle}}{Keywords}}\enskip
       {\itshape\tpUseComp{Keywords}\par}%
     }{}%
-    \tpIfCompOr{Abstract}{TitleEn}{%
-      \tpIfComp{QuoteBlock}{%
-        \vskip2\baselineskip
-        \savenotes
-        \tpUseComp{QuoteBlock}%
-        \tpIfComp{AuthorNameList}{%
-          \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
-        }{%
-          \vskip-1.68\baselineskip%
-        }%
-        \spewnotes
-      }{}%
-    }{%
-      \tpIfComp{Keywords}{%
-        \tpIfComp{QuoteBlock}{%
-          \vskip2\baselineskip
-          \savenotes
-          \tpUseComp{QuoteBlock}
-          \tpIfComp{AuthorNameList}{%
-            \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
-          }{%
-            \vskip-1.68\baselineskip%
-          }
-          \spewnotes
-        }{}%
-      }%
-    }%
+    %\tpIfCompOr{Abstract}{TitleEn}{%
+    %  \tpIfComp{QuoteBlock}{%
+    %    \vskip2\baselineskip
+    %    \savenotes
+    %    \tpUseComp{QuoteBlock}%
+    %    \tpIfComp{AuthorNameList}{%
+    %      \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
+    %    }{%
+    %      \vskip-1.68\baselineskip%
+    %    }%
+    %    \spewnotes
+    %  }{}%
+    %}{%
+    %  \tpIfComp{Keywords}{%
+    %    \tpIfComp{QuoteBlock}{%
+    %      \vskip2\baselineskip
+    %      \savenotes
+    %      \tpUseComp{QuoteBlock}
+    %      \tpIfComp{AuthorNameList}{%
+    %        \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
+    %      }{%
+    %        \vskip-1.68\baselineskip%
+    %      }
+    %      \spewnotes
+    %    }{}%
+    %  }%
+    %}%
     \goodbreak%
   }%
 }
