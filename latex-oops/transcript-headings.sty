@@ -271,25 +271,17 @@
     }{}%
     %% Zitat
     \par
-    %\tpIfCompOr{Abstract}{TitleEn}{%
-    %  %
-    %}{
-    %  \tpIfComp{Keywords}{%
-    %    %
-    %  }{
-        \tpIfComp{QuoteBlock}{%
-          \vskip2\baselineskip
-          \savenotes
-          \tpUseComp{QuoteBlock}
-          \tpIfComp{AuthorNameList}{%
-            \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
-          }{%
-            \vskip-1.68\baselineskip%
-          }%
-          \spewnotes
-        }{}%
-    %  }%
-    %}%
+    \tpIfComp{QuoteBlock}{%
+      \vskip1\baselineskip
+      \savenotes
+      \tpUseComp{QuoteBlock}
+      \tpIfComp{AuthorNameList}{%
+        \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
+      }{%
+        \vskip-1.68\baselineskip%
+      }%
+      \spewnotes
+    }{}%
   }%
   
   \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}%
