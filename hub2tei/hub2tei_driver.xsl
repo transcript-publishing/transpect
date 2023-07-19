@@ -145,6 +145,7 @@
         </xsl:element>
       </xsl:for-each>
       <xsl:apply-templates select="node()" mode="#current"/>
+      <xsl:copy-of select="//*:keywords[not(parent::*[self::*:textClass])]"/>
     </xsl:copy>
   </xsl:template>
 
