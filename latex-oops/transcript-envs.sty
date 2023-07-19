@@ -86,7 +86,6 @@
     \parindent     \z@
     \partopsep     \z@
     \itemindent    \listparindent
-    \leftmargin    5mm
     \rightmargin   \z@
     \rightskip     \rightmargin\@plus1fil
     \nsfwiderfamily
@@ -103,37 +102,51 @@
     \global\let\@doendpe\orig@doendpe%
   }%
 }
-\newenvironment{versecentered}
-{\noindent\par\list{}{%
-    \listparindent\z@%
-    \parindent\z@
-    \itemindent    \listparindent
-    \leftmargin \z@
-    \rightmargin   \z@
-    \rightskip \z@
-    \nsfwiderfamily
-    \topsep6.4bp
-    \parsep        .5\baselineskip}%
-    \centering
-\item\noindent\ignorespaces}
-{\endlist
- \par
- \gdef\@doendpe{%
-   \@endpetrue
-   \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
-   \global\let\@doendpe\orig@doendpe}}
 
-\newenvironment{motto}
-               {\noindent\par\list{}{\rightmargin\leftmargin
-                   \parsep6.4bp
-                   \partopsep\z@
-                   \parindent\z@
-                   \nsfwiderfamily}%
-                \item\relax}
-               {\endlist\par\gdef\@doendpe{%
+\newenvironment{versecentered}{%
+  \par%
+  \def\tpBreak{\break}%
+  \list{%
+  }{%
+    \listparindent  \z@%
+    \parindent      \z@
+    \itemindent     \listparindent
+    \leftmargin     \z@
+    \rightmargin    \z@
+    \nsfwiderfamily
+    \topsep         6.4bp
+    \parsep        .5\baselineskip%
+  }%
+  \item\noindent\centering\ignorespaces%
+}{%
+  \endlist%
+  \par%
+  \gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
-    \global\let\@doendpe\orig@doendpe}}
+    \global\let\@doendpe\orig@doendpe%
+  }%
+}
+
+\newenvironment{motto}{%
+  \noindent%
+  \par%
+  \list{%
+  }{%
+    \rightmargin \leftmargin
+    \parsep      6.4bp
+    \partopsep   \z@
+    \parindent   \z@
+    \nsfwiderfamily%
+  }%
+  \item\relax%
+}{%
+  \endlist\par\gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe%
+  }%
+}
 
 \newenvironment{tpDedication}{%
   \cleardoublepage
