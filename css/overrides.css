@@ -60,10 +60,10 @@ html, body { margin:0; padding:0 }
   font-weight: bold;
   src: url('http://this.transpect.io/a9s/ts/fonts/roboto/Roboto-MediumItalic.otf') format('opentype');
 }
-p, li, dd, dt {
+p, li {
   font-family: droidserif, 'Georgia', serif;
 }
-h1, h2, h3, h4, h5, h6, blockquote *, a, section.title-page p.author, span.toc-author, p.heading-author {
+h1, h2, h3, h4, h5, h6, blockquote *, a, section.title-page p.author, span.toc-author, p.heading-author, dd, dt{
   font-family: 'roboto', sans-serif;
 }
 /* 
@@ -84,7 +84,6 @@ body {
  * links
  */
 a {
-  font-size:0.9em;
   text-decoration:none;
 }
 /* 
