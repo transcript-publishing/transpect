@@ -337,7 +337,7 @@
       xml2tex:meta2tex($copy-editing, (), 'tpQA'),
       xml2tex:meta2tex($cover-credit, (), 'tpCoverDesign'),
       xml2tex:meta2tex($cover-art, (), 'tpCoverImage'),
-      ml2tex:meta2tex($cover-concept, (), 'tpCoverConcept'),
+      xml2tex:meta2tex($cover-concept, (), 'tpCoverConcept'),
       xml2tex:meta2tex($typesetter, (), 'tpTypesetter'),
       xml2tex:meta2tex($printer, (), 'tpPrint'),
       xml2tex:meta2tex($used-font, (), 'tpUsedFont'),
