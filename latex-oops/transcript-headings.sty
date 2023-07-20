@@ -480,8 +480,12 @@
       \hsize.5\textwidth
       \normalsize\nsfwiderfamily\mdseries
       \noindent
-      \tpUseComp{QuoteText}}% LUP: kein tpQuoteSource?
-    }{}
+      \tpUseComp{QuoteText}\par
+      \tpIfComp{QuoteSource}{%
+        \tpUseComp{QuoteSource}%
+      }{}%
+    }%
+  }{}
   \tpSetProperty{heading-block}{%
     \savenotes
     \bgroup
