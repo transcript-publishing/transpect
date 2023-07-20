@@ -140,8 +140,8 @@ p {
   margin:0;
   line-height:1.6;
 }
-p + p {
-  text-indent:2em;
+div > p+p:not([class]) {
+  text-indent: 2em;
 }
 p.heading-author + p {
   text-indent:0em;
