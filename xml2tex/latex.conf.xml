@@ -148,6 +148,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Umschlagcredit']"/>
   <xsl:variable name="cover-art" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Umschlaggestaltung']"/>
+  <xsl:variable name="cover-concept" as="element(dbk:keyword)?" 
+                select="$metadata/dbk:keyword[@role eq 'Umschlagkonzept']"/>
   <xsl:variable name="copy-editing" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Korrektorat']"/>
   <xsl:variable name="converter" as="element(dbk:keyword)?" 
@@ -335,6 +337,7 @@
       xml2tex:meta2tex($copy-editing, (), 'tpQA'),
       xml2tex:meta2tex($cover-credit, (), 'tpCoverDesign'),
       xml2tex:meta2tex($cover-art, (), 'tpCoverImage'),
+      ml2tex:meta2tex($cover-concept, (), 'tpCoverConcept'),
       xml2tex:meta2tex($typesetter, (), 'tpTypesetter'),
       xml2tex:meta2tex($printer, (), 'tpPrint'),
       xml2tex:meta2tex($used-font, (), 'tpUsedFont'),
@@ -736,7 +739,7 @@
              level is called contribution and allows integration of abstracts and keywords -->
         <xsl:sequence select="if ($pubtype = ('collection', 'anth', '') 
                                               or contains($basename, '_anth_')
-                                              or $heading[dbk:info[dbk:abstract | dbk:keywordset]]
+                                              or $heading[dbk:info[dbk:abstract or dbk:keywordset]]
                                               or $is-collection 
                                               or $is-journal) 
                               then 'contribution' 
