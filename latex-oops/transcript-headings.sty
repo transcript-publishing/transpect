@@ -564,6 +564,7 @@
   \ifcollection\else
     \tpSetProperty{toc-indent}{2em}%
     \tpSetProperty{toc-margin-left}{4em}%
+    \tpSetProperty{toc-margin-right}{0\p@}%
   \fi
   \tpSetProperty{toc-heading}{%
     \tpUseProperty{toc-title-format}%
@@ -581,12 +582,12 @@
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
     }%
     \noindent%
-    \advance\leftskip by 4em%
+    %\advance\leftskip by 4em%
     \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
-    \rightskip\wd\@tempboxa%
+    \rightskip\wd\@tempboxa plus 1fil% 1fil sorgt für Linksbündigkeit des IHV-Eintrags.
     \tpTocLink{\tpUseComp{TocTitle}}%
     \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-    \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\tpUseComp{TocPage}}}}%
+    \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\hss\tpUseComp{TocPage}}}}%
   }%
 }
 
