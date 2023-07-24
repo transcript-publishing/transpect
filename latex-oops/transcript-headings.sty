@@ -98,7 +98,8 @@
     \selectfont%
   }%
   \tpSetProperty{quote-block-format}{%
-    \hfill\hbox{\vbox{%
+    \hfill\hbox{%
+      \vbox{%
         \rightskip\z@
         \hsize.5\textwidth
         \normalfont
@@ -107,8 +108,10 @@
         \tpUseComp{QuoteText}\par
         %% Zitat-Quelle
         \tpIfComp{QuoteSource}{%
-          {\itshape
-            \tpUseComp{QuoteSource}}}{}}}%
+          {\itshape\tpUseComp{QuoteSource}\par}%
+        }{}%
+      }%
+    }%
   }
   
   \tpSetProperty{before-heading}{%
@@ -151,6 +154,7 @@
 \gdef\tp@runningHeadingRight@backmatter{\relax}
 
 \gdef\tp@chaptermark{UNKNOWN CHAPTERMARK}
+
 
 \tpDeclareHeading{0}{chapter}{%
   % Ticket 13717.
@@ -212,18 +216,24 @@
     \parskip\baselineskip
     \rightskip\z@
     % BEGIN: Modifiziertes \raggedright aus der latex.ltx; Ticket 15122.
-    \let\\\@centercr\@rightskip\@flushglue \rightskip\@rightskip
+    %\let\\\@centercr\@rightskip\@flushglue \rightskip\@rightskip
+    %\leftskip0.5\textwidth
+    %\parindent\z@
+    %%%%%%%%%% Modifiziertes \RaggedRight (\raggedright mit Silbentrennung).
     \leftskip0.5\textwidth
-    \parindent\z@
+    \@rightskip\RaggedRightRightskip
+    \rightskip\@rightskip
     % END.
     \normalfont
     \normalsize
     \nsfwiderfamily
-    \tpUseComp{QuoteText}
+    \tpUseComp{QuoteText}%
     %% Zitat-Quelle
     \tpIfComp{QuoteSource}{%
       {\hfill\break\itshape\tpUseComp{QuoteSource}}\par%
-    }{}%
+    }{%
+      \par%
+    }%
   }
   
   \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
@@ -278,7 +288,7 @@
     \tpIfComp{QuoteBlock}{%
       \vskip1\baselineskip
       \savenotes
-      \tpUseComp{QuoteBlock}
+      \tpUseComp{QuoteBlock}\par%
       \tpIfComp{AuthorNameList}{%
         \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
       }{%
