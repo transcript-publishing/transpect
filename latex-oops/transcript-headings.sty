@@ -33,6 +33,10 @@
     \tpIfComp{TocNumber}{\tpUseProperty{toc-hang-number}}{}%
     \tpTocLink{%
       \tpUseComp{TocTitle}%
+      \tpIfComp{TocSubtitle}{%
+        \hfill\break%
+        \tpUseComp{TocSubtitle}%
+      }{}%
       \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
   }%
   \tpSetProperty{running-heading}{}%
@@ -163,7 +167,7 @@
   \tpSetProperty{toc-margin-right}{2em}% Begrenzt die Breite, auf der Titel und Untertitel erscheinen können. 2 em sind dann der Platz, auf dem die Seitenzahl »übersteht«.
   \tpSetProperty{toc-number-sep}{\enskip}%
   \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\normalsize}%
-  \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapsubtocfamily\large}%
+  \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapsubtocfamily\normalsize}%
   \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
   \tpSetProperty{toc-number-format}{\normalfont\normalsize\sfchapwidefamily}%
   \tpSetProperty{toc-indent}{0em}%
@@ -446,6 +450,7 @@
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
     \tpSetProperty{toc-before-entry}{\nopagebreak}%
+    \tpSetProperty{toc-subtitle-format}{\normalfont\normalsize}%
     \tpSetProperty{toc-heading}{%
       \tpUseProperty{toc-title-format}%
       \tpIfComp{TocNumber}{%
@@ -464,11 +469,13 @@
       \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
       \rightskip\wd\@tempboxa%
       \tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpIfComp{TocSubtitle}{%
+        \newline%
+        {\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}%
+      }{}%
       \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\tpUseComp{TocPage}}}}%
     }%
   \fi
-  
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
   \tpSetProperty{number-sep}{\enskip}%
   \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
