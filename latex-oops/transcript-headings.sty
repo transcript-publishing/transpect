@@ -207,7 +207,10 @@
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
     % \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
-    \tpIfComp{BMNumber}{\tpUseComp{BMNumber}\space}{}\tpUseComp{BMTitle}%
+    \tpIfComp{BMNumber}{%
+      \tpUseComp{BMNumber}\space%
+    }{}%
+    \tpUseComp{BMTitle}%
   }
 
   \tpSetProperty{title-format}{\ifx\ts@layout@type\ts@str@layout@mdw\huge\else\Huge\fi\sbseries\sfchapfamily}%
@@ -524,7 +527,12 @@
     \spewnotes
   }%
   %\tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
-  \tpSetProperty{bookmark}{\tpIfComp{TocNumber}{\tpUseComp{TocNumber}\enskip}{}\tpUseComp{TocTitle}}%
+  \tpSetProperty{bookmark}{%
+    \tpIfComp{BMNumber}{%
+      \tpUseComp{BMNumber}\enskip%
+    }{}%
+    \tpUseComp{BMTitle}%
+  }
   \tpSetProperty{after-heading-block}{\nopagebreak}
   \tpSetProperty{after-skip}{12.8bp}%
 }
