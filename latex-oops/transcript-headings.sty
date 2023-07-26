@@ -639,6 +639,19 @@
     \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
     \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
   }%
+  \tpSetProperty{quote-block-format}{%
+    \hfill\vbox{%
+      %\justify% Auskommentiert mit Ticket 15122.
+      \hsize.5\textwidth
+      \normalsize\nsfwiderfamily\mdseries
+      \noindent
+      \tpUseComp{QuoteText}\par
+      \tpIfComp{QuoteSource}{%
+        \tpUseComp{QuoteSource}%
+      }{}%
+      \vskip\baselineskip%
+    }%
+  }{}
   \tpSetProperty{after-skip}{\z@}%
 }
 
