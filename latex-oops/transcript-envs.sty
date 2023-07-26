@@ -43,13 +43,16 @@
   \aftergroup\@afterbox}
 
 \renewenvironment{quotation}{%
+  \ifhmode\par\fi
+  \def\tpBreak{\hfill\vskip1\baselineskip}
+  %\addvspace{\dimexpr6.96bp+1.087mm+1mm\relax}
   \list{}{%
     \listparindent \z@%
     \itemindent    \listparindent%
     \leftmargin    \parindent%
     \rightmargin   \ifx\ts@layout@type\ts@str@layout@mdw\leftmargin\else\z@\fi%
     \nsfwiderfamily%
-    %\topsep        6.4bp
+    %\topsep        \z@%
     \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
     \parsep        \z@%
   }%
@@ -68,6 +71,7 @@
     }%
     \global\let\@doendpe\orig@doendpe%
   }%
+  %\vskip\dimexpr6.96bp+1.087mm+1mm\relax%
 }
 
 \renewenvironment{quote}
@@ -89,9 +93,12 @@
     \rightmargin   \z@
     \rightskip     \rightmargin\@plus1fil
     \nsfwiderfamily
-    \topsep        6.4bp
+    %\topsep        6.4bp
+    \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
     \parsep       .5\baselineskip%
   }%
+  \@tempdima=\baselineskip% Ticket 15122.
+  \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
   \item\noindent\ignorespaces%
 }{%
   \endlist
@@ -114,9 +121,12 @@
     \leftmargin     \z@
     \rightmargin    \z@
     \nsfwiderfamily
-    \topsep         6.4bp
+    %\topsep         6.4bp
+    \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
     \parsep        .5\baselineskip%
   }%
+  \@tempdima=\baselineskip% Ticket 15122.
+  \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
   \item\noindent\centering\ignorespaces%
 }{%
   \endlist%
