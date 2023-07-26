@@ -105,6 +105,8 @@
         \normalfont
         \normalsize
         \nsfwiderfamily
+        \@tempdima=\baselineskip% Ticket 15122.
+        \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
         \tpUseComp{QuoteText}\par
         %% Zitat-Quelle
         \tpIfComp{QuoteSource}{%
@@ -230,6 +232,8 @@
     \normalfont
     \normalsize
     \nsfwiderfamily
+    \@tempdima=\baselineskip% Ticket 15122.
+    \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
     \tpUseComp{QuoteText}%
     %% Zitat-Quelle
     \tpIfComp{QuoteSource}{%
@@ -500,6 +504,8 @@
       \hsize.5\textwidth
       \normalsize\nsfwiderfamily\mdseries
       \noindent
+      \@tempdima=\baselineskip% Ticket 15122.
+      \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \tpUseComp{QuoteText}\par
       \tpIfComp{QuoteSource}{%
         \tpUseComp{QuoteSource}%
@@ -653,6 +659,8 @@
       \hsize.5\textwidth
       \normalsize\nsfwiderfamily\mdseries
       \noindent
+      \@tempdima=\baselineskip% Ticket 15122.
+      \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \tpUseComp{QuoteText}\par
       \tpIfComp{QuoteSource}{%
         \tpUseComp{QuoteSource}%
