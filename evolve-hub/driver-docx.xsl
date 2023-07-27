@@ -209,7 +209,7 @@
 
   <xsl:template match="para[not(@role)][not(matches(., '\S'))][@css:page-break-before]" mode="hub:split-at-tab">
     <xsl:text>&#xa;</xsl:text>
-    <xsl:processing-instruction name="{$pi-xml-name}" select="'\newpage'"/>
+    <xsl:processing-instruction name="{$pi-xml-name}" select="'\newpage '"/>
   </xsl:template>
 
   <xsl:template match="annotation" mode="hub:dissolve-sidebars-without-purpose">
