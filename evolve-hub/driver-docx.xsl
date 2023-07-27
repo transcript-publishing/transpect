@@ -267,4 +267,16 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="para[matches(@role, $hub:blockquote-role-regex)]
+                           [not(processing-instruction())]
+                           [not(matches(., '\S'))]
+                           [preceding-sibling::*[1][matches(@role, $hub:blockquote-role-regex)]]
+                           [following-sibling::*[1][matches(@role, $hub:blockquote-role-regex)]]" mode="hub:ids" priority="3">
+    <!-- https://redmine.le-tex.de/issues/15240 -->
+    <xsl:copy>
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:processing-instruction name="latex" select="'\tpNewPar[1\baselineskip]'"/>
+    </xsl:copy>  
+  </xsl:template>
+
 </xsl:stylesheet>
