@@ -42,8 +42,13 @@
   \spewnotes
   \aftergroup\@afterbox}
 
+
 \renewenvironment{quotation}{%
-  \ifhmode\par\fi
+  %\ifdim\dimexpr\pagegoal-\pagetotal\relax>0\p@
+  %  \ifdim\dimexpr\pagegoal-\pagetotal\relax<3\baselineskip
+  %    \newpage%
+  %  \fi%
+  %\fi
   \def\tpBreak{\hfill\vskip1\baselineskip}
   %\addvspace{\dimexpr6.96bp+1.087mm+1mm\relax}
   \list{}{%
@@ -59,6 +64,7 @@
   \ifx\ts@layout@type\ts@str@layout@mdw%
     \footnotesize%
   \fi%
+  \setlength{\parindent}{5mm}% Ticket 15240.
   \@tempdima=\baselineskip% Ticket 15122.
   \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
   \item\noindent\ignorespaces%
@@ -72,7 +78,11 @@
     \global\let\@doendpe\orig@doendpe%
   }%
   %\vskip\dimexpr6.96bp+1.087mm+1mm\relax%
+  %\ifdim\dimexpr\pagegoal-\pagetotal\relax<3\baselineskip
+  %  \newpage%
+  %\fi%
 }
+
 
 \renewenvironment{quote}
 {\noindent\par\list{}{\rightmargin\leftmargin\nsfwiderfamily}%
@@ -81,6 +91,7 @@
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
+
 
 \renewenvironment{verse}{%
   \noindent\par%
