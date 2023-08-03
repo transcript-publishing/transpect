@@ -414,15 +414,7 @@
         <xsl:when test="$elt/ancestor::spGrp"/>
         <xsl:when test="$elt/ancestor::figure"/>
         <xsl:when test="$elt/ancestor::floatingText"/>
-        <!--<xsl:when test="$elt/ancestor::div1"/>
-        <xsl:when test="$elt/ancestor::div2"/>-->
-        <!--<xsl:when
-          test="
-            $elt/parent::div/@type = ('part', 'appendix', 'imprint', 'acknowledgements', 'dedication', 'glossary', 'preface') or
-            $elt/parent::divGen/@type = ('index', 'toc')">
-          <xsl:sequence select="3"/>
-        </xsl:when>-->
-       <xsl:when test="$elt/parent::div/@type = ('part', 'appendix', 'imprint', 'acknowledgements', 'dedication', 'glossary', 'preface') or
+        <xsl:when test="$elt/parent::div/@type = ('part', 'appendix', 'imprint', 'acknowledgements', 'dedication', 'glossary', 'preface') or
                        $elt/parent::divGen/@type = ('index', 'toc')(: or
                        $elt/parent::listBibl:)">
           <xsl:sequence select="3"/>
@@ -436,16 +428,11 @@
                 3"
           />
         </xsl:when>
-        <xsl:when test="$elt/parent::listBibl">
+        <xsl:when test="$elt/parent::listBibl[not(parent::div[@type = 'bibliography'])]">
           <xsl:sequence select="if ($elt/ancestor::div/@type = 'part') 
                                 then count($elt/ancestor::*[self::div[@type eq 'section'] | self::listBibl]) + 4
                                 else count($elt/ancestor::*[self::div[@type eq 'section'] | self::listBibl]) + 3"/>
         </xsl:when>
-        <!--<xsl:when test="$elt/parent::div[@type = ('section')] or $elt/parent::listBibl">
-          <xsl:sequence select="if ($elt/ancestor::div/@type = 'part') 
-                                then count($elt/ancestor::*[self::div[@type eq 'section'] | self::listBibl]) + 4
-                                else count($elt/ancestor::*[self::div[@type eq 'section'] | self::listBibl]) + 3"/>
-        </xsl:when>-->
         <xsl:when test="$elt/parent::div[@type = ('section')] or $elt/parent::argument">
           <xsl:choose>
             <xsl:when test="$elt/parent::argument">
@@ -458,10 +445,13 @@
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
-        <xsl:when test="$elt/parent::div/@type = ('bibliography')">
-          <xsl:sequence select="if ($elt/ancestor::div/@type = ('chapter', 'article')) 
-                                then 4 + 1[$elt/ancestor::div/@type = ('part')]
-                                else 3 + 1[$elt/ancestor::div/@type = ('part')]"/>
+        <xsl:when test="$elt/parent::div/@type = 'bibliography' 
+                        or 
+                        $elt/parent::listBibl[parent::div[@type = 'bibliography']]">
+          <xsl:sequence select="if ($elt/ancestor::*[self::div[@type = ('chapter', 'article')]]) 
+                                then 4 + count($elt/ancestor::*[self::div[@type = 'part']])
+                                else 3 + count($elt/ancestor::*[self::div[@type = 'part']])"/>
+
         </xsl:when>
         <xsl:when test="$elt/parent::*[matches(local-name(.), '^div\d')]">
           <xsl:sequence select="count($elt/ancestor::*[matches(local-name(.), '^div')])"/>
