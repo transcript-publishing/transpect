@@ -347,8 +347,7 @@
       xml2tex:meta2tex($funder-pretext, (), 'tpFundingPreText'),
       xml2tex:meta2tex($funder-posttext, (), 'tpFundingPostText'),
       xml2tex:meta2tex($bibl-issn, (), 'tpBiblISSN'),
-      xml2tex:meta2tex($bible-issn, (), 'tpBibleISSN'),
-      xml2tex:meta2tex($advertisement, (), 'tpAdvertise')
+      xml2tex:meta2tex($bible-issn, (), 'tpBibleISSN')
       "/>
     <!-- logos image -->
     <xsl:if test="normalize-space($cover-href)">
@@ -499,13 +498,13 @@
     </rule>
   </template>
   
-  <template context="dbk:blockquote[not(matches(@role, '^[a-z]+_?verse.*$'))]
+<!--  <template context="dbk:blockquote[not(matches(@role, '^[a-z]+_?verse.*$'))]
                                    [count(dbk:para) gt 1]/dbk:para">
     <rule break-after="2">
       <text>\setlength{\parindent}{5mm}</text>
       <text/>
     </rule>
-  </template>
+  </template>-->
   
 <!-- <template context="dbk:para[following-sibling::*[1][self::dbk:blockquote]]
                    |dbk:blockquote/dbk:para[last()]
