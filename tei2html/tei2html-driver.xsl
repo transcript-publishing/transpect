@@ -441,7 +441,7 @@
                                     else 4"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:sequence select="count($elt/ancestor::div[@type = ('part', 'chapter', 'section')]) + 2"/>
+              <xsl:sequence select="count($elt/ancestor::div[@type = ('part', 'chapter', 'article', 'section')]) + 2"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:when>
@@ -449,7 +449,7 @@
                         or 
                         $elt/parent::listBibl[parent::div[@type = 'bibliography']]">
           <xsl:sequence select="if ($elt/ancestor::*[self::div[@type = ('chapter', 'article')]]) 
-                                then 3 + count($elt/ancestor::*[self::div[@type = ('part', 'chapter','section')]])
+                                then 3 + count($elt/ancestor::*[self::div[@type = ('part', 'chapter',  'article', 'section')]])
                                 else 3 + count($elt/ancestor::*[self::div[@type = 'part']])"/>
 
         </xsl:when>
