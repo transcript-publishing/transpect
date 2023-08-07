@@ -105,6 +105,7 @@
     <unconditional-split elt="div" attr="class" attval="part"/>
     <unconditional-split elt="div" attr="class" attval="chapter"/>
     <unconditional-split elt="div" attr="class" attval="notes"/>
+    <unconditional-split elt="div" attr="class" attval="bibliography"/>
 <!--    <unconditional-split attr="epub:type" attval="cover"/>-->
     <unconditional-split attr="epub:type" attval="endnotes"/>
     <heading elt="h1"/>

@@ -93,10 +93,10 @@ h2.part {
   font-size: 3em;
   margin:1em 0;
 }
-h2.part, h3.chapter, h3.toc-title {
+h2.part, h3.chapter, h3.toc-title, div.bibliography h3 {
   page-break-before:always;
 }
-h2.part, h3.chapter, h4.chapter, h3.toc-title {
+h2.part, h3.chapter, h4.chapter, h3.toc-title, div.bibliography h3 {
   font-weight: bold;
 }
 p.notes-headline {
@@ -107,7 +107,7 @@ p.notes-headline {
 h5.section {
   font-weight: normal;
 }
-h3.chapter, h4.chapter, h3.toc-title {
+h3.chapter, h4.chapter, h3.toc-title, div.bibliography h3 {
   font-size: 2em;
   padding: 1.5em 0 1em 0;
   border-bottom: 2px solid #00354a;
