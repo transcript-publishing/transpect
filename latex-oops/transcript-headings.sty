@@ -206,6 +206,10 @@
       \strut%
     }
   }%
+  
+  % Unter Umständen nur für Monographien sinnvoll. In jenem Fall dann entsprechend anpassen.
+  \tpSetProperty{toc-after-entry}{\nopagebreak}%
+  
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
     % \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
