@@ -31,7 +31,7 @@
       % Monographien.
       \else
         % Kolumnentitel unabhängig vom Vorhandensein von Respektseiten.
-        %\tp@authormark:\space% Da \tpRunNames bisher ungekannt war, müssen Autoren nicht noch mal extra genannt werden, sondern stecken im \tpRunTitle.
+        %\tp@authormark:\space% Da \tpRunNames bisher unbekannt war, müssen Autoren nicht noch mal extra genannt werden, sondern stecken im \tpRunTitle.
         \tpRunBookTitle%
       \fi
     \fi
@@ -51,7 +51,11 @@
         \tp@chaptermark%
       % Monographien.
       \else
-        \tp@chapternumber\space\tp@chaptermark%
+        \expandafter\ifx\tp@chaptermark\relax
+        \else
+          \tp@chapternumber\space%
+        \fi%
+        \tp@chaptermark%
       \fi
     \fi
   }%

@@ -262,7 +262,11 @@
     \tpIfComp{RunNumber}{%
       \protected@xdef\tp@chapternumber{\tp@heading@RunNumber}%
     }{
-      \protected@xdef\tp@chapternumber{\tp@heading@Number}%
+      \tpIfComp{Number}{%
+        \protected@xdef\tp@chapternumber{\tp@heading@Number}%
+      }{%
+        \global\let\tp@chapternumber\relax%
+      }
     }%
     \tpIfComp{RunTitle}{%
       \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
