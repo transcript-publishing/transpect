@@ -208,7 +208,12 @@
   }%
   
   % Unter Umständen nur für Monographien sinnvoll. In jenem Fall dann entsprechend anpassen.
-  \tpSetProperty{toc-after-entry}{\nopagebreak}%
+  \tpSetProperty{toc-after-entry}{%
+    \ifcollection
+    \else
+      \nopagebreak%
+    \fi%
+  }%
   
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
