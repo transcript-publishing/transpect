@@ -13,7 +13,8 @@
   \def\left@mark{%
     \def\numberline####1{####1\enskip}%
     % Das Inhaltsverzeichnis wird beim Erstellen von Kopfzeilen exkludiert.
-    \ifx\@chaptername\contentsname\else
+    \ifx\@chaptername\contentsname
+    \else
       % Anthologien.
       \ifcollection
         % Respektseiten sind vorhanden.
@@ -52,11 +53,15 @@
         \tp@chaptermark%
       % Monographien.
       \else
-        \expandafter\ifx\tp@chapternumber\relax
+        \ifcsname tp@partmark\endcsname
+          \tp@partmark%
         \else
-          \tp@chapternumber\space%
-        \fi%
-        \tp@chaptermark%
+          \expandafter\ifx\tp@chapternumber\relax
+          \else
+            \tp@chapternumber\space%
+          \fi%
+          \tp@chaptermark%
+        \fi
       \fi
     \fi
   }%
