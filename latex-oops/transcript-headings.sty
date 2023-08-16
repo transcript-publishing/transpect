@@ -278,6 +278,8 @@
     }{
       \protected@xdef\tp@chaptermark{\tp@heading@Title}%
     }%
+    % Den Titel des Parts für den Kolumnentitel zurücksetzen.
+    \global\let\tp@partmark\@undefined%
     %% Titel
     \ifjournal
     \else
@@ -319,45 +321,6 @@
   }%
   
   \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}%
-  
-  % \tpSetProperty{after-heading-block}{%
-  %   % Berechnung verbleibenden Abstands.
-  %   \tp@saveRemainingSpace
-  % }
-  
-  %% Format Kolumnentitel
-  % Running heading: ungerade Seiten.
-  %\tpSetProperty{running-heading}{%
-    
-    %\tpUseComp{RunTitle}%
-  %}%
-  %% Running extra: gerade Seiten.
-  %\tpSetProperty{running-extra}{%
-  %  \ifcollection
-  %    \tpIfComp{RunAuthorNameList}{%
-  %      \protected@xdef\tp@runningHeadingLeft@backmatter{\tpUseComp{RunAuthorNameList}}%
-  %    }{}%
-  %    \tpIfComp{RunTitle}{%
-  %      \protected@xdef\tp@runningHeadingRight@backmatter{\tpUseComp{RunTitle}}%
-  %    }{}%
-  %    \tpIfComp{RunAuthorNameList}{%
-  %      \protected@xdef\@authormark{\tpUseComp{RunAuthorNameList}}%
-  %    }{\global\let\@authormark\@empty%
-  %      \xdef\@authormark{\tpRunBookTitle}%
-  %      \if@frontmatter%
-  %      \else
-  %        \if@mainmatter
-  %        \else
-  %          \expandafter\gdef\expandafter\@partmark\expandafter{\tpUseComp{Title}}%
-  %        \fi
-  %      \fi
-  %    }%
-  %  \else
-  %    \ifcsname tp@titlepage@RunTitle\endcsname
-  %      \protected@xdef\@authormark{\csname tp@titlepage@RunTitle\endcsname}%
-  %    \fi
-  %  \fi
-  %}
 }
 
 % Für Zeitschriften.
@@ -505,6 +468,28 @@
       }{}%
       \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\tpUseComp{TocPage}}}}%
     }%
+  \else
+    \tpSetProperty{toc-before-entry}{%
+      \addvspace{\tpUseProperty{toc-margin-top}}
+      \parindent \z@
+    }%
+    \tpSetProperty{toc-heading}{%
+      \tpUseProperty{toc-title-format}%
+      \tpIfComp{TocNumber}{%
+        \@tempdima=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+        \leftskip\@tempdima\hskip-\@tempdima\hb@xt@\@tempdima{\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}\hss}%
+      }{%\leftskip\z@%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+      }%
+      \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
+      \advance\rightskip\wd\@tempboxa%
+      \tpTocLink{\tpUseComp{TocTitle}}%
+      \tpIfComp{TocSubtitle}{%
+        \newline%
+        {\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}%
+      }{}%
+      \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\unhbox\@tempboxa}}%
+    }%
   \fi
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
   \tpSetProperty{number-sep}{\enskip}%
@@ -605,34 +590,61 @@
   \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\sbseries\else\mdseries\fi\Large}%
   \tpSetProperty{before-quote-skip}{.5\baselineskip}%
   \tpSetProperty{running-heading}{}% da subsection sonst die Kolumnentitel ebenfalls von section erben würde
-  \ifcollection\else
+  \tpSetProperty{toc-number-sep}{\enskip}
+  \ifcollection
+  \else
     \tpSetProperty{toc-indent}{2em}%
     \tpSetProperty{toc-margin-left}{4em}%
     \tpSetProperty{toc-margin-right}{0\p@}%
   \fi
-  \tpSetProperty{toc-heading}{%
-    \tpUseProperty{toc-title-format}%
-    \@tempdima=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
-    \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
-    \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
-    \ifdim\@tempdimb<\@tempdimc\relax
-      \@tempdimb=\@tempdimc\relax%
-    \fi%
-    \tpIfComp{TocNumber}{%
-      \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-      \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
-    }{%\leftskip\z@%
-      \leftskip\@tempdimb%
-      \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+  \ifcollection
+    \tpSetProperty{toc-heading}{%
+      \tpUseProperty{toc-title-format}%
+      \@tempdima=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
+      \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+      \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
+      \ifdim\@tempdimb<\@tempdimc\relax
+        \@tempdimb=\@tempdimc\relax%
+      \fi%
+      \tpIfComp{TocNumber}{%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
+        \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+      }{%\leftskip\z@%
+        \leftskip\@tempdimb%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+      }%
+      \noindent%
+      %\advance\leftskip by 4em%
+      \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
+      \rightskip\wd\@tempboxa plus 1fil% 1fil sorgt für Linksbündigkeit des IHV-Eintrags.
+      \tpTocLink{\tpUseComp{TocTitle}}%
+      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\hss\tpUseComp{TocPage}}}}%
     }%
-    \noindent%
-    %\advance\leftskip by 4em%
-    \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
-    \rightskip\wd\@tempboxa plus 1fil% 1fil sorgt für Linksbündigkeit des IHV-Eintrags.
-    \tpTocLink{\tpUseComp{TocTitle}}%
-    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-    \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\hss\tpUseComp{TocPage}}}}%
-  }%
+  \else
+    \tpSetProperty{toc-before-entry}{%
+      \addvspace{\tpUseProperty{toc-margin-top}}
+      \parindent \z@
+    }%
+    \tpSetProperty{toc-heading}{%
+      \tpUseProperty{toc-title-format}%
+      \tpIfComp{TocNumber}{%
+        \@tempdima=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+        \@tempdimb=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
+        \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdimb\hb@xt@\@tempdimb{\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}\hss}%
+      }{%\leftskip\z@%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+      }%
+      \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
+      \advance\rightskip\wd\@tempboxa%
+      \tpTocLink{\tpUseComp{TocTitle}}%
+      \tpIfComp{TocSubtitle}{%
+        \newline%
+        {\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}%
+      }{}%
+      \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\unhbox\@tempboxa}}%
+    }%
+  \fi
 }
 
 
