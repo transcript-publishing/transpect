@@ -40,7 +40,8 @@
   \def\right@mark{%
     \def\numberline####1{####1\enskip}%
     % Das Inhaltsverzeichnis wird beim Erstellen von Kopfzeilen exkludiert.
-    \ifx\@chaptername\contentsname\else
+    \ifx\@chaptername\contentsname
+    \else
       % Anthologien.
       \ifcollection
         % Kolumnentitel unabhängig vom Vorhandensein von Respektseiten.
@@ -51,7 +52,7 @@
         \tp@chaptermark%
       % Monographien.
       \else
-        \expandafter\ifx\tp@chaptermark\relax
+        \expandafter\ifx\tp@chapternumber\relax
         \else
           \tp@chapternumber\space%
         \fi%
