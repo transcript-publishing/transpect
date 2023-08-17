@@ -8,6 +8,8 @@
   \let\@evenfoot\@empty
 }
 
+\gdef\tp@str@part{part}
+
 \def\ps@headings{%
   % Gerade, linke Seiten.
   \def\left@mark{%
@@ -17,23 +19,46 @@
     \else
       % Anthologien.
       \ifcollection
-        % Respektseiten sind vorhanden.
+        % Mit Respektseiten.
         \ifx\has@parts\relax
-          \ifx\tp@partmark\@undefined
-            % Falls bspw. eine Introduction vor dem ersten Part auftaucht, ist der Buchtitel Fallback.
+          % Ein Part setzt links den Buchtitel.
+          \ifx\tp@currentHeading\tp@str@part
             \tpRunBookTitle%
+          % Ein Kapitel setzt links den durch den aktuellen Part bestimmten Respekttitel, …
           \else
-            \tp@partmark%
+            % … sofern dieser schon vorhanden ist (tritt bspw. auf, wenn Contribution vor erstem Part kommt), …
+            \ifcsname tp@partmark\endcsname
+              \tp@partmark%
+            % … andernfalls den Buchtitel
+            \else
+              \tpRunBookTitle%
+            \fi
           \fi
-        % Respektseiten sind nicht vorhanden.
+        % Ohne Respektseiten.
         \else
-          \tpRunBookTitle%
+          \tp@authormark%
         \fi
       % Monographien.
       \else
-        % Kolumnentitel unabhängig vom Vorhandensein von Respektseiten.
-        %\tp@authormark:\space% Da \tpRunNames bisher unbekannt war, müssen Autoren nicht noch mal extra genannt werden, sondern stecken im \tpRunTitle.
-        \tpRunBookTitle%
+        % Mit Respektseiten.
+        \ifx\has@parts\relax
+          % Ein Part setzt links den Buchtitel.
+          \ifx\tp@currentHeading\tp@str@part
+            \tpRunBookTitle%
+          % Ein Kapitel setzt links den durch den aktuellen Part bestimmten Respekttitel, …
+          \else
+            % … sofern dieser schon vorhanden ist (tritt bspw. auf, wenn Contribution vor erstem Part kommt), …
+            \ifcsname tp@partmark\endcsname
+              \tp@partmark%
+            % … andernfalls den Buchtitel
+            \else
+              \tpRunBookTitle%
+            \fi
+          \fi%
+        % Ohne Respektseiten.
+        \else
+          \tpRunBookTitle%
+        \fi
       \fi
     \fi
   }%
@@ -45,21 +70,36 @@
     \else
       % Anthologien.
       \ifcollection
-        % Kolumnentitel unabhängig vom Vorhandensein von Respektseiten.
-        \expandafter\ifx\tp@authormark\relax
+        % Mit Respektseiten.
+        \ifx\has@parts\relax
+          % Ein Part setzt rechts seinen Respekttitel.
+          \ifx\tp@currentHeading\tp@str@part
+            \tp@partmark%
+          % Ein Kapitel setzt rechts den Autor des Beitrags, sofern vorhanden, sowie den Beitragstitel.
+          \else
+            \expandafter\ifx\tp@authormark\relax
+            \else
+              \tp@authormark:\space%
+            \fi%
+            \tp@chaptermark%
+          \fi%
+        % Ohne Respektseiten.
         \else
-          \tp@authormark:\space%
-        \fi%
-        \tp@chaptermark%
+          \tp@chaptermark%
+        \fi
       % Monographien.
       \else
-        \ifcsname tp@partmark\endcsname
-          \tp@partmark%
-        \else
-          \expandafter\ifx\tp@chapternumber\relax
+        % Mit Respektseiten.
+        \ifx\has@parts\relax
+          % Ein Part setzt rechts seinen Respekttitel.
+          \ifx\tp@currentHeading\tp@str@part
+            \tp@partmark%
+          % Ein Kapitel setzt rechts den Beitragstitel.
           \else
-            \tp@chapternumber\space%
+            \tp@chaptermark%
           \fi%
+        % Ohne Respektseiten.
+        \else
           \tp@chaptermark%
         \fi
       \fi

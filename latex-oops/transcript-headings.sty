@@ -43,6 +43,7 @@
   \tpSetProperty{running-extra}{}%
 }
 
+\gdef\tp@currentHeading{}
 
 \tpDeclareHeading{-1}{part}{%
   %% ToC
@@ -127,13 +128,13 @@
   }%
   
   \tpSetProperty{heading-block}{%
+    \gdef\tp@currentHeading{part}%
     % Kolumnentitel setzen.
     \tpIfComp{RunTitle}{%
       \protected@xdef\tp@partmark{\tp@heading@RunTitle}%
     }{
       \protected@xdef\tp@partmark{\tp@heading@Title}%
-    }%
-    
+    }%    
     \tpUseProperty{title-format}%
     %\vskip.5\baselineskip
     \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
@@ -255,6 +256,7 @@
   \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
   
   \tpSetProperty{heading-block}{%
+    \gdef\tp@currentHeading{chapter}
     \ifcollection
       \tpIfComp{RunAuthorNameList}{%
         \protected@xdef\tp@authormark{\tp@heading@RunAuthorNameList}%
@@ -278,8 +280,6 @@
     }{
       \protected@xdef\tp@chaptermark{\tp@heading@Title}%
     }%
-    % Den Titel des Parts für den Kolumnentitel zurücksetzen.
-    \global\let\tp@partmark\@undefined%
     %% Titel
     \ifjournal
     \else
@@ -328,7 +328,6 @@
 \global\newbox\@articlefooterbox%
 
 \tpDeclareHeading[chapter]{0}{contribution}{%
-
   \tpSetProperty{extended}{true}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
   %\thispagestyle{articlehead}
   
