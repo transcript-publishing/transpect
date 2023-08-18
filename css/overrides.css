@@ -457,7 +457,7 @@ p.editorial {
 span.article-title{
   font-weight: bold;
 }
-.tsmotto, .tsmottosource{
+.tsmotto, .tsmottosource, blockquote.epigraph{
   margin: 0 0 2em 40%;
   font-size: 1rem !important;
   line-height: 1.5em !important;
