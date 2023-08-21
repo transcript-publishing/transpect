@@ -227,8 +227,11 @@ section.title-page p.author {
 section.title-page h2.subtitle {
   font-size: 1.5em;
 }
-section.title-page div.logo {
+p.reihe {
   margin-top: 6em;
+}
+section.title-page div.logo {
+  margin-top: 1em;
 }
 section.title-page div.logo img {
   height: 2.2em;
