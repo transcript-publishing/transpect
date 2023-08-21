@@ -462,3 +462,9 @@ span.article-title{
   font-size: 1rem !important;
   line-height: 1.5em !important;
 }
+figcaption{
+  font-style: italic;
+}
+div.table-wrapper {
+  margin-bottom: 1em;
+}
