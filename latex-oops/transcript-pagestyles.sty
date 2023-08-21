@@ -21,44 +21,18 @@
       \ifcollection
         % Mit Respektseiten.
         \ifx\has@parts\relax
-          % Ein Part setzt links den Buchtitel.
-          \ifx\tp@currentHeading\tp@str@part
-            \tpRunBookTitle%
-          % Ein Kapitel setzt links den durch den aktuellen Part bestimmten Respekttitel, …
-          \else
-            % … sofern dieser schon vorhanden ist (tritt bspw. auf, wenn Contribution vor erstem Part kommt), …
-            \ifcsname tp@partmark\endcsname
-              \tp@partmark%
-            % … andernfalls den Buchtitel
-            \else
-              \tpRunBookTitle%
-            \fi
-          \fi
-        % Ohne Respektseiten.
-        \else
-          \tp@authormark%
-        \fi
-      % Monographien.
-      \else
-        % Mit Respektseiten.
-        \ifx\has@parts\relax
-          % Ein Part setzt links den Buchtitel.
-          \ifx\tp@currentHeading\tp@str@part
-            \tpRunBookTitle%
-          % Ein Kapitel setzt links den durch den aktuellen Part bestimmten Respekttitel, …
-          \else
-            % … sofern dieser schon vorhanden ist (tritt bspw. auf, wenn Contribution vor erstem Part kommt), …
-            \ifcsname tp@partmark\endcsname
-              \tp@partmark%
-            % … andernfalls den Buchtitel
-            \else
-              \tpRunBookTitle%
-            \fi
-          \fi%
+          \tp@partmark%
         % Ohne Respektseiten.
         \else
           \tpRunBookTitle%
         \fi
+      % Monographien.
+      \else
+        \expandafter\ifx\tp@authormark\relax
+        \else
+          \tp@authormark:\space%
+        \fi%
+        \tpRunBookTitle%
       \fi
     \fi
   }%
@@ -70,38 +44,14 @@
     \else
       % Anthologien.
       \ifcollection
-        % Mit Respektseiten.
-        \ifx\has@parts\relax
-          % Ein Part setzt rechts seinen Respekttitel.
-          \ifx\tp@currentHeading\tp@str@part
-            \tp@partmark%
-          % Ein Kapitel setzt rechts den Autor des Beitrags, sofern vorhanden, sowie den Beitragstitel.
-          \else
-            \expandafter\ifx\tp@authormark\relax
-            \else
-              \tp@authormark:\space%
-            \fi%
-            \tp@chaptermark%
-          \fi%
-        % Ohne Respektseiten.
+        \expandafter\ifx\tp@authormark\relax
         \else
-          \tp@chaptermark%
-        \fi
+          \tp@authormark:\space%
+        \fi%
+        \tp@chaptermark%
       % Monographien.
       \else
-        % Mit Respektseiten.
-        \ifx\has@parts\relax
-          % Ein Part setzt rechts seinen Respekttitel.
-          \ifx\tp@currentHeading\tp@str@part
-            \tp@partmark%
-          % Ein Kapitel setzt rechts den Beitragstitel.
-          \else
-            \tp@chaptermark%
-          \fi%
-        % Ohne Respektseiten.
-        \else
-          \tp@chaptermark%
-        \fi
+        \tp@chaptermark%
       \fi
     \fi
   }%
