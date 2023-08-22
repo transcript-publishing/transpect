@@ -27,6 +27,10 @@
     <!-- add series specific usepackage options. for example journal_series=zig or lay_type=std (https://redmine.le-tex.de/issues/14510#change-80305)-->
   </xsl:variable>
 
+ <xsl:variable name="letter-spacing-def" select="''" as="xs:string?">
+    <!-- https://mattermost.le-tex.de/letexml/pl/3bo8ggkcxfnnmqnkbi169usnby -->
+  </xsl:variable>
+
   <!-- see the wiki link below for details
        https://redmine.le-tex.de/projects/transpect-typesetter/wiki/Titelei -->
   <xsl:variable name="metadata" as="element(dbk:keywordset)?" 
@@ -564,11 +568,12 @@
       <xsl:when test="$is-collection">-->
 <!--        links: tpAuthor/tpRunAuthorNameList, wenn es den nicht gibt: \tp(Run)Title | Rechts: \tp(Run)Title-->
 
-        <xsl:if test="dbk:titleabbrev[matches(@role, $col-author-style)] or (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]">
+        <xsl:if test="dbk:titleabbrev[matches(@role, $col-author-style)] or 
+                      (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]">
           <rule name="tpRunAuthorNameList" type="cmd" break-before="1">
             <param select="(dbk:titleabbrev[matches(@role, $col-author-style)], 
-                            (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]/dbk:personname/dbk:othername
-                            )[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+                           (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]/dbk:personname/dbk:othername
+                           )[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
               <with-param name="remove-footnote" select="true()" as="xs:boolean" tunnel="yes"/>
               <with-param name="remove-newline" select="true()" as="xs:boolean" tunnel="yes"/>
               <with-param name="remove-indexterm" select="true()" as="xs:boolean" tunnel="yes"/>
