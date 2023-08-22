@@ -21,7 +21,7 @@
   
   <xsl:variable name="metadata" as="element(*)?" select="/TEI/teiHeader/profileDesc/textClass/keywords[@rendition = 'titlepage']"/>
 
-  <xsl:variable name="tei2bits:alt-title-regex" as="xs:string" select="'tsheadline(left|right)?$'"/>
+  <xsl:variable name="tei2bits:alt-title-regex" as="xs:string" select="'tsheadline(left|right|author)?$'"/>
 
   <xsl:template name="book-meta">
     <book-meta>
