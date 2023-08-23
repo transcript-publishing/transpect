@@ -238,6 +238,7 @@
   \pagestyle{backmatter}%
 }
 
+\def\tp@str@heading{heading}
 \newunicodechar{…}{\ldots}
 \gdef\tp@languageRules@arabic{%
   \rmfamily% Andere Schriften (bspw. \nsfwidefamily) verursachen einen Konvertierungsabbruch.
@@ -264,6 +265,9 @@
   %\fi
   % END.
   \sffamily%
+  \ifx\@currenvir\tp@str@heading
+    \bfseries%
+  \fi
   \fontsize{0.8468\dimexpr\f@size\p@\relax}{\the\baselineskip}\selectfont%
 }
 
