@@ -64,6 +64,18 @@
     </phrase>
   </xsl:template>
   
+  <xsl:template match="sub">
+    <subscript><!--https://redmine.le-tex.de/issues/15391-->
+      <xsl:apply-templates/>
+    </subscript>
+  </xsl:template>
+
+  <xsl:template match="sup">
+    <superscript>
+      <xsl:apply-templates/>
+    </superscript>
+  </xsl:template>
+
   <!-- https://redmine.le-tex.de/issues/13098 -->
   
  <!--  <xsl:template match="array[preceding-sibling::*[1][self::key][. eq 'Bibliografische Information']]/string[1]" priority="5"/>-->
