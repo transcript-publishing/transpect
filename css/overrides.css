@@ -472,6 +472,9 @@ figcaption {
   font-size: 0.8em;
   font-style: italic;
 }
+figcaption p{
+  text-indent: 0;
+}
 p.fig-title {
   margin-bottom: 1em;
 }
