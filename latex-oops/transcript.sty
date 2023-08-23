@@ -247,6 +247,7 @@
 
 \gdef\tp@languageRules@greek{%
   % Hier jeden Fall einzeln berücksichtigen, falls ein universeller Faktor keine Lösung darstellt.
+  % BEGIN: Musterblock.
   %\bgroup
   %  \footnotesize
   %  \global\@tempdima=\f@size\p@
@@ -261,7 +262,9 @@
   %\ifdim\f@size\p@=\@tempdima\relax
   %  \fontsize{7.8bp}{\the\baselineskip}\selectfont%
   %\fi
-  %\fontsize{0.8468\dimexpr\f@size\p@\relax}{\the\baselineskip}\selectfont%
+  % END.
+  \sffamily%
+  \fontsize{0.8468\dimexpr\f@size\p@\relax}{\the\baselineskip}\selectfont%
 }
 
 \let\@foreignNewLanguageRules\foreignlanguage
