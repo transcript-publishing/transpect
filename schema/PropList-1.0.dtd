@@ -9,8 +9,10 @@
 <!ELEMENT key (#PCDATA)>
 
 <!--- Primitive types -->
-<!ELEMENT string (#PCDATA | b | i )*>
+<!ELEMENT string (#PCDATA | b | i | sub| sup)*>
 <!ELEMENT b (#PCDATA)>
+<!ELEMENT sub (#PCDATA)>
+<!ELEMENT sup (#PCDATA)>
 <!ELEMENT i (#PCDATA)>
 <!ELEMENT data (#PCDATA)> <!-- Contents interpreted as Base-64 encoded -->
 <!ELEMENT date (#PCDATA)> <!-- Contents should conform to a subset of ISO 8601 (in particular, YYYY '-' MM '-' DD 'T' HH ':' MM ':' SS 'Z'.  Smaller units may be omitted with a loss of precision) -->
