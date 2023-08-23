@@ -245,6 +245,25 @@
   \gdef\ldots{.\kern\fontdimen3\font.\kern\fontdimen3\font.\kern\fontdimen3\font}%
 }
 
+\gdef\tp@languageRules@greek{%
+  % Hier jeden Fall einzeln berücksichtigen, falls ein universeller Faktor keine Lösung darstellt.
+  %\bgroup
+  %  \footnotesize
+  %  \global\@tempdima=\f@size\p@
+  %\egroup
+  %\ifdim\f@size\p@=\@tempdima\relax
+  %  \fontsize{6.8bp}{\the\baselineskip}\selectfont%
+  %\fi
+  %\bgroup
+  %  \normalsize
+  %  \global\@tempdima=\f@size\p@
+  %\egroup
+  %\ifdim\f@size\p@=\@tempdima\relax
+  %  \fontsize{7.8bp}{\the\baselineskip}\selectfont%
+  %\fi
+  %\fontsize{0.8468\dimexpr\f@size\p@\relax}{\the\baselineskip}\selectfont%
+}
+
 \let\@foreignNewLanguageRules\foreignlanguage
 \gdef\foreignlanguage#1#2{%
   \protect\@foreignNewLanguageRules{#1}{%
