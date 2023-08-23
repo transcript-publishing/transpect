@@ -465,8 +465,15 @@ span.article-title{
   font-size: 1rem !important;
   line-height: 1.5em !important;
 }
-figcaption{
+figure {
+  margin: 1em auto;
+}
+figcaption {
+  font-size: 0.8em;
   font-style: italic;
+}
+p.fig-title {
+  margin-bottom: 1em;
 }
 div.table-wrapper {
   margin-bottom: 1em;
