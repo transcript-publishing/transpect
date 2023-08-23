@@ -453,7 +453,7 @@
                                                then () 
                                                else if (..[self::*:sec])
                                                     then string-join((for $s in ancestor-or-self::*:sec return concat('s_', xs:string(format-number((count($s/preceding-sibling::*:sec) + 1), '000')))),'_')
-                                                    else format-number(xs:integer(replace(., '^\p{L}+', '')), '000')" as="xs:string?"/>
+                                                    else format-number(xs:integer(replace(., '^\p{L}+|-', '')), '000')" as="xs:string?"/>
     <!--https://redmine.le-tex.de/issues/12762, http://www.wiki.degruyter.de/production/files/dg_variables_and_id.xhtml#ids-->
     <xsl:attribute name="{name()}" select="string-join(('b', $book-part-id, $type, $normalized-id), '_')"/>
    <!-- boxes not yet checked -->
