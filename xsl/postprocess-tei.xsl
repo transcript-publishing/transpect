@@ -63,13 +63,13 @@
   </xsl:template>
 
   <xsl:template match="@css:font-style[. = ('italic', 'oblique')]" mode="style-rend" priority="2">
-    <!--https://github.com/transcript-publishing/6246/issues/21-->
-    <xsl:attribute name="rend" select="'italic'"/>
+    <!--https://github.com/transcript-publishing/mapping-conventions/blob/main/italic/index.md, https://github.com/transcript-publishing/6246/issues/21-->
+    <xsl:attribute name="rend" select="'em'"/>
   </xsl:template>
 
   <xsl:template match="@css:font-weight[. = ('bold', 'black', '900', '800', '700', '600', '500', '400')]"  mode="style-rend"  priority="2">
-    <!--https://github.com/transcript-publishing/6246/issues/21-->
-    <xsl:attribute name="rend" select="'bold'"/>
+    <!-- hi[contains(@rend, 'italic')]https://github.com/transcript-publishing/mapping-conventions/blob/main/bold/index.md, https://github.com/transcript-publishing/6246/issues/21-->
+    <xsl:attribute name="rend" select="'strong'"/>
   </xsl:template>
 
   <xsl:template match="@css:text-decorationt[. = ('underline')]"  mode="style-rend"  priority="2">
@@ -85,16 +85,16 @@
   </xsl:template>
 
   <xsl:template match="hi[@rend = ('superscript', 'subscript')] | 
-                       seg[matches(@rend, 'fett|hervorgehoben|bold|italic')] | 
+                       seg[matches(@rend, 'fett|hervorgehoben|bold|strong|italic|em')] | 
                        seg[@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration')]]">
     <!--https://github.com/transcript-publishing/6246/issues/21-->
     <xsl:variable name="classes" as="xs:string*">
       <xsl:apply-templates select="@*" mode="style-rend"/>
     </xsl:variable>
-    <xsl:variable name="rend" as="xs:string?" select="if (@rend) then replace(replace(@rend, 'fett|tsbold', 'bold', 'i'), 'hervorgehoben|tsitalic', 'italic', 'i') else ()"/>
+    <xsl:variable name="rend" as="xs:string?" select="if (@rend) then replace(replace(@rend, 'fett|tsbold', 'strong', 'i'), 'hervorgehoben|tsitalic', 'em', 'i') else ()"/>
     <xsl:choose>
       <xsl:when test="   self::hi 
-                      or self::seg[matches(@rend, 'fett|hervorgehoben|bold|italic')]
+                      or self::seg[matches(@rend, 'fett|strong|hervorgehoben|bold|italic|em')]
                       or string-join($classes, '')[normalize-space()]">
         <hi>
           <xsl:attribute name="rend" select="string-join(distinct-values(($rend, $classes)), ' ')"/>

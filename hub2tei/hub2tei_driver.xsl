@@ -82,13 +82,13 @@
   <xsl:template match="@*" mode="style-rend"/>
 
   <xsl:template match="@css:font-style[. = ('italic', 'oblique')]" mode="style-rend" priority="2">
-    <!--https://github.com/transcript-publishing/6246/issues/21-->
-    <xsl:attribute name="rend" select="'italic'"/>
+    <!--https://github.com/transcript-publishing/mapping-conventions/blob/main/italic/index.md, before: https://github.com/transcript-publishing/6246/issues/21-->
+    <xsl:attribute name="rend" select="'em'"/>
   </xsl:template>
 
   <xsl:template match="@css:font-weight[. = ('bold', 'black', '900', '800', '700', '600', '500', '400')]"  mode="style-rend"  priority="2">
-    <!--https://github.com/transcript-publishing/6246/issues/21-->
-    <xsl:attribute name="rend" select="'bold'"/>
+    <!--https://github.com/transcript-publishing/mapping-conventions/blob/main/bold/index.md, before: https://github.com/transcript-publishing/6246/issues/21-->
+    <xsl:attribute name="rend" select="'strong'"/>
   </xsl:template>
 
   <xsl:template match="@css:text-decorationt[. = ('underline')]"  mode="style-rend"  priority="2">
@@ -110,7 +110,7 @@
     <xsl:variable name="classes" as="xs:string*">
       <xsl:apply-templates select="@*" mode="style-rend"/>
     </xsl:variable>
-    <xsl:variable name="rend" as="xs:string?" select="if (@rend) then replace(replace(@rend, 'fett|tsbold', 'bold', 'i'), 'hervorgehoben|tsitalic', 'italic', 'i') else ()"/>
+    <xsl:variable name="rend" as="xs:string?" select="if (@rend) then replace(replace(@rend, 'fett|tsbold', 'strong', 'i'), 'hervorgehoben|tsitalic', 'em', 'i') else ()"/>
     <xsl:choose>
       <xsl:when test="   self::tei:hi 
                       or self::tei:seg[matches(@rend, 'fett|hervorgehoben|bold|italic')]

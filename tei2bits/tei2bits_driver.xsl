@@ -477,7 +477,7 @@
                                                 not(../preceding-sibling::*[1][matches(., ':\p{Zs}*$')])) then 'float' else 'anchor'"/>
   </xsl:template>
 
-  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|line-?through|superscript|subscript')]" mode="tei2bits" priority="5">
+  <xsl:template match="hi[matches(@rend, 'italic|(^|\s)em($|\s)|strong|bold|underline|line-?through|superscript|subscript')]" mode="tei2bits" priority="5">
     <xsl:apply-templates select="." mode="create-style-elts"/>
   </xsl:template>
 
@@ -489,11 +489,11 @@
     <sup><xsl:next-match/></sup>
   </xsl:template>
 
-  <xsl:template match="hi[contains(@rend, 'italic')]" mode="create-style-elts"  priority="5">
+  <xsl:template match="hi[tr:contains-token(@rend, ('italic', 'em'))]" mode="create-style-elts"  priority="5">
     <italic><xsl:next-match/></italic>
   </xsl:template>
 
-  <xsl:template match="hi[contains(@rend, 'bold')]" mode="create-style-elts"  priority="4">
+  <xsl:template match="hi[tr:contains-token(@rend, ('bold', 'strong'))]" mode="create-style-elts"  priority="4">
     <bold><xsl:next-match/></bold>
   </xsl:template>
 
@@ -505,14 +505,20 @@
     <underline><xsl:next-match/></underline>
   </xsl:template>
 
-  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]" mode="create-style-elts" priority="1">
+  <xsl:template match="hi[tr:contains-token(@rend, ('italic', 'em', 'bold', 'strong', 'underline', 'superscript', 'subscript'))]" mode="create-style-elts" priority="1">
     <xsl:apply-templates select="@* except @rend" mode="tei2bits"/>
-    <xsl:if test="some $t in tokenize(@rend, '\s') satisfies $t[not(. = ('italic', 'bold', 'underline', 'superscript','subscript', 'line-through'))]">
-      <xsl:attribute name="class" select="normalize-space(replace(@rend, '(italic|bold|underline|superscript|subscript|line-through)\s?', ''))"/>
+    <xsl:if test="some $t in tokenize(@rend, '\s') satisfies $t[not(. = ('italic', 'em', 'bold', 'strong', 'underline', 'superscript','subscript', 'line-through'))]">
+      <xsl:attribute name="class" select="normalize-space(replace(@rend, '(italic|em|bold|strong|underline|superscript|subscript|line-through)\s?', ''))"/>
     </xsl:if>
     <xsl:apply-templates select="node()" mode="tei2bits"/>
   </xsl:template>
 
- <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript|line-through')]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2bits"/>
+ <xsl:template match="hi[tr:contains-token(@rend, ('italic', 'em', 'bold', 'strong', 'underline', 'superscript', 'subscript', 'line-through'))]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2bits"/>
+
+  <xsl:function name="tr:contains-token" as="xs:boolean">
+    <xsl:param name="string" as="xs:string?"/>
+    <xsl:param name="tokens" as="xs:string*"/>
+    <xsl:sequence select="if ($string) then tokenize($string, '\s+') = $tokens else false()"/>
+  </xsl:function>
 
 </xsl:stylesheet>

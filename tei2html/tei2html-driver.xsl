@@ -797,7 +797,7 @@
     <xsl:apply-templates select="node()"  mode="#current"/>
   </xsl:template>
 
-  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]" mode="tei2html" priority="5">
+  <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline|superscript|subscript')]" mode="tei2html" priority="5">
     <xsl:apply-templates select="." mode="create-style-elts"/>
   </xsl:template>
 
@@ -809,22 +809,22 @@
     <sup><xsl:next-match/></sup>
   </xsl:template>
 
-  <xsl:template match="hi[contains(@rend, 'italic')]" mode="create-style-elts"  priority="4">
-    <i><xsl:next-match/></i>
+  <xsl:template match="hi[contains(@rend, 'italic')] | hi[contains(@rend, 'em')]" mode="create-style-elts"  priority="4">
+    <em><xsl:next-match/></em>
   </xsl:template>
 
-  <xsl:template match="hi[contains(@rend, 'bold')]" mode="create-style-elts"  priority="3">
-    <b><xsl:next-match/></b>
+  <xsl:template match="hi[contains(@rend, 'bold')] | hi[contains(@rend, 'strong')]" mode="create-style-elts"  priority="3">
+    <strong><xsl:next-match/></strong>
   </xsl:template>
 
   <xsl:template match="hi[contains(@rend, 'underline')]" mode="create-style-elts"  priority="2">
     <u><xsl:next-match/></u>
   </xsl:template>
 
-  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]" mode="create-style-elts" priority="1">
+  <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline|superscript|subscript')]" mode="create-style-elts" priority="1">
     <xsl:apply-templates select="@* except @rend" mode="tei2html"/>
-    <xsl:if test="some $t in tokenize(@rend, '\s') satisfies $t[not(. = ('italic', 'bold', 'underline', 'superscript','subscript'))]">
-      <xsl:attribute name="class" select="normalize-space(replace(@rend, '(italic|bold|underline|superscript|subscript)\s?', ''))"/>
+    <xsl:if test="some $t in tokenize(@rend, '\s') satisfies $t[not(. = ('italic', 'em', 'bold', 'strong', 'underline', 'superscript','subscript'))]">
+      <xsl:attribute name="class" select="normalize-space(replace(@rend, '(italic|em|bold|strong|underline|superscript|subscript)\s?', ''))"/>
     </xsl:if>
     <xsl:apply-templates select="node()" mode="tei2html"/>
   </xsl:template>
@@ -835,6 +835,6 @@
     </b>
   </xsl:template>-->
 
-  <xsl:template match="hi[matches(@rend, 'italic|bold|underline|superscript|subscript')]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2html"/>
+  <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline|superscript|subscript')]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2html"/>
 
 </xsl:stylesheet>
