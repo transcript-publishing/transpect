@@ -161,12 +161,8 @@
 
 \tpDeclareHeading{0}{chapter}{%
   % Ticket 13717.
-  \if@frontmatter%
-  \else
-    \if@mainmatter
-    \else
-      \tpSetProperty{bookmark-level}{-1}
-    \fi
+  \if@backmatter%
+    \tpSetProperty{bookmark-level}{-1}
   \fi
   
   %% Format IHV-Eintrag
@@ -255,6 +251,12 @@
   
   \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
   
+  \if@backmatter
+    \tpSetProperty{running-heading}{%
+      \tp@chaptermark%
+    }{}
+  \fi
+  
   \tpSetProperty{heading-block}{%
     \gdef\tp@currentHeading{chapter}
     \ifcollection
@@ -279,6 +281,7 @@
       \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
     }{
       \protected@xdef\tp@chaptermark{\tp@heading@Title}%
+      \typeout{Chaptermark set: \tp@chaptermark}%
     }%
     %% Titel
     \ifjournal
@@ -320,7 +323,7 @@
     }{}%
   }%
   
-  \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}%
+  \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}\typeout{——————————————— afterskip Chaptermark: \tp@chaptermark}}
 }
 
 % Für Zeitschriften.
@@ -430,12 +433,8 @@
 
 \tpDeclareHeading{1}{section}{%
   % Ticket 13717.
-  \if@frontmatter%
-  \else
-    \if@mainmatter
-    \else
-      \tpSetProperty{bookmark-level}{0}
-    \fi
+  \if@backmatter%
+    \tpSetProperty{bookmark-level}{0}
   \fi
   
   \ifcollection
@@ -577,15 +576,11 @@
 
 \tpDeclareHeading[section]{2}{subsection}{%
   % Ticket 13717.
-  \if@frontmatter%
-  \else
-    \if@mainmatter
-    \else
-      \tpSetProperty{bookmark-level}{1}
-      \tpSetProperty{toc-level}{section}
-    \fi
+  \if@backmatter%
+    \tpSetProperty{bookmark-level}{1}
+    \tpSetProperty{toc-level}{section}
   \fi
-
+  
   \tpSetProperty{before-heading}{\addvspace{11.5bp}}%
   \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\sbseries\else\mdseries\fi\Large}%
   \tpSetProperty{before-quote-skip}{.5\baselineskip}%
