@@ -574,6 +574,10 @@
   <xsl:template match="*:lb" mode="strip-indexterms-etc tei2html">
     <!-- https://redmine.le-tex.de/issues/12371 -->
     <xsl:choose>
+      <xsl:when test="ancestor::epigraph[@rend='motto']">
+      <!-- https://github.com/transcript-publishing/mapping-conventions/blob/main/motto/index.md#ts_motto-->
+        <br/>
+      </xsl:when>
       <xsl:when
         test="
         preceding-sibling::node() and matches(preceding-sibling::node()[1], '\s$') or
@@ -711,7 +715,7 @@
 
   <xsl:template match="html:figure/html:p" mode="clean-up">
     <!-- https://redmine.le-tex.de/issues/13415 -->
-    <xsl:element name="span">
+    <xsl:element name="p">
       <xsl:attribute name="class" select="if (@class = 'tsfiguresource') then 'fig-source' else 'fig-title'"/>
       <xsl:apply-templates select="@* except @class, node()" mode="#current"/>
     </xsl:element>
@@ -836,5 +840,25 @@
   </xsl:template>-->
 
   <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline|superscript|subscript')]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2html"/>
+
+  <xsl:template match="epigraph | div[@type = 'motto']" mode="tei2html" priority="3">
+    <!-- https://redmine.le-tex.de/issues/15339 -->
+    <xsl:choose>
+      <xsl:when test="parent::*[self::div[@type = 'motto']]">
+        <xsl:apply-templates select="node()" mode="#current"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <blockquote class="epigraph">
+          <xsl:apply-templates select="node()" mode="#current"/>
+        </blockquote>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="p[matches(@rend, 'tsmottosource')]" mode="tei2html" priority="3">
+    <cite>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </cite>
+  </xsl:template>
 
 </xsl:stylesheet>
