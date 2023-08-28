@@ -21,18 +21,17 @@
       \ifcollection
         % Mit Respektseiten.
         \ifx\has@parts\relax
-          \tp@partmark%
+          \ifcsname tp@partmark\endcsname
+            \tp@partmark%
+          \else
+            \tpRunBookTitle%
+          \fi%
         % Ohne Respektseiten.
         \else
           \tpRunBookTitle%
         \fi
       % Monographien.
       \else
-        % Den Autorennamen nicht gesondert ausgeben, da dieser in \tpRunBookTitle bereits enthalten ist.
-        %\expandafter\ifx\tp@authormark\relax
-        %\else
-        %  \tp@authormark:\space%
-        %\fi%
         \tpRunBookTitle%
       \fi
     \fi

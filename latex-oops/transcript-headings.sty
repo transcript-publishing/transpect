@@ -127,6 +127,10 @@
     \ifcollection \global\let\@authormark\@empty\fi
   }%
   
+  \tpSetProperty{running-heading}{%
+    \tp@partmark%
+  }
+  
   \tpSetProperty{heading-block}{%
     \gdef\tp@currentHeading{part}%
     % Kolumnentitel setzen.
@@ -251,11 +255,9 @@
   
   \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
   
-  \if@backmatter
-    \tpSetProperty{running-heading}{%
-      \tp@chaptermark%
-    }{}
-  \fi
+  \tpSetProperty{running-heading}{%
+    \tp@chaptermark%
+  }{}
   
   \tpSetProperty{heading-block}{%
     \gdef\tp@currentHeading{chapter}
