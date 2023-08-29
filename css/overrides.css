@@ -461,7 +461,7 @@ span.article-title{
   font-weight: bold;
 }
 .tsmottosource{
-  float: left;
+  display: block;
 }
 .tsmotto, .tsmottosource, blockquote.epigraph{
   margin: 0 0 2em 40%;
