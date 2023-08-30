@@ -223,9 +223,9 @@
                                  if($is-collection) then ',pubtype=collection' else if ($is-journal) then ',pubtype=journal' else (),
                                  if($notes-per-chapter = ('yes', 'true') or $notes-type = 'footnotes') then ',resetnotesperchapter' else (),
                                  if($notes-type eq 'endnotes' and $endnotes-with-chapter eq 'yes')  
-                                                                     then ',endnoteswithchapters'
+                                                                     then ',endnoteswithchapters,endnotelinks'
                                  else if($notes-type eq 'endnotes') 
-                                                                     then ',endnotes,endnotelinks,endnotelinks' 
+                                                                     then ',endnotes,endnotelinks' 
                                  else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  xml2tex:foreign-scripts(root()),
