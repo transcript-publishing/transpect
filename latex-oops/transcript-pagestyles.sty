@@ -51,6 +51,10 @@
         \tp@chaptermark%
       % Monographien.
       \else
+        \expandafter\ifx\tp@chapternumber\relax
+        \else
+          \tp@chapternumber\space%
+        \fi%
         \tp@chaptermark%
       \fi
     \fi
