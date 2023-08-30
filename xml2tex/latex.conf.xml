@@ -225,7 +225,7 @@
                                  if($notes-type eq 'endnotes' and $endnotes-with-chapter eq 'yes')  
                                                                      then ',endnoteswithchapters'
                                  else if($notes-type eq 'endnotes') 
-                                                                     then ',endnotes' 
+                                                                     then ',endnotes,endnotelinks,endnotelinks' 
                                  else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  xml2tex:foreign-scripts(root()),
