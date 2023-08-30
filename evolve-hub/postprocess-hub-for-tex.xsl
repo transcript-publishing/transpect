@@ -27,7 +27,7 @@
   </xsl:variable>
   <xsl:variable name="repeat-split-table-head" select="true()" as="xs:boolean"/>
 
-  <xsl:template match="@* | node()" mode="postprocess-hub">
+  <xsl:template match="@* | node()" mode="postprocess-hub" priority="-0.25">
     <xsl:copy>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </xsl:copy>
@@ -47,5 +47,14 @@
          be aware that it splits tables also if the hub is further processed to XML/HTML.-->
   </xsl:template>
 
+  <xsl:template match="processing-instruction()[some $t in tokenize(., '\s+') satisfies $t = '\doTableBreak']
+                       [$split-landscape-table-with-dotablebreak-pi]" mode="postprocess-hub" priority="3">
+    <xsl:choose>
+      <xsl:when test=". = '\doTableBreak'"/>
+      <xsl:otherwise>
+        <xsl:processing-instruction name="{name()}" select="string-join(tokenize(., '\s+')[not(. = '\doTableBreak')], ' ')"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>
