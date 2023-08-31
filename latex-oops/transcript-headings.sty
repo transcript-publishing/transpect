@@ -128,6 +128,10 @@
   }%
   
   \tpSetProperty{running-heading}{%
+    \ifx\tp@partnumber\relax
+    \else
+      \tp@partnumber\space%
+    \fi%
     \tp@partmark%
   }
   
@@ -138,7 +142,17 @@
       \protected@xdef\tp@partmark{\tp@heading@RunTitle}%
     }{
       \protected@xdef\tp@partmark{\tp@heading@Title}%
-    }%    
+    }%
+    \tpIfComp{RunNumber}{%
+      \protected@xdef\tp@partnumber{\tp@heading@RunNumber}%
+    }{
+      \tpIfComp{Number}{%
+        \protected@xdef\tp@partnumber{\tp@heading@Number}%
+      }{%
+        \global\let\tp@partnumber\relax%
+      }%
+    }%
+    
     \tpUseProperty{title-format}%
     %\vskip.5\baselineskip
     \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
@@ -283,7 +297,6 @@
       \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
     }{
       \protected@xdef\tp@chaptermark{\tp@heading@Title}%
-      \typeout{Chaptermark set: \tp@chaptermark}%
     }%
     %% Titel
     \ifjournal
@@ -340,16 +353,28 @@
   % Muss global und ausgewertet sein, damit das Seitenlayout ps@articlehead darauf zugreifen kann.
   \xdef\@articleDOI{\tpUseComp{DOI}}%
   
-  \tpSetProperty{affiliation-format}{}%
   \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
   \tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
   \tpSetProperty{author-contact-format}{%Format of a single author's contact information
+    \tpUseComp{FullName}%
     \tpIfComp{Affil}{%
-      \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{Affil}}{affil-block-format});\par%
-      \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
-      \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
+      \space(\tpUseGroupProp{tpAffil}{\the\@currAffilCnt}{Affiliation})%
+      \global\advance\@currAffilCnt\@ne%
     }{}%
-  }
+  }%
+  
+  % Voherblock, 15194.  
+  %\tpSetProperty{affiliation-format}{}%
+  %\tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
+  %\tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
+  %\tpSetProperty{author-contact-format}{%Format of a single author's contact information
+  %  \tpIfComp{Affil}{%
+  %    \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{Affil}}{affil-block-format});\par%
+  %    \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
+  %    \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
+  %  }{}%
+  %}
+
   
   \tpSetProperty{counted-name-sep}{,\space}
   \tpSetProperty{before-heading}{%
@@ -375,6 +400,7 @@
       \tpUseProperty{affil-block-face}%
       \tpUseComp{AuthorContactBlock}\par
       \@headingCopyright%
+      \global\advance\@currAffilCnt\@ne%
     }
     \@tempdima = \the\ht\@articlefooterbox
     % Verkleinere die Seite um die Höhe der Fußzeileninformationen.

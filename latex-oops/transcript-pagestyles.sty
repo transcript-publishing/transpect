@@ -44,14 +44,14 @@
     \else
       % Anthologien.
       \ifcollection
-        \expandafter\ifx\tp@authormark\relax
+        \ifx\tp@authormark\relax
         \else
           \tp@authormark:\space%
         \fi%
         \tp@chaptermark%
       % Monographien.
       \else
-        \expandafter\ifx\tp@chapternumber\relax
+        \ifx\tp@chapternumber\relax
         \else
           \tp@chapternumber\space%
         \fi%
