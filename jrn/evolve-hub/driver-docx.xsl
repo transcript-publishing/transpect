@@ -182,6 +182,30 @@
 
   <xsl:template match="biblioid[@class='doi'][@otherclass='temp']" mode="custom-2"/>
 
+  <xsl:template match="chapter/title[@role = 'tsheading1review']" mode="hub:process-meta-sidebar">
+    <xsl:apply-templates select="..//para[@role = 'tsreviewer']" mode="#current">
+      <xsl:with-param name="reviewer-as-author" as="xs:boolean" select="true()" tunnel="yes"/>
+    </xsl:apply-templates>
+    <xsl:next-match/>
+  </xsl:template>
+
+  <xsl:template match="para[@role = 'tsreviewer']" mode="hub:process-meta-sidebar">
+    <xsl:param name="reviewer-as-author" as="xs:boolean?" tunnel="yes"/>
+    <xsl:choose>
+      <xsl:when test="$reviewer-as-author">
+        <author role="override">
+          <personname>
+            <othername>  
+              <xsl:apply-templates select="@*, node()" mode="#current"/>
+            </othername>
+          </personname>
+        </author></xsl:when>
+      <xsl:otherwise>
+        <xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
 <!-- to do: tei2bits. fm und toc bei ZS 10.14361/dak-2021-toc01 statt zig.2020.11.issue-1-toc-->
 <!-- Parts haben keine IDs -> DOIS falsch, bzw. werden sie nicht richtig zugeordnet. -->
 </xsl:stylesheet>
