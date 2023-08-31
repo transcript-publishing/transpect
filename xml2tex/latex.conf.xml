@@ -709,19 +709,22 @@
       <xsl:when test="$style = 'tsheadingpart'">
         <xsl:sequence select="'part'"/>
       </xsl:when>
-      <xsl:when test="$style = ('tsheading1', 'tsbackmatter1')">
+      <xsl:when test="$style = ('tsheading1review', 'tsheading1reviewtoc')">
+        <xsl:sequence select="'review'"/>
+      </xsl:when>
+      <xsl:when test="$style = ('tsheading1', 'tsheading1nonum',  'tsheading1notoc', 'tsbackmatter1')">
         <xsl:sequence select="if ($is-collection or $is-journal) then 'contribution' else 'chapter'"/>
       </xsl:when>
-      <xsl:when test="$style = ('tsheading2', 'tsbackmatter2')">
+      <xsl:when test="$style = ('tsheading2', 'tsheading2nonum',  'tsheading2notoc', 'tsbackmatter2')">
         <xsl:sequence select="'section'"/>
       </xsl:when>
-      <xsl:when test="$style = ('tsheading3', 'tsbackmatter3')">
+      <xsl:when test="$style = ('tsheading3',  'tsheading3nonum',  'tsheading3notoc', 'tsbackmatter3')">
         <xsl:sequence select="'subsection'"/>
       </xsl:when>
-      <xsl:when test="$style = ('tsheading4', 'tsbackmatter4')">
+      <xsl:when test="$style = ('tsheading4', 'tsheading4nonum',  'tsheading4notoc',  'tsbackmatter4')">
         <xsl:sequence select="'subsubsection'"/>
       </xsl:when>
-      <xsl:when test="$style = ('tsheading5', 'tsbackmatter5')">
+      <xsl:when test="$style = ('tsheading5', 'tsheading5nonum',  'tsheading5notoc', 'tsbackmatter5')">
         <xsl:sequence select="'paragraph'"/>
       </xsl:when>
      <xsl:when test="$style = 'tsheadheadword'">
