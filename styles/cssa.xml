@@ -9,7 +9,7 @@
   <css:rule layout-type="para" native-name="ts_heading_short" name="tsheadingshort"/>
   <css:rule layout-type="para" native-name="ts_headlineright" name="tsheadlineright" regex="^tsheadline(left|right|short|author)?$"/>
   <css:rule layout-type="para" native-name="ts_heading_part" name="tsheadingpart"/>
-  <css:rule layout-type="para" native-name="ts_heading_1" name="tsheading1" regex="^tsheading1(notoc|nobm)?$"/>
+  <css:rule layout-type="para" native-name="ts_heading_1" name="tsheading1" regex="^tsheading1(notoc|nobm|review)?$"/>
   <css:rule layout-type="para" native-name="ts_heading_2" name="tsheading2" regex="^tsheading2(notoc|nobm)?$"/>
   <css:rule layout-type="para" native-name="ts_heading_3" name="tsheading3" regex="^tsheading3(notoc|nobm)?$"/>
   <css:rule layout-type="para" native-name="ts_heading_4" name="tsheading4" regex="^tsheading4(notoc|nobm)?$"/>
@@ -54,6 +54,7 @@
   <css:rule layout-type="para" native-name="ts_dedication" name="tsdedication"/>
   <css:rule layout-type="para" native-name="ts_twocolumn" name="tstwocolumn"/>  
   <css:rule layout-type="para" native-name="ts_onecolumn" name="tsonecolumn"/>  
+  <css:rule layout-type="para" native-name="ts_reviewer" name="tsreviewer"/>  
 
   <css:rule layout-type="para" native-name="ts_keywords" name="tskeywords"/>
 <!--  <css:rule layout-type="para" native-name="ts_keywords_heading" name="tskeywordsheading"/>-->
