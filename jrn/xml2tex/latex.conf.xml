@@ -127,9 +127,21 @@
         </rule>
       </xsl:if>
       <xsl:if test="@role = 'override'">
-        <rule name="tpAuthorNameList" type="cmd" break-before="1">
-          <param select="for $a in dbk:personname/dbk:othername return normalize-space($a)"/>
-        </rule>
+        <xsl:choose>
+          <xsl:when test="dbk:personname/dbk:othername/@role = 'tsreviewer'">
+            <!-- reviewer is only created as \tpRunAuthorNameList (https://redmine.le-tex.de/issues/14887#note-17) to avoid displaying-->
+            <rule name="tpRunAuthorNameList" type="cmd" break-before="1">
+              <param select="if (exists(ancestor::dbk:info//dbk:titleabbrev[@role='tsheadlineauthor'])) 
+                             then ancestor::dbk:info//dbk:titleabbrev[@role='tsheadlineauthor']
+                             else for $a in dbk:personname/dbk:othername return normalize-space($a)"/>
+            </rule>
+          </xsl:when>
+          <xsl:otherwise>
+            <rule name="tpAuthorNameList" type="cmd" break-before="1">
+              <param select="for $a in dbk:personname/dbk:othername return normalize-space($a)"/>
+            </rule>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:if>
     
   </template>
@@ -334,7 +346,9 @@
       </xsl:for-each>
       <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:if test="dbk:legalnotice[normalize-space()][matches(., 'BY')] or $open-access">
+    <xsl:if test="(dbk:legalnotice[normalize-space()][matches(., 'BY')] or $open-access)
+                  and
+                  ../(dbk:author|dbk:authorgroup/dbk:author)/dbk:personname[normalize-space()(:only add logo if footer is created:)]">
       <xsl:value-of select="'&#xa;\tpLicenceLogo{logos/oasymbol.pdf}'"/>
     </xsl:if>
   </xsl:template>
