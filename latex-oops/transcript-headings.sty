@@ -601,31 +601,26 @@
   
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
   
-  \tpSetProperty{heading-block}{%
-    \gdef\tp@currentHeading{chapter}
-    \ifcollection
-      \tpIfComp{RunAuthorNameList}{%
-        \protected@xdef\tp@authormark{\tp@heading@RunAuthorNameList}%
-      }{%
-        \protected@xdef\tp@authormark{\tp@heading@AuthorNameList}%
-      }
-    \else
-      \protected@xdef\tp@authormark{\tp@titlepage@AuthorNameList}%
-    \fi      
-    \tpIfComp{RunNumber}{%
-      \protected@xdef\tp@chapternumber{\tp@heading@RunNumber}%
-    }{
-      \tpIfComp{Number}{%
-        \protected@xdef\tp@chapternumber{\tp@heading@Number}%
-      }{%
-        \global\let\tp@chapternumber\relax%
-      }
-    }%
+  \tpSetProperty{running-extra}{%
+    \global\let\tp@partmark\relax%
+    \global\let\tp@chapternumber\relax%
+    \global\let\tp@authormark\relax
+    \tpIfComp{RunAuthorNameList}{%
+      \protected@xdef\tp@partmark{\tp@heading@RunAuthorNameList}%
+    }{%
+      \protected@xdef\tp@partmark{\tp@heading@AuthorNameList}%
+    }
     \tpIfComp{RunTitle}{%
       \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
     }{
       \protected@xdef\tp@chaptermark{\tp@heading@Title}%
     }%
+    % Muss gesetzt werden, damit \tp@make@run obige Definition nicht überschreibt.
+    \let\chaptermark\tp@chaptermark%
+  }
+  
+  \tpSetProperty{heading-block}{%
+    \gdef\tp@currentHeading{chapter}%
     \savenotes
     \bgroup
       \normalfont
