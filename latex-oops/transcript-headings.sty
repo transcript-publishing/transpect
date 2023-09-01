@@ -167,7 +167,7 @@
       \vskip-2\baselineskip
     }{}%
   }%
-  \tpSetProperty{after-heading-block}{\vfill}%
+  \tpSetProperty{after-heading-block}{\newpage}%
 }
 
 
@@ -279,7 +279,11 @@
       \tpIfComp{RunAuthorNameList}{%
         \protected@xdef\tp@authormark{\tp@heading@RunAuthorNameList}%
       }{%
-        \protected@xdef\tp@authormark{\tp@heading@AuthorNameList}%
+        \tpIfComp{AuthorNameList}{%
+          \protected@xdef\tp@authormark{\tp@heading@AuthorNameList}%
+        }{%
+          \global\let\tp@authormark\relax%
+        }
       }
     \else
       \protected@xdef\tp@authormark{\tp@titlepage@AuthorNameList}%
@@ -353,27 +357,27 @@
   % Muss global und ausgewertet sein, damit das Seitenlayout ps@articlehead darauf zugreifen kann.
   \xdef\@articleDOI{\tpUseComp{DOI}}%
   
-  \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
-  \tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
-  \tpSetProperty{author-contact-format}{%Format of a single author's contact information
-    \tpUseComp{FullName}%
-    \tpIfComp{Affil}{%
-      \space(\tpUseGroupProp{tpAffil}{\the\@currAffilCnt}{Affiliation})%
-      \global\advance\@currAffilCnt\@ne%
-    }{}%
-  }%
-  
-  % Voherblock, 15194.  
-  %\tpSetProperty{affiliation-format}{}%
   %\tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
   %\tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
   %\tpSetProperty{author-contact-format}{%Format of a single author's contact information
+  %  \tpUseComp{FullName}%
   %  \tpIfComp{Affil}{%
-  %    \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{Affil}}{affil-block-format});\par%
-  %    \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
-  %    \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
+  %    \space(\tpUseGroupProp{tpAffil}{\the\@currAffilCnt}{Affiliation})%
+  %    \global\advance\@currAffilCnt\@ne%
   %  }{}%
-  %}
+  %}%
+  
+  % Voherblock, 15194.  
+  \tpSetProperty{affiliation-format}{}%
+  \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
+  \tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
+  \tpSetProperty{author-contact-format}{%Format of a single author's contact information
+    \tpIfComp{Affil}{%
+      \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{Affil}}{affil-block-format});\par%
+      \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
+      \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
+    }{}%
+  }
 
   
   \tpSetProperty{counted-name-sep}{,\space}
@@ -568,6 +572,13 @@
   \tpSetProperty{after-skip}{12.8bp}%
 }
 
+\def\tp@make@run{%
+  \tp@check@empty{heading}{Title}{Run}%
+  \tp@check@empty{heading}{Number}{Run}%
+  \tp@check@author{Run}%
+  \tp@check@empty{heading}{Subtitle}{Run}%
+  \tpUseProperty{running-extra}%
+}
 
 \tpDeclareHeading[chapter]{0}{review}{%
   % IHV-Überschrift der Rezension unterscheidet sich von chapter darin, dass kein Untertitel ausgegeben wird.
@@ -597,9 +608,11 @@
   }%
 
   \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
-  \tpSetProperty{subtitle-format}{\normalfont\sffamily\LARGE}%
+  \tpSetProperty{subtitle-format}{\normalfont\rmfamily\normalsize}%
   
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
+  
+  %\tpSetProperty{running-heading}{}
   
   \tpSetProperty{running-extra}{%
     \global\let\tp@partmark\relax%
@@ -615,34 +628,37 @@
     }{
       \protected@xdef\tp@chaptermark{\tp@heading@Title}%
     }%
-    % Muss gesetzt werden, damit \tp@make@run obige Definition nicht überschreibt.
-    \let\chaptermark\tp@chaptermark%
   }
   
-  \tpSetProperty{heading-block}{%
+  \tpSetProperty{heading-block}{%    
     \gdef\tp@currentHeading{chapter}%
     \savenotes
     \bgroup
-      \normalfont
-      \interlinepenalty\@M
-      \tpUseProperty{title-format}%
-      \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
-      \tpUseComp{Title}\par\nopagebreak%
-      \tpIfComp{Subtitle}{\tpUseComp{subtitle-format}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
-      \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
+      \edef\twocolumnHere{\if@twocolumn\@empty\fi}%
+      \ifx\twocolumnHere\@empty
+        \begin{table*}[t]%
+        \typeout{++++++++++++++++ Twocolumn}%
+      \fi
+        \normalfont
+        \interlinepenalty\@M
+        \tpUseProperty{title-format}%
+        \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
+        \tpUseComp{Title}\par\nopagebreak%
+        \tpIfComp{Subtitle}{\tpUseComp{subtitle-format}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
+        \tpIfComp{DOI}{%
+          \vskip\baselineskip%
+          \tpUseComp{DOI}%
+        }{}%
+      \ifx\twocolumnHere\@empty
+        \end{table*}%
+      \fi%
     \egroup
     \nopagebreak
-    \tpIfComp{QuoteBlock}{%
-      \vskip\tpUseProperty{before-quote-skip}%
-      %\savenotes
-      \tpUseComp{QuoteBlock}
-      %\spewnotes
-      \par}{}%
     \spewnotes
   }%
   
   \tpSetProperty{after-heading-block}{\nopagebreak}
-  \tpSetProperty{after-skip}{12.8bp}%
+  \tpSetProperty{after-skip}{8\baselineskip}%
 }
 
 \tpDeclareHeading[section]{2}{subsection}{%
