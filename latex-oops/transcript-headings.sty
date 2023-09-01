@@ -630,14 +630,13 @@
     }%
   }
   
-  \tpSetProperty{heading-block}{%    
+  \tpSetProperty{heading-block}{%
+    \clearpage
     \gdef\tp@currentHeading{chapter}%
     \savenotes
     \bgroup
-      \edef\twocolumnHere{\if@twocolumn\@empty\fi}%
-      \ifx\twocolumnHere\@empty
+      \if@twocolumn
         \begin{table*}[t]%
-        \typeout{++++++++++++++++ Twocolumn}%
       \fi
         \normalfont
         \interlinepenalty\@M
@@ -649,7 +648,8 @@
           \vskip\baselineskip%
           \tpUseComp{DOI}%
         }{}%
-      \ifx\twocolumnHere\@empty
+      \if@twocolumn
+        \vspace{2\baselineskip}%
         \end{table*}%
       \fi%
     \egroup
@@ -658,7 +658,7 @@
   }%
   
   \tpSetProperty{after-heading-block}{\nopagebreak}
-  \tpSetProperty{after-skip}{8\baselineskip}%
+  \tpSetProperty{after-skip}{3\baselineskip}%
 }
 
 \tpDeclareHeading[section]{2}{subsection}{%
