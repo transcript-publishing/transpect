@@ -712,12 +712,12 @@
     }%
     \tpSetProperty{toc-heading}{%
       \tpUseProperty{toc-title-format}%
+      \@tempdima=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+      \@tempdimb=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
       \tpIfComp{TocNumber}{%
-        \@tempdima=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
-        \@tempdimb=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
         \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdimb\hb@xt@\@tempdimb{\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}\hss}%
-      }{%\leftskip\z@%
-        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+      }{%
+        \leftskip\@tempdima%
       }%
       \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
       \advance\rightskip\wd\@tempboxa%
