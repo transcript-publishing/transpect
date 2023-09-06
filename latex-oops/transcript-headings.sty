@@ -392,7 +392,14 @@
     %\global\setbox\@licenceTextFooter = \hbox{}
     
     \xdef\@headingDOI{\tpUseComp{DOI}}
-    \def\@headingCopyright{\tpIfComp{LicenceLogo}{\includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space\footnotesize\nsffamily\tpUseComp{LicenceName}\space}{}\tpUseComp{Copyright}}
+    \def\@headingCopyright{%
+      \tpIfComp{LicenceLogo}{%
+        \includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space%
+        \footnotesize\nsffamily%
+        \tpUseComp{LicenceName}\space%
+      }{}%
+      \tpUseComp{Copyright}%
+    }
     \tpIfComp{LicenceLogo}{%
       \xdef\@articleLicenceLogo{\tpUseComp{LicenceLogo}}%
     }{
@@ -403,7 +410,14 @@
       \parindent\z@%
       \tpUseProperty{affil-block-face}%
       \tpUseComp{AuthorContactBlock}\par
-      \@headingCopyright%
+      \tpIfComp{LicenceLogo}{%
+        \ifnum\tpAuthorCnt>\z@%
+          \includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space%
+        \fi
+        \footnotesize\nsffamily%
+        \tpUseComp{LicenceName}\space%
+      }{}%
+      \tpUseComp{Copyright}%
       \global\advance\@currAffilCnt\@ne%
     }
     \@tempdima = \the\ht\@articlefooterbox
