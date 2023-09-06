@@ -346,9 +346,7 @@
       </xsl:for-each>
       <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:if test="(dbk:legalnotice[normalize-space()][matches(., 'BY')] or $open-access)
-                  and
-                  ../(dbk:author|dbk:authorgroup/dbk:author)/dbk:personname[normalize-space()(:only add logo if footer is created:)]">
+    <xsl:if test="dbk:legalnotice[normalize-space()][matches(., 'BY')] or $open-access">
       <xsl:value-of select="'&#xa;\tpLicenceLogo{logos/oasymbol.pdf}'"/>
     </xsl:if>
   </xsl:template>
