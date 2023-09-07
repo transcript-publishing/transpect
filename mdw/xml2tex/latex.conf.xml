@@ -9,4 +9,34 @@
   <xsl:variable name="series-logo-href" as="xs:string?" 
                 select="'mdw_logo.eps'"/>
 
+<!--  <xsl:variable name="greek" as="xs:string?" select="()"/>-->
+  <xsl:variable name="babel-langs" select="for $i in $all-langs
+                                           return replace(xml2tex:lang-to-babel-lang($i)[not(. = ('hebrew', 'arabic', 'chinese', 'japanese', 'syriac', 'armenian', 'greek', 'el'))],
+                                                         '(spanish)', 
+                                                         '$1,es-noindentfirst,es-noshorthands')[normalize-space()]" as="xs:string*"/>
+
+  <xsl:function name="xml2tex:foreign-scripts" as="xs:string?">
+    <xsl:param name="root" as="document-node(element())"/>
+    <!-- adds usescripts for lanugages defined in variable scripts. If a usescript is set, a fallback font for this language will be applied.
+         For greek this is overridden because most fonts contain greek characters already. If not, overwrite this function and deleted the 
+         condition for greek as well as the variable $greek in the documentclass definitiOn -->
+
+    <xsl:variable name="other-scripts-in-doc" as="xs:string*" select="xml2tex:determine-other-langs($root)"/>
+    
+    <xsl:sequence select="if(exists($other-scripts-in-doc))
+                          then concat(',usescript={',
+                                      string-join($other-scripts-in-doc, ','), 
+                                      '}')
+                          else ()"/>
+  </xsl:function>
+
+  <xsl:variable name="scripts" as="element(script)*" xmlns="">
+    <script name="arabic"   unicode-range="&#x600;-&#x6ff;&#x750;-&#x77f;"/>
+    <script name="syriac"   unicode-range="&#x700;-&#x74f;"/>
+    <script name="armenian" unicode-range="&#x530;-&#x58f;&#xfb13;-&#xfb17;"/>
+    <script name="chinese"  unicode-range="&#12288;-&#12351;&#x3002;&#x4e00;-&#x9fff;"/>
+    <script name="hebrew"   unicode-range="&#x590;-&#x5ff;&#xfb1d;-&#xfb4f;"/>
+    <script name="japanese" unicode-range="&#x3040;-&#x309f;&#x30a0;-&#x30ff;&#12352;-&#12543;"/>
+    <script name="greek"    unicode-range="&#x370;-&#x3ff;&#7936;-&#8191;"/>
+  </xsl:variable>
 </set>
