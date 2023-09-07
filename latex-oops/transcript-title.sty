@@ -572,7 +572,7 @@
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
     \tpIfComp{Copyright}{{\sbseries\sffamily\tpUseComp{Copyright}}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
-    \tpIfComp{PubDivision}{\tpGetComp{PubDivision}}{}%
+    \tpIfComp{PubDivision}{{\sffamily\tpGetComp{PubDivision}}}{}%
     \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}% CopyrightDisclaimer enthält aktuell »© [Autorenname]«. Keine Leerzeile davor mit Ticket 13870. Beobachten.
   }
   \tpSetProperty{publisher}{%
