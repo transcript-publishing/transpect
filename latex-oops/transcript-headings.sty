@@ -103,9 +103,12 @@
       \vbox{%
         \rightskip\z@
         \hsize.5\textwidth
-        \normalfont
-        \normalsize
-        \nsfwiderfamily
+        \normalfont\normalsize%
+        \ifx\ts@layout@type\ts@str@layout@mdw
+          \rmfamily%
+        \else
+          \nsfwiderfamily%
+        \fi
         \@tempdima=\baselineskip% Ticket 15122.
         \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
         \tpUseComp{QuoteText}\par
@@ -255,7 +258,11 @@
     % END.
     \normalfont
     \normalsize
-    \nsfwiderfamily
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \rmfamily%
+    \else
+      \nsfwiderfamily%
+    \fi
     \@tempdima=\baselineskip% Ticket 15122.
     \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
     \tpUseComp{QuoteText}%
@@ -545,7 +552,12 @@
     \hfill\vbox{%
       %\justify% Auskommentiert mit Ticket 15122.
       \hsize.5\textwidth
-      \normalsize\nsfwiderfamily\mdseries
+      \normalsize\mdseries
+      \ifx\ts@layout@type\ts@str@layout@mdw
+        \rmfamily%
+      \else
+        \nsfwiderfamily%
+      \fi
       \noindent
       \@tempdima=\baselineskip% Ticket 15122.
       \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
@@ -780,7 +792,12 @@
     \hfill\vbox{%
       %\justify% Auskommentiert mit Ticket 15122.
       \hsize.5\textwidth
-      \normalsize\nsfwiderfamily\mdseries
+      \normalsize\mdseries
+      \ifx\ts@layout@type\ts@str@layout@mdw
+        \rmfamily%
+      \else
+        \nsfwiderfamily%
+      \fi
       \noindent
       \@tempdima=\baselineskip% Ticket 15122.
       \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
