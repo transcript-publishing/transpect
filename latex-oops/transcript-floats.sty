@@ -154,15 +154,15 @@
   \tpSetProperty{list-of-block}{%
     \tpUseProperty{list-of-caption-format}%
     \tpIfComp{ListofNumber}{%
-      \@tempdima=\csname tp-tpTable-list-of-number-maxwd\endcsname
-      \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
+      \@tempdima=\csname tp-tpTable-list-of-number-maxwd\endcsname%
+      \leftskip\@tempdima\hskip-\@tempdima\hb@xt@\@tempdima{%
         \tpUseComp{ListofNumber}%
         \tpIfComp{ListofCaption}{%
           \tpUseProperty{list-of-number-sep}%
         }{}%
         \hss%
       }%
-      \tpIfComp{ListofCaption}{\tpUseComp{ListofCaption}}{}%
+      \tpIfComp{ListofCaption}{\ignorespaces\tpUseComp{ListofCaption}}{}%
     }{%
       \leftskip0pt \tpUseComp{ListofCaption}%
     }%
