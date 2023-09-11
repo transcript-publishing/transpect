@@ -21,13 +21,11 @@
   \SetClassProp{table}{hyphen}{auto}%
 }
 
-\global\newcount\tp@realPage \global\tp@realPage=0
-\global\newcount\tp@realPageCnt \global\tp@realPageCnt=0
-
 \intextsep\baselineskip
 
 
 % Ermittlung der echten Seitennummer durch Labels.
+\global\newcount\realpageCnt \global\realpageCnt=0
 \global\newcount\realpage
 \gdef\realHref{}
 \def\getLabelPage#1{%
@@ -58,9 +56,9 @@
     \ifvoid\htTableBox\else
       % BEGIN: Setze die echte Seite auf den Tabellenanfang.
       \phantomsection%
-      \label{floatLabel\the\tp@realPageCnt}%
-      \getLabelPage{floatLabel\the\tp@realPageCnt}%
-      \global\advance\tp@realPageCnt\@ne%
+      \label{floatLabel\the\realpageCnt}%
+      \getLabelPage{floatLabel\the\realpageCnt}%
+      \global\advance\realpageCnt\@ne%
       % END.
       \let\tp@floatbox\htTableBox%
     \fi%
