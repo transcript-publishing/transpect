@@ -21,8 +21,52 @@
   \SetClassProp{table}{hyphen}{auto}%
 }
 
+\global\newcount\tp@realPage \global\tp@realPage=0
+\global\newcount\tp@realPageCnt \global\tp@realPageCnt=0
 
 \intextsep\baselineskip
+
+
+% Ermittlung der echten Seitennummer durch Labels.
+\global\newcount\realpage
+\gdef\realHref{}
+\def\getLabelPage#1{%
+  \def\tp@getPage##1##2##3##4##5{##2}
+  \def\tp@getHref##1##2##3##4##5{##4}
+  \bgroup%
+    \def\@setref##1##2##3{%
+      \ifx##1\relax%
+        \@latex@warning{Reference `##3' on page \thepage \space undefined; ##1}%
+      \else
+        \global\realpage=\number\expandafter\tp@getPage##1
+        \xdef\realHref{\expandafter\tp@getHref##1}%
+      \fi
+    }
+    \pageref{#1}%
+  \egroup%
+}%
+
+\def\tp@flt@addcontentsline#1#2#3{%
+  % Ersetze \thepage durch \the\realpage.
+  \protected@write\@auxout
+    {\tpGobble}%
+    {\string\@writefile{#1}{\protect\tpContentsline{#2}{#3}{\the\realpage}{\realHref}\protected@file@percent}}\relax
+}
+
+\def\tpGetTableContent{%
+  \ifx\htTableBox\@undefined\else
+    \ifvoid\htTableBox\else
+      % BEGIN: Setze die echte Seite auf den Tabellenanfang.
+      \phantomsection%
+      \label{floatLabel\the\tp@realPageCnt}%
+      \getLabelPage{floatLabel\the\tp@realPageCnt}%
+      \global\advance\tp@realPageCnt\@ne%
+      % END.
+      \let\tp@floatbox\htTableBox%
+    \fi%
+  \fi%
+}
+
 %% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
 \tpAddToDefault{float}{%
   \def\tpBreak{\hfill\break}%
