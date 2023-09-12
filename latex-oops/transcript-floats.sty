@@ -65,9 +65,17 @@
   \fi%
 }
 
+\def\tp@str@center{center}
 %% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
 \tpAddToDefault{float}{%
-  \def\tpBreak{\hfill\break}%
+  \def\tpBreak{%
+    \GetCascCellProp{hAlign}{text-align}%
+    \ifx\hAlign\tp@str@center
+    \else
+      \hfill%
+    \fi%
+    \break%
+  }%
   \tpSetProperty{number-format}{}% Format of number, additional to caption-format
   \tpSetProperty{number-sep}{:\space\ignorespaces}
   \tpSetProperty{caption-sep-top}{3mm}%
