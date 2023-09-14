@@ -44,11 +44,14 @@
   \egroup%
 }%
 
+\def\tp@str@table{table}
 \def\tp@flt@addcontentsline#1#2#3{%
   % Ersetze \thepage durch \the\realpage.
-  \protected@write\@auxout
-    {\tpGobble}%
-    {\string\@writefile{#1}{\protect\tpContentsline{#2}{#3}{\the\realpage}{\realHref}\protected@file@percent}}\relax
+  \ifx#1\tp@str@table
+    \protected@write\@auxout{\tpGobble}{\string\@writefile{#1}{\protect\tpContentsline{#2}{#3}{\the\realpage}{\realHref}\protected@file@percent}}\relax
+  \else
+    \protected@write\@auxout{\tpGobble}{\string\@writefile{#1}{\protect\tpContentsline{#2}{#3}{\thepage}{\@currentHref}\protected@file@percent}}\relax
+  \fi
 }
 
 \def\tpGetTableContent{%
