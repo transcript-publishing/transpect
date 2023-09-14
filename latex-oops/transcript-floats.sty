@@ -47,9 +47,12 @@
 \def\tp@str@table{table}
 \def\tp@flt@addcontentsline#1#2#3{%
   % Ersetze \thepage durch \the\realpage.
-  \ifx#1\tp@str@table
+  \typeout{+++++++++++ Comparing #2\space to \tp@str@table}%
+  \ifx#2\tp@str@table
+    \typeout{+++++++++++ TABLE}%
     \protected@write\@auxout{\tpGobble}{\string\@writefile{#1}{\protect\tpContentsline{#2}{#3}{\the\realpage}{\realHref}\protected@file@percent}}\relax
   \else
+    \typeout{+++++++++++ FIGURE}%
     \protected@write\@auxout{\tpGobble}{\string\@writefile{#1}{\protect\tpContentsline{#2}{#3}{\thepage}{\@currentHref}\protected@file@percent}}\relax
   \fi
 }
