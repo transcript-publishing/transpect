@@ -413,7 +413,7 @@
     <xsl:if test="normalize-space($funder-name) or exists($funder-logo)">
       <xsl:for-each select="$funder-logo[normalize-space()]">
         <xsl:text>&#xa;\begin{tpFunding}</xsl:text>
-        <!-- currenly no method for multiple funding logo/name pairs -->
+        <!-- currently no method for multiple funding logo/name pairs -->
         <xsl:if test="normalize-space($funder-name) and position() eq 1">
           <xsl:value-of select="concat('&#xa;\tpFundName{', $funder-name, '}')"/>
         </xsl:if>
@@ -841,5 +841,26 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+  <xsl:function name="xml2tex:generate-clear-after-p" as="xs:string?">
+    <xsl:param name="context" as="element()"/>
+    <xsl:choose>
+      <xsl:when test="$context[tr:determine-float-pos(.) = 'orientation=landscape']">
+        <xsl:text>\FloatBarrier&#xa;</xsl:text>
+        <!--  https://redmine.le-tex.de/issues/15527 -->
+      </xsl:when>
+      <xsl:when test="$context[matches(tr:determine-float-pos(.), 'float-pos=t?p') 
+                              and not(following-sibling::*[1][xml2tex:is-float-object(.)])
+                              and (not(preceding-sibling::*[1][xml2tex:is-float-object(.)])
+                             or
+                                (preceding-sibling::*[1][matches(tr:determine-float-pos(.), 'float-pos=t?p')]
+                                and not(preceding-sibling::*[2][xml2tex:is-float-object(.)])
+                                ))
+                                ]">
+        <xsl:text>\tpFloatBarrier&#xa;</xsl:text>
+        <!--  https://redmine.le-tex.de/issues/11889#note-18: after last float-pos=p, https://redmine.le-tex.de/issues/15527 -->
+      </xsl:when>
+    </xsl:choose>
+  </xsl:function>
 
 </set>
