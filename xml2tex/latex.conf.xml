@@ -845,9 +845,11 @@
   <xsl:function name="xml2tex:generate-clear-after-p" as="xs:string?">
     <xsl:param name="context" as="element()"/>
     <xsl:choose>
-      <xsl:when test="$context[tr:determine-float-pos(.) = 'orientation=landscape']">
+      <xsl:when test="$context[tr:determine-float-pos(.) = 'orientation=landscape']
+                              [not(replace(@xml:id, '-\d+$', '') = replace($context/following-sibling::*[1]/@xml:id, '-\d+$', ''))(:avoid barriers between slitted tables:)]">
         <xsl:text>\FloatBarrier&#xa;</xsl:text>
-        <!--  https://redmine.le-tex.de/issues/15527 -->
+        <!--  https://redmine.le-tex.de/issues/15527, 
+              https://redmine.le-tex.de/issues/15565 -->
       </xsl:when>
       <xsl:when test="$context[matches(tr:determine-float-pos(.), 'float-pos=t?p') 
                               and not(following-sibling::*[1][xml2tex:is-float-object(.)])
