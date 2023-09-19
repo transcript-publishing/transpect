@@ -352,6 +352,7 @@
   \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}
 }
 
+
 % Für Zeitschriften.
 \global\newcount\@currAffilCnt \global\@currAffilCnt=1
 \global\newbox\@articlefooterbox%
@@ -563,7 +564,7 @@
       \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \tpUseComp{QuoteText}\par
       \tpIfComp{QuoteSource}{%
-        \tpUseComp{QuoteSource}%
+        \itshape\tpUseComp{QuoteSource}%
       }{}%
     }%
   }{}
@@ -803,7 +804,7 @@
       \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \tpUseComp{QuoteText}\par
       \tpIfComp{QuoteSource}{%
-        \tpUseComp{QuoteSource}%
+        \itshape\tpUseComp{QuoteSource}%
       }{}%
       \vskip\baselineskip%
     }%
