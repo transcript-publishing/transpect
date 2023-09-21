@@ -106,7 +106,7 @@
 
 \usepackage{newunicodechar}
 %\newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
-\newunicodechar{‐}{-\hskip\fontdimen3\font}% 8617, U+2010, ersetzt durch U+002D.
+\newunicodechar{‐}{\penalty\@M-\hskip\z@skip}% 8617, U+2010, ersetzt durch U+002D.
 \newunicodechar{‑}{\hbox{-}\penalty\@M\hskip\z@skip}% 8617, U+2011 (non-breaking hyphen).
 \newunicodechar{↩}{\hskip\z@skip}
 \newunicodechar{。}{\hbox{$_\circ$\enskip\ignorespaces}}
