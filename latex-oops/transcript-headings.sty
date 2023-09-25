@@ -139,22 +139,32 @@
   }
   
   \tpSetProperty{heading-block}{%
-    \gdef\tp@currentHeading{part}%
+    \gdef\tp@currentHeading{chapter}%
     % Kolumnentitel setzen.
-    \tpIfComp{RunTitle}{%
-      \protected@xdef\tp@partmark{\tp@heading@RunTitle}%
-    }{
-      \protected@xdef\tp@partmark{\tp@heading@Title}%
-    }%
-    \tpIfComp{RunNumber}{%
-      \protected@xdef\tp@partnumber{\tp@heading@RunNumber}%
-    }{
-      \tpIfComp{Number}{%
-        \protected@xdef\tp@partnumber{\tp@heading@Number}%
+    \ifcollection
+      \global\let\tp@authormark\relax%
+      \global\let\tp@partmark\undefined% Nutzt dann den Buchtitel als Fallback.
+      \tpIfComp{RunTitle}{%
+        \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
       }{%
-        \global\let\tp@partnumber\relax%
+        \protected@xdef\tp@chaptermark{\tp@heading@Title}%
       }%
-    }%
+    \else
+      \tpIfComp{RunTitle}{%
+        \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
+      }{
+        \protected@xdef\tp@chaptermark{\tp@heading@Title}%
+      }%
+      \tpIfComp{RunNumber}{%
+        \protected@xdef\tp@chapternumber{\tp@heading@RunNumber}%
+      }{
+        \tpIfComp{Number}{%
+          \protected@xdef\tp@chapternumber{\tp@heading@Number}%
+        }{%
+          \global\let\tp@chapternumber\relax%
+        }%
+      }%
+    \fi
     
     \tpUseProperty{title-format}%
     %\vskip.5\baselineskip
