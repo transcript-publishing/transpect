@@ -269,14 +269,21 @@
   }
 
 
+
 \newenvironment{dialog}{%
   \def\infoItem##1{%
-    \item[\bgroup\itshape\sbseries ##1\egroup]%
-  }
+    \vspace{-0.75\baselineskip}%
+    \bgroup
+      \list{}
+        \item\rmfamily\leftskip\dimexpr-7mm-1.5em\relax%
+        \bgroup\itshape\sbseries ##1\egroup%
+      \endlist%
+    \egroup%
+  }%
   \list{}%
-  {\leftmargin5mm
+  {\leftmargin7mm
    \labelsep1em
-   \labelwidth\dimexpr5mm-\labelsep\relax
+   \labelwidth\dimexpr7mm-\labelsep\relax
    \itemsep\z@
    \itemindent\z@
    \parsep\z@
