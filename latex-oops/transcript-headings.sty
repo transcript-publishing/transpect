@@ -142,13 +142,23 @@
     \gdef\tp@currentHeading{chapter}%
     % Kolumnentitel setzen.
     \ifcollection
-      \global\let\tp@authormark\relax%
-      \global\let\tp@partmark\undefined% Nutzt dann den Buchtitel als Fallback.
-      \tpIfComp{RunTitle}{%
-        \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
-      }{%
-        \protected@xdef\tp@chaptermark{\tp@heading@Title}%
-      }%
+      \ifjournal
+        \tpIfComp{RunTitle}{%
+          \protected@xdef\tp@partmark{\tp@heading@RunTitle}%
+        }{%
+          \tpIfComp{Title}{%
+            \protected@xdef\tp@partmark{\tp@heading@Title}%
+          }{}%
+        }
+      \else
+        \global\let\tp@authormark\relax%
+        \global\let\tp@partmark\undefined% Nutzt dann den Buchtitel als Fallback.
+        \tpIfComp{RunTitle}{%
+          \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
+        }{%
+          \protected@xdef\tp@chaptermark{\tp@heading@Title}%
+        }%
+      \fi
     \else
       \tpIfComp{RunTitle}{%
         \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
@@ -183,41 +193,6 @@
   \tpSetProperty{after-heading-block}{\vfill}%
 }
 
-
-\tpDeclareHeading[part]{-1}{partAsRunChap}{%
-  \tpSetProperty{heading-block}{%
-    \gdef\tp@currentHeading{chapter}%
-    % Kolumnentitel setzen.
-    \tpIfComp{RunTitle}{%
-      \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
-    }{
-      \protected@xdef\tp@chaptermark{\tp@heading@Title}%
-    }%
-    \tpIfComp{RunNumber}{%
-      \protected@xdef\tp@chapternumber{\tp@heading@RunNumber}%
-    }{
-      \tpIfComp{Number}{%
-        \protected@xdef\tp@chapternumber{\tp@heading@Number}%
-      }{%
-        \global\let\tp@chapternumber\relax%
-      }%
-    }%
-    
-    \tpUseProperty{title-format}%
-    %\vskip.5\baselineskip
-    \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
-    \tpUseComp{Title}\par%
-    \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
-    %% Zitat
-    \tpIfComp{QuoteBlock}{%
-      \vskip2\baselineskip
-      \savenotes
-      \tpUseComp{QuoteBlock}
-      \spewnotes
-      \vskip-2\baselineskip
-    }{}%
-  }%
-}
 
 \gdef\tp@runningHeadingLeft@backmatter{\relax}
 \gdef\tp@runningHeadingRight@backmatter{\relax}
@@ -330,15 +305,18 @@
   \tpSetProperty{heading-block}{%
     \gdef\tp@currentHeading{chapter}
     \ifcollection
-      \tpIfComp{RunAuthorNameList}{%
-        \protected@xdef\tp@authormark{\tp@heading@RunAuthorNameList}%
-      }{%
-        \tpIfComp{AuthorNameList}{%
-          \protected@xdef\tp@authormark{\tp@heading@AuthorNameList}%
+      %\ifjournal
+      %\else
+        \tpIfComp{RunAuthorNameList}{%
+          \protected@xdef\tp@authormark{\tp@heading@RunAuthorNameList}%
         }{%
-          \global\let\tp@authormark\relax%
+          \tpIfComp{AuthorNameList}{%
+            \protected@xdef\tp@authormark{\tp@heading@AuthorNameList}%
+          }{%
+            \global\let\tp@authormark\relax%
+          }
         }
-      }
+      %\fi
     \else
       \protected@xdef\tp@authormark{\tp@titlepage@AuthorNameList}%
     \fi      
