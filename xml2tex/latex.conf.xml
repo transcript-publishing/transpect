@@ -538,6 +538,7 @@
   </template>
   
   <template context="dbk:blockquote[matches(@role,'tsdialogue')]/dbk:para[not(dbk:personname)]">
+    <!--https://redmine.le-tex.de/issues/15597-->
     <rule name="infoItem" type="cmd" break-before="1">
       <param select="node()"/>
     </rule>
