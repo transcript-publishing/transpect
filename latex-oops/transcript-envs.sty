@@ -270,6 +270,9 @@
 
 
 \newenvironment{dialog}{%
+  \def\infoItem##1{%
+    \item[\bgroup\itshape\sbseries ##1\egroup]%
+  }
   \list{}%
   {\leftmargin5mm
    \labelsep1em
