@@ -537,6 +537,12 @@
     </rule>
   </template>
   
+  <template context="dbk:blockquote[matches(@role,'tsdialogue')]/dbk:para[not(dbk:personname)]">
+    <rule name="infoItem" type="cmd" break-before="1">
+      <param select="node()"/>
+    </rule>
+  </template>
+
   <!-- https://redmine.le-tex.de/issues/9852 -->
   
   <xsl:variable name="list-mark-map" as="element(xml2tex:map)+">
