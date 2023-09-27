@@ -299,7 +299,7 @@
 % \gdef\href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
 % \gdef\@fn@href #1\@nil #2↩#3↩\@nil{\oldhref{#1}{#2}\hskip\z@skip\if!#3!\else\@fn@href #1\@nil #3↩\@nil\fi}
 % \egroup
-\usepackage{ulem}
+\usepackage[normalem]{ulem}
 \let\ul\uline
 \AtBeginDocument{%
   \ifx\tpRunBookTitle\@undefined
