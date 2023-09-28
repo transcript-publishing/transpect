@@ -155,8 +155,10 @@
         \global\let\tp@partmark\undefined% Nutzt dann den Buchtitel als Fallback.
         \tpIfComp{RunTitle}{%
           \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
+          \protected@xdef\tp@latestPartmark{\tp@heading@RunTitle}% latestPartmark wird bei chapter als partmark gesetzt.
         }{%
           \protected@xdef\tp@chaptermark{\tp@heading@Title}%
+          \protected@xdef\tp@latestPartmark{\tp@heading@Title}% latestPartmark wird bei chapter als partmark gesetzt.
         }%
       \fi
     \else
@@ -198,6 +200,7 @@
 \gdef\tp@runningHeadingRight@backmatter{\relax}
 
 \gdef\tp@chaptermark{UNKNOWN CHAPTERMARK}
+\global\let\tp@latestPartmark\relax% latestPartmark wird im part gespeichert und in Anthologien bei chapter als partmark gesetzt.
 
 
 \tpDeclareHeading{0}{chapter}{%
@@ -307,6 +310,10 @@
     \ifcollection
       %\ifjournal
       %\else
+        \ifx\tp@latestPartmark\relax
+        \else
+          \protected@xdef\tp@partmark{\tp@latestPartmark}%
+        \fi
         \tpIfComp{RunAuthorNameList}{%
           \protected@xdef\tp@authormark{\tp@heading@RunAuthorNameList}%
         }{%
