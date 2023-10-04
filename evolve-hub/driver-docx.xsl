@@ -279,4 +279,8 @@
     </xsl:copy>  
   </xsl:template>
 
+  <xsl:template match="phrase[matches(@role, '^tsemph')]/@*[starts-with(name(), 'css:')] | css:rule[matches(@name, '^tsemph')]/@*[starts-with(name(), 'css:')]" mode="hub:clean-hub" priority="13">
+    <!-- https://redmine.le-tex.de/issues/15620 -->
+  </xsl:template>
+
 </xsl:stylesheet>
