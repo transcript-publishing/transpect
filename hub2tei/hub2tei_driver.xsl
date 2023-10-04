@@ -103,6 +103,12 @@
     <!-- TODO Auch, wenn in ZF? -->
   </xsl:template>
 
+  <xsl:template match="phrase[starts-with(@role, 'tsemph')]" mode="hub2tei:dbk2tei" priority="4"> 
+    <emph>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </emph>
+  </xsl:template>
+
   <xsl:template match="tei:hi[@rend = ('superscript', 'subscript')] | 
                        tei:seg[matches(@rend, 'fett|hervorgehoben|bold|italic')] | 
                        tei:seg[@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration')]]" mode="hub2tei:tidy">
