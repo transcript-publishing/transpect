@@ -398,7 +398,7 @@
     <xsl:attribute name="class" select="@rend"/>
   </xsl:template>
 
-  <xsl:template match="head/label" mode="tei2html">
+  <xsl:template match="head/label" mode="tei2html" priority="3">
     <xsl:next-match/>
     <xsl:if test="following-sibling::node()[1][self::seg[@type='tab'] or self::text()[matches(., '\P{Zs}')]]">
       <xsl:text> </xsl:text>
@@ -705,12 +705,18 @@
   <xsl:template match="(table|figure)/head//*[self::seg[starts-with(@rend, 'hub:')]|self::label]" mode="tei2html" priority="5">
     <!-- https://redmine.le-tex.de/issues/13415 -->
     <xsl:apply-templates select="node()" mode="#current"/>
+    <!-- https://redmine.le-tex.de/issues/15425-->
+      <xsl:apply-templates select="." mode="label-sep"/>
     <xsl:if test=".[self::seg[@rend='hub:caption-number'] 
                     or 
                     self::label[not(..[self::seg[@rend='hub:caption-number']])]]
                    [following-sibling::node()[1][not(matches(., '^\p{Zs}'))]]">
       <xsl:text> </xsl:text>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="(table|figure)/head/*[self::seg[starts-with(@rend, 'hub:')]|self::label]" mode="label-sep">
+    <xsl:text>:</xsl:text>
   </xsl:template>
 
   <xsl:template match="html:figure/html:p" mode="clean-up">
@@ -774,7 +780,10 @@
       <xsl:variable name="label" as="node()*">
         <xsl:apply-templates select="(head[@type = 'titleabbrev'], head[not(@type), head])[1]/*[self::label|self::seg[@rend = ('hub:caption-number', 'hub:identifier')]]" mode="strip-indexterms-etc"/>
       </xsl:variable>
-      <dt><xsl:sequence select="if (string-join($label, '')[normalize-space()]) then $label else '→'"/></dt>
+      <dt>
+        <xsl:sequence select="if (string-join($label, '')[normalize-space()]) then $label else '→'"/>
+        <xsl:apply-templates select="(head[@type = 'titleabbrev'], head[not(@type), head])[1]/*[self::label|self::seg[@rend = ('hub:caption-number', 'hub:identifier')]]" mode="label-sep"/>
+      </dt>
       <dd>
         <a href="#{@xml:id}">
           <xsl:apply-templates select="(head[@type = 'titleabbrev'], head[not(@type), head])[1]/node()[not(self::label|self::seg[@rend = ('hub:caption-number', 'hub:identifier')])]" mode="strip-indexterms-etc"/>
