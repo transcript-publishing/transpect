@@ -128,6 +128,9 @@
     \global\let\has@parts\relax
     \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
     \ifcollection \global\let\@authormark\@empty\fi
+    % Zurücksetzen der Fußnotenzählen bereits bei Parts, nicht erst bei Chapter. Ticket 15665.
+    \global\c@footnote\z@
+    \global\c@endnote\z@
   }%
   
   \tpSetProperty{running-heading}{%
