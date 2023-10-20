@@ -29,7 +29,7 @@
     <xsl:copy>
       <xsl:apply-templates mode="#current"/>
     </xsl:copy>
-    <xsl:if test="//bibliomixed[node()]">
+    <xsl:if test="//bibliomixed[not(ancestor::bibliography[@role = ('Citavi', 'Citavi-formatted', 'CSL', 'CSL-formatted')])])][node()]">
       <xsl:result-document href="{concat($out-dir, '/', $basename, '.bib.txt')}" 
                            method="text" media-type="text/plain" encoding="UTF-8">
         <xsl:value-of select="string-join(//bibliomixed, '&#xa;')"/>
