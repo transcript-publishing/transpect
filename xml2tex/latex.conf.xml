@@ -479,7 +479,7 @@
     </rule>
   </template>
   
-  <template context="dbk:bibliography[not(@role eq 'Citavi')]/dbk:bibliodiv">
+  <template context="dbk:bibliography[not(@role = ('Citavi', 'Citavi-formatted'))]/dbk:bibliodiv">
     <xsl:variable name="level" select="count(ancestor::dbk:bibliography)" as="xs:integer"/>
     <xsl:variable name="name" as="xs:string"
                   select="if($level eq 1) then 'section'
