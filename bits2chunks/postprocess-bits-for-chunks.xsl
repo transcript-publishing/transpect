@@ -203,6 +203,11 @@
   <!-- empty body in chunks. no body in issue file parts-->
     <xsl:if test="not($in-issue)">
       <xsl:copy copy-namespaces="no"/>
+      <xsl:if test="descendant::ref-list">
+        <back>
+          <xsl:apply-templates select="descendant::ref-list" mode="#current"/>
+        </back>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
@@ -284,7 +289,7 @@
     <xsl:param name="nodes" as="node()*"/>
     <xsl:param name="uri" as="xs:string"/>
     <xsl:param name="doi" as="xs:string?"/>
-    <xsl:param name="issue" as="xs:boolean?"/>
+    <xsl:param name="issue" as="xs:boolean?"/><xsl:message select="'###', string-join($nodes//*:ref)"/>
     <xsl:if test="$nodes[.//*[self::*:ref-list]]">
       <xsl:element name="doi" namespace="">
         <xsl:attribute name="xml:base" select="replace(replace($uri, '^(.+/)chunks-atypon/.+/([^/]+)\.xml$', '$1chunks-bibl/$2.bibl.xml'), 'title-page', 'fm')"/>
