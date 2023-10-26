@@ -83,6 +83,25 @@
     </ref>
   </xsl:template>
 
+
+  <xsl:template match="*:body[.//*:sec/*:ref-list]" mode="clean-up" priority="3">
+    <xsl:next-match>
+      <xsl:with-param name="move-refs-to-back" as="xs:boolean" select="false()" tunnel="yes"/>
+    </xsl:next-match>
+      <xsl:element name="back">
+        <xsl:apply-templates select="(.//*:sec/*:ref-list | .//*:sec/*[preceding-sibling::*:ref-list])" mode="#current">
+          <xsl:with-param name="move-refs-to-back" as="xs:boolean" select="true()" tunnel="yes"/>
+        </xsl:apply-templates>
+      </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="*:body/*:sec/*:ref-list | *:body/*:sec/*[preceding-sibling::*:ref-list]" mode="clean-up" priority="5">
+    <xsl:param name="move-refs-to-back" as="xs:boolean" tunnel="yes"/>
+    <xsl:if test="$move-refs-to-back">
+      <xsl:next-match/>
+    </xsl:if>
+  </xsl:template>
+
  <!-- <xsl:template match="abstract/p[matches(@rend, 'Grundtext_Abstract_Trans')]" mode="tei2bits">
     <title>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
