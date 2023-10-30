@@ -18,8 +18,8 @@
   <c:param name="interface-language" value="de"/>
   <c:param name="epub-version" value="EPUB3"/>
   <c:param name="epub-a11y-check" value="yes"/>
-  <c:param name="epub-a11y-ace-path" value="/usr/local/bin/ace"/>
-  <c:param name="epub-a11y-htmlreport" value="no"/>
+  <c:param name="epub-a11y-ace-path" value="/usr/local/lib/node_modules/@daisy/ace/bin/ace-puppeteer.js"/>
+  <c:param name="epub-a11y-htmlreport" value="yes"/>
   <c:param name="epub-a11y-rule-family-name" value="Barrierefreiheit"/>
   <c:param name="epub-a11y-severity-override" value="info"/>  
   
