@@ -79,15 +79,15 @@
     \fi%
     \break%
   }%
-  \tpSetProperty{number-format}{}% Format of number, additional to caption-format
+  \tpSetProperty{number-face}{}% Format of number, additional to caption-format
   \tpSetProperty{number-sep}{:\space\ignorespaces}
   \tpSetProperty{caption-sep-top}{3mm}%
   \tpSetProperty{caption-sep-bottom}{\dimexpr3mm\relax}%
   \tpSetProperty{subcaption-add-sep-top}{-2mm}%
   \tpSetProperty{caption-valign-top}{bottom}%
   \tpSetProperty{caption-valign-bottom}{top}%
-  \tpSetProperty{caption-format-top}{\ifx\ts@layout@type\ts@str@layout@mdw\footnotesize\else\itshape\fi\RaggedRight}%
-  \tpSetProperty{caption-format-bottom}{\footnotesize\upshape\RaggedRight}%
+  \tpSetProperty{caption-face-top}{\ifx\ts@layout@type\ts@str@layout@mdw\footnotesize\else\itshape\fi\RaggedRight}%
+  \tpSetProperty{caption-face-bottom}{\footnotesize\upshape\RaggedRight}%
   \tpSetProperty{subfloat-sep}{2mm}%
   \tpSetProperty{intext-skip-top}{2\baselineskip}%
   \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
@@ -108,7 +108,7 @@
           \normalsize\itshape%
           \tpIfComp{Number}{%
             {%
-              \tpUseProperty{number-format}\tpUseComp{Number}%
+              \tpUseProperty{number-face}\tpUseComp{Number}%
               \tpIfComp{Caption}{%
                 \tpUseProperty{number-sep}%
               }{%
@@ -142,7 +142,7 @@
       \tpSetProperty{caption-top}{%
         \tpIfComp{Number}{%
           {%
-            \tpUseProperty{number-format}\tpUseComp{Number}%
+            \tpUseProperty{number-face}\tpUseComp{Number}%
             \tpIfComp{Caption}{%
               \tpUseProperty{number-sep}%
             }{}%
@@ -158,17 +158,18 @@
     \fi
   \fi
   %% Parameter für Abbildungs- und Tabellenverzeichnisse.
-  \tpSetProperty{list-of-caption-format}{\sffamily}%
-  \tpSetProperty{list-of-indent}{0pt}%
-  \tpSetProperty{list-of-margin-left}{0pt}%
+  \tpSetProperty{list-of-caption-face}{\sffamily}%
+  \tpSetProperty{list-of-indent}{\z@}%
+  \tpSetProperty{list-of-margin-left}{\z@}%
   \tpSetProperty{list-of-margin-right}{1.2em plus 1fil}%
   \tpSetProperty{list-of-page-sep}{\mydotfill\kern.5\p@}% siehe transcript-headings.sty für Def von \mydotfill
-  \tpSetProperty{list-of-caption-format}{\sffamily}%
+  \tpSetProperty{list-of-caption-face}{\sffamily}%
+  \tpSetProperty{list-of-number-face}{}%
   \tpSetProperty{list-of-number-sep}{:\enskip}%
   \tpSetProperty{list-of-block}{%
-    \tpUseProperty{list-of-caption-format}%
+    \tpUseProperty{list-of-caption-face}%
     \tpIfComp{ListofNumber}
-      {\tpUseComp{list-of-hang-number}}
+      {\tpUseComp{ListofNumber}}
       {\leftskip0pt}%
     \tpUseComp{ListofCaption}%
     \tpUseProperty{list-of-page-sep}\tpUseComp{ListofPage}%
@@ -181,12 +182,12 @@
 \tpDeclareFloat{tpFigure}{figure}{lof}{%
   \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}% Ticket 14959, 14989.
   \ifx\ts@layout@type\ts@str@layout@mdw
-    \tpSetProperty{number-format}{\bfseries}% Ticket 14957.
+    \tpSetProperty{number-face}{\bfseries}% Ticket 14957.
   \fi%
   \tpSetProperty{list-of-block}{%
-    \tpUseProperty{list-of-caption-format}%
+    \tpUseProperty{list-of-caption-face}%
     \tpIfComp{ListofNumber}{%
-      \@tempdima=\csname tp-tpFigure-list-of-number-maxwd\endcsname
+      \@tempdima=\tpUseProperty{list-of-number-width-max}%
       \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
         \tpUseComp{ListofNumber}%
         \tpIfComp{ListofCaption}{%
@@ -205,7 +206,7 @@
 %% gilt nur für Tabellen:
 \tpDeclareFloat{tpTable}{table}{lot}{%
   \tpSetProperty{list-of-block}{%
-    \tpUseProperty{list-of-caption-format}%
+    \tpUseProperty{list-of-caption-face}%
     \tpIfComp{ListofNumber}{%
       \@tempdima=\csname tp-tpTable-list-of-number-maxwd\endcsname%
       \leftskip\@tempdima\hskip-\@tempdima\hb@xt@\@tempdima{%

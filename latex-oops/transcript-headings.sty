@@ -25,10 +25,10 @@
   \tpSetProperty{toc-number-align}{left}%
   \tpSetProperty{toc-number-sep}{\enskip}%
   \tpSetProperty{toc-page-sep}{\mydotfill}%
-  \tpSetProperty{toc-title-format}{\sffamily\normalsize}%
-  \tpSetProperty{toc-page-format}{\normalfont\sfwidefamily\normalsize}%
-  \tpSetProperty{toc-heading}{%
-    \tpUseProperty{toc-title-format}%
+  \tpSetProperty{toc-title-face}{\sffamily\normalsize}%
+  \tpSetProperty{toc-page-face}{\normalfont\sfwidefamily\normalsize}%
+  \tpSetProperty{toc-format}{%
+    \tpUseProperty{toc-title-face}%
     \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
     \tpIfComp{TocNumber}{\tpUseProperty{toc-hang-number}}{}%
     \tpTocLink{%
@@ -51,7 +51,7 @@
   \tpSetProperty{toc-after-hook-part}{\nopagebreak}
   \tpSetProperty{toc-margin-top}{2.25em}%
   \tpSetProperty{toc-indent}{}%
-  \tpSetProperty{toc-title-format}{\sffamily\sbseries\ifx\ts@layout@type\ts@str@layout@mdw\LARGE\else\huge\fi}%
+  \tpSetProperty{toc-title-face}{\sffamily\sbseries\ifx\ts@layout@type\ts@str@layout@mdw\LARGE\else\huge\fi}%
   
   \tpSetProperty{toc-before-entry}{%
     \addvspace{\tpUseProperty{toc-margin-top}}
@@ -66,11 +66,11 @@
     %\ifdim\measurepage<7\baselineskip\relax\newpage\fi%
   }%
   
-  \tpSetProperty{toc-heading}{%
+  \tpSetProperty{toc-format}{%
     %\ifdim\dimexpr\pagegoal-\pagetotal<8\baselineskip\relax%
     %  \clearpage%
     %\fi%
-    \tpUseProperty{toc-title-format}%
+    \tpUseProperty{toc-title-face}%
     \tpIfComp{TocNumber}{%
       \ifcsname tp-heading-toc-number--1-maxwd\endcsname
         \@tempdima=\csname tp-heading-toc-number--1-maxwd\endcsname%
@@ -89,7 +89,7 @@
   
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
-  \tpSetProperty{title-format}{%
+  \tpSetProperty{title-face}{%
     \sffamily\sbseries%
     \ifx\ts@layout@type\ts@str@layout@mdw
       \LARGE%
@@ -180,8 +180,7 @@
         }%
       }%
     \fi
-    
-    \tpUseProperty{title-format}%
+    \tpUseProperty{title-face}%
     %\vskip.5\baselineskip
     \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
     \tpUseComp{Title}\par%
@@ -217,19 +216,19 @@
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-margin-right}{2em}% Begrenzt die Breite, auf der Titel und Untertitel erscheinen können. 2 em sind dann der Platz, auf dem die Seitenzahl »übersteht«.
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-title-format}{\sbseries\sfchapwidefamily\normalsize}%
-  \tpSetProperty{toc-subtitle-format}{\normalfont\sfchapsubtocfamily\normalsize}%
-  \tpSetProperty{toc-author-format}{\normalfont\normalsize\sfchapfamily\itshape}%
-  \tpSetProperty{toc-number-format}{\normalfont\normalsize\sfchapwidefamily}%
+  \tpSetProperty{toc-title-face}{\sbseries\sfchapwidefamily\normalsize}%
+  \tpSetProperty{toc-subtitle-face}{\normalfont\sfchapsubtocfamily\normalsize}%
+  \tpSetProperty{toc-author-face}{\normalfont\normalsize\sfchapfamily\itshape}%
+  \tpSetProperty{toc-page-face}{\normalfont\normalsize\sfchapwidefamily}%
   \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
-  \tpSetProperty{toc-heading}{%
+  \tpSetProperty{toc-format}{%
     %\ifdim\dimexpr\pagegoal-\pagetotal\relax<7\baselineskip\relax
     %  \clearpage%
     %\fi
     % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
     \vtop{\strut%
-      \tpUseProperty{toc-title-format}%
+      \tpUseProperty{toc-title-face}%
       \tpIfComp{TocNumber}{%
         \@tempdima=\csname tp-heading-toc-number-0-maxwd\endcsname%
         \@tempdimb=0\p@\relax
@@ -245,9 +244,9 @@
         \leftskip\z@%
       }%
       \strut\tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
       \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
-      \tpUseProperty{toc-number-format}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+      \tpUseProperty{toc-page-face}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
     }
   }%
@@ -271,7 +270,7 @@
     \tpUseComp{BMTitle}%
   }
 
-  \tpSetProperty{title-format}{\ifx\ts@layout@type\ts@str@layout@mdw\huge\else\Huge\fi\sbseries\sfchapfamily}%
+  \tpSetProperty{title-face}{\ifx\ts@layout@type\ts@str@layout@mdw\huge\else\Huge\fi\sbseries\sfchapfamily}%
   
   \tpSetProperty{quote-block-format}{%
     \parskip\baselineskip
@@ -355,7 +354,7 @@
     \bgroup
       \raggedright
       \tpIfComp{Number}{\leftskip-\tpUseProperty{indent}}{}%
-      \tpUseProperty{title-format}%
+      \tpUseProperty{title-face}%
       {\tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
        \tpUseComp{Title}}%
       \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{13.7bp}{17.2bp}\selectfont\sfchapsubfamily\tpUseComp{Subtitle}}{}%
@@ -531,9 +530,9 @@
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
     \tpSetProperty{toc-before-entry}{\nopagebreak}%
-    \tpSetProperty{toc-subtitle-format}{\normalfont\normalsize}%
-    \tpSetProperty{toc-heading}{%
-      \tpUseProperty{toc-title-format}%
+    \tpSetProperty{toc-subtitle-face}{\normalfont\normalsize}%
+    \tpSetProperty{toc-format}{%
+      \tpUseProperty{toc-title-face}%
       \tpIfComp{TocNumber}{%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
         \@tempdima=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
@@ -552,7 +551,7 @@
       \tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{%
         \newline%
-        {\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}%
+        {\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}%
       }{}%
       \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\tpUseComp{TocPage}}}}%
     }%
@@ -562,8 +561,8 @@
       \parindent \z@
       \raggedright
     }%
-    \tpSetProperty{toc-heading}{%
-      \tpUseProperty{toc-title-format}%
+    \tpSetProperty{toc-format}{%
+      \tpUseProperty{toc-title-face}%
       \tpIfComp{TocNumber}{%
         \@tempdima=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
         \leftskip\@tempdima\hskip-\@tempdima\hb@xt@\@tempdima{\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}\hss}%
@@ -575,15 +574,15 @@
       \tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{%
         \newline%
-        {\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}%
+        {\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}%
       }{}%
       \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\unhbox\@tempboxa}}%
     }%
   \fi
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
   \tpSetProperty{number-sep}{\enskip}%
-  \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
-  \tpSetProperty{subtitle-format}{\normalfont\sffamily\LARGE}%
+  \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
+  \tpSetProperty{subtitle-face}{\normalfont\sffamily\LARGE}%
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
   \tpSetProperty{quote-block-format}{%
     \hfill\vbox{%
@@ -609,10 +608,10 @@
     \bgroup
       \normalfont
       \interlinepenalty\@M
-      \tpUseProperty{title-format}%
+      \tpUseProperty{title-face}%
       \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
       \tpUseComp{Title}\par\nopagebreak%
-      \tpIfComp{Subtitle}{\tpUseComp{subtitle-format}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
+      \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
       \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
     \egroup
     \nopagebreak
@@ -665,13 +664,13 @@
       \strut\tpTocLink{\tpUseComp{TocTitle}}%
       %\tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
       \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
-      \tpUseProperty{toc-number-format}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+      \tpUseProperty{toc-number-face}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
     }
   }%
 
-  \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
-  \tpSetProperty{subtitle-format}{\normalfont\rmfamily\normalsize}%
+  \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
+  \tpSetProperty{subtitle-face}{\normalfont\rmfamily\normalsize}%
   
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
   
@@ -704,10 +703,10 @@
       \fi
         \normalfont
         \interlinepenalty\@M
-        \tpUseProperty{title-format}%
+        \tpUseProperty{title-face}%
         \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
         \tpUseComp{Title}\par\nopagebreak%
-        \tpIfComp{Subtitle}{\tpUseComp{subtitle-format}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
+        \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
         \tpIfComp{DOI}{%
           \vskip\baselineskip%
           \tpUseComp{DOI}%
@@ -733,7 +732,7 @@
   \fi
   
   \tpSetProperty{before-heading}{\addvspace{11.5bp}}%
-  \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\sbseries\else\mdseries\fi\Large}%
+  \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\sbseries\else\mdseries\fi\Large}%
   \tpSetProperty{before-quote-skip}{.5\baselineskip}%
   \tpSetProperty{running-heading}{}% da subsection sonst die Kolumnentitel ebenfalls von section erben würde
   \tpSetProperty{toc-number-sep}{\enskip}
@@ -744,8 +743,8 @@
     \tpSetProperty{toc-margin-right}{0\p@}%
   \fi
   \ifcollection
-    \tpSetProperty{toc-heading}{%
-      \tpUseProperty{toc-title-format}%
+    \tpSetProperty{toc-format}{%
+      \tpUseProperty{toc-title-face}%
       \@tempdima=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
       \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
       \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
@@ -764,7 +763,7 @@
       \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
       \rightskip\wd\@tempboxa plus 1fil% 1fil sorgt für Linksbündigkeit des IHV-Eintrags.
       \tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
       \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\hss\tpUseComp{TocPage}}}}%
     }%
   \else
@@ -773,8 +772,8 @@
       \parindent \z@
       \raggedright
     }%
-    \tpSetProperty{toc-heading}{%
-      \tpUseProperty{toc-title-format}%
+    \tpSetProperty{toc-format}{%
+      \tpUseProperty{toc-title-face}%
       \@tempdima=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
       \@tempdimb=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
       \tpIfComp{TocNumber}{%
@@ -787,7 +786,7 @@
       \tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{%
         \newline%
-        {\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}%
+        {\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}%
       }{}%
       \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\unhbox\@tempboxa}}%
     }%
@@ -801,13 +800,13 @@
     \addvspace{1\baselineskip}%
   }%
   %\tpSetProperty{after-skip}{1sp}% Ticket 12534, 2022-04-25
-  \tpSetProperty{title-format}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\large\itshape\else\Large\mdseries\fi}%
+  \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\large\itshape\else\Large\mdseries\fi}%
   \ifcollection\else
     %\tpSetProperty{toc-indent}{8em}%
     \tpSetProperty{toc-margin-left}{6.5em}%
   \fi
-  \tpSetProperty{toc-heading}{%
-    \tpUseProperty{toc-title-format}%
+  \tpSetProperty{toc-format}{%
+    \tpUseProperty{toc-title-face}%
     \tpIfComp{TocNumber}{%
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
       \@tempdima=\csname tp-heading-toc-number-3-maxwd\endcsname\relax%
@@ -822,7 +821,7 @@
       \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
     }%
     \tpTocLink{\tpUseComp{TocTitle}}%
-    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
     \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
   }%
   \tpSetProperty{quote-block-format}{%
@@ -851,13 +850,13 @@
 \tpDeclareHeading[section]{4}{paragraph}{%
   \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
   \tpSetProperty{after-skip}{1sp}%
-  \tpSetProperty{title-format}{\normalfont\sffamily\normalsize}% 2022-06-02: \sffamily war vorher \sfwidefamily; 12745
+  \tpSetProperty{title-face}{\normalfont\sffamily\normalsize}% 2022-06-02: \sffamily war vorher \sfwidefamily; 12745
 }
 
 \tpDeclareHeading{5}{subparagraph}{%
   \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
   \tpSetProperty{after-skip}{-.5em}%
-  \tpSetProperty{title-format}{\normalfont\sffamily\normalsize\mdseries}%
+  \tpSetProperty{title-face}{\normalfont\sffamily\normalsize\mdseries}%
 }
 
 \endinput
