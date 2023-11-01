@@ -461,7 +461,11 @@
         \bgroup
           \righthyphenmin62
           \lefthyphenmin62
-          \raggedright\tpUseProperty{EditorNameList}\par%
+          \ifjournal
+            \raggedright\tpUseProperty{SeriesEditorNameList}\par%
+          \else
+            \raggedright\tpUseProperty{EditorNameList}\par%
+          \fi%
         \egroup
       \else
         \bgroup
