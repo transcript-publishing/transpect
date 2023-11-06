@@ -308,4 +308,27 @@
   \fi
 }
 
+
+\def\tpNoIndent{%
+  \global\@noskipsectrue
+  \everypar{%
+    \if@noskipsec
+      \global\@noskipsecfalse
+      {\setbox\z@\lastbox}%
+      \clubpenalty\@M
+      \unskip
+      \@tempskipa \parskip\relax
+      \hskip -\@tempskipa
+    \else
+      \everypar{}%
+    \fi%
+  }%
+}
+
+\def\parbreak{%
+  \par
+  \vskip\baselineskip
+  \tpNoIndent%
+}
+
 \endinput
