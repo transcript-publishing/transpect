@@ -872,11 +872,11 @@
     </xsl:choose>
   </xsl:function>
 
-  <xsl:template match="dbk:abstract/dbk:para" mode="xml2tex">
+<!--  <xsl:template match="dbk:abstract/dbk:para" mode="xml2tex">
     <xsl:if test="preceding-sibling::dbk:para">
-      <xsl:text>\parbreak &#xa;</xsl:text>
+      <xsl:text>\parbreak &#xa;</xsl:text><!-\-https://redmine.le-tex.de/issues/15731-\->
     </xsl:if>
     <xsl:next-match/>
-  </xsl:template>
+  </xsl:template>-->
 
 </set>
