@@ -806,20 +806,19 @@
     \tpSetProperty{toc-margin-left}{6.5em}%
   \fi
   \tpSetProperty{toc-format}{%
+    \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
     \tpUseProperty{toc-title-face}%
+    \@tempdima=\csname tp-heading-toc-number-3-maxwd\endcsname\relax%
+    \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+    \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
+    \ifdim\@tempdimb<\@tempdimc\relax
+      \@tempdimb=\@tempdimc\relax%
+    \fi%
+    \@tempdimc=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
+    \leftskip\dimexpr\@tempdima+\@tempdimb+\@tempdimc\relax%
     \tpIfComp{TocNumber}{%
-      \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-      \@tempdima=\csname tp-heading-toc-number-3-maxwd\endcsname\relax%
-      \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
-      \@tempdimc=\csname tp-heading-toc-number-0-maxwd\endcsname\relax%
-      \ifdim\@tempdimb<\@tempdimc\relax
-        \@tempdimb=\@tempdimc\relax%
-      \fi%
-      \@tempdimc=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
-      \leftskip\dimexpr\@tempdima+\@tempdimb+\@tempdimc\relax\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
-    }{%\leftskip\z@%
-      \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
-    }%
+      \hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+    }{}%
     \tpTocLink{\tpUseComp{TocTitle}}%
     \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
     \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
