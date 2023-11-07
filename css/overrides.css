@@ -121,7 +121,7 @@ h4.section {
 h5.section {
   font-size: 1.3em;
 }
-h6.section {
+h6.section, h6.tsheading4notoc {
   font-size: 1em;
 }
 span.heading-subtitle {
