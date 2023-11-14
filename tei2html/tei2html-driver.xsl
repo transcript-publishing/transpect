@@ -50,6 +50,7 @@
         <!--<xsl:call-template name="frontispiece"/>--><!-- series page not needed, yet -->
         <xsl:call-template name="full-title"/>
         <xsl:call-template name="imprint"/>
+        <xsl:call-template name="dedication"/>
         <xsl:call-template name="toc"/>
         <xsl:if test="not(//head[matches(@rend, $list-of-figures-regex)])"><xsl:call-template name="lof"/></xsl:if>
         <xsl:if test="not(//head[matches(@rend, $list-of-tables-regex)])"><xsl:call-template name="lot"/></xsl:if>
@@ -80,7 +81,7 @@
   <xsl:template name="half-title">
     <section class="halftitle title-page" epub:type="halftitlepage" id="halftitle">
       <!-- https://redmine.le-tex.de/issues/14982 -->
-    <xsl:apply-templates select="$metadata[@key = ('Widmung')]" mode="#current"/>
+      <xsl:apply-templates select="$metadata[@key = ('Widmung')]" mode="#current"/>
         <xsl:choose>
         <xsl:when test="contains($basename, '_mono_')">
           <xsl:apply-templates select="$metadata[@key = ('Autoreninformationen')],
@@ -98,7 +99,15 @@
     </section>
   </xsl:template>
 
-  <xsl:template match="html:section[@epub:type='halftitlepage'][not(matches(., '\S'))]" mode="clean-up" priority="2"/>
+  <xsl:template match="html:section[@epub:type=('halftitlepage', 'titlepage', 'imprint')][not(matches(., '\S'))]" mode="clean-up" priority="2"/>
+
+  <xsl:template name="dedication">
+    <xsl:if test="/TEI/text/front/div[@type = 'dedication']">
+    <section class="dedication" epub:type="dedication" role="doc-dedication">
+      <xsl:apply-templates select="/TEI/text/front/div[@type = 'dedication']/p" mode="#current"/>
+    </section>
+    </xsl:if>
+  </xsl:template>
   
   <xsl:template name="frontispiece">
     <section class="{local-name()} title-page" epub:type="seriespage"/>

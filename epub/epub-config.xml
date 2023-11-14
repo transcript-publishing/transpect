@@ -52,7 +52,7 @@
       will be considered when generating the landmarks. 
 	    fallback-id-for-landmark: See the embedded documentation in the Relax NG schema. 
 	  --> 
-    <type name="landmarks" generate-heading="yes" types="cover titlepage toc epigraph loi lot imprint copyright-page" hidden="true"/>
+    <type name="landmarks" generate-heading="yes" types="cover titlepage dedication toc epigraph loi lot imprint copyright-page" hidden="true"/>
     <type name="cover" heading="Cover" file="cover" guide-type="text"/>
     <type name="frontmatter" heading="Vorspann"/>
     <type name="bodymatter" heading="Hauptteil"/>
@@ -67,6 +67,7 @@
 <!--    <type name="halftitlepage" file="halftitle" title="Frontmatter"/>-->
     <type name="abstract" file="about-the-content"/>
     <type name="fulltitle" file="title"/>
+    <type name="dedication" file="dedication" generate-heading="yes" />
     <type name="imprint" generate-heading="yes" file="imprint" heading="Impressum"/>
     <type name="part" file="part"/>
     <type name="chapter" file="chapter"/>
@@ -101,6 +102,7 @@
     <unconditional-split elt="div" attr="class" attval="loi"/>
     <unconditional-split elt="div" attr="class" attval="lot"/>
     <unconditional-split elt="div" attr="class" attval="dedication"/>
+    <unconditional-split elt="section" attr="class" attval="dedication"/>
     <unconditional-split elt="div" attr="class" attval="preface"/>
     <unconditional-split elt="div" attr="class" attval="part"/>
     <unconditional-split elt="div" attr="class" attval="chapter"/>

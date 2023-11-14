@@ -64,7 +64,9 @@
 
       <xsl:variable name="motto-heading-title_de" select="'Motto'" />
       <xsl:variable name="motto-heading-title_en" select="'Epigraph'" />
-      
+
+      <xsl:variable name="dedication-heading-title_de" select="'Widmung'" />
+      <xsl:variable name="dedication-heading-title_en" select="'Dedication'" />      
       
       <xsl:variable name="titlepage-heading-title_de" select="'Titel'" />
       <xsl:variable name="titlepage-heading-title_en" select="'Title'" />
@@ -87,6 +89,11 @@
     <xsl:variable name="type" select="../@name"/>
     <xsl:variable name="title" select="$html//*[@epub:type = $type][1]//descendant::*[local-name() = ('h1', 'h2')][1]/@title" as="xs:string?"/>
     <xsl:attribute name="heading" select="if ($main-lang = 'en') then $titlepage-heading-title_en else $titlepage-heading-title_de" separator=" "/>
+  </xsl:template> 
+
+  <xsl:template match="epub-config/types/type[@name = 'dedication']/@generate-heading[. = ('true', 'yes')]" priority="3">
+    <xsl:variable name="type" select="../@name"/>
+    <xsl:attribute name="heading" select="if ($main-lang = 'en') then $dedication-heading-title_en else $dedication-heading-title_de" separator=" "/>
   </xsl:template> 
 
   <xsl:template match="epub-config/types/type[@name = 'preamble']/@generate-heading[. = ('true', 'yes')]" priority="3">

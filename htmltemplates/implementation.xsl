@@ -73,6 +73,7 @@
   <xsl:variable name="restructured-body-parts" select="$htmlinput[1]/html:html/html:body/*[@epub:type = 'imprint'], 
                                                        $htmlinput[1]/html:html/html:body/*[@epub:type = 'titlepage'],
                                                        $htmlinput[1]/html:html/html:body/*[@epub:type = 'halftitlepage'],
+                                                       $htmlinput[1]/html:html/html:body/*[@epub:type = 'dedication'],
                                                        $htmlinput[1]/html:html/html:body/*[@epub:type = 'toc']" as="element(*)*"/>
   <xsl:variable name="language" as="xs:string?" select="(
                                                          $htmlinput[1]/html:html/@lang, $metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Sprache']],
@@ -115,7 +116,7 @@
     <xsl:variable name="copyright" select="normalize-space(string-join($metadata//key[. = 'Copyright']/following-sibling::*[1]/descendant-or-self::string, ' '))"/>
     <meta name="DC.date">
       <xsl:attribute name="content" select="if (matches($copyright, '^\s*©\s*\d{4}')) then replace($copyright, '^\s*©\s*(\d{4}).+$', '$1') else format-date(current-date(), '[Y]')"/>
-    </meta> 
+    </meta>
     <xsl:if test="$metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Copyright']]">
        <meta name="DC.rights" content="{$copyright}"/>
     </xsl:if>
@@ -275,23 +276,7 @@
   <xsl:template name="dedication">
     <xsl:param name="_content" as="node()*"/>
     <xsl:param name="_work-lang" as="xs:string" tunnel="yes"/>
-    <xsl:if test="$restructured-body-parts[@epub:type = 'dedication']">
-      <div class="{$restructured-body-parts[@epub:type = 'dedication']/@class}" epub:type="dedication" xmlns:epub="http://www.idpf.org/2007/ops">
-        <xsl:if test="(matches($_content, '\S') or $_content//@title) and not($restructured-body-parts[@epub:type = 'dedication'][1]/descendant-or-self::*[1][local-name() = ('h1', 'h2')]) ">
-         <xsl:call-template name="_heading">
-           <xsl:with-param name="content" select="$_content"/>
-           <xsl:with-param name="class" select="$_content/@class"/>
-           <xsl:with-param name="prelim" select="$no-dedicated-info"/>
-         </xsl:call-template>
-       </xsl:if>
-        <xsl:if test="not($_content) and 
-                      not($restructured-body-parts[@epub:type = 'dedication'][1]/descendant-or-self::*[1][local-name() = ('h1', 'h2')]) and 
-                      not($epub-version eq 'EPUB3')">
-          <h1 title="{if ($_work-lang[starts-with(., 'en')]) then $dedication-heading-title_en else $dedication-heading-title_de}"/>
-        </xsl:if>
-        <xsl:apply-templates select="$restructured-body-parts[@epub:type = 'dedication']/node()"/>
-      </div>
-    </xsl:if>
+      <xsl:apply-templates select="$restructured-body-parts[@epub:type = 'dedication']"/>
   </xsl:template>
   
   <xsl:template name="motto">
