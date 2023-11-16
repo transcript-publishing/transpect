@@ -9,6 +9,8 @@
   \begin{heading}[notoc,nonumber,label=tableofcontents]{chapter}%
     \tpTitle{\contentsname}%
   \end{heading}%
+  \edef\skipAfterHeading{-\the\@tempskipa}%
+  \unskip
   %\pdfbookmark[0]{\contentsname}{tableofcontents}%
   \pagestyle{empty}%
   \if\layout a
@@ -17,6 +19,7 @@
   \if\layout b
     \enlargethispage{-2\baselineskip}%
   \fi
+  \vskip-\skipAfterHeading%
   \@starttoc{toc}%
   \clearpage\pagestyle{headings}%
 }
