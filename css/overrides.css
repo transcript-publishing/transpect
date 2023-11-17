@@ -107,12 +107,15 @@ p.notes-headline {
 h5.section {
   font-weight: normal;
 }
-h3.chapter, h4.chapter, h3.toc-title, div.bibliography h3 {
+h3.chapter, h4.chapter, h3.toc-title, div.bibliography h3, h3.part{
   font-size: 2em;
   padding: 1.5em 0 1em 0;
   border-bottom: 2px solid #00354a;
   display: flex;
   align-items: baseline;
+}
+h3.part{
+  border:none;
 }
 h3.chapter + h4.section, h4.chapter + h5.section  {
   margin-top:0;
