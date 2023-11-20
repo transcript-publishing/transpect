@@ -410,7 +410,7 @@
   <xsl:template match="head/label" mode="tei2html" priority="3">
     <xsl:next-match/>
     <xsl:if test="following-sibling::node()[1][self::seg[@type='tab'] or self::text()[matches(., '\P{Zs}')]]">
-      <xsl:text> </xsl:text>
+      <xsl:text>&#160;</xsl:text>
     </xsl:if>
   </xsl:template>
 
