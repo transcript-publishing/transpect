@@ -304,7 +304,8 @@
     <xsl:param name="nodes" as="node()*"/>
     <xsl:param name="uri" as="xs:string"/>
     <xsl:param name="meta" as="element(*)?" tunnel="yes"/>
-    <xsl:variable name="corresp-part" as="element()?" select=" $root/descendant::*:book-part[@book-part-type = 'part'][descendant::*[*:book-part-meta/*:book-part-id[@book-part-id-type='doi'] = $nodes/*:book-part-meta/*:book-part-id[@book-part-id-type='doi']]]"/>
+    <xsl:variable name="corresp-part" as="element()?" select=" $root/descendant::*:book-part[@book-part-type = 'part']
+                                                                                            [descendant::*[*:book-part-meta/*:book-part-id[@book-part-id-type='doi'] = $nodes/*:book-part-meta/*:book-part-id[@book-part-id-type='doi']]][1]"/>
     <xsl:element name="chunk-meta" namespace="">
       <xsl:attribute name="xml:base" select="replace(replace($uri, '^(.+/)chunks-atypon/.+/([^/]+)\.xml$', '$1chunks-meta/chunk-meta-$2.xml'), 'title-page', 'fm')"/>
       <xsl:attribute name="id" select="$nodes/@id"/>
