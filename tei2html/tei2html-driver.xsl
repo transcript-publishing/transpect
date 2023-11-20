@@ -553,14 +553,14 @@
   <xsl:template match="byline/persName" mode="toc">
     <br/>
     <span class="toc-author">
-      <xsl:value-of select="."/>
+      <xsl:apply-templates select="node()" mode="strip-indexterms-etc"/>
     </span>
   </xsl:template>
   
   <xsl:template match="head[@type eq 'sub']" mode="toc">
     <br/>
     <span class="toc-subtitle">
-      <xsl:apply-templates mode="tei2html"/>
+      <xsl:apply-templates mode="strip-indexterms-etc"/>
     </span>
   </xsl:template>
   
