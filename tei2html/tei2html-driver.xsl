@@ -544,8 +544,9 @@
             <xsl:sequence select="$toc-heading-content"/>
           </xsl:otherwise>
         </xsl:choose>
-        <xsl:apply-templates select="$subtitle" mode="#current"/>
-        <xsl:apply-templates select="$author" mode="#current"/>
+        <xsl:apply-templates select="$subtitle, $author" mode="#current">
+          <xsl:with-param name="in-toc" as="xs:boolean" select="true()" tunnel="yes"/>
+        </xsl:apply-templates>
       </a>
     </xsl:element>
   </xsl:template>
@@ -553,14 +554,14 @@
   <xsl:template match="byline/persName" mode="toc">
     <br/>
     <span class="toc-author">
-      <xsl:apply-templates select="node()" mode="strip-indexterms-etc"/>
+      <xsl:apply-templates select="node()" mode="tei2html"/>
     </span>
   </xsl:template>
   
   <xsl:template match="head[@type eq 'sub']" mode="toc">
     <br/>
     <span class="toc-subtitle">
-      <xsl:apply-templates mode="strip-indexterms-etc"/>
+      <xsl:apply-templates mode="tei2html"/>
     </span>
   </xsl:template>
   
@@ -878,5 +879,6 @@
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </cite>
   </xsl:template>
+
 
 </xsl:stylesheet>
