@@ -52,6 +52,9 @@
   <xsl:variable name="info-doi" as="xs:string"
                 select="'[a-z]{1,3}meta(chunk)?doi$'" />
 
+  <xsl:variable name="pi-style-regex" as="xs:string" 
+                select="'^[a-z]{1,3}pi(Zchn)?$'"/>
+
  <xsl:variable name="hub:preserve-abstract-as-text" as="xs:boolean" select="true()">
     <!-- if set to true() abstract, keywords and alternatve-title section are preserved additionally to meta tags in info-->
   </xsl:variable>
