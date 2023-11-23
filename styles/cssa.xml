@@ -75,6 +75,7 @@
   <css:rule layout-type="para" native-name="ts_media_url" name="tsmediaurl"/>
   <css:rule layout-type="para" native-name="ts_media_source" name="tsmediasource"/>
   <css:rule layout-type="para" native-name="ts_media_caption" name="tsmediacaption"/>
+  <css:rule layout-type="para" native-name="ts_codeblock" name="tscodeblock" regex="tscodeblock([a-z])?"/>
 
  <!-- new styles for utb publications, https://redmine.le-tex.de/issues/11832 -->
 
