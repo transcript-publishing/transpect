@@ -120,7 +120,7 @@
     <xsl:variable name="journal-meta-keywords" select="/hub/info/keywordset[@role='titlepage']" as="element(keywordset)?"/>
     <xsl:variable name="temp-isbn" as="xs:string?" select="replace($basename, '^.+\d(\d{4}).*$', '97838394$10')"/>
     <xsl:variable name="meta-doi" as="xs:string?" select="if ($journal-meta-keywords/keyword[@role = 'DOI'][normalize-space()]) 
-                                                          then replace(string-join($journal-meta-keywords/keyword[@role = 'DOI']), '^.*doi\.org/', '') 
+                                                          then replace(string-join($journal-meta-keywords/keyword[@role = 'DOI'], ''), '^.*doi\.org/', '', 's') 
                                                           else ()"/>
     <!-- if no DOI is given: calculate it from meta info-->
     <xsl:variable name="year" as="xs:string?"  select="normalize-space($journal-meta-keywords/keyword[@role = 'Jahr'])"/>
@@ -131,7 +131,7 @@
 
     <xsl:variable name="meta-issue" as="xs:string?" select="concat('10.14361/', $s9y2, '-', $year, '-', $volume, $issue)"/>
 
-     <xsl:if test="not(biblioid[@class='doi'])">  
+     <xsl:if test="not(biblioid[@class='doi']) and not(/hub//chapter/biblioset/biblioid[@otherclass='journal-doi'])">  
       <biblioid class="doi">
         <xsl:choose>
           <xsl:when test="$meta-doi[matches(., '\S')] or exists(/hub//biblioset[@role='chunk-metadata']/biblioid[@role= 'tsmetadoi'])">
@@ -151,7 +151,7 @@
       <biblioid class="isbn">
         <xsl:choose>
           <xsl:when test="$journal-meta-keywords/keyword[@role = 'PDF-ISBN'][matches(., '\S')]">
-            <xsl:value-of select="replace(string-join($journal-meta-keywords/keyword[@role = 'PDF-ISBN']), '^PDF-ISBN\s+', '')"/>
+            <xsl:value-of select="replace(string-join($journal-meta-keywords/keyword[@role = 'PDF-ISBN'], ''), '^.*PDF-ISBN:?\s+', '', 's')"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="tr:format-isbn(concat(replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13)))"/>
