@@ -65,7 +65,7 @@
     </xsl:copy>
     <xsl:variable name="temp-isbn" as="xs:string?" select="replace($basename, '^.+\d(\d{4}).*$', '97838394$10')"/>
     <xsl:variable name="meta-doi" as="xs:string?" select="if (/hub/info/keywordset/keyword[@role = 'DOI'][normalize-space()]) 
-      then replace(string-join(/hub/info/keywordset/keyword[@role = 'DOI']), '^.*doi\.org/', '') 
+      then replace(string-join(/hub/info/keywordset/keyword[@role = 'DOI']), '^.*doi\.org/', '', 's') 
       else ()"/>
     <!--  <xsl:message select="'temp-isbn: ', $temp-isbn, ' calc isbn: ', tr:check-isbn($temp-isbn, 13), 'ges: ', concat('10.14361/', replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13))"/>-->
     <!-- https://redmine.le-tex.de/issues/12499 add doi for chunking later (for calculate chunk DOIs) -->
@@ -85,7 +85,7 @@
       <biblioid class="isbn">
         <xsl:choose>
           <xsl:when test="/hub/info/keywordset/keyword[@role = 'PDF-ISBN'][matches(., '\S')]">
-            <xsl:value-of select="replace(string-join(/hub/info/keywordset/keyword[@role = 'PDF-ISBN']), '^PDF-ISBN\s+', '')"/>
+            <xsl:value-of select="normalize-space(replace(string-join(/hub/info/keywordset/keyword[@role = 'PDF-ISBN'], ''), '^.*PDF-ISBN:?\p{Zs}*', '', 's'))"/>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="tr:format-isbn(concat(replace($basename, '^.+\d(\d{4}).*$', '97838394$1'), tr:check-isbn($temp-isbn, 13)))"/>
@@ -112,7 +112,7 @@
 
 <!--  <xsl:template match="bibliography/info" mode="custom-2">
     <xsl:copy>
-      <xsl:apply-templates select="node()" mode="#current"/>
+      <xsl:apply-templates select="node()" mode="#current"/>i
       <xsl:if test="../..[self::hub]">
         <xsl:call-template name="create-chunk-DOI">
           <xsl:with-param name="context" as="element(*)" select="." tunnel="yes"/>
