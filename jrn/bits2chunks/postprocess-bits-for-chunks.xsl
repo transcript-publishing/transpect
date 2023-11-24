@@ -19,13 +19,13 @@
 
     <xsl:variable name="all-bibls">
       <xsl:if test="exists(*:doi)">
-        <xsl:variable name="issue-doi" select="book[1]/book-meta/book-id[@book-id-type='doi']" as="xs:string?"/>
+        <xsl:variable name="issue-doi" select="translate(book[1]/book-meta/book-id[@book-id-type='isbn'], '-', '')" as="xs:string?">
+      <!-- use doi prefix + isbn without hyphens for name of biblographic-information, https://redmine.le-tex.de/issues/15732 -->
+        </xsl:variable>
         <xsl:element name="biblographic-information">
-          <xsl:attribute name="xml:base" select="if (matches(*:doi[1][not(matches(@xml:base, 'toc|frontmatter|fm'))]/@xml:base, '-\d{6}\.bibl\.xml'))
-                                                 then replace(replace(*:doi[1][not(matches(@xml:base, 'toc|frontmatter|fm'))]/@xml:base, '(-\d{4})\d{2}\.bibl\.xml', '$1.bibl.xml'), '(chunks-bibl/)', '$1issue/')
-                                                 else replace(replace(*:doi[1][not(matches(@xml:base, 'toc|frontmatter|fm'))]/@xml:base, '-\d+\.bibl\.xml', '.bibl.xml'), '(chunks-bibl/)', '$1issue/')"/>
+          <xsl:attribute name="xml:base" select="concat(replace(*:doi[1][not(matches(@xml:base, 'toc|frontmatter|fm'))]/@xml:base, '(chunks-bibl)/(.+)\.bibl\.xml', '$1/issue/'), $issue-doi,  '.bibl.xml')"/>
           <xsl:attribute name="name" select="if ($issue-doi[normalize-space()])
-                                             then $issue-doi
+                                             then concat('10.14361/', $issue-doi)
                                              else replace(*:doi[not(matches(@xml:base, 'toc|frontmatter|fm'))][1]/@name, '-\d+$', '')"/>
           <xsl:sequence select="*:doi"/>
         </xsl:element>
