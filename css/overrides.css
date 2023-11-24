@@ -391,7 +391,9 @@ p.tsauthordescription {
 p.tstablecaption {
   margin-top: 1em;
 }
-
+table{
+  width: 100%;
+}
 dl {
   width: 100%;
   overflow: hidden;
