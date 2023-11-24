@@ -681,9 +681,9 @@
     \global\let\tp@chapternumber\relax%
     \global\let\tp@authormark\relax
     \tpIfComp{RunAuthorNameList}{%
-      \protected@xdef\tp@partmark{\tp@heading@RunAuthorNameList}%
+      \protected@xdef\tp@authormark{\tp@heading@RunAuthorNameList}%
     }{%
-      \protected@xdef\tp@partmark{\tp@heading@AuthorNameList}%
+      \protected@xdef\tp@authormark{\tp@heading@AuthorNameList}%
     }
     \tpIfComp{RunTitle}{%
       \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
