@@ -232,7 +232,7 @@
       <xsl:with-param name="id" as="xs:string" select="(*/@id, generate-id())[1]"/>
       <xsl:with-param name="book-atts" select="$book-atts" as="attribute(*)*" tunnel="yes"/>
       <xsl:with-param name="meta" select="$head-with-title" as="element(*)?" tunnel="yes"/>
-      <xsl:with-param name="doi" as="xs:string?" select="replace($temp-doi, '^.+/', '')" tunnel="yes"/>
+      <xsl:with-param name="doi" as="xs:string?" select="replace($temp-doi, '^https://doi.org/', '')" tunnel="yes"/>
     </xsl:call-template>
   </xsl:template>
 
