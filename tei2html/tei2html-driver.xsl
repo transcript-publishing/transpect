@@ -534,7 +534,7 @@
           </xsl:apply-templates>
         </xsl:variable>
         <xsl:choose>
-          <xsl:when test="contains(@rend, 'tsheading1')">
+          <xsl:when test="matches(@rend, 'ts(heading(1|review))|listof(figures|tables)')">
             <!-- https://redmine.le-tex.de/issues/14980 -->
             <span class="article-title">
               <xsl:sequence select="$toc-heading-content"/>
