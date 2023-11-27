@@ -880,7 +880,7 @@
     </cite>
   </xsl:template>
 
-  <xsl:template match="*[self::*:td|self::*:th]/@*[name() = ('^css:border-(top|left|bottom|right)-(style|color|width)$')]" mode="epub-alternatives" priority="3">
+  <xsl:template match="*[self::*:td|self::*:th]/@*[matches(name(), '^css:border-(top|left|bottom|right)-(style|color|width)$')]" mode="epub-alternatives" priority="8">
     <!-- https://redmine.le-tex.de/issues/15889-->
   </xsl:template>
 
