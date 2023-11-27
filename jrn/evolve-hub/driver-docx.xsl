@@ -117,11 +117,18 @@
     <xsl:copy>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </xsl:copy>
+    <!-- create work DOIs. precedences:
+         1. meta DOI in title page
+         2. ts_metadoi in any article
+         3. combine issue, year and volume and series -->
+
     <xsl:variable name="journal-meta-keywords" select="/hub/info/keywordset[@role='titlepage']" as="element(keywordset)?"/>
     <xsl:variable name="temp-isbn" as="xs:string?" select="replace($basename, '^.+\d(\d{4}).*$', '97838394$10')"/>
     <xsl:variable name="meta-doi" as="xs:string?" select="if ($journal-meta-keywords/keyword[@role = 'DOI'][normalize-space()]) 
                                                           then replace(string-join($journal-meta-keywords/keyword[@role = 'DOI'], ''), '^.*doi\.org/', '', 's') 
-                                                          else ()"/>
+                                                          else if (/hub//chapter/biblioset/biblioid[@otherclass='journal-doi'][normalize-space()]) 
+                                                               then /hub//chapter/biblioset/biblioid[@otherclass='journal-doi'][1][normalize-space()] [normalize-space()]
+                                                               else ()"/>
     <!-- if no DOI is given: calculate it from meta info-->
     <xsl:variable name="year" as="xs:string?"  select="normalize-space($journal-meta-keywords/keyword[@role = 'Jahr'])"/>
     <xsl:variable name="volume" as="xs:string?"  select="normalize-space($journal-meta-keywords/keyword[@role = 'Bandnummer'])"/>
@@ -130,8 +137,7 @@
                                                         else ()"/>
 
     <xsl:variable name="meta-issue" as="xs:string?" select="concat('10.14361/', $s9y2, '-', $year, '-', $volume, $issue)"/>
-
-     <xsl:if test="not(biblioid[@class='doi']) and not(/hub//chapter/biblioset/biblioid[@otherclass='journal-doi'])">  
+     <xsl:if test="not(biblioid[@class='doi'])">  
       <biblioid class="doi">
         <xsl:choose>
           <xsl:when test="$meta-doi[matches(., '\S')] or exists(/hub//biblioset[@role='chunk-metadata']/biblioid[@role= 'tsmetadoi'])">
