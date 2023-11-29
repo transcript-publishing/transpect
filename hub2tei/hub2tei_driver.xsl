@@ -22,18 +22,6 @@
 
   <xsl:param name="repo-href-canonical"/>
   
-  <xsl:template match="programlisting" mode="hub2tei:dbk2tei">
-    <p rend="{@role}">
-      <xsl:apply-templates mode="#current"/>
-    </p>
-  </xsl:template>
-  
-  <xsl:template match="programlisting/line" mode="hub2tei:dbk2tei">
-    <hi>
-      <xsl:apply-templates mode="#current"/>
-    </hi>
-  </xsl:template>
-  
   <xsl:function name="hub2tei:image-path"  as="xs:string">
     <xsl:param name="path" as="xs:string"/>
     <xsl:param name="root" as="document-node()?"/>
