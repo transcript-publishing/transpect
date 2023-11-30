@@ -644,9 +644,9 @@
 
 \tpDeclareHeading[chapter]{0}{review}{%
   % IHV-Überschrift der Rezension unterscheidet sich von chapter darin, dass kein Untertitel ausgegeben wird.
-  \tpSetProperty{toc-heading}{%
+  \tpSetProperty{toc-format}{%
     \vtop{\strut%
-      \tpUseProperty{toc-title-format}%
+      \tpUseProperty{toc-title-face}%
       \tpIfComp{TocNumber}{%
         \@tempdima=\csname tp-heading-toc-number-0-maxwd\endcsname%
         \@tempdimb=0\p@\relax
