@@ -283,10 +283,5 @@
                        css:rule[matches(@name, '^tsemph')]/@*[starts-with(name(), 'css:')]" mode="hub:postprocess-lists" priority="13">
     <!-- https://redmine.le-tex.de/issues/15620 -->
   </xsl:template>
-
-  <xsl:template match="programlisting/line/phrase" mode="custom-2">
-    <!--  https://redmine.le-tex.de/issues/15896-->
-    <xsl:apply-templates select="node()" mode="#current"/>
-  </xsl:template>
   
 </xsl:stylesheet>
