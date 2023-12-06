@@ -610,16 +610,19 @@
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template match="p[matches(@rend, '^tscodeblock[a-z0-9]+$')]" mode="tei2html">
+  <xsl:template match="floatingText[@type='code']" mode="tei2html">
     <pre>
-      <xsl:apply-templates mode="#current"/>
+       <code class="{replace(@rend, '^[a-z0-9]{2,3}codeblock', '')}">
+          <xsl:apply-templates mode="#current"/>
+       </code>
     </pre>
   </xsl:template>
   
-  <xsl:template match="p[matches(@rend, '^tscodeblock[a-z0-9]+$')]/hi" mode="tei2html">
-    <code class="{replace(parent::p/@rend, '^tscodeblock', '')}">
-      <xsl:apply-templates mode="#current"/>
-    </code>
+  <xsl:template match="p[matches(@rend, '^[a-z0-9]{2,3}codeblock[a-z0-9]+$')]" mode="tei2html">
+    <xsl:if test="preceding-sibling::*[1][self::p[matches(@rend, '^[a-z0-9]{2,3}codeblock[a-z0-9]+$')]]">
+      <br/>
+    </xsl:if>
+    <xsl:apply-templates select="node()" mode="#current" xml:space="preserve"/>
   </xsl:template>
   
   <xsl:template match="*:img[contains(../@class, 'fig')][../*:p[*:span[@class='hub:caption-text']]]/@alt[.= '']" mode="clean-up">
