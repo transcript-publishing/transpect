@@ -320,7 +320,8 @@
   <template context="dbk:info/dbk:biblioset/dbk:biblioid[@role = 'tsmetachunkdoi']">
    <!-- tpDOITitle also available-->
     <rule name="tpDOI" type="cmd" break-before="1" break-after="0">
-      <param select="concat('https://doi.org/', .)"/>
+      <xsl:variable name="doi-content" as="xs:string*" select="if (matches(., 'http')) then . else concat('https://doi.org/', .)"/>
+      <param select="$doi-content"/>
     </rule>
   </template>
 
