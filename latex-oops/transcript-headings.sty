@@ -147,34 +147,34 @@
     \ifcollection
       \ifjournal
         \tpIfComp{RunTitle}{%
-          \protected@xdef\tp@partmark{\tp@heading@RunTitle}%
+          \tpGStoreComp\tp@partmark{RunTitle}%
         }{%
           \tpIfComp{Title}{%
-            \protected@xdef\tp@partmark{\tp@heading@Title}%
+            \tpGStoreComp\tp@partmark{Title}%
           }{}%
         }
       \else
         \global\let\tp@authormark\relax%
         \global\let\tp@partmark\undefined% Nutzt dann den Buchtitel als Fallback.
         \tpIfComp{RunTitle}{%
-          \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
-          \protected@xdef\tp@latestPartmark{\tp@heading@RunTitle}% latestPartmark wird bei chapter als partmark gesetzt.
+          \tpGStoreComp\tp@chaptermark{RunTitle}%
+          \tpGStoreComp\tp@latestPartmark{RunTitle}%
         }{%
-          \protected@xdef\tp@chaptermark{\tp@heading@Title}%
-          \protected@xdef\tp@latestPartmark{\tp@heading@Title}% latestPartmark wird bei chapter als partmark gesetzt.
+          \tpGStoreComp\tp@chaptermark{Title}%
+          \tpGStoreComp\tp@latestPartmark{Title}%
         }%
       \fi
     \else
       \tpIfComp{RunTitle}{%
-        \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
+        \tpGStoreComp\tp@chaptermark{RunTitle}%
       }{
-        \protected@xdef\tp@chaptermark{\tp@heading@Title}%
+        \tpGStoreComp\tp@chaptermark{Title}%
       }%
       \tpIfComp{RunNumber}{%
-        \protected@xdef\tp@chapternumber{\tp@heading@RunNumber}%
+        \tpGStoreComp\tp@chapternumber{RunNumber}%
       }{
         \tpIfComp{Number}{%
-          \protected@xdef\tp@chapternumber{\tp@heading@Number}%
+          \tpGStoreComp\tp@chapternumber{Number}%
         }{%
           \global\let\tp@chapternumber\relax%
         }%
@@ -318,31 +318,31 @@
           \protected@xdef\tp@partmark{\tp@latestPartmark}%
         \fi
         \tpIfComp{RunAuthorNameList}{%
-          \protected@xdef\tp@authormark{\tp@heading@RunAuthorNameList}%
+          \tpGStoreComp\tp@authormark{RunAuthorNameList}%
         }{%
           \tpIfComp{AuthorNameList}{%
-            \protected@xdef\tp@authormark{\tp@heading@AuthorNameList}%
+            \tpGStoreComp\tp@authormark{AuthorNameList}%
           }{%
             \global\let\tp@authormark\relax%
           }
         }
       %\fi
     \else
-      \protected@xdef\tp@authormark{\tp@titlepage@AuthorNameList}%
+      \tpGStoreComp\tp@authormark{AuthorNameList}%
     \fi      
     \tpIfComp{RunNumber}{%
-      \protected@xdef\tp@chapternumber{\tp@heading@RunNumber}%
+      \tpGStoreComp\tp@chapternumber{RunNumber}%
     }{
       \tpIfComp{Number}{%
-        \protected@xdef\tp@chapternumber{\tp@heading@Number}%
+        \tpGStoreComp\tp@chapternumber{Number}%
       }{%
         \global\let\tp@chapternumber\relax%
       }
     }%
     \tpIfComp{RunTitle}{%
-      \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
+      \tpGStoreComp\tp@chaptermark{RunTitle}%
     }{
-      \protected@xdef\tp@chaptermark{\tp@heading@Title}%
+      \tpGStoreComp\tp@chaptermark{Title}%
     }%
     %% Titel
     \ifjournal
@@ -394,6 +394,9 @@
 
 \tpDeclareHeading[chapter]{0}{contribution}{%
   \tpSetProperty{extended}{true}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
+  \global\let\tpAbstractTitle\tpAbstractLabel
+  \global\let\tpKeywordsTitle\tpKeywordsLabel
+  \global\let\tpTitleEnTitle\tpTitleEnLabel
   %\thispagestyle{articlehead}
   
   % Artikel-DOI für die Zeitschriftenauftaktseite. Aus den Makros der Überschrift übernommen.
@@ -415,8 +418,8 @@
   \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
   \tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
   \tpSetProperty{author-contact-format}{%Format of a single author's contact information
-    \tpIfComp{Affil}{%
-      \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{Affil}}{affil-block-format});\par%
+    \tpIfComp{AffilRef}{%
+      \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{AffilRef}}{affil-block-format});\par%
       \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
       \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
     }{}%
@@ -474,18 +477,18 @@
     \tpIfComp{Abstract}{%
       \par\vskip2\baselineskip
         \rightskip\z@
-        {\mdseries\sffamily\tpIfComp{AbstractTitle}{\tpUseComp{AbstractTitle}}{Abstract}}\enskip
+        {\mdseries\sffamily\tpIfComp{AbstractLabel}{\tpUseComp{AbstractLabel}}{Abstract}}\enskip
         {\itshape\tpUseComp{Abstract}}\par%
       }
       {}%
     \tpIfComp{TitleEn}{%
       \par\vskip\baselineskip
-      {\mdseries\sffamily\tpIfComp{TitleEnTitle}{\tpUseComp{TitleEnTitle}}{Title}}\enskip
+      {\mdseries\sffamily\tpIfComp{TitleEnLabel}{\tpUseComp{TitleEnLabel}}{Title}}\enskip
       {\itshape\tpUseComp{TitleEn}\par}%
     }{}
     \tpIfComp{Keywords}{%
       \par\vskip\baselineskip
-      {\mdseries\sffamily\tpIfComp{KeywordsTitle}{\tpUseComp{KeywordsTitle}}{Keywords}}\enskip
+      {\mdseries\sffamily\tpIfComp{KeywordsLabel}{\tpUseComp{KeywordsLabel}}{Keywords}}\enskip
       {\itshape\tpUseComp{Keywords}\par}%
     }{}%
     %\tpIfCompOr{Abstract}{TitleEn}{%
@@ -686,9 +689,9 @@
       \protected@xdef\tp@authormark{\tp@heading@AuthorNameList}%
     }
     \tpIfComp{RunTitle}{%
-      \protected@xdef\tp@chaptermark{\tp@heading@RunTitle}%
+      \tpGStoreComp\tp@chaptermark{RunTitle}%
     }{
-      \protected@xdef\tp@chaptermark{\tp@heading@Title}%
+      \tpGStoreComp\tp@chaptermark{Title}%
     }%
   }
   

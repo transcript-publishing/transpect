@@ -71,14 +71,7 @@
 \def\tp@str@center{center}
 %% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
 \tpAddToDefault{float}{%
-  \def\tpBreak{%
-    \GetCascCellProp{hAlign}{text-align}%
-    \ifx\hAlign\tp@str@center
-    \else
-      \hfill%
-    \fi%
-    \break%
-  }%
+  \let\tpBreak\break%
   \tpSetProperty{number-face}{}% Format of number, additional to caption-format
   \tpSetProperty{number-sep}{:\space\ignorespaces}
   \tpSetProperty{caption-sep-top}{3mm}%

@@ -16,31 +16,7 @@
 
 \global\newbox\@licenceTextFooter
 
-\def\tp@create@editor@string#1{%
-  % Name lists need further expansion than \tpIfComp to detect \relax correctly.
-  \expandafter\expandafter\expandafter\ifx\csname tp@\tp@cur@cont @#1NameList\endcsname\relax%
-    % This assignment is needed for \tpIfComp{#1NameList}{…}{…} to work correctly for non-existing NameLists.
-    \global\expandafter\let\csname tp@\tp@cur@cont @#1NameList\endcsname\relax%
-  \else%
-    \def\@tempa{Author}%
-    \edef\@argi{#1}%
-    \ifx\@tempa\@argi%
-    \else%
-      \letcs\tpTotalCount{tp#1Cnt}%
-      \expandafter\xdef\csname tp@\tp@cur@cont @#1NameList\endcsname{%
-        % 14238: Umbrüche vor Herausgeberkürzel verhindern.
-        \tpUseComp{#1NameList}~\tpUseProperty{editor-suffix}%
-      }%
-    \fi%
-  \fi%
-}%
-
-% Keine Zeilenumbrüche vor dem Herausgebersuffix.
-\def\tp@create@editor@string#1{%
-  \expandafter\ifx\csname tp@\tp@cur@cont @#1NameList\endcsname\relax\else
-    \csgappto{tp@\tp@cur@cont @#1NameList}{{\letcs\tpTotalCount{tp#1Cnt}~\tpUseProperty{editor-suffix}}}%
-  \fi
-}%
+%% LUP: Hier wurde \tp@create@editor@string zweimal(!) überdefiniert… Bitte die ~ stattdessen in den entsprechenden Properties verarbeiten, nicht durch das Überdefinieren von Kernelmakros!
 
 \gdef\titleLayoutOverride{}
 \global\newif\if@unknownJournal \@unknownJournaltrue
@@ -66,8 +42,8 @@
     \fi%
   \fi%
   
-  \tpSetProperty{editor-suffix-sgl}{\editorsuffixsglname}
-  \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}
+  \tpSetProperty{editor-suffix-sgl}{~\editorsuffixsglname}
+  \tpSetProperty{editor-suffix-pl}{~\editorsuffixplname}
   
   \tpSetProperty{coverpage}{%
     \bgroup
@@ -105,7 +81,7 @@
     \tpSetProperty{name-and}{\space \nameandname\space}%
     \tpSetProperty{name-sep}{,\space}%
     
-    \tpSetProperty{name-list-format}{%
+    \tpSetProperty{role-block-print-format}{%
       \tpUseComp{FullName}%
       \ifnum\tpCurCount<\numexpr\tpTotalCount-1\relax%
         \tpUseProperty{name-sep}%
@@ -185,7 +161,7 @@
     \tpSetProperty{name-and}{,\space}%
     \tpSetProperty{name-sep}{,\space}%
     
-    \tpSetProperty{name-list-format}{%
+    \tpSetProperty{role-block-print-format}{%
       \tpUseComp{FullName}%
       \ifnum\tpCurCount<\numexpr\tpTotalCount-1\relax%
         \tpUseProperty{name-sep}%
@@ -232,18 +208,22 @@
       \tpIfComp{Editorial}{{\justify{\sffamily\sbseries\large Editorial}\par\vskip\baselineskip\tpUseComp{Editorial}\par\vskip\baselineskip}}{}%
       \vfill%
       \bgroup
-        {\justify\tpUseProperty{bio-block}}%
+        {\justify\tpUseProperty{bio-output-format}}%
       \egroup
     }%
       % Bio
-    \tpSetProperty{bio-block}{%
+    \tpSetProperty{bio-output-format}{%
       \ifcollection
-        \tpUseComp{EditorBioBlock}%
+        \tpIfComp{EditorBioBlock}
+          {\tpUseComp{EditorBioBlock}}
+          {\tpGetComp{SeriesEditorBioBlock}}%
       \else
-        \tpUseComp{AuthorBioBlock}%
+        \tpIfComp{AuthorBioBlock}
+          {\tpUseComp{AuthorBioBlock}}
+          {\tpGetComp{SeriesEditorBioBlock}}%
       \fi
     }%
-    \tpSetProperty{name-bio-format}{%
+    \tpSetProperty{role-biography-format}{%
       \tpUseComp{Bio}%
     }%
     %%%%%%%%%%%%%
@@ -494,18 +474,22 @@
       \tpIfComp{Editorial}{{\justify{\sffamily\sbseries\large Editorial}\par\vskip\baselineskip\tpUseComp{Editorial}\par\vskip\baselineskip}}{}%
       \vspace*{\fill}%
       \bgroup
-        {\justify\tpUseProperty{bio-block}}%
+        {\justify\tpUseProperty{bio-output-format}}%
       \egroup
     }%
       % Bio
-    \tpSetProperty{bio-block}{%
+    \tpSetProperty{bio-output-format}{%
       \ifcollection
-        \tpGetComp{EditorBioBlock}%
+        \tpIfComp{EditorBioBlock}
+          {\tpUseComp{EditorBioBlock}}
+          {\tpGetComp{SeriesEditorBioBlock}}%
       \else
-        \tpGetComp{AuthorBioBlock}%
+        \tpIfComp{AuthorBioBlock}
+          {\tpUseComp{AuthorBioBlock}}
+          {\tpGetComp{SeriesEditorBioBlock}}%
       \fi
     }%
-    \tpSetProperty{name-bio-format}{%
+    \tpSetProperty{role-biography-format}{%
       {\tpUseComp{Bio}}%
     }%
     %%%%%%%%%%%%%
