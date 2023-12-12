@@ -422,11 +422,16 @@
       \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{AffilRef}}{affil-block-format});\par%
       \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
       \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
-    }{}%
+    }{%
+      \tpUseComp{FullName}%
+      \tpIfComp{Affiliation}{%
+        \space(\tpUseComp{Affiliation})%
+      }{}%
+    }%
   }
 
-  
   \tpSetProperty{counted-name-sep}{,\space}
+
   \tpSetProperty{before-heading}{%
     \cleardoublepage%
     \if@twocolumn% Kein vspace vor Überschriften zweispaltiger Kapitel.

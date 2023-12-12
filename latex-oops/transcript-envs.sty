@@ -22,25 +22,48 @@
     \fi}}
 
 \let\orig@doendpe\@doendpe
-\newenvironment{kastengrau}{%
-  \def\FrameCommand{\fboxsep\FrameSep \colorbox[gray]{0.75}}%
-  \savenotes
-  \begin{framed}%
-    \noindent\nsffamily\ignorespaces
-  }{\end{framed}%
-  \spewnotes
-  \aftergroup\@afterbox}
 
-\newenvironment{kastenlinie}{%
+
+\newenvironment{kastengrau}[1][\relax]{%
+  \def\FrameCommand{\fboxsep1em \colorbox[gray]{0.75}}%
+  \savenotes
+  \def\optionalHeading{#1}%
+  \begin{framed}%
+    \if\optionalHeading\relax
+    \else
+      \vspace{-11.5bp}%
+      \begin{heading}[notoc,noBM]{subsection}%
+        \tpTitle{\optionalHeading}%
+      \end{heading}%
+    \fi
+    \@afterheading\nsffamily
+}{%
+  \end{framed}%
+  \spewnotes
+  \aftergroup\@afterbox%
+}
+
+
+\newenvironment{kastenlinie}[1][\relax]{%
   \FrameSep3mm
   \fboxrule.5bp
   \savenotes
   \def\FrameCommand{\fboxsep\FrameSep \fbox}%
+  \def\optionalHeading{#1}%
   \begin{framed}%
-    \noindent\nsffamily\ignorespaces\@afterheading
-  }{\end{framed}%
+    \if\optionalHeading\relax
+    \else
+      \vspace{-11.5bp}%
+      \begin{heading}[notoc,noBM]{subsection}%
+        \tpTitle{\optionalHeading}%
+      \end{heading}%
+    \fi
+    \@afterheading\nsffamily%\noindent\nsffamily\ignorespaces
+}{%
+  \end{framed}%
   \spewnotes
-  \aftergroup\@afterbox}
+  \aftergroup\@afterbox%
+}
 
 
 \renewenvironment{quotation}{%
