@@ -8,7 +8,8 @@
 
   <xsl:param name="cocotex" as="xs:boolean" select="true()"/>
   <xsl:param name="s9y2" as="xs:string?"><!-- journal series type like zig--></xsl:param>
-
+  <xsl:variable name="aff-as-ref" as="xs:boolean" select="false()"/>
+  
   <xsl:variable name="title" as="element(*)?"
                 select="$metadata/dbk:keyword[@role = ('Hefttitel')]" />
   <xsl:variable name="volume" as="item()*"
