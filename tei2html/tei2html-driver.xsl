@@ -620,7 +620,7 @@
   
   <xsl:template match="p[matches(@rend, '^[a-z0-9]{2,3}codeblock[a-z0-9]+$')]" mode="tei2html">
     <xsl:if test="preceding-sibling::*[1][self::p[matches(@rend, '^[a-z0-9]{2,3}codeblock[a-z0-9]+$')]]">
-      <br/>
+      <!--<br/>--><xsl:text>&#10;</xsl:text><!--https://redmine.le-tex.de/issues/15896-->
     </xsl:if>
     <xsl:apply-templates select="node()" mode="#current" xml:space="preserve"/>
   </xsl:template>
