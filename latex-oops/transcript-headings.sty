@@ -328,7 +328,9 @@
         }
       %\fi
     \else
-      \tpGStoreComp\tp@authormark{AuthorNameList}%
+      \tpIfComp{AuthorNameList}{%
+        \tpGStoreComp\tp@authormark{AuthorNameList}%
+      }{}
     \fi      
     \tpIfComp{RunNumber}{%
       \tpGStoreComp\tp@chapternumber{RunNumber}%
