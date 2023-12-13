@@ -79,7 +79,23 @@
 \def\ps@backmatter{% Ticket 14571.
   \def\left@mark{%
     \def\numberline####1{####1\enskip}%
-    \tp@authormark%
+    \ifcollection
+      % Mit Respektseiten.
+      \ifx\has@parts\relax
+        \ifcsname tp@partmark\endcsname
+          \tp@partmark%
+        \else
+          \tpRunBookTitle%
+        \fi%
+      % Ohne Respektseiten.
+      \else
+        \tpRunBookTitle%
+      \fi
+    % Monographien.
+    \else
+      \tpRunBookTitle%
+    \fi
+    %\tp@authormark%
   }%
   \def\right@mark{%
     \def\numberline####1{####1\enskip}%
