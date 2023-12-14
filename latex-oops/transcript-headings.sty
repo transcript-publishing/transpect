@@ -127,7 +127,6 @@
     %\global\let\@chaptermark\@undefined
     \global\let\has@parts\relax
     \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
-    \ifcollection \global\let\@authormark\@empty\fi
     % Zurücksetzen der Fußnotenzählen bereits bei Parts, nicht erst bei Chapter. Ticket 15665.
     \global\c@footnote\z@
     \global\c@endnote\z@
@@ -205,6 +204,16 @@
 \gdef\tp@chaptermark{UNKNOWN CHAPTERMARK}
 \global\let\tp@latestPartmark\relax% latestPartmark wird im part gespeichert und in Anthologien bei chapter als partmark gesetzt.
 
+\tpAddToHook[heading]{before-print-hook-chapter}{%
+  \ifcollection
+    \global\let\tp@authormark\@empty
+  \fi
+  \tpIfComp{RunAuthorNameList}
+    {\tpGStoreComp\tp@authormark{RunAuthorNameList}}
+    {\tpIfCompOverride{AuthorNameList}
+      {\tpGStoreComp\tp@authormark{AuthorNameList}}
+      {\tpCompGDef\tp@authormark{tpAuthor}{author-list-print-format}}}%
+}
 
 \tpDeclareHeading{0}{chapter}{%
   % Ticket 13717.
@@ -311,27 +320,10 @@
   \tpSetProperty{heading-block}{%
     \gdef\tp@currentHeading{chapter}
     \ifcollection
-      %\ifjournal
-      %\else
-        \ifx\tp@latestPartmark\relax
-        \else
+        \ifx\tp@latestPartmark\relax\else
           \protected@xdef\tp@partmark{\tp@latestPartmark}%
         \fi
-        \tpIfComp{RunAuthorNameList}{%
-          \tpGStoreComp\tp@authormark{RunAuthorNameList}%
-        }{%
-          \tpIfComp{AuthorNameList}{%
-            \tpGStoreComp\tp@authormark{AuthorNameList}%
-          }{%
-            \global\let\tp@authormark\relax%
-          }
-        }
-      %\fi
-    \else
-      \tpIfComp{AuthorNameList}{%
-        \tpGStoreComp\tp@authormark{AuthorNameList}%
-      }{}
-    \fi      
+    \fi
     \tpIfComp{RunNumber}{%
       \tpGStoreComp\tp@chapternumber{RunNumber}%
     }{
@@ -693,11 +685,6 @@
     \global\let\tp@partmark\relax%
     \global\let\tp@chapternumber\relax%
     \global\let\tp@authormark\relax
-    \tpIfComp{RunAuthorNameList}{%
-      \protected@xdef\tp@authormark{\tp@heading@RunAuthorNameList}%
-    }{%
-      \protected@xdef\tp@authormark{\tp@heading@AuthorNameList}%
-    }
     \tpIfComp{RunTitle}{%
       \tpGStoreComp\tp@chaptermark{RunTitle}%
     }{
