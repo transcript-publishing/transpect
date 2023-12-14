@@ -321,7 +321,7 @@
           \tpGStoreComp\tp@authormark{RunAuthorNameList}%
         }{%
           \tpIfComp{AuthorNameList}{%
-            \gdef\tp@authormark{\tp@heading@AuthorNameList}%
+            \tpGStoreComp\tp@authormark{AuthorNameList}%
           }{%
             \global\let\tp@authormark\relax%
           }
@@ -329,7 +329,7 @@
       %\fi
     \else
       \tpIfComp{AuthorNameList}{%
-        \gdef\tp@authormark{\tp@heading@AuthorNameList}%
+        \tpGStoreComp\tp@authormark{AuthorNameList}%
       }{}
     \fi      
     \tpIfComp{RunNumber}{%
