@@ -7,10 +7,11 @@
   \else
     \@setfontsize\normalsize{9.2bp}{12.8bp}%
   \fi%
-  \abovedisplayskip 9.3\p@ \@plus2\p@ \@minus5\p@
-  \abovedisplayshortskip \z@ \@plus3\p@
-  \belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
-  \belowdisplayskip \abovedisplayskip
+  % Mit Ticket 16004 auskommentiert, da über transcript-envs.sty generell gesteuert werden soll.
+  %\abovedisplayskip 9.3\p@ \@plus2\p@ \@minus5\p@
+  %\abovedisplayshortskip \z@ \@plus3\p@
+  %\belowdisplayshortskip 5\p@ \@plus3\p@ \@minus3\p@
+  %\belowdisplayskip \abovedisplayskip
   \let\@listi\@listI%
   \let\@listii\@listI%
   \let\@listiii\@listI%
@@ -22,27 +23,29 @@
   \else
     \@setfontsize\small{9bp}{11}% head
   \fi%
-  \abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
-  \abovedisplayshortskip \z@ \@plus2\p@
-  \belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+  %\abovedisplayskip 8.5\p@ \@plus3\p@ \@minus4\p@
+  %\abovedisplayshortskip \z@ \@plus2\p@
+  %\belowdisplayshortskip 4\p@ \@plus2\p@ \@minus2\p@
+  %\belowdisplayskip \abovedisplayskip
   \def\@listi{%
     \leftmargin\leftmargini
     \topsep 6.4bp
     \parsep 3.2bp
     \itemsep \parsep%
   }%
-  \belowdisplayskip \abovedisplayskip
 }
 \renewcommand\footnotesize{% footnotes
-   \@setfontsize\footnotesize{8bp}{11bp}%
-   \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
-   \abovedisplayshortskip \z@ \@plus\p@
-   \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
-   \def\@listi{\leftmargin\leftmargini
-               \topsep 3.2bp
-               \parsep 2\p@ \@plus\p@ \@minus\p@
-               \itemsep \parsep}%
-   \belowdisplayskip \abovedisplayskip
+  \@setfontsize\footnotesize{8bp}{11bp}%
+  \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
+  \abovedisplayshortskip \z@ \@plus\p@
+  \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
+  \belowdisplayskip \abovedisplayskip
+  \def\@listi{%
+    \leftmargin\leftmargini
+    \topsep 3.2bp
+    \parsep 2\p@ \@plus\p@ \@minus\p@
+    \itemsep \parsep%
+  }%
 }
 \renewcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
 \renewcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
