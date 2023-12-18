@@ -335,9 +335,12 @@
     }%
     \tpIfComp{RunTitle}{%
       \tpGStoreComp\tp@chaptermark{RunTitle}%
-    }{
+    }{%
       \tpGStoreComp\tp@chaptermark{Title}%
     }%
+    \tpIfComp{AuthorNameList}{%
+      \tpGStoreComp\tp@authormark{AuthorNameList}%
+    }{}
     %% Titel
     \ifjournal
     \else

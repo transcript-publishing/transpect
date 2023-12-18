@@ -82,11 +82,15 @@
     \ifcollection
       % Mit Respektseiten.
       \ifx\has@parts\relax
-        \ifcsname tp@partmark\endcsname
-          \tp@partmark%
+        \ifjournal
+          \tp@authormark
         \else
-          \tpRunBookTitle%
-        \fi%
+          \ifcsname tp@partmark\endcsname
+            \tp@partmark%
+          \else
+            \tpRunBookTitle%
+          \fi%
+        \fi
       % Ohne Respektseiten.
       \else
         \tpRunBookTitle%
