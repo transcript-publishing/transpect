@@ -212,7 +212,8 @@
     {\tpGStoreComp\tp@authormark{RunAuthorNameList}}
     {\tpIfCompOverride{AuthorNameList}
       {\tpGStoreComp\tp@authormark{AuthorNameList}}
-      {\tpCompGDef\tp@authormark{tpAuthor}{author-list-print-format}}}%
+      {\tpCompGDef\tp@authormark{tpAuthor}{author-list-print-format}}%
+    }%
 }
 
 \tpDeclareHeading{0}{chapter}{%
@@ -338,9 +339,6 @@
     }{%
       \tpGStoreComp\tp@chaptermark{Title}%
     }%
-    \tpIfComp{AuthorNameList}{%
-      \tpGStoreComp\tp@authormark{AuthorNameList}%
-    }{}
     %% Titel
     \ifjournal
     \else

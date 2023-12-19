@@ -22,9 +22,9 @@
         % Mit Respektseiten.
         \ifx\has@parts\relax
           \ifcsname tp@partmark\endcsname
-            \tp@partmark%
+            \tp@partmark
           \else
-            \tpRunBookTitle%
+            \tpRunBookTitle
           \fi%
         % Ohne Respektseiten.
         \else
@@ -83,6 +83,7 @@
       % Mit Respektseiten.
       \ifx\has@parts\relax
         \ifjournal
+          % U. a. für ZiG nötig, weil diese Dokumente vollständig Backmatter sind.
           \tp@authormark
         \else
           \ifcsname tp@partmark\endcsname
