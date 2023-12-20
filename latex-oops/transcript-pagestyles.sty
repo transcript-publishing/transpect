@@ -82,16 +82,16 @@
     \ifcollection
       % Mit Respektseiten.
       \ifx\has@parts\relax
-        \ifjournal
-          % U. a. für ZiG nötig, weil diese Dokumente vollständig Backmatter sind.
-          \tp@authormark
-        \else
+        %\ifjournal
+        %  % U. a. für ZiG nötig, weil diese Dokumente vollständig Backmatter sind. | Nach Rücksprache am 20.12.2023 wieder entfernt. Respekttitel sind korrekt.
+        %  \tp@authormark
+        %\else
           \ifcsname tp@partmark\endcsname
             \tp@partmark%
           \else
             \tpRunBookTitle%
           \fi%
-        \fi
+        %\fi
       % Ohne Respektseiten.
       \else
         \tpRunBookTitle%
