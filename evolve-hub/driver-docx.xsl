@@ -284,4 +284,15 @@
     <!-- https://redmine.le-tex.de/issues/15620 -->
   </xsl:template>
   
+  <!-- https://redmine.le-tex.de/issues/16004 -->
+  
+  <xsl:template match="para[count(*) eq 1 
+                            and inlineequation 
+                            and matches(normalize-space(string-join(text())),'^[\.:;!?]$' )]/inlineequation" mode="custom-1">
+    <xsl:copy>
+      <xsl:attribute name="role" select="string-join((@role, 'render-inline-as-display-equation'), ' ')"/>
+      <xsl:apply-templates select="@* except @role, node()" mode="#current"></xsl:apply-templates>
+    </xsl:copy>
+  </xsl:template>
+  
 </xsl:stylesheet>

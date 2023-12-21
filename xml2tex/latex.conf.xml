@@ -816,6 +816,15 @@
       </xsl:if>
     </rule>
   </template>
+  
+  <!-- https://redmine.le-tex.de/issues/16004 -->
+  
+  <template context="dbk:inlineequation[matches(@role, 'render-inline-as-display-equation')]">
+    <rule name="inlineEquation" type="env" break-before="0" break-after="0">
+      <text>&#xa;</text>
+      <text/>
+    </rule>
+  </template>
 
   <xsl:template match="dbk:keywordset[@role='titlepage']/dbk:keyword
                           [not(@role = ('Herausgeber', 'Autor', 'Herausgeberinformationen', 'Bibliografische_Information', 'Copyright'))]/dbk:para[not(position() eq last())] |
