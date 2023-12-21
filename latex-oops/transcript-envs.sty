@@ -345,6 +345,31 @@
 \setlength{\belowdisplayskip}{0.5\baselineskip}
 \setlength{\abovedisplayshortskip}{0.5\baselineskip}
 \setlength{\belowdisplayshortskip}{0.5\baselineskip}
+
+
+\newcount\@equation@after@doTimes \@equation@after@doTimes=1
+\newcount\@equation@after@didTimes
+
+\newenvironment{inlineEquation}{%
+  \@equation@after@didTimes=\z@
+  \xdef\oldparskip{\the\parskip}%
+  \parskip0.5\baselineskip
+  \ifhmode\par\fi
+}{%
+  \global\let\oldpar\par
+  \gdef\par{%
+    \ifnum\@equation@after@didTimes<\@equation@after@doTimes
+      \parskip0.5\baselineskip
+      \oldpar
+      \advance\@equation@after@didTimes\@ne
+    \else
+      \parskip\oldparskip
+      \oldpar
+    \fi
+  }%
+  \@afterheading
+}
+
 % \def\@abstract#1{%
 %   \vskip-\lastskip
 %   % \addvspace{1\baselineskip}%
