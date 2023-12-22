@@ -350,23 +350,16 @@
 \newcount\@equation@after@doTimes \@equation@after@doTimes=1
 \newcount\@equation@after@didTimes
 
-\newenvironment{inlineEquation}{%
+\newenvironment{inlineEquation}[1][\relax]{%
+  \def\afterEquationContents{#1}%
   \@equation@after@didTimes=\z@
-  \xdef\oldparskip{\the\parskip}%
-  \parskip0.5\baselineskip
   \ifhmode\par\fi
+  \vskip0.5\baselineskip
+  $
 }{%
-  \global\let\oldpar\par
-  \gdef\par{%
-    \ifnum\@equation@after@didTimes<\@equation@after@doTimes
-      \parskip0.5\baselineskip
-      \oldpar
-      \advance\@equation@after@didTimes\@ne
-    \else
-      \parskip\oldparskip
-      \oldpar
-    \fi
-  }%
+  \afterEquationContents
+  $
+  \vskip0.5\baselineskip
   \@afterheading
 }
 
