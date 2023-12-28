@@ -820,11 +820,17 @@
   <!-- https://redmine.le-tex.de/issues/16004 -->
   
   <template context="dbk:inlineequation[matches(@role, 'render-inline-as-display-equation')]">
+    <xsl:variable name="nodes" as="node()*">
+      <xsl:copy-of select="./following-sibling::node()"/>
+    </xsl:variable>
     <rule name="inlineEquation" type="env" break-before="0" break-after="0">
+      <option select="$nodes"/>
       <text>&#xa;</text>
       <text/>
     </rule>
   </template>
+  
+  <template context="node()[preceding-sibling::dbk:inlineequation[matches(@role, 'render-inline-as-display-equation')]]"/>
 
   <xsl:template match="dbk:keywordset[@role='titlepage']/dbk:keyword
                           [not(@role = ('Herausgeber', 'Autor', 'Herausgeberinformationen', 'Bibliografische_Information', 'Copyright'))]/dbk:para[not(position() eq last())] |

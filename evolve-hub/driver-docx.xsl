@@ -291,7 +291,7 @@
                             and matches(normalize-space(string-join(text())),'^[\.:;!?]$' )]/inlineequation" mode="custom-1">
     <xsl:copy>
       <xsl:attribute name="role" select="string-join((@role, 'render-inline-as-display-equation'), ' ')"/>
-      <xsl:apply-templates select="@* except @role, node()" mode="#current"></xsl:apply-templates>
+      <xsl:apply-templates select="@* except @role, node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
   
