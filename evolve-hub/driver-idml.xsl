@@ -48,5 +48,13 @@
       </personname>
     </author>
   </xsl:template>
+  
+  <!-- override default chapter keywords setup -->
+  
+  <xsl:template match="para[matches(@role, $info-keywords-role)]" mode="hub:process-meta-sidebar">
+    <xsl:copy>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
 
 </xsl:stylesheet>
