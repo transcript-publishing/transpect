@@ -293,14 +293,6 @@
       <xsl:attribute name="role" select="string-join((@role, 'render-inline-as-display-equation'), ' ')"/>
       <xsl:apply-templates select="@* except @role, node()" mode="#current"/>
     </xsl:copy>
-  </xsl:template>
-  
-  <!-- override default chapter keywords setup -->
-  
-  <xsl:template match="para[matches(@role, $info-keywords-role)]" mode="hub:process-meta-sidebar">
-    <xsl:copy>
-      <xsl:apply-templates select="@*, node()" mode="#current"/>
-    </xsl:copy>
-  </xsl:template>
+  </xsl:template>  
   
 </xsl:stylesheet>
