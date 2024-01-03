@@ -591,9 +591,9 @@
   \tpSetProperty{subtitle-face}{\normalfont\sffamily\LARGE}%
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
   \tpSetProperty{quote-block-format}{%
-    \hfill\vbox{%
+    \vbox{%
       %\justify% Auskommentiert mit Ticket 15122.
-      \hsize.5\textwidth
+      \leftskip0.5\textwidth
       \normalsize\mdseries
       \ifx\ts@layout@type\ts@str@layout@mdw
         \rmfamily%
@@ -623,10 +623,9 @@
     \nopagebreak
     \tpIfComp{QuoteBlock}{%
       \vskip\tpUseProperty{before-quote-skip}%
-      %\savenotes
-      \tpUseComp{QuoteBlock}
-      %\spewnotes
-      \par}{}%
+      \tpUseComp{QuoteBlock}%
+      \par%
+    }{}%
     \spewnotes
   }%
   %\tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
@@ -827,7 +826,7 @@
   \tpSetProperty{quote-block-format}{%
     \hfill\vbox{%
       %\justify% Auskommentiert mit Ticket 15122.
-      \hsize.5\textwidth
+      \leftskip0.5\textwidth
       \normalsize\mdseries
       \ifx\ts@layout@type\ts@str@layout@mdw
         \rmfamily%
