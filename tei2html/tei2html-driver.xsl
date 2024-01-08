@@ -625,6 +625,10 @@
     <xsl:apply-templates select="node()" mode="#current" xml:space="preserve"/>
   </xsl:template>
   
+  <xsl:template match="p[matches(@rend, '^[a-z0-9]{2,3}codeblock[a-z0-9]+$')]/lb" mode="tei2html" priority="10">
+      <xsl:text>&#10;</xsl:text><!--https://redmine.le-tex.de/issues/15896-->
+  </xsl:template>
+  
   <xsl:template match="*:img[contains(../@class, 'fig')][../*:p[*:span[@class='hub:caption-text']]]/@alt[.= '']" mode="clean-up">
     <xsl:attribute name="{name()}">
       <xsl:apply-templates select="../../*:p[*:span[@class='hub:caption-text']]/*:span[@class='hub:caption-text']" mode="strip-indexterms-etc"/>
