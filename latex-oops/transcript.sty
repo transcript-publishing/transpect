@@ -9,6 +9,10 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript}[2021/04/09 transcript]\relax
 
+% Übergangsvariable für TeXLive 2023.
+\newif\if@TLtwenty \@TLtwentyfalse
+\ifnum\luatexversion>111 \@TLtwentytrue\fi
+
 %% Paketoptionen
 %% durchreichen der script-Optionen
 \define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}\gdef\layout{#1}}
