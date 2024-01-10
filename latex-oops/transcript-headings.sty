@@ -254,9 +254,9 @@
         \leftskip\z@%
       }%
       \strut\tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-face}\sffamily\upseries\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
       \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
-      \tpUseProperty{toc-page-face}\tpTocLink{\tpUseProperty{toc-page-sep}\normalfont Test vor Seitenzahl \tpUseComp{TocPage}}%
+      \tpUseProperty{toc-page-face}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
     }
   }%
@@ -536,8 +536,7 @@
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
     \tpSetProperty{toc-before-entry}{\nopagebreak}%
-    \tpSetProperty{toc-title-face}{\normalfont\normalsize\upseries}%
-    \tpSetProperty{toc-subtitle-face}{\normalfont\normalsize\upseries}%
+    \tpSetProperty{toc-subtitle-face}{\normalfont\normalsize}%
     \tpSetProperty{toc-format}{%
       \tpUseProperty{toc-title-face}%
       \tpIfComp{TocNumber}{%
@@ -570,7 +569,6 @@
     }%
     \tpSetProperty{toc-format}{%
       \tpUseProperty{toc-title-face}%
-      \upseries
       \tpIfComp{TocNumber}{%
         \@tempdima=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
         \leftskip\@tempdima\hskip-\@tempdima\hb@xt@\@tempdima{\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}\hss}%
@@ -776,7 +774,6 @@
     }%
     \tpSetProperty{toc-format}{%
       \tpUseProperty{toc-title-face}%
-      \upseries
       \@tempdima=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
       \@tempdimb=\csname tp-heading-toc-number-2-maxwd\endcsname\relax%
       \tpIfComp{TocNumber}{%
