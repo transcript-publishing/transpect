@@ -230,7 +230,7 @@
     % Seite III %
     %%%%%%%%%%%%%
     \tpSetProperty{titlepage-iii}{%
-      {\Large\sfwidefamily\upseries%
+      {\Large\sfwidefamily%
         \ifcollection
           \righthyphenmin62
           \lefthyphenmin62
@@ -247,8 +247,8 @@
         \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{JournalName}\par
       }%
       \bgroup
-        \normalfont\Large%
-        \sffamily\upseries\vskip\dimexpr5bp+0.65mm\relax
+        \normalfont\Large
+        \sffamily\vskip\dimexpr5bp+0.65mm\relax
         \topsep0pt \partopsep0pt % no space before
         \flushleft Jg. \tpUseComp{Volume}, \tpUseComp{Issue}/\tpUseComp{Year}: \tpUseComp{Title}\endflushleft%
       \egroup
@@ -496,7 +496,7 @@
     % Seite III %
     %%%%%%%%%%%%%
     \tpSetProperty{titlepage-iii}{%
-      {\Large\sffamily\upseries%
+      {\Large\sfwidefamily%
         \ifcollection
           \righthyphenmin62
           \lefthyphenmin62
