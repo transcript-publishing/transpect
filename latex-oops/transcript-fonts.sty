@@ -37,8 +37,9 @@
     ItalicFont = Lato-Italic.ttf,%
     BoldItalicFont = Lato-BoldItalic.ttf,%
   ]{Lato-Regular.ttf}
-
-  \babelfont{sf}[%
+  
+  \if@altFonts
+    \babelfont{sf}[%
       Path=fonts/Lato/,%
       BoldFont = Lato-Bold.ttf,%
       FontFace = {up}{n}{Lato-Thin.ttf},%
@@ -58,50 +59,49 @@
       %FakeStretch=1.02,%
       %Color=353132%
     ]{Lato-Regular.ttf}
-
-  \babelfont{sfwide}[%
-    Path=fonts/Lato/,%
-    BoldFont = Lato-Bold.ttf,%
-    FontFace = {up}{n}{Lato-Thin.ttf},%
-    FontFace = {up}{it}{Lato-ThinItalic.ttf},%
-    FontFace = {lt}{n}{Lato-Regular.ttf},%
-    FontFace = {lt}{it}{Lato-Italic.ttf},%
-    FontFace = {md}{n}{Lato-Semibold.ttf},%
-    FontFace = {md}{it}{Lato-SemiboldItalic.ttf},%
-    FontFace = {eb}{n}{Lato-Heavy.ttf},%
-    FontFace = {eb}{it}{Lato-HeavyItalic.ttf},%
-    FontFace = {sb}{n}{Lato-Bold.ttf},%
-    FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
-    ItalicFont = Lato-Italic.ttf,%
-    BoldItalicFont =Lato-BoldItalic.ttf,%
-    WordSpace=1.1,%
-    %LetterSpace=1,%
-    %FakeStretch=1.02,%
-    %Color=353132%
-  ]{Lato-Regular.ttf}
     
-  \babelfont{sfwider}[%
-    Path=fonts/Lato/,%
-    BoldFont = Lato-Bold.ttf,%
-    FontFace = {up}{n}{Lato-Thin.ttf},%
-    FontFace = {up}{it}{Lato-ThinItalic.ttf},%
-    FontFace = {lt}{n}{Lato-Regular.ttf},%
-    FontFace = {lt}{it}{Lato-Italic.ttf},%
-    FontFace = {md}{n}{Lato-Semibold.ttf},%
-    FontFace = {md}{it}{Lato-SemiboldItalic.ttf},%
-    FontFace = {eb}{n}{Lato-Heavy.ttf},%
-    FontFace = {eb}{it}{Lato-HeavyItalic.ttf},%
-    FontFace = {sb}{n}{Lato-Bold.ttf},%
-    FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
-    ItalicFont = Lato-Italic.ttf,%
-    BoldItalicFont =Lato-BoldItalic.ttf,%
-    WordSpace=1.2,%
-    %LetterSpace=1,%
-    %FakeStretch=1.02,%
-    %Color=353132%
-  ]{Lato-Regular.ttf}
-    
-  \if@altFonts
+    \babelfont{sfwide}[%
+      Path=fonts/Lato/,%
+      BoldFont = Lato-Bold.ttf,%
+      FontFace = {up}{n}{Lato-Thin.ttf},%
+      FontFace = {up}{it}{Lato-ThinItalic.ttf},%
+      FontFace = {lt}{n}{Lato-Regular.ttf},%
+      FontFace = {lt}{it}{Lato-Italic.ttf},%
+      FontFace = {md}{n}{../../Noto/Sans/NotoSans-CondensedBold.ttf},%
+      FontFace = {md}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
+      FontFace = {eb}{n}{Lato-Heavy.ttf},%
+      FontFace = {eb}{it}{Lato-HeavyItalic.ttf},%
+      FontFace = {sb}{n}{../../Noto/Sans/NotoSans-CondensedBold.ttf},%
+      FontFace = {sb}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
+      ItalicFont = Lato-Italic.ttf,%
+      BoldItalicFont =Lato-BoldItalic.ttf,%
+      %WordSpace=2.0,%
+      %LetterSpace=2.0,%
+      %FakeStretch=1.02,%
+      %Color=353132%
+    ]{Lato-Regular.ttf}
+  
+    \babelfont{sfwider}[%
+      Path=fonts/Lato/,%
+      BoldFont = Lato-Bold.ttf,%
+      FontFace = {up}{n}{Lato-Thin.ttf},%
+      FontFace = {up}{it}{Lato-ThinItalic.ttf},%
+      FontFace = {lt}{n}{Lato-Regular.ttf},%
+      FontFace = {lt}{it}{Lato-Italic.ttf},%
+      FontFace = {md}{n}{../../Noto/Sans/NotoSans-CondensedBold.ttf},%
+      FontFace = {md}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
+      FontFace = {eb}{n}{Lato-Heavy.ttf},%
+      FontFace = {eb}{it}{Lato-HeavyItalic.ttf},%
+      FontFace = {sb}{n}{../../Noto/Sans/NotoSans-CondensedBold.ttf},%
+      FontFace = {sb}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
+      ItalicFont = Lato-Italic.ttf,%
+      BoldItalicFont =Lato-BoldItalic.ttf,%
+      %WordSpace=1.0,%
+      %LetterSpace=5.0,%
+      %FakeStretch=1.02,%
+      %Color=353132%
+    ]{Lato-Regular.ttf}
+  
     \babelfont{sfchap}[%
       Path=fonts/Noto/Sans/,%
       BoldFont = NotoSans-CondensedBold.ttf,%
@@ -189,6 +189,69 @@
     ]{NotoSans-Condensed.ttf}
     
   \else
+    \babelfont{sf}[%
+      Path=fonts/Lato/,%
+      BoldFont = Lato-Bold.ttf,%
+      FontFace = {up}{n}{Lato-Thin.ttf},%
+      FontFace = {up}{it}{Lato-ThinItalic.ttf},%
+      FontFace = {lt}{n}{Lato-Regular.ttf},%
+      FontFace = {lt}{it}{Lato-Italic.ttf},%
+      FontFace = {md}{n}{Lato-Semibold.ttf},%
+      FontFace = {md}{it}{Lato-SemiboldItalic.ttf},%
+      FontFace = {eb}{n}{Lato-Heavy.ttf},%
+      FontFace = {eb}{it}{Lato-HeavyItalic.ttf},%
+      FontFace = {sb}{n}{Lato-Bold.ttf},%
+      FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
+      ItalicFont = Lato-Italic.ttf,%
+      BoldItalicFont = Lato-BoldItalic.ttf,%
+      %WordSpace=1.1,%
+      %LetterSpace=1,%
+      %FakeStretch=1.02,%
+      %Color=353132%
+    ]{Lato-Regular.ttf}
+    
+    \babelfont{sfwide}[%
+      Path=fonts/Lato/,%
+      BoldFont = Lato-Bold.ttf,%
+      FontFace = {up}{n}{Lato-Thin.ttf},%
+      FontFace = {up}{it}{Lato-ThinItalic.ttf},%
+      FontFace = {lt}{n}{Lato-Regular.ttf},%
+      FontFace = {lt}{it}{Lato-Italic.ttf},%
+      FontFace = {md}{n}{Lato-Semibold.ttf},%
+      FontFace = {md}{it}{Lato-SemiboldItalic.ttf},%
+      FontFace = {eb}{n}{Lato-Heavy.ttf},%
+      FontFace = {eb}{it}{Lato-HeavyItalic.ttf},%
+      FontFace = {sb}{n}{Lato-Bold.ttf},%
+      FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
+      ItalicFont = Lato-Italic.ttf,%
+      BoldItalicFont = Lato-BoldItalic.ttf,%
+      WordSpace=1.1,%
+      %LetterSpace=1,%
+      %FakeStretch=1.02,%
+      %Color=353132%
+    ]{Lato-Regular.ttf}
+    
+    \babelfont{sfwider}[%
+      Path=fonts/Lato/,%
+      BoldFont = Lato-Bold.ttf,%
+      FontFace = {up}{n}{Lato-Thin.ttf},%
+      FontFace = {up}{it}{Lato-ThinItalic.ttf},%
+      FontFace = {lt}{n}{Lato-Regular.ttf},%
+      FontFace = {lt}{it}{Lato-Italic.ttf},%
+      FontFace = {md}{n}{Lato-Semibold.ttf},%
+      FontFace = {md}{it}{Lato-SemiboldItalic.ttf},%
+      FontFace = {eb}{n}{Lato-Heavy.ttf},%
+      FontFace = {eb}{it}{Lato-HeavyItalic.ttf},%
+      FontFace = {sb}{n}{Lato-Bold.ttf},%
+      FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
+      ItalicFont = Lato-Italic.ttf,%
+      BoldItalicFont =Lato-BoldItalic.ttf,%
+      WordSpace=1.2,%
+      %LetterSpace=1,%
+      %FakeStretch=1.02,%
+      %Color=353132%
+    ]{Lato-Regular.ttf}
+    
     % Schrift für Kapitelüberschriften.
     \babelfont{sfchap}[%
       Path=fonts/Lato/,%
@@ -247,7 +310,7 @@
       FontFace = {sb}{n}{Lato-Bold.ttf},%
       FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
       ItalicFont = Lato-Italic.ttf,%
-      BoldItalicFont =Lato-BoldItalic.ttf,%
+      BoldItalicFont = Lato-BoldItalic.ttf,%
       %WordSpace=1.1,%
       %LetterSpace=1,%
       %FakeStretch=1.02,%
@@ -268,7 +331,7 @@
       FontFace = {sb}{n}{Lato-Bold.ttf},%
       FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
       ItalicFont = Lato-Italic.ttf,%
-      BoldItalicFont =Lato-BoldItalic.ttf,%
+      BoldItalicFont = Lato-BoldItalic.ttf,%
       %WordSpace=1.2,%
       %LetterSpace=2.0,%
       %FakeStretch=1.02,%
@@ -287,8 +350,7 @@
     FontFace = {sb}{it}{Alegreya-MediumItalic.ttf},%
     ItalicFont = Alegreya-Italic.ttf,%
     %WordSpace = 1.25,% Commenting this line fixes hyphenation differences. \tpDeclareBabelFont{greek} block below not necessary.
-    BoldItalicFont = Alegreya-BoldItalic.ttf%
-  ]{Alegreya-Regular.ttf}
+    BoldItalicFont = Alegreya-BoldItalic.ttf]{Alegreya-Regular.ttf}
     
   \babelfont{nsf}[%
     Path=fonts/Alegreya/Alegreya Sans/,%
@@ -301,8 +363,7 @@
     FontFace = {sb}{it}{AlegreyaSans-MediumItalic.ttf},%
     ItalicFont = AlegreyaSans-Italic.ttf,%
     WordSpace = 1.0,%
-    BoldItalicFont = AlegreyaSans-BoldItalic.ttf%
-  ]{AlegreyaSans-Regular.ttf}
+    BoldItalicFont = AlegreyaSans-BoldItalic.ttf]{AlegreyaSans-Regular.ttf}
 
   \babelfont{nsfwider}[%
     BoldFont = AlegreyaSans-Bold.ttf,%
@@ -316,74 +377,72 @@
     BoldItalicFont = AlegreyaSans-BoldItalic.ttf,%
     WordSpace={1.2,1.0,1.2},%
     Path=fonts/Alegreya/Alegreya Sans/,%
-    LetterSpace=1.2%
-  ]{AlegreyaSans-Regular.ttf}
-
-  \babelfont{sf}[%
-    Path=fonts/Barlow/Barlow Condensed/,%
-    BoldFont = BarlowCondensed-Bold.ttf,%
-    FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},%
-    FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},%
-    FontFace = {lt}{n}{BarlowCondensed-Light.ttf},%
-    FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},%
-    FontFace = {md}{n}{BarlowCondensed-Medium.ttf},%
-    FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},%
-    FontFace = {eb}{n}{BarlowCondensed-Black.ttf},%
-    FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},%
-    FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},%
-    FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},%
-    ItalicFont = BarlowCondensed-Italic.ttf,%
-    BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
-    WordSpace=1.1,%
-    LetterSpace=1,%
-    FakeStretch=1.02,%
-    Color=353132%
-  ]{BarlowCondensed-Regular.ttf}
-
-  \babelfont{sfwide}[%
-    Path=fonts/Barlow/Barlow Condensed/,%
-    BoldFont = BarlowCondensed-Bold.ttf,%
-    FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},%
-    FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},%
-    FontFace = {lt}{n}{BarlowCondensed-Light.ttf},%
-    FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},%
-    FontFace = {md}{n}{BarlowCondensed-Medium.ttf},%
-    FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},%
-    FontFace = {eb}{n}{BarlowCondensed-Black.ttf},%
-    FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},%
-    FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},%
-    FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},%
-    ItalicFont = BarlowCondensed-Italic.ttf,%
-    BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
-    WordSpace=2.0,%
-    LetterSpace=2.0,%
-    FakeStretch=1.02,%
-    Color=353132%
-  ]{BarlowCondensed-Regular.ttf}
-  
-  \babelfont{sfwider}[%
-    Path=fonts/Barlow/Barlow Condensed/,%
-    BoldFont = BarlowCondensed-Bold.ttf,%
-    FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},%
-    FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},%
-    FontFace = {lt}{n}{BarlowCondensed-Light.ttf},%
-    FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},%
-    FontFace = {md}{n}{BarlowCondensed-Medium.ttf},%
-    FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},%
-    FontFace = {eb}{n}{BarlowCondensed-Black.ttf},%
-    FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},%
-    FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},%
-    FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},%
-    ItalicFont = BarlowCondensed-Italic.ttf,%
-    BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
-    WordSpace=1.0,%
-    LetterSpace=5.0,%
-    FakeStretch=1.02,%
-    Color=353132%
-  ]{BarlowCondensed-Regular.ttf}
-  
+    LetterSpace=1.2]{AlegreyaSans-Regular.ttf}
     
   \if@altFonts
+    \babelfont{sf}[%
+      Path=fonts/Barlow/Barlow Condensed/,%
+      BoldFont = BarlowCondensed-Bold.ttf,%
+      FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},%
+      FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},%
+      FontFace = {lt}{n}{BarlowCondensed-Light.ttf},%
+      FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},%
+      FontFace = {md}{n}{../../Noto/Sans/NotoSans-CondensedBold.ttf},%
+      FontFace = {md}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
+      FontFace = {eb}{n}{BarlowCondensed-Black.ttf},%
+      FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},%
+      FontFace = {sb}{n}{../../Noto/Sans/NotoSans-CondensedBold.ttf},%
+      FontFace = {sb}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
+      ItalicFont = BarlowCondensed-Italic.ttf,%
+      BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
+      WordSpace=1.1,%
+      LetterSpace=1,%
+      FakeStretch=1.02,%
+      Color=353132%
+    ]{BarlowCondensed-Regular.ttf}
+    
+    \babelfont{sfwide}[%
+      Path=fonts/Barlow/Barlow Condensed/,%
+      BoldFont = BarlowCondensed-Bold.ttf,%
+      FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},%
+      FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},%
+      FontFace = {lt}{n}{BarlowCondensed-Light.ttf},%
+      FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},%
+      FontFace = {md}{n}{../../Noto/Sans/NotoSans-CondensedBold.ttf},%
+      FontFace = {md}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
+      FontFace = {eb}{n}{BarlowCondensed-Black.ttf},%
+      FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},%
+      FontFace = {sb}{n}{../../Noto/Sans/NotoSans-CondensedBold.ttf},%
+      FontFace = {sb}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
+      ItalicFont = BarlowCondensed-Italic.ttf,%
+      BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
+      WordSpace=2.0,%
+      LetterSpace=2.0,%
+      FakeStretch=1.02,%
+      Color=353132%
+    ]{BarlowCondensed-Regular.ttf}
+  
+    \babelfont{sfwider}[%
+      Path=fonts/Barlow/Barlow Condensed/,%
+      BoldFont = BarlowCondensed-Bold.ttf,%
+      FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},%
+      FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},%
+      FontFace = {lt}{n}{BarlowCondensed-Light.ttf},%
+      FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},%
+      FontFace = {md}{n}{../../Noto/Sans/NotoSans-CondensedBold.ttf},%
+      FontFace = {md}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
+      FontFace = {eb}{n}{BarlowCondensed-Black.ttf},%
+      FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},%
+      FontFace = {sb}{n}{../../Noto/Sans/NotoSans-CondensedBold.ttf},%
+      FontFace = {sb}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
+      ItalicFont = BarlowCondensed-Italic.ttf,%
+      BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
+      WordSpace=1.0,%
+      LetterSpace=5.0,%
+      FakeStretch=1.02,%
+      Color=353132%
+    ]{BarlowCondensed-Regular.ttf}
+  
     \babelfont{sfchap}[%
       Path=fonts/Noto/Sans/,%
       BoldFont = NotoSans-CondensedBold.ttf,%
@@ -471,6 +530,69 @@
     ]{NotoSans-Condensed.ttf}
     
   \else
+    \babelfont{sf}[%
+      Path=fonts/Barlow/Barlow Condensed/,%
+      BoldFont = BarlowCondensed-Bold.ttf,%
+      FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},%
+      FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},%
+      FontFace = {lt}{n}{BarlowCondensed-Light.ttf},%
+      FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},%
+      FontFace = {md}{n}{BarlowCondensed-Medium.ttf},%
+      FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},%
+      FontFace = {eb}{n}{BarlowCondensed-Black.ttf},%
+      FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},%
+      FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},%
+      FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},%
+      ItalicFont = BarlowCondensed-Italic.ttf,%
+      BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
+      WordSpace=1.1,%
+      LetterSpace=1,%
+      FakeStretch=1.02,%
+      Color=353132%
+    ]{BarlowCondensed-Regular.ttf}
+    
+    \babelfont{sfwide}[%
+      Path=fonts/Barlow/Barlow Condensed/,%
+      BoldFont = BarlowCondensed-Bold.ttf,%
+      FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},%
+      FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},%
+      FontFace = {lt}{n}{BarlowCondensed-Light.ttf},%
+      FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},%
+      FontFace = {md}{n}{BarlowCondensed-Medium.ttf},%
+      FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},%
+      FontFace = {eb}{n}{BarlowCondensed-Black.ttf},%
+      FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},%
+      FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},%
+      FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},%
+      ItalicFont = BarlowCondensed-Italic.ttf,%
+      BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
+      WordSpace=2.0,%
+      LetterSpace=2.0,%
+      FakeStretch=1.02,%
+      Color=353132%
+    ]{BarlowCondensed-Regular.ttf}
+  
+    \babelfont{sfwider}[%
+      Path=fonts/Barlow/Barlow Condensed/,%
+      BoldFont = BarlowCondensed-Bold.ttf,%
+      FontFace = {up}{n}{../../Barlow/Barlow/Barlow-Light.ttf},%
+      FontFace = {up}{it}{../../Barlow/Barlow/Barlow-LightItalic.ttf},%
+      FontFace = {lt}{n}{BarlowCondensed-Light.ttf},%
+      FontFace = {lt}{it}{BarlowCondensed-LightItalic.ttf},%
+      FontFace = {md}{n}{BarlowCondensed-Medium.ttf},%
+      FontFace = {md}{it}{BarlowCondensed-MediumItalic.ttf},%
+      FontFace = {eb}{n}{BarlowCondensed-Black.ttf},%
+      FontFace = {eb}{it}{BarlowCondensed-BlackItalic.ttf},%
+      FontFace = {sb}{n}{BarlowCondensed-SemiBold.ttf},%
+      FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},%
+      ItalicFont = BarlowCondensed-Italic.ttf,%
+      BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
+      WordSpace=1.0,%
+      LetterSpace=5.0,%
+      FakeStretch=1.02,%
+      Color=353132%
+    ]{BarlowCondensed-Regular.ttf}
+  
     \babelfont{sfchap}[%
       Path=fonts/Barlow/Barlow Condensed/,%
       BoldFont = BarlowCondensed-Bold.ttf,%
