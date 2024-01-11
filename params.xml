@@ -20,6 +20,5 @@
   <c:param name="epub-a11y-ace-path" value="/usr/local/lib/node_modules/@daisy/ace/bin/ace-puppeteer.js"/>
   <c:param name="epub-a11y-htmlreport" value="yes"/>
   <c:param name="epub-a11y-rule-family-name" value="Barrierefreiheit"/>
-  <c:param name="epub-a11y-severity-override" value="info"/>  
-  
+  <c:param name="epub-a11y-severity-override" value="info"/>
 </c:param-set>
