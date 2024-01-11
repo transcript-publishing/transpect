@@ -1,2 +1,2 @@
 # transpect
-custom configuration for transpect
+Custom configuration for transpect
