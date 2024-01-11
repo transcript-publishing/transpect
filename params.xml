@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <c:param-set xmlns:c="http://www.w3.org/ns/xproc-step">
+  
   <c:param name="work-regex" value="\d{5}"/>
   <c:param name="type-regex" value="[a-z]{3,4}"/>
   <c:param name="series-regex" value="[a-z]{3}"/>
@@ -21,4 +22,5 @@
   <c:param name="epub-a11y-htmlreport" value="yes"/>
   <c:param name="epub-a11y-rule-family-name" value="Barrierefreiheit"/>
   <c:param name="epub-a11y-severity-override" value="info"/>
+  
 </c:param-set>
