@@ -33,6 +33,7 @@
   <css:rule layout-type="para" native-name="ts_box_border_end" name="tsboxborderend"/>
   <css:rule layout-type="para" native-name="ts_box_grey_start" name="tsboxgreystart"/>
   <css:rule layout-type="para" native-name="ts_box_grey_end" name="tsboxgreyend"/>
+  <css:rule layout-type="para" native-name="ts_box_heading" name="tsboxheading"/>
   <css:rule layout-type="para" native-name="ts_table" name="tstable"/>
   <css:rule layout-type="para" native-name="ts_table_caption" name="tstablecaption"/>
   <css:rule layout-type="para" native-name="ts_table_source" name="tstablesource"/>
