@@ -33,7 +33,8 @@
   <css:rule layout-type="para" native-name="ts_quotation" name="tsdialogue"/>
   <css:rule layout-type="para" native-name="ts_footnote" name="tsfootnote"/>
   <css:rule layout-type="para" native-name="ts_ded" name="tsded"/>
-  <css:rule layout-type="para" native-name="ts_dedication" name="tsdedication"/>
+  <css:rule layout-type="para" native-name="ts_dedication" name="tsdedication"/> 
+  <css:rule layout-type="para" native-name="ts_box_heading" name="tsboxheading"/>
   <!--<css:rule layout-type="inline" native-name="footnote reference" name="Funotenzeichen"/>-->
   <css:rule layout-type="inline" native-name="ts_superscript" name="tssuperscript"/>
   <css:rule layout-type="inline" native-name="Hyperlink" name="Hyperlink"/>
