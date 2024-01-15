@@ -47,8 +47,13 @@
          be aware that it splits tables also if the hub is further processed to XML/HTML.-->
   </xsl:template>
 
-  <xsl:template match="processing-instruction()[some $t in tokenize(., '\s+') satisfies $t = '\doTableBreak']
-                       [$split-landscape-table-with-dotablebreak-pi]" mode="postprocess-hub" priority="3">
+  <xsl:template match="*[self::table|self::informaltable]
+                        [@role[contains(., 'tablerotated')] or preceding-sibling::node()[1]
+                                                                                       [self::processing-instruction()]
+                                                                                       [some $t in tokenize(., '\s+') satisfies $t = 'orientation=landscape']
+                        ]//processing-instruction()[some $t in tokenize(., '\s+') satisfies $t = '\doTableBreak']
+                                                   [$split-landscape-table-with-dotablebreak-pi]
+                       " mode="postprocess-hub" priority="3">
     <xsl:choose>
       <xsl:when test=". = '\doTableBreak'"/>
       <xsl:otherwise>
