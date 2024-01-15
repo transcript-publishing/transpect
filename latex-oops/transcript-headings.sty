@@ -227,9 +227,9 @@
   \tpSetProperty{toc-margin-right}{2em}% Begrenzt die Breite, auf der Titel und Untertitel erscheinen können. 2 em sind dann der Platz, auf dem die Seitenzahl »übersteht«.
   \tpSetProperty{toc-number-sep}{\enskip}%
   \tpSetProperty{toc-title-face}{\sbseries\sfchapwidefamily\normalsize}%
-  \tpSetProperty{toc-subtitle-face}{\normalfont\sfchapsubtocfamily\normalsize}%
-  \tpSetProperty{toc-author-face}{\normalfont\normalsize\sfchapfamily\itshape}%
-  \tpSetProperty{toc-page-face}{\normalfont\normalsize\sfchapwidefamily}%
+  \tpSetProperty{toc-subtitle-face}{\normalfont\sfchapsubtocfamily\normalsize\if@TLtwenty\upseries\fi}%
+  \tpSetProperty{toc-author-face}{\normalfont\normalsize\sfchapfamily\itshape\if@TLtwenty\upseries\fi}%
+  \tpSetProperty{toc-page-face}{\normalfont\normalsize\sfchapwidefamily\if@TLtwenty\upseries\fi}%
   \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-format}{%
@@ -255,7 +255,7 @@
       }%
       \strut\tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
+      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\tpUseProperty{toc-author-face}\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
       \tpUseProperty{toc-page-face}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
     }
@@ -352,7 +352,7 @@
       \tpUseProperty{title-face}%
       {\tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
        \tpUseComp{Title}}%
-      \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{13.7bp}{17.2bp}\selectfont\sfchapsubfamily\tpUseComp{Subtitle}}{}%
+      \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{13.7bp}{17.2bp}\selectfont\sfchapsubfamily\upseries\tpUseComp{Subtitle}}{}%
       \par\nobreak
     \egroup
     %% Linie

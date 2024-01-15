@@ -59,12 +59,12 @@
       \fi
     \fi
   }%
-  \def\@oddhead{\hfill{\small\sffamily\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
+  \def\@oddhead{\hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
       % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     }}%
   \def\@evenhead{%
     % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    {\small\sffamily\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
+    {\small\sffamily\if@TLtwenty\upseries\fi\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
   \let\@oddfoot\@empty
   \let\@evenfoot\@empty
   \def\partmark##1{%
@@ -106,12 +106,12 @@
     \def\numberline####1{####1\enskip}%
     \tp@chaptermark%
   }%
-  \def\@oddhead{\hfill{\small\sffamily\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
+  \def\@oddhead{\hfill{\small\sffamily\if@TLtwenty\ltseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
       % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     }}%
   \def\@evenhead{%
     % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    {\small\sffamily\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
+    {\small\sffamily\if@TLtwenty\ltseries\fi\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
   \let\@oddfoot\@empty
   \let\@evenfoot\@empty
   \def\partmark##1{%
