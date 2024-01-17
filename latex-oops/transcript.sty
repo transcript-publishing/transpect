@@ -295,6 +295,13 @@
   }%
 }
 
+\let\@selectNewLanguageRules\selectlanguage
+\gdef\selectlanguage#1{%
+  \protect\@selectNewLanguageRules{#1}%
+  \ifcsname tp@languageRules@\languagename\endcsname
+    \csname tp@languageRules@\languagename\endcsname
+  \fi
+}%
 
 \def\tpNewTocPage{\addtocontents{toc}{\protect\newpage}}
 
