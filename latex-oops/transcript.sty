@@ -33,9 +33,11 @@
 \gdef\ts@str@layout@xtx{xtx}
 
 % Pfade sind nach Priorität geordnet und werden von TeX derart durchsucht.
-\graphicspath{{logos/cc/}{logos/}{images/}}
+% Dateiendungen können weggelassen werden und werden nach TeX-interner Prioritätenliste (\Gin@extensions) gewählt:
+%     .pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF
+\graphicspath{{logos/cc/}{logos/}{images/}{series/}}
 
-%% Alternative Fonts, zuschaltbar im Falle fehlender Zeichen in den Standardfonts.
+%% Alternative Schriften; zuschaltbar im Falle fehlender Zeichen in den Standardschriften.
 \newif\if@altFonts \@altFontsfalse
 \DeclareOptionX{altFonts}{\@altFontstrue}
 
