@@ -1,6 +1,12 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-headings}[2021/08/18 transcript]\relax
 
+% Umschalter für alternative Kolumnentitel (Ticket 16094).
+\newif\if@altRunTitles \@altRunTitlesfalse
+\def\altRunTitles{%
+  \@altRunTitlestrue%
+  \pagestyle{altRunTitles}%
+}
 
 \def\mydotfill{%
   \nobreak\leaders\hbox{$\m@th

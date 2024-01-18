@@ -123,6 +123,32 @@
 }
 
 
+\def\ps@altRunTitles{% Ticket 16094. Pagestyle identisch mit Backmatter, aber links wird in jedem Fall der Buchtitel eingetragen.
+  \def\left@mark{%
+    \def\numberline####1{####1\enskip}%
+    \tpRunBookTitle%
+  }%
+  \def\right@mark{%
+    \def\numberline####1{####1\enskip}%
+    \tp@chaptermark%
+  }%
+  \def\@oddhead{\hfill{\small\sffamily\if@TLtwenty\ltseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
+      % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
+    }}%
+  \def\@evenhead{%
+    % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
+    {\small\sffamily\if@TLtwenty\ltseries\fi\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
+  \let\@oddfoot\@empty
+  \let\@evenfoot\@empty
+  \def\partmark##1{%
+    \protected@xdef\tp@partmark{##1}%
+  }%
+  \def\chaptermark##1{%
+    \protected@xdef\tp@chaptermark{##1}%
+  }%
+}
+
+
 \def\ps@articlehead{%
   \ps@headings
   \def\@oddhead{\smash{\vtop{\hfill\footnotesize\nsffamily\tpNamespace{titlepage}\tpUseComp{JournalName}\space\tpUseComp{Year}\enskip\tpUseComp{Volume}/\tpUseComp{Issue}\ifx\@articleLicenceLogo\relax\else\enskip\includegraphics[height=7bp]{\@articleLicenceLogo}\fi\@@par\hfill \@articleDOI}}}%
