@@ -825,7 +825,11 @@
       \tpIfComp{TocNumber}{%
         \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdimb\hb@xt@\@tempdimb{\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}\hss}%
       }{%
-        \leftskip\@tempdima%
+        \ifdim\@tempdima=0\p@
+          \leftskip1em% Ticket 16195.
+        \else
+          \leftskip\@tempdima%
+        \fi
       }%
       \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
       \advance\rightskip\wd\@tempboxa%
