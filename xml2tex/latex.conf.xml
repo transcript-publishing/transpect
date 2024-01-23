@@ -842,6 +842,13 @@
   </xsl:template>
 
 
+  <xsl:template match="dbk:keywordset[@role='titlepage']/dbk:keyword[@role = 'Verlagsimprint']/dbk:phrase[@css:font-weight = 'bold' or @role = ('cbold', 'fett', 'bold')]" mode="xml2tex strip-meta" priority="490">
+    <!--https://redmine.le-tex.de/issues/16148#note-5-->
+    <xsl:text>\textsb{</xsl:text>
+      <xsl:apply-templates mode="#current"/>
+    <xsl:text>}</xsl:text>
+  </xsl:template>
+
   <xsl:template match="dbk:keywordset[@role='titlepage']
                                      [dbk:keyword[@role = ('Qualifikationsnachweis')][normalize-space()]]/dbk:keyword
                                      [@role = ('Gutachter')][normalize-space()]" mode="strip-meta" priority="4">
