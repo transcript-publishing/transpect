@@ -209,18 +209,31 @@
 
 \gdef\tp@chaptermark{UNKNOWN CHAPTERMARK}
 \global\let\tp@latestPartmark\relax% latestPartmark wird im part gespeichert und in Anthologien bei chapter als partmark gesetzt.
+\global\let\tp@authormark\relax
 
 \tpAddToHook[heading]{before-print-hook-chapter}{%
-  \ifcollection
-    \global\let\tp@authormark\@empty
-  \fi
-  \tpIfComp{RunAuthorNameList}
-    {\tpGStoreComp\tp@authormark{RunAuthorNameList}}
-    {\tpIfCompOverride{AuthorNameList}
-      {\tpGStoreComp\tp@authormark{AuthorNameList}}
-      {\tpCompGDef\tp@authormark{tpAuthor}{author-list-print-format}}%
-    }%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Wird zu zeitig ausgewertet. RunAuthorNameList landet auf der Seite vor dem Kapitel, zu dem der Autorennamen eigentlich gehört. %
+  % Zurück zum vorherigen Zustand (\global\let\tp@authormark\relax).                                                               %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %\ifcollection
+  %  \global\let\tp@authormark\@empty
+  %\fi
+  %\tpIfComp{RunAuthorNameList}{%
+  %  \tpGStoreComp\tp@authormark{RunAuthorNameList}%
+  %}{%
+  %  \tpIfCompOverride{AuthorNameList}{%
+  %    \tpGStoreComp\tp@authormark{AuthorNameList}%
+  %  }{%
+  %    \tpCompGDef\tp@authormark{tpAuthor}{author-list-print-format}%
+  %  }%
+  %}%
 }
+
+
+%%%%%%%%%%%%
+% Chapter. %
+%%%%%%%%%%%%
 
 \tpDeclareHeading{0}{chapter}{%
   % Ticket 13717.
@@ -327,9 +340,9 @@
   \tpSetProperty{heading-block}{%
     \gdef\tp@currentHeading{chapter}
     \ifcollection
-        \ifx\tp@latestPartmark\relax\else
-          \protected@xdef\tp@partmark{\tp@latestPartmark}%
-        \fi
+      \ifx\tp@latestPartmark\relax\else
+        \protected@xdef\tp@partmark{\tp@latestPartmark}%
+      \fi
     \fi
     \tpIfComp{RunNumber}{%
       \tpGStoreComp\tp@chapternumber{RunNumber}%
@@ -344,6 +357,11 @@
       \tpGStoreComp\tp@chaptermark{RunTitle}%
     }{%
       \tpGStoreComp\tp@chaptermark{Title}%
+    }%
+    \tpIfComp{RunAuthorNameList}{%
+      \tpGStoreComp\tp@authormark{RunAuthorNameList}%
+    }{%
+      \global\let\tp@authormark\relax%
     }%
     %% Titel
     \ifjournal
@@ -392,6 +410,11 @@
 % Für Zeitschriften.
 \global\newcount\@currAffilCnt \global\@currAffilCnt=1
 \global\newbox\@articlefooterbox%
+
+
+%%%%%%%%%%%%%%%%%
+% Contribution. %
+%%%%%%%%%%%%%%%%%
 
 \tpDeclareHeading[chapter]{0}{contribution}{%
   \tpSetProperty{extended}{true}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
@@ -531,6 +554,107 @@
   }%
 }
 
+\def\tp@make@run{%
+  \tp@check@empty{heading}{Title}{Run}%
+  \tp@check@empty{heading}{Number}{Run}%
+  \tp@check@author{Run}%
+  \tp@check@empty{heading}{Subtitle}{Run}%
+  \tpUseProperty{running-extra}%
+}
+
+
+%%%%%%%%%%%
+% Review. %
+%%%%%%%%%%%
+
+\tpDeclareHeading[chapter]{0}{review}{%
+  % IHV-Überschrift der Rezension unterscheidet sich von chapter darin, dass kein Untertitel ausgegeben wird.
+  \tpSetProperty{toc-format}{%
+    \vtop{\strut%
+      \tpUseProperty{toc-title-face}%
+      \tpIfComp{TocNumber}{%
+        \@tempdima=\csname tp-heading-toc-number-0-maxwd\endcsname%
+        \@tempdimb=0\p@\relax
+        \expandafter\ifx\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+        \else%
+          \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
+        \fi%
+        \ifdim\@tempdima<\@tempdimb\relax%
+          \@tempdima=\@tempdimb%
+        \fi%
+        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+      }{%
+        \leftskip\z@%
+      }%
+      \strut\tpTocLink{\tpUseComp{TocTitle}}%
+      %\tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
+      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
+      \tpUseProperty{toc-number-face}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+      \strut%
+    }
+  }%
+
+  \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
+  \tpSetProperty{subtitle-face}{\normalfont\rmfamily\normalsize}%
+  
+  \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
+  
+  %\tpSetProperty{running-heading}{}
+  
+  \tpSetProperty{running-extra}{%
+    \global\let\tp@partmark\relax%
+    \global\let\tp@chapternumber\relax%
+    \global\let\tp@authormark\relax
+    \tpIfComp{RunTitle}{%
+      \tpGStoreComp\tp@chaptermark{RunTitle}%
+    }{
+      \tpGStoreComp\tp@chaptermark{Title}%
+    }%
+    \ifx\ts@journal@series\ts@str@journal@zig
+      \tpIfComp{RunAuthorNameList}{%
+        \tpGStoreComp\tp@authormark{RunAuthorNameList}%
+      }{%
+        \global\let\tp@authormark\relax%
+      }%
+    \fi
+  }
+  
+  \tpSetProperty{heading-block}{%
+    \clearpage
+    \thispagestyle{empty}
+    \gdef\tp@currentHeading{chapter}%
+    \savenotes
+    \bgroup
+      \if@twocolumn
+        \begin{table*}[t]%
+      \fi
+        \normalfont
+        \interlinepenalty\@M
+        \tpUseProperty{title-face}%
+        \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
+        \tpUseComp{Title}\par\nopagebreak%
+        \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
+        \tpIfComp{DOI}{%
+          \vskip\baselineskip%
+          \tpUseComp{DOI}%
+        }{}%
+      \if@twocolumn
+        \vspace{1\baselineskip}%
+        \end{table*}%
+      \fi%
+    \egroup
+    \nopagebreak
+    \spewnotes
+  }%
+  
+  \tpSetProperty{after-heading-block}{\nopagebreak}
+  \tpSetProperty{after-skip}{3\baselineskip}%
+}
+
+
+%%%%%%%%%%%%
+% Section. %
+%%%%%%%%%%%%
 
 \tpDeclareHeading{1}{section}{%
   % Ticket 13717.
@@ -645,90 +769,6 @@
   \tpSetProperty{after-skip}{12.8bp}%
 }
 
-\def\tp@make@run{%
-  \tp@check@empty{heading}{Title}{Run}%
-  \tp@check@empty{heading}{Number}{Run}%
-  \tp@check@author{Run}%
-  \tp@check@empty{heading}{Subtitle}{Run}%
-  \tpUseProperty{running-extra}%
-}
-
-\tpDeclareHeading[chapter]{0}{review}{%
-  % IHV-Überschrift der Rezension unterscheidet sich von chapter darin, dass kein Untertitel ausgegeben wird.
-  \tpSetProperty{toc-format}{%
-    \vtop{\strut%
-      \tpUseProperty{toc-title-face}%
-      \tpIfComp{TocNumber}{%
-        \@tempdima=\csname tp-heading-toc-number-0-maxwd\endcsname%
-        \@tempdimb=0\p@\relax
-        \expandafter\ifx\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
-        \else%
-          \@tempdimb=\csname tp-heading-toc-number-1-maxwd\endcsname\relax%
-        \fi%
-        \ifdim\@tempdima<\@tempdimb\relax%
-          \@tempdima=\@tempdimb%
-        \fi%
-        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
-      }{%
-        \leftskip\z@%
-      }%
-      \strut\tpTocLink{\tpUseComp{TocTitle}}%
-      %\tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
-      \tpUseProperty{toc-number-face}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
-      \strut%
-    }
-  }%
-
-  \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
-  \tpSetProperty{subtitle-face}{\normalfont\rmfamily\normalsize}%
-  
-  \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
-  
-  %\tpSetProperty{running-heading}{}
-  
-  \tpSetProperty{running-extra}{%
-    \global\let\tp@partmark\relax%
-    \global\let\tp@chapternumber\relax%
-    \global\let\tp@authormark\relax
-    \tpIfComp{RunTitle}{%
-      \tpGStoreComp\tp@chaptermark{RunTitle}%
-    }{
-      \tpGStoreComp\tp@chaptermark{Title}%
-    }%
-  }
-  
-  \tpSetProperty{heading-block}{%
-    \clearpage
-    \thispagestyle{empty}
-    \gdef\tp@currentHeading{chapter}%
-    \savenotes
-    \bgroup
-      \if@twocolumn
-        \begin{table*}[t]%
-      \fi
-        \normalfont
-        \interlinepenalty\@M
-        \tpUseProperty{title-face}%
-        \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
-        \tpUseComp{Title}\par\nopagebreak%
-        \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
-        \tpIfComp{DOI}{%
-          \vskip\baselineskip%
-          \tpUseComp{DOI}%
-        }{}%
-      \if@twocolumn
-        \vspace{1\baselineskip}%
-        \end{table*}%
-      \fi%
-    \egroup
-    \nopagebreak
-    \spewnotes
-  }%
-  
-  \tpSetProperty{after-heading-block}{\nopagebreak}
-  \tpSetProperty{after-skip}{3\baselineskip}%
-}
 
 \tpDeclareHeading[section]{2}{subsection}{%
   % Ticket 13717.

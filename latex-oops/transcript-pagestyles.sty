@@ -126,7 +126,11 @@
 \def\ps@altRunTitles{% Ticket 16094. Pagestyle identisch mit Backmatter, aber links wird in jedem Fall der Buchtitel eingetragen.
   \def\left@mark{%
     \def\numberline####1{####1\enskip}%
-    \tpRunBookTitle%
+    \ifx\tp@authormark\relax
+      \tpRunBookTitle%
+    \else
+      \tp@authormark
+    \fi%
   }%
   \def\right@mark{%
     \def\numberline####1{####1\enskip}%
