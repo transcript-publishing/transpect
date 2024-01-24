@@ -361,8 +361,12 @@
     \tpIfComp{RunAuthorNameList}{%
       \tpGStoreComp\tp@authormark{RunAuthorNameList}%
     }{%
-      \global\let\tp@authormark\relax%
-    }%
+      \tpIfCompOverride{AuthorNameList}{%
+        \tpGStoreComp\tp@authormark{AuthorNameList}%
+      }{%
+        \tpCompGDef\tp@authormark{tpAuthor}{author-list-print-format}%
+      }%
+    }%    
     %% Titel
     \ifjournal
     \else
@@ -614,7 +618,11 @@
       \tpIfComp{RunAuthorNameList}{%
         \tpGStoreComp\tp@authormark{RunAuthorNameList}%
       }{%
-        \global\let\tp@authormark\relax%
+        \tpIfCompOverride{AuthorNameList}{%
+          \tpGStoreComp\tp@authormark{AuthorNameList}%
+        }{%
+          \tpCompGDef\tp@authormark{tpAuthor}{author-list-print-format}%
+        }%
       }%
     \fi
   }
