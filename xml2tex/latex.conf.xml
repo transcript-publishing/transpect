@@ -262,6 +262,7 @@
         <xsl:apply-templates select="if(count($authors/*) gt 1) then $author-info/*[$pos] else $author-info" mode="#current"/>
         <xsl:text>}&#xa;</xsl:text>
       </xsl:if>
+      <xsl:value-of select="concat('&#xa;\tpPDFInfoName{', xml2tex:meta-remove-links-etc(.), '}')"/>
       <xsl:text>\end{tpAuthor}&#xa;</xsl:text>
     </xsl:for-each>
     <xsl:for-each select="if(count($editors/*) gt 1) then $editors/* else $editors">
