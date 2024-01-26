@@ -64,7 +64,7 @@
     <!-- use col-style para for runtitle. if it doesn't exist and heading contains footnotes or linebreaks:
       discard those and use as column title. otherwise '/'  separated list of authors, https://redmine.le-tex.de/issues/16194 -->
     <!-- not reviewer and not editorial/gig-->
-    <xsl:if test="not(dbk:title[contains(@role, 'review')]) and not(dbk:title[matches(., '(GiG\p{Zs}+im\p{Zs}+Gespräch|^Editorial|^Autorinnen\p{Zs}+und\p{Zs}+Autoren)', 'i')])">
+    <xsl:if test="not(dbk:title[contains(@role, 'review')]) and not(dbk:title[matches(., '(^Editorial|^Autorinnen\p{Zs}+und\p{Zs}+Autoren)', 'i')])">
       <xsl:call-template name="run-authors">
         <xsl:with-param name="authors" select="if (dbk:titleabbrev[matches(@role, $col-author-style)])
                                                then dbk:titleabbrev[matches(@role, $col-author-style)] 
