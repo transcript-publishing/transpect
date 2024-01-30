@@ -33,12 +33,17 @@
     <xsl:if test="exists($authors[normalize-space()])">
       <rule name="tpRunAuthorNameList" type="cmd" break-after="0" break-before="1">
       <xsl:variable name="content" as="xs:string+">
-        <xsl:apply-templates select="$authors/node()" mode="#current">
-          <xsl:with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
-          <xsl:with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
-          <xsl:with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
-          <xsl:with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
-        </xsl:apply-templates>
+        <xsl:for-each select="$authors">
+          <xsl:variable name="single-author">
+            <xsl:apply-templates select="node()" mode="#current">
+            <xsl:with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+            <xsl:with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+            <xsl:with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+            <xsl:with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+          </xsl:apply-templates>
+          </xsl:variable>
+          <xsl:sequence select="string-join($single-author)"/>
+        </xsl:for-each>
       </xsl:variable>
       <xsl:variable name="actual-authors" as="element(*)">
         <tmp>
@@ -55,7 +60,7 @@
 <!--      <xsl:message select="'#####', $relevant-authors, '-', $opening-brackets, '-', $closing-brackets, '=', $missing-closing-brackets "/>
       <xsl:message select="'~~~~', concat(string-join($relevant-authors, ' | '), ' u.a.'[count($actual-authors/*) gt 3], string-join(for $count in (1 to $missing-closing-brackets) return '}', ''))"/>-->
 <!--      <param select="concat(string-join($relevant-authors, '/'), ' u.a.'[count($actual-authors/*) gt 3], string-join(for $count in (1 to $missing-closing-brackets) return '}', ''))"/>-->
-       <param select="concat(string-join($relevant-authors, '/'), string-join(for $count in (1 to $missing-closing-brackets) return '}', ''))"/>
+       <param select="concat(string-join($relevant-authors[normalize-space()], '/'), string-join(for $count in (1 to $missing-closing-brackets) return '}', ''))"/>
       </rule>
     </xsl:if>
   </template>
