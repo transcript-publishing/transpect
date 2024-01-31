@@ -446,25 +446,36 @@
   
   % Voherblock, 15194.  
   \tpSetProperty{affiliation-format}{}%
-  \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
+  \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation} AFTER AFFILIATION}
   \tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
   \tpSetProperty{author-contact-format}{%Format of a single author's contact information
-    \tpIfComp{AffilRef}{%
-      \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{AffilRef}}{affil-block-format});\par%
-      \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
-      \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
+    \ifx\ts@journal@series\ts@str@journal@zig
+      \tpIfComp{AffilRef}{%
+      \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{AffilRef}}{affil-block-format})%
     }{%
       \tpUseComp{FullName}%
       \tpIfComp{Affiliation}{%
         \space(\tpUseComp{Affiliation})%
       }{}%
-      ;\par
-      \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
-      \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
     }%
+    \else
+      \tpIfComp{AffilRef}{%
+        \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{AffilRef}}{affil-block-format});\par%
+        \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
+        \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
+      }{%
+        \tpUseComp{FullName}%
+        \tpIfComp{Affiliation}{%
+          \space(\tpUseComp{Affiliation})%
+        }{}%
+        ;\par
+        \tpIfComp{Email}{\tpUseComp{Email};\par}{}%
+        \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
+      }%
+    \fi
   }
 
-  \tpSetProperty{counted-name-sep}{,\space}
+  \tpSetProperty{counted-name-sep}{~/\space}
 
   \tpSetProperty{before-heading}{%
     \cleardoublepage%
@@ -494,7 +505,32 @@
     \global\setbox\@articlefooterbox = \vbox{%
       \parindent\z@%
       \tpUseProperty{affil-block-face}%
+      %
+      % Ausgabe der Autoren mit Instituts-/Unternehmenszugehörigkeit.
+      \tpSetProperty{author-contact-format}{%Format of a single author's contact information
+        \tpIfComp{AffilRef}{%
+          \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{AffilRef}}{affil-block-format})%
+        }{%
+          \tpUseComp{FullName}%
+          \tpIfComp{Affiliation}{%
+            \space(\tpUseComp{Affiliation})%
+          }{}%
+        }%
+      }%
+      \tpSetProperty{counted-name-sep}{;\space}
       \tpUseComp{AuthorContactBlock}\par
+      %
+      % Ausgabe der E-Mail-Adressen der Autoren.
+      \tpSetProperty{author-contact-format}{%Format of a single author's contact information
+        \tpIfComp{Email}{\tpUseComp{Email}}{}%
+      }%
+      \tpUseComp{AuthorContactBlock};
+      % Ausgabe der ORCIDs der Autoren.
+      \tpSetProperty{author-contact-format}{%Format of a single author's contact information
+        \tpIfComp{ORCID}{\tpUseComp{ORCID}}{}%
+      }%
+      \tpUseComp{AuthorContactBlock}\par
+      %
       \tpIfComp{LicenceLogo}{%
         \ifnum\tpAuthorCnt>\z@%
           \includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space%
