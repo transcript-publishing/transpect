@@ -19,16 +19,25 @@
     \else
       % Anthologien.
       \ifcollection
-        % Mit Respektseiten.
-        \ifx\has@parts\relax
-          \ifcsname tp@partmark\endcsname
-            \tp@partmark
-          \else
+        \ifx\ts@journal@series\ts@str@journal@zig
+          % Bei ZiG die Abschnitte »Rezensionen« sowie »Autorinnen und Autoren« betreffend.
+          \ifx\tp@authormark\relax
             \tpRunBookTitle
+          \else
+            \tp@authormark
           \fi%
-        % Ohne Respektseiten.
         \else
-          \tpRunBookTitle%
+          % Mit Respektseiten.
+          \ifx\has@parts\relax
+            \ifcsname tp@partmark\endcsname
+              \tp@partmark
+            \else
+              \tpRunBookTitle
+            \fi%
+          % Ohne Respektseiten.
+          \else
+            \tpRunBookTitle%
+          \fi
         \fi
       % Monographien.
       \else
@@ -46,7 +55,10 @@
       \ifcollection
         \ifx\tp@authormark\relax
         \else
-          \tp@authormark:\space%
+          \ifx\ts@journal@series\ts@str@journal@zig
+          \else
+            \tp@authormark:\space%
+          \fi
         \fi%
         \tp@chaptermark%
       % Monographien.

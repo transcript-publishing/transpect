@@ -366,7 +366,10 @@
       }{%
         \tpCompGDef\tp@authormark{tpAuthor}{author-list-print-format}%
       }%
-    }%    
+    }%
+    \ifx\ts@journal@series\ts@str@journal@zig
+      \protected@xdef\tp@partmark{\tp@authormark}%
+    \fi
     %% Titel
     \ifjournal
     \else
