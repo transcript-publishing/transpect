@@ -446,7 +446,7 @@
   
   % Voherblock, 15194.  
   \tpSetProperty{affiliation-format}{}%
-  \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation} AFTER AFFILIATION}
+  \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
   \tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
   \tpSetProperty{author-contact-format}{%Format of a single author's contact information
     \ifx\ts@journal@series\ts@str@journal@zig
@@ -475,7 +475,7 @@
     \fi
   }
 
-  \tpSetProperty{counted-name-sep}{~/\space}
+  \tpSetProperty{counted-name-sep}{/}
 
   \tpSetProperty{before-heading}{%
     \cleardoublepage%
