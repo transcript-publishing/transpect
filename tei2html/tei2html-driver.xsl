@@ -891,4 +891,11 @@
     <!-- https://redmine.le-tex.de/issues/15889-->
   </xsl:template>
 
+  <xsl:function name="tei2html:main-sec-name" as="xs:string">
+    <xsl:param name="context" as="element()"/>
+<!--    <xsl:sequence select="if (xs:double($xhtml-version) ge 5 
+                              and $context[self::div[@type = $default-structural-containers]|self::divGen]) then 'section' else 'div'"/>-->
+        <xsl:sequence select="'div'"/>
+  </xsl:function>
+  
 </xsl:stylesheet>
