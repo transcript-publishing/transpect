@@ -293,6 +293,14 @@
       <xsl:attribute name="role" select="string-join((@role, 'render-inline-as-display-equation'), ' ')"/>
       <xsl:apply-templates select="@* except @role, node()" mode="#current"/>
     </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="div[@role= 'tsboxquotation']" mode="hub:clean-hub">
+    <!--  https://redmine.le-tex.de/issues/16263-->
+    <blockquote>
+      <xsl:attribute name="role" select="'tsquotation'"/>
+      <xsl:apply-templates select="@* except @role, node()" mode="#current"/>
+    </blockquote>
   </xsl:template>  
   
 </xsl:stylesheet>
