@@ -9,6 +9,7 @@
 \usepackage{multirow}
 
 \usepackage{htmltabs}
+\AtBeginEnvironment{htmltab}{\def\tpBreak{\htCellBreak}}
 \expandafter\def\csname ht@font-family@sans-serif\endcsname{\ht@apply@prop{internal-font-family}{\nsffamily}}
 
 %% default-Klasse für Tabellen:
@@ -71,7 +72,6 @@
 \def\tp@str@center{center}
 %% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
 \tpAddToDefault{float}{%
-  \def\tpBreak{\hfill\break}%
   \tpSetProperty{number-face}{}% Format of number, additional to caption-format
   \tpSetProperty{number-sep}{:\space\ignorespaces}
   \tpSetProperty{caption-sep-top}{3mm}%
