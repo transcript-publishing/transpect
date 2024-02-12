@@ -137,6 +137,7 @@
                                    $metadata[@key = 'Lizenzlink'],
                                    $metadata[@key = 'Lizenztext'],
                                    $metadata[@key = 'Copyright'],
+                                   $metadata[@key = 'Umschlagkonzept'],
                                    $metadata[@key = 'Umschlaggestaltung'],
                                    $metadata[@key = 'Umschlagcredit'], 
                                    $metadata[@key = 'Lektorat'],
