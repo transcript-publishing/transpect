@@ -1,0 +1,32 @@
+<?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<set xmlns="http://transpect.io/xml2tex" 
+     xmlns:xml2tex="http://transpect.io/xml2tex" 
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  
+  <import href="../../xml2tex/latex.conf.xml"/>
+
+  <xsl:param name="cocotex" as="xs:boolean" select="true()"/>
+
+  
+  
+  
+  <xsl:template name="xml2tex:add-publicationtype-specific-meta">
+   <xsl:if test="not($license-name[normalize-space()](:already applied in main template then:)) 
+                 and 
+                 $open-access">
+     <xsl:value-of select="concat('&#xa;\tpLicenceName{',
+                                  replace((//dbk:chapter[dbk:info/dbk:biblioset/dbk:legalnotice[matches(., 'Creative\p{Zs}+Commons', 'i')]])[1]/
+                                            dbk:info/dbk:biblioset/dbk:legalnotice[matches(., 'Creative\p{Zs}+Commons', 'i')][1], 
+                                          '^.*(Creative\p{Zs}+Commons.+?\)).*$', '$1'),
+                                  '}')"/>
+    </xsl:if> 
+   <xsl:sequence select="'&#xa;\tpSeries{\includegraphics[width=\hsize]{logos/series/REIHENLOGO_SOZ_JES.png}}&#xa;',
+                         xml2tex:meta2tex($prices, (), 'tpPrices'),
+                         xml2tex:meta2tex($pub-cycle, (), 'tpPubCycle '),
+                         xml2tex:meta2tex($memberlist, (), 'tpMemberList ')"/>
+  </xsl:template>
+  
+  
+
+</set>
