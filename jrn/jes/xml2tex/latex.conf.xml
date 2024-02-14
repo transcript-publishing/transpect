@@ -21,7 +21,7 @@
                                           '^.*(Creative\p{Zs}+Commons.+?\)).*$', '$1'),
                                   '}')"/>
     </xsl:if> 
-   <xsl:sequence select="'&#xa;\tpSeries{\includegraphics[width=\hsize]{logos/series/REIHENLOGO_SOZ_JES.png}}&#xa;',
+   <xsl:sequence select="'&#xa;\tpSeries{\includegraphics{logos/series/REIHENLOGO_SOZ_JES.pdf}}&#xa;',
                          xml2tex:meta2tex($prices, (), 'tpPrices'),
                          xml2tex:meta2tex($pub-cycle, (), 'tpPubCycle '),
                          xml2tex:meta2tex($memberlist, (), 'tpMemberList ')"/>
