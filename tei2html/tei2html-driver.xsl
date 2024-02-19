@@ -52,8 +52,8 @@
         <xsl:call-template name="imprint"/>
         <xsl:call-template name="dedication"/>
         <xsl:call-template name="toc"/>
-        <xsl:if test="not(//head[matches(@rend, $list-of-figures-regex)])"><xsl:call-template name="lof"/></xsl:if>
-        <xsl:if test="not(//head[matches(@rend, $list-of-tables-regex)])"><xsl:call-template name="lot"/></xsl:if>
+    <!--  <xsl:if test="not(//head[matches(@rend, $list-of-figures-regex)])"><xsl:call-template name="lof"/></xsl:if>
+        <xsl:if test="not(//head[matches(@rend, $list-of-tables-regex)])"><xsl:call-template name="lot"/></xsl:if>--><!-- https://redmine.le-tex.de/issues/16319 -->
         <xsl:call-template name="html-body"/>
       </body>
     </html>
