@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:css="http://www.w3.org/1996/css"
+  xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns="http://docbook.org/ns/docbook"
   version="2.0" exclude-result-prefixes="#all">
@@ -20,7 +21,7 @@
    <xsl:output-character character="&#159;" string=" "/>
   </xsl:character-map>-->
 
-   <xsl:template match="*:product_export" priority="15">
+  <xsl:template match="*:product_export" priority="15">
     <keywordset role="titlepage">
       <xsl:apply-templates select="*:product/*" mode="klopotek-to-keyword"/>
     </keywordset>
@@ -38,7 +39,7 @@
     </keyword>
   </xsl:template>
   
-  <xsl:template match="array">
+  <xsl:template match="array | cx:documents">
     <xsl:apply-templates select="*"/>
   </xsl:template>
   
