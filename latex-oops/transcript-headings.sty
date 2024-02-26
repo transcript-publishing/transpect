@@ -300,6 +300,7 @@
   }
 
   \tpSetProperty{title-face}{\ifx\ts@layout@type\ts@str@layout@mdw\huge\else\Huge\fi\sbseries\sfchapfamily}%
+  \tpSetProperty{subtitle-face}{\normalfont\fontsize{13.7bp}{17.2bp}\selectfont\sfchapsubfamily\upseries}
   
   \tpSetProperty{quote-block-format}{%
     \parskip\baselineskip
@@ -381,9 +382,12 @@
       \raggedright
       \tpIfComp{Number}{\leftskip-\tpUseProperty{indent}}{}%
       \tpUseProperty{title-face}%
-      {\tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
-       \tpUseComp{Title}}%
-      \tpIfComp{Subtitle}{\par\vskip1.1bp\normalfont\fontsize{13.7bp}{17.2bp}\selectfont\sfchapsubfamily\upseries\tpUseComp{Subtitle}}{}%
+      {%
+        \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
+        \tpUseComp{Title}%
+      }%
+      \tpUseProperty{subtitle-face}%
+      \tpIfComp{Subtitle}{\par\vskip1.1bp\tpUseComp{Subtitle}}{}%
       \par\nobreak
     \egroup
     %% Linie
