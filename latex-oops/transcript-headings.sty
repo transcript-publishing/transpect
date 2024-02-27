@@ -386,8 +386,11 @@
         \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
         \tpUseComp{Title}%
       }%
-      \tpUseProperty{subtitle-face}%
-      \tpIfComp{Subtitle}{\par\vskip1.1bp\tpUseComp{Subtitle}}{}%
+      \tpIfComp{Subtitle}{%
+        \par\vskip1.1bp%
+        \tpUseProperty{subtitle-face}%
+        \tpUseComp{Subtitle}%
+      }{}%
       \par\nobreak
     \egroup
     %% Linie
