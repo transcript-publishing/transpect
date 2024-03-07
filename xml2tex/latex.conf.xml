@@ -902,4 +902,31 @@
     <xsl:next-match/>
   </xsl:template>-->
   
+    <!-- medieval font (junicode) -->
+  <!-- use following regexes in your adaptations if medieval characters appear. https://redmine.le-tex.de/issues/16379 -->
+  <regex regex="([&#xA722;-&#xA725;]+)">
+    <rule name="mdvfont" type="cmd">
+      <param regex-group="1"/>
+    </rule>
+  </regex>
+  
+  <!-- medieval combining characters (junicode) -->
+  
+<!--  <regex regex="(\p{L}[&#x2b0;-&#x2b8;&#x2c0;&#x2c1;&#x2e0;-&#x2ff;&#x318;-&#x325;&#x329;-&#x341;&#x1d9c;&#x1da0;&#x1dbb;&#x1dcd;-&#x1de6;&#x20dd;&#x2c7d;]+)">
+    <rule name="mdvfont" type="cmd">
+      <param regex-group="1"/>
+    </rule>
+  </regex>-->
+  
+  <template context="dbk:phrase[@role = 'tsregular']
+                               [@css:font-style eq 'normal']
+                               [ancestor::*[self::dbk:para[@role = ('tstranstitle', 'tsabstract')]]]
+                               [not(exists(ancestor-or-self::*[@css:font-style = 'italic'][1]))
+                               and not((some $role in ancestor-or-self::*[@role]/@role
+                               satisfies exists(key('style', @role)[@css:font-style eq 'italic'])))]">
+    <xsl:text>\textup{</xsl:text>
+    <xsl:next-match/>
+    <xsl:text>}</xsl:text>
+  </template>
+  
 </set>
