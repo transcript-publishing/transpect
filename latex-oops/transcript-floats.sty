@@ -9,7 +9,6 @@
 \usepackage{multirow}
 
 \usepackage{htmltabs}
-\AtBeginEnvironment{htmltab}{\def\tpBreak{\htCellBreak}}
 \expandafter\def\csname ht@font-family@sans-serif\endcsname{\ht@apply@prop{internal-font-family}{\nsffamily}}
 
 %% default-Klasse für Tabellen:
@@ -198,6 +197,15 @@
 
 %% gilt nur für Tabellen:
 \tpDeclareFloat{tpTable}{table}{lot}{%
+  \def\tpBreak{%
+    \GetCellProp{@tempa}{text-align}%
+    \def\@tempb{center}%
+    \ifx\@tempa\@tempb
+      \break
+    \else
+      \hfill\break
+    \fi
+  }
   \tpSetProperty{list-of-block}{%
     \tpUseProperty{list-of-caption-face}%
     \tpIfComp{ListofNumber}{%
@@ -231,7 +239,7 @@
 }
 
 \def\ht@min@p@rows{2}%
-\def\ht@min@b@rows{4}%
+\def\ht@min@b@rows{2}%
 
 
 %% Abbildungsverzeichnis
