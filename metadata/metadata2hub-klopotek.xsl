@@ -9,7 +9,7 @@
   
 
   
-  <xsl:template match="*:title | *:subtitle | *:doi"  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:title | *:subtitle | *:doi | *:vol_no | *:serial_title"  mode="klopotek-to-keyword"  priority="2">
     <keyword role="{css:map-klopotek-to-keyword(name())}">
       <xsl:apply-templates select="node()" mode="#current"/>
     </keyword>
@@ -25,7 +25,9 @@
                               'shorttitle':'Kurztitel',    
                               'title':'Titel',
                               'subtitle':'Untertitel',
-                              'catchwords':'Schlagworte'
+                              'catchwords':'Schlagworte',
+                              'serial_title':'Reihe',
+                              'vol_no':'Bandnummer'
                               }"/>
     <xsl:value-of select="map:get($klopotek-roles, $role)"/>
   </xsl:function>
@@ -34,21 +36,45 @@
 
 
   <xsl:template match="*:copyright_holders"  mode="klopotek-to-keyword"  priority="2">
-    <!-- https://redmine.le-tex.de/issues/14963 -->
-    <keyword role="{if (*:copyright_holder[cpr_type = ('VE', 'HG')][1][cpr_type = 'VE']) then 'Autor' else 'Herausgeber'}">
-      <xsl:choose>
-        <xsl:when test="count(*:copyright_holder[cpr_type = ('VE', 'HG')]) gt 1">
-          <xsl:for-each select="*:copyright_holder[cpr_type = ('VE', 'HG')]">
-            <para>
-              <xsl:sequence select="concat(*:first_name, ' ', *:last_name)"/>
-            </para>
-          </xsl:for-each>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:sequence select="concat(*:copyright_holder[cpr_type = ('VE', 'HG')]/*:first_name, ' ', *:copyright_holder[cpr_type = ('VE', 'HG')]/*:last_name)"/>
-        </xsl:otherwise>
-      </xsl:choose>
+    <!-- https://redmine.le-tex.de/issues/16437 -->
+
+    <xsl:for-each-group select="*:copyright_holder" group-by="*:cpr_type">
+      <xsl:if test="current-grouping-key() = ('VE', 'HG', 'UMSA')">
+        <keyword role="{current-group()[1]/*:cpr_type/@term}">      
+          <xsl:choose>
+            <xsl:when test="count(current-group()) gt 1">
+              <xsl:for-each select="current-group()">
+                <para>
+                  <xsl:sequence select="concat(*:first_name, ' ', *:last_name)"/>
+                </para>
+              </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:sequence select="concat(current-group()/*:first_name, ' ', current-group()/*:last_name)"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </keyword>
+      </xsl:if>
+    </xsl:for-each-group>
+  </xsl:template>
+    
+  <xsl:template match="*:copyright_holders/*:copyright_holder[*:cpr_type = 'UMSA']"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/16437 -->
+    <keyword role="Umschlagabbildung">
+      <xsl:apply-templates select="node()" mode="#current"/>
     </keyword>
   </xsl:template>
-
+  
+  <xsl:template match="*:serial_relation"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/16437 -->
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+  
+  <xsl:template match="*:serial_relation/*:vol_name"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/16437 -->
+    <keyword role="Bandbezeichnung">
+      <xsl:apply-templates select="@term" mode="#current"/>
+    </keyword>
+  </xsl:template>
+  
 </xsl:stylesheet>
