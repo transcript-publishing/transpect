@@ -9,7 +9,7 @@
   
 
   
-  <xsl:template match="*:title | *:subtitle | *:doi | *:vol_no | *:serial_title"  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:title | *:subtitle | *:doi | *:serial_title"  mode="klopotek-to-keyword"  priority="2">
     <keyword role="{css:map-klopotek-to-keyword(name())}">
       <xsl:apply-templates select="node()" mode="#current"/>
     </keyword>
@@ -26,8 +26,7 @@
                               'title':'Titel',
                               'subtitle':'Untertitel',
                               'catchwords':'Schlagworte',
-                              'serial_title':'Reihe',
-                              'vol_no':'Bandnummer'
+                              'serial_title':'Reihe'
                               }"/>
     <xsl:value-of select="map:get($klopotek-roles, $role)"/>
   </xsl:function>
@@ -40,7 +39,10 @@
 
     <xsl:for-each-group select="*:copyright_holder" group-by="*:cpr_type">
       <xsl:if test="current-grouping-key() = ('VE', 'HG', 'UMSA')">
-        <keyword role="{current-group()[1]/*:cpr_type/@term}">      
+        <keyword role="{replace(current-group()[1]/*:cpr_type/@term,
+                                'Umschlagabbildung', 
+                                'Umschlagcredit'
+                                )}">      
           <xsl:choose>
             <xsl:when test="count(current-group()) gt 1">
               <xsl:for-each select="current-group()">
@@ -57,23 +59,16 @@
       </xsl:if>
     </xsl:for-each-group>
   </xsl:template>
-    
-  <xsl:template match="*:copyright_holders/*:copyright_holder[*:cpr_type = 'UMSA']"  mode="klopotek-to-keyword"  priority="2">
-    <!-- https://redmine.le-tex.de/issues/16437 -->
-    <keyword role="Umschlagabbildung">
-      <xsl:apply-templates select="node()" mode="#current"/>
-    </keyword>
-  </xsl:template>
   
   <xsl:template match="*:serial_relation"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/16437 -->
     <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
   
-  <xsl:template match="*:serial_relation/*:vol_name"  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:serial_relation/*:vol_no"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/16437 -->
-    <keyword role="Bandbezeichnung">
-      <xsl:apply-templates select="@term" mode="#current"/>
+    <keyword role="Bandnummer">
+      <xsl:value-of select="string-join((../*:vol_name/@term[normalize-space()], .), ' ')"/>
     </keyword>
   </xsl:template>
   
