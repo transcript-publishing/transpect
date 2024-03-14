@@ -1,0 +1,196 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-floats}[2021/04/09 transcript]\relax
+\ProcessOptionsX\relax
+
+%% gedrehte Gleitobjekte immer in die gleiche Richtung drehen:
+\@rot@twosidefalse
+\def\rot@LR{-1}%
+\usepackage{ragged2e}
+\usepackage{tabularx}
+\usepackage{multirow}
+
+\usepackage{htmltabs}
+\expandafter\def\csname ht@font-family@sans-serif\endcsname{\ht@apply@prop{internal-font-family}{\nsffamily}}
+
+%% default-Klasse für Tabellen:
+\SetHTClass{}{%
+  \SetClassProp{td}{font-family}{sans-serif}%
+  \SetClassProp{td}{font-size}{x-small}%
+  \SetClassProp[thead]{td}{font-weight}{bold}%
+  \SetClassProp{td}{padding}{0.9mm 2.15mm 0.3mm}%
+  \SetClassProp{table}{break-table}{true}%
+}
+
+
+\intextsep\baselineskip
+%% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
+\tpAddToDefault{float}{%
+  \let\tpBreak\break%
+  \tpSetProperty{number-format}{}% Format of number, additional to caption-format
+  \tpSetProperty{number-sep}{:\space\ignorespaces}
+  \tpSetProperty{caption-sep-top}{3mm}%
+  \tpSetProperty{caption-sep-bottom}{\dimexpr3mm\relax}%
+  \tpSetProperty{subcaption-add-sep-top}{-2mm}%
+  \tpSetProperty{caption-valign-top}{bottom}%
+  \tpSetProperty{caption-valign-bottom}{top}%
+  \tpSetProperty{caption-format-top}{\itshape\RaggedRight}%
+  \tpSetProperty{caption-format-bottom}{\footnotesize\upshape\RaggedRight}%
+  \tpSetProperty{subfloat-sep}{2mm}%
+  \tpSetProperty{intext-skip-top}{2\baselineskip}%
+  \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}% Ticket 14989.
+  \tpSetProperty{numbering}{}% keine automatische Nummerierung von Gleitobjekten!
+  \ifcsname ts@caps@figure\endcsname%
+  \else
+    \let\ts@caps@figure\ts@caps%
+  \fi
+  \ifcsname ts@caps@table\endcsname%
+  \else
+    \let\ts@caps@table\ts@caps%
+  \fi
+  \ifcsname tp@captype\endcsname
+    \expandafter\ifx\csname ts@caps@\tp@captype\endcsname\tp@str@bottom
+      \tpSetProperty{caption-top}{}%
+      \tpSetProperty{caption-bottom}{%
+        \bgroup
+          \normalsize\itshape%
+          \tpIfComp{Number}{%
+            {%
+              \tpUseProperty{number-format}\tpUseComp{Number}%
+              \tpIfComp{Caption}{%
+                \tpUseProperty{number-sep}%
+              }{%
+                \par%
+              }%
+            }%
+          }{}%
+          \tpIfComp{Caption}{%
+            \tpUseComp{Caption}\par%
+          }{}%
+          \tpIfComp{Legend}{%
+            {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
+          }{}%
+        \egroup
+        \tpIfComp{Source}{%
+          \tpIfComp{Legend}{%
+            \par\nopagebreak%
+          }{}%
+          {\tpUseProperty{source-format}\tpUseComp{Source}}%
+        }{}%
+      }%
+    \else
+      \tpSetProperty{caption-bottom}{%
+        \tpIfComp{Source}{%
+          \tpIfComp{Legend}{%
+            \par\nopagebreak%
+          }{}%
+          {\tpUseProperty{source-format}\tpUseComp{Source}}%
+        }{}%
+      }%
+      \tpSetProperty{caption-top}{%
+        \tpIfComp{Number}{%
+          {%
+            \tpUseProperty{number-format}\tpUseComp{Number}%
+            \tpIfComp{Caption}{%
+              \tpUseProperty{number-sep}%
+            }{}%
+          }%
+        }{}%
+        \tpIfComp{Caption}{%
+          \tpUseComp{Caption}%
+        }{}%
+        \tpIfComp{Legend}{%
+          {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
+        }{}%
+      }%
+    \fi
+  \fi
+  %% Parameter für Abbildungs- und Tabellenverzeichnisse
+  \tpSetProperty{list-of-caption-format}{\sffamily}%
+  \tpSetProperty{list-of-indent}{0pt}%
+  \tpSetProperty{list-of-margin-left}{0pt}%
+  \tpSetProperty{list-of-margin-right}{1.2em plus 1fil}%
+  \tpSetProperty{list-of-page-sep}{\mydotfill\kern.5\p@}% siehe transcript-headings.sty für Def von \mydotfill
+  \tpSetProperty{list-of-caption-format}{\sffamily}%
+  \tpSetProperty{list-of-number-sep}{:\enskip}%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}
+      {\tpUseComp{list-of-hang-number}}
+      {\leftskip0pt}%
+    \tpUseComp{ListofCaption}%
+    \tpUseProperty{list-of-page-sep}\tpUseComp{ListofPage}%
+  }%
+}
+
+\setcounter{lofdepth}{0}%% Tiefe des Abb.-Verzeichnisses: 0 = nur Haupteinträge; 1 = auch (echte) sub-floats inkludieren!
+
+%% gilt nur für Abbildungen:
+\tpDeclareFloat{tpFigure}{figure}{lof}{%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}{%
+      \@tempdima=\csname tp-tpFigure-list-of-number-maxwd\endcsname
+      \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
+        \tpUseComp{ListofNumber}%
+        \tpIfComp{ListofCaption}{%
+          \tpUseProperty{list-of-number-sep}%
+        }{}%
+        \hss%
+      }%
+      \tpIfComp{ListofCaption}{\tpUseComp{ListofCaption}}{}%
+    }{%
+      \leftskip0pt \tpUseComp{ListofCaption}%
+    }%
+    \nobreak\tpUseProperty{list-of-page-sep}\hbox to 1em{\hss\tpTocLink{\tpUseComp{ListofPage}}}%
+  }%
+}
+
+%% gilt nur für Tabellen:
+\tpDeclareFloat{tpTable}{table}{lot}{%
+  \tpSetProperty{list-of-block}{%
+    \tpUseProperty{list-of-caption-format}%
+    \tpIfComp{ListofNumber}{%
+      \@tempdima=\csname tp-tpTable-list-of-number-maxwd\endcsname
+      \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
+        \tpUseComp{ListofNumber}%
+        \tpIfComp{ListofCaption}{%
+          \tpUseProperty{list-of-number-sep}%
+        }{}%
+        \hss%
+      }%
+      \tpIfComp{ListofCaption}{\tpUseComp{ListofCaption}}{}%
+    }{%
+      \leftskip0pt \tpUseComp{ListofCaption}%
+    }%
+    \nobreak\tpUseProperty{list-of-page-sep}\hbox to 1em{\hss\tpTocLink{\tpUseComp{ListofPage}}}%
+  }%
+}
+
+
+%% Klassen für Abbildungen:
+\tpDeclareClass{A}{\tpSetProperty{margin-left}{0mm}\tpSetProperty{margin-right}{0mm}}
+\tpDeclareClass{B}{\tpSetProperty{margin-left}{10mm}\tpSetProperty{margin-right}{10mm}}
+\tpDeclareClass{C}{\tpSetProperty{margin-left}{15mm}\tpSetProperty{margin-right}{15mm}}
+\tpDeclareClass{D}{\tpSetProperty{margin-left}{25mm}\tpSetProperty{margin-right}{25mm}}
+\tpDeclareClass{E}{\tpSetProperty{margin-outer}{\dimexpr-\evensidemargin+10mm\relax}}
+
+\tpDeclareClass{wide}{%
+  \tpSetProperty{margin-outer}{\dimexpr-\evensidemargin+10mm\relax}%
+  %\tpSetProperty{margin-inner}{-\oddsidemargin}%
+}
+
+\def\ht@min@p@rows{2}%
+\def\ht@min@b@rows{4}%
+
+
+%% Abbildungsverzeichnis
+\renewcommand\listoffigures{%
+  \@starttoc{lof}%
+  \clearpage
+  }
+
+%% Tabellenverzeichnis
+\renewcommand\listoftables{%
+  \@starttoc{lot}%
+  \clearpage
+  }

@@ -1,0 +1,283 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-title}[2021/04/09 transcript]\relax
+
+\renewcommand\justify{%
+  \rightskip=0pt
+  \spaceskip=0pt
+  \xspaceskip=0pt
+  \relax%
+}
+
+\tpSetBabelLabel{german}{editorsuffixsgl}{(Hg.)}
+\tpSetBabelLabel{english}{editorsuffixsgl}{(ed.)}
+
+\tpSetBabelLabel{german}{editorsuffixpl}{(Hg.)}
+\tpSetBabelLabel{english}{editorsuffixpl}{(eds.)}
+
+\def\tp@create@editor@string#1{%
+  % Name lists need further expansion than \tpIfComp to detect \relax correctly.
+  \expandafter\expandafter\expandafter\ifx\csname tp@\tp@namespace @#1NameList\endcsname\relax%
+    % This assignment is needed for \tpIfComp{#1NameList}{…}{…} to work correctly for non-existing NameLists.
+    \global\expandafter\let\csname tp@\tp@namespace @#1NameList\endcsname\relax%
+  \else%
+    \def\@tempa{Author}%
+    \edef\@argi{#1}%
+    \ifx\@tempa\@argi%
+    \else%
+      \expandafter\xdef\csname tp@\tp@namespace @#1NameList\endcsname{%
+        % 14238: Umbrüche vor Herausgeberkürzel verhindern.
+        \tpUseComp{#1NameList}~\tpUseProperty{editor-suffix}%
+      }%
+    \fi%
+  \fi%
+}%
+
+\gdef\titleLayoutOverride{}
+
+\tpDeclareTitlepage{%
+  \ifcsname ts@layout@type\endcsname
+  \else
+    \let\ts@layout@type\relax%
+  \fi
+  
+  % Titeleien des a- und b-Layouts mit Layoutvariante c ausgeben. Gilt nur für std-Layout, nicht für xtx.
+  \ifx\ts@layout@type\ts@str@layout@std
+    \if\layout a
+      \gdef\titleLayoutOverride{\csname layout-c\endcsname}%
+    \fi%
+    \if\layout b
+      \gdef\titleLayoutOverride{\csname layout-c\endcsname}%
+    \fi%
+  \fi%
+  
+  \tpSetProperty{editor-suffix-sgl}{\editorsuffixsglname}
+  \tpSetProperty{editor-suffix-pl}{\editorsuffixplname}
+
+  \tpSetProperty{coverpage}{%
+    \bgroup
+      \def\thepage{\@alph\c@page}%
+      \smash{\rlap{%
+          \raise\dimexpr\topskip+\headheight+\headsep+\topmargin-\paperheight\relax
+          \vtop{%
+            \hspace*{-\oddsidemargin}\relax
+            \includegraphics[width=\paperwidth,height=\paperheight]{\tpUseComp{Cover}}%
+          }}}%
+      \clearpage
+    \egroup
+  }%
+  
+  \tpSetProperty{before-titlepage-roman}{%
+    \setcounter{page}{1}%
+    \def\thepage{\roman{page}}%
+    \def\UrlFont{\rmfamily}%
+    \fontsize{9.3}{12.5}\selectfont%
+  }%
+  
+  \tpSetProperty{titlepage-roman}{%
+    \titleLayoutOverride%
+    \ifx\ts@layout@type\ts@str@layout@std
+      \if\layout a
+        \enlargethispage{5\baselineskip}%
+      \fi
+      \if\layout b
+        \enlargethispage{2\baselineskip}%
+      \fi
+    \fi
+    \tpUsePropEnv{titlepage-i}%
+    \clearpage
+    \tpUsePropEnv{titlepage-ii}%
+    \clearpage
+    \tpUsePropEnv{titlepage-iii}%
+    \clearpage
+    \tpUsePropEnv{titlepage-iv}%
+    \clearpage
+  }%
+  
+  %%%%%%%%%%%%
+  % Seite I. %
+  %%%%%%%%%%%%
+  \tpSetProperty{titlepage-i}{%
+    \ifcollection
+      \topsep0pt \partopsep0pt % no space before
+      \bgroup
+        \righthyphenmin62
+        \lefthyphenmin62
+        \raggedright\tpUseProperty{EditorNameList}%
+      \egroup
+    \else
+      \bgroup
+        \righthyphenmin62
+        \lefthyphenmin62
+        \raggedright\tpUseComp{AuthorNameList}%
+      \egroup
+    \fi%
+    \par
+    \tpUseComp{Title}\par%
+    \vfill
+    \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
+    \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
+    \tpIfComp{Volume}{{\enskip\strutbox\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip\ignorespaces\tpUseComp{Volume}}}{}%
+  }%
+  %%%%%%%%%%%%%
+  % Seite II. %
+  %%%%%%%%%%%%%
+  \tpSetProperty{titlepage-ii}{%
+    \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
+    \tpIfComp{Acknowledgements}{{\itshape\large\tpUseComp{Acknowledgements}}\par\vskip\baselineskip}{}%
+    \tpIfComp{Editorial}{{\justify{\sffamily\sbseries\large Editorial}\par\vskip\baselineskip\tpUseComp{Editorial}\par\vskip\baselineskip}}{}%
+    \vspace*{\fill}%
+    \bgroup
+      {\justify\tpUseProperty{bio-block}}%
+    \egroup
+  }%
+    % Bio
+  \tpSetProperty{bio-block}{%
+    \ifcollection
+      \tpGetComp{EditorMetaBlock}%
+      %\tpGetComp{SeriesEditorMetaBlock}% Erzeugt ein Fundinglogo.
+    \else
+      \tpGetComp{AuthorMetaBlock}% Erzeugt ein Fundinglogo.
+    \fi
+  }%
+  %%%%%%%%%%%&&%
+  % Seite III. %
+  %%%%%%%%%%%%&&
+  \tpSetProperty{titlepage-iii}{%
+    {\Large\sfwidefamily%
+      \ifcollection
+        \righthyphenmin62
+        \lefthyphenmin62
+        \raggedright\tpUseProperty{EditorNameList}\par%
+      \else
+        \righthyphenmin62
+        \lefthyphenmin62
+        \raggedright\tpUseComp{AuthorNameList}\par%
+      \fi%
+    }%
+    \vskip\dimexpr5bp-0.65mm\relax
+    {\raggedright
+      \leavevmode
+      \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{Title}%
+      \tpIfComp{Subtitle}{%
+        \par
+        \normalfont\Large
+        \sffamily\vskip\dimexpr5bp+0.65mm\relax
+        \Large
+        \topsep0pt \partopsep0pt % no space before
+        \flushleft\tpUseComp{Subtitle}\endflushleft%
+      }{%
+        \vskip\baselineskip
+      }%
+    }%
+    \par
+    \vskip\baselineskip
+    \tpIfComp{AddNoteIII}{%
+      {\Large\sfwidefamily\tpUseComp{AddNoteIII}}%
+    }{}
+    \par
+    \vfill
+    \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
+  }%
+  %%%%%%%%%%&%%
+  % Seite IV. %
+  %%%%%%%%%%%&%
+  \tpSetProperty{titlepage-iv}{%
+    \bgroup
+      \tpIfComp{Statement}{\tpUseComp{Statement}\par\vskip\baselineskip}{}%
+      \justify
+      \tpUseProperty{funding-block}%
+      \vfill
+      \tpUseProperty{imprint-format}%
+      \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
+      \tpUseProperty{licence}%
+      \vskip2\baselineskip
+      \bgroup
+        \tpUseProperty{imprint}%
+      \egroup
+    \egroup
+  }%
+  %% Format Copyright-Zeile
+  \tpSetProperty{copyright}{%
+    \tpIfComp{Copyright}{{\sffamily\sbseries\tpUseComp{Copyright}}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
+    \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}% CopyrightDisclaimer enthält aktuell »© [Autorenname]«. Keine Leerzeile davor mit Ticket 13870. Beobachten.
+  }
+  \tpSetProperty{publisher}{%
+    \tpGetComp{PubDivInfo}%
+    \tpUseProperty{copyright}%
+    \tpGetComp{PubNote}%
+    %\tpGetComp{PubWeb}% Entfernt mit Ticket 13870.
+  }%
+  %% Format Impressum
+  \tpSetProperty{imprint}{%
+    \tpUseProperty{publisher}%
+    \tpUseProperty{imprint-sep}
+    \tpGetComp{Qualification}%
+    \tpGetComp{Conversion}%
+    \tpIfComp{CoverImage}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverImage}}}{}%
+    \tpIfComp{CoverDesign}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverDesign}}}{}%
+    \tpIfComp{Lectorate}{{\leftskip5mm\hskip-5mm\tpGetComp{Lectorate}}}{}%
+    \tpIfComp{QA}{{\leftskip5mm\hskip-5mm\tpGetComp{QA}}}{}%
+    \tpIfComp{Translator}{{\leftskip5mm\hskip-5mm\tpGetComp{Translator}}}{}%
+    \tpGetComp{Appraiser}%
+    \tpGetComp{Discussion}%
+    \tpIfComp{Typesetter}{{\leftskip5mm\hskip-5mm\tpGetComp{Typesetter}}}{}%
+    \tpGetComp{Print}%%
+    \tpGetComp{DOI}%%
+    \tpGetComp{Keywords}%%
+    \tpGetComp{ISBN}%
+    \tpGetComp{EpubPreText}%
+    \tpGetComp{EISBN}%
+    \tpGetComp{EpubISBN}%
+    \tpGetComp{BiblISSN}%
+    \tpGetComp{BibleISSN}%
+    \tpUseProperty{imprint-sep}%
+    \tpGetComp{EnvDisclaimer}%
+    \tpGetComp{Advertise}%
+  }%
+  %% Format Biographien
+  \tpSetProperty{imprint-format}{}%
+  \tpSetProperty{counted-meta-sep}{}%
+  \tpSetProperty{name-meta-format}{%
+    \tpIfComp{Bio}
+      {%{\sbseries\tpUseComp{FullName}}\space% Ticket 12562; 2022-05-02.
+       \tpUseComp{Bio}\par%
+       \tpUseProperty{counted-meta-sep}%
+     }{}%
+  }
+  %% Format CC-Lizenz
+  \tpSetProperty{licence}{%
+    \bgroup
+      \tpIfComp{LicenceLogo}{%
+        \fontsize{8.5}{10}\selectfont
+        \vskip.5\baselineskip
+        \includegraphics{\tpUseComp{LicenceLogo}}\par\vskip1mm}{}%
+      \tpGetComp{LicenceText}%
+    \egroup
+  }
+  %% Format Förderer-Logos
+  \tpSetProperty{fund-vsep}{1mm}% vert. Abstand zwischen Fördererlogos
+  \tpSetProperty{fund-format}{%
+    \tpIfComp{FundName}
+      {\tpUseComp{FundName}\par\vskip-\parskip%% sonst doppelter Abstand
+       \includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}\par\vskip-\parskip\leavevmode}
+      {%
+        \setbox\@tempboxa\hbox{\includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}}%
+        \vbox{\hsize\wd\@tempboxa \box\@tempboxa}\hskip5mm%
+      }%
+  }%
+  \tpSetProperty{funding-block}{%
+    \bgroup
+      \tpIfComp{FundingPreText}{\tpUseComp{FundingPreText}\par}{}%
+      \bgroup
+        \raggedright
+        \lineskip\tpUseProperty{fund-vsep}% vertikaler Abstand zwischen Logos
+        \parskip\tpUseProperty{fund-vsep}%
+        \leavevmode
+        \tpUseComp{FundingBlock}\par%
+      \egroup
+      \tpIfComp{FundingPostText}{\vskip.5\baselineskip\tpUseComp{FundingPostText}\par}{}%
+    \egroup
+  }
+  \tpSetProperty{counted-name-sep}{\ifnum\tpCurCount<\tpTotalCount\relax,\space\fi}%
+  %\tpSetProperty{editor-suffix}{~(Hg.)}
+}

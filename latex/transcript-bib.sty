@@ -1,0 +1,45 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-bib}[2021/04/09 transcript]\relax
+
+\usepackage{placeins}
+\usepackage{natbib}
+\bibsep\z@
+\bibhang\parindent
+
+\def\bibfont{\ifx\NoAutoSpacing\@undefined\else\NoAutoSpacing\fi}%Ticket 7647 (giovanni, 2019-11-04)
+
+\@ifundefined{chapter}{%
+  \renewcommand\bibsection{\FloatBarrier\section*{\refname}%
+  }}{\@ifxundefined\NAT@sectionbib{\FloatBarrier\renewcommand\bibsection{\chapter*{\bibname}%
+    }}{\renewcommand\bibsection{\FloatBarrier\section*{\bibname}}}}%
+
+\renewenvironment{thebibliography}[1]{%
+  \FloatBarrier
+  %\bibsection
+  % \chaptermark{\chaptername}
+  \parindent\z@
+  \bibpreamble
+  \bibfont
+  \list{\@biblabel{\the\c@NAT@ctr}}{\@bibsetup{#1}\global\c@NAT@ctr\z@}%
+ \ifNAT@openbib
+   \renewcommand\newblock{\par}%
+ \else
+   \renewcommand\newblock{\hskip .11em \@plus.33em \@minus.07em}%
+ \fi
+ \sloppy
+  \clubpenalty\@M
+  \widowpenalty\@M
+ \sfcode`\.\@m
+ \let\NAT@bibitem@first@sw\@firstoftwo
+    \let\citeN\cite \let\shortcite\cite
+    \let\citeasnoun\cite
+}{%
+ \bibitem@fin
+ \bibpostamble
+ \def\@noitemerr{%
+  \PackageWarning{natbib}{Empty `thebibliography' environment}%
+ }%
+ \endlist
+ \bibcleanup
+ \vskip1\baselineskip% 2022-06-02; 12745
+}%

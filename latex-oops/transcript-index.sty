@@ -1,0 +1,22 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-index}[2021/04/09 transcript]\relax
+\RequirePackage{multicol}
+
+\renewenvironment{theindex}{%
+  \begin{multicols}{2}[%
+    \ifx\index@prologue\@empty\else
+      \index@prologue
+      \bigskip
+    \fi
+    ]%
+    \thispagestyle{empty}%
+    \parindent\z@
+    \@rightskip\@flushglue
+    \rightskip\@rightskip
+    \leftskip\z@skip
+    \parskip\z@ \@plus .3\p@\relax
+    \let\item\@idxitem
+}{%
+  \end{multicols}
+  \clearpage
+}

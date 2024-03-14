@@ -1,0 +1,386 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-envs}[2021/04/09 transcript]\relax
+
+\RequirePackage{framed}
+\def\FrameHeightAdjust{\topskip}
+\FrameRule\z@
+\FrameSep2mm
+
+\def\@afterbox{%
+  \everypar{%
+    \if@nobreak
+      \@nobreakfalse
+      \clubpenalty \@M
+      \if@afterindent \else
+        {\setbox\z@\lastbox}%
+        \everypar{}%2015-04-09
+      \fi
+    \else
+      \clubpenalty \@clubpenalty
+      {\setbox\z@\lastbox}%
+      \everypar{}%
+    \fi}}
+
+\let\orig@doendpe\@doendpe
+
+
+\newenvironment{kastengrau}[1][\relax]{%
+  \def\FrameCommand{\fboxsep1em \colorbox[gray]{0.75}}%
+  \savenotes
+  \def\optionalHeading{#1}%
+  \begin{framed}%
+    \if\optionalHeading\relax
+    \else
+      \vspace{-11.5bp}%
+      \begin{heading}[notoc,noBM]{subsection}%
+        \tpTitle{\optionalHeading}%
+      \end{heading}%
+    \fi
+    \@afterheading\nsffamily
+}{%
+  \end{framed}%
+  \spewnotes
+  \aftergroup\@afterbox%
+}
+
+
+\newenvironment{kastenlinie}[1][\relax]{%
+  \FrameSep3mm
+  \fboxrule.5bp
+  \savenotes
+  \def\FrameCommand{\fboxsep\FrameSep \fbox}%
+  \def\optionalHeading{#1}%
+  \begin{framed}%
+    \if\optionalHeading\relax
+    \else
+      \vspace{-11.5bp}%
+      \begin{heading}[notoc,noBM]{subsection}%
+        \tpTitle{\optionalHeading}%
+      \end{heading}%
+    \fi
+    \@afterheading\nsffamily%\noindent\nsffamily\ignorespaces
+}{%
+  \end{framed}%
+  \spewnotes
+  \aftergroup\@afterbox%
+}
+
+
+\renewenvironment{quotation}{%
+  %\ifdim\dimexpr\pagegoal-\pagetotal\relax>0\p@
+  %  \ifdim\dimexpr\pagegoal-\pagetotal\relax<3\baselineskip
+  %    \newpage%
+  %  \fi%
+  %\fi
+  \def\tpBreak{\hfill\vskip1\baselineskip}
+  %\addvspace{\dimexpr6.96bp+1.087mm+1mm\relax}
+  \list{}{%
+    \listparindent \z@%
+    \itemindent    \listparindent%
+    \leftmargin    \parindent%
+    \rightmargin   \ifx\ts@layout@type\ts@str@layout@mdw\leftmargin\else\z@\fi%
+    \nsfwiderfamily%
+    %\topsep        \z@%
+    \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
+    \parsep        \z@%
+  }%
+  \ifx\ts@layout@type\ts@str@layout@mdw%
+    \footnotesize%
+    \rmfamily%
+  \fi%
+  \setlength{\parindent}{5mm}% Ticket 15240.
+  \@tempdima=\baselineskip% Ticket 15122.
+  \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
+  \item\noindent\ignorespaces%
+}{%
+  \endlist
+  \gdef\@doendpe{%
+    \@endpetrue
+    \everypar{%
+      {\setbox\z@\lastbox}\global\everypar{}\@endpefalse%
+    }%
+    \global\let\@doendpe\orig@doendpe%
+  }%
+  %\vskip\dimexpr6.96bp+1.087mm+1mm\relax%
+  %\ifdim\dimexpr\pagegoal-\pagetotal\relax<3\baselineskip
+  %  \newpage%
+  %\fi%
+}
+
+
+\renewenvironment{quote}
+{\noindent\par\list{}{\rightmargin\leftmargin\nsfwiderfamily}%
+\item\relax}
+{\endlist\par\gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe}}
+
+
+\renewenvironment{verse}{%
+  \noindent\par%
+  \list{%
+  }{%
+    \listparindent \z@%
+    \parindent     \z@
+    \partopsep     \z@
+    \itemindent    \listparindent
+    \rightmargin   \z@
+    \rightskip     \rightmargin\@plus1fil
+    \nsfwiderfamily
+    %\topsep        6.4bp
+    \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
+    \parsep       .5\baselineskip%
+  }%
+  \@tempdima=\baselineskip% Ticket 15122.
+  \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
+  \item\noindent\ignorespaces%
+}{%
+  \endlist
+  \par
+  \gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe%
+  }%
+}
+
+\newenvironment{versecentered}{%
+  \par%
+  \def\tpBreak{\break}%
+  \list{%
+  }{%
+    \listparindent  \z@%
+    \parindent      \z@
+    \itemindent     \listparindent
+    \leftmargin     \z@
+    \rightmargin    \z@
+    \nsfwiderfamily
+    %\topsep         6.4bp
+    \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
+    \parsep        .5\baselineskip%
+  }%
+  \@tempdima=\baselineskip% Ticket 15122.
+  \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
+  \item\noindent\centering\ignorespaces%
+}{%
+  \endlist%
+  \par%
+  \gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe%
+  }%
+}
+
+\newenvironment{motto}{%
+  \noindent%
+  \par%
+  \list{%
+  }{%
+    \rightmargin \leftmargin
+    \parsep      6.4bp
+    \partopsep   \z@
+    \parindent   \z@
+    \nsfwiderfamily%
+  }%
+  \item\relax%
+}{%
+  \endlist\par\gdef\@doendpe{%
+    \@endpetrue
+    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \global\let\@doendpe\orig@doendpe%
+  }%
+}
+
+\newenvironment{tpDedication}{%
+  \cleardoublepage
+  \bgroup
+    \parindent\z@
+    \thispagestyle{empty}%
+    \let\tpBreak\break%
+    \null\vskip\dimexpr\headingsep+1\baselineskip-.45mm\relax%
+    \parindent \z@
+    \normalfont
+    \itshape
+    \centering
+    \def\@gnewline ##1{%
+      \ifvmode
+        \@nolnerr
+      \else
+        \unskip \reserved@e {\reserved@f##1}\break
+      \fi%
+    }
+}{%
+    \par%
+  \egroup%
+  \aftergroup\cleardoublepage%
+}
+
+
+\usepackage{enumerate}
+
+\leftmargini\parindent
+\leftmarginii2\parindent
+
+%% Überdef
+\def\@enum@{%
+  \list{\csname label\@enumctr\endcsname}%
+  {\labelsep\z@
+   \itemsep\z@
+   \ifnum \@enumdepth=\@ne
+     \leftmargin\parindent
+     \labelwidth\parindent
+   \else
+     \@tempdima3mm
+     \leftmargin\dimexpr\@enumdepth\@tempdima\relax
+     \labelwidth\dimexpr\@enumdepth\@tempdima\relax
+     \itemindent\z@%\leftmargin
+   \fi
+   \parsep\z@
+   \ifnum \@enumdepth=\@ne\topsep12.8bp\else\topsep\z@\fi
+   \usecounter\@enumctr%
+   \def\makelabel##1{\small##1\hss}}}
+
+\let\leftmarginii\leftmargini
+\let\leftmarginiii\leftmargini
+
+\def\itemize{%
+  \ifnum \@itemdepth >\thr@@\@toodeep\else
+    \advance\@itemdepth\@ne
+    \@tempdima=12.8bp
+    \ifnum\@itemdepth>\@ne\relax\@tempdima=0\p@\fi
+    \@enumdepth=\@itemdepth
+    \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
+    \expandafter\list\csname\@itemitem\endcsname{%
+      \topsep\the\@tempdima
+      \labelwidth\csname leftmargin\romannumeral\the\@itemdepth\endcsname
+      \leftmargin\labelwidth
+      \labelsep\z@
+      \itemsep\z@
+      \parsep\z@
+      \partopsep\z@
+      \def\makelabel##1{##1\hss}%
+    }%
+  \fi%
+}
+
+\renewenvironment{description}[1][]
+{\list{}{%
+    \settowidth\labelwidth{\normalfont\sbseries#1}%
+    \ifdim\labelwidth=\z@\relax
+      \itemindent-\leftmargin
+    \else
+      \advance\labelwidth.5em
+      \labelsep   -\labelwidth\relax
+      \leftmargin  \labelwidth\relax
+    \fi
+    \itemsep\z@
+    \parsep\z@
+    \partopsep\z@
+    \let\makelabel\descriptionlabel}}
+{\endlist}
+\renewcommand*\descriptionlabel[1]{%
+  \setbox\z@\hbox{#1}%
+  \hskip\labelsep
+  \ifdim\wd\z@>\labelwidth
+    {\normalfont\sbseries #1\enskip}%
+    \hskip-\labelsep
+  \else
+    \hbox to \labelwidth{\normalfont\sbseries #1\hfill}%
+  \fi
+  }
+
+
+
+\newenvironment{dialog}{%
+  \def\infoItem##1{%
+    \vspace{-0.75\baselineskip}%
+    \bgroup
+      \list{}
+        \item\rmfamily\leftskip\dimexpr-7mm-1.5em\relax%
+        \bgroup\itshape ##1\egroup%
+      \endlist%
+    \egroup%
+  }%
+  \list{}%
+  {\leftmargin7mm
+   \labelsep1em
+   \labelwidth\dimexpr7mm-\labelsep\relax
+   \itemsep\z@
+   \itemindent\z@
+   \parsep\z@
+   \topsep12.8bp
+   \def\makelabel##1{{\ignorespaces\itshape##1\ignorespaces}}}%
+}{\endlist}
+
+\RequirePackage{amsmath}
+\let\lll\relax
+\RequirePackage{amssymb}
+\RequirePackage{upgreek}
+
+
+\newenvironment{authorbio}{%
+  \parskip1\baselineskip\noindent%
+}{%
+  \par%
+}
+
+
+\newenvironment{emphPar}[1][]{%
+  \def\tp@temp{#1}%
+  \parskip1\baselineskip\noindent\textbf{\tp@temp}%
+  \ifx\empty\tp@temp\empty%
+  \else%
+    \space%
+  \fi%
+}{%
+  \par%
+}
+
+
+% Linksbündige Formeln mit 5 mm Einzug.
+\@fleqntrue\@mathmargin5mm
+\setlength{\abovedisplayskip}{0.5\baselineskip}
+\setlength{\belowdisplayskip}{0.5\baselineskip}
+\setlength{\abovedisplayshortskip}{0.5\baselineskip}
+\setlength{\belowdisplayshortskip}{0.5\baselineskip}
+
+
+\newcount\@equation@after@doTimes \@equation@after@doTimes=1
+\newcount\@equation@after@didTimes
+
+\newenvironment{inlineEquation}[1][\relax]{%
+  \def\afterEquationContents{#1}%
+  \@equation@after@didTimes=\z@
+  \ifhmode\par\fi
+  \vskip0.5\baselineskip
+  $
+}{%
+  \afterEquationContents
+  $
+  \vskip0.5\baselineskip
+  \@afterheading
+}
+
+% \def\@abstract#1{%
+%   \vskip-\lastskip
+%   % \addvspace{1\baselineskip}%
+%   % \par
+%   \bgroup
+%     \if!#1!\else
+%       \noindent{\bfseries #1}%
+%       \par\noindent
+%     \fi
+%     \small
+%     \itshape
+% }
+% \let\end@abstract\egroup
+% %% abstracts
+% \newenvironment{abstract}[1]{%
+%   \@abstract{#1}%
+%   }{\end@abstract}
+% %% keywords
+% \newenvironment{keywords}[1]{%
+%   \@abstract{#1}%
+%   }{\end@abstract}

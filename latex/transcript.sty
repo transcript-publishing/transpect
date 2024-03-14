@@ -1,0 +1,203 @@
+%%
+%% Pusblisher specific style sheet for transcript
+%% To be used with le-tex transpect.cls.
+%%
+%% Maintainer: p.schulz@le-tex.de
+%%
+%% lualatex  -  texlive > 2019
+%%
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript}[2021/04/09 transcript]\relax
+
+%% Paketoptionen
+%% Durchreichen der script-Optionen
+\define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}\gdef\layout{#1}}
+\def\ts@caps{top}%
+\define@key{transcript.sty}{captions}[top]{\gdef\ts@caps{#1}}
+\define@key{transcript.sty}{captions_figure}[top]{\gdef\ts@caps@figure{#1}}
+\define@key{transcript.sty}{captions_table}[top]{\gdef\ts@caps@table{#1}}
+\define@key{transcript.sty}{lay_type}[]{\gdef\ts@layout@type{#1}}
+
+\gdef\ts@str@layout@std{std}
+\gdef\ts@str@layout@xtx{xtx}
+
+%% Alternative Fonts, zuschaltbar im Falle fehlender Zeichen in den Standardfonts.
+\newif\if@altFonts \@altFontsfalse
+\DeclareOptionX{altFonts}{\@altFontstrue}
+
+\DeclareOptionX{nohead}{\global\let\n@head\relax}
+\ProcessOptionsX\relax
+
+%% Seitenzähler unter der Annahme, dass keine Titelei erzeugt wird.
+%% Das Titeleimodul setzt den Seitenzähler bei Aufruf auf 1.
+\setcounter{page}{5}
+
+%%%%%%%%%%
+% Fonts  %
+%%%%%%%%%%
+\usepackage{transcript-fonts}
+
+\newdimen\tp@majuscleHeight
+
+\usepackage{newunicodechar}
+%\newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
+%\newunicodechar{ }{~}% 8617
+\newunicodechar{‐}{\penalty\@M-\hskip\z@skip}% 8617
+\newunicodechar{‑}{\hbox{-}\penalty\@M\hskip\z@skip}% 8617
+\newunicodechar{↩}{\hskip\z@skip}
+\newunicodechar{。}{\hbox{$_\circ$\enskip\ignorespaces}}
+\newunicodechar{、}{,\enskip\ignorespaces}
+\newunicodechar{；}{;\enskip\ignorespaces}
+\newunicodechar{：}{:\enskip\ignorespaces}
+\newunicodechar{，}{,\enskip\ignorespaces}
+%\newunicodechar{ǀ}{|}
+\newunicodechar{ǀ}{%
+  \setbox\@tempboxa = \hbox{K}% Beliebige Versalie.
+  \tp@majuscleHeight = \ht\@tempboxa%
+  {\fontsize{\the\tp@majuscleHeight}{0bp}\selectfont\raisebox{\the\dimexpr0.24\tp@majuscleHeight\relax}{\unichar{ǀ}}}%
+}
+\newunicodechar{ǁ}{%
+  \setbox\@tempboxa = \hbox{K}% Beliebige Versalie.
+  \tp@majuscleHeight = \ht\@tempboxa%
+  {\fontsize{\the\tp@majuscleHeight}{0bp}\selectfont\raisebox{\the\dimexpr0.24\tp@majuscleHeight\relax}{\unichar{ǁ}}}%
+}
+\newunicodechar{ǂ}{%
+  \setbox\@tempboxa = \hbox{K}% Beliebige Versalie.
+  \tp@majuscleHeight = \ht\@tempboxa%
+  {\fontsize{\the\tp@majuscleHeight}{0bp}\selectfont\raisebox{\the\dimexpr0.24\tp@majuscleHeight\relax}{\unichar{ǂ}}}%
+}
+\newunicodechar{ǃ}{%
+  \setbox\@tempboxa = \hbox{K}% Beliebige Versalie.
+  \tp@majuscleHeight = \ht\@tempboxa%
+  {\fontsize{\the\dimexpr1.4\tp@majuscleHeight\relax}{0bp}\selectfont\raisebox{\the\dimexpr0\tp@majuscleHeight\relax}{\unichar{ǃ}}}%
+}
+
+\DeclareRobustCommand\unichar[1]{\textfallback{#1}}
+
+%%%%%%%%%%%%%%
+% Font sizes %
+%%%%%%%%%%%%%%
+
+\usepackage{transcript-fontsizes}
+
+%%%%%%%%%%%%%%%
+% page layout %
+%%%%%%%%%%%%%%%
+\usepackage[\lay]{transcript-pagelayout}
+
+%%%%%%%%%%%%%%%
+% Page Styles %
+%%%%%%%%%%%%%%%
+
+\usepackage{transcript-pagestyles}
+
+\gdef\cleardoublepage{%
+  \clearpage
+  \ifodd\c@page\relax\else
+    \hbox{}\thispagestyle{empty}\newpage
+    \if@twocolumn\hbox{}\thispagestyle{empty}\newpage\fi
+  \fi}
+
+%%%%%%%%%%%%%%%%%
+% Überschriften %
+%%%%%%%%%%%%%%%%%
+
+\usepackage{transcript-headings}
+
+%%%%%%%
+% TOC %
+%%%%%%%
+
+\usepackage{transcript-toc}
+
+%%%%%%%%%%%%%
+% Footnotes %
+%%%%%%%%%%%%%
+
+\usepackage{transcript-notes}
+
+%%%%%%%%%%%%%%%%
+% Gleitobjekte %
+%%%%%%%%%%%%%%%%
+
+\usepackage{transcript-floats}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Gestaltungselemente %
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{transcript-envs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Literaturverzeichnis %
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{transcript-bib}
+
+\def\source#1{\leavevmode\par#1}
+
+%%%%%%%%%%%
+% Titelei %
+%%%%%%%%%%%
+\usepackage{transcript-title}
+
+\def\flq{‹}
+\def\frq{›}
+
+%%%%%%%%%%%%
+% Register %
+%%%%%%%%%%%%
+
+\usepackage{transcript-index}
+
+%%%%%%%%%%%%
+% Sprachen %
+%%%%%%%%%%%%
+
+\newunicodechar{…}{\ldots}
+\gdef\tp@languageRules@arabic{%
+  \rmfamily% Andere Schriften (bspw. \nsfwidefamily) verursachen einen Konvertierungsabbruch.
+  \let\par\relax%
+  \gdef\ldots{.\kern\fontdimen3\font.\kern\fontdimen3\font.\kern\fontdimen3\font}%
+}
+
+\let\@foreignNewLanguageRules\foreignlanguage
+\gdef\foreignlanguage#1#2{%
+  \protect\@foreignNewLanguageRules{#1}{%
+    \ifcsname tp@languageRules@\languagename\endcsname\csname tp@languageRules@\languagename\endcsname\fi
+    #2%
+  }%
+}
+
+%%%%%%%%%%%%%%%%%
+% Sonderwünsche %
+%%%%%%%%%%%%%%%%%
+
+\def\tpNewTocPage{\addtocontents{toc}{\protect\newpage}}
+
+% \def\@nohyphen#1\@nil#2#3\relax{\href{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\ts@url{#1}{#3}\fi}
+% \protected\def\ts@url#1#2{{\let↩\@empty\@nohyphen#1\@nil#2 \relax\relax}}%
+% \protected\def\tsUrl#1{\ts@url{#1}{#1}}
+% Makro für verlinkte Bilder.
+\let\imgHref\href
+
+\def\@nohyphen#1\@nil#2#3\relax{\imgHref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\href{#1}{#3}\fi}
+\protected\def\href#1#2{{\let↩\@empty\@nohyphen#1\@nil#2{}\relax\relax}}%
+\let\fn@href\href
+% \bgroup
+% \let↩\relax
+% \gdef\fn@href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
+% \gdef\href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
+% \gdef\@fn@href #1\@nil #2↩#3↩\@nil{\oldhref{#1}{#2}\hskip\z@skip\if!#3!\else\@fn@href #1\@nil #3↩\@nil\fi}
+% \egroup
+\usepackage{ulem}
+\let\ul\uline
+\AtBeginDocument{%
+  \ifx\tpRunBookTitle\@undefined
+    \PackageError{transcript.sty}{No BookTitle given!}{}%
+    \def\tpRunBookTitle{--~book title not defined~--}%
+  \fi
+}
+
+
+\endinput

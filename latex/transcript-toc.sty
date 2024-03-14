@@ -1,0 +1,24 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-toc}[2021/04/09 transcript]\relax
+
+\addto\captionsngerman{\def\contentsname{Inhalt}}
+%
+\renewcommand\@dotsep{.5}
+\renewcommand\tableofcontents{%
+  %\setcounter{page}{5} % Entfernt mit 12635.
+  \begin{heading}[notoc,nonumber,label=tableofcontents]{chapter}%
+    \tpTitle{\contentsname}%
+  \end{heading}%
+  %\pdfbookmark[0]{\contentsname}{tableofcontents}%
+  \pagestyle{empty}%
+  \if\layout a
+    \enlargethispage{-5\baselineskip}%
+  \fi
+  \if\layout b
+    \enlargethispage{-2\baselineskip}%
+  \fi
+  \@starttoc{toc}%
+  \clearpage\pagestyle{headings}%
+}
+\ifcollection\c@tocdepth=0\relax\else\c@tocdepth=3\relax\fi
+
