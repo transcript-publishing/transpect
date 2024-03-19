@@ -37,6 +37,7 @@
   
   <xsl:variable name="lang" select="     if (//*:original_publication/*:language[matches(., 'ENGL', 'i')]) then 'E' 
                                     else if (//*:original_publication/*:language[matches(., 'SPA', 'i')]) then 'S' else ''" as="xs:string?"/>
+  
   <xsl:param name="basename" as="xs:string"/>
   
   <xsl:template match="*:original_publication"  mode="klopotek-to-keyword"  priority="2">
@@ -77,26 +78,53 @@
       </xsl:choose>
     </keyword>
   </xsl:template>
-
+  
+  <xsl:variable name="copyright-roles-lookup" as="map(xs:string, xs:string+)"
+                  select="map{'VE':  ('Autor',          '',                  '',             ''),
+                              'HG':  ('Herausgeber',    '',                  '',             ''),
+                              'EDIT':('Herausgeber',    '',                  '',             ''),
+                              'UMSA':('Umschlagcredit', 'Umschlagabbildung', '',             ''),
+                              'LEKT':('Lektorat',       'Lektorat',          'Proofreading', ''),
+                              'KORR':('Korrektorat',    'Korrektorat',       'Correction',   ''),
+                              'LAYO':('Satz',           '',                  '',             ''),
+                              'DRUK':('Druck',          '',                  '',             '')
+                  }">
+     <!--                             1: Keyname,        2: added info German, 3: English 4 Spanish (https://redmine.le-tex.de/issues/16459)-->
+   </xsl:variable>
+                  
+                  
+  <xsl:variable name="copyright-roles"  as="xs:string+" 
+              select="('VE', 'HG', 'EDIT', 'UMSA', 'LEKT', 'KORR', 'LAYO', 'DRUK')"/>
+  
+  
   <xsl:template match="*:copyright_holders"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/16437 -->
-
+    <xsl:variable name="lang-num" select="if ($lang = 'E') then 3 else
+                                          if ($lang = 'S') then 4 else 2" as="xs:integer"/>
     <xsl:for-each-group select="*:copyright_holder" group-by="*:cpr_type">
-      <xsl:if test="current-grouping-key() = ('VE', 'HG', 'EDIT', 'UMSA')">
-        <keyword role="{replace(current-group()[1]/*:cpr_type/@term,
-                                'Umschlagabbildung', 
-                                'Umschlagcredit'
-                                )}">      
+      <xsl:if test="current-grouping-key() =  $copyright-roles">
+        <xsl:variable name="current-lookup"  select="map:get($copyright-roles-lookup, current-grouping-key())" as="xs:string+"/>
+        <keyword role="{$current-lookup[1]}">      
           <xsl:choose>
             <xsl:when test="count(current-group()) gt 1">
               <xsl:for-each select="current-group()">
                 <para>
-                  <xsl:sequence select="concat(*:first_name, ' ', *:last_name)"/>
+                  <xsl:sequence select="string-join(
+                                                    ($current-lookup[$lang-num][normalize-space()], 
+                                                     string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
+                                                    ), 
+                                                    ': '
+                                                    )"/>
                 </para>
               </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:sequence select="concat(current-group()/*:first_name, ' ', current-group()/*:last_name)"/>
+                  <xsl:sequence select="string-join(
+                                                    ($current-lookup[$lang-num][normalize-space()], 
+                                                     string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
+                                                    ), 
+                                                    ': '
+                                                    )"/>
             </xsl:otherwise>
           </xsl:choose>
         </keyword>
