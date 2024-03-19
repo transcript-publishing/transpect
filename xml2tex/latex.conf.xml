@@ -402,8 +402,8 @@
       <xsl:value-of select="concat('&#xa;\tpLicenceLogo{logos/cc/', 
                                    replace(
                                            replace($license-logo-href, '\\(.)', '$1'),
-                                           '^.*/(.+?)$',
-                                           '$1'),
+                                           '^(.+/)?([^\.]+)(\.\p{L}+)?$',
+                                           '$2', 'sm'),
                                    '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($license-text)">
