@@ -303,4 +303,8 @@
     </blockquote>
   </xsl:template>  
   
+  <xsl:template match="/hub/info/keywordset[@role = 'titlepage']/keyword[@role = 'Widmung']" mode="hub:split-at-tab">
+    <!-- https://redmine.le-tex.de/issues/16444-->
+  </xsl:template>
+  
 </xsl:stylesheet>
