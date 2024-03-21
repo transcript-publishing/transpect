@@ -51,7 +51,7 @@
            <xsl:choose>
              <xsl:when test="contains($basename, '_anth_')">
                <xsl:value-of select="concat('© ', 
-                                            string-join(for $ch in ../*:copyright_holders/*:copyright_holder[*:cpr_type = ('EDIT', 'HG')] 
+                                            string-join(for $ch in ../*:copyright_holders/*:copyright_holder[*:cpr_type = 'HG'] 
                                                         return concat($ch/*:first_name, ' ', $ch/*:last_name), ', '),
                                             if ($lang = 'E') then ' (ed.)' else ' (Hg.)'
                                            )"/>
@@ -82,7 +82,6 @@
   <xsl:variable name="copyright-roles-lookup" as="map(xs:string, xs:string+)"
                   select="map{'VE':  ('Autor',          '',                  '',             ''),
                               'HG':  ('Herausgeber',    '',                  '',             ''),
-                              'EDIT':('Herausgeber',    '',                  '',             ''),
                               'UMSA':('Umschlagcredit', 'Umschlagabbildung', '',             ''),
                               'LEKT':('Lektorat',       'Lektorat',          'Proofreading', ''),
                               'KORR':('Korrektorat',    'Korrektorat',       'Correction',   ''),
@@ -94,7 +93,7 @@
                   
                   
   <xsl:variable name="copyright-roles"  as="xs:string+" 
-              select="('VE', 'HG', 'EDIT', 'UMSA', 'LEKT', 'KORR', 'LAYO', 'DRUK')"/>
+              select="('VE', 'HG', 'UMSA', 'LEKT', 'KORR', 'LAYO', 'DRUK')"/>
   
   
   <xsl:template match="*:copyright_holders"  mode="klopotek-to-keyword"  priority="2">
@@ -132,14 +131,14 @@
     </xsl:for-each-group>
     
     
-    <xsl:if test="*:copyright_holder[*:cpr_type = ('EDIT', 'HG', 'VG')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]">
-      <keyword role="{if (*:copyright_holder[*:cpr_type  = ('EDIT', 'VG')][text[@text_type = concat('AUTBIO', $lang)][normalize-space()]]) then 'Herausgeberinformationen' else 'Autoreninformationen'}">
+    <xsl:if test="*:copyright_holder[*:cpr_type = ('HG', 'VG')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]">
+      <keyword role="{if (*:copyright_holder[*:cpr_type  = 'VG'][text[@text_type = concat('AUTBIO', $lang)][normalize-space()]]) then 'Herausgeberinformationen' else 'Autoreninformationen'}">
         
         <!--Herausgeberinformationen https://redmine.le-tex.de/issues/16479-->
         
         <xsl:choose>
-          <xsl:when test="count(*:copyright_holder[*:cpr_type = ('EDIT', 'HG')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
-            <xsl:for-each select="*:copyright_holder[*:cpr_type = ('EDIT', 'HG')]/text[@text_type = concat('AUTBIO', $lang)]">
+          <xsl:when test="count(*:copyright_holder[*:cpr_type = 'HG']/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
+            <xsl:for-each select="*:copyright_holder[*:cpr_type = 'HG']/text[@text_type = concat('AUTBIO', $lang)]">
               <para>
                <!-- <xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
                 <xsl:sequence select="html:process-html(.)" />
