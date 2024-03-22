@@ -4,6 +4,7 @@
   xmlns:tei2html="http://transpect.io/tei2html"
   xmlns:hub="http://transpect.io/hub"
   xmlns:css="http://www.w3.org/1996/css"
+  xmlns:xml2tex="http://transpect.io/xml2tex"
   exclude-result-prefixes="xs"
   version="2.0">
   
@@ -35,6 +36,8 @@
         how the splitting is done exactly, should in most cases be adapted in customer code to make sure that the position of titles, sources etc. is according to styles 
         https://redmine.le-tex.de/issues/15409-->
   </xsl:variable>
+  
+  <xsl:variable name="xml2tex:split-landscape-tables" as="xs:boolean" select="$split-landscape-table-with-dotablebreak-pi"/>
 
   <xsl:variable name="info-meta-styles" as="xs:string"
                 select="'^tsmeta'" ><!-- all meta style names, if they do not all begin with meta in your a9s, 
