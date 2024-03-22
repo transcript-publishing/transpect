@@ -132,13 +132,13 @@
     
     
     <xsl:if test="*:copyright_holder[*:cpr_type = ('HG', 'VG')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]">
-      <keyword role="{if (*:copyright_holder[*:cpr_type  = 'VG'][text[@text_type = concat('AUTBIO', $lang)][normalize-space()]]) then 'Herausgeberinformationen' else 'Autoreninformationen'}">
+      <keyword role="{if (*:copyright_holder[*:cpr_type  = 'HG'][text[@text_type = concat('AUTBIO', $lang)][normalize-space()]]) then 'Herausgeberinformationen' else 'Autoreninformationen'}">
         
         <!--Herausgeberinformationen https://redmine.le-tex.de/issues/16479-->
         
         <xsl:choose>
-          <xsl:when test="count(*:copyright_holder[*:cpr_type = 'HG']/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
-            <xsl:for-each select="*:copyright_holder[*:cpr_type = 'HG']/text[@text_type = concat('AUTBIO', $lang)]">
+          <xsl:when test="count(*:copyright_holder[*:cpr_type = ('HG', 'VG')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
+            <xsl:for-each select="*:copyright_holder[*:cpr_type = ('HG', 'VG')]/text[@text_type = concat('AUTBIO', $lang)]">
               <para>
                <!-- <xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
                 <xsl:sequence select="html:process-html(.)" />
@@ -147,7 +147,7 @@
           </xsl:when>
           <xsl:otherwise>
             <!--<xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
-            <xsl:sequence select="html:process-html(.)" />
+            <xsl:sequence select="html:process-html(*:copyright_holder[*:cpr_type = ('HG', 'VG')]/text[@text_type = concat('AUTBIO', $lang)])" />
           </xsl:otherwise>
         </xsl:choose>
       </keyword>
@@ -213,7 +213,7 @@
   </xsl:template>
 
   
-  <xsl:template match="*:b" mode="postprocess-html-from-onix" priority="4">
+  <xsl:template match="*:b|*:strong" mode="postprocess-html-from-onix" priority="4">
     <xsl:element name="phrase">
       <xsl:attribute name="css:font-weight" select="'bold'"/>
       <xsl:apply-templates select="node()" mode="#current"/>
