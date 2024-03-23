@@ -13,6 +13,8 @@
   exclude-result-prefixes="xs hub dbk ts tr xlink functx" 
   version="2.0">
   
+  <!-- this XSLT is no longer included in main-ts.xpl and 
+       was replaced by xml2tex/helpers.xsl -->
 
   <xsl:import href="http://this.transpect.io/a9s/common/evolve-hub/driver-docx.xsl"/>  
   <xsl:import href="http://this.transpect.io/a9s/ts/xsl/shared-variables.xsl"/>

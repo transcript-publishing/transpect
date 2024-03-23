@@ -31,13 +31,17 @@
                          '^(berschrift8|[Hh]eading\s?8|[a-z]{1,3}heading7|[a-z]{1,3}headingenumerated7)$',
                          '^(berschrift9|[Hh]eading\s?9|[a-z]{1,3}heading8|[a-z]{1,3}headingenumerated8)$')"/>-->
   
-  <xsl:variable name="split-landscape-table-with-dotablebreak-pi" select="false()" as="xs:boolean">
+  <xsl:variable name="xml2tex:split-landscape-tables" as="xs:boolean" select="true()">
     <!-- As long as tables with PI orientation=landscape cannot be split automatically via the framework, they may be split via converter. 
         how the splitting is done exactly, should in most cases be adapted in customer code to make sure that the position of titles, sources etc. is according to styles 
         https://redmine.le-tex.de/issues/15409-->
   </xsl:variable>
   
-  <xsl:variable name="xml2tex:split-landscape-tables" as="xs:boolean" select="$split-landscape-table-with-dotablebreak-pi"/>
+  <xsl:variable name="xml2tex:repeat-split-table-title" as="xs:boolean" select="false()"/>
+  
+  <xsl:variable name="xml2tex:repeat-split-table-head" as="xs:boolean" select="true()"/>
+
+  <xsl:variable name="xml2tex:repeat-split-table-caption" as="xs:boolean" select="false()"/>
 
   <xsl:variable name="info-meta-styles" as="xs:string"
                 select="'^tsmeta'" ><!-- all meta style names, if they do not all begin with meta in your a9s, 
