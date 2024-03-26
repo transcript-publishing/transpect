@@ -82,11 +82,11 @@
   <xsl:variable name="copyright-roles-lookup" as="map(xs:string, xs:string+)"
                   select="map{'VE':  ('Autor',          '',                  '',             ''),
                               'HG':  ('Herausgeber',    '',                  '',             ''),
-                              'UMSA':('Umschlagcredit', 'Umschlagabbildung', '',             ''),
-                              'LEKT':('Lektorat',       'Lektorat',          'Proofreading', ''),
-                              'KORR':('Korrektorat',    'Korrektorat',       'Correction',   ''),
-                              'LAYO':('Satz',           '',                  '',             ''),
-                              'DRUK':('Druck',          '',                  '',             '')
+                              'UMSA':('Umschlagcredit', 'Umschlagabbildung', 'Cover illustration', 'Ilustración de portada'),
+                              'LEKT':('Lektorat',       'Lektorat',          'Proofreading', 'Revisión'),
+                              'KORR':('Korrektorat',    'Korrektorat',       'Correction',   'Corrección'),
+                              'LAYO':('Satz',           'Satz',              'Typesetting',  'Composición tipográfica'),
+                              'DRUK':('Druck',          'Druck',             'Printing',     'Imprenta')
                   }">
      <!--                             1: Keyname,        2: added info German, 3: English 4 Spanish (https://redmine.le-tex.de/issues/16459)-->
    </xsl:variable>
