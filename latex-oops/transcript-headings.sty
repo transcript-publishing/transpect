@@ -8,13 +8,7 @@
   \pagestyle{altRunTitles}%
 }
 
-\def\mydotfill{%
-  \nobreak\leaders\hbox{$\m@th
-    \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
-    mu$}\hskip 1em plus 1fill% Space of at least 1 em prevents empty dotfills with page number directly after the toc heading.
-  \nobreak}
 
-\newdimen\chaphskip \chaphskip7mm %% default
 %% Globale Settings: gelten für alle ÜS-Ebenen
 \tpAddToDefault{heading}{%
   \tpSetProperty{numbering}{}%
@@ -30,7 +24,7 @@
   \fi
   \tpSetProperty{toc-number-align}{left}%
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-page-sep}{\mydotfill}%
+  \tpSetProperty{toc-page-sep}{\tsDotfill}% Definition für \tsDotfill in der Hauptdatei transcript.sty.
   \tpSetProperty{toc-title-face}{\sffamily\normalsize}%
   \tpSetProperty{toc-page-face}{\normalfont\sfwidefamily\normalsize}%
   \tpSetProperty{toc-format}{%
@@ -66,16 +60,9 @@
     \let\\\@centercr
     \rightskip\z@skip\relax
     \parfillskip\@flushglue
-    %\par
-    %\edef\measurepage{\the\dimexpr\pagegoal-\pagetotal-\baselineskip\relax}%
-    %\typeout{TOC BEFORE ENTRY: \measurepage}
-    %\ifdim\measurepage<7\baselineskip\relax\newpage\fi%
   }%
   
   \tpSetProperty{toc-format}{%
-    %\ifdim\dimexpr\pagegoal-\pagetotal<8\baselineskip\relax%
-    %  \clearpage%
-    %\fi%
     \tpUseProperty{toc-title-face}%
     \tpIfComp{TocNumber}{%
       \ifcsname tp-heading-toc-number--1-maxwd\endcsname
@@ -135,7 +122,6 @@
     \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
     % Zurücksetzen der Fußnotenzählen bereits bei Parts, nicht erst bei Chapter. Ticket 15665.
     \global\c@footnote\z@
-    \global\c@endnote\z@
   }%
   
   \tpSetProperty{running-heading}{%
@@ -305,11 +291,7 @@
   \tpSetProperty{quote-block-format}{%
     \parskip\baselineskip
     \rightskip\z@
-    % BEGIN: Modifiziertes \raggedright aus der latex.ltx; Ticket 15122.
-    %\let\\\@centercr\@rightskip\@flushglue \rightskip\@rightskip
-    %\leftskip0.5\textwidth
-    %\parindent\z@
-    %%%%%%%%%% Modifiziertes \RaggedRight (\raggedright mit Silbentrennung).
+    % BEGIN: Modifiziertes \RaggedRight (\raggedright mit Silbentrennung).
     \leftskip0.5\textwidth
     \@rightskip\RaggedRightRightskip
     \rightskip\@rightskip
@@ -324,7 +306,6 @@
     \@tempdima=\baselineskip% Ticket 15122.
     \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
     \tpUseComp{QuoteText}%
-    %% Zitat-Quelle
     \tpIfComp{QuoteSource}{%
       {\hfill\break\itshape\tpUseComp{QuoteSource}}\par%
     }{%
@@ -441,30 +422,20 @@
   % Muss global und ausgewertet sein, damit das Seitenlayout ps@articlehead darauf zugreifen kann.
   \xdef\@articleDOI{\tpUseComp{DOI}}%
   
-  %\tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
-  %\tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
-  %\tpSetProperty{author-contact-format}{%Format of a single author's contact information
-  %  \tpUseComp{FullName}%
-  %  \tpIfComp{Affil}{%
-  %    \space(\tpUseGroupProp{tpAffil}{\the\@currAffilCnt}{Affiliation})%
-  %    \global\advance\@currAffilCnt\@ne%
-  %  }{}%
-  %}%
-  
-  % Voherblock, 15194.  
+  % Vorherblock, 15194.
   \tpSetProperty{affiliation-format}{}%
   \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
   \tpSetProperty{affil-block-face}{\footnotesize\nsffamily}
   \tpSetProperty{author-contact-format}{%
     \ifx\ts@journal@series\ts@str@journal@zig
       \tpIfComp{AffilRef}{%
-      \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{AffilRef}}{affil-block-format})%
-    }{%
-      \tpUseComp{FullName}%
-      \tpIfComp{Affiliation}{%
-        \space(\tpUseComp{Affiliation})%
-      }{}%
-    }%
+        \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{AffilRef}}{affil-block-format})%
+      }{%
+        \tpUseComp{FullName}%
+        \tpIfComp{Affiliation}{%
+          \space(\tpUseComp{Affiliation})%
+        }{}%
+      }%
     \else
       \tpIfComp{AffilRef}{%
         \tpUseComp{FullName} (\tpUseGroupProp{tpAffil}{\tpUseComp{AffilRef}}{affil-block-format});\par%
@@ -557,8 +528,7 @@
     \enlargethispage{-\@tempdima}
     %\tpIfComp{AffilBlock}{{\tpUseProperty{affil-block-face}\tpUseComp{AffilBlock}}\par}{}
   }
-  
-    %% Abstract
+
   \tpSetProperty{extended-heading}{%
     \tpIfComp{Abstract}{%
       \par\vskip2\baselineskip
@@ -577,33 +547,6 @@
       {\mdseries\sffamily\tpIfComp{KeywordsLabel}{\tpUseComp{KeywordsLabel}}{Keywords}}\enskip
       {\itshape\tpUseComp{Keywords}\par}%
     }{}%
-    %\tpIfCompOr{Abstract}{TitleEn}{%
-    %  \tpIfComp{QuoteBlock}{%
-    %    \vskip2\baselineskip
-    %    \savenotes
-    %    \tpUseComp{QuoteBlock}%
-    %    \tpIfComp{AuthorNameList}{%
-    %      \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
-    %    }{%
-    %      \vskip-1.68\baselineskip%
-    %    }%
-    %    \spewnotes
-    %  }{}%
-    %}{%
-    %  \tpIfComp{Keywords}{%
-    %    \tpIfComp{QuoteBlock}{%
-    %      \vskip2\baselineskip
-    %      \savenotes
-    %      \tpUseComp{QuoteBlock}
-    %      \tpIfComp{AuthorNameList}{%
-    %        \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
-    %      }{%
-    %        \vskip-1.68\baselineskip%
-    %      }
-    %      \spewnotes
-    %    }{}%
-    %  }%
-    %}%
     \goodbreak%
   }%
 }
@@ -650,11 +593,10 @@
 
   \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
   \tpSetProperty{subtitle-face}{\normalfont\rmfamily\normalsize}%
-  
+
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
-  
-  %\tpSetProperty{running-heading}{}
-  
+
+
   \tpSetProperty{running-extra}{%
     \global\let\tp@partmark\relax%
     \global\let\tp@chapternumber\relax%
@@ -858,7 +800,7 @@
       \tpIfComp{TocNumber}{%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
         \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
-      }{%\leftskip\z@%
+      }{%
         \leftskip\@tempdimb%
         \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
       }%
@@ -904,7 +846,6 @@
 
 \tpDeclareHeading[section]{3}{subsubsection}{%
   \tpSetProperty{before-heading}{%
-    %\tp@spaceIfAfterChapterHeading{-1\baselineskip}% Ticket 13181, 2022-08-09
     \addvspace{1\baselineskip}%
   }%
   %\tpSetProperty{after-skip}{1sp}% Ticket 12534, 2022-04-25

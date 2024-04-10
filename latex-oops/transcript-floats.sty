@@ -2,7 +2,7 @@
 \ProvidesPackage{transcript-floats}[2021/04/09 transcript]\relax
 \ProcessOptionsX\relax
 
-%% gedrehte Gleitobjekte immer in die gleiche Richtung drehen:
+% Gedrehte Gleitobjekte immer in die gleiche Richtung, nicht seitenabhängig (gerade vs. ungerade) drehen.
 \@rot@twosidefalse
 \def\rot@LR{-1}%
 \usepackage{tabularx}
@@ -11,7 +11,7 @@
 \usepackage{htmltabs}
 \expandafter\def\csname ht@font-family@sans-serif\endcsname{\ht@apply@prop{internal-font-family}{\nsffamily}}
 
-%% default-Klasse für Tabellen:
+% Standards für Tabellen:
 \SetHTClass{}{%
   \SetClassProp{td}{font-family}{sans-serif}%
   \SetClassProp{td}{font-size}{x-small}%
@@ -154,7 +154,7 @@
   \tpSetProperty{list-of-indent}{\z@}%
   \tpSetProperty{list-of-margin-left}{\z@}%
   \tpSetProperty{list-of-margin-right}{1.2em plus 1fil}%
-  \tpSetProperty{list-of-page-sep}{\mydotfill\kern.5\p@}% siehe transcript-headings.sty für Def von \mydotfill
+  \tpSetProperty{list-of-page-sep}{\tsDotfill\kern.5\p@}% Definition für \tsDotfill in der Hauptdatei transcript.sty.
   \tpSetProperty{list-of-caption-face}{\sffamily}%
   \tpSetProperty{list-of-number-face}{}%
   \tpSetProperty{list-of-number-sep}{:\enskip}%

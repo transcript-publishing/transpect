@@ -2,9 +2,9 @@
 %% Pusblisher specific style sheet for transcript
 %% To be used with le-tex cocotex.cls.
 %%
-%% Maintainer: p.schulz@le-tex.de
+%% Maintainer: marcus.hottenroth@le-tex.de
 %%
-%% lualatex  -  texlive > 2019
+%% lualatex  -  texlive ≥ 2019
 %%
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript}[2021/04/09 transcript]\relax
@@ -13,8 +13,8 @@
 \newif\if@TLtwenty \@TLtwentyfalse
 \ifnum\luatexversion>111 \@TLtwentytrue\fi
 
-%% Paketoptionen
-%% durchreichen der script-Optionen
+% Paketoptionen
+% Durchreichen der script-Optionen
 \define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}\gdef\layout{#1}}
 \DeclareOptionX{nohead}{\global\let\n@head\relax}
 \define@key{transcript.sty}{captions}[top]{\gdef\ts@caps{#1}}
@@ -37,19 +37,31 @@
 %     .pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF
 \graphicspath{{logos/cc/}{logos/}{images/}{series/}}
 
-%% Alternative Schriften; zuschaltbar im Falle fehlender Zeichen in den Standardschriften.
+% Alternative Schriften; zuschaltbar im Falle fehlender Zeichen in den Standardschriften.
 \newif\if@altFonts \@altFontsfalse
 \DeclareOptionX{altFonts}{\@altFontstrue}
 
 \ProcessOptionsX\relax
 \ifjournal\collectiontrue\fi
 
-%% Seitenzähler unter der Annahme, dass keine Titelei erzeugt wird.
-%% Das Titeleimodul setzt den Seitenzähler bei Aufruf auf 1.
+% Seitenzähler unter der Annahme, dass keine Titelei erzeugt wird.
+% Das Titeleimodul setzt den Seitenzähler bei Aufruf auf 1.
 \setcounter{page}{5}
 
 % U. a. für linksbündige Motti auf der rechten Seitenhälfte bei Kapiteln verwendet.
 \usepackage{ragged2e}
+
+% Die Zeile auffüllende Punktierung. Verwendung derzeit für Inhalts- (transcript-headings.sty) sowie Tabellen- und Abbildungsverzeichnisse (transcript-floats.sty).
+\def\tsDotfill{%
+  \nobreak\leaders\hbox{%
+    $\m@th
+    \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
+    mu$%
+  }%
+  \hskip 1em plus 1fill% Mindestens 1 em horizontaler Platz, damit leere Auspunktierungen und Seitenzahlen direkt hinter der Überschrift im Inhaltsverzeichnis vermieden werden.
+  \nobreak%
+}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Logische Operatoren für tpComps. %
@@ -163,20 +175,24 @@
 
 \DeclareRobustCommand\unichar[1]{\textfallback{#1}}
 
-%%%%%%%%%%%%%%
-% Font sizes %
-%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%
+% Schriftgrößen. %
+%%%%%%%%%%%%%%%%%%
 
 \usepackage{transcript-fontsizes}
 
-%%%%%%%%%%%%%%%
-% page layout %
-%%%%%%%%%%%%%%%
-\usepackage[\lay]{transcript-pagelayout}
 
 %%%%%%%%%%%%%%%
-% Page Styles %
+% Papiermaße. %
 %%%%%%%%%%%%%%%
+
+\usepackage[\lay]{transcript-pagelayout}
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% Seitengestaltung. %
+%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{transcript-pagestyles}
 
@@ -187,55 +203,64 @@
     \if@twocolumn\hbox{}\thispagestyle{empty}\newpage\fi
   \fi}
 
-%%%%%%%%%%%%%%%%%
-% Überschriften %
-%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%
+% Überschriften. %
+%%%%%%%%%%%%%%%%%%
 
 \usepackage{transcript-headings}
 
-%%%%%%%
-% TOC %
-%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Inhaltsverzeichnis. %
+%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{transcript-toc}
 
-%%%%%%%%%%%%%
-% Footnotes %
-%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Fuß- und Endnoten. %
+%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{transcript-notes}
 
-%%%%%%%%%%%%%%%%
-% Gleitobjekte %
-%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%
+% Gleitobjekte. %
+%%%%%%%%%%%%%%%%%
 
 \usepackage{transcript-floats}
 
-%%%%%%%%%%%%%%%%%%%%%%%
-% Gestaltungselemente %
-%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Gestaltungselemente/Umgebungen. %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{transcript-envs}
 
-%%%%%%%%%%%%%%%%%%%%%%%%
-% Literaturverzeichnis %
-%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Literaturverzeichnis. %
+%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \usepackage{transcript-bib}
 
 \def\source#1{\leavevmode\par#1}
 
-%%%%%%%%%%%
-% Titelei %
-%%%%%%%%%%%
+
+%%%%%%%%%%%%
+% Titelei% %
+%%%%%%%%%%%%
+
 \usepackage{transcript-title}
 
 \def\flq{‹}
 \def\frq{›}
 
-%%%%%%%%%%%%
-% Register %
-%%%%%%%%%%%%
+
+%%%%%%%%%%%%%
+% Register. %
+%%%%%%%%%%%%%
 
 \usepackage{transcript-index}
 
@@ -274,7 +299,7 @@
 }
 
 \gdef\tp@languageRules@french{%
-  \NoAutoSpacing% Keine automatischen Leerzeichen bspw. vor Satzschlusspunkten.
+  \NoAutoSpacing% Keine automatischen Leerzeichen, bspw. vor Satzschlusspunkten.
 }
 
 \gdef\tp@languageRules@greek{%
@@ -365,5 +390,3 @@
 }
 
 \endinput
-%% Dieser Kommentar dient nur zu Testen der git-svn-bridge.
-%% Zweiter Versuch.

@@ -148,9 +148,11 @@
     \def\numberline####1{####1\enskip}%
     \tp@chaptermark%
   }%
-  \def\@oddhead{\hfill{\small\sffamily\if@TLtwenty\ltseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
+  \def\@oddhead{%
+    \hfill{\small\sffamily\if@TLtwenty\ltseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
       % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    }}%
+    }%
+  }%
   \def\@evenhead{%
     % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     {\small\sffamily\if@TLtwenty\ltseries\fi\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
