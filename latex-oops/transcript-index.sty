@@ -15,7 +15,9 @@
     \rightskip\@rightskip
     \leftskip\z@skip
     \parskip\z@ \@plus .3\p@\relax
+    \renewcommand{\@idxitem}{\par\hangindent5mm}%
     \let\item\@idxitem
+    \def\subitem{\par\hspace{5mm}\hangindent10mm\ignorespaces}%
 }{%
   \end{multicols}
   \clearpage
