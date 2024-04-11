@@ -95,7 +95,11 @@
 \parskip\z@
 
 %% Absatzeinzug
-\parindent5mm
+\ifx\ts@layout@type\ts@str@layout@mdw
+  \parindent6mm%
+\else
+\parindent5mm%
+\fi
 
 %% Abstand zwischen zwei Fussnoten (Grundlinie zu Grundlinie)
 {\footnotesize\global\setlength\footnotesep{\ht\strutbox}}%
