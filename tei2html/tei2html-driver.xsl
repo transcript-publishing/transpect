@@ -872,17 +872,17 @@
     <!-- https://redmine.le-tex.de/issues/15339 -->
     <xsl:choose>
       <xsl:when test="parent::*[self::div[@type = 'motto']]">
-        <xsl:apply-templates select="node()" mode="#current"/>
+        <xsl:apply-templates select="node() except bibl, bibl" mode="#current"/>
       </xsl:when>
       <xsl:otherwise>
         <blockquote class="epigraph">
-          <xsl:apply-templates select="node()" mode="#current"/>
+          <xsl:apply-templates select="node() except bibl, bibl" mode="#current"/>
         </blockquote>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="p[matches(@rend, 'tsmottosource')]" mode="tei2html" priority="3">
+  <xsl:template match="p[matches(@rend, 'tsmottosource')]|bibl[@type = 'source']" mode="tei2html" priority="3">
     <cite>
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </cite>
