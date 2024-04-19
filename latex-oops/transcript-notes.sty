@@ -5,6 +5,15 @@
 %\@removefromreset{footnote}{chapter}
 \def\footnoterule{\kern-6.4bp\hrule \@height .4bp \@width 33mm \kern 6bp} % the \hrule is .4pt high
 
+% Entspricht der Originaldefinition aus dem Kernel. Platzierung hier im Stylefile sorgt aber dafür, dass die aktuelle Schrift verwendet wird, bspw. im Falle von Fußnoten in Überschriften.
+\def\footnote{%
+  \@ifnextchar[\@xfootnote{%
+    \stepcounter\@mpfn
+    \protected@xdef\@thefnmark{\thempfn}%
+    \@footnotemark\@footnotetext%
+  }%
+}
+
 
 % \def\@makefnmark{\smash{\textsuperscript{\@thefnmark}}}
 \def\@makefnmark{\hbox{\@textsuperscript{\selectfont\@thefnmark}}}%(giovanni, 2019-07-30)
@@ -36,48 +45,3 @@
     #1%
   \egroup%
 }
-
-% \newif\if@enotesopen
-% \ifendnotes
-%   \RequirePackage{endnotes}
-%   \let\footnote=\endnote
-%   \def\enotesize{\normalsize}%
-%   \def\enoteformat{\leavevmode\hskip-2em\hb@xt@2em{\@theenmark\hss}}%
-%   \def\enoteheading{%
-%     \ifcollection
-%       \ifx\endnotes@per@chapter\relax
-%         \chapter*{\notesname}%
-%         \ifx\noendnotetoc\@undefined
-%           \addcontentsline{toc}{chapter}{\notesname}%
-%         \fi
-%       \else
-%         \section*{\notesname}%
-%         \ifx\noendnotetoc\@undefined
-%           \addcontentsline{toc}{chapter}{\notesname}%
-%         \fi
-%       \fi
-%     \else
-%       \chapter*{\notesname}%
-%       \ifx\noendnotetoc\@undefined
-%         \addcontentsline{toc}{chapter}{\notesname}%
-%       \fi
-%     \fi
-%     \leftskip2em
-%   }%
-%   \def\printnotes{%
-%     \ifx\endnotes@per@chapter\relax
-%       \ifnum\c@endnote>\z@
-%         \expandafter\global\expandafter\let\csname enotes@in@\the\realchap\endcsname\@empty
-%       \fi
-%     \fi
-%     \if@enotesopen
-%       \global\c@endnote\z@%
-%       \bgroup
-%       \parindent\z@
-%       \parskip\z@
-%       \theendnotes
-%       \egroup
-%     \fi}
-% \else
-%   \let\printnotes\relax
-% \fi
