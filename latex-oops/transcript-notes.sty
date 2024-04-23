@@ -5,15 +5,8 @@
 %\@removefromreset{footnote}{chapter}
 \def\footnoterule{\kern-6.4bp\hrule \@height .4bp \@width 33mm \kern 6bp} % the \hrule is .4pt high
 
-% Entspricht der Originaldefinition aus dem Kernel. Platzierung hier im Stylefile sorgt aber dafür, dass die aktuelle Schrift verwendet wird, bspw. im Falle von Fußnoten in Überschriften.
-\def\footnote{%
-  \@ifnextchar[\@xfootnote{%
-    \stepcounter\@mpfn
-    \protected@xdef\@thefnmark{\thempfn}%
-    \@footnotemark\@footnotetext%
-  }%
-}
-
+% Entfernt \normalfont aus der Endnotendefinition des endnotes-Pakets, wodurch bspw. in Überschriften die eingestellte Schriftart auch für die Fuß-/Endnotennummer übernommen wird. 
+\patchcmd{\@makeenmark}{\normalfont}{\selectfont}{}{}
 
 % \def\@makefnmark{\smash{\textsuperscript{\@thefnmark}}}
 \def\@makefnmark{\hbox{\@textsuperscript{\selectfont\@thefnmark}}}%(giovanni, 2019-07-30)
