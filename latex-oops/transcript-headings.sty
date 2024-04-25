@@ -873,7 +873,8 @@
     \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
   }%
   \tpSetProperty{quote-block-format}{%
-    \hfill\vbox{%
+    \hfill\hbox{
+      \vbox{%
       %\justify% Auskommentiert mit Ticket 15122.
       \leftskip0.5\textwidth
       \normalsize\mdseries
@@ -890,8 +891,8 @@
         \itshape\tpUseComp{QuoteSource}%
       }{}%
       \vskip\baselineskip%
-    }%
-  }{}
+      }%
+    }{}
   \tpSetProperty{after-skip}{\z@}%
 }
 
