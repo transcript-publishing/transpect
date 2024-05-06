@@ -582,10 +582,27 @@
 
   <xsl:template match="p[@rend eq 'tsendnotesheading']" mode="tei2html"/>  
 
-  <xsl:template match="*:lb" mode="strip-indexterms-etc tei2html">
+  <xsl:template match="*:lb" mode="strip-indexterms-etc">
     <!-- https://redmine.le-tex.de/issues/12371 -->
     <xsl:choose>
       <xsl:when test="ancestor::epigraph[@rend='motto']">
+      <!-- https://github.com/transcript-publishing/mapping-conventions/blob/main/motto/index.md#ts_motto-->
+        <br/>
+      </xsl:when>
+      <xsl:when
+        test="
+        preceding-sibling::node() and matches(preceding-sibling::node()[1], '\s$') or
+        following-sibling::node() and matches(following-sibling::node()[1], '^\s')"/>
+      <xsl:otherwise>
+        <xsl:text>&#160;</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+    <xsl:template match="*:lb" mode="tei2html">
+    <!-- https://redmine.le-tex.de/issues/12371, https://redmine.le-tex.de/issues/16741 -->
+    <xsl:choose>
+      <xsl:when test="ancestor::epigraph[@rend='motto'] or @rend = 'keep'">
       <!-- https://github.com/transcript-publishing/mapping-conventions/blob/main/motto/index.md#ts_motto-->
         <br/>
       </xsl:when>
