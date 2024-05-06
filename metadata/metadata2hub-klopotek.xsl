@@ -35,8 +35,10 @@
 
   <xsl:template match="*"  mode="klopotek-to-keyword" priority="-0.5"/>
   
-  <xsl:variable name="lang" select="     if (//*:original_publication/*:language[matches(., 'ENGL', 'i')]) then 'E' 
-                                    else if (//*:original_publication/*:language[matches(., 'SPA', 'i')]) then 'S' else ''" as="xs:string?"/>
+  <xsl:variable name="lang" select="     if (/*:product_export/*:product/*:language[@seq_no='1'][matches(., 'ENGL', 'i')]) then 'E' 
+                                    else if (/*:product_export/*:product/*:language[@seq_no='1'][matches(., 'SPA', 'i')]) then 'S' else ''" as="xs:string?">
+      <!--´ https://redmine.le-tex.de/issues/16459#note-7 -->
+  </xsl:variable>
   
   <xsl:param name="basename" as="xs:string"/>
   
