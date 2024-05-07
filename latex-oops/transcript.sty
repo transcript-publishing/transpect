@@ -22,6 +22,7 @@
 \define@key{transcript.sty}{captions_table}[top]{\gdef\ts@caps@table{#1}}
 \define@key{transcript.sty}{journal_series}[]{\gdef\ts@journal@series{#1}}
 \define@key{transcript.sty}{lay_type}[]{\gdef\ts@layout@type{#1}}
+\DeclareOptionX{nonatbib}{\global\let\n@natbib\relax}
 
 \gdef\ts@str@journal@abc{abc}
 \gdef\ts@str@journal@aua{aua}
@@ -245,7 +246,9 @@
 % Literaturverzeichnis. %
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage{transcript-bib}
+\ifx\n@natbib\relax\else
+  \usepackage{transcript-bib}
+\fi
 
 \def\source#1{\leavevmode\par#1}
 
