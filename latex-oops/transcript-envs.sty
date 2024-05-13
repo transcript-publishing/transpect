@@ -67,13 +67,7 @@
 
 
 \renewenvironment{quotation}{%
-  %\ifdim\dimexpr\pagegoal-\pagetotal\relax>0\p@
-  %  \ifdim\dimexpr\pagegoal-\pagetotal\relax<3\baselineskip
-  %    \newpage%
-  %  \fi%
-  %\fi
-  \def\tpBreak{\hfill\vskip1\baselineskip}
-  %\addvspace{\dimexpr6.96bp+1.087mm+1mm\relax}
+  \def\tpBreak{\newline}
   \list{}{%
     \listparindent \z@%
     \itemindent    \listparindent%

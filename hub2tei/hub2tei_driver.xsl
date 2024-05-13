@@ -146,8 +146,19 @@
   <xsl:template match="tei:textClass/tei:keywords[@rendition='titlepage']/tei:term[@key='THEMA'][normalize-space()]" mode="hub2tei:tidy" priority="2"/>
 
   <xsl:template match="dbk:para[not(normalize-space())]
-                                [not(.//*[self::dbk:inlinemediaobject|self::dbk:mediaobject])][not(.//dbk:anchor)]" mode="hub2tei:dbk2tei" priority="2">
+                               [not(.//*[self::dbk:inlinemediaobject|self::dbk:mediaobject])][not(.//dbk:anchor)]" mode="hub2tei:dbk2tei" priority="2">
     <!-- discard pagebreaks/empty paras, https://redmine.le-tex.de/issues/14550-->
   </xsl:template>
 
+  <xsl:template match="dbk:para[preceding-sibling::*[1][matches(@role, 'lineskip')]]" mode="cals2html-table" priority="2">
+    <xsl:copy>
+      <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:for-each select="1 to xs:integer(replace(preceding-sibling::*[1]/@role, 'tslineskip', ''))">
+        <xsl:element name="br" namespace="http://docbook.org/ns/docbook">
+          <xsl:attribute name="rend" select="'keep'"/>
+        </xsl:element>
+      </xsl:for-each>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
 </xsl:stylesheet>
