@@ -885,7 +885,7 @@
 
   <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline|superscript|subscript')]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2html"/>
   
-  <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline|superscript|subscript')]
+  <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline')]
                          [note]" mode="tei2html" priority="6">
     <!-- https://redmine.le-tex.de/issues/16736 -->
      <xsl:apply-templates select="node()" mode="#current"/>
