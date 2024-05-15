@@ -886,9 +886,25 @@
   <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline|superscript|subscript')]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2html"/>
   
   <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline')]
-                         [note]" mode="tei2html" priority="6">
+                         [note]" mode="tei2html" priority="7">
+    <xsl:variable name="context" select="." as="element()"/>
     <!-- https://redmine.le-tex.de/issues/16736 -->
-     <xsl:apply-templates select="node()" mode="#current"/>
+       <xsl:for-each-group select="node()" group-by="local-name()">
+         <xsl:choose>
+           <xsl:when test="current-grouping-key() = 'note'">
+             <xsl:apply-templates select="current-group()" mode="#current"/>
+           </xsl:when>
+           <xsl:otherwise>
+             <xsl:variable name="new-elt">
+               <xsl:element name="hi" xmlns="http://www.tei-c.org/ns/1.0">
+                 <xsl:copy-of select="$context/@*"/>
+                 <xsl:sequence select="current-group()"/>
+               </xsl:element>
+             </xsl:variable>
+             <xsl:apply-templates select="$new-elt" mode="create-style-elts"/>
+           </xsl:otherwise>
+         </xsl:choose>
+       </xsl:for-each-group>
   </xsl:template>
 
   <xsl:template match="epigraph | div[@type = 'motto']" mode="tei2html" priority="3">
