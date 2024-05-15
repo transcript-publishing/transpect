@@ -16,6 +16,32 @@
       <xsl:apply-templates select="node()" mode="#current"/>
     </keyword>
   </xsl:template>
+  
+   <xsl:template match="*:isbn"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:next-match/>
+    <xsl:call-template name="add-static-keywords"/>
+  </xsl:template>
+  
+    <xsl:template name="add-static-keywords">
+      <!--https://redmine.le-tex.de/issues/16798, https://redmine.le-tex.de/issues/16800-->
+      <keyword role="Papier">
+        <xsl:value-of select="if ($lang = 'E') 
+                                                   then 'Printed on permanent acid-free text paper.'
+                                                   else 'Gedruckt auf alterungsbeständigem Papier mit chlorfrei gebleichtem Zellstoff.'"/>
+      </keyword>
+      <keyword role="Bibliografische Information">
+        <xsl:choose>  
+          <xsl:when test="$lang = 'E'">
+            <para>Bibliographic information published by the Deutsche Nationalbibliothek</para>
+            <para>The Deutsche Nationalbibliothek lists this publication in the Deutsche Nationalbibliografie; detailed bibliographic data are available in the Internet at <link xlink:href="https://dnb.dnb.de">https://dnb.dnb.de</link></para>
+          </xsl:when>
+          <xsl:otherwise>
+            <para>Bibliografische Information der Deutschen Nationalbibliothek</para>
+            <para>Die Deutsche Nationalbibliothek verzeichnet diese Publikation in der Deutschen Nationalbibliografie; detaillierte bibliografische Daten sind im Internet über <link xlink:href="https://dnb.dnb.de/">https://dnb.dnb.de/</link> abrufbar.</para>
+          </xsl:otherwise>
+        </xsl:choose>
+      </keyword>
+    </xsl:template>
 
   <xsl:function name="css:map-klopotek-to-keyword" as="xs:string">
     <xsl:param name="role" as="xs:string"/>
@@ -96,8 +122,7 @@
                   
   <xsl:variable name="copyright-roles"  as="xs:string+" 
               select="('VE', 'HG', 'UMSA', 'LEKT', 'KORR', 'LAYO', 'DRUK')"/>
-  
-  
+
   <xsl:template match="*:copyright_holders"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/16437 -->
     <xsl:variable name="lang-num" select="if ($lang = 'E') then 3 else
