@@ -29,7 +29,7 @@
                                                    then 'Printed on permanent acid-free text paper.'
                                                    else 'Gedruckt auf alterungsbeständigem Papier mit chlorfrei gebleichtem Zellstoff.'"/>
       </keyword>
-      <keyword role="Bibliografische Information">
+      <keyword role="Bibliografische_Information">
         <xsl:choose>  
           <xsl:when test="$lang = 'E'">
             <para>Bibliographic information published by the Deutsche Nationalbibliothek</para>
