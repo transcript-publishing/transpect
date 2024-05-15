@@ -372,7 +372,11 @@
     <xsl:variable name="heading-level" select="tei2html:heading-level(.)"/>
     <xsl:variable name="author" select="preceding-sibling::byline[not(@rend = 'override')]/persName" as="element(persName)*"/>
     <xsl:variable name="subtitle" select="following-sibling::head[@type eq 'sub'], preceding-sibling::head[@type eq 'sub']" as="element(head)*"/>    
-    <xsl:element name="{if ($heading-level) then concat('h', $heading-level) else 'p'}">
+    <xsl:element name="{if ($heading-level castable as xs:integer)
+                        then if ($heading-level le 6) 
+                              then concat('h', $heading-level) 
+                               else 'h6'
+                        else 'p'}">
       <xsl:apply-templates select="." mode="class-att"/>
       <xsl:apply-templates select="@* except @rend" mode="#current"/>
       <xsl:attribute name="title" select="tei2html:heading-title(.)"/>
@@ -398,9 +402,10 @@
   
   <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))]
                            [not(ancestor::*[self::figure or self::table or self::floatingText or self::lg or self::spGrp])]" mode="class-att">
-    <xsl:attribute name="class" select="if (parent::div[@type] or parent::divGen[@type]) 
-                                        then (parent::div, parent::divGen)[1]/@type
-                                        else @rend"/>
+    <xsl:variable name="type" select="if (parent::div[@type] or parent::divGen[@type]) 
+                                      then (parent::div, parent::divGen)[1]/@type
+                                      else @rend"/>
+    <xsl:attribute name="class" select="string-join(($type, concat('h',tei2html:heading-level(current()))), ' ')"/>
   </xsl:template>
 
   <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))][matches(@rend, 'tsmeta(keyword|abstract)s?heading|tsheadword')]" 
@@ -482,18 +487,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:sequence
-      select="
-        if ($level castable as xs:integer)
-        then
-          if (xs:integer($level) gt 6)
-          then
-            6
-          else
-            $level
-        else
-          $level"
-    />
+    <xsl:sequence select="$level"/>
   </xsl:function>
 
   <xsl:template match="byline/persName" mode="heading-content">
