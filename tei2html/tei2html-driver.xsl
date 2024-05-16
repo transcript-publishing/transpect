@@ -431,7 +431,7 @@
         <xsl:when test="$elt/ancestor::figure"/>
         <xsl:when test="$elt/ancestor::floatingText"/>
         <xsl:when test="$elt/parent::div/@type = ('part', 'appendix', 'imprint', 'acknowledgements', 'dedication', 'glossary', 'preface') or
-                       $elt/parent::divGen/@type = ('index', 'toc')(: or
+                       $elt/parent::*[self::divGen|self::div]/@type = ('index', 'toc')(: or
                        $elt/parent::listBibl:)">
           <xsl:sequence select="3"/>
         </xsl:when>
