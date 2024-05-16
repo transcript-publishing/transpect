@@ -404,8 +404,9 @@
                            [not(ancestor::*[self::figure or self::table or self::floatingText or self::lg or self::spGrp])]" mode="class-att">
     <xsl:variable name="type" select="if (parent::div[@type] or parent::divGen[@type]) 
                                       then (parent::div, parent::divGen)[1]/@type
-                                      else @rend"/>
-    <xsl:attribute name="class" select="string-join(($type, concat('h',tei2html:heading-level(current()))), ' ')"/>
+                                      else (@rend, parent::*/local-name())[1]"/>
+    <xsl:variable name="level" select="tei2html:heading-level(.)"/>
+    <xsl:attribute name="class" select="string-join(($type, if ($level castable as xs:integer) then concat('h',$level) else ())[normalize-space()], ' ')"/>
   </xsl:template>
 
   <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))][matches(@rend, 'tsmeta(keyword|abstract)s?heading|tsheadword')]" 
