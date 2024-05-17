@@ -372,7 +372,11 @@
     <xsl:variable name="heading-level" select="tei2html:heading-level(.)"/>
     <xsl:variable name="author" select="preceding-sibling::byline[not(@rend = 'override')]/persName" as="element(persName)*"/>
     <xsl:variable name="subtitle" select="following-sibling::head[@type eq 'sub'], preceding-sibling::head[@type eq 'sub']" as="element(head)*"/>    
-    <xsl:element name="{if ($heading-level) then concat('h', $heading-level) else 'p'}">
+    <xsl:element name="{if ($heading-level castable as xs:integer)
+                        then if ($heading-level le 6) 
+                              then concat('h', $heading-level) 
+                               else 'h6'
+                        else 'p'}">
       <xsl:apply-templates select="." mode="class-att"/>
       <xsl:apply-templates select="@* except @rend" mode="#current"/>
       <xsl:attribute name="title" select="tei2html:heading-title(.)"/>
@@ -398,9 +402,11 @@
   
   <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))]
                            [not(ancestor::*[self::figure or self::table or self::floatingText or self::lg or self::spGrp])]" mode="class-att">
-    <xsl:attribute name="class" select="if (parent::div[@type] or parent::divGen[@type]) 
-                                        then (parent::div, parent::divGen)[1]/@type
-                                        else @rend"/>
+    <xsl:variable name="type" select="if (parent::div[@type] or parent::divGen[@type]) 
+                                      then (parent::div, parent::divGen)[1]/@type
+                                      else (@rend, parent::*/local-name())[1]"/>
+    <xsl:variable name="level" select="tei2html:heading-level(.)"/>
+    <xsl:attribute name="class" select="string-join(($type, if ($level castable as xs:integer) then concat('h',$level) else ())[normalize-space()], ' ')"/>
   </xsl:template>
 
   <xsl:template match="head[not(@type = ('sub', 'titleabbrev'))][matches(@rend, 'tsmeta(keyword|abstract)s?heading|tsheadword')]" 
@@ -425,7 +431,7 @@
         <xsl:when test="$elt/ancestor::figure"/>
         <xsl:when test="$elt/ancestor::floatingText"/>
         <xsl:when test="$elt/parent::div/@type = ('part', 'appendix', 'imprint', 'acknowledgements', 'dedication', 'glossary', 'preface') or
-                       $elt/parent::divGen/@type = ('index', 'toc')(: or
+                       $elt/parent::*[self::divGen|self::div]/@type = ('index', 'toc')(: or
                        $elt/parent::listBibl:)">
           <xsl:sequence select="3"/>
         </xsl:when>
@@ -482,18 +488,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:sequence
-      select="
-        if ($level castable as xs:integer)
-        then
-          if (xs:integer($level) gt 6)
-          then
-            6
-          else
-            $level
-        else
-          $level"
-    />
+    <xsl:sequence select="$level"/>
   </xsl:function>
 
   <xsl:template match="byline/persName" mode="heading-content">
@@ -884,6 +879,28 @@
   </xsl:template>-->
 
   <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline|superscript|subscript')]/@*[name() = ('css:font-weight', 'css:font-style', 'css:text-decoration', 'css:vertical-align')]" mode="tei2html"/>
+  
+  <xsl:template match="hi[matches(@rend, 'italic|em|bold|strong|underline')]
+                         [note]" mode="tei2html" priority="7">
+    <xsl:variable name="context" select="." as="element()"/>
+    <!-- https://redmine.le-tex.de/issues/16736 -->
+       <xsl:for-each-group select="node()" group-by="local-name()">
+         <xsl:choose>
+           <xsl:when test="current-grouping-key() = 'note'">
+             <xsl:apply-templates select="current-group()" mode="#current"/>
+           </xsl:when>
+           <xsl:otherwise>
+             <xsl:variable name="new-elt">
+               <xsl:element name="hi" xmlns="http://www.tei-c.org/ns/1.0">
+                 <xsl:copy-of select="$context/@*"/>
+                 <xsl:sequence select="current-group()"/>
+               </xsl:element>
+             </xsl:variable>
+             <xsl:apply-templates select="$new-elt" mode="create-style-elts"/>
+           </xsl:otherwise>
+         </xsl:choose>
+       </xsl:for-each-group>
+  </xsl:template>
 
   <xsl:template match="epigraph | div[@type = 'motto']" mode="tei2html" priority="3">
     <!-- https://redmine.le-tex.de/issues/15339 -->
