@@ -884,19 +884,19 @@
                          [note]" mode="tei2html" priority="7">
     <xsl:variable name="context" select="." as="element()"/>
     <!-- https://redmine.le-tex.de/issues/16736 -->
-       <xsl:for-each-group select="node()" group-by="local-name()">
+       <xsl:for-each-group select="node()" group-adjacent="exists(self::note)">
          <xsl:choose>
-           <xsl:when test="current-grouping-key() = 'note'">
+           <xsl:when test="current-grouping-key()">
              <xsl:apply-templates select="current-group()" mode="#current"/>
            </xsl:when>
            <xsl:otherwise>
-             <xsl:variable name="new-elt">
+             <xsl:variable name="new-elt" as="element()">
                <xsl:element name="hi" xmlns="http://www.tei-c.org/ns/1.0">
                  <xsl:copy-of select="$context/@*"/>
                  <xsl:sequence select="current-group()"/>
                </xsl:element>
              </xsl:variable>
-             <xsl:apply-templates select="$new-elt" mode="create-style-elts"/>
+             <xsl:apply-templates select="if ($new-elt[normalize-space()]) then $new-elt else current-group()" mode="create-style-elts"/>
            </xsl:otherwise>
          </xsl:choose>
        </xsl:for-each-group>
