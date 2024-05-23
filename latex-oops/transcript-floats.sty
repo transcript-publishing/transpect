@@ -23,50 +23,60 @@
 
 \intextsep\baselineskip
 
+%% @marcush, das das vorher nicht richtig funktioniert hat, lag daran,
+%% dass im coco-floats.sty die Hyperref-Anchor erzeugt wurden
+%% *nachdem* die LoF/LoT-Einträge generiert wurden. Ich hab das
+%% einfach umgedreht, damit kommen die Sprungziele und Seitenzahlen
+%% korrekt raus. Ich hab daher deinen Mechanismus auskommentiert, da
+%% er dafür gesorgt hat, dass die Einträge in der LoT um eins nach
+%% hinten verschoben waren, also "Tabelle 2" hat die Seitenzahl von
+%% "Tabelle 1" gekriegt und "Tabelle 1" hatte "0" als Seitenzahl; die
+%% Sprungziele analog. (vgl. redmine-16842).
+%
+%
+% % Ermittlung der echten Seitennummer durch Labels.
+% \global\newcount\realpageCnt \global\realpageCnt=0
+% \global\newcount\realpage
+% \gdef\realHref{}
+% \def\getLabelPage#1{%
+%   \def\tp@getPage##1##2##3##4##5{##2}
+%   \def\tp@getHref##1##2##3##4##5{##4}
+%   \bgroup%
+%     \def\@setref##1##2##3{%
+%       \ifx##1\relax%
+%         \@latex@warning{Reference `##3' on page \thepage \space undefined; ##1}%
+%       \else
+%         \global\realpage=\number\expandafter\tp@getPage##1
+%         \xdef\realHref{\expandafter\tp@getHref##1}%
+%       \fi
+%     }
+%     \pageref{#1}%
+%   \egroup%
+% }%
 
-% Ermittlung der echten Seitennummer durch Labels.
-\global\newcount\realpageCnt \global\realpageCnt=0
-\global\newcount\realpage
-\gdef\realHref{}
-\def\getLabelPage#1{%
-  \def\tp@getPage##1##2##3##4##5{##2}
-  \def\tp@getHref##1##2##3##4##5{##4}
-  \bgroup%
-    \def\@setref##1##2##3{%
-      \ifx##1\relax%
-        \@latex@warning{Reference `##3' on page \thepage \space undefined; ##1}%
-      \else
-        \global\realpage=\number\expandafter\tp@getPage##1
-        \xdef\realHref{\expandafter\tp@getHref##1}%
-      \fi
-    }
-    \pageref{#1}%
-  \egroup%
-}%
+% \def\tp@str@table{table}
+% \def\tp@flt@addcontentsline#1#2#3{%
+%   % Ersetze \thepage durch \the\realpage.
+%   \ifx#2\tp@str@table
+%     \protected@write\@auxout{\tpGobble}{\string\@writefile{#1}{\protect\tpContentsline{#2}{#3}{\the\realpage}{\realHref}\protected@file@percent}}\relax
+%   \else
+%     \protected@write\@auxout{\tpGobble}{\string\@writefile{#1}{\protect\tpContentsline{#2}{#3}{\thepage}{\@currentHref}\protected@file@percent}}\relax
+%   \fi
+% }
 
-\def\tp@str@table{table}
-\def\tp@flt@addcontentsline#1#2#3{%
-  % Ersetze \thepage durch \the\realpage.
-  \ifx#2\tp@str@table
-    \protected@write\@auxout{\tpGobble}{\string\@writefile{#1}{\protect\tpContentsline{#2}{#3}{\the\realpage}{\realHref}\protected@file@percent}}\relax
-  \else
-    \protected@write\@auxout{\tpGobble}{\string\@writefile{#1}{\protect\tpContentsline{#2}{#3}{\thepage}{\@currentHref}\protected@file@percent}}\relax
-  \fi
-}
-
-\def\tpGetTableContent{%
-  \ifx\htTableBox\@undefined\else
-    \ifvoid\htTableBox\else
-      % BEGIN: Setze die echte Seite auf den Tabellenanfang.
-      \phantomsection%
-      \label{floatLabel\the\realpageCnt}%
-      \getLabelPage{floatLabel\the\realpageCnt}%
-      \global\advance\realpageCnt\@ne%
-      % END.
-      \let\tp@floatbox\htTableBox%
-    \fi%
-  \fi%
-}
+% \def\tpGetTableContent{%
+%   \ifx\htTableBox\@undefined\else
+%     \ifvoid\htTableBox\else
+%       % BEGIN: Setze die echte Seite auf den Tabellenanfang.
+%       \phantomsection%
+%       \label{floatLabel\the\realpageCnt}%
+%       \getLabelPage{floatLabel\the\realpageCnt}%
+%       \global\advance\realpageCnt\@ne%
+%       % END.
+%       \let\tp@floatbox\htTableBox%
+%     \fi%
+%   \fi%
+% }
 
 \def\tp@str@center{center}
 %% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
