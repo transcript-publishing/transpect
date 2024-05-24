@@ -15,11 +15,12 @@
   
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
-  <xsl:param name="table-caption-pos" as="xs:string?"/>
-  <xsl:param name="figure-caption-pos" as="xs:string?"/>
   <xsl:param name="sans-font"   as="xs:string?"/>
   
   <xsl:variable name="create-customer-toctitles" select="true()" as="xs:boolean"/>
+  
+  <xsl:param name="table-caption-pos" as="xs:string?"/>
+  <xsl:param name="figure-caption-pos" as="xs:string?"/>
   
   <xsl:variable name="is-collection" select="matches($basename,  'ts_[a-z]{3}_anth_')" as="xs:boolean"/>
   <xsl:variable name="is-journal" select="matches($basename,  'ts_jrn_[a-z]{3,4}_')" as="xs:boolean"/>
@@ -749,7 +750,7 @@
         ($heading/local-name() = 'bibliography' and $heading/parent::dbk:*[local-name() = ('hub', 'book')][dbk:part])">
         <xsl:sequence select="'part'"/>
       </xsl:when>
-      <xsl:when test="$heading/local-name() = ('chapter', 'index') 
+      <xsl:when test="$heading/local-name() = ('chapter', 'index', 'appendix') 
                       or 
                       ($heading/local-name() = 'section' and $heading[@renderas = 'chapter'])
                       or
