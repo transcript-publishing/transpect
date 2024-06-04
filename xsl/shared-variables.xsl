@@ -71,4 +71,7 @@
 
   <xsl:variable name="css:italic-elt-name" as="xs:string?" select="'em'"/>
   <xsl:variable name="css:bold-elt-name" as="xs:string?" select="'strong'"/>
+  
+  <xsl:variable name="xml2tex:set-pagecounter-without-titlepage" select="()"/>
+  
 </xsl:stylesheet>
