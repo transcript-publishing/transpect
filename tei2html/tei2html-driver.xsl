@@ -107,6 +107,11 @@
       <xsl:apply-templates select="/TEI/text/front/div[@type = 'dedication']/p" mode="#current"/>
     </section>
     </xsl:if>
+    <xsl:if test="/TEI/text/front/div[@type = 'preface'][@rend = 'epigraph']">
+      <section class="motto" epub:type="epigraph" role="doc-epigraph">
+        <xsl:apply-templates select="/TEI/text/front/div[@type = 'preface'][@rend = 'epigraph']/*" mode="#current"/>
+      </section>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template name="frontispiece">

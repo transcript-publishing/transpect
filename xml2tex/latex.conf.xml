@@ -449,18 +449,19 @@
     </xsl:if>
   </preamble>
 
+
   <front>
     <xsl:if test="$title-pages eq 'yes'">
       <xsl:text>\tpMaketitle&#xa;</xsl:text>  
     </xsl:if>
-    <xsl:apply-templates select="/dbk:*/dbk:colophon[@role = 'dedication']
+    <xsl:apply-templates select=" /dbk:*/dbk:colophon[@role = 'dedication']
+                                 |/dbk:*/dbk:preface[@role = 'epigraph']
                                  |/dbk:*/dbk:dedication" mode="#current">
       <xsl:with-param name="keep" select="true()" tunnel="yes"/>
     </xsl:apply-templates>
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
-  
-  
+
   <xsl:template name="xml2tex:add-publicationtype-specific-meta">
     <!-- placeholder-->
   </xsl:template>
