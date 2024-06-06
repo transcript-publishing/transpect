@@ -122,6 +122,9 @@ h5.section {
 h6.section, h6.tsheading4notoc {
   font-size: 1em;
 }
+h6.h7 {
+  font-weight:normal;
+}
 span.heading-subtitle {
   font-weight:normal;
 }
@@ -474,7 +477,7 @@ p.editorial {
   text-indent: 0;
   margin-top: 1em;
 }
-span.article-title{
+li.toc3 > a{
   font-weight: bold;
 }
 .tsmottosource{
