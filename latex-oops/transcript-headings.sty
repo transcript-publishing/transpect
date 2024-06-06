@@ -1,6 +1,8 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-headings}[2021/08/18 transcript]\relax
 
+% Änderungen für die Migration von TeXLive 2019 auf TeXLive 2024 sind mit »Mig2024« kommentiert.
+
 % Umschalter für alternative Kolumnentitel (Ticket 16094).
 \newif\if@altRunTitles \@altRunTitlesfalse
 \def\altRunTitles{%
@@ -25,8 +27,8 @@
   \tpSetProperty{toc-number-align}{left}%
   \tpSetProperty{toc-number-sep}{\enskip}%
   \tpSetProperty{toc-page-sep}{\tsDotfill}% Definition für \tsDotfill in der Hauptdatei transcript.sty.
-  \tpSetProperty{toc-title-face}{\sffamily\normalsize}%
-  \tpSetProperty{toc-page-face}{\normalfont\sfwidefamily\normalsize}%
+  \tpSetProperty{toc-title-face}{\sffamily\normalsize\if@TLtwenty\upseries\fi}% Mig2024
+  \tpSetProperty{toc-page-face}{\normalfont\sfwidefamily\normalsize\if@TLtwenty\upseries\fi}% Mig2024
   \tpSetProperty{toc-format}{%
     \tpUseProperty{toc-title-face}%
     \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
@@ -718,7 +720,7 @@
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
   \tpSetProperty{number-sep}{\enskip}%
   \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
-  \tpSetProperty{subtitle-face}{\normalfont\sffamily\LARGE}%
+  \tpSetProperty{subtitle-face}{\normalfont\sffamily\LARGE\if@TLtwenty\upseries\fi}% Mig2024
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
   \tpSetProperty{quote-block-format}{%
     \vbox{%
