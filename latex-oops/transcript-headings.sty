@@ -900,13 +900,13 @@
 \tpDeclareHeading[section]{4}{paragraph}{%
   \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
   \tpSetProperty{after-skip}{1sp}%
-  \tpSetProperty{title-face}{\normalfont\sffamily\normalsize}% 2022-06-02: \sffamily war vorher \sfwidefamily; 12745
+  \tpSetProperty{title-face}{\normalfont\sffamily\normalsize\if@TLtwenty\upseries\fi}% Mig2024, 2022-06-02: \sffamily war vorher \sfwidefamily; 12745
 }
 
 \tpDeclareHeading{5}{subparagraph}{%
   \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
   \tpSetProperty{after-skip}{-.5em}%
-  \tpSetProperty{title-face}{\normalfont\sffamily\normalsize\mdseries}%
+  \tpSetProperty{title-face}{\normalfont\sffamily\normalsize\if@TLtwenty\upseries\else\mdseries\fi}% Mig2024
 }
 
 \endinput
