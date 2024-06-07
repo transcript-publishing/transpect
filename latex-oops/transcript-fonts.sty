@@ -9,6 +9,7 @@
   \babelfont{rm}[%
     Path=fonts/Lora/,%
     BoldFont = Lora-Bold.ttf,%
+    FontFace = {md}{it}{Lora-Italic.ttf},%
     FontFace = {eb}{n}{Lora-Regular.ttf},%
     FontFace = {eb}{it}{Lora-BoldItalic.ttf},%
     FontFace = {sb}{n}{Lora-Medium.ttf},%
@@ -186,7 +187,11 @@
       FontFace = {sb}{it}{NotoSans-CondensedBoldItalic.ttf},%
       ItalicFont = NotoSans-CondensedItalic.ttf,%
       BoldItalicFont = NotoSans-CondensedBoldItalic.ttf,%
-      WordSpace=2.0,%
+      \if@TLtwenty
+        WordSpace=1.2,%
+      \else
+        WordSpace=2.0,%
+      \fi
       LetterSpace=2.0,%
       FakeStretch=1.02,%
       Color=TranscriptGrey%
@@ -229,7 +234,10 @@
       FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
       ItalicFont = Lato-Italic.ttf,%
       BoldItalicFont = Lato-BoldItalic.ttf,%
-      WordSpace=1.1,%
+      \if@TLtwenty
+      \else
+        WordSpace=1.1,%
+      \fi
       %LetterSpace=1,%
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
@@ -250,7 +258,10 @@
       FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
       ItalicFont = Lato-Italic.ttf,%
       BoldItalicFont =Lato-BoldItalic.ttf,%
-      WordSpace=1.2,%
+      \if@TLtwenty
+      \else
+        WordSpace=1.2,%
+      \fi
       %LetterSpace=1,%
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
@@ -422,9 +433,14 @@
       FontFace = {sb}{it}{../../Noto/Sans/NotoSans-CondensedBoldItalic.ttf},%
       ItalicFont = BarlowCondensed-Italic.ttf,%
       BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
-      WordSpace=2.0,%
-      LetterSpace=2.0,%
-      FakeStretch=1.02,%
+      \if@TLtwenty
+        LetterSpace=2.85,%
+        WordSpace=1.2,%
+      \else
+        WordSpace=2.0,%
+        LetterSpace=2.0,%
+        FakeStretch=1.02,%
+      \fi
       Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
   
@@ -529,7 +545,11 @@
       FontFace = {sb}{it}{NotoSans-CondensedBoldItalic.ttf},%
       ItalicFont = NotoSans-CondensedItalic.ttf,%
       BoldItalicFont = NotoSans-CondensedBoldItalic.ttf,%
-      WordSpace=2.0,%
+      \if@TLtwenty
+        WordSpace=1.2,%
+      \else
+        WordSpace=2.0,%
+      \fi
       LetterSpace=2.0,%
       FakeStretch=1.02,%
       Color=TranscriptGrey%
@@ -573,9 +593,14 @@
       FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},%
       ItalicFont = BarlowCondensed-Italic.ttf,%
       BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
-      WordSpace=2.0,%
-      LetterSpace=2.0,%
-      FakeStretch=1.02,%
+      \if@TLtwenty
+        LetterSpace=2.85,%
+        WordSpace=1.2,%
+      \else
+        WordSpace=2.0,%
+        LetterSpace=2.0,%
+        FakeStretch=1.02,%
+      \fi
       Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
   
@@ -679,13 +704,36 @@
       FontFace = {sb}{it}{BarlowCondensed-SemiBoldItalic.ttf},%
       ItalicFont = BarlowCondensed-Italic.ttf,%
       BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
-      WordSpace=2.0,%
+      \if@TLtwenty
+        WordSpace=1.2,%
+      \else
+        WordSpace=2.0,%
+      \fi
       LetterSpace=2.0,%
       FakeStretch=1.02,%
       Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
   \fi
 \fi
+
+\tpDeclareBabelFont{greek}{%
+  [%
+    BoldFont = NotoSerif-Bold.ttf,%
+    ItalicFont = NotoSerif-Italic.ttf,%
+    BoldItalicFont = NotoSerif-BoldItalic.ttf,%
+    Path = ./fonts/Noto/Serif/,%
+    WordSpace = 1.25
+  ]{NotoSerif-Regular.ttf}%
+}{%
+  [%
+    BoldFont = NotoSans-Bold.ttf,%
+    ItalicFont = NotoSans-Italic.ttf,%
+    FontFace = {md}{it}{NotoSans-Italic.ttf},% Erlaubt griechische Kursivierung. Mig2024.
+    BoldItalicFont = NotoSans-BoldItalic.ttf,%
+    Path = ./fonts/Noto/Sans/,%
+    WordSpace = 1.25%
+  ]{NotoSans-Regular.ttf}%
+}
 
 \DeclareRobustCommand{\ltseries}{\fontseries{lt}\selectfont}
 \DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}

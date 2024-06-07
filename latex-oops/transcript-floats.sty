@@ -160,12 +160,11 @@
     \fi
   \fi
   %% Parameter für Abbildungs- und Tabellenverzeichnisse.
-  \tpSetProperty{list-of-caption-face}{\sffamily}%
+  \tpSetProperty{list-of-caption-face}{\normalfont\normalsize\sffamily\if@TLtwenty\upseries\fi}% Mig2024
   \tpSetProperty{list-of-indent}{\z@}%
   \tpSetProperty{list-of-margin-left}{\z@}%
   \tpSetProperty{list-of-margin-right}{1.2em plus 1fil}%
   \tpSetProperty{list-of-page-sep}{\tsDotfill\kern.5\p@}% Definition für \tsDotfill in der Hauptdatei transcript.sty.
-  \tpSetProperty{list-of-caption-face}{\sffamily}%
   \tpSetProperty{list-of-number-face}{}%
   \tpSetProperty{list-of-number-sep}{:\enskip}%
   \tpSetProperty{list-of-block}{%
@@ -190,7 +189,8 @@
     \tpUseProperty{list-of-caption-face}%
     \tpIfComp{ListofNumber}{%
       \@tempdima=\tpUseProperty{list-of-number-width-max}%
-      \leftskip\@tempdima \hskip-\@tempdima \hbox to \@tempdima{%
+      \leftskip\@tempdima \hskip-\@tempdima
+      \hbox to \@tempdima{%
         \tpUseComp{ListofNumber}%
         \tpIfComp{ListofCaption}{%
           \tpUseProperty{list-of-number-sep}%

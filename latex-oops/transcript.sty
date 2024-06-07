@@ -153,6 +153,8 @@
 \newunicodechar{⑦}{\circledNumber{7}}
 \newunicodechar{⑧}{\circledNumber{8}}
 \newunicodechar{⑨}{\circledNumber{9}}
+% Ideomatisches Komma für Chinesisch.
+\newunicodechar{、}{\char"3001}
 %\newunicodechar{ǀ}{|}
 
 \newunicodechar{ǀ}{%
@@ -325,9 +327,9 @@
   %  \fontsize{7.8bp}{\the\baselineskip}\selectfont%
   %\fi
   % END.
-  \sffamily%
+  \sffamily
   \ifx\@currenvir\tp@str@heading
-    \bfseries%
+    \bfseries
   \fi
   \fontsize{0.8468\dimexpr\f@size\p@\relax}{\the\baselineskip}\selectfont%
 }
