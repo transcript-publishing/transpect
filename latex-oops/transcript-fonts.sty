@@ -716,6 +716,25 @@
   \fi
 \fi
 
+\tpDeclareBabelFont{greek}{%
+  [%
+    BoldFont = NotoSerif-Bold.ttf,%
+    ItalicFont = NotoSerif-Italic.ttf,%
+    BoldItalicFont = NotoSerif-BoldItalic.ttf,%
+    Path = ./fonts/Noto/Serif/,%
+    WordSpace = 1.25
+  ]{NotoSerif-Regular.ttf}%
+}{%
+  [%
+    BoldFont = NotoSans-Bold.ttf,%
+    ItalicFont = NotoSans-Italic.ttf,%
+    FontFace = {md}{it}{NotoSans-Italic.ttf},% Erlaubt griechische Kursivierung. Mig2024.
+    BoldItalicFont = NotoSans-BoldItalic.ttf,%
+    Path = ./fonts/Noto/Sans/,%
+    WordSpace = 1.25%
+  ]{NotoSans-Regular.ttf}%
+}
+
 \DeclareRobustCommand{\ltseries}{\fontseries{lt}\selectfont}
 \DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
 \DeclareRobustCommand{\sbseries}{\fontseries{sb}\selectfont}
