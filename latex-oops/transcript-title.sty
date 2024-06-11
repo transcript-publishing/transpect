@@ -639,7 +639,9 @@
         \vfill
         \tpUseProperty{imprint-format}%
         \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
-        \tpIfComp{AddNoteIV}{\vskip1\baselineskip\tpUseComp{AddNoteIV}}{}%
+        \tpIfComp{AddNoteIV}{%
+          \vskip1\baselineskip\tpUseComp{AddNoteIV}%
+        }{}%
         \tpUseProperty{licence}%
         \vfill
         \bgroup
