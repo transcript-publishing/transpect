@@ -10,6 +10,18 @@
   version="2.0" exclude-result-prefixes="#all">
   
 
+  <xsl:import href="licenses.xsl"/>
+
+  <xsl:param name="basename" as="xs:string"/>
+  <xsl:variable name="lang" select="     if (//*:product_export/*:product/*:language[@seq_no='1'][matches(., 'ENGL', 'i')]) then 'E' 
+                                    else if (//*:product_export/*:product/*:language[@seq_no='1'][matches(., 'SPA', 'i')]) then 'S' else ''" as="xs:string?">
+    <!-- https://redmine.le-tex.de/issues/16459#note-7 -->
+  </xsl:variable>
+  <xsl:variable name="open-access" as="xs:boolean" select="exists(//*:product_export/*:product/*:open_access[@open_access_yn = 'Y'])"/>
+    
+  <xsl:template match="*"  mode="klopotek-to-keyword" priority="-0.5"/>
+  
+
   
   <xsl:template match="*:title | *:subtitle | *:doi | *:serial_title"  mode="klopotek-to-keyword"  priority="2">
     <keyword role="{css:map-klopotek-to-keyword(name())}">
@@ -17,10 +29,73 @@
     </keyword>
   </xsl:template>
   
-   <xsl:template match="*:isbn"  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:open_access"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/16949-->
+    <xsl:if test="$open-access">
+      <xsl:variable name="license-type" select="string-join(tokenize(*:cc_license_type/@term, '\P{Lu}')[not(. = 'CC')], '-')"/>
+        <xsl:message select="'###', $license-type"/>
+      <keyword role="Lizenz">
+        <xsl:value-of select="$license-type" />
+      </keyword>
+      <xsl:apply-templates select="$license-texts/*:License[@id = $license-type]" mode="#current">
+        <xsl:with-param name="license-lang" 
+                      select=" if (//*:product_export/*:product/*:language[@seq_no='1'][matches(., 'ENGL', 'i')]) then 'en' 
+                          else if (//*:product_export/*:product/*:language[@seq_no='1'][matches(., 'SPA', 'i')]) then 'es' else 'de'" tunnel="yes"/>
+      </xsl:apply-templates>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template match="*:License"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/16949-->
+    <xsl:apply-templates select="*:Image | *:Link | *:Texts" mode="#current"/>
+  </xsl:template>
+  
+  <xsl:template match="*:License/*:Texts"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:param name="license-lang" tunnel="yes" as="xs:string"/>
+    <!-- https://redmine.le-tex.de/issues/16949-->
+    <keyword role="Lizenztext">
+      <xsl:apply-templates select="*:Text[@lang = $license-lang]" mode="#current"/>
+    </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:License/*:Texts/*:Text"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:choose>
+      <xsl:when test="*:br"><!-- single paras from br -->   
+        <xsl:for-each-group select="node()[.]" group-ending-with="self::*:br">
+          <para><xsl:apply-templates select="current-group()" mode="#current"/></para>
+        </xsl:for-each-group>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="node()" mode="#current"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="*:License/*:Texts/*:Text/text()"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:value-of select="normalize-space(.)"/>
+  </xsl:template>
+  
+  <xsl:template match="*:License/*:Image"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:param name="license-lang" tunnel="yes" as="xs:string"/>
+    <!-- https://redmine.le-tex.de/issues/16949-->
+    <keyword role="Lizenzlogo">
+      <xsl:value-of select="@url"/>
+    </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:License/*:Link"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:param name="license-lang" tunnel="yes" as="xs:string"/>
+    <!-- https://redmine.le-tex.de/issues/16949-->
+    <keyword role="Lizenzlink">
+      <xsl:value-of select="@url"/>
+    </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:isbn"  mode="klopotek-to-keyword"  priority="2">
     <xsl:next-match/>
     <xsl:call-template name="add-static-keywords"/>
   </xsl:template>
+  
   
     <xsl:template name="add-static-keywords">
       <!--https://redmine.le-tex.de/issues/16798, https://redmine.le-tex.de/issues/16800-->
@@ -59,21 +134,14 @@
     <xsl:value-of select="map:get($klopotek-roles, $role)"/>
   </xsl:function>
 
-  <xsl:template match="*"  mode="klopotek-to-keyword" priority="-0.5"/>
-  
-  <xsl:variable name="lang" select="     if (//*:product_export/*:product/*:language[@seq_no='1'][matches(., 'ENGL', 'i')]) then 'E' 
-                                    else if (//*:product_export/*:product/*:language[@seq_no='1'][matches(., 'SPA', 'i')]) then 'S' else ''" as="xs:string?">
-      <!--´ https://redmine.le-tex.de/issues/16459#note-7 -->
-  </xsl:variable>
-  
-  <xsl:param name="basename" as="xs:string"/>
+
   
   <xsl:template match="*:original_publication"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/16471-->
     <keyword role="Copyright">
       <para><xsl:sequence select="*:copyright_remark/node()"/></para>
       <xsl:choose>
-        <xsl:when test="../*:open_access[@open_access_yn = 'Y']">
+        <xsl:when test="$open-access">
           <!-- Open Access-->
          <para>
            <xsl:choose>
