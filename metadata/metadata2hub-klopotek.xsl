@@ -46,7 +46,6 @@
   </xsl:template>
   
   <xsl:template match="*:License"  mode="klopotek-to-keyword"  priority="2">
-    <xsl:param name="license-lang" tunnel="yes" as="xs:string"/>
     <!-- https://redmine.le-tex.de/issues/16949-->
     <xsl:apply-templates select="*:Image | *:Link | *:Texts" mode="#current"/>
   </xsl:template>
@@ -54,10 +53,26 @@
   <xsl:template match="*:License/*:Texts"  mode="klopotek-to-keyword"  priority="2">
     <xsl:param name="license-lang" tunnel="yes" as="xs:string"/>
     <!-- https://redmine.le-tex.de/issues/16949-->
-    <xsl:apply-templates select="*:Image | *:Link | *:Texts" mode="#current"/>
     <keyword role="Lizenztext">
-      <xsl:apply-templates select="*:Text[@lang = $license-lang]/node()" mode="#current"/>
+      <xsl:apply-templates select="*:Text[@lang = $license-lang]" mode="#current"/>
     </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:License/*:Texts/*:Text"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:choose>
+      <xsl:when test="*:br"><!-- single paras from br -->   
+        <xsl:for-each-group select="node()[.]" group-ending-with="self::*:br">
+          <para><xsl:apply-templates select="current-group()" mode="#current"/></para>
+        </xsl:for-each-group>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="node()" mode="#current"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="*:License/*:Texts/*:Text/text()"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:value-of select="normalize-space(.)"/>
   </xsl:template>
   
   <xsl:template match="*:License/*:Image"  mode="klopotek-to-keyword"  priority="2">
