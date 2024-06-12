@@ -123,7 +123,8 @@
       <xsl:apply-templates select="$metadata[@key = 'Autor'], 
                                    $metadata[@key = 'Herausgeber'],
                                    $metadata[@key = 'Titel'],
-                                   $metadata[@key = 'Untertitel']" mode="#current"/>
+                                   $metadata[@key = 'Untertitel'],
+                                   $metadata[@key = 'Reihe']" mode="#current"/>
       <div class="logo">
         <img src="http://this.transpect.io/a9s/ts/logos/transcript_rgb.png" alt="Transcript Verlag"/>
       </div>
@@ -191,6 +192,17 @@
   <xsl:template match="term[@key eq 'Lizenzlogo'][normalize-space()]" mode="tei2html">
      <p class="{lower-case(translate(@key, ' ', '-'))}">
       <img src="{concat('http://this.transpect.io/a9s/ts/logos/cc/', replace(., '\.eps', '.png', 'i'))}" alt="Logo {normalize-space(../term[@key eq 'Lizenz'])}" class="cc logo"/>
+    </p>
+  </xsl:template>
+
+  <xsl:template match="term[@key eq 'Reihe'][normalize-space()]" mode="tei2html">
+    <!--  https://redmine.le-tex.de/issues/15397-->
+     <p class="{lower-case(translate(@key, ' ', '-'))}">
+      <strong><xsl:apply-templates mode="#current"/></strong>
+       <xsl:if test="../term[@key eq 'Bandnummer'][normalize-space()]">
+         <xsl:text> | </xsl:text>
+         <xsl:value-of select="normalize-space(../term[@key eq 'Bandnummer'])"/>
+       </xsl:if>
     </p>
   </xsl:template>
 
