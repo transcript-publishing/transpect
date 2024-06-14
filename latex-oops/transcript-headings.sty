@@ -176,7 +176,7 @@
     \tpUseProperty{title-face}%
     %\vskip.5\baselineskip
     \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
-    \tpUseComp{Title}\par%
+    \ignorespaces\tpUseComp{Title}\par%
     \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
     %% Zitat
     \tpIfComp{QuoteBlock}{%
@@ -367,7 +367,7 @@
       \tpUseProperty{title-face}%
       {%
         \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
-        \tpUseComp{Title}%
+        \ignorespaces\tpUseComp{Title}%
       }%
       \tpIfComp{Subtitle}{%
         \par\vskip1.1bp%
@@ -634,7 +634,7 @@
         \interlinepenalty\@M
         \tpUseProperty{title-face}%
         \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
-        \tpUseComp{Title}\par\nopagebreak%
+        \ignorespaces\tpUseComp{Title}\par\nopagebreak%
         \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
         \tpIfComp{DOI}{%
           \vskip\baselineskip%
@@ -748,7 +748,7 @@
       \interlinepenalty\@M
       \tpUseProperty{title-face}%
       \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
-      \tpUseComp{Title}\par\nopagebreak%
+      \ignorespaces\tpUseComp{Title}\par\nopagebreak%
       \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
       \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
     \egroup
