@@ -17,7 +17,11 @@
                 select="if (exists(//*:figure/*:title[matches(normalize-space(.), '^(Bild|Abbildung|Abbildungen|Abb\.|Figures?|Figs?\.?)')])) 
                         then 'Bild|Abbildung|Abbildungen|Abb\.|Figures?|Figs?\.?' 
                         else '[^\p{Zs}]+'"/>
-
+  
+  <xsl:variable name="text-to-identifiy-not-identifier" select="'(years|Jahre|to\p{Zs}|bis\p{Zs}|$)'">
+    <!-- if chapter/part headings only are numbers: avoid identifying -->
+  </xsl:variable>
+  
   <!-- the code below was commented since the heading2 with keyword is not used anymore -->
 
   <!--<xsl:variable name="hub:hierarchy-role-regexes-x" as="xs:string+" 
