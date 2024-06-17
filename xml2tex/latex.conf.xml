@@ -199,26 +199,33 @@
   
   <xsl:variable name="create-customer-toctitles"  select="true()" as="xs:boolean"/>
 
-  <xsl:variable name="scripts" as="element(script)*" xmlns="">
+<!--  <xsl:variable name="scripts" as="element(script)*" xmlns="">
     <script name="arabic"   unicode-range="&#x600;-&#x6ff;&#x750;-&#x77f;"/>
     <script name="syriac"   unicode-range="&#x700;-&#x74f;"/>
     <script name="armenian" unicode-range="&#x530;-&#x58f;&#xfb13;-&#xfb17;"/>
     <script name="chinese"  unicode-range="&#12288;-&#12351;&#x3002;&#x4e00;-&#x9fff;"/>
     <script name="hebrew"   unicode-range="&#x590;-&#x5ff;&#xfb1d;-&#xfb4f;"/>
     <script name="japanese" unicode-range="&#x3040;-&#x309f;&#x30a0;-&#x30ff;&#12352;-&#12543;"/>
-    <!--<script name="greek"    unicode-range="&#x370;-&#x3ff;&#7936;-&#8191;"/> overwritten temporarily for CI tests-->
-  </xsl:variable>
+    <!-\-<script name="greek"    unicode-range="&#x370;-&#x3ff;&#7936;-&#8191;"/> overwritten temporarily for CI tests-\->
+  </xsl:variable>-->
 
   <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
   <ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
   
   <import href="../../common/xml2tex/latex.conf.xml"/>  
   
+  <xsl:variable name="greek" as="xs:string?" 
+                  select="if (some $l in xml2tex:determine-other-langs(root()) satisfies $l = 'greek' 
+                                       and 
+                                       not(some $b in $all-langs satisfies $b = 'el')) 
+                                   then 'greek' else ()"/>
+  
   <preamble>%
     % by transcript publishers
     %
     <xsl:value-of select="concat('\documentclass[',
                                  string-join(($babel-langs[position() ne 1],
+                                            $greek[normalize-space()],
                                             $babel-langs[1]), (: 1st lang is main lang and comes last :)
                                             ','),
                                  if($is-collection) then ',pubtype=collection' else if ($is-journal) then ',pubtype=journal' else (),
@@ -462,6 +469,21 @@
     <xsl:text>\tableofcontents&#xa;</xsl:text>
   </front>
 
+  <xsl:function name="xml2tex:foreign-scripts" as="xs:string?">
+    <xsl:param name="root" as="document-node(element())"/>
+    <!-- adds usescripts for lanugages defined in variable scripts. If a usescript is set, a fallback font for this language will be applied.
+      For greek this is overridden because most fonts contain greek characters already. If not, overwrite this function and delete the 
+      condition for greek as well as the variable $greek in the documentclass definition -->
+    
+    <xsl:variable name="other-scripts-in-doc" as="xs:string*" select="xml2tex:determine-other-langs($root), for $af in $xml2tex:lang-for-additional-fonts return $af[. = $all-babel-langs]"/>
+    
+    <xsl:sequence select="if(exists($other-scripts-in-doc))
+      then concat(',usescript=', '{'[count($other-scripts-in-doc) gt 1],
+      string-join($other-scripts-in-doc, ','), 
+      '}'[count($other-scripts-in-doc) gt 1])
+      else ()"/>
+  </xsl:function>
+  
   <xsl:template name="xml2tex:add-publicationtype-specific-meta">
     <!-- placeholder-->
   </xsl:template>
