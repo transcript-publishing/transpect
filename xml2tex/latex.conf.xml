@@ -702,14 +702,14 @@
   <template name="customer-toctitles">
     <rule name="tpTocTitle" type="cmd" break-after="0" break-before="1">
       <param select="dbk:title/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
-        <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+        <with-param name="protect-lang" select="true()" as="xs:boolean" tunnel="yes"/>
         <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
       </param>
     </rule>
     <xsl:if test="dbk:title[dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
       <rule name="tpTocNumber" type="cmd" break-after="0" break-before="1">
         <param select="dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()[self::dbk:phrase | self::text()]">
-          <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="protect-lang" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
@@ -717,7 +717,7 @@
     <xsl:if test="dbk:subtitle">
       <rule name="tpTocSubtitle" type="cmd" break-after="0" break-before="1">
         <param select="dbk:subtitle/node()">
-          <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+          <with-param name="protect-lang" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>

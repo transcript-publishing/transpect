@@ -17,8 +17,12 @@
   <xsl:import href="../../common/xml2tex/helpers.xsl"/>
    <!-- overridden to include client specific table split variables -->
   
-  <xsl:import href="../xsl/shared-variables.xsl"/>
-
   
+  <xsl:import href="../xsl/shared-variables.xsl"/>
+  <xsl:param name="table-caption-pos" as="xs:string?"/>
+  <xsl:param name="figure-caption-pos" as="xs:string?"/>
+  
+    <!-- handle table caption position. 'top' or 'bottom'-->
+  <xsl:variable name="xml2tex:table-caption-pos" as="xs:string?" select="$table-caption-pos"/>
 
 </xsl:stylesheet>
