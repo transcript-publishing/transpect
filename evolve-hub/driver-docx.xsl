@@ -310,5 +310,11 @@
   <xsl:template match="/hub/info/keywordset[@role = 'titlepage']/keyword[@role = 'Widmung']" mode="hub:split-at-tab">
     <!-- https://redmine.le-tex.de/issues/16444-->
   </xsl:template>
-    
+
+  <xsl:template match="footnote//phrase[@role = 'hub:separator'][matches(., '^\p{Zs}+$')]" mode="hub:split-at-tab">
+   <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+  
+
+  
 </xsl:stylesheet>
