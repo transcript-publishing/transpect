@@ -310,5 +310,16 @@
   <xsl:template match="/hub/info/keywordset[@role = 'titlepage']/keyword[@role = 'Widmung']" mode="hub:split-at-tab">
     <!-- https://redmine.le-tex.de/issues/16444-->
   </xsl:template>
-    
+
+  <xsl:template match="footnote//phrase[@role = 'hub:separator'][matches(., '^\p{Zs}+$')]" mode="hub:split-at-tab"/>
+  
+ <!--  <xsl:template match="|hub/section[matches(@role,$part-heading-role-regex)]/section[matches(@role, concat('^[a-z]{1,3}(heading(enumerated)?1(review)?|journalreviewheading|',
+                                                                                                            replace($list-of-figures-regex, '^\^(.+)\$$', '$1'),
+                                                                                                            '|', replace($list-of-tables-regex, '^\^(.+)\$$', '$1'),
+                                                                                                            ')(', $suffixes-regex, ')?$'))]" mode="hub:postprocess-hierarchy">
+    <chapter>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </chapter>
+  </xsl:template> -->
+  
 </xsl:stylesheet>
