@@ -431,8 +431,10 @@ blockquote > p+p {
   text-indent: 0;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, h6 {
   page-break-after: avoid;
+  widows: 2;
+  orphans: 2;
 }
 p.qualifikationsnachweis, p.gutachter, p.widmung, p.dank, p.fordertext, p.bibliografische_information, p.copyright {
   margin-top: 1em;
