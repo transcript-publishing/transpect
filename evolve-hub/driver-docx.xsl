@@ -199,6 +199,11 @@
     <xsl:sequence select="translate(., '»«›‹',  '“”ʻʼ')"/>
   </xsl:template>
 
+  <xsl:template match="text()[matches(., '[&#8544;-&#85475;]')]" mode="custom-1">
+    <!-- replace roamn numerals with numbers, https://redmine.le-tex.de/issues/17148#change -->
+    <xsl:value-of select="tr:roman-numeral-to-letter(.)"/>
+  </xsl:template>
+  
   <xsl:template match="footnote/para/phrase[@role = 'hub:identifier']/phrase" mode="custom-2">
     <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
