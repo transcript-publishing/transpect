@@ -199,8 +199,8 @@
     <xsl:sequence select="translate(., '»«›‹',  '“”ʻʼ')"/>
   </xsl:template>
 
-  <xsl:template match="text()[matches(., '[&#8544;-&#85475;]')]" mode="custom-1">
-    <!-- replace roamn numerals with numbers, https://redmine.le-tex.de/issues/17148#change -->
+  <xsl:template match="text()[matches(., '[&#8544;-&#8575;]')]" mode="custom-1">
+    <!-- replace roman numerals with numbers, https://redmine.le-tex.de/issues/17148#change -->
     <xsl:value-of select="tr:roman-numeral-to-letter(.)"/>
   </xsl:template>
   
