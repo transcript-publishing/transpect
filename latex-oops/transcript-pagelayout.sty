@@ -34,40 +34,40 @@
   {\paperheight=225mm\relax}
   {\paperheight=225mm\relax}
 
-%% Höhe Kopfzeile
+%% Höhe Kopfzeile.
 \headheight=12.8bp\relax
-%% Abstand Grundlinie Fliesstext <-> Oberkante Satzspiegel (= Höhe der ersten Fließtext-Zeile)
+%% Abstand Grundlinie erster Fließtext zu Oberkante Satzspiegel.
 \topskip=9.2bp\relax
 
-%% Abstand oberer Seitenrand <-> Oberkante Kopfzeile
+%% Abstand oberer Seitenrand zu Oberkante Kopfzeile.
 \LayVar
   {\topmargin=\dimexpr15mm-\headheight\relax}
   {\topmargin=\dimexpr21.5mm-\headheight\relax}
   {\topmargin=\dimexpr17mm-\headheight\relax}
   {\topmargin=\dimexpr15.35mm-\headheight\relax}
 
-%% Abstand Grundlinie Fliesstext <-> Grundlinie Kopfzeile
+%% Abstand Grundlinie Fließtext zu Grundlinie Kopfzeile.
 \LayVar
   {\headsep=\dimexpr9mm-\topskip\relax}
   {\headsep=\dimexpr14mm-\topskip\relax}
   {\headsep=\dimexpr13.35mm-\topskip\relax}
   {\headsep=\dimexpr10.5mm-\topskip\relax}
 
-%% Außensteg
+%% Außensteg.
 \LayVar
   {\evensidemargin=22mm\relax}
   {\evensidemargin=32mm\relax}
   {\evensidemargin=27mm\relax}
   {\evensidemargin=21.5mm\relax}
 
-%% Innensteg
+%% Innensteg.
 \LayVar
   {\oddsidemargin=18mm\relax}
   {\oddsidemargin=22mm\relax}
   {\oddsidemargin=19mm\relax}
   {\oddsidemargin=17.5mm\relax}
 
-%% Satzspiegelbreite
+%% Satzspiegelbreite.
 \LayVar
   {\textwidth=115mm\relax}
   {\textwidth=94mm\relax}
@@ -81,7 +81,7 @@
   {\textheight=\dimexpr37\baselineskip+\topskip\relax}
   {\textheight=\dimexpr40\baselineskip+\topskip\relax}
 
-%% Vertikaler Abstand vor chapter-ÜSen
+%% Vertikaler Abstand vor chapter-Überschriften.
 \newlength\headingsep
 \LayVar
   {\headingsep=35mm\relax}
@@ -89,31 +89,31 @@
   {\headingsep=16mm\relax}
   {\headingsep=16mm\relax}
 
-%% vert. Abstand zwischen zwei Absätzen in Listen
+%% Vert. Abstand zwischen zwei Absätzen in Listen.
 \parsep\z@
-%% vert. Abstand zwischen zwei Absätzen im Fließtext
+%% Vert. Abstand zwischen zwei Absätzen im Fließtext.
 \parskip\z@
 
-%% Absatzeinzug
+%% Absatzeinzug.
 \ifx\ts@layout@type\ts@str@layout@mdw
   \parindent6mm%
 \else
   \parindent5mm%
 \fi
 
-%% Abstand zwischen zwei Fussnoten (Grundlinie zu Grundlinie)
+%% Abstand zwischen zwei Fußnoten (Grundlinie zu Grundlinie).
 {\footnotesize\global\setlength\footnotesep{\ht\strutbox}}%
 
-%% Abstand Fussnotenapparat <-> Fließtext
+%% Abstand Fußnotenapparat zu Fließtext.
 \setlength{\skip\footins}{12.8bp \@plus 25.6bp}
 
-%% Kein Flattern der Seiten
+%% Kein Flattern der Seiten.
 \flushbottom
 
-%% Gesamtlänge des zusätzlichen Weißraums, der auf die Leerzeichen einer Zeile verteilt werden darf
+%% Gesamtlänge des zusätzlichen Weißraums, der auf die Leerzeichen einer Zeile verteilt werden darf.
 \emergencystretch=2em
 
-%% Unterdrückt overfull vbox-Meldungen
+%% Unterdrückt overfull-vbox-Meldungen.
 \vfuzz=\z@
 
 \ifx\ts@layout@type\ts@str@layout@mdw\linespread{1.02}\fi

@@ -143,6 +143,8 @@ p.heading-author {
 p {
   margin:0;
   line-height:1.6;
+  widows: 2;
+  orphans: 2;
 }
 div > p+p:not([class]) {
   text-indent: 2em;
@@ -431,7 +433,7 @@ blockquote > p+p {
   text-indent: 0;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, h6 {
   page-break-after: avoid;
 }
 p.qualifikationsnachweis, p.gutachter, p.widmung, p.dank, p.fordertext, p.bibliografische_information, p.copyright {

@@ -299,6 +299,19 @@
 \newunicodechar{…}{\ldots}
 
 
+
+%%%%%%%%%%%%%
+% Sprachen. %
+%%%%%%%%%%%%%
+
+% Erlaubt Umbruch nach jedem beliebigen Zeichen und fügt keinen Trennstrich ein.
+\def\tp@letterwise#1{\@tp@letterwise#1{}}
+\def\@tp@letterwise#1{\tp@firstChar{#1}\@@tp@letterwise}
+\def\@@tp@letterwise#1{\ifx^#1^\else\tp@nextChar{#1}\expandafter\@@tp@letterwise\fi}
+\def\tp@firstChar#1{#1}
+\def\tp@nextChar#1{\allowbreak #1}
+
+
 \gdef\tp@languageRules@arabic{%
   \rmfamily% Andere Schriften (bspw. \nsfwidefamily) verursachen einen Konvertierungsabbruch.
   \let\par\relax%
@@ -334,11 +347,21 @@
   \fontsize{0.8468\dimexpr\f@size\p@\relax}{\the\baselineskip}\selectfont%
 }
 
+\gdef\tp@languageRules@chinese@macro#1{%
+  \tp@letterwise{#1}%
+}
+
 \let\@foreignNewLanguageRules\foreignlanguage
 \gdef\foreignlanguage#1#2{%
   \protect\@foreignNewLanguageRules{#1}{%
-    \ifcsname tp@languageRules@\languagename\endcsname\csname tp@languageRules@\languagename\endcsname\fi
-    #2%
+    \ifcsname tp@languageRules@\languagename\endcsname
+      \csname tp@languageRules@\languagename\endcsname%
+    \fi%
+    \ifcsname tp@languageRules@\languagename @macro\endcsname
+      \csname tp@languageRules@\languagename @macro\endcsname{#2}%
+    \else
+      #2%
+    \fi
   }%
 }
 
