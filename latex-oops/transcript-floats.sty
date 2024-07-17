@@ -81,7 +81,7 @@
 \def\tp@str@center{center}
 %% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
 \tpAddToDefault{float}{%
-  \tpSetProperty{number-face}{}% Format of number, additional to caption-format
+  \tpSetProperty{number-face}{\ifx\ts@layout@type\ts@str@layout@mdw\bfseries\else\itshape\fi}% Format of number, additional to caption-format
   \tpSetProperty{number-sep}{:\space\ignorespaces}
   \tpSetProperty{caption-sep-top}{3mm}%
   \tpSetProperty{caption-sep-bottom}{\dimexpr3mm\relax}%
