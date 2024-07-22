@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:c="http://www.w3.org/ns/xproc-step" 
+  xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:css="http://www.w3.org/1996/css" 
   xmlns:csstmp="http://transpect.io/csstmp"
@@ -8,9 +10,10 @@
   xmlns:html="http://www.w3.org/1999/xhtml"
   xmlns:hub2htm="http://transpect.io/hub2htm"
   xmlns:epub="http://www.idpf.org/2007/ops"
+  xmlns:xml2tex="http://transpect.io/xml2tex"
   xmlns:tr="http://transpect.io"
   xmlns="http://www.w3.org/1999/xhtml"  
-  exclude-result-prefixes="css hub2htm xs tei2html tei html tr"
+  exclude-result-prefixes="#all"
   xpath-default-namespace="http://www.tei-c.org/ns/1.0"
   version="2.0">
   
@@ -18,6 +21,7 @@
   
   <xsl:import href="http://this.transpect.io/a9s/common/tei2html/tei2html-driver.xsl"/>
   <xsl:import href="http://this.transpect.io/a9s/ts/xsl/shared-variables.xsl"/>
+  <xsl:import href="http://transpect.io/xml2tex/xsl/calstable2htmltabs.xsl"/>
   
   <xsl:param name="toc-depth" select="3" as="xs:integer"/>
   <xsl:param name="verbose" select="'no'"/>
@@ -941,6 +945,18 @@
 
   <xsl:template match="*[self::*:td|self::*:th]/@*[matches(name(), '^css:border-(top|left|bottom|right)-(style|color|width)$')]" mode="epub-alternatives" priority="8">
     <!-- https://redmine.le-tex.de/issues/15889-->
+  </xsl:template>
+  
+  <!-- https://redmine.le-tex.de/issues/17217 -->
+  <xsl:template match="*:colgroup/*:col" mode="tei2html">
+    <col>
+      <xsl:apply-templates select="@* except @css:width" mode="#current"/>
+      <xsl:attribute name="style" 
+                     select="concat((if(not(following-sibling::*)) 
+                                     then 1 - sum(for $col in preceding-sibling::*:col
+                                                  return xml2tex:absolute-to-relative-col-width($col/@css:width, parent::*:colgroup/*:col/@css:width))
+                                     else xml2tex:absolute-to-relative-col-width(@css:width, parent::*:colgroup/*:col/@css:width)) * 100, '%')"/>
+    </col>
   </xsl:template>
 
   <xsl:function name="tei2html:main-sec-name" as="xs:string">
