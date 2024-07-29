@@ -367,6 +367,7 @@
 \newenvironment{transcription}[1][1]{%
   % Makro/PI, womit sich die Zeilennummer innerhalb der Umgebung neu setzen lässt.
   \def\lineNumber##1{\@transcriptionLine=\numexpr##1-1\relax}%
+  \def\spaces##1{\hspace*{##1\fontdimen2\font}}%
   \ttfamily
   % Die feste Breite der Zeilennummer auf die Breite der Nummer der erste Zeile setzen.
   \setbox\@tempboxa = \hbox{#1}%
