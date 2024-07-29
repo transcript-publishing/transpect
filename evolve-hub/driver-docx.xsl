@@ -318,6 +318,11 @@
 
   <xsl:template match="footnote//phrase[@role = 'hub:separator'][matches(., '^\p{Zs}+$')]" mode="hub:split-at-tab"/>
   
+  <!--  https://redmine.le-tex.de/issues/17245
+        remove row bg color since word saves colors at the cell rather than the row -->
+  
+  <xsl:template match="row/css:background-color" mode="custom-1"/>
+  
  <!--  <xsl:template match="|hub/section[matches(@role,$part-heading-role-regex)]/section[matches(@role, concat('^[a-z]{1,3}(heading(enumerated)?1(review)?|journalreviewheading|',
                                                                                                             replace($list-of-figures-regex, '^\^(.+)\$$', '$1'),
                                                                                                             '|', replace($list-of-tables-regex, '^\^(.+)\$$', '$1'),
