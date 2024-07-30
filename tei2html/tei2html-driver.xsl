@@ -966,4 +966,22 @@
         <xsl:sequence select="'div'"/>
   </xsl:function>
   
+  <!-- https://redmine.le-tex.de/issues/17246 
+       EPUB fixes for Grid -->
+  
+  <xsl:template match="figure[@css:display[. eq 'grid']]" mode="epub-alternatives">
+    <xsl:copy>
+      <xsl:attribute name="rend" select="concat(@rend, ' grid grid-template-columns-', count(*))"/>
+      <xsl:apply-templates select="@* except (@rend, @css:display, @css:grid-template-columns), node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="figure[@css:display[. eq 'grid']]/figure" mode="epub-alternatives">
+    <xsl:variable name="is-last" as="xs:boolean" select="not(following-sibling::*)"/>
+    <xsl:copy>
+      <xsl:attribute name="rend" select="concat(@rend, ' grid-column-', count(preceding-sibling::*) + 1, ' is-last'[$is-last])"/>
+      <xsl:apply-templates select="@* except (@rend, @css:grid-column), node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+  
 </xsl:stylesheet>
