@@ -974,6 +974,7 @@
       <xsl:attribute name="rend" select="concat(@rend, ' grid grid-template-columns-', count(*))"/>
       <xsl:apply-templates select="@* except (@rend, @css:display, @css:grid-template-columns), node()" mode="#current"/>
     </xsl:copy>
+    <div class="clear"/>
   </xsl:template>
   
   <xsl:template match="figure[@css:display[. eq 'grid']]/figure" mode="epub-alternatives">
