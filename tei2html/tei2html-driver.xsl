@@ -977,6 +977,10 @@
     <div class="clear"/>
   </xsl:template>
   
+  <xsl:template match="*:div[@class eq 'clear']" mode="tei2html">
+    <xsl:copy-of select="."/>
+  </xsl:template>
+  
   <xsl:template match="figure[@css:display[. eq 'grid']]/figure" mode="epub-alternatives">
     <xsl:variable name="is-last" as="xs:boolean" select="not(following-sibling::*)"/>
     <xsl:copy>

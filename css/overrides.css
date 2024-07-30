@@ -507,17 +507,19 @@ p.fig-title {
   margin-bottom: 1em;
 }
 figure.grid-template-columns-2, 
-figure.grid-template-columns-3, 
+figure.grid-template-columns-3,   
 figure.grid-template-columns-4, 
 figure.grid-template-columns-5{
-  width:100% 
+  width:85%;
+  margin:0 auto;
+  page-break-inside :avoid;
 }
 figure.grid-template-columns-2 figure, 
 figure.grid-template-columns-3 figure, 
 figure.grid-template-columns-4 figure, 
 figure.grid-template-columns-5 figure{
   float:left; 
-  margin:0 1em 0 0 
+  margin:1em 1em 1em 0 
 }
 figure.grid-template-columns-2 figure{
   width:49%;
