@@ -65,7 +65,8 @@
   <css:rule layout-type="para" native-name="ts_twocolumn" name="tstwocolumn"/>  
   <css:rule layout-type="para" native-name="ts_onecolumn" name="tsonecolumn"/>  
   <css:rule layout-type="para" native-name="ts_reviewer" name="tsreviewer"/>
-  <css:rule layout-type="para" native-name="ts_verse" name="tsverse"/>  
+  <css:rule layout-type="para" native-name="ts_verse" name="tsverse"/>
+  <css:rule layout-type="para" native-name="ts_regular" name="tsregular"/>
 
   <css:rule layout-type="para" native-name="ts_keywords" name="tskeywords"/>
 <!--  <css:rule layout-type="para" native-name="ts_keywords_heading" name="tskeywordsheading"/>-->
