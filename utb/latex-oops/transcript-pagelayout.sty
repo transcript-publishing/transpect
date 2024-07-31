@@ -1,0 +1,166 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-pagelayout}[2021/04/09 transcript]\relax
+%% Satzspiegel/Layoutvarianten
+\long\gdef\LayVar#1#2#3#4{#4}%
+\define@choicekey{transcript-pagelayout.sty}{lay}[\p@ley\nr]{e,a,b,c}{%
+  \ifcase\nr\relax
+    \global\let\lay=e\relax
+    \long\gdef\LayVar##1##2##3##4{##1}%
+  \or
+    \global\let\lay=a\relax
+    \long\gdef\LayVar##1##2##3##4{##2}%
+  \or
+    \global\let\lay=b\relax
+    \long\gdef\LayVar##1##2##3##4{##3}%
+  \else
+    \global\let\lay=c\relax
+    \long\gdef\LayVar##1##2##3##4{##4}%
+  \fi}%
+\ProcessOptionsX\relax
+
+\voffset-1in\relax
+\hoffset-1in\relax
+
+%% Seitenbreite
+\LayVar
+  {\paperwidth=155mm\relax}
+  {\paperwidth=148mm\relax}
+  {\paperwidth=148mm\relax}
+  {\paperwidth=148mm\relax}
+%% Seitenhöhe
+\LayVar
+  {\paperheight=240mm\relax}
+  {\paperheight=225mm\relax}
+  {\paperheight=225mm\relax}
+  {\paperheight=225mm\relax}
+
+%% Höhe Kopfzeile.
+\headheight=12.8bp\relax
+%% Abstand Grundlinie erster Fließtext zu Oberkante Satzspiegel.
+\topskip=9.2bp\relax
+
+%% Abstand oberer Seitenrand zu Oberkante Kopfzeile.
+\LayVar
+  {\topmargin=\dimexpr15mm-\headheight\relax}
+  {\topmargin=\dimexpr21.5mm-\headheight\relax}
+  {\topmargin=\dimexpr17mm-\headheight\relax}
+  {\topmargin=\dimexpr15.35mm-\headheight\relax}
+
+%% Abstand Grundlinie Fließtext zu Grundlinie Kopfzeile.
+\LayVar
+  {\headsep=\dimexpr9mm-\topskip\relax}
+  {\headsep=\dimexpr14mm-\topskip\relax}
+  {\headsep=\dimexpr13.35mm-\topskip\relax}
+  {\headsep=\dimexpr10.5mm-\topskip\relax}
+
+%% Außensteg.
+\LayVar
+  {\evensidemargin=22mm\relax}
+  {\evensidemargin=32mm\relax}
+  {\evensidemargin=27mm\relax}
+  {\evensidemargin=21.5mm\relax}
+
+%% Innensteg.
+\LayVar
+  {\oddsidemargin=18mm\relax}
+  {\oddsidemargin=22mm\relax}
+  {\oddsidemargin=19mm\relax}
+  {\oddsidemargin=17.5mm\relax}
+
+%% Satzspiegelbreite.
+\LayVar
+  {\textwidth=115mm\relax}
+  {\textwidth=94mm\relax}
+  {\textwidth=102mm\relax}
+  {\textwidth=109mm\relax}
+
+%% Satzspiegelhöhe
+\LayVar
+  {\textheight=\dimexpr44\baselineskip+\topskip\relax}
+  {\textheight=\dimexpr34\baselineskip+\topskip\relax}
+  {\textheight=\dimexpr37\baselineskip+\topskip\relax}
+  {\textheight=\dimexpr40\baselineskip+\topskip\relax}
+
+%% Vertikaler Abstand vor chapter-Überschriften.
+\newlength\headingsep
+\LayVar
+  {\headingsep=35mm\relax}
+  {\headingsep=16mm\relax}
+  {\headingsep=16mm\relax}
+  {\headingsep=16mm\relax}
+
+%% Vert. Abstand zwischen zwei Absätzen in Listen.
+\parsep\z@
+%% Vert. Abstand zwischen zwei Absätzen im Fließtext.
+\parskip\z@
+
+%% Absatzeinzug.
+\ifx\ts@layout@type\ts@str@layout@mdw
+  \parindent6mm%
+\else
+  \parindent5mm%
+\fi
+
+%% Abstand zwischen zwei Fußnoten (Grundlinie zu Grundlinie).
+{\footnotesize\global\setlength\footnotesep{\ht\strutbox}}%
+
+%% Abstand Fußnotenapparat zu Fließtext.
+\setlength{\skip\footins}{12.8bp \@plus 25.6bp}
+
+%% Kein Flattern der Seiten.
+\flushbottom
+
+%% Gesamtlänge des zusätzlichen Weißraums, der auf die Leerzeichen einer Zeile verteilt werden darf.
+\emergencystretch=2em
+
+%% Unterdrückt overfull-vbox-Meldungen.
+\vfuzz=\z@
+
+\ifx\ts@layout@type\ts@str@layout@mdw\linespread{1.02}\fi
+
+\expandafter\def\csname layout-e\endcsname{%
+  \paperwidth=155mm\relax%
+  \paperheight=225mm\relax%
+  \topmargin=\dimexpr15mm-\headheight\relax%
+  \headsep=\dimexpr9mm-\topskip\relax%
+  \evensidemargin=22mm\relax%
+  \oddsidemargin=18mm\relax%
+  \textwidth=115mm\relax%
+  \textheight=\dimexpr44\baselineskip+\topskip\relax%
+  \headingsep=35mm\relax%
+}
+
+\expandafter\def\csname layout-a\endcsname{%
+  \paperwidth=148mm\relax%
+  \paperheight=225mm\relax%
+  \topmargin=\dimexpr21.5mm-\headheight\relax%
+  \headsep=\dimexpr14mm-\topskip\relax%
+  \evensidemargin=32mm\relax%
+  \oddsidemargin=22mm\relax%
+  \textwidth=94mm\relax%
+  \textheight=\dimexpr34\baselineskip+\topskip\relax%
+  \headingsep=16mm\relax%
+}
+
+\expandafter\def\csname layout-b\endcsname{%
+  \paperwidth=148mm\relax%
+  \paperheight=225mm\relax%
+  \topmargin=\dimexpr17mm-\headheight\relax
+  \headsep=\dimexpr13.35mm-\topskip\relax%
+  \evensidemargin=27mm\relax%
+  \oddsidemargin=19mm\relax%
+  \textwidth=102mm\relax%
+  \textheight=\dimexpr37\baselineskip+\topskip\relax%
+  \headingsep=16mm\relax
+}
+
+\expandafter\def\csname layout-c\endcsname{%
+  \topmargin=\dimexpr15.35mm-\headheight\relax%
+  \headsep=\dimexpr10.5mm-\topskip\relax%
+  \evensidemargin=21.5mm\relax%
+  \oddsidemargin=17.5mm\relax%
+  \textwidth=109mm\relax%
+  \hsize=109mm\relax%
+  \textheight=\dimexpr40\baselineskip+\topskip\relax%
+  \headingsep=16mm\relax%
+}
