@@ -1,0 +1,99 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-fontsizes}[2021/04/09 transcript]\relax
+
+%% unterschiedl grundraster und schriftgrößen pro layout
+\long\gdef\LayVar#1#2#3#4{#4}%
+\define@choicekey{transcript-pagelayout.sty}{lay}[\p@ley\nr]{e,a,b,c}{%
+  \ifcase\nr\relax
+    \global\let\lay=e\relax
+    \long\gdef\LayVar##1##2##3##4{##1}%
+  \or
+    \global\let\lay=a\relax
+    \long\gdef\LayVar##1##2##3##4{##2}%
+  \or
+    \global\let\lay=b\relax
+    \long\gdef\LayVar##1##2##3##4{##3}%
+  \else
+    \global\let\lay=c\relax
+    \long\gdef\LayVar##1##2##3##4{##4}%
+  \fi}%
+\ProcessOptionsX\relax
+
+\LayVar
+{
+\renewcommand\normalsize{%
+  \@setfontsize\normalsize{9.2bp}{13.2bp}%
+  \let\@listi\@listI%
+  \let\@listii\@listI%
+  \let\@listiii\@listI%
+}
+\renewcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
+\renewcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
+\renewcommand\large{\@setfontsize\large{11bp}{13.2bp}}% chapter in TOC
+\renewcommand\Large{\@setfontsize\Large{11bp}{13.2bp}}% subsection
+\renewcommand\LARGE{\@setfontsize\LARGE{12bp}{13.2bp}}% section
+\renewcommand\huge{\@setfontsize\huge{13.5bp}{16}}% part in TOC
+\renewcommand\Huge{\@setfontsize\Huge{14.3bp}{17bp}}% chapter
+\newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{36bp}}% part
+}%%l-layout
+{
+\renewcommand\normalsize{%
+  \@setfontsize\normalsize{9.2bp}{13.2bp}%
+}
+}%% leeres layout
+{
+\renewcommand\normalsize{%
+  \@setfontsize\normalsize{9.2bp}{13.2bp}%
+  \let\@listi\@listI%
+  \let\@listii\@listI%
+  \let\@listiii\@listI%
+}
+\renewcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
+\renewcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
+\renewcommand\large{\@setfontsize\large{11bp}{13.2bp}}% chapter in TOC
+\renewcommand\Large{\@setfontsize\Large{11bp}{13.2bp}}% subsection
+\renewcommand\LARGE{\@setfontsize\LARGE{12bp}{13.2bp}}% section
+\renewcommand\huge{\@setfontsize\huge{13.5bp}{16}}% part in TOC
+\renewcommand\Huge{\@setfontsize\Huge{14.3bp}{17bp}}% chapter
+\newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{36bp}}% part
+}%% m-b layout
+{
+\renewcommand\normalsize{%
+  \@setfontsize\normalsize{9.2bp}{12.8bp}%
+  \let\@listi\@listI%
+  \let\@listii\@listI%
+  \let\@listiii\@listI%
+}
+\renewcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
+\renewcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
+\renewcommand\large{\@setfontsize\large{11bp}{12.8bp}}% chapter in TOC
+\renewcommand\Large{\@setfontsize\Large{11bp}{12.8bp}}% subsection
+\renewcommand\LARGE{\@setfontsize\LARGE{12bp}{12.8bp}}% section
+\renewcommand\huge{\@setfontsize\huge{13.5bp}{12.8bp}}% part in TOC
+\renewcommand\Huge{\@setfontsize\Huge{14.4bp}{17bp}}% chapter
+\newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{20bp}}% part
+}%% m-c layout
+\normalsize
+
+\renewcommand\small{%
+  \@setfontsize\small{9bp}{11}% head
+  \def\@listi{%
+    \leftmargin\leftmargini
+    \topsep 6.4bp
+    \parsep 3.2bp
+    \itemsep \parsep%
+  }%
+}
+\renewcommand\footnotesize{% footnotes
+  \@setfontsize\footnotesize{8bp}{11bp}%
+  \abovedisplayskip 6\p@ \@plus2\p@ \@minus4\p@
+  \abovedisplayshortskip \z@ \@plus\p@
+  \belowdisplayshortskip 3\p@ \@plus\p@ \@minus2\p@
+  \belowdisplayskip \abovedisplayskip
+  \def\@listi{%
+    \leftmargin\leftmargini
+    \topsep 3.2bp
+    \parsep 2\p@ \@plus\p@ \@minus\p@
+    \itemsep \parsep%
+  }%
+}
