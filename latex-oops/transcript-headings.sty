@@ -199,7 +199,8 @@
 \global\let\tp@latestPartmark\relax% latestPartmark wird im part gespeichert und in Anthologien bei chapter als partmark gesetzt.
 \global\let\tp@authormark\relax
 
-\tpAddToHook[heading]{before-print-hook-chapter}{%
+%\tpAddToHook[heading]{before-print-hook-chapter}{% LUP
+\AddToHook{cc/headings/chapter/print/before}{%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Wird zu zeitig ausgewertet. RunAuthorNameList landet auf der Seite vor dem Kapitel, zu dem der Autorennamen eigentlich gehört. %
   % Zurück zum vorherigen Zustand (\global\let\tp@authormark\relax).                                                               %

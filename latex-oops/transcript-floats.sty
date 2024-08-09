@@ -180,6 +180,12 @@
 \setcounter{lofdepth}{0}%% Tiefe des Abb.-Verzeichnisses: 0 = nur Haupteinträge; 1 = auch (echte) sub-floats inkludieren!
 
 %% gilt nur für Abbildungen:
+
+%% LUP: Syntax für \ccDeclareFloat hat sich im Verglech zu
+%% \tpDeclareFloat geändert: Zunächst mal darf kein bereits
+%% existierendes Float überdefiniert werden. Zum zweiten ist das
+%% 5. Argument ein \ccDeclareContainer-Body, kein
+%% \ccAddToType{Property}-Body.
 \tpDeclareFloat{tpFigure}{figure}{lof}{%
   \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}% Ticket 14959, 14989.
   \ifx\ts@layout@type\ts@str@layout@mdw
@@ -235,6 +241,9 @@
   }%
 }
 
+% LUP Falls Tabellen und Abbildungen in derselebn ListOf erscheinen
+% sollen, z.B. tabellen in der lof:
+% \ccAddToType{FloatEnvInfo}{Table}{\def\ccf@cap@list@type{lof}}
 
 %% Klassen für Abbildungen:
 \tpDeclareClass{A}{\tpSetProperty{margin-left}{0mm}\tpSetProperty{margin-right}{0mm}}
