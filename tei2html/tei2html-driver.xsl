@@ -955,8 +955,7 @@
     <col>
       <xsl:apply-templates select="@* except @css:width" mode="#current"/>
       <xsl:attribute name="style" 
-                     select="concat('width:',
-                                    (if(not(following-sibling::*)) 
+                     select="concat((if(not(following-sibling::*)) 
                                      then 1 - sum(for $col in preceding-sibling::*:col
                                                   return xml2tex:absolute-to-relative-col-width($col/@css:width, parent::*:colgroup/*:col/@css:width))
                                      else xml2tex:absolute-to-relative-col-width(@css:width, parent::*:colgroup/*:col/@css:width)) * 100, '%')"/>
