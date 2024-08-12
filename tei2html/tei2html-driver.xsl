@@ -30,7 +30,7 @@
   <xsl:param name="generate-note-link-title" select="true()" as="xs:boolean"/>
   <xsl:param name="also-consider-rule-atts" select="false()" as="xs:boolean"/>
   <xsl:param name="s9y1-path-canonical"/>
-  <xsl:param name="notes-per-chapter" as="xs:string?" select="'yes'"/>
+  <xsl:param name="notes-per-chapter" as="xs:string?"/>
   
   <xsl:variable name="tei2html:chapterwise-footnote" as="xs:boolean" select="if ($notes-per-chapter = 'yes') then true() else false()"/>
   
@@ -955,7 +955,8 @@
     <col>
       <xsl:apply-templates select="@* except @css:width" mode="#current"/>
       <xsl:attribute name="style" 
-                     select="concat((if(not(following-sibling::*)) 
+                     select="concat('width:',
+                                    (if(not(following-sibling::*)) 
                                      then 1 - sum(for $col in preceding-sibling::*:col
                                                   return xml2tex:absolute-to-relative-col-width($col/@css:width, parent::*:colgroup/*:col/@css:width))
                                      else xml2tex:absolute-to-relative-col-width(@css:width, parent::*:colgroup/*:col/@css:width)) * 100, '%')"/>
