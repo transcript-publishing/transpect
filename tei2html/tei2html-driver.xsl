@@ -955,7 +955,8 @@
     <col>
       <xsl:apply-templates select="@* except @css:width" mode="#current"/>
       <xsl:attribute name="style" 
-                     select="concat((if(not(following-sibling::*)) 
+                     select="concat('width:',
+                                    (if(not(following-sibling::*)) 
                                      then 1 - sum(for $col in preceding-sibling::*:col
                                                   return xml2tex:absolute-to-relative-col-width($col/@css:width, parent::*:colgroup/*:col/@css:width))
                                      else xml2tex:absolute-to-relative-col-width(@css:width, parent::*:colgroup/*:col/@css:width)) * 100, '%')"/>
@@ -1006,7 +1007,7 @@
     <xsl:variable name="fn-ids" select="if ($tei2html:chapterwise-footnote) 
                                         then ($previous-text//note[@type = 'footnote']/@xml:id,.//note[@type = 'footnote']/@xml:id) 
                                         else $footnote-ids" as="xs:string*"/>
-    <xsl:if test="$tei2html:chapterwise-footnote">
+    <xsl:if test="$tei2html:chapterwise-footnote and exists($previous-text//note[@type = 'footnote'])">
       <xsl:call-template name="tei2html:footnotes">
         <xsl:with-param name="chapterwise" as="xs:boolean" select="true()" tunnel="yes"/>
         <xsl:with-param name="context" as="node()*" select="$previous-text" tunnel="yes"/>
