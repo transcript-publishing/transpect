@@ -364,7 +364,7 @@
 \newcount\@transcriptionLine % Aktuelle Zeilennummer innerhalb der Umgebung.
 \newcount\@transcriptionEnv  % Für die Durchnummerierung der Transkriptionsumgebungen, damit sich Labelbreiten speichern lassen.
 
-\newenvironment{transcription}[1][1]{%
+\newenvironment{transcript}[1][1]{%
   % Makro/PI, womit sich die Zeilennummer innerhalb der Umgebung neu setzen lässt.
   \def\lineNumber##1{\@transcriptionLine=\numexpr##1-1\relax}%
   \def\spaces##1{\hspace*{##1\fontdimen2\font}}%
