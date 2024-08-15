@@ -357,6 +357,55 @@
   \@afterheading
 }
 
+\newcount\@transcriptionLineNumberSep \@transcriptionLineNumberSep=2 % Mindestanzahl der Leerzeichen nach der Zeilennummer.
+\newcount\@transcriptionNameSep       \@transcriptionNameSep=2       % Mindestanzahl der Leerzeichen nach der sprechenden Person.
+
+\newcount\@transcriptionLine % Aktuelle Zeilennummer innerhalb der Umgebung.
+\newcount\@transcriptionEnv  % Für die Durchnummerierung der Transkriptionsumgebungen, damit sich Labelbreiten speichern lassen.
+
+\newenvironment{transcript}[1][1]{%
+  % Makro/PI, womit sich die Zeilennummer innerhalb der Umgebung neu setzen lässt.
+  \def\lineNumber##1{\@transcriptionLine=\numexpr##1-1\relax}%
+  \def\spaces##1{\hspace*{##1\fontdimen2\font}}%
+  \ttfamily
+  % Die feste Breite der Zeilennummer auf die Breite der Nummer der erste Zeile setzen.
+  \setbox\@tempboxa = \hbox{#1}%
+  % Nach dem ersten Durchlauf wird diese Breite mit der der höchsten Zeilennummer in dieser Umgebung überschrieben.
+  \ifcsname transcription-\the\@transcriptionEnv –maxLineNumber\endcsname
+    \setbox\@tempboxa = \hbox{\csuse{transcription-\the\@transcriptionEnv –maxLineNumber}}%
+  \fi
+  \edef\@lineNumberWidth{\the\dimexpr\wd\@tempboxa}%
+  % Die maximale Breite unter den Namen der Gesprächsteilnehmer.
+  \@tempdima=0\p@
+  % Nach dem ersten Durchlauf wird diese Breite mit der des längsten Namens in dieser Umgebung überschrieben.
+  \ifcsname transcription-\the\@transcriptionEnv –maxNameWidth\endcsname
+    \@tempdima = \csuse{transcription-\the\@transcriptionEnv –maxNameWidth}%
+  \fi
+  \edef\@nameWidth{\the\dimexpr\@tempdima}%
+  \list{}{%
+    % Breite des Einzugs: (maximale) Zeilennummernbreite plus Zeilennummerntrenner plus (maximale) Namensbreite plus Namenstrenner.
+    % \fontdimen2\font entspricht der Breite des Leerzeichens in der aktuell eingestellten Schrift.
+    \leftmargin \dimexpr\@lineNumberWidth+\@transcriptionLineNumberSep\fontdimen2\font+\@nameWidth+\@transcriptionNameSep\fontdimen2\font\relax
+    \labelwidth \dimexpr\@lineNumberWidth+\@transcriptionLineNumberSep\fontdimen2\font+\@nameWidth\relax
+    \labelsep   \@transcriptionNameSep\fontdimen2\font
+  }%
+  \@transcriptionLine=\numexpr#1-1\relax
+  \let\olditem\item
+  \renewcommand\item[1][]{%
+    \global\advance\@transcriptionLine\@ne
+    \setbox\z@ = \hbox{##1}%
+    \ifdim\wd\z@ > \@nameWidth
+      \edef\@nameWidth{\the\dimexpr\wd\z@}%
+    \fi
+    \olditem[\hb@xt@\@lineNumberWidth{\the\@transcriptionLine\hss}\hskip\@transcriptionLineNumberSep\fontdimen2\font\hb@xt@\@nameWidth{##1\hss}]%
+  }%
+}{%
+  \endlist
+  \immediate\write\@auxout{\string\csgdef{transcription-\the\@transcriptionEnv –maxLineNumber}{\the\@transcriptionLine}}%
+  \immediate\write\@auxout{\string\csgdef{transcription-\the\@transcriptionEnv –maxNameWidth}{\@nameWidth}}%
+  \global\advance\@transcriptionEnv\@ne
+}
+
 % \def\@abstract#1{%
 %   \vskip-\lastskip
 %   % \addvspace{1\baselineskip}%
