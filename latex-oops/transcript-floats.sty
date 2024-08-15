@@ -225,7 +225,7 @@
   \tpSetProperty{list-of-block}{%
     \tpUseProperty{list-of-caption-face}%
     \tpIfComp{ListofNumber}{%
-      \@tempdima=\csname tp-tpTable-list-of-number-maxwd\endcsname%
+      \@tempdima=\dimexpr\ccUseProperty{list-of-number-width-max}\relax
       \leftskip\@tempdima\hskip-\@tempdima\hb@xt@\@tempdima{%
         \tpUseComp{ListofNumber}%
         \tpIfComp{ListofCaption}{%

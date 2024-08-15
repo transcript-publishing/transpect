@@ -83,10 +83,10 @@
 
     \tpSetProperty{role-block-print-format}{%
       \tpUseComp{FullName}%
-      \ifnum\tpCurCount<\numexpr\tpTotalCount-1\relax%
+      \ifnum\ccCurCount<\numexpr\tpTotalCount-1\relax%
         \tpUseProperty{name-sep}%
       \else%
-        \ifnum\tpCurCount<\tpTotalCount\relax%
+        \ifnum\ccCurCount<\tpTotalCount\relax%
           \tpUseProperty{name-and}%
         \fi%
       \fi%
@@ -165,10 +165,10 @@
     
     \tpSetProperty{role-block-print-format}{%
       \tpUseComp{FullName}%
-      \ifnum\tpCurCount<\numexpr\tpTotalCount-1\relax%
+      \ifnum\ccCurCount<\numexpr\tpTotalCount-1\relax%
         \tpUseProperty{name-sep}%
       \else%
-        \ifnum\tpCurCount<\tpTotalCount\relax%
+        \ifnum\ccCurCount<\tpTotalCount\relax%
           \tpUseProperty{name-and}%
         \fi%
       \fi%
@@ -298,10 +298,10 @@
     
     \tpSetProperty{role-block-print-format}{%
       \tpUseComp{FullName}%
-      \ifnum\tpCurCount<\numexpr\tpTotalCount-1\relax%
+      \ifnum\ccCurCount<\numexpr\tpTotalCount-1\relax%
         \tpUseProperty{name-sep}%
       \else%
-        \ifnum\tpCurCount<\tpTotalCount\relax%
+        \ifnum\ccCurCount<\tpTotalCount\relax%
           \tpUseProperty{name-and}%
         \fi%
       \fi%
@@ -379,10 +379,10 @@
 
     \tpSetProperty{role-block-print-format}{%
       \tpUseComp{FullName}%
-      \ifnum\tpCurCount<\numexpr\tpTotalCount-1\relax%
+      \ifnum\ccCurCount<\numexpr\tpTotalCount-1\relax%
         \tpUseProperty{name-sep}%
       \else%
-        \ifnum\tpCurCount<\tpTotalCount\relax%
+        \ifnum\ccCurCount<\tpTotalCount\relax%
           \tpUseProperty{name-and}%
         \fi%
       \fi%
@@ -460,10 +460,10 @@
     
     \tpSetProperty{role-block-print-format}{%
       \tpUseComp{FullName}%
-      \ifnum\tpCurCount<\numexpr\tpTotalCount-1\relax%
+      \ifnum\ccCurCount<\numexpr\tpTotalCount-1\relax%
         \tpUseProperty{name-sep}%
       \else%
-        \ifnum\tpCurCount<\tpTotalCount\relax%
+        \ifnum\ccCurCount<\tpTotalCount\relax%
           \tpUseProperty{name-and}%
         \fi%
       \fi%
@@ -886,6 +886,6 @@
       \tpIfComp{FundingPostText}{\vskip.5\baselineskip\tpUseComp{FundingPostText}\par}{}%
     \egroup
   }
-  \tpSetProperty{counted-name-sep}{\ifnum\tpCurCount<\tpTotalCount\relax,\space\fi}%
+  \tpSetProperty{counted-name-sep}{\ifnum\ccCurCount<\tpTotalCount\relax,\space\fi}%
   %\tpSetProperty{editor-suffix}{~(Hg.)}
 }
