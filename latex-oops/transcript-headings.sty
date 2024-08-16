@@ -124,13 +124,19 @@
     \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
     % Zurücksetzen der Fußnotenzählen bereits bei Parts, nicht erst bei Chapter. Ticket 15665.
     \global\c@footnote\z@
+    \tpIfComp{Number}{%
+      \tpGStoreComp\tp@partnumber{Number}%
+    }{
+      \global\let\tp@partnumber\relax
+    }%
   }%
-  
+
+  \def\tp@partmark{\tpRunBookTitle}%
   \tpSetProperty{running-heading}{%
     \ifx\tp@partnumber\relax
     \else
-      \tp@partnumber\space%
-    \fi%
+      \tp@partnumber\space
+    \fi
     \tp@partmark%
   }
   
@@ -148,7 +154,7 @@
         }
       \else
         \global\let\tp@authormark\relax%
-        \global\let\tp@partmark\undefined% Nutzt dann den Buchtitel als Fallback.
+        %\global\let\tp@partmark\undefined% Nutzt dann den Buchtitel als Fallback.
         \tpIfComp{RunTitle}{%
           \tpGStoreComp\tp@chaptermark{RunTitle}%
           \tpGStoreComp\tp@latestPartmark{RunTitle}%
@@ -200,7 +206,7 @@
 \global\let\tp@authormark\relax
 
 %\tpAddToHook[heading]{before-print-hook-chapter}{% LUP
-\AddToHook{cc/headings/chapter/print/before}{%
+%\AddToHook{cc/headings/chapter/print/before}{%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Wird zu zeitig ausgewertet. RunAuthorNameList landet auf der Seite vor dem Kapitel, zu dem der Autorennamen eigentlich gehört. %
   % Zurück zum vorherigen Zustand (\global\let\tp@authormark\relax).                                                               %
@@ -217,7 +223,7 @@
   %    \tpCompGDef\tp@authormark{tpAuthor}{author-list-print-format}%
   %  }%
   %}%
-}
+%}
 
 
 %%%%%%%%%%%%
@@ -519,7 +525,7 @@
         \tpUseComp{AuthorContactBlock}\par
       \fi
       \tpIfComp{LicenceLogo}{%
-        \ifnum\tpAuthorCnt>\z@%
+        \ifnum\ccAuthorCnt>\z@%
           \includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space%
         \fi
         \footnotesize\nsffamily%

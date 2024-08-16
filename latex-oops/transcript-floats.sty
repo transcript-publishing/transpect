@@ -84,7 +84,7 @@
   \tpSetProperty{number-face}{}% Format of number, additional to caption-format
   \tpSetProperty{number-sep}{:\space\ignorespaces}
   \tpSetProperty{caption-sep-top}{3mm}%
-  \tpSetProperty{caption-sep-bottom}{\dimexpr3mm\relax}%
+  \tpSetProperty{caption-sep-bottom}{3mm}%
   \tpSetProperty{subcaption-add-sep-top}{-2mm}%
   \tpSetProperty{caption-valign-top}{bottom}%
   \tpSetProperty{caption-valign-bottom}{top}%
@@ -93,7 +93,7 @@
   \tpSetProperty{subfloat-sep}{2mm}%
   \tpSetProperty{intext-skip-top}{2\baselineskip}%
   \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
-  \tpSetProperty{numbering}{}% keine automatische Nummerierung von Gleitobjekten!
+  \tpSetProperty{numbering}{}% Keine automatische Nummerierung von Gleitobjekten!
   \ifcsname ts@caps@figure\endcsname%
   \else
     \let\ts@caps@figure\ts@caps%
@@ -133,14 +133,6 @@
         }{}%
       }%
     \else
-      \tpSetProperty{caption-bottom}{%
-        \tpIfComp{Source}{%
-          \tpIfComp{Legend}{%
-            \par\nopagebreak%
-          }{}%
-          {\tpUseProperty{source-format}\tpUseComp{Source}}%
-        }{}%
-      }%
       \tpSetProperty{caption-top}{%
         \tpIfComp{Number}{%
           {%
@@ -155,6 +147,14 @@
         }{}%
         \tpIfComp{Legend}{%
           {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
+        }{}%
+      }%
+      \tpSetProperty{caption-bottom}{%
+        \tpIfComp{Source}{%
+          \tpIfComp{Legend}{%
+            \par\nopagebreak%
+          }{}%
+          {\tpUseProperty{source-format}\tpUseComp{Source}}%
         }{}%
       }%
     \fi
@@ -186,7 +186,7 @@
 %% existierendes Float überdefiniert werden. Zum zweiten ist das
 %% 5. Argument ein \ccDeclareContainer-Body, kein
 %% \ccAddToType{Property}-Body.
-\tpDeclareFloat{tpFigure}{figure}{lof}{%
+\ccAddToType{Properties}{Figure}{%
   \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}% Ticket 14959, 14989.
   \ifx\ts@layout@type\ts@str@layout@mdw
     \tpSetProperty{number-face}{\bfseries}% Ticket 14957.
@@ -212,7 +212,7 @@
 }
 
 %% gilt nur für Tabellen:
-\tpDeclareFloat{tpTable}{table}{lot}{%
+\ccAddToType{Properties}{Table}{%
   \def\tpBreak{%
     \GetCellProp{@tempa}{text-align}%
     \def\@tempb{center}%
