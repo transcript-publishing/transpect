@@ -44,6 +44,7 @@
   <css:rule layout-type="para" native-name="ts_table_source" name="tstablesource"/>
   <css:rule layout-type="para" native-name="ts_table_text" name="tstabletext"/>
   <css:rule layout-type="para" native-name="ts_table_value" name="tstablevalue"/>
+  <css:rule layout-type="para" native-name="ts_transcription" name="tstranscription"/>
   <css:rule layout-type="para" native-name="ts_head_word" name="tsheadword"/>
   <css:rule layout-type="para" native-name="ts_index_name" name="tsindexname"/>
   <css:rule layout-type="para" native-name="ts_index_static" name="tsindexstatic" regex="^tsindexstatic\d?$"/>
