@@ -458,7 +458,14 @@
   \tpSetProperty{counted-name-sep}{/}
 
   \tpSetProperty{before-heading}{%
-    \cleardoublepage%
+    \ifx\@twocolumnContinuousChapters\relax
+      \if@twocolumn
+      \else
+        \cleardoublepage
+      \fi
+    \else
+      \cleardoublepage
+    \fi
     \if@twocolumn% Kein vspace vor Überschriften zweispaltiger Kapitel.
     \else%
       \null\nobreak\vskip\dimexpr\headingsep-.45mm\relax%
@@ -627,7 +634,14 @@
   }
   
   \tpSetProperty{heading-block}{%
-    \clearpage
+    \if@twocolumn
+      \ifx\@twocolumnContinousChapters\relax
+        \typeout{++++++++++++++ NOt skipping before review}%
+      \else
+        \typeout{++++++++++++++ SKIPPING before review}%
+        \clearpage
+      \fi
+    \fi
     \thispagestyle{empty}
     \gdef\tp@currentHeading{chapter}%
     \savenotes
