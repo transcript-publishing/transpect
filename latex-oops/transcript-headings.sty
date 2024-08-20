@@ -315,7 +315,18 @@
     }%
   }
   
-  \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
+  \tpSetProperty{before-heading}{%
+    \ifx\@noBlanksBeforeChapters\relax
+      \clearpage
+    \else
+      \cleardoublepage
+    \fi
+    \if@twocolumn
+    \else
+      \null\nobreak
+      \vskip\dimexpr\headingsep-.45mm\relax
+    \fi%
+  }%
   
   \tpSetProperty{running-heading}{%
     \tp@chaptermark%
@@ -461,10 +472,18 @@
     \ifx\@twocolumnContinuousChapters\relax
       \if@twocolumn
       \else
-        \cleardoublepage
+        \ifx\@noBlanksBeforeChapters\relax
+          \clearpage
+        \else
+          \cleardoublepage
+        \fi
       \fi
     \else
-      \cleardoublepage
+      \ifx\@noBlanksBeforeChapters\relax
+        \clearpage
+      \else
+        \cleardoublepage
+      \fi
     \fi
     \if@twocolumn% Kein vspace vor Überschriften zweispaltiger Kapitel.
     \else%
