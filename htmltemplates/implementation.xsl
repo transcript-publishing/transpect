@@ -82,7 +82,8 @@
   
   
   <xsl:template name="main">
-    <html>
+    <html lang="{$language}" xml:lang="{$language}">
+      <!--  https://redmine.le-tex.de/issues/17361-->
       <head>
         <xsl:call-template name="htmltitle"/>
         <xsl:apply-templates select="$metadata//*:dict" mode="meta"/>
