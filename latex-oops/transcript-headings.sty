@@ -368,7 +368,11 @@
     %% Titel
     \ifjournal
     \else
-      \thispagestyle{empty}
+      \ifx\@twocolumnContinuousChapters\relax
+        \thispagestyle{headings}%
+      \else
+        \thispagestyle{empty}%
+      \fi
     \fi
     \leftskip\z@
     \leavevmode
@@ -389,7 +393,7 @@
     \egroup
     %% Linie
     \vskip\dimexpr-1\baselineskip\relax
-    \smash{\rlap{\lower3.25mm\vbox{\rule{\hsize}{.4\p@}}}}\par%
+    \smash{\rlap{\lower3.25mm\vbox{\rule{\hsize}{.4\p@}}}}\par\nobreak
     %% Autor
     \tpIfComp{AuthorNameList}{%
       \vskip\baselineskip
@@ -486,10 +490,13 @@
       \fi
     \fi
     \if@twocolumn% Kein vspace vor Überschriften zweispaltiger Kapitel.
+      \ifx\@twocolumnContinuousChapters\relax
+        \vskip2\baselineskip
+      \fi
     \else%
       \null\nobreak\vskip\dimexpr\headingsep-.45mm\relax%
     \fi
-    \thispagestyle{articlehead}
+    \thispagestyle{articlehead}%
     % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
     %\global\setbox\@licenceTextFooter = \hbox{}
     
