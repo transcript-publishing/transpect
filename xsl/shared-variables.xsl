@@ -52,7 +52,7 @@
       concat the important ones (info-licence-style, info-doi, etc.)--></xsl:variable>
   
   <xsl:variable name="info-author-role" as="xs:string"
-                select="'^tsmetacontributionauthorname$'"/>
+                select="'^tsmetacontributionauthorname(notoc)?$'"/>
   
   <xsl:variable name="info-author-affiliation-role" as="xs:string"
                 select="'^tsmetacontributionauthoraffiliation$'"/>
