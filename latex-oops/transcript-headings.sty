@@ -262,7 +262,14 @@
       }%
       \strut\tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\tpUseProperty{toc-author-face}\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
+      \tpIfComp{TocAuthorNameList}{%
+        \long\def\@tempa{\ignorespaces}%
+        \ifx\@tempa\tp@heading@TocAuthorNameList
+        \else
+          \nopagebreak\newline
+          {\tpUseProperty{toc-author-face}\tpTocLink{\tpUseComp{TocAuthorNameList}}}%
+        \fi
+      }{}%
       \tpUseProperty{toc-page-face}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
     }
