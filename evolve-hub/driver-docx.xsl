@@ -246,12 +246,12 @@
 
   <xsl:template match="sidebar[@role = 'chunk-metadata']" mode="hub:reorder-marginal-notes">
     <xsl:param name="process-meta-section" tunnel="yes" as="xs:boolean?"/>
-    <xsl:if test="$process-meta-section or preceding-sibling::*[1][@role = ('tsheadlineleft', 'tsheadlineright', 'tsheadlineauthor', 'tsheading1', 'tsheading2', 'tsauthor')]">
+    <xsl:if test="$process-meta-section or preceding-sibling::*[1][@role = ('tsheadlineleft', 'tsheadlineright', 'tsheadlineauthor', 'tsheading1', 'tsheading2', 'tsauthor', 'tsauthornotoc')]">
       <xsl:next-match/>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="para[matches(@role, '^tsauthor$')]" mode="hub:process-meta-sidebar">
+  <xsl:template match="para[matches(@role, '^tsauthor(notoc)?$')]" mode="hub:process-meta-sidebar">
     <author>
       <personname>
         <othername>  

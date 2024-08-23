@@ -3,8 +3,8 @@
   <css:rule layout-type="para" native-name="ts_abstract" name="tsabstract"/>
   <css:rule layout-type="para" native-name="ts_headword" name="tsheadword"/>
   <css:rule layout-type="para" native-name="ts_trans_title" name="tstranstitle"/>
-  <css:rule layout-type="para" native-name="ts_author" name="tsauthor"/>
-  <css:rule layout-type="para" native-name="ts_author_name" name="tsauthorname"/>
+  <css:rule layout-type="para" native-name="ts_author" name="tsauthor" regex="^tsauthor(notoc)?$"/>
+  <css:rule layout-type="para" native-name="ts_author_name" name="tsauthorname"  regex="^tsauthorname(notoc)?$"/>
   <css:rule layout-type="para" native-name="ts_author_description" name="tsauthordescription"/>
   <css:rule layout-type="para" native-name="ts_body" name="tsbody"/>
   <css:rule layout-type="para" native-name="ts_author_description" name="tsauthordescription"/>
