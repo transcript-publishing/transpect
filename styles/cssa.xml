@@ -3,8 +3,8 @@
   <css:rule layout-type="para" native-name="ts_abstract" name="tsabstract"/>
   <css:rule layout-type="para" native-name="ts_headword" name="tsheadword"/>
   <css:rule layout-type="para" native-name="ts_trans_title" name="tstranstitle"/>
-  <css:rule layout-type="para" native-name="ts_author" name="tsauthor"/>
-  <css:rule layout-type="para" native-name="ts_author_name" name="tsauthorname"/>
+  <css:rule layout-type="para" native-name="ts_author" name="tsauthor" regex="^tsauthor(notoc)?$"/>
+  <css:rule layout-type="para" native-name="ts_author_name" name="tsauthorname"  regex="^tsauthorname(notoc)?$"/>
   <css:rule layout-type="para" native-name="ts_author_description" name="tsauthordescription"/>
   <css:rule layout-type="para" native-name="ts_body" name="tsbody"/>
   <css:rule layout-type="para" native-name="ts_author_description" name="tsauthordescription"/>
@@ -44,11 +44,14 @@
   <css:rule layout-type="para" native-name="ts_table_source" name="tstablesource"/>
   <css:rule layout-type="para" native-name="ts_table_text" name="tstabletext"/>
   <css:rule layout-type="para" native-name="ts_table_value" name="tstablevalue"/>
+  <css:rule layout-type="para" native-name="ts_transcription" name="tstranscription"/>
   <css:rule layout-type="para" native-name="ts_head_word" name="tsheadword"/>
   <css:rule layout-type="para" native-name="ts_index_name" name="tsindexname"/>
   <css:rule layout-type="para" native-name="ts_index_static" name="tsindexstatic" regex="^tsindexstatic\d?$"/>
   <css:rule layout-type="para" native-name="ts_index_heading" name="tsindexheading" regex="^tsindexheading.*$"/>
-  <css:rule layout-type="para" native-name="ts_lineskip" name="ts_lineskip_1" regex="^ts_lineskip_[1-3]$"/>
+  <css:rule layout-type="para" native-name="ts_lineskip_1" name="tslineskip1"/>
+  <css:rule layout-type="para" native-name="ts_lineskip_2" name="tslineskip2"/>
+  <css:rule layout-type="para" native-name="ts_lineskip_3" name="tslineskip3"/>
   <css:rule layout-type="para" native-name="ts_list" name="tslist"/>
   <css:rule layout-type="para" native-name="ts_list_of_tables_item" name="tslistoftablesitem"/>
   <css:rule layout-type="para" native-name="ts_list_of_endnotes" name="tslistofendnotes" regex="^[a-z]{1,3}listof(endnotes|figures|tables)$"/>
@@ -64,7 +67,9 @@
   <css:rule layout-type="para" native-name="ts_dedication" name="tsdedication"/>
   <css:rule layout-type="para" native-name="ts_twocolumn" name="tstwocolumn"/>  
   <css:rule layout-type="para" native-name="ts_onecolumn" name="tsonecolumn"/>  
-  <css:rule layout-type="para" native-name="ts_reviewer" name="tsreviewer"/>  
+  <css:rule layout-type="para" native-name="ts_reviewer" name="tsreviewer"/>
+  <css:rule layout-type="para" native-name="ts_verse" name="tsverse"/>
+  <css:rule layout-type="para" native-name="ts_regular" name="tsregular"/>
 
   <css:rule layout-type="para" native-name="ts_keywords" name="tskeywords"/>
 <!--  <css:rule layout-type="para" native-name="ts_keywords_heading" name="tskeywordsheading"/>-->

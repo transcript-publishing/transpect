@@ -269,7 +269,14 @@
       }%
       \strut\tpTocLink{\tpUseComp{TocTitle}}%
       \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\tpUseProperty{toc-author-face}\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
+      \tpIfComp{TocAuthorNameList}{%
+        \long\def\@tempa{\ignorespaces}%
+        \ifx\@tempa\tp@heading@TocAuthorNameList
+        \else
+          \nopagebreak\newline
+          {\tpUseProperty{toc-author-face}\tpTocLink{\tpUseComp{TocAuthorNameList}}}%
+        \fi
+      }{}%
       \tpUseProperty{toc-page-face}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
       \strut%
     }
@@ -322,7 +329,18 @@
     }%
   }
   
-  \tpSetProperty{before-heading}{\cleardoublepage\if@twocolumn\else\null\nobreak\vskip\dimexpr\headingsep-.45mm\relax\fi}%
+  \tpSetProperty{before-heading}{%
+    \ifx\@noBlanksBeforeChapters\relax
+      \clearpage
+    \else
+      \cleardoublepage
+    \fi
+    \if@twocolumn
+    \else
+      \null\nobreak
+      \vskip\dimexpr\headingsep-.45mm\relax
+    \fi%
+  }%
   
   \tpSetProperty{running-heading}{%
     \tp@chaptermark%
@@ -366,7 +384,11 @@
     %% Titel
     \ifjournal
     \else
-      \thispagestyle{empty}
+      \ifx\@twocolumnContinuousChapters\relax
+        \thispagestyle{headings}%
+      \else
+        \thispagestyle{empty}%
+      \fi
     \fi
     \leftskip\z@
     \leavevmode
@@ -387,7 +409,7 @@
     \egroup
     %% Linie
     \vskip\dimexpr-1\baselineskip\relax
-    \smash{\rlap{\lower3.25mm\vbox{\rule{\hsize}{.4\p@}}}}\par%
+    \smash{\rlap{\lower3.25mm\vbox{\rule{\hsize}{.4\p@}}}}\par\nobreak
     %% Autor
     \tpIfComp{AuthorNameList}{%
       \vskip\baselineskip
@@ -467,12 +489,30 @@
   \tpSetProperty{counted-name-sep}{/}
 
   \tpSetProperty{before-heading}{%
-    \cleardoublepage%
+    \ifx\@twocolumnContinuousChapters\relax
+      \if@twocolumn
+      \else
+        \ifx\@noBlanksBeforeChapters\relax
+          \clearpage
+        \else
+          \cleardoublepage
+        \fi
+      \fi
+    \else
+      \ifx\@noBlanksBeforeChapters\relax
+        \clearpage
+      \else
+        \cleardoublepage
+      \fi
+    \fi
     \if@twocolumn% Kein vspace vor Überschriften zweispaltiger Kapitel.
+      \ifx\@twocolumnContinuousChapters\relax
+        \vskip2\baselineskip
+      \fi
     \else%
       \null\nobreak\vskip\dimexpr\headingsep-.45mm\relax%
     \fi
-    \thispagestyle{articlehead}
+    \thispagestyle{articlehead}%
     % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
     %\global\setbox\@licenceTextFooter = \hbox{}
     
@@ -536,7 +576,12 @@
     }
     \@tempdima = \the\ht\@articlefooterbox
     % Verkleinere die Seite um die Höhe der Fußzeileninformationen.
-    \enlargethispage{-\@tempdima}
+    % \enlargethispage* (d. h. Version mit Asterisk) drückt den Seiteninhalt vertikal so weit wie möglich zusammen. Bei einspaltigem Satz unerwünscht.
+    \if@twocolumn
+      \enlargethispage*{-\@tempdima}%
+    \else
+      \enlargethispage{-\@tempdima}%
+    \fi
     %\tpIfComp{AffilBlock}{{\tpUseProperty{affil-block-face}\tpUseComp{AffilBlock}}\par}{}
   }
 
@@ -631,7 +676,14 @@
   }
   
   \tpSetProperty{heading-block}{%
-    \clearpage
+    \if@twocolumn
+      \ifx\@twocolumnContinousChapters\relax
+        \typeout{++++++++++++++ NOt skipping before review}%
+      \else
+        \typeout{++++++++++++++ SKIPPING before review}%
+        \clearpage
+      \fi
+    \fi
     \thispagestyle{empty}
     \gdef\tp@currentHeading{chapter}%
     \savenotes

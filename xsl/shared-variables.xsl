@@ -11,7 +11,7 @@
   <xsl:import href="http://this.transpect.io/a9s/common/xsl/shared-variables.xsl"/>
 
   <xsl:variable name="tei2html:epub-type" as="xs:string" select="'3'"/>
-  <xsl:variable name="tei2html:chapterwise-footnote" select="true()" as="xs:boolean"/>
+<!--  <xsl:variable name="tei2html:chapterwise-footnote" select="true()" as="xs:boolean"/>-->
   <xsl:variable name="tei2html:generate-ol-type" select="true()" as="xs:boolean"/>
   <xsl:variable name="hub:figure-caption-start-regex" as="xs:string" 
                 select="if (exists(//*:figure/*:title[matches(normalize-space(.), '^(Bild|Abbildung|Abbildungen|Abb\.|Figures?|Figs?\.?)')])) 
@@ -52,7 +52,7 @@
       concat the important ones (info-licence-style, info-doi, etc.)--></xsl:variable>
   
   <xsl:variable name="info-author-role" as="xs:string"
-                select="'^tsmetacontributionauthorname$'"/>
+                select="'^tsmetacontributionauthorname(notoc)?$'"/>
   
   <xsl:variable name="info-author-affiliation-role" as="xs:string"
                 select="'^tsmetacontributionauthoraffiliation$'"/>

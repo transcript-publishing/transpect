@@ -357,6 +357,7 @@
   \@afterheading
 }
 
+
 \newcount\@transcriptionLineNumberSep \@transcriptionLineNumberSep=2 % Mindestanzahl der Leerzeichen nach der Zeilennummer.
 \newcount\@transcriptionNameSep       \@transcriptionNameSep=2       % Mindestanzahl der Leerzeichen nach der sprechenden Person.
 
@@ -397,7 +398,7 @@
     \ifdim\wd\z@ > \@nameWidth
       \edef\@nameWidth{\the\dimexpr\wd\z@}%
     \fi
-    \olditem[\hb@xt@\@lineNumberWidth{\the\@transcriptionLine\hss}\hskip\@transcriptionLineNumberSep\fontdimen2\font\hb@xt@\@nameWidth{##1\hss}]%
+    \olditem[\hb@xt@\@lineNumberWidth{\the\@transcriptionLine\hss}\hskip\@transcriptionLineNumberSep\fontdimen2\font\hb@xt@\@nameWidth{##1\hss}]\leavevmode\obeyspaces%
   }%
 }{%
   \endlist

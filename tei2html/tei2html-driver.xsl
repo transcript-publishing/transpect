@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:c="http://www.w3.org/ns/xproc-step" 
+  xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:css="http://www.w3.org/1996/css" 
   xmlns:csstmp="http://transpect.io/csstmp"
@@ -8,9 +10,10 @@
   xmlns:html="http://www.w3.org/1999/xhtml"
   xmlns:hub2htm="http://transpect.io/hub2htm"
   xmlns:epub="http://www.idpf.org/2007/ops"
+  xmlns:xml2tex="http://transpect.io/xml2tex"
   xmlns:tr="http://transpect.io"
   xmlns="http://www.w3.org/1999/xhtml"  
-  exclude-result-prefixes="css hub2htm xs tei2html tei html tr"
+  exclude-result-prefixes="#all"
   xpath-default-namespace="http://www.tei-c.org/ns/1.0"
   version="2.0">
   
@@ -18,6 +21,7 @@
   
   <xsl:import href="http://this.transpect.io/a9s/common/tei2html/tei2html-driver.xsl"/>
   <xsl:import href="http://this.transpect.io/a9s/ts/xsl/shared-variables.xsl"/>
+  <xsl:import href="http://transpect.io/xml2tex/xsl/calstable2htmltabs.xsl"/>
   
   <xsl:param name="toc-depth" select="3" as="xs:integer"/>
   <xsl:param name="verbose" select="'no'"/>
@@ -26,6 +30,9 @@
   <xsl:param name="generate-note-link-title" select="true()" as="xs:boolean"/>
   <xsl:param name="also-consider-rule-atts" select="false()" as="xs:boolean"/>
   <xsl:param name="s9y1-path-canonical"/>
+  <xsl:param name="notes-per-chapter" as="xs:string?"/>
+  
+  <xsl:variable name="tei2html:chapterwise-footnote" as="xs:boolean" select="if ($notes-per-chapter = 'yes') then true() else false()"/>
   
   <xsl:variable name="divify-sections" select="'no'"/>
   <xsl:variable name="xhtml-version " select="'5'"/>
@@ -942,6 +949,19 @@
   <xsl:template match="*[self::*:td|self::*:th]/@*[matches(name(), '^css:border-(top|left|bottom|right)-(style|color|width)$')]" mode="epub-alternatives" priority="8">
     <!-- https://redmine.le-tex.de/issues/15889-->
   </xsl:template>
+  
+  <!-- https://redmine.le-tex.de/issues/17217 -->
+  <xsl:template match="*:colgroup/*:col" mode="tei2html">
+    <col>
+      <xsl:apply-templates select="@* except @css:width" mode="#current"/>
+      <xsl:attribute name="style" 
+                     select="concat('width:',
+                                    (if(not(following-sibling::*)) 
+                                     then 1 - sum(for $col in preceding-sibling::*:col
+                                                  return xml2tex:absolute-to-relative-col-width($col/@css:width, parent::*:colgroup/*:col/@css:width))
+                                     else xml2tex:absolute-to-relative-col-width(@css:width, parent::*:colgroup/*:col/@css:width)) * 100, '%')"/>
+    </col>
+  </xsl:template>
 
   <xsl:function name="tei2html:main-sec-name" as="xs:string">
     <xsl:param name="context" as="element()"/>
@@ -949,5 +969,60 @@
                               and $context[self::div[@type = $default-structural-containers]|self::divGen]) then 'section' else 'div'"/>-->
         <xsl:sequence select="'div'"/>
   </xsl:function>
+  
+  <!-- https://redmine.le-tex.de/issues/17246 
+       EPUB fixes for Grid -->
+  
+  <xsl:template match="figure[@css:display[. eq 'grid']]" mode="epub-alternatives">
+    <xsl:copy>
+      <xsl:attribute name="rend" select="concat(@rend, ' grid grid-template-columns-', count(*))"/>
+      <xsl:apply-templates select="@* except (@rend, @css:display, @css:grid-template-columns), node()" mode="#current"/>
+    </xsl:copy>
+    <div class="clear"/>
+  </xsl:template>
+  
+  <xsl:template match="*:div[@class eq 'clear']" mode="tei2html">
+    <xsl:copy-of select="."/>
+  </xsl:template>
+  
+  <xsl:template match="figure[@css:display[. eq 'grid']]/figure" mode="epub-alternatives">
+    <xsl:variable name="is-last" as="xs:boolean" select="not(following-sibling::*)"/>
+    <xsl:copy>
+      <xsl:attribute name="rend" select="concat(@rend, ' grid-column-', count(preceding-sibling::*) + 1, ' is-last'[$is-last])"/>
+      <xsl:apply-templates select="@* except (@rend, @css:grid-column), node()" mode="#current"/>
+    </xsl:copy>
+  </xsl:template>
+  
+  
+  <xsl:template match="div[@type = ('chapter', 'article', 'appendix', 'preface', 'bibliography')]
+                          [not(..[@type = 'appendix'])]" mode="tei2html" priority="11">
+    <!-- also consider introductory text in parts -->
+    <xsl:variable name="previous-text" as="element()*">
+        <xsl:sequence select="if (.[..[self::div[@type = 'part']]]
+                                   [. is ../div[1]]
+                                   [not(@type = ('bibliography', 'appendix'))])
+                              then preceding-sibling::*
+                              else ()"/>
+    </xsl:variable>
+    <xsl:variable name="fn-ids" select="if ($tei2html:chapterwise-footnote) 
+                                        then ($previous-text//note[@type = 'footnote']/@xml:id,.//note[@type = 'footnote']/@xml:id) 
+                                        else $footnote-ids" as="xs:string*"/>
+    <xsl:if test="$tei2html:chapterwise-footnote and exists($previous-text//note[@type = 'footnote'])">
+      <xsl:call-template name="tei2html:footnotes">
+        <xsl:with-param name="chapterwise" as="xs:boolean" select="true()" tunnel="yes"/>
+        <xsl:with-param name="context" as="node()*" select="$previous-text" tunnel="yes"/>
+      </xsl:call-template>
+    </xsl:if>
+    <xsl:next-match>
+      <xsl:with-param name="fn-ids" select="$fn-ids" as="xs:string*" tunnel="yes"/>
+      <xsl:with-param name="avoid-footnote-creation" select="true()" as="xs:boolean" tunnel="yes"/>
+    </xsl:next-match>
+    <xsl:if test="$tei2html:chapterwise-footnote">
+      <xsl:call-template name="tei2html:footnotes">
+        <xsl:with-param name="chapterwise" as="xs:boolean" select="true()" tunnel="yes"/>
+        <xsl:with-param name="context" as="node()*" select="." tunnel="yes"/>
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
   
 </xsl:stylesheet>

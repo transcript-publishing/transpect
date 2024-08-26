@@ -16,7 +16,8 @@
 % Paketoptionen
 % Durchreichen der script-Optionen
 \define@key{transcript.sty}{lay}[b]{\gdef\lay{lay=#1}\gdef\layout{#1}}
-\DeclareOptionX{nohead}{\global\let\n@head\relax}
+\DeclareOptionX{twocolumnContinuousChapters}{\global\let\@twocolumnContinuousChapters\relax}
+\DeclareOptionX{noBlanksBeforeChapters}{\global\let\@noBlanksBeforeChapters\relax}
 \define@key{transcript.sty}{captions}[top]{\gdef\ts@caps{#1}}
 \define@key{transcript.sty}{captions_figure}[top]{\gdef\ts@caps@figure{#1}}
 \define@key{transcript.sty}{captions_table}[top]{\gdef\ts@caps@table{#1}}
@@ -322,6 +323,15 @@
   \NoAutoSpacing% Keine automatischen Leerzeichen, bspw. vor Satzschlusspunkten.
 }
 
+
+% Innerhalb einer Fußnote wird die globale Information, dass man sich in einer solchen befindet, gesetzt.
+% Dies wird benötigt, damit in folgender Definition griechischer Text in Überschriften fett gesetzt werden kann, aber die Fettung nicht erscheint, wenn die Überschrift eine Fußnote besitzt, innerhalb derer wiederum ebenfalls griechischer Text vorkommt.
+\let\@withinFootnote\@undefined
+\preto\footnote{%
+  \let\@withinFootnote\relax
+}
+
+
 \gdef\tp@languageRules@greek{%
   % Hier jeden Fall einzeln berücksichtigen, falls ein universeller Faktor keine Lösung darstellt.
   % BEGIN: Musterblock.
@@ -342,7 +352,10 @@
   % END.
   \sffamily
   \ifx\@currenvir\tp@str@heading
-    \bfseries
+    \ifx\@withinFootnote\relax
+    \else
+      \bfseries
+    \fi
   \fi
   \fontsize{0.8468\dimexpr\f@size\p@\relax}{\the\baselineskip}\selectfont%
 }

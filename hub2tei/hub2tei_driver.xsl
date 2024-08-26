@@ -161,4 +161,27 @@
       <xsl:apply-templates select="node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
+  
+  <xsl:template match="tei:div[tei:div[following-sibling::tei:p]]" mode="hub2tei:tidy">
+    <!-- no floating p elements are allowed after divs. therefore group them an surround them by a virtual div, 
+      https://redmine.le-tex.de/issues/17198 -->
+    <xsl:copy copy-namespaces="no">
+     <xsl:apply-templates select="@*" mode="#current"/>
+      <xsl:for-each-group select="node()" group-starting-with="node()[not(self::tei:div|self::text()[matches(., '^\p{Zs}+$')])]
+                                                                     [preceding-sibling::node()[1][self::tei:div]]">
+        <xsl:choose>
+          <xsl:when test="current-group()[last()][self::tei:div]">
+            <xsl:apply-templates select="current-group()" mode="#current"/>
+          </xsl:when>
+          <xsl:otherwise>
+             <xsl:element name="div">
+             <xsl:attribute name="type" select="'virtual'"/>
+             <xsl:apply-templates select="current-group()" mode="#current"/>
+           </xsl:element>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each-group>
+    </xsl:copy>
+  </xsl:template>
+  
 </xsl:stylesheet>

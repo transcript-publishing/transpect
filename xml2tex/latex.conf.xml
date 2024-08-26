@@ -17,8 +17,6 @@
   
   <xsl:param name="sans-font"   as="xs:string?"/>
   
-  <xsl:variable name="create-customer-toctitles" select="true()" as="xs:boolean"/>
-  
   <xsl:param name="table-caption-pos" as="xs:string?"/>
   <xsl:param name="figure-caption-pos" as="xs:string?"/>
   
@@ -28,7 +26,14 @@
     <!-- add series specific usepackage options. for example journal_series=zig or lay_type=std (https://redmine.le-tex.de/issues/14510#change-80305)-->
   </xsl:variable>
 
- <xsl:variable name="letter-spacing-def" select="''" as="xs:string?">
+  <xsl:variable name="noBlanksBeforeChapters" select="exists(//processing-instruction('latex')[matches(., '(^|\p{Zs}|\\)noBlanksBeforeChapters($|\p{Zs})')])" as="xs:boolean">
+    <!-- https://redmine.le-tex.de/issues/17344 -->
+  </xsl:variable>
+  <xsl:variable name="twocolumnContinuousChapters" select="exists(//processing-instruction('latex')[matches(., '(^|\p{Zs}|\\)twocolumnContinuousChapters($|\p{Zs})')])" as="xs:boolean">
+    <!-- https://redmine.le-tex.de/issues/17348 -->
+  </xsl:variable>
+  
+  <xsl:variable name="letter-spacing-def" select="''" as="xs:string?">
     <!-- https://mattermost.le-tex.de/letexml/pl/3bo8ggkcxfnnmqnkbi169usnby -->
   </xsl:variable>
 
@@ -197,17 +202,7 @@
   <xsl:variable name="advertisement" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Werbung']"/>
   
-  <xsl:variable name="create-customer-toctitles"  select="true()" as="xs:boolean"/>
-
-<!--  <xsl:variable name="scripts" as="element(script)*" xmlns="">
-    <script name="arabic"   unicode-range="&#x600;-&#x6ff;&#x750;-&#x77f;"/>
-    <script name="syriac"   unicode-range="&#x700;-&#x74f;"/>
-    <script name="armenian" unicode-range="&#x530;-&#x58f;&#xfb13;-&#xfb17;"/>
-    <script name="chinese"  unicode-range="&#12288;-&#12351;&#x3002;&#x4e00;-&#x9fff;"/>
-    <script name="hebrew"   unicode-range="&#x590;-&#x5ff;&#xfb1d;-&#xfb4f;"/>
-    <script name="japanese" unicode-range="&#x3040;-&#x309f;&#x30a0;-&#x30ff;&#12352;-&#12543;"/>
-    <!-\-<script name="greek"    unicode-range="&#x370;-&#x3ff;&#7936;-&#8191;"/> overwritten temporarily for CI tests-\->
-  </xsl:variable>-->
+  <xsl:variable name="create-customer-toctitles" select="true()" as="xs:boolean"/>
 
   <ns prefix="dc" uri="http://purl.org/dc/elements/1.1/"/>
   <ns prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
@@ -253,6 +248,8 @@
                                  ',captions_table=',
                                  if($table-caption-pos eq 'bottom') then 'bottom' else 'top',
                                  if($sans-font eq 'noto-condensed') then ',altFonts' else (),
+                                 if ($twocolumnContinuousChapters) then ',twocolumnContinuousChapters' else (),
+                                 if ($noBlanksBeforeChapters) then ',noBlanksBeforeChapters' else (),
                                  $series-options,
                                  ']{transcript}&#xa;')"/>
     
@@ -724,7 +721,9 @@
     </xsl:if>
     <xsl:if test="dbk:author or dbk:authorgroup/dbk:author">
       <rule name="tpTocAuthorNameList" type="cmd" break-after="0" break-before="1">
-        <param select="(dbk:author|dbk:authorgroup/dbk:author)/dbk:personname/dbk:othername/node()">
+        <param select="if ((dbk:author|dbk:authorgroup/dbk:author)/dbk:personname/dbk:othername[@role[contains(., 'notoc')]]) 
+                       then '' 
+                       else (dbk:author|dbk:authorgroup/dbk:author)/dbk:personname/dbk:othername/node()">
           <with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
@@ -952,5 +951,24 @@
     <xsl:next-match/>
     <xsl:text>}</xsl:text>
   </template>
+
+  <template context="processing-instruction()[name() eq $pi-xml-name]
+                                             [matches(., '(^|\p{Zs}|\\)(twocolumnContinuousChapters|noBlanksBeforeChapters)($|\p{Zs})')]">
+    <!-- these PIs go into options and will be streiiped from content
+         https://redmine.le-tex.de/issues/17344, https://redmine.le-tex.de/issues/17348 -->
+    <xsl:choose>
+      <xsl:when test="matches(., '(^\\?)(twocolumnContinuousChapters|noBlanksBeforeChapters)$')">
+         <!-- if PI is included as only node in para;discard it an pull it to package option-->
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- more than one option separated by space: strip option-->
+         <xsl:value-of select="replace(
+                                 replace(., '\\?(twocolumnContinuousChapters|noBlanksBeforeChapters)(\p{Zs})?', ''), 
+                                 '\s\s+', 
+                                 ' ')"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </template>
+ 
   
 </set>

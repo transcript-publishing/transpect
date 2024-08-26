@@ -199,6 +199,11 @@
     <xsl:sequence select="translate(., '»«›‹',  '“”ʻʼ')"/>
   </xsl:template>
 
+  <xsl:template match="text()[matches(., '[&#8544;-&#8575;]')]" mode="custom-1">
+    <!-- replace roman numerals with numbers, https://redmine.le-tex.de/issues/17148#change -->
+    <xsl:value-of select="tr:roman-numeral-to-letter(.)"/>
+  </xsl:template>
+  
   <xsl:template match="footnote/para/phrase[@role = 'hub:identifier']/phrase" mode="custom-2">
     <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
@@ -241,12 +246,12 @@
 
   <xsl:template match="sidebar[@role = 'chunk-metadata']" mode="hub:reorder-marginal-notes">
     <xsl:param name="process-meta-section" tunnel="yes" as="xs:boolean?"/>
-    <xsl:if test="$process-meta-section or preceding-sibling::*[1][@role = ('tsheadlineleft', 'tsheadlineright', 'tsheadlineauthor', 'tsheading1', 'tsheading2', 'tsauthor')]">
+    <xsl:if test="$process-meta-section or preceding-sibling::*[1][@role = ('tsheadlineleft', 'tsheadlineright', 'tsheadlineauthor', 'tsheading1', 'tsheading2', 'tsauthor', 'tsauthornotoc')]">
       <xsl:next-match/>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="para[matches(@role, '^tsauthor$')]" mode="hub:process-meta-sidebar">
+  <xsl:template match="para[matches(@role, '^tsauthor(notoc)?$')]" mode="hub:process-meta-sidebar">
     <author>
       <personname>
         <othername>  
@@ -312,6 +317,11 @@
   </xsl:template>
 
   <xsl:template match="footnote//phrase[@role = 'hub:separator'][matches(., '^\p{Zs}+$')]" mode="hub:split-at-tab"/>
+  
+  <!--  https://redmine.le-tex.de/issues/17245
+        remove row bg color since word saves colors at the cell rather than the row -->
+  
+  <xsl:template match="row/@css:background-color" mode="custom-1"/>
   
  <!--  <xsl:template match="|hub/section[matches(@role,$part-heading-role-regex)]/section[matches(@role, concat('^[a-z]{1,3}(heading(enumerated)?1(review)?|journalreviewheading|',
                                                                                                             replace($list-of-figures-regex, '^\^(.+)\$$', '$1'),
