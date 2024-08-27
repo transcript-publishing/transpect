@@ -184,4 +184,19 @@
     </xsl:copy>
   </xsl:template>
   
+  <xsl:template name="source-desc">
+    <!--  https://redmine.le-tex.de/issues/17362-->
+    <xsl:variable name="qualification" select="/hub/info/keywordset[@role='titlepage']/keyword[@role = 'Qualifikationsnachweis']"/>
+    <xsl:if test="$qualification[normalize-space()]">
+      <xsl:choose>
+        <xsl:when test="$qualification[*:para]">
+          <xsl:sequence select="/hub/info/keywordset[@role='titlepage']/keyword[@role = 'Qualifikationsnachweis']/*"/>
+        </xsl:when>
+      <xsl:otherwise>
+        <p><xsl:sequence select="/hub/info/keywordset[@role='titlepage']/keyword[@role = 'Qualifikationsnachweis']/text()"/></p>
+      </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:template>
+  
 </xsl:stylesheet>
