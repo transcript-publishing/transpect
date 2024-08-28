@@ -422,7 +422,13 @@
     }{}%
   }%
   
-  \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}
+  \tpSetProperty{after-skip}{%
+    \tpIfComp{AuthorNameList}{%
+      1.68\baselineskip
+    }{%
+      3.68\baselineskip
+    }%
+  }
 }
 
 
@@ -503,7 +509,10 @@
     \else%
       \null\nobreak\vskip\dimexpr\headingsep-.45mm\relax%
     \fi
-    \thispagestyle{articlehead}%
+    \if@twocolumn% Kein vspace vor Überschriften zweispaltiger Kapitel.
+    \else
+      \thispagestyle{articlehead}%
+    \fi
     % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
     %\global\setbox\@licenceTextFooter = \hbox{}
     
@@ -669,9 +678,7 @@
   \tpSetProperty{heading-block}{%
     \if@twocolumn
       \ifx\@twocolumnContinousChapters\relax
-        \typeout{++++++++++++++ NOt skipping before review}%
       \else
-        \typeout{++++++++++++++ SKIPPING before review}%
         \clearpage
       \fi
     \fi
@@ -682,16 +689,22 @@
       \if@twocolumn
         \begin{table*}[t]%
       \fi
-        \normalfont
-        \interlinepenalty\@M
-        \tpUseProperty{title-face}%
-        \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
-        \ignorespaces\tpUseComp{Title}\par\nopagebreak%
-        \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
-        \tpIfComp{DOI}{%
-          \vskip\baselineskip%
-          \tpUseComp{DOI}%
-        }{}%
+      \normalfont
+      \interlinepenalty\@M
+      \tpUseProperty{title-face}%
+      \tpIfComp{Number}{%
+        \tpUseProperty{hang-number}%
+      }{%
+        \leftskip\z@
+      }%
+      \ignorespaces\tpUseComp{Title}\par\nopagebreak%
+      \tpIfComp{Subtitle}{%
+        \tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par
+      }{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
+      \tpIfComp{DOI}{%
+        \vskip\baselineskip%
+        \tpUseComp{DOI}%
+      }{}%
       \if@twocolumn
         \vspace{1\baselineskip}%
         \end{table*}%
