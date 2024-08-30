@@ -80,7 +80,7 @@
 
 \def\tp@str@center{center}
 %% gilt für Abbildungen und Tabellen (und weitere Floats) gleichermaßen:
-\tpAddToDefault{float}{%
+\ccAddToType{Properties}{float}{%
   \tpSetProperty{number-face}{\ifx\ts@layout@type\ts@str@layout@mdw\bfseries\else\itshape\fi}% Format of number, additional to caption-format
   \tpSetProperty{number-sep}{:\space\ignorespaces}
   \tpSetProperty{caption-sep-top}{3mm}%
@@ -167,6 +167,7 @@
   \tpSetProperty{list-of-page-sep}{\tsDotfill\kern.5\p@}% Definition für \tsDotfill in der Hauptdatei transcript.sty.
   \tpSetProperty{list-of-number-face}{}%
   \tpSetProperty{list-of-number-sep}{:\enskip}%
+  \tpSetProperty{numbering}{}%
   \tpSetProperty{list-of-block}{%
     \tpUseProperty{list-of-caption-face}%
     \tpIfComp{ListofNumber}
