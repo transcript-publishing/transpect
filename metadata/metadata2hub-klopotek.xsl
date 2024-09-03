@@ -96,7 +96,11 @@
     <xsl:call-template name="add-static-keywords"/>
   </xsl:template>
   
-  
+  <xsl:template match="*:memo|*:content"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17443-->
+    <xsl:apply-templates select="*:text[@term]" mode="#current"/>
+  </xsl:template>
+ 
     <xsl:template name="add-static-keywords">
       <!--https://redmine.le-tex.de/issues/16798, https://redmine.le-tex.de/issues/16800-->
       <keyword role="Papier">
@@ -334,6 +338,20 @@
     <!-- https://redmine.le-tex.de/issues/16437 -->
     <keyword role="Bandnummer">
       <xsl:value-of select="string-join((../*:vol_name/@term[normalize-space()], .), ' ')"/>
+    </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:text[@term = 'Fördertext (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/16437 -->
+    <keyword role="Fordertext">
+      <xsl:value-of select="."/>
+    </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:text[@term = 'Thesis-Pflichteintrag (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/16437 -->
+    <keyword role="Qualifikationsnachweis">
+      <xsl:value-of select="."/>
     </keyword>
   </xsl:template>
   
