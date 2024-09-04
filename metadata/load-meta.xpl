@@ -136,7 +136,10 @@
 
   <tr:file-uri name="meta-file-uri" cx:depends-on="meta-list">
     <p:with-option name="filename" select="concat(/c:directory/@xml:base, 
-                                                  (/c:directory/c:file[contains(@name, '.klopotek.xml')]/@name, /c:directory/c:file[contains(@name, '.meta.xml')]/@name)[1]
+                                                  (/c:directory/c:file[contains(@name, '.klopotek.xml')]
+                                                                      [matches(@name, replace($basename, '^(.+_\d{5})(_.+)?$', '$1'))]/@name, 
+                                                   /c:directory/c:file[contains(@name, '.meta.xml')]
+                                                                      [matches(@name, replace($basename, '^(.+_\d{5})(_.+)?$', '$1'))]/@name)[1]
                                                   )">
      <p:pipe port="result" step="meta-list"/>
     </p:with-option>
