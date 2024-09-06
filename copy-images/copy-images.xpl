@@ -131,7 +131,8 @@
           <p:with-option name="imagemagick-options" select="'-colorspace rgb -background white -flatten'"/>
           <p:with-option name="debug" select="$debug"/>
           <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-          <p:with-option name="fail-on-error" select="$fail-on-error"/>	    
+          <p:with-option name="fail-on-error" select="$fail-on-error"/>   
+          <p:with-option name="imagemagick-path" select="if ($run-local) then 'C:/cygwin/bin/convert.exe' else '')"/>   
         </tr:imagemagick>
         
         <p:group>
@@ -190,7 +191,8 @@
 <p:sink/>
 
  <p:try name="directory-list">
-    <p:documentation>In this step a recursive listing of all files in the images directory is done. Those are copied to temp directory afterwards
+    <p:documentation>In this step a recursive listing of all files in the images directory is done. 
+      Those are copied to temp directory afterwards.
     </p:documentation>
     <p:group>
       <p:output port="result">
@@ -224,9 +226,10 @@
     </p:catch>
   </p:try>
   <cx:message name="msg07">
-    <p:with-option name="message" select="'####### Copying Cover from media directory: ', $covername">
+
+    <p:with-option name="message" select="'####### Copying Cover from media directory: ', $covername"/>
       
-    </p:with-option>
+    
   </cx:message>
   
   <p:viewport match="c:directory[@name = 'pdf']" name="copy-images-from-content-repo" cx:depends-on="msg07">
@@ -241,11 +244,15 @@
                         then 'file:/'
                         else ''">
       <p:pipe port="parameters" step="copy-images"/>
-    </p:variable>
-        <p:variable  name="covername" 
+   </p:variable>
+   <p:variable name="epub-cover-path" 
+                select="concat(/c:param-set/c:param[@name eq 's9y1-path']/@value, 'epub')">
+      <p:pipe port="parameters" step="copy-images"/>
+   </p:variable>
+<!--         <p:variable  name="covername" 
                 select="(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Cover'][normalize-space()]/text(), 'nocover.jpg')[1]">
       <p:pipe port="source" step="copy-images"/>
-    </p:variable>
+    </p:variable>-->
     
     
     <p:try name="copy-versioned-images">
@@ -289,6 +296,18 @@
               <p:documentation>add a Cover directory to prevent image from being deleted in temp directory by Makefile</p:documentation>
             </p:pipe>
             
+          </p:with-option>
+          <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        </cxf:copy>
+        
+        <!-- copy epub cover -->
+        <cxf:copy name="copy-files">
+          <p:with-option name="href" select="concat($file-prefix, /c:result/@os-path)">
+            <p:pipe port="result" step="file-uri2"/>
+          </p:with-option>
+          <p:with-option name="target" 
+            select="concat($epub-cover-path, '/', c:result/@lastpath-os')">
+            <p:pipe port="result" step="file-uri2"/>
           </p:with-option>
           <p:with-option name="fail-on-error" select="$fail-on-error"/>
         </cxf:copy>
