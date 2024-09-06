@@ -92,9 +92,31 @@
     </keyword>
   </xsl:template>
   
-  <xsl:template match="*:isbn"  mode="klopotek-to-keyword"  priority="2">
-    <xsl:next-match/>
-    <xsl:call-template name="add-static-keywords"/>
+  <xsl:template match="*:isbn[normalize-space()]"  mode="klopotek-to-keyword"  priority="3">
+    <xsl:param name="already-added-static" as="xs:boolean?"/>
+    <xsl:choose>
+      <xsl:when test="../*:edition_type[.='PBK']">
+        <!-- create Cover from Print ISBN -->
+        <keyword role="Cover"><xsl:value-of select="concat(translate(., '-', ''), '.jpg')"/></keyword>
+        <keyword role="Print-ISBN">
+          <xsl:value-of select="concat('Print-ISBN: ', .)"/>
+        </keyword>
+      </xsl:when>
+      <xsl:when test="../*:edition_type[.='EBP']">
+        <keyword role="PDF-ISBN">
+          <xsl:value-of select="concat('PDF-ISBN: ', .)"/>
+        </keyword>
+      </xsl:when>
+      <xsl:when test="../*:edition_type[.='EBE']">
+        <keyword role="ePUB-ISBN">
+          <xsl:value-of select="concat('ePUB-ISBN: ', .)"/>
+        </keyword>
+      </xsl:when>
+    </xsl:choose>
+    <xsl:apply-templates select="../*:parallel_versions/*:ref/*:isbn" mode="#current">
+      <xsl:with-param name="already-added-static" select="true()" as="xs:boolean"/>
+    </xsl:apply-templates>
+   <xsl:if test="not($already-added-static)"><xsl:call-template name="add-static-keywords"/></xsl:if>
   </xsl:template>
   
   <xsl:template match="*:memo|*:content"  mode="klopotek-to-keyword"  priority="2">
@@ -127,7 +149,6 @@
     <xsl:param name="role" as="xs:string"/>
     <xsl:variable name="klopotek-roles" as="map(xs:string, xs:string)"
                   select="map{ 
-                              'isbn':'ISBN',
                               'doi':'DOI',
                               'language':'Sprache',
                               'shorttitle':'Kurztitel',    
