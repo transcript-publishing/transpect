@@ -246,7 +246,7 @@
       <p:pipe port="parameters" step="copy-images"/>
    </p:variable>
    <p:variable name="epub-cover-path" 
-                select="concat(/c:param-set/c:param[@name eq 's9y1-path']/@value, 'epub')">
+                select="concat(replace(/c:param-set/c:param[@name eq 's9y1-path']/@value, 'file:///', 'file:/'), 'epub/')">
       <p:pipe port="parameters" step="copy-images"/>
    </p:variable>
 <!--         <p:variable  name="covername" 
@@ -279,7 +279,8 @@
       </tr:store-debug>
         
         <cx:message name="copy-from-svn-msg2">
-          <p:with-option name="message" select="'[info] copy: ', concat($file-prefix, /c:result/@os-path), ' => ', concat($file-prefix, $outdir-print, '/cover/', /c:result/@lastpath-os)">
+          <p:with-option name="message" select="'[info] copy: ', concat($file-prefix, /c:result/@os-path), ' => ', concat($file-prefix, $outdir-print, '/cover/', /c:result/@lastpath-os), ' and ' 
+						concat($epub-cover-path, /c:result/@lastpath-os')">
             <p:pipe port="result" step="file-uri2"/>
           </p:with-option>
         </cx:message>
@@ -301,12 +302,12 @@
         </cxf:copy>
         
         <!-- copy epub cover -->
-        <cxf:copy name="copy-files">
+        <cxf:copy name="copy-epub-files">
           <p:with-option name="href" select="concat($file-prefix, /c:result/@os-path)">
             <p:pipe port="result" step="file-uri2"/>
           </p:with-option>
           <p:with-option name="target" 
-            select="concat($epub-cover-path, '/', c:result/@lastpath-os')">
+            select="concat($epub-cover-path, /c:result/@lastpath-os')">
             <p:pipe port="result" step="file-uri2"/>
           </p:with-option>
           <p:with-option name="fail-on-error" select="$fail-on-error"/>
