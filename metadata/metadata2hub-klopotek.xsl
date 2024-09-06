@@ -96,13 +96,13 @@
     <xsl:param name="already-added-static" as="xs:boolean?"/>
     <xsl:choose>
       <xsl:when test="../*:edition_type[.='PBK']">
-        <!-- create Cover from Print ISBN -->
-        <keyword role="Cover"><xsl:value-of select="concat(translate(., '-', ''), '.jpg')"/></keyword>
         <keyword role="Print-ISBN">
           <xsl:value-of select="concat('Print-ISBN: ', .)"/>
         </keyword>
       </xsl:when>
       <xsl:when test="../*:edition_type[.='EBP']">
+         <!-- create Cover from Print ISBN -->
+        <keyword role="Cover"><xsl:value-of select="concat(translate(., '-', ''), '.jpg')"/></keyword>
         <keyword role="PDF-ISBN">
           <xsl:value-of select="concat('PDF-ISBN: ', .)"/>
         </keyword>
