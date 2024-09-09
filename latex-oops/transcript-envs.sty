@@ -365,10 +365,12 @@
 \newcount\@transcriptionEnv  % Für die Durchnummerierung der Transkriptionsumgebungen, damit sich Labelbreiten speichern lassen.
 
 \newenvironment{transcript}[1][1]{%
+  \fontsize{8bp}{10bp}\selectfont
+  \def\tpBreak{\par}%
   % Makro/PI, womit sich die Zeilennummer innerhalb der Umgebung neu setzen lässt.
   \def\lineNumber##1{\@transcriptionLine=\numexpr##1-1\relax}%
   \def\spaces##1{\hspace*{##1\fontdimen2\font}}%
-  \ttfamily
+  \sansmonofamily
   % Die feste Breite der Zeilennummer auf die Breite der Nummer der erste Zeile setzen.
   \setbox\@tempboxa = \hbox{#1}%
   % Nach dem ersten Durchlauf wird diese Breite mit der der höchsten Zeilennummer in dieser Umgebung überschrieben.
@@ -389,6 +391,7 @@
     \leftmargin \dimexpr\@lineNumberWidth+\@transcriptionLineNumberSep\fontdimen2\font+\@nameWidth+\@transcriptionNameSep\fontdimen2\font\relax
     \labelwidth \dimexpr\@lineNumberWidth+\@transcriptionLineNumberSep\fontdimen2\font+\@nameWidth\relax
     \labelsep   \@transcriptionNameSep\fontdimen2\font
+    \itemsep    0\p@
   }%
   \@transcriptionLine=\numexpr#1-1\relax
   \let\olditem\item
