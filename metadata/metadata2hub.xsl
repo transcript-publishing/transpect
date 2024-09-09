@@ -23,7 +23,13 @@
 
   <xsl:template match="*:product_export" priority="15">
     <keywordset role="titlepage">
-      <xsl:apply-templates select="*:product/*" mode="klopotek-to-keyword"/>
+      <xsl:message select="'####### process klopotek to keywords'"/>
+      <xsl:apply-templates select="if (count (*:product) = 1) 
+                                   then *:product/*
+                                   else (*:product[*:edition_type = 'PBK'], *:product[*:edition_type = 'EPB'], *:product[*:edition_type = 'EBEH'],*:product[*:edition_type = 'EBE'])[1]/*, 
+                                   *:serial" mode="klopotek-to-keyword">
+        <xsl:with-param name="all-products" select="*:product" as="element()+" tunnel="yes"/>
+      </xsl:apply-templates>
     </keywordset>
   </xsl:template>
 

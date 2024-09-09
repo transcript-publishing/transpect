@@ -44,6 +44,9 @@
               select="replace(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'hub']/dbk:keyword[@role eq 'source-dir-uri'], 
                               '^(.+/).+?\.docx.tmp/', '$1')"/>
   <p:variable name="format" select="'jpg'"/>
+  <p:variable name="covername" 
+              select="(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Cover'][normalize-space()]/text(), 'nocover.jpg')[1]"/>
+  
   
   <tr:store-debug name="debug-before-copy-images" pipeline-step="copy-images/02_before">
     <p:with-option name="active" select="$debug"/>
@@ -128,7 +131,8 @@
           <p:with-option name="imagemagick-options" select="'-colorspace rgb -background white -flatten'"/>
           <p:with-option name="debug" select="$debug"/>
           <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-          <p:with-option name="fail-on-error" select="$fail-on-error"/>	    
+          <p:with-option name="fail-on-error" select="$fail-on-error"/>   
+          <p:with-option name="imagemagick-path" select="if ($run-local) then 'C:/cygwin/bin/convert.exe' else '')"/>   
         </tr:imagemagick>
         
         <p:group>
@@ -187,14 +191,15 @@
 <p:sink/>
 
  <p:try name="directory-list">
-    <p:documentation>In this step a recursive listing of all files in the images directory is done. Those are copied to temp directory afterwards
+    <p:documentation>In this step a recursive listing of all files in the images directory is done. 
+      Those are copied to temp directory afterwards.
     </p:documentation>
     <p:group>
       <p:output port="result">
         <p:pipe port="result" step="image-list"/>
       </p:output>
       <tr:recursive-directory-list name="image-list">
-        <p:with-option name="path" select="concat(/c:param-set/c:param[@name eq 's9y1-path']/@value, 'epub')">
+        <p:with-option name="path" select="'/media/cover/trans_full/pdf/'">
           <p:pipe port="parameters" step="copy-images"/>
         </p:with-option>
       </tr:recursive-directory-list>
@@ -221,12 +226,13 @@
     </p:catch>
   </p:try>
   <cx:message name="msg07">
-    <p:with-option name="message" select="'####### Copying Cover from working copy: ', /c:directory/@xml:base">
+
+    <p:with-option name="message" select="'####### Copying Cover from media directory: ', $covername"/>
       
-    </p:with-option>
+    
   </cx:message>
   
-  <p:viewport match="c:directory[@name = 'cover']" name="copy-images-from-content-repo" cx:depends-on="msg07">
+  <p:viewport match="c:directory[@name = 'pdf']" name="copy-images-from-content-repo" cx:depends-on="msg07">
      <p:variable  name="outdir-print" 
                 select="if (/*/c:param[@name = 'run-local']/@value = ('yes', 'true')) 
                         then concat($outdir, '/tex/temp')
@@ -238,7 +244,15 @@
                         then 'file:/'
                         else ''">
       <p:pipe port="parameters" step="copy-images"/>
-    </p:variable>
+   </p:variable>
+   <p:variable name="epub-cover-path" 
+                select="concat(replace(/c:param-set/c:param[@name eq 's9y1-path']/@value, 'file:///', 'file:/'), 'epub/')">
+      <p:pipe port="parameters" step="copy-images"/>
+   </p:variable>
+<!--         <p:variable  name="covername" 
+                select="(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Cover'][normalize-space()]/text(), 'nocover.jpg')[1]">
+      <p:pipe port="source" step="copy-images"/>
+    </p:variable>-->
     
     
     <p:try name="copy-versioned-images">
@@ -251,12 +265,12 @@
         <tr:file-uri name="file-uri2">
           <p:with-option name="filename" select="replace(
                                                           concat(
-                                                                  c:directory[@name = 'cover']/@xml:base, 
-                                                                  c:directory[@name = 'cover']/(c:file[contains(@name, '.eps')], c:file[not(contains(@name, '.eps'))])[1]/@name
+                                                                  c:directory[@name = 'pdf']/@xml:base, 
+                                                                  c:directory[@name = 'pdf']/c:file[@name = $covername]/@name
                                                                  ), 
                                                           'file:///', 
                                                           'file:/'
-                                                         )"/>
+                                                          )"/>
         </tr:file-uri>
         
        <tr:store-debug pipeline-step="copy-images/cover-file-uri">
@@ -265,7 +279,8 @@
       </tr:store-debug>
         
         <cx:message name="copy-from-svn-msg2">
-          <p:with-option name="message" select="'[info] copy: ', concat($file-prefix, /c:result/@os-path), ' => ', concat($file-prefix, $outdir-print, '/cover/', /c:result/@lastpath-os)">
+          <p:with-option name="message" select="'[info] copy: ', concat($file-prefix, /c:result/@os-path), ' => ', concat($file-prefix, $outdir-print, '/cover/', /c:result/@lastpath-os), ' and ' 
+						concat($epub-cover-path, /c:result/@lastpath-os')">
             <p:pipe port="result" step="file-uri2"/>
           </p:with-option>
         </cx:message>
@@ -286,13 +301,25 @@
           <p:with-option name="fail-on-error" select="$fail-on-error"/>
         </cxf:copy>
         
+        <!-- copy epub cover -->
+        <cxf:copy name="copy-epub-files">
+          <p:with-option name="href" select="concat($file-prefix, /c:result/@os-path)">
+            <p:pipe port="result" step="file-uri2"/>
+          </p:with-option>
+          <p:with-option name="target" 
+            select="concat($epub-cover-path, /c:result/@lastpath-os')">
+            <p:pipe port="result" step="file-uri2"/>
+          </p:with-option>
+          <p:with-option name="fail-on-error" select="$fail-on-error"/>
+        </cxf:copy>
+        
       </p:group>
       <p:catch>
         <p:output port="result">
           <p:empty/>
         </p:output>
         <cx:message name="msg7">
-          <p:with-option name="message" select="'[error] Image copying from working copy failed for: ', c:directory[@name = 'cover']/(c:file[contains(@name, '.eps')], c:file[not(contains(@name, '.eps'))])[1]/@name">
+          <p:with-option name="message" select="'[error] Image copying from working copy failed for: ', c:directory[@name = 'pdf']/c:file[@name = $covername]/@name">
             <p:pipe port="current" step="copy-images-from-content-repo"/>
           </p:with-option>
         </cx:message>

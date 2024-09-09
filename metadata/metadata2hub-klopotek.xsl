@@ -30,10 +30,11 @@
   </xsl:template>
   
   <xsl:template match="*:open_access"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:param name="all-products" as="element()+" tunnel="yes"/>
     <!-- https://redmine.le-tex.de/issues/16949-->
     <xsl:if test="$open-access">
-      <xsl:variable name="license-type" select="string-join(tokenize(*:cc_license_type/@term, '\P{Lu}')[not(. = 'CC')], '-')"/>
-        <xsl:message select="'###', $license-type"/>
+      <xsl:variable name="license-type" select="string-join(tokenize(($all-products[not(*:edition_type = ('EBE', 'PBK'))][*:open_access/@open_access_yn='Y'])[1]/*:open_access/*:cc_license_type/@term, '\P{Lu}')[not(. = 'CC')], '-')"/>
+        <xsl:message select="'### license: ', $license-type"/>
       <keyword role="Lizenz">
         <xsl:value-of select="$license-type" />
       </keyword>
@@ -91,12 +92,38 @@
     </keyword>
   </xsl:template>
   
-  <xsl:template match="*:isbn"  mode="klopotek-to-keyword"  priority="2">
-    <xsl:next-match/>
-    <xsl:call-template name="add-static-keywords"/>
+  <xsl:template match="*:isbn[normalize-space()]"  mode="klopotek-to-keyword"  priority="3">
+    <xsl:param name="already-added-static" as="xs:boolean?"/>
+    <xsl:choose>
+      <xsl:when test="../*:edition_type[.='PBK']">
+        <keyword role="Print-ISBN">
+          <xsl:value-of select="concat('Print-ISBN: ', .)"/>
+        </keyword>
+      </xsl:when>
+      <xsl:when test="../*:edition_type[.='EBP']">
+         <!-- create Cover from Print ISBN -->
+        <keyword role="Cover"><xsl:value-of select="concat(translate(., '-', ''), '.jpg')"/></keyword>
+        <keyword role="PDF-ISBN">
+          <xsl:value-of select="concat('PDF-ISBN: ', .)"/>
+        </keyword>
+      </xsl:when>
+      <xsl:when test="../*:edition_type[.='EBE']">
+        <keyword role="ePUB-ISBN">
+          <xsl:value-of select="concat('ePUB-ISBN: ', .)"/>
+        </keyword>
+      </xsl:when>
+    </xsl:choose>
+    <xsl:apply-templates select="../*:parallel_versions/*:ref/*:isbn" mode="#current">
+      <xsl:with-param name="already-added-static" select="true()" as="xs:boolean"/>
+    </xsl:apply-templates>
+   <xsl:if test="not($already-added-static)"><xsl:call-template name="add-static-keywords"/></xsl:if>
   </xsl:template>
   
-  
+  <xsl:template match="*:memo|*:content"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17443-->
+    <xsl:apply-templates select="*:text[@term]" mode="#current"/>
+  </xsl:template>
+ 
     <xsl:template name="add-static-keywords">
       <!--https://redmine.le-tex.de/issues/16798, https://redmine.le-tex.de/issues/16800-->
       <keyword role="Papier">
@@ -122,7 +149,6 @@
     <xsl:param name="role" as="xs:string"/>
     <xsl:variable name="klopotek-roles" as="map(xs:string, xs:string)"
                   select="map{ 
-                              'isbn':'ISBN',
                               'doi':'DOI',
                               'language':'Sprache',
                               'shorttitle':'Kurztitel',    
@@ -226,23 +252,23 @@
     </xsl:for-each-group>
     
     
-    <xsl:if test="*:copyright_holder[*:cpr_type = ('HG', 'VG')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]">
+    <xsl:if test="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]">
       <keyword role="{if (*:copyright_holder[*:cpr_type  = 'HG'][text[@text_type = concat('AUTBIO', $lang)][normalize-space()]]) then 'Herausgeberinformationen' else 'Autoreninformationen'}">
         
         <!--Herausgeberinformationen https://redmine.le-tex.de/issues/16479-->
         
         <xsl:choose>
-          <xsl:when test="count(*:copyright_holder[*:cpr_type = ('HG', 'VG')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
-            <xsl:for-each select="*:copyright_holder[*:cpr_type = ('HG', 'VG')]/text[@text_type = concat('AUTBIO', $lang)]">
+          <xsl:when test="count(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
+            <xsl:for-each select="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)]">
               <para>
                <!-- <xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
-                <xsl:sequence select="html:process-html(.)" />
+                <xsl:sequence select="html:process-html(., false())" />
               </para>
             </xsl:for-each>
           </xsl:when>
           <xsl:otherwise>
             <!--<xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
-            <xsl:sequence select="html:process-html(*:copyright_holder[*:cpr_type = ('HG', 'VG')]/text[@text_type = concat('AUTBIO', $lang)])" />
+            <xsl:sequence select="html:process-html(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)], false())" />
           </xsl:otherwise>
         </xsl:choose>
       </keyword>
@@ -252,71 +278,54 @@
   
   <xsl:function name="html:process-html" as="node()*">
     <xsl:param name="context" as="element()"/>
+    <xsl:param name="preserve-paras" as="xs:boolean"/>
     
     <xsl:if test="$context[normalize-space()]">
       
-
-    <xsl:variable name="parsed" as="document-node(element(div))" 
-                  select="parse-xml('&lt;div>' || $context || '&lt;/div>')"/>
-
-
-      <xsl:variable name="stripped-namespaces" as="element(dbk:div)"> 
-        <xsl:apply-templates select="$parsed" mode="strip-namespaces"/>
+      <xsl:variable name="parsed" as="document-node(element(div))" 
+        select="parse-xml('&lt;div>' || $context || '&lt;/div>')"/>
+      
+      <xsl:variable name="postprocessed" as="node()*">
+        <xsl:apply-templates select="$parsed/*:div/node()" mode="postprocess-html">
+          <xsl:with-param name="preserve-paras" select="$preserve-paras" as="xs:boolean" tunnel="yes"/>
+        </xsl:apply-templates>
       </xsl:variable>
-
-  	  <xsl:variable name="structured-onix" as="node()*">
-  	    <xsl:for-each-group select="$stripped-namespaces/node()[not(self::text()[matches(., '^\p{Zs}+$')])]" 
-                      group-starting-with="*:br[not(preceding-sibling::node()[1][self::*:br])]">
-   	    <xsl:choose>
-   	      <xsl:when test="current-group()[1][not(self::*:br)]">
-             <!-- first para -->
-   	        <xsl:element name="p">
-   	          <xsl:attribute name="class" select="'Hauptteil_Grundtext_GT'"/>
-               <xsl:attribute name="style" select="'margin-top:1em; text-indent:0;'"/>
-   	          <xsl:sequence  select="current-group()"/>
-   	        </xsl:element>
-   	      </xsl:when>
-   	      <xsl:when test="current-group()[1][self::*:br] 
-                           and 
-                           current-group()[2][self::*:br]">
-             <!-- empty line -->
-   	        <xsl:element name="p">
-   	          <xsl:attribute name="class" select="'Hauptteil_Grundtext_GT'"/>
-               <xsl:attribute name="style" select="'margin-top:1em; text-indent:0;'"/>
-   	          <xsl:sequence select="current-group()[position() gt 2]" />
-   	        </xsl:element>
-   	      </xsl:when>
-   	      <xsl:otherwise>
-             <!-- following para -->
-   	        <xsl:element name="p"><!--https://redmine.le-tex.de/issues/15535-->
-   	          <xsl:attribute name="class" select="'Hauptteil_Grundtext_GT'"/>
-   	          <xsl:sequence select="current-group()[position() gt 1]"/>
-   	        </xsl:element>
-           </xsl:otherwise>
-   	    </xsl:choose>
-  	    </xsl:for-each-group>
-  	  </xsl:variable>
-      <xsl:apply-templates select="$structured-onix" mode="postprocess-html-from-onix"/>
-  	</xsl:if>
+      <xsl:apply-templates select="$postprocessed" mode="strip-namespaces"/>
+    </xsl:if>
   </xsl:function>
   
     
-  <xsl:template match="@* | node()" mode="strip-namespaces postprocess-html-from-onix toc">
+  <xsl:template match="@* | node()" mode="strip-namespaces postprocess-html" priority="-0.25">
     <xsl:copy copy-namespaces="no">
       <xsl:apply-templates select="@*, node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
-
   
-  <xsl:template match="*:b|*:strong" mode="postprocess-html-from-onix" priority="4">
+<!--  <xsl:template match="*" mode="strip-namespaces" priority="2">
+    <xsl:element name="{name()}">
+      <xsl:apply-templates select="@* except @xmlns, node()" mode="#current"/>
+    </xsl:element>
+  </xsl:template>-->
+  
+  <xsl:template match="*:b|*:strong" mode="postprocess-html" priority="4">
     <xsl:element name="phrase">
       <xsl:attribute name="css:font-weight" select="'bold'"/>
       <xsl:apply-templates select="node()" mode="#current"/>
     </xsl:element>
   </xsl:template>
   
-  <xsl:template match="*:p" mode="postprocess-html-from-onix" priority="3">
-    <xsl:apply-templates select="node()" mode="#current"/>
+  <xsl:template match="*:p" mode="postprocess-html" priority="3">
+    <xsl:param name="preserve-paras" as="xs:boolean?" tunnel="yes" select="false()"/>
+    <xsl:choose>
+      <xsl:when test="not($preserve-paras)">
+        <xsl:apply-templates select="node()" mode="#current"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="para">
+          <xsl:apply-templates select="node()" mode="#current"/>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   <xsl:template match="*" mode="strip-namespaces" priority="2" exclude-result-prefixes="#all">
@@ -336,5 +345,38 @@
       <xsl:value-of select="string-join((../*:vol_name/@term[normalize-space()], .), ' ')"/>
     </keyword>
   </xsl:template>
+  
+  <xsl:template match="*:text[@term = 'Fördertext (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/16437 -->
+    <keyword role="Fordertext">
+      <xsl:value-of select="."/>
+    </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:text[@term = 'Thesis-Pflichteintrag (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/16437 -->
+    <keyword role="Qualifikationsnachweis">
+      <xsl:value-of select="."/>
+    </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:text[@term = 'Editorial'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17450 -->
+    <keyword role="Editorial">
+      <xsl:sequence select="html:process-html(., true())" />
+    </keyword>
+  </xsl:template>
+
+  <xsl:template match="*:serial"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17443-->
+    <xsl:apply-templates select="*:memo" mode="#current"/>
+  </xsl:template>
+  
+<!-- https://redmine.le-tex.de/issues/17419
+    
+  <edition_type term="E-Book - PDF">EBP</edition_type> -> OpenAccess 
+  <edition_type term="Softcover">PBK</edition_type> -> Druck
+  <edition_type term="E-Book - ePub">EBE</edition_type>
+  <edition_type term="E-Book - Enhanced Html">EBEH</edition_type>-->
   
 </xsl:stylesheet>
