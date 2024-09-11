@@ -45,7 +45,8 @@
                               '^(.+/).+?\.docx.tmp/', '$1')"/>
   <p:variable name="format" select="'jpg'"/>
   <p:variable name="covername" 
-              select="(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Cover'][normalize-space()]/text(), 'nocover.jpg')[1]"/>
+              select="(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Cover'][normalize-space()]/text(), 
+                      'fallback-cover.jpg')[1]"/>
   
   
   <tr:store-debug name="debug-before-copy-images" pipeline-step="copy-images/02_before">
@@ -132,7 +133,6 @@
           <p:with-option name="debug" select="$debug"/>
           <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
           <p:with-option name="fail-on-error" select="$fail-on-error"/>   
-          <p:with-option name="imagemagick-path" select="if ($run-local) then 'C:/cygwin/bin/convert.exe' else '')"/>   
         </tr:imagemagick>
         
         <p:group>
@@ -280,7 +280,7 @@
         
         <cx:message name="copy-from-svn-msg2">
           <p:with-option name="message" select="'[info] copy: ', concat($file-prefix, /c:result/@os-path), ' => ', concat($file-prefix, $outdir-print, '/cover/', /c:result/@lastpath-os), ' and ' 
-						concat($epub-cover-path, /c:result/@lastpath-os')">
+            concat($epub-cover-path, /c:result/@lastpath-os')">
             <p:pipe port="result" step="file-uri2"/>
           </p:with-option>
         </cx:message>
