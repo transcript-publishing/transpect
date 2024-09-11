@@ -95,7 +95,7 @@
   <xsl:template match="*:isbn[normalize-space()]"  mode="klopotek-to-keyword"  priority="3">
     <xsl:param name="already-added-static" as="xs:boolean?"/>
     <xsl:choose>
-      <xsl:when test="../*:edition_type[.='PBK']">
+      <xsl:when test="../*:edition_type[.=('PBK', 'HC')]">
         <keyword role="Print-ISBN">
           <xsl:value-of select="concat('Print-ISBN: ', .)"/>
         </keyword>
