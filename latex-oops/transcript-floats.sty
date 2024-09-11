@@ -247,15 +247,16 @@
 % \ccAddToType{FloatEnvInfo}{Table}{\def\ccf@cap@list@type{lof}}
 
 %% Klassen für Abbildungen:
-\tpDeclareClass{A}{\tpSetProperty{margin-left}{0mm}\tpSetProperty{margin-right}{0mm}}
-\tpDeclareClass{B}{\tpSetProperty{margin-left}{10mm}\tpSetProperty{margin-right}{10mm}}
-\tpDeclareClass{C}{\tpSetProperty{margin-left}{15mm}\tpSetProperty{margin-right}{15mm}}
-\tpDeclareClass{D}{\tpSetProperty{margin-left}{25mm}\tpSetProperty{margin-right}{25mm}}
-\tpDeclareClass{E}{\tpSetProperty{margin-outer}{\dimexpr-\evensidemargin+10mm\relax}}
+\tpDeclareClass{A}{\tpSetProperty{margin-left}{0mm}\tpSetProperty{margin-right}{0mm}\tpSetProperty{fix-dimen}{true}}
+\tpDeclareClass{B}{\tpSetProperty{margin-left}{10mm}\tpSetProperty{margin-right}{10mm}\tpSetProperty{fix-dimen}{true}}
+\tpDeclareClass{C}{\tpSetProperty{margin-left}{15mm}\tpSetProperty{margin-right}{15mm}\tpSetProperty{fix-dimen}{true}}
+\tpDeclareClass{D}{\tpSetProperty{margin-left}{25mm}\tpSetProperty{margin-right}{25mm}\tpSetProperty{fix-dimen}{true}}
+\tpDeclareClass{E}{\tpSetProperty{margin-outer}{\dimexpr-\evensidemargin+10mm\relax}\tpSetProperty{fix-dimen}{true}}
 
 \tpDeclareClass{wide}{%
   \tpSetProperty{margin-outer}{\dimexpr-\evensidemargin+10mm\relax}%
   %\tpSetProperty{margin-inner}{-\oddsidemargin}%
+  \tpSetProperty{fix-dimen}{true}%
 }
 
 \def\ht@min@p@rows{2}%
