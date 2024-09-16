@@ -100,6 +100,7 @@
     <xsl:param name="already-added-static" as="xs:boolean?"/>
     <xsl:param name="all-products" as="element()*" tunnel="yes"/>
     <xsl:param name="main-product-type" as="xs:string" tunnel="yes"/>
+    <xsl:message select="'### main-product: ', $main-product-type"/>
     <!-- if not EBP, process doi of EBP--> 
     <xsl:if test="not($main-product-type = 'EBP') and not($already-added-static)" >
       <xsl:apply-templates select="$all-products//*:doi[../*:edition_type = 'EBP']" mode="#current"/>
@@ -398,7 +399,7 @@
     </keyword>
   </xsl:template>
   
-  <xsl:template match="*:text[@term = 'Editorial'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:text[@term = 'Editorial'][normalize-space()][$lang = ''] | *:text[@term = 'Editorial Übersetzung'][normalize-space()][not($lang = '')]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/17450 -->
     <keyword role="Editorial">
       <xsl:sequence select="html:process-html(., true())" />
