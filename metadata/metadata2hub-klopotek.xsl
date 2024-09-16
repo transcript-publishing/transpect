@@ -21,9 +21,13 @@
     
   <xsl:template match="*"  mode="klopotek-to-keyword" priority="-0.5"/>
   
-
+  <xsl:template match="*:doi "  mode="klopotek-to-keyword"  priority="2">
+    <keyword role="{css:map-klopotek-to-keyword(name())}">
+      <xsl:value-of select="if (not(contains(., 'http'))) then concat('https://doi.org/',.) else ."/>
+    </keyword>
+  </xsl:template>
   
-  <xsl:template match="*:title | *:subtitle | *:doi | *:serial_title"  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:title | *:subtitle | *:serial_title"  mode="klopotek-to-keyword"  priority="2">
     <keyword role="{css:map-klopotek-to-keyword(name())}">
       <xsl:apply-templates select="node()" mode="#current"/>
     </keyword>
@@ -94,6 +98,12 @@
   
   <xsl:template match="*:isbn[normalize-space()]"  mode="klopotek-to-keyword"  priority="3">
     <xsl:param name="already-added-static" as="xs:boolean?"/>
+    <xsl:param name="all-products" as="element()*" tunnel="yes"/>
+    <xsl:param name="main-product-type" as="xs:string" tunnel="yes"/>
+    <!-- if not EBP, process doi of EBP--> 
+    <xsl:if test="not($main-product-type = 'EBP') and not($already-added-static)" >
+      <xsl:apply-templates select="$all-products//*:doi[../*:edition_type = 'EBP']" mode="#current"/>
+    </xsl:if>
     <xsl:choose>
       <xsl:when test="../*:edition_type[.=('PBK', 'HC')]">
         <keyword role="Print-ISBN">
@@ -335,7 +345,21 @@
   </xsl:template>
   
   <xsl:template match="*:serial_relation"  mode="klopotek-to-keyword"  priority="2">
-    <!-- https://redmine.le-tex.de/issues/16437 -->
+    <xsl:param name="all-products" as="element()+" tunnel="yes"/>
+    <xsl:param name="main-product-type" as="xs:string" tunnel="yes"/>
+    <xsl:param name="main-product-processed" as="xs:boolean?" select="false()" tunnel="yes"/>
+    <!-- https://redmine.le-tex.de/issues/16437, https://redmine.le-tex.de/issues/17519 -->
+    <xsl:apply-templates select="node()" mode="#current"/>
+    <!-- will vol_number etc. be in every edition?-->
+<!--     <xsl:if test="not($main-product-type = 'EBP') and not($main-product-processed)" >
+      <xsl:apply-templates select="$all-products//*:serial_relation/*:vol_no" mode="#current">
+        <xsl:with-param name="main-product-processed" select="true()" as="xs:boolean"/>
+      </xsl:apply-templates>
+    </xsl:if>-->
+  </xsl:template>
+  
+  <xsl:template match="*:serial_relation/*:identifiers"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/16437, https://redmine.le-tex.de/issues/17519 -->
     <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
   
@@ -343,6 +367,20 @@
     <!-- https://redmine.le-tex.de/issues/16437 -->
     <keyword role="Bandnummer">
       <xsl:value-of select="string-join((../*:vol_name/@term[normalize-space()], .), ' ')"/>
+    </keyword>
+  </xsl:template>
+  
+   <xsl:template match="*:serial_relation/*:issn"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17519 -->
+    <keyword role="BiblISSN">
+      <xsl:value-of select="if ($lang = '') then concat('Buchreihen-ISSN: ', .) else concat('ISSN of series: ', .)"/>
+    </keyword>
+  </xsl:template>
+  
+     <xsl:template match="*:serial_relation/*:identifiers/*:identifier[@type='EISSN']"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17519 -->
+    <keyword role="BiblISSN">
+      <xsl:value-of select="if ($lang = '') then concat('Buchreihen-eISSN: ', .) else concat('eISSN of series: ', .)"/>
     </keyword>
   </xsl:template>
   
@@ -366,10 +404,18 @@
       <xsl:sequence select="html:process-html(., true())" />
     </keyword>
   </xsl:template>
+  
+  <xsl:template match="*:text[@term][@text_type = 'REIHG'][normalize-space()][$lang = ''] |
+                       *:text[@term][@text_type = 'REIHGU'][normalize-space()][not($lang = '')]"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17450 -->
+    <keyword role="Reihenherausgeber">
+      <xsl:sequence select="html:process-html(., true())" />
+    </keyword>
+  </xsl:template>
 
   <xsl:template match="*:serial"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/17443-->
-    <xsl:apply-templates select="*:memo" mode="#current"/>
+    <xsl:apply-templates select="*:memo | *:content" mode="#current"/>
   </xsl:template>
   
 <!-- https://redmine.le-tex.de/issues/17419
