@@ -380,7 +380,7 @@
   
      <xsl:template match="*:serial_relation/*:identifiers/*:identifier[@type='EISSN']"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/17519 -->
-    <keyword role="BiblISSN">
+    <keyword role="BibleISSN">
       <xsl:value-of select="if ($lang = '') then concat('Buchreihen-eISSN: ', .) else concat('eISSN of series: ', .)"/>
     </keyword>
   </xsl:template>
@@ -399,8 +399,10 @@
     </keyword>
   </xsl:template>
   
-  <xsl:template match="*:text[@term = 'Editorial'][normalize-space()][$lang = ''] | *:text[@term = 'Editorial Übersetzung'][normalize-space()][not($lang = '')]"  mode="klopotek-to-keyword"  priority="2">
-    <!-- https://redmine.le-tex.de/issues/17450 -->
+  <xsl:template match="*:text[@term = 'Editorial'][normalize-space()][$lang = ''] | 
+                       *:text[@term = 'Editorial Übersetzung'][normalize-space()][not($lang = '')]"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17450,
+         https://redmine.le-tex.de/issues/17511 (localization)-->
     <keyword role="Editorial">
       <xsl:sequence select="html:process-html(., true())" />
     </keyword>
