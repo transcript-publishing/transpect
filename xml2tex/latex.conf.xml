@@ -232,7 +232,6 @@
                                  else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
                                  xml2tex:foreign-scripts(root()),
-                                 'a11y'[$a11y],
                                  ']{cocotex}&#xa;')"/>
     \usepackage{htmltabs}&#xa;
     \definecolor{color-1}{rgb}{0,0,0}

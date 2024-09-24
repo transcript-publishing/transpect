@@ -181,9 +181,10 @@
           <title type="sub"><xsl:value-of select="$meta/term[@key = 'Untertitel']"/></title>
         </xsl:if>
       </title>
-      <xsl:if test="$meta/term[@key = 'Korrektorat'][normalize-space()]">
+      <xsl:copy-of select="editor[@role]" copy-namespaces="no"/>
+      <!--      <xsl:if test="$meta/term[@key = 'Korrektorat'][normalize-space()]">
         <editor role="proofreading"><xsl:value-of select="$meta/term[@key = 'Korrektorat']"/></editor>
-      </xsl:if>
+      </xsl:if>--><!-- is done earlier now.-->
       <xsl:if test="$meta/term[@key = 'Umschlaggestaltung'][normalize-space()]">
         <editor role="cover design"><xsl:value-of select="replace($meta/term[@key = 'Umschlaggestaltung'], '^.+:\p{Zs}*', '')"/></editor>
       </xsl:if>
