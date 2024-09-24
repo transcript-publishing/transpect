@@ -115,7 +115,7 @@
       \vskip1\baselineskip%
       \bgroup
         \Large\sbseries\sfchapfamily%
-        \ccaStructStart{Title}%
+        \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}%
         \tpUseComp{JournalName}\newline
         \tpUseComp{Issue}/\tpUseComp{Year}: \tpUseComp{SubSeries} 
         \ccaStructEnd{Title}%
@@ -144,7 +144,6 @@
         {\itshape\tpUseProperty{funding-block}}%
         \tpIfComp{AddNoteII}{\tpUseComp{AddNoteII}\par\vskip\baselineskip}%
         \null\vfill
-        \tpUseProperty{imprint-format}%
         \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
         \tpUseProperty{licence}%
         \vskip2\baselineskip
@@ -214,7 +213,7 @@
       \tpUseComp{SeriesEditorNameList}%
       \ccaStructEnd{SeriesEditors}%
       \ccaStructEnd{MetaDatumBlock}\hfill\break
-      \ccaStructStart{Title}%
+      \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}%
       {\let\tpBreak\space\tpUseComp{JournalName}}%
       \vfill
       {\bfseries\sfchapwidefamily\large\let\tpBreak\space\tpUseComp{JournalName}}%
@@ -235,6 +234,7 @@
     }%
       % Bio
     \tpSetProperty{bio-output-format}{%
+      \ccaStructStart{MetaDatumBlock}%
       \ifcollection
         \tpIfComp{EditorBioBlock}
           {\tpUseComp{EditorBioBlock}}
@@ -244,6 +244,7 @@
           {\tpUseComp{AuthorBioBlock}}
           {\tpGetComp{SeriesEditorBioBlock}}%
       \fi
+      \ccaStructEnd{MetaDatumBlock}%
     }%
     \tpSetProperty{role-biography-format}{%
       \tpUseComp{Bio}%
@@ -266,7 +267,7 @@
           \lefthyphenmin62
           \ccaStructStart{Authors}%
           \raggedright\tpUseComp{AuthorNameList}\par%
-          \ccaStructStart{Authors}%
+          \ccaStructEnd{Authors}%
         \fi%
       }%
       \ccaStructEnd{MetaDatumBlock}%
@@ -296,7 +297,6 @@
         \justify
         \tpUseProperty{funding-block}%
         \vfill
-        \tpUseProperty{imprint-format}%
         \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
         \tpIfComp{AddNoteIV}{\vskip1\baselineskip\tpUseComp{AddNoteIV}}{}%
         \tpUseProperty{licence}%
@@ -362,7 +362,7 @@
       \vskip1\baselineskip%
       \bgroup
         \Large\sbseries\sfchapfamily%
-        \ccaStructStart{Title}%
+        \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}%
         \tpUseComp{Volume}, Issue \tpUseComp{Issue}/\tpUseComp{Year}: \tpUseComp{SubSeries}
         \ccaStructEnd{Title}
       \egroup
@@ -391,7 +391,6 @@
         {\itshape\tpUseProperty{funding-block}}%
         \tpIfComp{AddNoteII}{\tpUseComp{AddNoteII}\par\vskip\baselineskip}%
         \null\vfill
-        \tpUseProperty{imprint-format}%
         \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
         \tpUseProperty{licence}%
         \vskip2\baselineskip
@@ -455,7 +454,7 @@
       \vskip1\baselineskip%
       \bgroup
         \Large\sbseries\sfchapfamily%
-        \ccaStructStart{Title}%
+        \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}%
         \tpUseComp{JournalName}\newline
         \tpUseComp{Issue}/\tpUseComp{Year}: \tpUseComp{SubSeries} 
         \ccaStructEnd{Title}%
@@ -484,7 +483,6 @@
         {\itshape\tpUseProperty{funding-block}}%
         \tpIfComp{AddNoteII}{\tpUseComp{AddNoteII}\par\vskip\baselineskip}%
         \null\vfill
-        \tpUseProperty{imprint-format}%
         \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
         \tpUseProperty{licence}%
         \vskip2\baselineskip
@@ -548,7 +546,7 @@
       \vskip1\baselineskip%
       \bgroup
         \Large\sbseries\sfchapfamily%
-        \ccaStructStart{Title}%
+        \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}%
         \tpUseComp{Volume}. Jahrgang, \tpUseComp{Year}, \tpUseComp{Issue}
         \ccaStructEnd{Title}
       \egroup
@@ -576,7 +574,6 @@
         {\itshape\tpUseProperty{funding-block}}%
         \tpIfComp{AddNoteII}{\tpUseComp{AddNoteII}\par\vskip\baselineskip}%
         \null\vfill
-        \tpUseProperty{imprint-format}%
         \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
         \tpUseProperty{licence}%
         \vskip2\baselineskip
@@ -635,7 +632,7 @@
       \ccaStructEnd{SeriesEditors}%
       \ccaStructEnd{MetaDatumBlock}%
       \hfill\break
-      {\let\tpBreak\space\ccaStructStart{Title}\tpUseComp{JournalName}\space\tpUseComp{Volume}\ccaStructEnd{Title}}%
+      {\let\tpBreak\space\ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}\tpUseComp{JournalName}\space\tpUseComp{Volume}\ccaStructEnd{Title}}%
       \ccaStructEnd{Titlepage}%
     }
     %%%%%%%%%%%%
@@ -722,7 +719,6 @@
         \vfill%
         %\tpUseProperty{funding-block}%
         \vfill
-        \tpUseProperty{imprint-format}%
         \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
         \tpIfComp{AddNoteIV}{%
           \vskip1\baselineskip\tpUseComp{AddNoteIV}%
@@ -796,16 +792,16 @@
       \fi%
       \ccaStructEnd{MetaDatumBlock}%
       \par
-      \ccaStructStart{Title}\tpUseComp{Title}\ccaStructEnd{Title}\par%
+      \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}\tpUseComp{Title}\ccaStructEnd{Title}\par%
       \vfill
       % mdw bekommt keine Reiheninformation am Ende der Seite, sondern stattdessen ein Logo auf Seite III.
       \ifx\ts@layout@type\ts@str@layout@mdw
       \else
-        \ccaStructStart{MetaDatumBlock}%
+        \ccaStructStart{MetaDatumBlock}\ccaStructStart{P}%
         \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
         \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
         \tpIfComp{Volume}{{\enskip\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip\ignorespaces\tpUseComp{Volume}}}{}%
-        \ccaStructEnd{MetaDatumBlock}%
+        \ccaStructEnd{P}\ccaStructEnd{MetaDatumBlock}%
       \fi
       \ccaStructEnd{Titlepage}%
     }%
@@ -825,6 +821,7 @@
     }%
       % Bio
     \tpSetProperty{bio-output-format}{%
+      \ccaStructStart{MetaDatumBlock}%
       \ifcollection
         \tpIfComp{EditorBioBlock}
           {\tpUseComp{EditorBioBlock}}
@@ -834,9 +831,10 @@
           {\tpUseComp{AuthorBioBlock}}
           {\tpGetComp{SeriesEditorBioBlock}}%
       \fi
+      \ccaStructEnd{MetaDatumBlock}%
     }%
     \tpSetProperty{role-biography-format}{%
-      {\tpUseComp{Bio}}%
+      {\ccaStructStart{P}\tpUseComp{Bio}\ccaStructEnd{P}}%
     }%
     %%%%%%%%%%%%%
     % Seite III %
@@ -861,31 +859,42 @@
       }%
       \ccaStructEnd{MetaDatumBlock}%
       \vskip\dimexpr5bp-0.65mm\relax
+      \ccaStructStart{MetaDatumBlock}%
       {\raggedright
         \leavevmode
-        \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont\tpUseComp{Title}%
+        \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont
+        \ccaStructStart{P}\tpUseComp{Title}\ccaStructEnd{P}%
         \tpIfComp{Subtitle}{%
           \par
           \normalfont\Large\upseries
           \sffamily\vskip\dimexpr5bp+0.65mm\relax
           \Large
           \topsep0pt \partopsep0pt % no space before
-          \flushleft\tpUseComp{Subtitle}\endflushleft%
+          \flushleft\ccaStructStart{P}\tpUseComp{Subtitle}\ccaStructEnd{P}\endflushleft%
         }{%
           \vskip\baselineskip
         }%
       }%
+      \ccaStructEnd{MetaDatumBlock}%
       \par
       \vskip\baselineskip
-      \tpIfComp{AddNoteIII}{%
+      \tpWhenComp{AddNoteIII}{%
+        \ccaStructStart{MetaDatumBlock}%
         {\Large\sfwidefamily\tpUseComp{AddNoteIII}}%
-      }{}
+        \ccaStructEnd{MetaDatumBlock}%
+      }%
       \par
       \vfill
       \ifx\ts@layout@type\ts@str@layout@mdw
+        \ccaStructStart{MetaDatumBlock}%
         \tpUseComp{Series}\hfill%
+        \ccaStructEnd{MetaDatumBlock}%
       \fi
-      \tpIfComp{PubLogo}{\includegraphics[height=9mm]{\tpUseComp{PubLogo}}}{}
+      \tpWhenComp{PubLogo}{\ccaStructStart{Figure}%
+        \ccaAddPlacement{Block}%
+        \ccaAddAltText{Publisher Logo}%
+        \includegraphics[height=9mm]{\tpUseComp{PubLogo}}%
+        \ccaStructEnd{Figure}}
       \ccaStructEnd{Titlepage}%
     }%
     %%%%%%%%%%%%
@@ -894,16 +903,33 @@
     \tpSetProperty{titlepage-iv}{%
       \bgroup
         \ccaStructStart{Titlepage}%
-        \tpIfComp{Statement}{\tpUseComp{Statement}\par\ifx\ts@layout@type\ts@str@layout@mdw\else\vskip\baselineskip\fi}{}%
+        \tpWhenComp{Statement}{\ccaStructStart{MetaDatumBlock}%
+          \tpUseComp{Statement}\par\ifx\ts@layout@type\ts@str@layout@mdw\else\vskip\baselineskip\fi
+          \ccaStructEnd{MetaDatumBlock}}%
         \justify
+        \ccaStructStart{MetaDatumBlock}%
         \tpUseProperty{funding-block}%
+        \ccaStructEnd{MetaDatumBlock}
         \vfill
-        \tpUseProperty{imprint-format}%
-        \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
+        \tpWhenComp{Biblio}{%
+          \ccaStructStart{MetaDatum}%
+          {\sffamily\sbseries
+            \ccaStructStart{MetaDatumLabel}%
+            \ccGetComp*{BiblioTitle}%
+            \ccaStructEnd{MetaDatumLabel}}%
+          \ccaStructStart{MetaDatumValue}%
+          \tpGetComp*{Biblio}%
+          \ccaStructEnd{MetaDatumValue}%
+          \ccaStructEnd{MetaDatum}%
+        }%
+        \ccaStructStart{MetaDatumBlock}%
         \tpUseProperty{licence}%
+        \ccaStructEnd{MetaDatumBlock}%
         \vskip2\baselineskip
         \bgroup
+          \ccaStructStart{MetaDatumBlock}%
           \tpUseProperty{imprint}%
+          \ccaStructEnd{MetaDatumBlock}%
         \egroup
         \ccaStructEnd{Titlepage}%
       \egroup
@@ -926,19 +952,19 @@
   }%
   %% Format Impressum
   \tpSetProperty{imprint}{%
-    \tpUseProperty{publisher}%
-    \tpUseProperty{imprint-sep}
+    \ccaStructStart{P}\tpUseProperty{publisher}\ccaStructEnd{P}%
+    \tpUseProperty{imprint-sep}%
     \tpGetComp{Qualification}%
     \tpGetComp{Conversion}%
-    \tpIfComp{CoverImage}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverImage}}}{}%
-    \tpIfComp{CoverConcept}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverConcept}}}{}%
-    \tpIfComp{CoverDesign}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverDesign}}}{}%
-    \tpIfComp{Lectorate}{{\leftskip5mm\hskip-5mm\tpGetComp{Lectorate}}}{}%
-    \tpIfComp{QA}{{\leftskip5mm\hskip-5mm\tpGetComp{QA}}}{}%
-    \tpIfComp{Translator}{{\leftskip5mm\hskip-5mm\tpGetComp{Translator}}}{}%
+    \tpWhenComp{CoverImage}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverImage}}}%
+    \tpWhenComp{CoverConcept}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverConcept}}}%
+    \tpWhenComp{CoverDesign}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverDesign}}}%
+    \tpWhenComp{Lectorate}{{\leftskip5mm\hskip-5mm\tpGetComp{Lectorate}}}%
+    \tpWhenComp{QA}{{\leftskip5mm\hskip-5mm\tpGetComp{QA}}}{}%
+    \tpWhenComp{Translator}{{\leftskip5mm\hskip-5mm\tpGetComp{Translator}}}%
     \tpGetComp{Appraiser}%
     \tpGetComp{Discussion}%
-    \tpIfComp{Typesetter}{{\leftskip5mm\hskip-5mm\tpGetComp{Typesetter}}}{}%
+    \tpWhenComp{Typesetter}{{\leftskip5mm\hskip-5mm\tpGetComp{Typesetter}}}%
     \tpGetComp{Print}%%
     \tpGetComp{DOI}%%
     \tpGetComp{Keywords}%%
@@ -953,7 +979,6 @@
     \tpGetComp{Advertise}%
   }%
   %% Format Biographien
-  \tpSetProperty{imprint-format}{}%
   \tpSetProperty{counted-meta-sep}{}%
   \tpSetProperty{name-meta-format}{%
     \tpIfComp{Bio}
@@ -965,10 +990,15 @@
   %% Format CC-Lizenz
   \tpSetProperty{licence}{%
     \bgroup
-      \tpIfComp{LicenceLogo}{%
+      \tpWhenComp{LicenceLogo}{%
         \fontsize{8.5}{10}\selectfont
         \vskip.5\baselineskip
-        \includegraphics[height=10mm]{\tpUseComp{LicenceLogo}}\par\vskip1mm}{}%
+        \ccaStructStart{Figure}%
+        \ccaAddAltText{\ccUseComp{LicenceName} Logo}%
+        \ccaAddPlacement{Block}%
+        \includegraphics[height=10mm]{\tpUseComp{LicenceLogo}}\par\vskip1mm
+        \ccaStructEnd{Figure}%
+      }%
       \tpGetComp{LicenceText}%
     \egroup
   }
