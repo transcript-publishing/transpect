@@ -650,7 +650,15 @@
   \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
   \tpSetProperty{subtitle-face}{\normalfont\rmfamily\normalsize}%
 
-  \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
+  \tpSetProperty{before-heading}{%
+    \if@twocolumn
+      \ifx\@twocolumnContinousChapters\relax
+      \else
+        \clearpage
+      \fi
+    \fi
+    \addvspace{24.2bp}%
+  }%
 
 
   \tpSetProperty{running-extra}{%
@@ -675,13 +683,8 @@
     \fi
   }
   
+  
   \tpSetProperty{heading-block}{%
-    \if@twocolumn
-      \ifx\@twocolumnContinousChapters\relax
-      \else
-        \clearpage
-      \fi
-    \fi
     \thispagestyle{empty}
     \gdef\tp@currentHeading{chapter}%
     \savenotes
