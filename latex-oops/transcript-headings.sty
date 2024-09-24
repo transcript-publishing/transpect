@@ -462,7 +462,13 @@
     \ccaStructEnd{Div}
   }%
   
-  \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}
+  \tpSetProperty{after-skip}{%
+    \tpIfComp{AuthorNameList}{%
+      1.68\baselineskip
+    }{%
+      3.68\baselineskip
+    }%
+  }
 }
 
 
@@ -543,7 +549,10 @@
     \else%
       \null\nobreak\vskip\dimexpr\headingsep-.45mm\relax%
     \fi
-    \thispagestyle{articlehead}%
+    \if@twocolumn% Kein vspace vor Überschriften zweispaltiger Kapitel.
+    \else
+      \thispagestyle{articlehead}%
+    \fi
     % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
     %\global\setbox\@licenceTextFooter = \hbox{}
     
@@ -689,7 +698,15 @@
   \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
   \tpSetProperty{subtitle-face}{\normalfont\rmfamily\normalsize}%
 
-  \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
+  \tpSetProperty{before-heading}{%
+    \if@twocolumn
+      \ifx\@twocolumnContinousChapters\relax
+      \else
+        \clearpage
+      \fi
+    \fi
+    \addvspace{24.2bp}%
+  }%
 
 
   \tpSetProperty{running-extra}{%
@@ -714,15 +731,8 @@
     \fi
   }
   
+  
   \tpSetProperty{heading-block}{%
-    \if@twocolumn
-      \ifx\@twocolumnContinousChapters\relax
-        \typeout{++++++++++++++ NOt skipping before review}%
-      \else
-        \typeout{++++++++++++++ SKIPPING before review}%
-        \clearpage
-      \fi
-    \fi
     \thispagestyle{empty}
     \gdef\tp@currentHeading{chapter}%
     \savenotes
@@ -737,11 +747,11 @@
         \tpIfComp{Number}{\ccaStructStart{Lbl}\tpUseProperty{hang-number}\ccaStructEnd{Lbl}}{\leftskip\z@}%
         \ignorespaces\tpUseComp{Title}\par\nopagebreak%
         \cchHeadTagEnd
-        \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
-        \tpIfComp{DOI}{%
+        \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
+        \tpWhenComp{DOI}{%
           \vskip\baselineskip%
           \tpUseComp{DOI}%
-        }{}%
+        }%
       \if@twocolumn
         \vspace{1\baselineskip}%
         \end{table*}%

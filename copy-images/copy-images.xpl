@@ -44,6 +44,10 @@
               select="replace(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'hub']/dbk:keyword[@role eq 'source-dir-uri'], 
                               '^(.+/).+?\.docx.tmp/', '$1')"/>
   <p:variable name="format" select="'jpg'"/>
+  <p:variable name="covername" 
+              select="(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Cover'][normalize-space()]/text(), 
+                      'fallback-cover.jpg')[1]"/>
+  
   
   <p:variable name="covername" 
               select="(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Cover'][normalize-space()]/text(), 
@@ -133,7 +137,7 @@
           <p:with-option name="imagemagick-options" select="'-colorspace rgb -background white -flatten'"/>
           <p:with-option name="debug" select="$debug"/>
           <p:with-option name="debug-dir-uri" select="$debug-dir-uri"/>
-          <p:with-option name="fail-on-error" select="$fail-on-error"/>	    
+          <p:with-option name="fail-on-error" select="$fail-on-error"/>   
         </tr:imagemagick>
         
         <p:group>
@@ -242,7 +246,15 @@
                         then 'file:/'
                         else ''">
       <p:pipe port="parameters" step="copy-images"/>
-    </p:variable>
+   </p:variable>
+   <p:variable name="epub-cover-path" 
+                select="concat(replace(/c:param-set/c:param[@name eq 's9y1-path']/@value, 'file:///', 'file:/'), 'epub/')">
+      <p:pipe port="parameters" step="copy-images"/>
+   </p:variable>
+<!--         <p:variable  name="covername" 
+                select="(/dbk:hub/dbk:info/dbk:keywordset[@role eq 'titlepage']/dbk:keyword[@role eq 'Cover'][normalize-space()]/text(), 'nocover.jpg')[1]">
+      <p:pipe port="source" step="copy-images"/>
+    </p:variable>-->
     
     
     <p:variable name="epub-cover-path" 
