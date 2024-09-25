@@ -50,6 +50,7 @@
 
   <p:variable name="basename" select="/c:param-set/c:param[@name eq 'basename']/@value"/>
   <p:variable name="ci-test" select="if (/c:param-set/c:param[@name='out-dir-uri'][@value[contains(., 'test_after')]]) then true() else false()"/>
+  <p:variable name="run-local" select="if (/*/c:param[@name = 'run-local']/@value = ('yes', 'true'))  then true() else false()"/>
   <p:variable name="local-dir" select="/c:param-set/c:param[@name='out-dir-uri']/@value">
       <!-- example: file:/data/svncompat/.jenkins/workspace/svncompat_https_subversion_le_tex_de_customers_transcript_branches_common_tex_migration/test_after/std/anth/05013 -->
   </p:variable>
@@ -133,6 +134,19 @@
   </tr:store-debug>
 
   <p:sink/>
+  
+  <tr:recursive-directory-list name="logo-dir-listing">
+    <p:with-option name="path" select="if ($run-local = true())
+                                       then 'file:///C:/cygwin/home/mpufe/transcript/content/media/logos/funders/'
+                                       else '/media/logos/funders/'"/>
+  </tr:recursive-directory-list>
+  
+  <tr:store-debug pipeline-step="metadata/02_logo-dir-content">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </tr:store-debug>
+
+  <p:sink/>
 
   <tr:file-uri name="meta-file-uri" cx:depends-on="meta-list">
     <p:with-option name="filename" select="concat(/c:directory/@xml:base, 
@@ -146,7 +160,7 @@
   </tr:file-uri>
 
 
-  <tr:store-debug pipeline-step="metadata/01_file-uri">
+  <tr:store-debug pipeline-step="metadata/03_file-uri">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
@@ -177,7 +191,7 @@
     </p:otherwise>
   </p:choose>
 
-  <tr:store-debug pipeline-step="metadata/02_path">
+  <tr:store-debug pipeline-step="metadata/04_path">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
@@ -237,11 +251,17 @@
   
   <p:sink/>
   
-  <p:wrap-sequence wrapper="cx:documents">
+  <p:wrap-sequence wrapper="cx:documents" name="meta-wrapped-with-logo-list">
     <p:input port="source">
       <!--<p:pipe port="result" step="try-load-onix"/>-->
       <p:pipe port="result" step="try-load-titlepage-meta"/>
+      <p:pipe port="result" step="logo-dir-listing"/>
     </p:input>
   </p:wrap-sequence>
+  
+  <tr:store-debug pipeline-step="metadata/05_wrapped">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </tr:store-debug>
   
 </p:declare-step>
