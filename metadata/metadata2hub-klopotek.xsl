@@ -13,9 +13,9 @@
   <xsl:import href="licenses.xsl"/>
 
   <xsl:param name="basename" as="xs:string"/>
-  <xsl:variable name="lang" select="     if (//*:product_export/*:product/*:language[@seq_no='1'][matches(., 'ENGL', 'i')]) then 'E' 
-                                    else if (//*:product_export/*:product/*:language[@seq_no='1'][matches(., 'SPA', 'i')]) then 'S' else ''" as="xs:string?">
-    <!-- https://redmine.le-tex.de/issues/16459#note-7 -->
+  <xsl:variable name="lang" select="     if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'ENGL', 'i')]) then 'E' 
+                                    else if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'SPA', 'i')]) then 'S' else ''" as="xs:string?">
+    <!-- https://redmine.le-tex.de/issues/16459#note-7, https://redmine.le-tex.de/issues/17587 -->
   </xsl:variable>
   <xsl:variable name="open-access" as="xs:boolean" select="exists(//*:product_export/*:product/*:open_access[@open_access_yn = 'Y'])"/>
     
