@@ -181,21 +181,9 @@
         <xsl:when test="$open-access">
           <!-- Open Access-->
          <para>
-           <xsl:choose>
-             <xsl:when test="contains($basename, '_anth_')">
-               <xsl:value-of select="concat('© ', 
-                                            string-join(for $ch in ../*:copyright_holders/*:copyright_holder[*:cpr_type = 'HG'] 
-                                                        return concat($ch/*:first_name, ' ', $ch/*:last_name), ', '),
-                                            if ($lang = 'E') then ' (ed.)' else ' (Hg.)'
-                                           )"/>
-             </xsl:when>
-             <xsl:when test="contains($basename, '_mono_')">
-               <xsl:value-of select="concat('© ', 
-                                            string-join(for $ch in ../*:copyright_holders/*:copyright_holder[*:cpr_type = 'VE'] 
-                                                        return concat($ch/*:first_name, ' ', $ch/*:last_name), ', ')
-                                           )"/>
-             </xsl:when>
-           </xsl:choose>
+           <xsl:call-template name="join-copyright-statement">
+              <xsl:with-param name="context" select="../*:copyright_holders" tunnel="yes" as="element()"/>
+           </xsl:call-template>
          </para>
         </xsl:when>
         <xsl:otherwise><!--default not OA-->
@@ -210,6 +198,25 @@
         </xsl:otherwise>
       </xsl:choose>
     </keyword>
+  </xsl:template>
+  
+  <xsl:template name="join-copyright-statement">
+    <xsl:param name="context" tunnel="yes" as="element()"/>
+    <xsl:choose>
+      <xsl:when test="contains($basename, '_anth_')">
+        <xsl:value-of select="concat('© ', 
+                                    string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'HG'] 
+                                                return concat($ch/*:first_name, ' ', $ch/*:last_name), ', '),
+                                    if ($lang = 'E') then ' (ed.)' else ' (Hg.)'
+          )"/>
+      </xsl:when>
+      <xsl:when test="contains($basename, '_mono_')">
+        <xsl:value-of select="concat('© ', 
+                                      string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'VE'] 
+                                                  return concat($ch/*:first_name, ' ', $ch/*:last_name), ', ')
+                                      )"/>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
   
   <xsl:variable name="copyright-roles-lookup" as="map(xs:string, xs:string+)"
@@ -284,7 +291,14 @@
         </xsl:choose>
       </keyword>
     </xsl:if>
-    
+    <xsl:if test="not(exists(..[*:original_publication])) and self::*:copyright_holders">
+      <!--https://redmine.le-tex.de/issues/17513-->
+      <keyword role="Copyright">
+        <xsl:call-template name="join-copyright-statement">
+          <xsl:with-param name="context" select="." tunnel="yes" as="element()"/>
+        </xsl:call-template>
+      </keyword>
+    </xsl:if>
   </xsl:template>
   
   <xsl:function name="html:process-html" as="node()*">
