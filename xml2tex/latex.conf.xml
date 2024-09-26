@@ -112,7 +112,7 @@
                 select="$metadata/dbk:keyword[@role = ('transcript-Website', 'Website')]"/>
   <!-- publication meta -->
   <xsl:variable name="doi" as="element(dbk:keyword)?"
-                select="$metadata/dbk:keyword[@role eq 'DOI']"/>
+                select="$metadata/dbk:keyword[@role eq 'DOI'][normalize-space()]"/>
   <xsl:variable name="print-isbn" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Print-ISBN']"/>
   <xsl:variable name="epdf-isbn" as="element(dbk:keyword)?"
@@ -369,7 +369,7 @@
       xml2tex:meta2tex($converter, (), 'tpConversion'),
       xml2tex:meta2tex($license-link, (), 'tpLicenceLink'),
       xml2tex:meta2tex($license-name, (), 'tpLicenceName'),
-      xml2tex:meta2tex($funder-pretext, (), 'tpFundingPreText'),
+      (:xml2tex:meta2tex($funder-pretext, (), 'tpFundingPreText'),:)
       xml2tex:meta2tex($funder-posttext, (), 'tpFundingPostText'),
       xml2tex:meta2tex($bibl-issn, (), 'tpBiblISSN'),
       xml2tex:meta2tex($bible-issn, (), 'tpBibleISSN')
@@ -440,7 +440,7 @@
               <xsl:value-of select="concat('&#xA;\tpFundLogo{images/', replace(normalize-space(current-group()[self::dbk:keyword[@role = 'Forderlogos']]), '^(.+/)', ''),                                       '}')"/>
             </xsl:if>
             
-            <xsl:text>\end{tpFunding}</xsl:text>
+            <xsl:text>&#xa;\end{tpFunding}</xsl:text>
           </xsl:if>
         </xsl:for-each-group>     
       </xsl:for-each>  
