@@ -22,7 +22,7 @@
     
   <xsl:template match="*"  mode="klopotek-to-keyword" priority="-0.5"/>
   
-  <xsl:template match="*:doi "  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:doi"  mode="klopotek-to-keyword"  priority="2">
     <keyword role="{css:map-klopotek-to-keyword(name())}">
       <xsl:value-of select="if (not(contains(., 'http'))) then concat('https://doi.org/',.) else ."/>
     </keyword>
@@ -103,7 +103,7 @@
     <xsl:param name="main-product-type" as="xs:string" tunnel="yes"/>
     <xsl:message select="'### main-product: ', $main-product-type"/>
     <!-- if not EBP, process doi of EBP--> 
-    <xsl:if test="not($main-product-type = 'EBP') and not($already-added-static)" >
+    <xsl:if test="not($main-product-type = 'EBP') and not($already-added-static) and not(//*:product_export/*:product[*:edition_type = $main-product-type][*:doi])" >
       <xsl:apply-templates select="$all-products//*:doi[../*:edition_type = 'EBP']" mode="#current"/>
     </xsl:if>
     <xsl:choose>
