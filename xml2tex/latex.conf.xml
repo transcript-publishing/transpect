@@ -187,13 +187,18 @@
   <xsl:variable name="license-name" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Lizenz']"/>
   <!-- funding statement -->
-  <xsl:variable name="funder-name" as="xs:string?" 
+  <xsl:variable name="funding-block" as="element(xml2tex:tmp)*">
+    <xsl:for-each-group select="$metadata/dbk:keyword[starts-with(@role, 'Forder')]" group-starting-with="dbk:keyword[starts-with(@role, 'Fordertext')]">
+     <tmp><xsl:sequence select="current-group()"/></tmp>
+    </xsl:for-each-group>
+  </xsl:variable>
+  <xsl:variable name="funder-pretext" as="element(dbk:keyword)*" 
+                select="$metadata/dbk:keyword[starts-with(@role, 'Fordertext')]"/>
+  <xsl:variable name="funder-name" as="xs:string*" 
                 select="$metadata/dbk:keyword[@role eq 'Fordername']"/>
   <xsl:variable name="funder-logo" as="xs:string*" 
-                select="$metadata/dbk:keyword[@role eq 'Forderlogos']//text()"/>
-  <xsl:variable name="funder-pretext" as="element(dbk:keyword)?" 
-                select="$metadata/dbk:keyword[@role eq 'Fordertext']"/>
-  <xsl:variable name="funder-posttext" as="element(dbk:keyword)?" 
+                select="$metadata/dbk:keyword[@role eq 'Forderlogos']"/>
+  <xsl:variable name="funder-posttext" as="element(dbk:keyword)*" 
                 select="$metadata/dbk:keyword[@role eq 'Fordertextpost']"/>
   <xsl:variable name="bibl-issn" as="xs:string?" 
                 select="$metadata/dbk:keyword[@role eq 'BiblISSN']"/>
@@ -416,17 +421,28 @@
                                    string-join($license-text/*, '\\&#xa;'),
                                    '}&#xA;')"/>
     </xsl:if>
-    <xsl:if test="normalize-space($funder-name) or exists($funder-logo)">
-      <xsl:for-each select="$funder-logo[normalize-space()]">
-        <xsl:text>&#xa;\begin{tpFunding}</xsl:text>
-        <!-- currently no method for multiple funding logo/name pairs -->
-        <xsl:if test="normalize-space($funder-name) and position() eq 1">
-          <xsl:value-of select="concat('&#xa;\tpFundName{', $funder-name, '}')"/>
-        </xsl:if>
-        <xsl:value-of select="concat('&#xa;\tpFundLogo{images/', 
-                                      replace(normalize-space(.), '^(.+/)', ''), 
-                                     '}')"/>
-        <xsl:text>&#xa;\end{tpFunding}&#xa;</xsl:text>
+    <xsl:if test="$funding-block/dbk:keyword[normalize-space()]">
+      
+      <xsl:for-each select="$funding-block[normalize-space()]">
+        <xsl:variable name="context" select="."/>
+        <xsl:for-each-group select="dbk:keyword" group-starting-with="dbk:keyword[@role = 'Fordername']">
+          <xsl:if test="not(current-group()[1][starts-with(@role, 'Fordertext')])">
+            <xsl:text>&#xa;\begin{tpFunding}</xsl:text>
+            
+            <xsl:if test="current-group()[self::dbk:keyword[@role = 'Fordername'][normalize-space()]]">
+              <xsl:value-of select="concat('&#xA;\tpFundName{', 
+                                          if (. is $context/dbk:keyword[@role = 'Fordername'][1]) then $context/dbk:keyword[starts-with(@role, 'Fordertext')] else (),
+                                          current-group()[self::dbk:keyword[@role = 'Fordername']], 
+                                          '}')"/>
+            </xsl:if>
+            
+            <xsl:if test="current-group()[self::dbk:keyword[@role = 'Forderlogos'][normalize-space()]]">
+              <xsl:value-of select="concat('&#xA;\tpFundLogo{images/', replace(normalize-space(current-group()[self::dbk:keyword[@role = 'Forderlogos']]), '^(.+/)', ''),                                       '}')"/>
+            </xsl:if>
+            
+            <xsl:text>\end{tpFunding}</xsl:text>
+          </xsl:if>
+        </xsl:for-each-group>     
       </xsl:for-each>  
     </xsl:if>
     <!-- journal-specific metadata -->
