@@ -236,66 +236,70 @@
               select="('VE', 'HG', 'UMSA', 'LEKT', 'KORR', 'LAYO', 'DRUK')"/>
 
   <xsl:template match="*:copyright_holders"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:param name="all-products" as="element()+" tunnel="yes"/>
+    <xsl:param name="main-product-type" as="xs:string" tunnel="yes"/>
     <!-- https://redmine.le-tex.de/issues/16437 -->
     <xsl:variable name="lang-num" select="if ($lang = 'E') then 3 else
                                           if ($lang = 'S') then 4 else 2" as="xs:integer"/>
-    <xsl:for-each-group select="*:copyright_holder" group-by="*:cpr_type">
-      <xsl:if test="current-grouping-key() =  $copyright-roles">
-        <xsl:variable name="current-lookup"  select="map:get($copyright-roles-lookup, current-grouping-key())" as="xs:string+"/>
-        <keyword role="{$current-lookup[1]}">      
-          <xsl:choose>
-            <xsl:when test="count(current-group()) gt 1">
-              <xsl:for-each select="current-group()">
-                <para>
-                  <xsl:sequence select="string-join(
-                                                    ($current-lookup[$lang-num][normalize-space()], 
-                                                     string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
-                                                    ), 
-                                                    ': '
-                                                    )"/>
-                </para>
-              </xsl:for-each>
-            </xsl:when>
-            <xsl:otherwise>
-                  <xsl:sequence select="string-join(
-                                                    ($current-lookup[$lang-num][normalize-space()], 
-                                                     string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
-                                                    ), 
-                                                    ': '
-                                                    )"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </keyword>
-      </xsl:if>
-    </xsl:for-each-group>
-    
-    
-    <xsl:if test="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]">
-      <keyword role="{if (*:copyright_holder[*:cpr_type  = 'HG'][text[@text_type = concat('AUTBIO', $lang)][normalize-space()]]) then 'Herausgeberinformationen' else 'Autoreninformationen'}">
-        
-        <!--Herausgeberinformationen https://redmine.le-tex.de/issues/16479-->
-        
-        <xsl:choose>
-          <xsl:when test="count(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
-            <xsl:for-each select="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)]">
-              <para>
-               <!-- <xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
-                <xsl:sequence select="html:process-html(., false())" />
-              </para>
-            </xsl:for-each>
-          </xsl:when>
-          <xsl:otherwise>
-            <!--<xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
-            <xsl:sequence select="html:process-html(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)], false())" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </keyword>
+    <xsl:if test="../*:edition_type[. = 'EBP']">  
+       <xsl:for-each-group select="*:copyright_holder" group-by="*:cpr_type">
+         <xsl:if test="current-grouping-key() =  $copyright-roles">
+           <xsl:variable name="current-lookup"  select="map:get($copyright-roles-lookup, current-grouping-key())" as="xs:string+"/>
+           <keyword role="{$current-lookup[1]}">      
+             <xsl:choose>
+               <xsl:when test="count(current-group()) gt 1">
+                 <xsl:for-each select="current-group()">
+                   <para>
+                     <xsl:sequence select="string-join(
+                                                       ($current-lookup[$lang-num][normalize-space()], 
+                                                        string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
+                                                       ), 
+                                                       ': '
+                                                       )"/>
+                   </para>
+                 </xsl:for-each>
+               </xsl:when>
+               <xsl:otherwise>
+                     <xsl:sequence select="string-join(
+                                                       ($current-lookup[$lang-num][normalize-space()], 
+                                                        string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
+                                                       ), 
+                                                       ': '
+                                                       )"/>
+               </xsl:otherwise>
+             </xsl:choose>
+           </keyword>
+         </xsl:if>
+       </xsl:for-each-group>
+       
+       
+       <xsl:if test="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]">
+         <keyword role="{if (*:copyright_holder[*:cpr_type  = 'HG'][text[@text_type = concat('AUTBIO', $lang)][normalize-space()]]) then 'Herausgeberinformationen' else 'Autoreninformationen'}">
+           
+           <!--Herausgeberinformationen https://redmine.le-tex.de/issues/16479-->
+           
+           <xsl:choose>
+             <xsl:when test="count(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
+               <xsl:for-each select="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)]">
+                 <para>
+                  <!-- <xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
+                   <xsl:sequence select="html:process-html(., false())" />
+                 </para>
+               </xsl:for-each>
+             </xsl:when>
+             <xsl:otherwise>
+               <!--<xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
+               <xsl:sequence select="html:process-html(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)], false())" />
+             </xsl:otherwise>
+           </xsl:choose>
+         </keyword>
+       </xsl:if>
     </xsl:if>
-    <xsl:if test="not(exists(..[*:original_publication])) and self::*:copyright_holders">
+    <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists(..[*:original_publication])) and self::*:copyright_holders">
       <!--https://redmine.le-tex.de/issues/17513-->
       <keyword role="Copyright">
         <xsl:call-template name="join-copyright-statement">
-          <xsl:with-param name="context" select="." tunnel="yes" as="element()"/>
+          <xsl:with-param name="context" select="$all-products[*:edition_type =  'EBP']" tunnel="yes" as="element()"/>
         </xsl:call-template>
       </keyword>
     </xsl:if>
