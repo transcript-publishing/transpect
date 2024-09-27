@@ -26,10 +26,10 @@
     <!-- add series specific usepackage options. for example journal_series=zig or lay_type=std (https://redmine.le-tex.de/issues/14510#change-80305)-->
   </xsl:variable>
 
-  <xsl:variable name="noBlanksBeforeChapters" select="exists(//processing-instruction('latex')[matches(., '(^|\p{Zs}|\\)noBlanksBeforeChapters($|\p{Zs})')])" as="xs:boolean">
+  <xsl:variable name="noBlanksBeforeChapters" select="exists(//processing-instruction('latex')[matches(., '(^|\p{Zs}|\\|\{)noBlanksBeforeChapters($|\p{Zs})')])" as="xs:boolean">
     <!-- https://redmine.le-tex.de/issues/17344 -->
   </xsl:variable>
-  <xsl:variable name="twocolumnContinuousChapters" select="exists(//processing-instruction('latex')[matches(., '(^|\p{Zs}|\\)twocolumnContinuousChapters($|\p{Zs})')])" as="xs:boolean">
+  <xsl:variable name="twocolumnContinuousChapters" select="exists(//processing-instruction('latex')[matches(., '(^|\p{Zs}|\\|\{)twocolumnContinuousChapters($|\p{Zs})')])" as="xs:boolean">
     <!-- https://redmine.le-tex.de/issues/17348 -->
   </xsl:variable>
   
@@ -969,17 +969,17 @@
   </template>
 
   <template context="processing-instruction()[name() eq $pi-xml-name]
-                                             [matches(., '(^|\p{Zs}|\\)(twocolumnContinuousChapters|noBlanksBeforeChapters)($|\p{Zs})')]">
-    <!-- these PIs go into options and will be streiiped from content
+                                             [matches(., '(^|\p{Zs}|\\|\{)(twocolumnContinuousChapters|noBlanksBeforeChapters)($|\}|\p{Zs})')]">
+    <!-- these PIs go into options and will be stripped from content
          https://redmine.le-tex.de/issues/17344, https://redmine.le-tex.de/issues/17348 -->
     <xsl:choose>
-      <xsl:when test="matches(., '(^\\?)(twocolumnContinuousChapters|noBlanksBeforeChapters)$')">
+      <xsl:when test="matches(., '(^\\?|\{)(twocolumnContinuousChapters|noBlanksBeforeChapters)$')">
          <!-- if PI is included as only node in para;discard it an pull it to package option-->
       </xsl:when>
       <xsl:otherwise>
         <!-- more than one option separated by space: strip option-->
          <xsl:value-of select="replace(
-                                 replace(., '\\?(twocolumnContinuousChapters|noBlanksBeforeChapters)(\p{Zs})?', ''), 
+                                 replace(., '\\?\{?(twocolumnContinuousChapters|noBlanksBeforeChapters)(\p{Zs}|\})*', ''), 
                                  '\s\s+', 
                                  ' ')"/>
       </xsl:otherwise>
