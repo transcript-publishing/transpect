@@ -248,110 +248,112 @@
     <xsl:variable name="lang-num" select="if ($lang = 'E') then 3 else
                                           if ($lang = 'S') then 4 else 2" as="xs:integer"/>
    
-    <xsl:for-each-group select="*:copyright_holder|*:funder" group-by="*:cpr_type">
-     
-      <xsl:variable name="type" select="current-grouping-key()"/>
-      <xsl:variable name="cg" as="element()*">
-         <xsl:perform-sort select="current-group()" >
-           <xsl:sort select="*:cpr_type/@seq_no" order="ascending" data-type="number"/>
-         </xsl:perform-sort> 
-      </xsl:variable>
-      <xsl:variable name="current-lookup"  select="map:get($copyright-roles-lookup, $type)" as="xs:string+"/>
-      <xsl:choose>
-        <xsl:when test="$type =  $copyright-roles">
-          <keyword role="{$current-lookup[1]}">      
+    <xsl:if test="../*:edition_type[. = 'EBP']">  
+      <xsl:for-each-group select="*:copyright_holder|*:funder" group-by="*:cpr_type">
+         
+          <xsl:variable name="type" select="current-grouping-key()"/>
+          <xsl:variable name="cg" as="element()*">
+             <xsl:perform-sort select="current-group()" >
+               <xsl:sort select="*:cpr_type/@seq_no" order="ascending" data-type="number"/>
+             </xsl:perform-sort> 
+          </xsl:variable>
+          <xsl:variable name="current-lookup"  select="map:get($copyright-roles-lookup, $type)" as="xs:string+"/>
+          <xsl:choose>
+            <xsl:when test="$type =  $copyright-roles">
+              <keyword role="{$current-lookup[1]}">      
+                <xsl:choose>
+                  <xsl:when test="count($cg) gt 1">
+                    <xsl:for-each select="$cg">
+                      <para>
+                        <xsl:sequence select="string-join(
+                                                          ($current-lookup[$lang-num][normalize-space()], 
+                                                           string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
+                                                          ), 
+                                                          ': '
+                                                          )"/>
+                      </para>
+                    </xsl:for-each>
+                  </xsl:when>
+                  <xsl:otherwise>
+                        <xsl:sequence select="string-join(
+                                                          ($current-lookup[$lang-num][normalize-space()], 
+                                                           string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
+                                                          ), 
+                                                          ': '
+                                                          )"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </keyword>
+            </xsl:when>
+             <xsl:when test="$type =  ('OAEN', 'SPONSOR', 'ENAB', 'PENA')">
+               <!-- Sponsoring/funding-->
+               
+               <!-- pretext --> 
+               <keyword role="{$current-lookup[1]}">
+                 <xsl:value-of select="string-join((($cg[1]/*:pretext[normalize-space()]/replace(text(), ':$', ''), $current-lookup[$lang-num][normalize-space()])[1], ' '), ':')"/>
+               </keyword>
+              <xsl:for-each select="$cg">
+                <xsl:variable name="current-copyright" select="."/>
+                <!-- funder name-->
+                <keyword role="Fordername"><xsl:value-of select="string-join(
+                                                          ( 
+                                                           string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
+                                                          ), 
+                                                          ': '
+                                                          )"/></keyword>
+                <!-- funding-logo -->
+                <!-- add language to logo for searching, fallback is english and german (= no suffix) https://redmine.le-tex.de/issues/17501 -->
+               <xsl:if test="some $l in $logo-listing/c:file satisfies $l[starts-with(@name, $current-copyright/@unique_person_id)]">
+                 <xsl:variable name="lang-codes" select="( replace(concat('_', lower-case(//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1']), '$'), '_ger\$', '^\\d+-[^_]+\$'),
+                                                          '_engl$', 
+                                                          '^\d+-[^_]+$')" as="xs:string+"/>
+    
+                 <xsl:variable name="logo-filenames" as="document-node()">
+                   <xsl:document>
+                     <xsl:for-each select="$lang-codes">
+                       <xsl:sequence select="$logo-listing/c:file[starts-with(@name, $current-copyright/@unique_person_id)][matches(@name, current())]"/>
+                     </xsl:for-each>
+                   </xsl:document>
+                 </xsl:variable>
+                 <!--<xsl:message select="'-\-\-', string-join(@unique_person_id, ''), $lang, '//', string-join($logo-listing//c:file[starts-with(@name, current()/@unique_person_id)]/@name), '##', $logo-filenames "/>-->
+                 <keyword role="Forderlogos"><xsl:value-of select="$logo-filenames/*[1]/@name"/></keyword>
+               </xsl:if>
+              </xsl:for-each>   
+          </xsl:when>
+          </xsl:choose>
+        </xsl:for-each-group>
+    
+        <xsl:if test="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]">
+          <keyword role="{if (*:copyright_holder[*:cpr_type  = 'HG'][text[@text_type = concat('AUTBIO', $lang)][normalize-space()]]) then 'Herausgeberinformationen' else 'Autoreninformationen'}">
+            
+            <!--Herausgeberinformationen https://redmine.le-tex.de/issues/16479-->
+            
             <xsl:choose>
-              <xsl:when test="count($cg) gt 1">
-                <xsl:for-each select="$cg">
+              <xsl:when test="count(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
+                <xsl:for-each select="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)]">
                   <para>
-                    <xsl:sequence select="string-join(
-                                                      ($current-lookup[$lang-num][normalize-space()], 
-                                                       string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
-                                                      ), 
-                                                      ': '
-                                                      )"/>
+                   <!-- <xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
+                    <xsl:sequence select="html:process-html(., false())" />
                   </para>
                 </xsl:for-each>
               </xsl:when>
               <xsl:otherwise>
-                    <xsl:sequence select="string-join(
-                                                      ($current-lookup[$lang-num][normalize-space()], 
-                                                       string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
-                                                      ), 
-                                                      ': '
-                                                      )"/>
+                <!--<xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
+                <xsl:sequence select="html:process-html(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)], false())" />
               </xsl:otherwise>
             </xsl:choose>
           </keyword>
-        </xsl:when>
-         <xsl:when test="$type =  ('OAEN', 'SPONSOR', 'ENAB', 'PENA')">
-           <!-- Sponsoring/funding-->
-           
-           <!-- pretext --> 
-           <keyword role="{$current-lookup[1]}">
-             <xsl:value-of select="string-join((($cg[1]/*:pretext[normalize-space()]/replace(text(), ':$', ''), $current-lookup[$lang-num][normalize-space()])[1], ' '), ':')"/>
-           </keyword>
-          <xsl:for-each select="$cg">
-            <xsl:variable name="current-copyright" select="."/>
-            <!-- funder name-->
-            <keyword role="Fordername"><xsl:value-of select="string-join(
-                                                      ( 
-                                                       string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
-                                                      ), 
-                                                      ': '
-                                                      )"/></keyword>
-            <!-- funding-logo -->
-            <!-- add language to logo for searching, fallback is english and german (= no suffix) https://redmine.le-tex.de/issues/17501 -->
-           <xsl:if test="some $l in $logo-listing/c:file satisfies $l[starts-with(@name, $current-copyright/@unique_person_id)]">
-             <xsl:variable name="lang-codes" select="( replace(concat('_', lower-case(//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1']), '$'), '_ger\$', '^\\d+-[^_]+\$'),
-                                                      '_engl$', 
-                                                      '^\d+-[^_]+$')" as="xs:string+"/>
-
-             <xsl:variable name="logo-filenames" as="document-node()">
-               <xsl:document>
-                 <xsl:for-each select="$lang-codes">
-                   <xsl:sequence select="$logo-listing/c:file[starts-with(@name, $current-copyright/@unique_person_id)][matches(@name, current())]"/>
-                 </xsl:for-each>
-               </xsl:document>
-             </xsl:variable>
-             <!--<xsl:message select="'-\-\-', string-join(@unique_person_id, ''), $lang, '//', string-join($logo-listing//c:file[starts-with(@name, current()/@unique_person_id)]/@name), '##', $logo-filenames "/>-->
-             <keyword role="Forderlogos"><xsl:value-of select="$logo-filenames/*[1]/@name"/></keyword>
-           </xsl:if>
-          </xsl:for-each>   
-      </xsl:when>
-      </xsl:choose>
-    </xsl:for-each-group>
-    
-    <xsl:if test="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]">
-      <keyword role="{if (*:copyright_holder[*:cpr_type  = 'HG'][text[@text_type = concat('AUTBIO', $lang)][normalize-space()]]) then 'Herausgeberinformationen' else 'Autoreninformationen'}">
-        
-        <!--Herausgeberinformationen https://redmine.le-tex.de/issues/16479-->
-        
-        <xsl:choose>
-          <xsl:when test="count(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
-            <xsl:for-each select="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)]">
-              <para>
-               <!-- <xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
-                <xsl:sequence select="html:process-html(., false())" />
-              </para>
-            </xsl:for-each>
-          </xsl:when>
-          <xsl:otherwise>
-            <!--<xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
-            <xsl:sequence select="html:process-html(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)], false())" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </keyword>
+        </xsl:if>
     </xsl:if>
     <!-- when print product: also apply epb-->
-    <xsl:if test="not($main-product-type =  'EBP') and ../*:edition_type[. = $main-product-type]">
-       <xsl:apply-templates select="$all-products[*:edition_type =  'EBP']/(*:copyright_holders[*:cpr_type = ('OAEN', 'SPONSOR', 'ENAB', 'PENA') ]|*:funders)" mode="#current"/>
+    <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists(..[*:original_publication])) and self::*:copyright_holders">
+       <xsl:apply-templates select="$all-products[*:edition_type =  'EBP']/(*:copyright_holders|*:funders)" mode="#current"/>
     </xsl:if>
-    <xsl:if test="not(exists(..[*:original_publication])) and self::*:copyright_holders">
+    <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists(..[*:original_publication])) and self::*:copyright_holders">
       <!--https://redmine.le-tex.de/issues/17513-->
       <keyword role="Copyright">
         <xsl:call-template name="join-copyright-statement">
-          <xsl:with-param name="context" select="." tunnel="yes" as="element()"/>
+          <xsl:with-param name="context" select="$all-products[*:edition_type =  'EBP']/*:copyright_holders" tunnel="yes" as="element()"/>
         </xsl:call-template>
       </keyword>
     </xsl:if>
