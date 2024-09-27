@@ -248,7 +248,7 @@
     <xsl:variable name="lang-num" select="if ($lang = 'E') then 3 else
                                           if ($lang = 'S') then 4 else 2" as="xs:integer"/>
    
-    <xsl:if test="../*:edition_type[. = 'EBP']">  
+    <xsl:if test="../*:edition_type[. = 'EBP']  or count($all-products) = 1">  
       <xsl:for-each-group select="*:copyright_holder|*:funder" group-by="*:cpr_type">
          
           <xsl:variable name="type" select="current-grouping-key()"/>
@@ -353,7 +353,7 @@
       <!--https://redmine.le-tex.de/issues/17513-->
       <keyword role="Copyright">
         <xsl:call-template name="join-copyright-statement">
-          <xsl:with-param name="context" select="$all-products[*:edition_type =  'EBP']/*:copyright_holders" tunnel="yes" as="element()"/>
+          <xsl:with-param name="context" select="if ($all-products[*:edition_type =  'EBP']/*:copyright_holders) then $all-products[*:edition_type =  'EBP']/*:copyright_holders else ." tunnel="yes" as="element()"/>
         </xsl:call-template>
       </keyword>
     </xsl:if>
