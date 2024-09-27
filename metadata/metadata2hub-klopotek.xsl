@@ -241,7 +241,7 @@
     <!-- https://redmine.le-tex.de/issues/16437 -->
     <xsl:variable name="lang-num" select="if ($lang = 'E') then 3 else
                                           if ($lang = 'S') then 4 else 2" as="xs:integer"/>
-    <xsl:if test="../*:edition_type[. = 'EBP']">  
+    <xsl:if test="../*:edition_type[. = 'EBP'] or count($all-products) = 1">  
        <xsl:for-each-group select="*:copyright_holder" group-by="*:cpr_type">
          <xsl:if test="current-grouping-key() =  $copyright-roles">
            <xsl:variable name="current-lookup"  select="map:get($copyright-roles-lookup, current-grouping-key())" as="xs:string+"/>
@@ -295,11 +295,15 @@
          </keyword>
        </xsl:if>
     </xsl:if>
+        <!-- when print product: also apply epb-->
+    <xsl:if test="../*:edition_type[. = $main-product-type][not(.  = 'EBP')] and self::*:copyright_holders">
+       <xsl:apply-templates select="$all-products[*:edition_type =  'EBP']/(*:copyright_holders|*:funders)" mode="#current"/>
+    </xsl:if>
     <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists(..[*:original_publication])) and self::*:copyright_holders">
       <!--https://redmine.le-tex.de/issues/17513-->
       <keyword role="Copyright">
         <xsl:call-template name="join-copyright-statement">
-          <xsl:with-param name="context" select="$all-products[*:edition_type =  'EBP']/*:copyright_holders" tunnel="yes" as="element()"/>
+          <xsl:with-param name="context" select="if ($all-products[*:edition_type =  'EBP']/*:copyright_holders) then $all-products[*:edition_type =  'EBP']/*:copyright_holders else ." tunnel="yes" as="element()"/>
         </xsl:call-template>
       </keyword>
     </xsl:if>
