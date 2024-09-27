@@ -299,7 +299,7 @@
       <!--https://redmine.le-tex.de/issues/17513-->
       <keyword role="Copyright">
         <xsl:call-template name="join-copyright-statement">
-          <xsl:with-param name="context" select="$all-products[*:edition_type =  'EBP']" tunnel="yes" as="element()"/>
+          <xsl:with-param name="context" select="$all-products[*:edition_type =  'EBP']/*:copyright_holders" tunnel="yes" as="element()"/>
         </xsl:call-template>
       </keyword>
     </xsl:if>
