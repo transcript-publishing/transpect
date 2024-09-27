@@ -346,7 +346,7 @@
         </xsl:if>
     </xsl:if>
     <!-- when print product: also apply epb-->
-    <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists(..[*:original_publication])) and self::*:copyright_holders">
+    <xsl:if test="../*:edition_type[. = $main-product-type][not(.  = 'EBP')] and self::*:copyright_holders">
        <xsl:apply-templates select="$all-products[*:edition_type =  'EBP']/(*:copyright_holders|*:funders)" mode="#current"/>
     </xsl:if>
     <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists(..[*:original_publication])) and self::*:copyright_holders">
