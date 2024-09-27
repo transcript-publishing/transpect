@@ -957,13 +957,13 @@
     <!-- these PIs go into options and will be stripped from content
          https://redmine.le-tex.de/issues/17344, https://redmine.le-tex.de/issues/17348 -->
     <xsl:choose>
-      <xsl:when test="matches(., '(^\\?)(twocolumnContinuousChapters|noBlanksBeforeChapters)$')">
+      <xsl:when test="matches(., '(^\\?|\{)(twocolumnContinuousChapters|noBlanksBeforeChapters)$')">
          <!-- if PI is included as only node in para;discard it an pull it to package option-->
       </xsl:when>
       <xsl:otherwise>
         <!-- more than one option separated by space: strip option-->
          <xsl:value-of select="replace(
-                                 replace(., '\\?|\{?(twocolumnContinuousChapters|noBlanksBeforeChapters)(\p{Zs}|\})*', ''), 
+                                 replace(., '\\?\{?(twocolumnContinuousChapters|noBlanksBeforeChapters)(\p{Zs}|\})*', ''), 
                                  '\s\s+', 
                                  ' ')"/>
       </xsl:otherwise>
