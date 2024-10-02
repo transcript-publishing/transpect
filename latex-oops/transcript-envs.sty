@@ -67,7 +67,8 @@
 
 
 \renewenvironment{quotation}{%
-  \def\tpBreak{\newline}
+  \def\tpBreak{\newline}%
+  \ccaVstructStart{BlockQuote}% PDF/UA-1 only!
   \list{}{%
     \listparindent \z@%
     \itemindent    \listparindent%
@@ -88,6 +89,7 @@
   \item\noindent\ignorespaces%
 }{%
   \endlist
+  \ccaVstructEnd{BlockQuote}% PDF/UA-1 only!
   \gdef\@doendpe{%
     \@endpetrue
     \everypar{%
@@ -103,9 +105,14 @@
 
 
 \renewenvironment{quote}
-{\noindent\par\list{}{\rightmargin\leftmargin\nsfwiderfamily}%
+{\noindent\par
+ \ccaVstructStart{BlockQuote}% PDF/UA-1 only!
+ \list{}{\rightmargin\leftmargin\nsfwiderfamily}%
 \item\relax}
-{\endlist\par\gdef\@doendpe{%
+{\endlist
+  \ccaVstructStart{BlockQuote}% PDF/UA-1 only!
+  \par
+  \gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe}}
@@ -113,6 +120,7 @@
 
 \renewenvironment{verse}{%
   \noindent\par%
+  \ccaVstructStart{Verse}%
   \list{%
   }{%
     \listparindent \z@%
@@ -131,6 +139,7 @@
   \item\noindent\ignorespaces%
 }{%
   \endlist
+  \ccaVstructEnd{Verse}%
   \par
   \gdef\@doendpe{%
     \@endpetrue
@@ -139,9 +148,12 @@
   }%
 }
 
+\ccaAddRolemap{Verse}{Div}
+
 \newenvironment{versecentered}{%
   \par%
   \def\tpBreak{\break}%
+  \ccaVstructStart{Verse}%
   \list{%
   }{%
     \listparindent  \z@%
@@ -159,6 +171,7 @@
   \item\noindent\centering\ignorespaces%
 }{%
   \endlist%
+  \ccaVstructEnd{Verse}%
   \par%
   \gdef\@doendpe{%
     \@endpetrue
@@ -170,6 +183,7 @@
 \newenvironment{motto}{%
   \noindent%
   \par%
+  \ccaVstructStart{Motto}%
   \list{%
   }{%
     \rightmargin \leftmargin
@@ -180,18 +194,23 @@
   }%
   \item\relax%
 }{%
-  \endlist\par\gdef\@doendpe{%
+  \endlist
+  \ccaVstructEnd{Motto}%
+  \par
+  \gdef\@doendpe{%
     \@endpetrue
     \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
     \global\let\@doendpe\orig@doendpe%
   }%
 }
+\ccaAddRolemap{Motto}{Div}
 
 \newenvironment{tpDedication}{%
   \cleardoublepage
   \bgroup
     \parindent\z@
     \thispagestyle{empty}%
+    \ccaVstructStart{Dedication}%
     \let\tpBreak\break%
     \null\vskip\dimexpr\headingsep+1\baselineskip-.45mm\relax%
     \parindent \z@
@@ -207,9 +226,11 @@
     }
 }{%
     \par%
+    \ccaVstructEnd{Dedication}%
   \egroup%
   \aftergroup\cleardoublepage%
 }
+\ccaAddRolemap{Dedication}{Div}
 
 
 \usepackage{enumerate}
@@ -234,7 +255,23 @@
    \parsep\z@
    \ifnum \@enumdepth=\@ne\topsep12.8bp\else\topsep\z@\fi
    \usecounter\@enumctr%
-   \def\makelabel##1{\small##1\hss}}}
+   \global\let\is@first@item\relax
+   \ccaVstructStart{L}%
+   \def\makelabel##1{%
+     \ifx\is@first@item\relax
+       \global\let\is@first@item\@undefined
+     \else
+       \ccaVstructEnd{LBody}%
+       \ccaVstructEnd{LI}%
+     \fi
+     \ccaVstructStart{LI}%
+     \ccaVstructStart{Lbl}%
+     \small##1\hss
+     \ccaVstructEnd{Lbl}%
+     \ccaVstructStart{LBody}%
+}}}
+\let\ltx@endenumerate\endenumerate
+\def\endenumerate{\ccaVstructEnd{LBody}\ccaVstructEnd{LI}\ccaVstructEnd{L}\ltx@endenumerate}
 
 \let\leftmarginii\leftmargini
 \let\leftmarginiii\leftmargini
@@ -254,10 +291,27 @@
       \itemsep\z@
       \parsep\z@
       \partopsep\z@
-      \def\makelabel##1{##1\hss}%
+      \global\let\is@first@item\relax
+      \ccaVstructStart{L}%
+      \def\makelabel##1{%
+        \ifx\is@first@item\relax
+          \global\let\is@first@item\@undefined
+        \else
+          \ccaVstructEnd{LBody}%
+          \ccaVstructEnd{LI}%
+        \fi
+        \ccaVstructStart{LI}%
+        \ccaVstructStart{Lbl}%
+        ##1\hss
+        \ccaVstructEnd{Lbl}%
+        \ccaVstructStart{LBody}%
+      }%
     }%
   \fi%
 }
+\let\ltx@enditemize\enditemize
+\def\enditemize{\ccaVstructEnd{LBody}\ccaVstructEnd{LI}\ccaVstructEnd{L}\ltx@enditemize}
+
 
 \renewenvironment{description}[1][]
 {\list{}{%
@@ -272,10 +326,21 @@
     \itemsep\z@
     \parsep\z@
     \partopsep\z@
+    \global\let\is@first@item\relax
+    \ccaVstructStart{L}%
     \let\makelabel\descriptionlabel}}
-{\endlist}
+{\ccaVstructEnd{LBody}\ccaVstructEnd{LI}\ccaVstructEnd{L}\endlist}
+
 \renewcommand*\descriptionlabel[1]{%
-  \setbox\z@\hbox{#1}%
+  \ccaDisable\setbox\z@\hbox{#1}\ccaEnable%
+  \ifx\is@first@item\relax
+    \global\let\is@first@item\@undefined
+  \else
+    \ccaVstructEnd{LBody}%
+    \ccaVstructEnd{LI}%
+  \fi
+  \ccaVstructStart{LI}%
+  \ccaVstructStart{Lbl}%
   \hskip\labelsep
   \ifdim\wd\z@>\labelwidth
     {\normalfont\sbseries #1\enskip}%
@@ -283,8 +348,9 @@
   \else
     \hbox to \labelwidth{\normalfont\sbseries #1\hfill}%
   \fi
+  \ccaVstructEnd{Lbl}%
+  \ccaVstructStart{LBody}%
   }
-
 
 
 \newenvironment{dialog}{%
@@ -293,10 +359,13 @@
     \bgroup
       \list{}
         \item\rmfamily\leftskip\dimexpr-7mm-1.5em\relax%
+        \ccaVstructStart{DialogueDirection}%
         \bgroup\itshape ##1\egroup%
+        \ccaVstructEnd{DialogueDirection}%
       \endlist%
     \egroup%
   }%
+  \ccaVstructStart{Dialogue}%
   \list{}%
   {\leftmargin7mm
    \labelsep1em
@@ -305,8 +374,25 @@
    \itemindent\z@
    \parsep\z@
    \topsep12.8bp
-   \def\makelabel##1{{\ignorespaces\itshape##1\ignorespaces}}}%
-}{\endlist}
+   \global\let\is@first@item\relax
+   \def\makelabel##1{%
+     \ifx\is@first@item\relax
+       \global\let\is@first@item\@undefined
+     \else
+       \ccaVstructEnd{DialogueLine}%
+     \fi
+     \ccaVstructStart{DialogueLine}%
+     {\ignorespaces\itshape\ccaVstructStart{DialogueLabel}##1\ccaVstructEnd{DialogueLabel}\ignorespaces}
+   }}%
+}{%
+  \endlist
+  \ccaVstructEnd{Dialogue}%
+}
+
+\ccaAddRolemap{Dialogue}{Div}
+\ccaAddRolemap{DialogueLine}{\if@cc@pdf@two Sub\else Div\fi}
+\ccaAddRolemap{DialogueLabel}{\if@cc@pdf@two Lbl\else Span\fi}
+\ccaAddRolemap{DialogueDirection}{\if@cc@pdf@two Sub\else Div\fi}
 
 \RequirePackage{amsmath}
 \let\lll\relax
@@ -316,22 +402,27 @@
 
 \newenvironment{authorbio}{%
   \parskip1\baselineskip\noindent%
+  \ccaVstructStart{Bio}%
 }{%
+  \ccaVstructEnd{Bio}%
   \par%
 }
+\ccaAddRolemap{Bio}{Div}
 
 
 \newenvironment{emphPar}[1][]{%
   \def\tp@temp{#1}%
+  \ccaVstructStart{Em}%
   \parskip1\baselineskip\noindent\textbf{\tp@temp}%
   \ifx\empty\tp@temp\empty%
   \else%
     \space%
   \fi%
 }{%
+  \ccaVstructEnd{Em}%
   \par%
 }
-
+\if@cc@pdf@two\else\ccaAddRolemap{Em}{Span}\fi
 
 % Linksbündige Formeln mit 5 mm Einzug.
 \@fleqntrue\@mathmargin5mm
@@ -349,10 +440,14 @@
   \@equation@after@didTimes=\z@
   \ifhmode\par\fi
   \vskip0.5\baselineskip
+  \ccaVstructStart{P}%
+  \ccaVstructStart{Formula}%
   $
 }{%
   \afterEquationContents
   $
+  \ccaVstructEnd{Formula}%
+  \ccaVstructEnd{P}%
   \vskip0.5\baselineskip
   \@afterheading
 }
@@ -366,6 +461,7 @@
 
 \newenvironment{transcript}[1][1]{%
   \fontsize{8bp}{10bp}\selectfont
+  \ccaVstructStart{Transcription}%
   \def\tpBreak{\par}%
   % Makro/PI, womit sich die Zeilennummer innerhalb der Umgebung neu setzen lässt.
   \def\lineNumber##1{\@transcriptionLine=\numexpr##1-1\relax}%
@@ -394,21 +490,36 @@
     \itemsep    0\p@
   }%
   \@transcriptionLine=\numexpr#1-1\relax
+  \global\let\is@first@item\relax
   \let\olditem\item
   \renewcommand\item[1][]{%
+    \ifx\is@first@item\relax
+      \global\let\is@first@item\@undefined
+    \else
+      \ccaVstructEnd{TranscriptionLine}%
+    \fi
     \global\advance\@transcriptionLine\@ne
     \setbox\z@ = \hbox{##1}%
     \ifdim\wd\z@ > \@nameWidth
       \edef\@nameWidth{\the\dimexpr\wd\z@}%
     \fi
-    \olditem[\hb@xt@\@lineNumberWidth{\the\@transcriptionLine\hss}\hskip\@transcriptionLineNumberSep\fontdimen2\font\hb@xt@\@nameWidth{##1\hss}]\leavevmode\obeyspaces%
+    \ccaVstructStart{TranscriptionLine}%
+    \ccaVstructStart{TranscriptionLabel}%
+    \olditem[\hb@xt@\@lineNumberWidth{\the\@transcriptionLine\hss}\hskip\@transcriptionLineNumberSep\fontdimen2\font\hb@xt@\@nameWidth{##1\hss}]%
+    \ccaVstructEnd{TranscriptionLabel}%
+    \leavevmode\obeyspaces%
   }%
 }{%
+  \ccaVstructEnd{TranscriptionLine}%
   \endlist
+  \ccaVstructEnd{Transcription}%
   \immediate\write\@auxout{\string\csgdef{transcription-\the\@transcriptionEnv –maxLineNumber}{\the\@transcriptionLine}}%
   \immediate\write\@auxout{\string\csgdef{transcription-\the\@transcriptionEnv –maxNameWidth}{\@nameWidth}}%
   \global\advance\@transcriptionEnv\@ne
 }
+\ccaAddRolemap{Transcription}{Div}
+\ccaAddRolemap{TranscriptionLine}{Div}
+\ccaAddRolemap{TranscriptionLabel}{\if@cc@pdf@two Sub\else Div\fi}
 
 % \def\@abstract#1{%
 %   \vskip-\lastskip
