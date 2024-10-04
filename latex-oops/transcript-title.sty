@@ -1006,26 +1006,64 @@
   \tpSetProperty{fund-vsep}{1mm}% vert. Abstand zwischen Fördererlogos
   \tpSetProperty{fund-format}{%
     \tpIfComp{FundName}
-      {\tpUseComp{FundName}\par\vskip-\parskip%% sonst doppelter Abstand
+      {\tpUseComp{FundName}\par\nobreak\vskip-\parskip%% sonst doppelter Abstand
        \includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}\par\vskip-\parskip\leavevmode}
-      {%
-        \setbox\@tempboxa\hbox{\includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}}%
-        \vbox{\hsize\wd\@tempboxa \box\@tempboxa}\hskip5mm%
+      {\setbox\@tempboxa\hbox{\includegraphics[max width=\linewidth]{\tpUseComp{FundLogo}}}%
+       \vbox{\hsize\wd\@tempboxa \box\@tempboxa}\hskip5mm%
       }%
   }%
   \tpSetProperty{funding-block}{%
     \bgroup
-      \tpIfComp{FundingPreText}{\tpUseComp{FundingPreText}\par}{}%
-      \bgroup
-        \raggedright
-        \lineskip\tpUseProperty{fund-vsep}% vertikaler Abstand zwischen Logos
-        \parskip\tpUseProperty{fund-vsep}%
-        \leavevmode
-        \tpUseComp{FundingBlock}\par%
-      \egroup
-      \tpIfComp{FundingPostText}{\vskip.5\baselineskip\tpUseComp{FundingPostText}\par}{}%
+      \tsPrintFunding{OA}%
+      \tsPrintFunding{Series}%
+      \tsPrintFunding{}%
+      \tsPrintFunding{Print}%
     \egroup
   }
   \tpSetProperty{counted-name-sep}{\ifnum\ccCurCount<\tpTotalCount\relax,\space\fi}%
   %\tpSetProperty{editor-suffix}{~(Hg.)}
+}
+
+\def\tsPrintFunding#1{%
+  \tpIfComp{Funding#1PreText}{\tpUseComp{Funding#1PreText}\par}{}%
+  \bgroup
+    \raggedright
+    \lineskip\tpUseProperty{fund-vsep}% vertikaler Abstand zwischen Logos
+    \parskip\tpUseProperty{fund-vsep}%
+    \leavevmode
+    \tpUseComp{Funding#1Block}\par%
+  \egroup
+  \tpIfComp{Funding#1PostText}{\vskip.5\baselineskip\tpUseComp{Funding#1PostText}\par}{}%
+}
+
+%% Neue Förderer-Kateogien, https://redmine.le-tex.de/issues/17515
+\def\ts@funding@comps{%
+  \ccDeclareCountedComponent{FundName}%
+  \ccDeclareCountedComponent{FundLogo}%
+  \ccDeclareCountedComponent{FundID}%
+}
+\ccAddToType{Components}{titlepage}{%
+  %% Open Access funding
+  \ccDeclareComponent{FundingOABlock}{\expandafter\global}{}%
+  \ccDeclareComponentGroup{FundingOA}{\ts@funding@comps}{}%
+  \ccDeclareGlobalComponent{FundingOAPreText}%
+  \ccDeclareGlobalComponent{FundingOAPostText}%
+  %% Print funding
+  \ccDeclareComponent{FundingPrintBlock}{\expandafter\global}{}%
+  \ccDeclareComponentGroup{FundingPrint}{\ts@funding@comps}{}%
+  \ccDeclareGlobalComponent{FundingPrintPreText}%
+  \ccDeclareGlobalComponent{FundingPrintPostText}%
+  %% Series funding
+  \ccDeclareComponent{FundingSeriesBlock}{\expandafter\global}{}%
+  \ccDeclareComponentGroup{FundingSeries}{\ts@funding@comps}{}%
+  \ccDeclareGlobalComponent{FundingSeriesPreText}%
+  \ccDeclareGlobalComponent{FundingSeriesPostText}%
+}
+
+% Die neuen Funding-Kategorien solle intern genau so formatiert werden
+% wie das "normale" (Werks-)Funding:
+\AddToHook{cc/titlepage/funding}{%
+  \ccComposeCollection{FundingOA}    {fund-format}{FundingOABlock}%
+  \ccComposeCollection{FundingPrint} {fund-format}{FundingPrintBlock}%
+  \ccComposeCollection{FundingSeries}{fund-format}{FundingSeriesBlock}%
 }
