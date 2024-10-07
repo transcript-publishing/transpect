@@ -193,7 +193,7 @@
     </xsl:for-each-group>
   </xsl:variable>
   <xsl:variable name="funder-pretext" as="element(dbk:keyword)*" 
-                select="$metadata/dbk:keyword[starts-with(@role, 'Fordertext')]"/>
+                select="$metadata/dbk:keyword[@role = 'Fordertext']"/>
   <xsl:variable name="funder-name" as="xs:string*" 
                 select="$metadata/dbk:keyword[@role eq 'Fordername']"/>
   <xsl:variable name="funder-logo" as="xs:string*" 
@@ -236,6 +236,7 @@
                                                                      then ',endnotes,endnotelinks' 
                                  else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
+                                 'a11y'[$a11y],
                                  xml2tex:foreign-scripts(root()),
                                  ']{cocotex}&#xa;')"/>
     \usepackage{htmltabs}&#xa;
@@ -369,7 +370,7 @@
       xml2tex:meta2tex($converter, (), 'tpConversion'),
       xml2tex:meta2tex($license-link, (), 'tpLicenceLink'),
       xml2tex:meta2tex($license-name, (), 'tpLicenceName'),
-      (:xml2tex:meta2tex($funder-pretext, (), 'tpFundingPreText'),:)
+      xml2tex:meta2tex($funder-pretext, (), 'tpFundingPreText'),
       xml2tex:meta2tex($funder-posttext, (), 'tpFundingPostText'),
       xml2tex:meta2tex($bibl-issn, (), 'tpBiblISSN'),
       xml2tex:meta2tex($bible-issn, (), 'tpBibleISSN')
@@ -425,22 +426,26 @@
       
       <xsl:for-each select="$funding-block[normalize-space()]">
         <xsl:variable name="context" select="."/>
+        <xsl:variable name="funding-type" select="if (dbk:keyword[contains(@role,  'Fordertext_')]) then replace(dbk:keyword[contains(@role,  'Fordertext')][1]/@role, 'Fordertext_', '') else ()" as="xs:string?"/>
         <xsl:for-each-group select="dbk:keyword" group-starting-with="dbk:keyword[@role = 'Fordername']">
+          <xsl:if test="current-group()[1][starts-with(@role, 'Fordertext')]">
+            <xsl:value-of select="concat('&#xa;&#xa;\tpFunding', $funding-type, 'PreText{')"/>
+            <xsl:apply-templates select="." mode="strip-meta"/>
+            <xsl:text>}</xsl:text>
+          </xsl:if>
           <xsl:if test="not(current-group()[1][starts-with(@role, 'Fordertext')])">
-            <xsl:text>&#xa;\begin{tpFunding}</xsl:text>
+            <xsl:value-of select="concat('&#xa;\begin{tpFunding', $funding-type, '}')"/>
             
             <xsl:if test="current-group()[self::dbk:keyword[@role = 'Fordername'][normalize-space()]]">
-              <xsl:value-of select="concat('&#xA;\tpFundName{', 
-                                          if (. is $context/dbk:keyword[@role = 'Fordername'][1]) then $context/dbk:keyword[starts-with(@role, 'Fordertext')] else (),
+              <xsl:value-of select="concat('&#xA;  \tpFundName{', 
                                           current-group()[self::dbk:keyword[@role = 'Fordername']], 
                                           '}')"/>
             </xsl:if>
             
             <xsl:if test="current-group()[self::dbk:keyword[@role = 'Forderlogos'][normalize-space()]]">
-              <xsl:value-of select="concat('&#xA;\tpFundLogo{images/', replace(normalize-space(current-group()[self::dbk:keyword[@role = 'Forderlogos']]), '^(.+/)', ''),                                       '}')"/>
+              <xsl:value-of select="concat('&#xA;  \tpFundLogo{images/', replace(normalize-space(current-group()[self::dbk:keyword[@role = 'Forderlogos']]), '^(.+/)', ''),                                       '}')"/>
             </xsl:if>
-            
-            <xsl:text>&#xa;\end{tpFunding}</xsl:text>
+            <xsl:value-of select="concat('&#xa;\end{tpFunding', $funding-type, '}')"/>
           </xsl:if>
         </xsl:for-each-group>     
       </xsl:for-each>  
