@@ -420,4 +420,7 @@
   \tpNoIndent%
 }
 
+%% Wenn es in einem Reihen-Ordner eine Datei namens transcript-add.sty gibt, binde diese nun ein.
+\IfFileExists{transcript-add.sty}{\RequirePackage{transcript-add.sty}}{}
+
 \endinput
