@@ -236,7 +236,7 @@
                                                                      then ',endnotes,endnotelinks' 
                                  else (),
                                  if($notes-type eq 'endnotes' and $notes-per-chapter-notoc eq 'yes') then ',ennotoc' else (),
-                                 'a11y'[$a11y],
+                                 ',a11y'[$a11y],
                                  xml2tex:foreign-scripts(root()),
                                  ']{cocotex}&#xa;')"/>
     \usepackage{htmltabs}&#xa;
