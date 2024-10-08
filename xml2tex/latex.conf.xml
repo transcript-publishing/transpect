@@ -113,6 +113,8 @@
   <!-- publication meta -->
   <xsl:variable name="doi" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'DOI'][normalize-space()]"/>
+  <xsl:variable name="contribution" as="element(dbk:keyword)?" 
+                select="$metadata/dbk:keyword[@role eq 'Mitwirkung']"/>
   <xsl:variable name="print-isbn" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Print-ISBN']"/>
   <xsl:variable name="epdf-isbn" as="element(dbk:keyword)?"
@@ -337,6 +339,7 @@
       xml2tex:meta2tex($publisher-imprint-info, (), 'tpPubDivInfo'),
       xml2tex:meta2tex($publisher-note, (), 'tpPubNote'),
       xml2tex:meta2tex($publisher-location, (), 'tpPubPlace'),
+      xml2tex:meta2tex($contribution, (), 'tpISBNPreText'),
       xml2tex:meta2tex($print-isbn, (), 'tpISBN'),
       xml2tex:meta2tex($epdf-isbn, (), 'tpEISBN'),
       xml2tex:meta2tex($epub-isbn, (), 'tpEpubISBN'),
@@ -428,7 +431,7 @@
         <xsl:variable name="context" select="."/>
         <xsl:variable name="funding-type" select="if (dbk:keyword[contains(@role,  'Fordertext_')]) then replace(dbk:keyword[contains(@role,  'Fordertext')][1]/@role, 'Fordertext_', '') else ()" as="xs:string?"/>
         <xsl:for-each-group select="dbk:keyword" group-starting-with="dbk:keyword[@role = 'Fordername']">
-          <xsl:if test="current-group()[1][starts-with(@role, 'Fordertext')]">
+          <xsl:if test="current-group()[1][starts-with(@role, 'Fordertext')][normalize-space()]">
             <xsl:value-of select="concat('&#xa;&#xa;\tpFunding', $funding-type, 'PreText{')"/>
             <xsl:apply-templates select="." mode="strip-meta"/>
             <xsl:text>}</xsl:text>
