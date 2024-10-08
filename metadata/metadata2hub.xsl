@@ -27,15 +27,27 @@
   <xsl:template match="*:product_export" priority="15">
     <keywordset role="titlepage">
       <xsl:message select="'####### process klopotek to keywords'"/>
-      <xsl:apply-templates select="if (count (*:product) = 1) 
-                                   then *:product/*
-                                   else (*:product[*:edition_type = 'PBK'], *:product[*:edition_type = 'HC'], *:product[*:edition_type = 'EPB'], *:product[*:edition_type = 'EBEH'],*:product[*:edition_type = 'EBE'])[1]/*, 
-                                   *:serial" mode="klopotek-to-keyword">
-        <xsl:with-param name="all-products" select="*:product" as="element()+" tunnel="yes"/>
-        <xsl:with-param name="main-product-type" select="(*:product[*:edition_type = 'PBK'], *:product[*:edition_type = 'HC'], *:product[*:edition_type = 'EPB'], *:product[*:edition_type = 'EBEH'],*:product[*:edition_type = 'EBE'])[1]/*:edition_type/text()"
-                        as="xs:string" tunnel="yes"/>
-        <xsl:with-param name="logo-listing" select="../c:directory" as="element(c:directory)?" tunnel="yes"/>
-      </xsl:apply-templates>
+       <xsl:variable name="temporary-keys" as="node()*">
+        <xsl:apply-templates select="if (count (*:product) = 1) 
+                                     then *:product/*
+                                     else (*:product[*:edition_type = 'PBK'], *:product[*:edition_type = 'HC'], *:product[*:edition_type = 'EPB'], *:product[*:edition_type = 'EBEH'],*:product[*:edition_type = 'EBE'])[1]/*, 
+                                     *:serial" mode="klopotek-to-keyword">
+          <xsl:with-param name="all-products" select="*:product" as="element()+" tunnel="yes"/>
+          <xsl:with-param name="main-product-type" select="(*:product[*:edition_type = 'PBK'], *:product[*:edition_type = 'HC'], *:product[*:edition_type = 'EPB'], *:product[*:edition_type = 'EBEH'],*:product[*:edition_type = 'EBE'])[1]/*:edition_type/text()"
+                          as="xs:string" tunnel="yes"/>
+          <xsl:with-param name="logo-listing" select="../c:directory" as="element(c:directory)?" tunnel="yes"/>
+        </xsl:apply-templates>
+       </xsl:variable>
+      <xsl:for-each-group select="$temporary-keys[. instance of element()]" group-by="./@role">
+        <xsl:choose>
+          <xsl:when test="not(matches(current-grouping-key(), 'Forder(name|text_|logo)'))">
+            <xsl:sequence select="current-group()[1]"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:sequence select="current-group()"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each-group>
     </keywordset>
   </xsl:template>
 

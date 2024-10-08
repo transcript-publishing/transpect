@@ -132,8 +132,16 @@
   </xsl:template>
   
   <xsl:template match="*:memo|*:content"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:param name="all-products" as="element()*" tunnel="yes"/>
+    <xsl:param name="processed-main-edition" select="false()" as="xs:boolean?" tunnel="yes"/>
+    <xsl:param name="main-product-type" as="xs:string" tunnel="yes"/>
     <!-- https://redmine.le-tex.de/issues/17443-->
     <xsl:apply-templates select="*:text[@term]" mode="#current"/>
+    <xsl:if test="not($main-product-type = 'EBP') and not($processed-main-edition)" >
+      <xsl:apply-templates select="$all-products[not(*:edition_type = $main-product-type)]//(*:memo|*:content)" mode="#current">
+        <xsl:with-param name="processed-main-edition" select="true()" as="xs:boolean" tunnel="yes"/>
+      </xsl:apply-templates>
+    </xsl:if>
   </xsl:template>
  
     <xsl:template name="add-static-keywords">
@@ -259,7 +267,9 @@
           </xsl:variable>
           <xsl:variable name="current-lookup"  select="map:get($copyright-roles-lookup, $type)" as="xs:string+"/>
           <xsl:choose>
-            <xsl:when test="$type =  $copyright-roles">
+            <xsl:when test="$type[. =  $copyright-roles] 
+                            and
+                            (not($type = 'UMSA') or empty($all-products//*:memo/*:text[@term = 'Umschlagabb./Copyright Vermerk']))">
               <keyword role="{$current-lookup[1]}">      
                 <xsl:choose>
                   <xsl:when test="count($cg) gt 1">
@@ -458,8 +468,15 @@
   </xsl:template>
   
   <xsl:template match="*:text[@term = 'Fördertext (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
-    <!-- https://redmine.le-tex.de/issues/16437. might be obolete with https://redmine.le-tex.de/issues/17515 -->
+    <!-- https://redmine.le-tex.de/issues/16437. might be obsolete with https://redmine.le-tex.de/issues/17515 -->
     <keyword role="Fordertext">
+      <xsl:value-of select="."/>
+    </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:text[@term = 'Mitwirkende Ergänzung (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17617 -->
+    <keyword role="Mitwirkung">
       <xsl:value-of select="."/>
     </keyword>
   </xsl:template>
@@ -467,6 +484,13 @@
   <xsl:template match="*:text[@term = 'Thesis-Pflichteintrag (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/16437 -->
     <keyword role="Qualifikationsnachweis">
+      <xsl:value-of select="."/>
+    </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:text[@term = 'Umschlagabb./Copyright Vermerk'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17617. Higher prio than in copyright-holders -->
+    <keyword role="Umschlagcredit">
       <xsl:value-of select="."/>
     </keyword>
   </xsl:template>
