@@ -34,6 +34,7 @@
 
 \gdef\ts@str@layout@mdw{mdw}
 \gdef\ts@str@layout@std{std}
+\gdef\ts@str@layout@utb{utb}
 \gdef\ts@str@layout@xtx{xtx}
 
 % Pfade sind nach Priorität geordnet und werden von TeX derart durchsucht.
@@ -432,5 +433,8 @@
   \vskip\baselineskip
   \tpNoIndent%
 }
+
+%% Wenn es in einem Reihen-Ordner eine Datei namens transcript-add.sty gibt, binde diese nun ein.
+\IfFileExists{transcript-add.sty}{\RequirePackage{transcript-add}}{}
 
 \endinput

@@ -1,0 +1,28 @@
+\NeedsTeXFormat{LaTeX2e}[2018/12/01]
+\ProvidesPackage{transcript-add}[2024/10/07 transcript]\relax
+
+%% Wir wollen eine bestimmte Eigenschaft einer bestimmten Überschrift
+%% überschreiben.
+%%
+%% In CoCoTeX sind alle Überschriften "Container" und die kleinen
+%% Code-Schnipsel, die festlegen, wie die Überschriften gerendert
+%% werden, heißen "Properties". Jede Property hat einen Namen und
+%% einen Wert. Properties sind ein CoCoTeX-Spezifischer "Datentyp".
+%%
+%% Um eine bestimmte Property zu ändern, müssen wir LaTeX zunächst
+%% sagen, zu welchem Container die Property gehört, die wir ändern
+%% wollen. Dazu verwenden wir das Makro \tpAddToType, das drei
+%% Argumente nimmt: 1. Den Datentyp, den wir ergänzen wollen (in dem
+%% Fall 'Properties'), 2. den Container, dessen Properties-Datentyp
+%% wir ergänzen wollen (in dem Fall den Container, der 'chapter'
+%% heißt) und 3. der Code selbst:
+\tpAddToType{Properties}{chapter}{%
+  %% Eine einzelne Property können wir mit dem \tpSetProperty-Makro
+  %% überdefinieren, die als erstes Argument den Namen der zu
+  %% ändernden Property bekommt und den neuen Wert als zweites
+  %% Argument:
+  \tpSetProperty{toc-title-face}{\mdseries\sfchapwidefamily\large}%
+}
+%% \tpAddToProperty ist im Prinzip ein Hook, mit dem sich Material ans
+%% Ende der Überschriftendeklaration hängen lässt.
+\endinput
