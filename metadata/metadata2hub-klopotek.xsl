@@ -248,6 +248,7 @@
   <xsl:variable name="copyright-roles"  as="xs:string+" 
               select="('VE', 'HG', 'UMSA', 'LEKT', 'KORR', 'LAYO', 'DRUK')"/>
 
+
   <xsl:template match="*:copyright_holders | *:funders"  mode="klopotek-to-keyword"  priority="2">
     <xsl:param name="all-products" as="element()+" tunnel="yes"/>
     <xsl:param name="main-product-type" as="xs:string" tunnel="yes"/>
