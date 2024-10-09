@@ -237,7 +237,7 @@
                               'LAYO':('Satz',           'Satz',              'Typesetting',  'Composición tipográfica'),
                               'DRUK':('Druck',          'Druck',             'Printing',     'Imprenta'),
                               'OAEN':('Fordertext_OA',  'Open-Access-Ausgabe mit freundlicher Förderung von',   '',     ''),
-                              'SPONSOR':('Fordertext_Reihe',  'Förderung der Reihe von',             '',     ''),
+                              'SPONSOR':('Fordertext_Series',  'Förderung der Reihe von',             '',     ''),
                               'ENAB':('Fordertext',     'Die Publikation entstand mit freundlicher Förderung von',    '',     ''),
                               'PENA':('Fordertext_Print',     'Print-Ausgabe mit freundlicher Förderung von',   '',     '')
                   }">
