@@ -38,16 +38,12 @@
           <xsl:with-param name="logo-listing" select="../c:directory" as="element(c:directory)?" tunnel="yes"/>
         </xsl:apply-templates>
        </xsl:variable>
-      <xsl:for-each-group select="$temporary-keys[. instance of element()]" group-by="./@role">
-        <xsl:choose>
-          <xsl:when test="not(matches(current-grouping-key(), 'Forder(name|text_|logo)'))">
-            <xsl:sequence select="current-group()[1]"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:sequence select="current-group()"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:for-each-group>
+      <xsl:variable name="sorted" as="node()*">
+        <xsl:for-each-group select="$temporary-keys[. instance of element()]" group-by="./@role[not(matches(., 'Forder'))]">
+          <xsl:sequence select="current-group()[1]"/>
+        </xsl:for-each-group>
+      </xsl:variable>
+      <xsl:sequence select="$temporary-keys[contains(@role, 'Forder')]|$sorted"/>
     </keywordset>
   </xsl:template>
 
