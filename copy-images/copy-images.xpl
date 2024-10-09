@@ -404,7 +404,7 @@
     <p:variable  name="img-name" select="dbk:keyword[@role = 'Forderlogos']"/>
    
      <cx:message name="msg99">
-      <p:with-option name="message" select="'~~~ copy logo ', $img-name, 'to temp dir'"/>
+      <p:with-option name="message" select="'~~~ copy logo ', $img-name, ' to temp dir'"/>
     </cx:message>
       <!-- copy logos to temp -->
     <p:try name="copy-logo-images">
