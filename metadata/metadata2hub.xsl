@@ -43,7 +43,7 @@
           <xsl:sequence select="current-group()[1]"/>
         </xsl:for-each-group>
       </xsl:variable>
-      <xsl:sequence select="$temporary-keys[contains(@role, 'Forder')]|$sorted"/>
+      <xsl:sequence select="$temporary-keys[@role ='Fordertext'][1], ($temporary-keys[matches(@role, 'Forder(name|logos|text_)')]|$sorted)"/>
     </keywordset>
   </xsl:template>
 

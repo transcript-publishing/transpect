@@ -256,6 +256,7 @@
     <!-- https://redmine.le-tex.de/issues/16437, https://redmine.le-tex.de/issues/17515 -->
     <xsl:variable name="lang-num" select="if ($lang = 'E') then 3 else
                                           if ($lang = 'S') then 4 else 2" as="xs:integer"/>
+    <xsl:variable name="context" select="." as="element()"/>
    
     <xsl:if test="../*:edition_type[. = 'EBP']  or count($all-products) = 1">  
       <xsl:for-each-group select="*:copyright_holder|*:funder" group-by="*:cpr_type">
@@ -299,10 +300,16 @@
              <xsl:when test="$type =  ('OAEN', 'SPONSOR', 'ENAB', 'PENA')">
                <!-- Sponsoring/funding-->
                
-               <!-- pretext --> 
-               <keyword role="{$current-lookup[1]}">
-                 <xsl:value-of select="string-join((($cg[1]/*:pretext[normalize-space()]/replace(text(), ':$', ''), $current-lookup[$lang-num][normalize-space()])[1], ' '), ':')"/>
-               </keyword>
+               <!-- pretext, https://redmine.le-tex.de/issues/17633 -->
+                 <xsl:apply-templates select="$context/../*:memo/*:text[@term = 'Fördertext (Impressum)'][normalize-space()]" mode="#current"/>
+                 <keyword role="{$current-lookup[1]}">
+                  <!-- https://redmine.le-tex.de/issues/17633-->
+                   <xsl:value-of select="if (empty($all-products[*:memo/*:text[@term = 'Fördertext (Impressum)'][normalize-space()]])) 
+                                         then string-join((($cg[1]/*:pretext[normalize-space()]/replace(text(), ':$', ''), $current-lookup[$lang-num][normalize-space()])[1], ' '), ':')
+                                         else ''"/>
+                 </keyword>
+                 <!-- will be added several times, but stripped by metadata2hub.xsl-->
+                 
               <xsl:for-each select="$cg">
                 <xsl:variable name="current-copyright" select="."/>
                 <!-- funder name-->
@@ -468,8 +475,15 @@
     </keyword>
   </xsl:template>
   
+  <xsl:template match="*:serial_relation/*:serial_code[normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
+    <!-- https://redmine.le-tex.de/issues/17605 -->
+    <keyword role="Reihenlogo">
+      <xsl:value-of select="concat('reihenlogo_', lower-case(.), '.eps')"/>
+    </keyword>
+  </xsl:template>
+  
   <xsl:template match="*:text[@term = 'Fördertext (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
-    <!-- https://redmine.le-tex.de/issues/16437. might be obsolete with https://redmine.le-tex.de/issues/17515 -->
+    <!-- https://redmine.le-tex.de/issues/17633 / https://redmine.le-tex.de/issues/16437 / https://redmine.le-tex.de/issues/17515 -->
     <keyword role="Fordertext">
       <xsl:value-of select="."/>
     </keyword>
