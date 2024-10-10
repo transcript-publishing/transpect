@@ -16,7 +16,7 @@
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
   <xsl:param name="sans-font"   as="xs:string?"/>
-  
+  <xsl:param name="a11y" as="xs:boolean" select="false()"/>
   <xsl:param name="table-caption-pos" as="xs:string?"/>
   <xsl:param name="figure-caption-pos" as="xs:string?"/>
   
