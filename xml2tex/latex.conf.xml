@@ -16,7 +16,7 @@
   <xsl:param name="s9y4-path" as="xs:string?"/>
   
   <xsl:param name="sans-font"   as="xs:string?"/>
-  
+  <xsl:param name="a11y" as="xs:boolean" select="false()"/>
   <xsl:param name="table-caption-pos" as="xs:string?"/>
   <xsl:param name="figure-caption-pos" as="xs:string?"/>
   
@@ -430,7 +430,8 @@
       <xsl:for-each select="$funding-block[normalize-space()]">
         <xsl:variable name="context" select="."/>
         <xsl:variable name="funding-type" select="if (dbk:keyword[contains(@role,  'Fordertext_')]) then replace(dbk:keyword[contains(@role,  'Fordertext')][1]/@role, 'Fordertext_', '') else ()" as="xs:string?"/>
-        <xsl:for-each-group select="dbk:keyword" group-starting-with="dbk:keyword[@role = 'Fordername']">
+        <xsl:for-each-group select="$context/dbk:keyword[not(dbk:para)]|$context/dbk:keyword/dbk:para"
+                                   group-starting-with="dbk:keyword[@role = 'Fordername'] | dbk:keyword[@role = 'Forderlogos'][not(..[dbk:keyword[@role = 'Fordername']])]/*:para">
           <xsl:if test="current-group()[1][starts-with(@role, 'Fordertext')][normalize-space()]">
             <xsl:value-of select="concat('&#xa;&#xa;\tpFunding', $funding-type, 'PreText{')"/>
             <xsl:apply-templates select="." mode="strip-meta"/>
@@ -441,14 +442,15 @@
             
             <xsl:if test="current-group()[self::dbk:keyword[@role = 'Fordername'][normalize-space()]]">
               <xsl:value-of select="concat('&#xA;  \tpFundName{', 
-                                          current-group()[self::dbk:keyword[@role = 'Fordername']], 
-                                          '}')"/>
+                current-group()[self::dbk:keyword[@role = 'Fordername']], 
+                '}')"/>
             </xsl:if>
             
-            <xsl:if test="current-group()[self::dbk:keyword[@role = 'Forderlogos'][normalize-space()]]">
-              <xsl:value-of select="concat('&#xA;  \tpFundLogo{images/', replace(normalize-space(current-group()[self::dbk:keyword[@role = 'Forderlogos']]), '^(.+/)', ''),                                       '}')"/>
+            <xsl:if test="current-group()[self::dbk:keyword[@role = 'Forderlogos'][normalize-space()]] or 
+              current-group()[self::dbk:para[../@role = 'Forderlogos']][normalize-space()]">
+              <xsl:value-of select="concat('&#xA;  \tpFundLogo{images/', replace(normalize-space(current-group()[self::dbk:keyword[@role = 'Forderlogos']|self::dbk:para]), '^(.+/)', ''),                                       '}')"/>
             </xsl:if>
-            <xsl:value-of select="concat('&#xa;\end{tpFunding', $funding-type, '}')"/>
+            <xsl:value-of select="concat('&#xA;\end{tpFunding', $funding-type, '}')"/>
           </xsl:if>
         </xsl:for-each-group>     
       </xsl:for-each>  
@@ -512,6 +514,7 @@
   <template context="dbk:para[matches(@role, $endnotes-heading-style)]">
     <xsl:value-of select="concat('&#xa;\def\notesname{', . ,'}')"/>
     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
+    <!-- A11Y: still needed? -->
   </template>
    
     <!-- suppress additional underline markup in titles -->
@@ -552,10 +555,13 @@
   <template context="dbk:blockquote[matches(@role, $verse-misc-style)]/dbk:para">
     <!-- add \tpBreak after every verse para. perhaps it might be better for future projcts 
       to work with linebreaks and para if an empty line is desired-->
-    <rule break-after="1">
+    <rule break-after="0">
       <text/>
       <xsl:if test="not(. is ../dbk:para[last()])"><text>\tpBreak</text></xsl:if>
     </rule>
+    <xsl:if test="not($a11y)">
+      <rule break-after="1"/>
+    </xsl:if>
   </template>
   
 <!--  <template context="dbk:blockquote[not(matches(@role, '^[a-z]+_?verse.*$'))]
@@ -579,14 +585,14 @@
   <template context="dbk:para[dbk:personname[@role eq 'speaker']]">
     <rule name="item" type="cmd" break-before="1">
       <option select="dbk:personname[@role eq 'speaker']/normalize-space(string-join(node(), ''))"/>
-      <text select="node() except dbk:personname[@role eq 'speaker']"/>
+      <text select="$cca-start, node() except dbk:personname[@role eq 'speaker'], $cca-end"/>
     </rule>
   </template>
   
   <template context="dbk:blockquote[matches(@role,'tsdialogue')]/dbk:para[not(dbk:personname)]">
     <!--https://redmine.le-tex.de/issues/15597-->
     <rule name="infoItem" type="cmd" break-before="1">
-      <param select="node()"/>
+      <param select="$cca-start,node(),$cca-end"/>
     </rule>
   </template>
 
@@ -605,12 +611,12 @@
                       then for $mark in parent::*/@mark
                            return $list-mark-map[@from eq $mark]/@to
                       else replace(parent::*/@mark, '⚬', '\$\\circ\$')"/>
-      <text select="' '"/>
+      <xsl:if test="not($a11y)"><text select="' '"/></xsl:if>
       <text/>
     </rule>
   </template>
   
-  <template context="dbk:para[matches(@role, 'tsmedia(caption|url|source)')]" priority="300"/>
+  <template context="dbk:para[matches(@role, 'tsmedia(caption|url|source)')]" priority="1300"/>
   
   <template context="dbk:link[@xlink:href][matches(@xlink:href, '^(https?|ftp):') or matches(., '^(https?|ftp):')]">
     <rule name="href" type="cmd">
@@ -993,6 +999,11 @@
       </xsl:otherwise>
     </xsl:choose>
   </template>
- 
+  
+   <xsl:function name="tr:suppress-structure" as="xs:boolean">
+    <xsl:param name="elt" as="element()"/>
+    <!-- add conditions to not generate structure. if outcome is true: no structure will be added.  -->
+    <xsl:sequence select="if ($a11y) then exists($elt[parent::*[self::*:legalnotice|self::*:blockquote[matches(@role,'tsdialogue|verse')]]]) else true()"/>
+  </xsl:function>
   
 </set>
