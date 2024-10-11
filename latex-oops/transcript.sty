@@ -392,10 +392,10 @@
 
 % Makro für verlinkte Bilder.
 \let\imgHref\href
-
-\def\@nohyphen#1#2\relax{#1\hskip0sp\@plus1sp\discretionary{}{}{}\if\relax#2\relax\else\@nohyphen#2\relax\relax\fi}
+\def\@nohyphen#1#2\relax{#1\hskip0sp\@plus1sp\discretionary{}{}{}\if\relax\detokenize{#2}\relax\else\@nohyphen#2\relax\relax\fi}
 \protected\def\href#1#2{{\let↩\@empty\def\@tempa{\imgHref{#1}}\expandafter\@tempa\expandafter{\@nohyphen#2\relax\relax}}}
 \let\fn@href\href
+
 % \bgroup
 % \let↩\relax
 % \gdef\fn@href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%

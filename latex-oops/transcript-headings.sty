@@ -2,6 +2,8 @@
 \ProvidesPackage{transcript-headings}[2021/08/18 transcript]\relax
 
 % Änderungen für die Migration von TeXLive 2019 auf TeXLive 2024 sind mit »Mig2024« kommentiert.
+%Mig2024 LUP 2024-10-11: sonst Fehler im ToC bei Monos
+\global\let\tp@chapternumber\relax%
 
 % Umschalter für alternative Kolumnentitel (Ticket 16094).
 \newif\if@altRunTitles \@altRunTitlesfalse
