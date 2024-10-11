@@ -437,7 +437,9 @@
             <xsl:apply-templates select="." mode="strip-meta"/>
             <xsl:text>}</xsl:text>
           </xsl:if>
-          <xsl:if test="not(current-group()[1][starts-with(@role, 'Fordertext')])">
+          <xsl:if test="not(current-group()[1][starts-with(@role, 'Fordertext')])
+                        or 
+                        current-group()[1][starts-with(@role, 'Fordertext')][not(normalize-space())(:no pretexts, only empty fordertext + logo:)]">
             <xsl:value-of select="concat('&#xa;\begin{tpFunding', $funding-type, '}')"/>
             
             <xsl:if test="current-group()[self::dbk:keyword[@role = 'Fordername'][normalize-space()]]">
