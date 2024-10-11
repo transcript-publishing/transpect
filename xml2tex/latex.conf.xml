@@ -7,6 +7,8 @@
   
   <xsl:import href="http://transpect.io/xslt-util/functx/Sequences/Sorting-and-Grouping/sort.xsl"/>
   
+  <xsl:param name="cover" as="xs:string?"/>
+  
   <xsl:param name="s9y1-path" as="xs:string?"/>
   <xsl:param name="s9y2" as="xs:string?"><!-- type type like mono/anth--></xsl:param>
   <xsl:param name="s9y2-path" as="xs:string?"/>
@@ -379,7 +381,7 @@
       xml2tex:meta2tex($bible-issn, (), 'tpBibleISSN')
       "/>
     <!-- logos image -->
-    <xsl:if test="normalize-space($cover-href)">
+    <xsl:if test="normalize-space($cover-href) and not($cover = 'no')">
       <xsl:value-of select="concat('&#xa;\tpCover{cover/', $cover-href, '}&#xa;')"/>
     </xsl:if>
     <xsl:if test="matches(string-join($statement, ''), '\S')">
