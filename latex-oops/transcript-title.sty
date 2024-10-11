@@ -1025,16 +1025,17 @@
 }
 
 \def\tsPrintFunding#1{%
-  \tpIfComp{Funding#1PreText}{\tpUseComp{Funding#1PreText}\par}{}%
-  \bgroup
-    \raggedright
-    \lineskip\tpUseProperty{fund-vsep}% vertikaler Abstand zwischen Logos
-    \parskip\tpUseProperty{fund-vsep}%
-    \leavevmode
-    \tpUseComp{Funding#1Block}\par%
-  \egroup
-  \tpIfComp{Funding#1PostText}{\vskip.5\baselineskip\tpUseComp{Funding#1PostText}\par}{}%
-}
+  \ccWhenComp{Funding#1Block}{%
+    \ccWhenComp{Funding#1PreText}{\tpUseComp{Funding#1PreText}\par}%
+    \bgroup
+      \raggedright
+      \lineskip\tpUseProperty{fund-vsep}% vertikaler Abstand zwischen Logos
+      \parskip\tpUseProperty{fund-vsep}%
+      \leavevmode
+      \tpUseComp{Funding#1Block}\par%
+    \egroup
+    \tpWhenComp{Funding#1PostText}{\vskip.5\baselineskip\tpUseComp{Funding#1PostText}\par}%
+}}
 
 %% Neue Förderer-Kateogien, https://redmine.le-tex.de/issues/17515
 \def\ts@funding@comps{%
