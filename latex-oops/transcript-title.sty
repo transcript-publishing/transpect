@@ -296,7 +296,7 @@
         \tpIfComp{Statement}{\tpUseComp{Statement}\par\vfill}{}%
         \justify
         \tpUseProperty{funding-block}%
-        \vfill
+        \null\vfill
         \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
         \tpIfComp{AddNoteIV}{\vskip1\baselineskip\tpUseComp{AddNoteIV}}{}%
         \tpUseProperty{licence}%
@@ -910,7 +910,7 @@
         \ccaStructStart{MetaDatumBlock}%
         \tpUseProperty{funding-block}%
         \ccaStructEnd{MetaDatumBlock}
-        \vfill
+        \null\vfill
         \tpWhenComp{Biblio}{%
           \ccaStructStart{MetaDatum}%
           {\sffamily\sbseries
