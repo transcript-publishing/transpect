@@ -149,13 +149,19 @@
       <keyword role="Papier">
         <xsl:value-of select="if ($lang = 'E') 
                                                    then 'Printed on permanent acid-free text paper.'
-                                                   else 'Gedruckt auf alterungsbeständigem Papier mit chlorfrei gebleichtem Zellstoff.'"/>
+                                                   else if ($lang = 'S') 
+                                                        then 'Impreso en papel resistente al envejecimiento, blanqueado y libre de cloro.'
+                                                        else 'Gedruckt auf alterungsbeständigem Papier mit chlorfrei gebleichtem Zellstoff.'"/>
       </keyword>
       <keyword role="Bibliografische_Information">
         <xsl:choose>  
           <xsl:when test="$lang = 'E'">
             <para>Bibliographic information published by the Deutsche Nationalbibliothek</para>
             <para>The Deutsche Nationalbibliothek lists this publication in the Deutsche Nationalbibliografie; detailed bibliographic data are available in the Internet at <link xlink:href="https://dnb.dnb.de">https://dnb.dnb.de</link></para>
+          </xsl:when>
+          <xsl:when test="$lang = 'S'">
+            <para>Informaciones bibliográficas de la Biblioteca Nacional de Alemania</para>
+            <para>La Biblioteca Nacional Alemana registra esta publicación en la Bibliografía Nacional Alemana; los datos bibliográficos detallados están disponibles en Internet por <link xlink:href="https://dnb.dnb.de">https://dnb.dnb.de</link></para>
           </xsl:when>
           <xsl:otherwise>
             <para>Bibliografische Information der Deutschen Nationalbibliothek</para>
