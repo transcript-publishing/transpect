@@ -252,7 +252,7 @@
   <xsl:template match="*:copyright_holders | *:funders"  mode="klopotek-to-keyword"  priority="2">
     <xsl:param name="all-products" as="element()+" tunnel="yes"/>
     <xsl:param name="main-product-type" as="xs:string" tunnel="yes"/>
-    <xsl:param name="logo-listing" as="element(c:directory)?" tunnel="yes"/>
+    <xsl:param name="funder-listing" as="element(c:directory)?" tunnel="yes"/>
     <!-- https://redmine.le-tex.de/issues/16437, https://redmine.le-tex.de/issues/17515 -->
     <xsl:variable name="lang-num" select="if ($lang = 'E') then 3 else
                                           if ($lang = 'S') then 4 else 2" as="xs:integer"/>
@@ -321,7 +321,7 @@
                                                           )"/></keyword>
                 <!-- funding-logo -->
                 <!-- add language to logo for searching, fallback is english and german (= no suffix) https://redmine.le-tex.de/issues/17501 -->
-               <xsl:if test="some $l in $logo-listing/c:file satisfies $l[starts-with(@name, $current-copyright/@unique_person_id)]">
+               <xsl:if test="some $l in $funder-listing/c:file satisfies $l[starts-with(@name, $current-copyright/@unique_person_id)]">
                  <xsl:variable name="lang-codes" select="( replace(concat('_', lower-case(//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1']), '$'), '_ger\$', '^\\d+-[^_]+\$'),
                                                           '_engl$', 
                                                           '^\d+-[^_]+$')" as="xs:string+"/>
@@ -329,11 +329,11 @@
                  <xsl:variable name="logo-filenames" as="document-node()">
                    <xsl:document>
                      <xsl:for-each select="$lang-codes">
-                       <xsl:sequence select="$logo-listing/c:file[starts-with(@name, $current-copyright/@unique_person_id)][matches(@name, current())]"/>
+                       <xsl:sequence select="$funder-listing/c:file[starts-with(@name, $current-copyright/@unique_person_id)][matches(@name, current())]"/>
                      </xsl:for-each>
                    </xsl:document>
                  </xsl:variable>
-                 <!--<xsl:message select="'-\-\-', string-join(@unique_person_id, ''), $lang, '//', string-join($logo-listing//c:file[starts-with(@name, current()/@unique_person_id)]/@name), '##', $logo-filenames "/>-->
+                 <!--<xsl:message select="'-\-\-', string-join(@unique_person_id, ''), $lang, '//', string-join($funder-listing//c:file[starts-with(@name, current()/@unique_person_id)]/@name), '##', $logo-filenames "/>-->
                  <keyword role="Forderlogos"><xsl:value-of select="$logo-filenames/*[1]/@name"/></keyword>
                </xsl:if>
               </xsl:for-each>   
@@ -476,10 +476,15 @@
   </xsl:template>
   
   <xsl:template match="*:serial_relation/*:serial_code[normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
+    <xsl:param name="logo-listing" as="element(c:directory)?" tunnel="yes"/>
     <!-- https://redmine.le-tex.de/issues/17605 -->
-    <keyword role="Reihenlogo">
-      <xsl:value-of select="concat('reihenlogo_', lower-case(.), '.eps')"/>
-    </keyword>
+    <xsl:message select="$logo-listing/c:file[@name = concat('reihenlogo_', lower-case(current()), '.eps')]/@name"/>
+    <!-- if logo is not present: do not create keyword- fallback reihe will be rendered then -->
+    <xsl:if test="$logo-listing/c:file[@name = concat('reihenlogo_', lower-case(current()), '.eps')]">   
+      <keyword role="Reihenlogo">
+        <xsl:value-of select="concat('reihenlogo_', lower-case(.), '.eps')"/>
+      </keyword>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="*:text[@term = 'Fördertext (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">

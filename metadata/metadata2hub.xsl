@@ -35,7 +35,8 @@
           <xsl:with-param name="all-products" select="*:product" as="element()+" tunnel="yes"/>
           <xsl:with-param name="main-product-type" select="(*:product[*:edition_type = 'PBK'], *:product[*:edition_type = 'HC'], *:product[*:edition_type = 'EBP'], *:product[*:edition_type = 'EBEH'],*:product[*:edition_type = 'EBE'])[1]/*:edition_type/text()"
                           as="xs:string" tunnel="yes"/>
-          <xsl:with-param name="logo-listing" select="../c:directory" as="element(c:directory)?" tunnel="yes"/>
+          <xsl:with-param name="funder-listing" select="../c:directory[@name='funders']" as="element(c:directory)?" tunnel="yes"/>
+          <xsl:with-param name="logo-listing" select="../c:directory[@name='series']" as="element(c:directory)?" tunnel="yes"/>
         </xsl:apply-templates>
        </xsl:variable>
       <xsl:variable name="sorted" as="node()*">

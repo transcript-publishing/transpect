@@ -54,6 +54,9 @@
   <p:variable name="local-dir" select="/c:param-set/c:param[@name='out-dir-uri']/@value">
       <!-- example: file:/data/svncompat/.jenkins/workspace/svncompat_https_subversion_le_tex_de_customers_transcript_branches_common_tex_migration/test_after/std/anth/05013 -->
   </p:variable>
+  <p:variable name="code-dir" select="/c:param-set/c:param[@name='s9y4-path']/@value">
+      <!-- example: file:///C:/cygwin/home/mpufe/transcript/transpect/a9s/ts/ -->
+  </p:variable>
 
 
   <!-- Determine paths for ONIX document in content repository. 
@@ -135,13 +138,24 @@
 
   <p:sink/>
   
-  <tr:recursive-directory-list name="logo-dir-listing">
+  <tr:recursive-directory-list name="funder-dir-listing">
     <p:with-option name="path" select="if ($run-local = true())
                                        then 'file:///C:/cygwin/home/mpufe/transcript/content/media/logos/funders/'
                                        else '/media/logos/funders/'"/>
   </tr:recursive-directory-list>
   
-  <tr:store-debug pipeline-step="metadata/02_logo-dir-content">
+   <tr:store-debug pipeline-step="metadata/02a_funder-dir-content">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </tr:store-debug>
+  
+  <p:sink/>
+  
+  <tr:recursive-directory-list name="logo-dir-listing">
+    <p:with-option name="path" select="concat($code-dir, '/latex-oops/logos/series/')"/>
+  </tr:recursive-directory-list>
+  
+   <tr:store-debug pipeline-step="metadata/02b_logo-dir-content">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
@@ -255,6 +269,7 @@
     <p:input port="source">
       <!--<p:pipe port="result" step="try-load-onix"/>-->
       <p:pipe port="result" step="try-load-titlepage-meta"/>
+      <p:pipe port="result" step="funder-dir-listing"/>
       <p:pipe port="result" step="logo-dir-listing"/>
     </p:input>
   </p:wrap-sequence>
