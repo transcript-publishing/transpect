@@ -436,14 +436,17 @@
                                    group-starting-with="  dbk:keyword[@role = 'Fordername'] 
                                                         | dbk:keyword[@role = 'Forderlogos'][not(..[dbk:keyword[@role = 'Fordername']])][not(*:para)]
                                                         | dbk:keyword[@role = 'Forderlogos'][not(..[dbk:keyword[@role = 'Fordername']])]/*:para">
-          <xsl:if test="current-group()[1][starts-with(@role, 'Fordertext')][normalize-space()]">
+          <xsl:if test="current-group()[1][ancestor-or-self::dbk:keyword[starts-with(@role, 'Fordertext')]][normalize-space()]">
             <xsl:value-of select="concat('&#xa;&#xa;\tpFunding', $funding-type, 'PreText{')"/>
             <xsl:apply-templates select="." mode="strip-meta"/>
             <xsl:text>}</xsl:text>
           </xsl:if>
-          <xsl:if test="not(current-group()[1][starts-with(@role, 'Fordertext')])
+          <xsl:if test="(not(current-group()[1][ancestor-or-self::dbk:keyword[starts-with(@role, 'Fordertext')]])
                         or 
-                        current-group()[1][starts-with(@role, 'Fordertext')][not(normalize-space())(:no pretexts, only empty fordertext + logo:)]">
+                        current-group()[1][ancestor-or-self::dbk:keyword[starts-with(@role, 'Fordertext')]][not(normalize-space())(:no pretexts, only empty fordertext + logo:)]
+                        )
+                        and 
+                        current-group()[normalize-space()(:ignore empty logos:)]">
             <xsl:value-of select="concat('&#xa;\begin{tpFunding', $funding-type, '}')"/>
             
             <xsl:if test="current-group()[self::dbk:keyword[@role = 'Fordername'][normalize-space()]]">
@@ -452,8 +455,7 @@
                 '}')"/>
             </xsl:if>
             
-            <xsl:if test="current-group()[self::dbk:keyword[@role = 'Forderlogos'][normalize-space()]] or 
-                          current-group()[self::dbk:para[../@role = 'Forderlogos']][normalize-space()]">
+            <xsl:if test="current-group()[ancestor-or-self::dbk:keyword[@role = 'Forderlogos'][normalize-space()]]">
               <xsl:value-of select="concat('&#xA;  \tpFundLogo{images/', replace(normalize-space(current-group()[self::dbk:keyword[@role = 'Forderlogos']|self::dbk:para]), '^(.+/)', ''),                                       '}')"/>
             </xsl:if>
             <xsl:value-of select="concat('&#xA;\end{tpFunding', $funding-type, '}')"/>
