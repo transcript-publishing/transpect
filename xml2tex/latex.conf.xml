@@ -375,7 +375,7 @@
       xml2tex:meta2tex($converter, (), 'tpConversion'),
       xml2tex:meta2tex($license-link, (), 'tpLicenceLink'),
       xml2tex:meta2tex($license-name, (), 'tpLicenceName'),
-      xml2tex:meta2tex($funder-pretext, (), 'tpFundingPreText'),
+      (:xml2tex:meta2tex($funder-pretext, (), 'tpFundingPreText'),:)
       xml2tex:meta2tex($funder-posttext, (), 'tpFundingPostText'),
       xml2tex:meta2tex($bibl-issn, (), 'tpBiblISSN'),
       xml2tex:meta2tex($bible-issn, (), 'tpBibleISSN')
@@ -433,7 +433,9 @@
         <xsl:variable name="context" select="."/>
         <xsl:variable name="funding-type" select="if (dbk:keyword[contains(@role,  'Fordertext_')]) then replace(dbk:keyword[contains(@role,  'Fordertext')][1]/@role, 'Fordertext_', '') else ()" as="xs:string?"/>
         <xsl:for-each-group select="$context/dbk:keyword[not(dbk:para)]|$context/dbk:keyword/dbk:para"
-                                   group-starting-with="dbk:keyword[@role = 'Fordername'] | dbk:keyword[@role = 'Forderlogos'][not(..[dbk:keyword[@role = 'Fordername']])]/*:para">
+                                   group-starting-with="  dbk:keyword[@role = 'Fordername'] 
+                                                        | dbk:keyword[@role = 'Forderlogos'][not(..[dbk:keyword[@role = 'Fordername']])][not(*:para)]
+                                                        | dbk:keyword[@role = 'Forderlogos'][not(..[dbk:keyword[@role = 'Fordername']])]/*:para">
           <xsl:if test="current-group()[1][starts-with(@role, 'Fordertext')][normalize-space()]">
             <xsl:value-of select="concat('&#xa;&#xa;\tpFunding', $funding-type, 'PreText{')"/>
             <xsl:apply-templates select="." mode="strip-meta"/>
@@ -451,7 +453,7 @@
             </xsl:if>
             
             <xsl:if test="current-group()[self::dbk:keyword[@role = 'Forderlogos'][normalize-space()]] or 
-              current-group()[self::dbk:para[../@role = 'Forderlogos']][normalize-space()]">
+                          current-group()[self::dbk:para[../@role = 'Forderlogos']][normalize-space()]">
               <xsl:value-of select="concat('&#xA;  \tpFundLogo{images/', replace(normalize-space(current-group()[self::dbk:keyword[@role = 'Forderlogos']|self::dbk:para]), '^(.+/)', ''),                                       '}')"/>
             </xsl:if>
             <xsl:value-of select="concat('&#xA;\end{tpFunding', $funding-type, '}')"/>
