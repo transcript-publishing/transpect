@@ -301,24 +301,30 @@
                <!-- Sponsoring/funding-->
                
                <!-- pretext, https://redmine.le-tex.de/issues/17633 -->
-                 <xsl:apply-templates select="$context/../*:memo/*:text[@term = 'Fördertext (Impressum)'][normalize-space()]" mode="#current"/>
-                 <keyword role="{$current-lookup[1]}">
+                 <xsl:choose>
+                   <xsl:when test="$context/../*:memo/*:text[@term = 'Fördertext (Impressum)'][normalize-space()]">
+                     <xsl:apply-templates select="$context/../*:memo/*:text[@term = 'Fördertext (Impressum)'][normalize-space()]" mode="#current"/>
+                 </xsl:when>
+                 <xsl:otherwise>
+                  <keyword role="{$current-lookup[1]}">
                   <!-- https://redmine.le-tex.de/issues/17633-->
                    <xsl:value-of select="if (empty($all-products[*:memo/*:text[@term = 'Fördertext (Impressum)'][normalize-space()]])) 
                                          then string-join((($cg[1]/*:pretext[normalize-space()]/replace(text(), ':$', ''), $current-lookup[$lang-num][normalize-space()])[1], ' '), ':')
                                          else ''"/>
                  </keyword>
+                 </xsl:otherwise>
+              </xsl:choose>
                  <!-- will be added several times, but stripped by metadata2hub.xsl-->
                  
               <xsl:for-each select="$cg">
                 <xsl:variable name="current-copyright" select="."/>
                 <!-- funder name-->
-                <keyword role="Fordername"><xsl:value-of select="string-join(
+               <!-- <keyword role="Fordername"><xsl:value-of select="string-join(
                                                           ( 
                                                            string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
                                                           ), 
                                                           ': '
-                                                          )"/></keyword>
+                                                          )"/></keyword>-->
                 <!-- funding-logo -->
                 <!-- add language to logo for searching, fallback is english and german (= no suffix) https://redmine.le-tex.de/issues/17501 -->
                <xsl:if test="some $l in $funder-listing/c:file satisfies $l[starts-with(@name, $current-copyright/@unique_person_id)]">
@@ -478,7 +484,6 @@
   <xsl:template match="*:serial_relation/*:serial_code[normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
     <xsl:param name="logo-listing" as="element(c:directory)?" tunnel="yes"/>
     <!-- https://redmine.le-tex.de/issues/17605 -->
-    <xsl:message select="$logo-listing/c:file[@name = concat('reihenlogo_', lower-case(current()), '.eps')]/@name"/>
     <!-- if logo is not present: do not create keyword- fallback reihe will be rendered then -->
     <xsl:if test="$logo-listing/c:file[@name = concat('reihenlogo_', lower-case(current()), '.eps')]">   
       <keyword role="Reihenlogo">
