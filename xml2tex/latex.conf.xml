@@ -341,7 +341,7 @@
       xml2tex:meta2tex($publisher-imprint-info, (), 'tpPubDivInfo'),
       xml2tex:meta2tex($publisher-note, (), 'tpPubNote'),
       xml2tex:meta2tex($publisher-location, (), 'tpPubPlace'),
-      xml2tex:meta2tex($contribution, (), 'tpISBNPreText'),
+      xml2tex:meta2tex($contribution, (), 'tpImprintAddendum'),
       xml2tex:meta2tex($print-isbn, (), 'tpISBN'),
       xml2tex:meta2tex($epdf-isbn, (), 'tpEISBN'),
       xml2tex:meta2tex($epub-isbn, (), 'tpEpubISBN'),
