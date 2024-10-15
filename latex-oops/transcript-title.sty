@@ -19,6 +19,10 @@
 \gdef\titleLayoutOverride{}
 \global\newif\if@unknownJournal \@unknownJournaltrue
 
+\tpAddToType{Components}{titlepage}{%
+  \tp@title@macro{ImprintAddendum}% Zusatzinformation fürs Impressum, die nicht genauer spezifiziert werden kann und direkt vor der DOI und/oder anderen Identifikationsnummern erscheint.
+}
+
 \tpDeclareTitlepage{%
   \ifcsname ts@journal@series\endcsname
   \else
@@ -828,6 +832,7 @@
     \tpGetComp{Discussion}%
     \tpIfComp{Typesetter}{{\leftskip5mm\hskip-5mm\tpGetComp{Typesetter}}}{}%
     \tpGetComp{Print}%%
+    \tpGetComp{ImprintAddendum}%
     \tpGetComp{DOI}%%
     \tpGetComp{Keywords}%%
     \tpGetComp{ISBN}%
