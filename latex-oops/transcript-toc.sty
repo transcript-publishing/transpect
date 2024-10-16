@@ -20,7 +20,9 @@
     \enlargethispage{-2\baselineskip}%
   \fi
   \vskip\skipAfterHeading%
+  \ccaStructStart{TOC}%
   \@starttoc{toc}%
+  \ccaStructEnd{TOC}%
   \clearpage\pagestyle{headings}%
 }
 \ifcollection\c@tocdepth=0\relax\else\c@tocdepth=3\relax\fi

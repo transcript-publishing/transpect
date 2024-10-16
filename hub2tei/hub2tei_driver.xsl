@@ -184,4 +184,53 @@
     </xsl:copy>
   </xsl:template>
   
+<xsl:template name="title-stm">
+    <xsl:if test="not(info/title)">
+      <title/>
+    </xsl:if>
+    <xsl:apply-templates select="info/title,
+                                 info/subtitle,
+                                 info/author, 
+                                 info/keywordset[@role='titlepage']/keyword[@role = ('Korrektorat', 'Lektorat', 'Satz', 'Ubersetzer', 'Umschlagcredit')]" mode="meta"/>
+  </xsl:template>
+  
+  <xsl:template name="source-desc">
+    <!--  https://redmine.le-tex.de/issues/17362-->
+    <xsl:variable name="qualification" select="/hub/info/keywordset[@role='titlepage']/keyword[@role = ('Qualifikationsnachweis')]"/>
+    <xsl:variable name="examiner" select="/hub/info/keywordset[@role='titlepage']/keyword[@role = ('Gutachter')]"/>
+    <xsl:choose>
+      <xsl:when test="$qualification[normalize-space()] or $examiner[normalize-space()]">
+        <bibl>
+          <xsl:apply-templates select="/hub/info/keywordset[@role='titlepage']/keyword[@role = ('Qualifikationsnachweis', 'Gutachter')]" mode="meta"/>
+        </bibl>
+      </xsl:when>
+      <xsl:otherwise>
+        <p/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="/hub/info/keywordset[@role='titlepage']/keyword[@role = ('Qualifikationsnachweis')]" mode="meta">
+    <!-- https://redmine.le-tex.de/issues/17426-->
+    <title>
+      <xsl:value-of select="if (*:para) then string-join(*:para/text(), ' ')  else ."/>
+    </title>
+  </xsl:template>
+  
+  <xsl:template match="/hub/info/keywordset[@role='titlepage']/keyword[@role = ('Gutachter', 'Korrektorat', 'Lektorat', 'Satz', 'Ubersetzer', 'Umschlagcredit')]
+                                                                       [normalize-space()]" mode="meta">
+    <!-- https://redmine.le-tex.de/issues/17426-->
+    <xsl:variable name="role">
+      <xsl:choose>
+        <xsl:when test="@role = 'Gutachter'"><xsl:value-of select="'examiner'"/></xsl:when>
+        <xsl:when test="@role = 'Korrektorat'"><xsl:value-of select="'correction'"/></xsl:when>
+        <xsl:when test="@role = 'Lektorat'"><xsl:value-of select="'proofreading'"/></xsl:when>
+        <xsl:when test="@role = 'Satz'"><xsl:value-of select="'technical editor'"/></xsl:when>
+        <xsl:when test="@role = 'Ubersetzer'"><xsl:value-of select="'translator'"/></xsl:when>
+        <xsl:when test="@role = 'Umschlagcredit'"><xsl:value-of select="'cover illustration'"/></xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <editor role="{$role}"><xsl:value-of select="if (*:para) then string-join(*:para/text(), ' ')  else ."/></editor>
+  </xsl:template>
+  
 </xsl:stylesheet>

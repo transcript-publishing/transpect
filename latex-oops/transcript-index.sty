@@ -2,6 +2,8 @@
 \ProvidesPackage{transcript-index}[2021/04/09 transcript]\relax
 \RequirePackage{multicol}
 
+\providecommand*{\seealso}[2]{\emph{\alsoname} #1}% Ticket#17611
+
 \renewenvironment{theindex}{%
   \begin{multicols}{2}[%
     \ifx\index@prologue\@empty\else

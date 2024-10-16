@@ -34,6 +34,7 @@
 
 \gdef\ts@str@layout@mdw{mdw}
 \gdef\ts@str@layout@std{std}
+\gdef\ts@str@layout@utb{utb}
 \gdef\ts@str@layout@xtx{xtx}
 
 % Pfade sind nach Priorität geordnet und werden von TeX derart durchsucht.
@@ -141,6 +142,7 @@
 \newunicodechar{；}{;\enskip\ignorespaces}
 \newunicodechar{：}{:\enskip\ignorespaces}
 \newunicodechar{，}{,\enskip\ignorespaces}
+\newunicodechar{ }{\,}
 \newunicodechar{⌈}{$\lceil$}
 \newunicodechar{⌉}{$\rceil$}
 \newunicodechar{⌊}{$\lfloor$}
@@ -390,10 +392,10 @@
 
 % Makro für verlinkte Bilder.
 \let\imgHref\href
-
-\def\@nohyphen#1\@nil#2#3\relax{\imgHref{#1}{{#2}}\hskip0sp\@plus1sp\discretionary{}{}{}\ifx\relax#2\else\@nohyphen#1\@nil#3\relax\fi}
-\protected\def\href#1#2{{\let↩\@empty\@nohyphen#1\@nil#2{}\relax\relax}}
+\def\@nohyphen#1#2\relax{#1\if\relax\detokenize{#2}\relax\else\hskip0sp\@plus1sp\discretionary{}{}{}\@nohyphen#2\relax\relax\fi}
+\protected\def\href#1#2{{\let↩\@empty\def\@tempa{\imgHref{#1}}\expandafter\@tempa\expandafter{\@nohyphen#2\relax\relax}}}
 \let\fn@href\href
+
 % \bgroup
 % \let↩\relax
 % \gdef\fn@href#1#2{\@fn@href #1\@nil #2↩↩\@nil}%
@@ -431,5 +433,8 @@
   \vskip\baselineskip
   \tpNoIndent%
 }
+
+%% Wenn es in einem Reihen-Ordner eine Datei namens transcript-add.sty gibt, binde diese nun ein.
+\IfFileExists{transcript-add.sty}{\RequirePackage{transcript-add}}{}
 
 \endinput

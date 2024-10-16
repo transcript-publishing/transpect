@@ -2,6 +2,8 @@
 \ProvidesPackage{transcript-headings}[2021/08/18 transcript]\relax
 
 % Änderungen für die Migration von TeXLive 2019 auf TeXLive 2024 sind mit »Mig2024« kommentiert.
+%Mig2024 LUP 2024-10-11: sonst Fehler im ToC bei Monos
+\global\let\tp@chapternumber\relax%
 
 % Umschalter für alternative Kolumnentitel (Ticket 16094).
 \newif\if@altRunTitles \@altRunTitlesfalse
@@ -31,15 +33,22 @@
   \tpSetProperty{toc-page-face}{\normalfont\sfwidefamily\normalsize\if@TLtwenty\upseries\fi}% Mig2024
   \tpSetProperty{toc-format}{%
     \tpUseProperty{toc-title-face}%
-    \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-    \tpIfComp{TocNumber}{\tpUseProperty{toc-hang-number}}{}%
+    \ccaVstructStart{TOCI}%
+    \tpWhenComp{TocNumber}{\ccaVstructStart{P}\ccaVstructStart{Reference}}%
     \tpTocLink{%
-      \tpUseComp{TocTitle}%
-      \tpIfComp{TocSubtitle}{%
+      \tpWhenComp{TocAuthorNameList}{\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}:\ccaVstructEnd{Span}\newline}%
+      \tpWhenComp{TocNumber}{\ccaVstructStart{Lbl}\tpUseProperty{toc-hang-number}\ccaVstructEnd{Lbl}}%
+      \ccaVstructStart{Span}\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
+      \tpWhenComp{TocSubtitle}{%
         \hfill\break%
-        \tpUseComp{TocSubtitle}%
-      }{}%
-      \tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+        \ccaVstructStart{Span}\tpUseComp{TocSubtitle}\ccaVstructEnd{Span}%
+      }%
+      \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
+      \ccaVstructStart{Span}\tpUseComp{TocPage}\ccaVstructEnd{Span}%
+    }%
+    \tpWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
+    \ccaVstructEnd{TOCI}%
+    \par
   }%
   \tpSetProperty{running-heading}{}%
   \tpSetProperty{running-extra}{}%
@@ -65,18 +74,26 @@
   }%
   
   \tpSetProperty{toc-format}{%
-    \tpUseProperty{toc-title-face}%
+    \ccaVstructStart{TOCI}%
     \tpIfComp{TocNumber}{%
+      \ccaVstructStart{P}\ccaVstructStart{Reference}%
       \ifcsname cc-Heading-toc-number--1-maxwd\endcsname
         \@tempdima=\csname cc-Heading-toc-number--1-maxwd\endcsname%
       \else
         \@tempdima=\z@%
       \fi%
-      \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}}\hss}%
+      \leftskip\@tempdima%
     }{%
       \leftskip\z@%
-    }%    
-    \tpTocLink{\tpUseComp{TocTitle}}%
+    }%
+    \tpUseProperty{toc-title-face}%
+    \tpTocLink{%
+      \ccWhenComp{TocNumber}{\hskip-\@tempdima\hbox to \@tempdima{\ccaVstructStart{Lbl}\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}\ccaVstructEnd{Lbl}\hss}}%
+      \ccaVstructStart{Span}\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
+    }%
+    \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
+    \ccaVstructEnd{TOCI}%
+    \par
   }%
   
   \tpSetProperty{toc-after-entry}{\nopagebreak\par\nopagebreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nopagebreak}% Thing at the end of the entry, after the page number
@@ -181,8 +198,10 @@
     \fi
     \tpUseProperty{title-face}%
     %\vskip.5\baselineskip
-    \tpIfComp{Number}{\tpUseComp{Number}\enskip}{}%
+    \cchHeadTagStart
+    \ccWhenComp{Number}{\ccaVstructStart{Lbl}\tpUseComp{Number}\ccaVstructEnd{Lbl}\enskip}%
     \ignorespaces\tpUseComp{Title}\par%
+    \cchHeadTagEnd
     \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
     %% Zitat
     \tpIfComp{QuoteBlock}{%
@@ -251,6 +270,8 @@
     %  \clearpage%
     %\fi
     % VBox verhindert durch Seitenumbruch auseinandergerissene Überschriften im Inhaltsverzeichnis.
+    \ccaVstructStart{TOCI}%
+    \ccWhenComp{TocNumber}{\ccaVstructStart{P}\ccaVstructStart{Reference}}%
     \vtop{\strut%
       \tpUseProperty{toc-title-face}%
       \tpIfComp{TocNumber}{%
@@ -263,23 +284,35 @@
         \ifdim\@tempdima<\@tempdimb\relax%
           \@tempdima=\@tempdimb%
         \fi%
-        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+        \leftskip\@tempdima%
       }{%
         \leftskip\z@%
       }%
-      \strut\tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpIfComp{TocAuthorNameList}{%
-        \long\def\@tempa{\ignorespaces}%
-        \ifx\@tempa\tp@heading@TocAuthorNameList
-        \else
-          \nopagebreak\newline
-          {\tpUseProperty{toc-author-face}\tpTocLink{\tpUseComp{TocAuthorNameList}}}%
-        \fi
-      }{}%
-      \tpUseProperty{toc-page-face}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
-      \strut%
-    }
+      \tpTocLink{%
+        \ccWhenComp{TocNumber}{\hskip-\@tempdima\hbox to \@tempdima{%
+            \ccaVstructStart{Lbl}\tpUseComp{TocNumber}\ccaVstructEnd{Lbl}\hss}}%
+        \strut\ccaVstructStart{Span}\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
+        \tpWhenComp{TocSubtitle}{%
+          \nopagebreak
+          \newline
+          {\tpUseProperty{toc-subtitle-face}%
+            \ccaVstructStart{Span}\tpUseComp{TocSubtitle}\ccaVstructEnd{Span}}}%
+        \tpIfComp{TocAuthorNameList}{%
+          \long\def\@tempa{\ignorespaces}%
+          \ifx\@tempa\tp@heading@TocAuthorNameList
+          \else
+            \nopagebreak\newline
+            {\tpUseProperty{toc-author-face}\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}\ccaVstructEnd{Span}}%
+          \fi
+        }{}%
+        \tpUseProperty{toc-page-face}%
+        \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
+        \ccaVstructStart{Span}\tpUseComp{TocPage}\ccaVstructEnd{Span}%
+        \strut%
+      }%
+    }%
+    \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
+    \ccaVstructEnd{TOCI}%
   }%
   
   % Unter Umständen nur für Monographien sinnvoll. In jenem Fall dann entsprechend anpassen.
@@ -397,23 +430,32 @@
       \tpIfComp{Number}{\leftskip-\tpUseProperty{indent}}{}%
       \tpUseProperty{title-face}%
       {%
-        \tpIfComp{Number}{\tpUseProperty{hang-number}}{}%
+        \cchHeadTagStart
+        \tpIfComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}{}%
         \ignorespaces\tpUseComp{Title}%
+        \cchHeadTagEnd
       }%
       \tpIfComp{Subtitle}{%
         \par\vskip1.1bp%
         \tpUseProperty{subtitle-face}%
+        \ccaVstructStart{P}%
         \tpUseComp{Subtitle}%
+        \ccaVstructEnd{P}%
       }{}%
       \par\nobreak
     \egroup
+    \ccaVstructStart{Div}%
     %% Linie
     \vskip\dimexpr-1\baselineskip\relax
+    \ccaVstructStart[Document]{Rule}%
     \smash{\rlap{\lower3.25mm\vbox{\rule{\hsize}{.4\p@}}}}\par\nobreak
+    \ccaVstructEnd{Rule}%
     %% Autor
     \tpIfComp{AuthorNameList}{%
       \vskip\baselineskip
+      \ccaVstructStart{Authors}
       {\large\sfwidefamily\upseries\itshape\tpUseComp{AuthorNameList}}%
+      \ccaVstructEnd{Authors}
       \par%\vskip\baselineskip
     }{}%
     %% Zitat
@@ -429,9 +471,16 @@
       }%
       \spewnotes
     }{}%
+    \ccaVstructEnd{Div}%
   }%
   
-  \tpSetProperty{after-skip}{\tpIfComp{AuthorNameList}{1.68\baselineskip}{3.68\baselineskip}}
+  \tpSetProperty{after-skip}{%
+    \tpIfComp{AuthorNameList}{%
+      1.68\baselineskip
+    }{%
+      3.68\baselineskip
+    }%
+  }
 }
 
 
@@ -446,15 +495,16 @@
 
 \tpDeclareHeading[chapter]{0}{contribution}{%
   \tpSetProperty{extended}{true}% stellt weitere Makros bereit wie \tpAbstract, \tpKeywords etc.
-  \global\let\tpAbstractTitle\tpAbstractLabel
-  \global\let\tpKeywordsTitle\tpKeywordsLabel
-  \global\let\tpTitleEnTitle\tpTitleEnLabel
+  %% LUP: Das ist hier falsch, da die Property-Liste erst am Ende der heading-Umgebung expandiert wird, die Makros aber schon am begin gebraucht werden -> in coco-xerif.sty
+  %\global\let\tpAbstractTitle\tpAbstractLabel
+  %\global\let\tpKeywordsTitle\tpKeywordsLabel
+  %\global\let\tpTitleEnTitle\tpTitleEnLabel
   %\thispagestyle{articlehead}
-  
+
   % Artikel-DOI für die Zeitschriftenauftaktseite. Aus den Makros der Überschrift übernommen.
   % Muss global und ausgewertet sein, damit das Seitenlayout ps@articlehead darauf zugreifen kann.
   \xdef\@articleDOI{\tpUseComp{DOI}}%
-  
+
   % Vorherblock, 15194.
   \tpSetProperty{affiliation-format}{}%
   \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
@@ -512,7 +562,10 @@
     \else%
       \null\nobreak\vskip\dimexpr\headingsep-.45mm\relax%
     \fi
-    \thispagestyle{articlehead}%
+    \if@twocolumn% Kein vspace vor Überschriften zweispaltiger Kapitel.
+    \else
+      \thispagestyle{articlehead}%
+    \fi
     % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
     %\global\setbox\@licenceTextFooter = \hbox{}
     
@@ -586,23 +639,27 @@
   }
 
   \tpSetProperty{extended-heading}{%
-    \tpIfComp{Abstract}{%
+    \tpWhenComp{Abstract}{%
       \par\vskip2\baselineskip
         \rightskip\z@
-        {\mdseries\sffamily\tpIfComp{AbstractLabel}{\tpUseComp{AbstractLabel}}{Abstract}}\enskip
-        {\itshape\tpUseComp{Abstract}}\par%
-      }
-      {}%
-    \tpIfComp{TitleEn}{%
+        \ccaVstructStart{Abstract}%
+        {\mdseries\sffamily\ccaVstructStart{AbstractLabel}\tpIfComp{AbstractLabel}{\tpUseComp{AbstractLabel}}{Abstract}\ccaVstructEnd{AbstractLabel}}\enskip
+        {\itshape\ccaVstructStart{AbstractText}\tpUseComp{Abstract}\ccaVstructEnd{AbstractText}}\ccaVstructEnd{Abstract}\par%
+      }%
+    \tpWhenComp{TitleEn}{%
       \par\vskip\baselineskip
-      {\mdseries\sffamily\tpIfComp{TitleEnLabel}{\tpUseComp{TitleEnLabel}}{Title}}\enskip
-      {\itshape\tpUseComp{TitleEn}\par}%
-    }{}
-    \tpIfComp{Keywords}{%
+      \ccaVstructStart{MetaDatum}%
+      {\mdseries\sffamily\ccaVstructStart{MetaDatumLabel}\tpIfComp{TitleEnLabel}{\tpUseComp{TitleEnLabel}}{Title}\ccaVstructEnd{MetaDatumLabel}}\enskip
+      {\itshape\ccaVstructStart{MetaDatumValue}\tpUseComp{TitleEn}\ccaVstructEnd{MetaDatumValue}\par}%
+      \ccaVstructEnd{MetaDatum}%
+    }%
+    \tpWhenComp{Keywords}{%
       \par\vskip\baselineskip
-      {\mdseries\sffamily\tpIfComp{KeywordsLabel}{\tpUseComp{KeywordsLabel}}{Keywords}}\enskip
-      {\itshape\tpUseComp{Keywords}\par}%
-    }{}%
+      \ccaVstructStart{Keywords}%
+      {\mdseries\sffamily\ccaVstructStart{KeywordsLabel}\tpIfComp{KeywordsLabel}{\tpUseComp{KeywordsLabel}}{Keywords}\ccaVstructEnd{KeywordsLabel}}\enskip
+      {\itshape\ccaVstructStart{KeywordsText}\tpUseComp{Keywords}\ccaVstructEnd{KeywordsText}\par}%
+      \ccaVstructEnd{Keywords}%
+    }%
     \goodbreak%
   }%
 }
@@ -623,8 +680,9 @@
 \tpDeclareHeading[chapter]{0}{review}{%
   % IHV-Überschrift der Rezension unterscheidet sich von chapter darin, dass kein Untertitel ausgegeben wird.
   \tpSetProperty{toc-format}{%
+    \ccaVstructStart{TOCI}%
+    \ccWhenComp{TocNumber}{\ccaVstructStart{P}\ccaVstructStart{Reference}}%
     \vtop{\strut%
-      \tpUseProperty{toc-title-face}%
       \tpIfComp{TocNumber}{%
         \@tempdima=\csname cc-Heading-number-0-maxwd\endcsname%
         \@tempdimb=0\p@\relax
@@ -635,22 +693,40 @@
         \ifdim\@tempdima<\@tempdimb\relax%
           \@tempdima=\@tempdimb%
         \fi%
-        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+        \leftskip\@tempdima%
       }{%
         \leftskip\z@%
       }%
-      \strut\tpTocLink{\tpUseComp{TocTitle}}%
-      %\tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpIfComp{TocAuthorNameList}{\nopagebreak\newline{\normalfont\sfchapfamily\itshape\normalsize\tpTocLink{\tpUseComp{TocAuthorNameList}}}}{}%
-      \tpUseProperty{toc-number-face}\tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
-      \strut%
-    }
+      \tpTocLink{%
+        \tpUseProperty{toc-title-face}%
+        \ccWhenComp{TocNumber}{\hskip-\@tempdima\hbox to \@tempdima{\ccaVstructStart{Span}\tpUseComp{TocNumber}\ccaVstructEnd{Span}\hss}}%
+        \ccaVstructStart{Span}\strut\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
+        % \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
+        \tpWhenComp{TocAuthorNameList}
+        {\nopagebreak\newline
+          {\normalfont\sfchapfamily\itshape\normalsize\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}\ccaVstructEnd{Span}}}%
+        \tpUseProperty{toc-number-face}%
+        \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
+        \ccaVstructStart{Span}\tpUseComp{TocPage}\ccaVstructEnd{Span}%
+        \strut%
+      }%
+    }%
+    \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
+    \ccaVstructEnd{TOCI}%
   }%
 
   \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
   \tpSetProperty{subtitle-face}{\normalfont\rmfamily\normalsize}%
 
-  \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
+  \tpSetProperty{before-heading}{%
+    \if@twocolumn
+      \ifx\@twocolumnContinousChapters\relax
+      \else
+        \clearpage
+      \fi
+    \fi
+    \addvspace{24.2bp}%
+  }%
 
 
   \tpSetProperty{running-extra}{%
@@ -675,15 +751,8 @@
     \fi
   }
   
+  
   \tpSetProperty{heading-block}{%
-    \if@twocolumn
-      \ifx\@twocolumnContinousChapters\relax
-        \typeout{++++++++++++++ NOt skipping before review}%
-      \else
-        \typeout{++++++++++++++ SKIPPING before review}%
-        \clearpage
-      \fi
-    \fi
     \thispagestyle{empty}
     \gdef\tp@currentHeading{chapter}%
     \savenotes
@@ -694,13 +763,15 @@
         \normalfont
         \interlinepenalty\@M
         \tpUseProperty{title-face}%
-        \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
+        \cchHeadTagStart
+        \tpIfComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}{\leftskip\z@}%
         \ignorespaces\tpUseComp{Title}\par\nopagebreak%
-        \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
-        \tpIfComp{DOI}{%
+        \cchHeadTagEnd
+        \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
+        \tpWhenComp{DOI}{%
           \vskip\baselineskip%
           \tpUseComp{DOI}%
-        }{}%
+        }%
       \if@twocolumn
         \vspace{1\baselineskip}%
         \end{table*}%
@@ -731,28 +802,36 @@
     \tpSetProperty{toc-before-entry}{\nopagebreak}%
     \tpSetProperty{toc-subtitle-face}{\normalfont\normalsize}%
     \tpSetProperty{toc-format}{%
+      \ccaVstructStart{TOCI}%
+      \ccWhenComp{TocNumber}{\ccaVstructStart{P}\ccaVstructStart{Reference}}%
       \tpUseProperty{toc-title-face}%
       \tpIfComp{TocNumber}{%
-        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}:\ccaVstructEnd{Span}}\newline}{}%
         \@tempdima=\csname cc-Heading-toc-number-1-maxwd\endcsname\relax%
         \@tempdimb=\csname cc-Heading-toc-number-0-maxwd\endcsname\relax%
         \ifdim\@tempdima<\@tempdimb\relax
           \@tempdima=\@tempdimb%
         \fi%
-        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\ccaVstructStart{Lbl}\tpUseComp{TocNumber}\ccaVstructEnd{Lbl}}\hss}%
       }{%\leftskip\z@%
-        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+        \tpWhenComp{TocAuthorNameList}{\tpTocLink{\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}:\ccaVstructEnd{Span}}\space}%
       }%
       \noindent%
       \advance\leftskip by 2em%
       \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
       \rightskip\wd\@tempboxa%
-      \tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{%
-        \newline%
-        {\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}%
-      }{}%
-      \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\tpUseComp{TocPage}}}}%
+      \tpTocLink{%
+        \ccaVstructStart{Span}\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
+        \tpWhenComp{TocSubtitle}{%
+          \newline%
+          {\tpUseProperty{toc-subtitle-face}\ccaVstructStart{Span}\tpUseComp{TocSubtitle}\ccaVstructEnd{Span}}%
+        }%
+        \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
+        \ccaVstructStart{Span}\rlap{\hb@xt@\wd\@tempboxa{\tpUseComp{TocPage}}}\ccaVstructEnd{Span}%
+      }%
+      \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
+      \ccaVstructEnd{TOCI}%
+      \par
     }%
   \else
     \tpSetProperty{toc-before-entry}{%
@@ -761,21 +840,31 @@
       \raggedright
     }%
     \tpSetProperty{toc-format}{%
+      \ccaVstructStart{TOCI}%
+      \ccWhenComp{TocNumber}{\ccaVstructStart{P}\ccaVstructStart{Reference}}%
+      %
       \tpUseProperty{toc-title-face}%
       \tpIfComp{TocNumber}{%
         \@tempdima=\csname cc-Heading-toc-number-1-maxwd\endcsname\relax%
-        \leftskip\@tempdima\hskip-\@tempdima\hb@xt@\@tempdima{\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}\hss}%
+        \leftskip\@tempdima
+        \hskip-\@tempdima\hb@xt@\@tempdima{\tpTocLink{\ccaVstructStart{Lbl}\tpUseComp{TocNumber}\ccaVstructEnd{Lbl}}\tpUseProperty{toc-number-sep}\hss}%
       }{%\leftskip\z@%
-        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}:\ccaVstructEnd{Span}}\space}{}%
       }%
       \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
       \advance\rightskip\wd\@tempboxa%
-      \tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{%
-        \newline%
-        {\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}%
-      }{}%
-      \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\unhbox\@tempboxa}}%
+      \tpTocLink{%
+        \ccaVstructStart{Span}\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
+        \tpIfComp{TocSubtitle}{%
+          \newline%
+          {\tpUseProperty{toc-subtitle-face}\ccaVstructStart{Span}\tpUseComp{TocSubtitle}\ccaVstructEnd{Span}}%
+        }{}%
+        \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
+        \ccaVstructStart{Span}\rlap{\unhbox\@tempboxa}\ccaVstructEnd{Span}%
+      }%
+      \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
+      \ccaVstructEnd{TOCI}%
+      \par
     }%
   \fi
   \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
@@ -808,8 +897,10 @@
       \normalfont
       \interlinepenalty\@M
       \tpUseProperty{title-face}%
-      \tpIfComp{Number}{\tpUseProperty{hang-number}}{\leftskip\z@}%
+      \cchHeadTagStart
+      \tpIfComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}{\leftskip\z@}%
       \ignorespaces\tpUseComp{Title}\par\nopagebreak%
+      \cchHeadTagEnd
       \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
       \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
     \egroup
@@ -853,6 +944,8 @@
   \fi
   \ifcollection
     \tpSetProperty{toc-format}{%
+      \ccaVstructStart{TOCI}%
+      \ccWhenComp{TocNumber}{\ccaVstructStart{P}\ccaVstructStart{Reference}}%
       \tpUseProperty{toc-title-face}%
       \@tempdima=\csname cc-Heading-toc-number-2-maxwd\endcsname\relax%
       \@tempdimb=\csname cc-Heading-toc-number-1-maxwd\endcsname\relax%
@@ -861,19 +954,26 @@
         \@tempdimb=\@tempdimc\relax%
       \fi%
       \tpIfComp{TocNumber}{%
-        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
-        \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}:\ccaVstructEnd{Span}}\newline}{}%
+        \leftskip\dimexpr\@tempdima+\@tempdimb\relax
+        \hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\ccaVstructStart{Lbl}\tpUseComp{TocNumber}\ccaVstructEnd{Lbl}}\hss}%
       }{%
         \leftskip\@tempdimb%
-        \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\space}{}%
+        \tpIfComp{TocAuthorNameList}{\tpTocLink{\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}:\ccaVstructEnd{Span}}\space}{}%
       }%
       \noindent%
-      %\advance\leftskip by 4em%
+      % \advance\leftskip by 4em%
       \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
       \rightskip\wd\@tempboxa plus 1fil% 1fil sorgt für Linksbündigkeit des IHV-Eintrags.
-      \tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-      \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\hb@xt@\wd\@tempboxa{\hss\tpUseComp{TocPage}}}}%
+      \tpTocLink{%
+        \ccaVstructStart{Span}\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
+        \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-face}\ccaVstructStart{Span}\tpUseComp{TocSubtitle}\ccaVstructEnd{Span}}}{}%
+        \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
+        \ccaVstructStart{Span}\rlap{\hb@xt@\wd\@tempboxa{\hss\tpUseComp{TocPage}}}\ccaVstructEnd{Span}%
+      }%
+      \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
+      \ccaVstructEnd{TOCI}%
+      \par
     }%
   \else
     \tpSetProperty{toc-before-entry}{%
@@ -882,11 +982,13 @@
       \raggedright
     }%
     \tpSetProperty{toc-format}{%
+      \ccaVstructStart{TOCI}%
+      \ccWhenComp{TocNumber}{\ccaVstructStart{P}\ccaVstructStart{Reference}}%
       \tpUseProperty{toc-title-face}%
       \@tempdima=\csname cc-Heading-toc-number-1-maxwd\endcsname\relax%
       \@tempdimb=\csname cc-Heading-toc-number-2-maxwd\endcsname\relax%
       \tpIfComp{TocNumber}{%
-        \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdimb\hb@xt@\@tempdimb{\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}\hss}%
+        \leftskip\dimexpr\@tempdima+\@tempdimb\relax\hskip-\@tempdimb\hb@xt@\@tempdimb{\tpTocLink{\ccaVstructStart{Lbl}\tpUseComp{TocNumber}\ccaVstructEnd{Lbl}\tpUseProperty{toc-number-sep}}\hss}%
       }{%
         \ifdim\@tempdima=0\p@
           \leftskip1em% Ticket 16195.
@@ -896,12 +998,18 @@
       }%
       \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
       \advance\rightskip\wd\@tempboxa%
-      \tpTocLink{\tpUseComp{TocTitle}}%
-      \tpIfComp{TocSubtitle}{%
-        \newline%
-        {\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}%
-      }{}%
-      \tpTocLink{\tpUseProperty{toc-page-sep}\rlap{\unhbox\@tempboxa}}%
+      \tpTocLink{%
+        \ccaVstructStart{Span}\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
+        \tpWhenComp{TocSubtitle}{%
+          \newline%
+          {\tpUseProperty{toc-subtitle-face}\ccaVstructStart{Span}\tpUseComp{TocSubtitle}\ccaVstructEnd{Span}}%
+        }%
+        \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
+        \ccaVstructStart{Span}\rlap{\unhbox\@tempboxa}\ccaVstructEnd{Span}%
+      }%
+      \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
+      \ccaVstructEnd{TOCI}%
+      \par
     }%
   \fi
 }
@@ -918,7 +1026,9 @@
     \tpSetProperty{toc-margin-left}{6.5em}%
   \fi
   \tpSetProperty{toc-format}{%
-    \tpIfComp{TocAuthorNameList}{\tpTocLink{\tpUseComp{TocAuthorNameList}:}\newline}{}%
+    \ccaVstructStart{TOCI}%
+    \ccWhenComp{TocNumber}{\ccaVstructStart{P}\ccaVstructStart{Reference}}%
+    \tpIfComp{TocAuthorNameList}{\tpTocLink{\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}:\ccaVstructEnd{Span}}\newline}{}%
     \tpUseProperty{toc-title-face}%
     \@tempdima=\csname cc-Heading-toc-number-3-maxwd\endcsname\relax%
     \@tempdimb=\csname cc-Heading-toc-number-1-maxwd\endcsname\relax%
@@ -928,12 +1038,18 @@
     \fi%
     \@tempdimc=\csname cc-Heading-toc-number-2-maxwd\endcsname\relax%
     \leftskip\dimexpr\@tempdima+\@tempdimb+\@tempdimc\relax%
-    \tpIfComp{TocNumber}{%
-      \hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\tpUseComp{TocNumber}}\hss}%
-    }{}%
-    \tpTocLink{\tpUseComp{TocTitle}}%
-    \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-face}\tpTocLink{\tpUseComp{TocSubtitle}}}}{}%
-    \tpTocLink{\tpUseProperty{toc-page-sep}\tpUseComp{TocPage}}%
+    \tpWhenComp{TocNumber}{%
+      \hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\ccaVstructStart{Lbl}\tpUseComp{TocNumber}\ccaVstructEnd{Lbl}}\hss}%
+    }%
+    \tpTocLink{%
+      \ccaVstructStart{Span}\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
+      \tpIfComp{TocSubtitle}{\newline{\tpUseProperty{toc-subtitle-face}\ccaVstructStart{Span}\tpUseComp{TocSubtitle}\ccaVstructEnd{Span}}}{}%
+      \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
+      \ccaVstructStart{Span}\tpUseComp{TocPage}\ccaVstructEnd{Span}%
+    }%
+    \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
+    \ccaVstructEnd{TOCI}%
+    \par
   }%
   \tpSetProperty{quote-block-format}{%
     \hfill\vbox{%

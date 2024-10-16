@@ -1,0 +1,33 @@
+<?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<set xmlns="http://transpect.io/xml2tex" 
+     xmlns:xml2tex="http://transpect.io/xml2tex" 
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  
+  <import href="../../xml2tex/latex.conf.xml"/>
+ 
+<!--  <xsl:variable name="series-logo-href" as="xs:string?" 
+                select="'mdw_logo.eps'"/>-->
+
+<!--  <xsl:variable name="greek" as="xs:string?" select="()"/>-->
+  <xsl:variable name="babel-langs" select="for $i in $all-langs
+                                           return replace(xml2tex:lang-to-babel-lang($i)[not(. = ('hebrew', 'arabic', 'chinese', 'japanese', 'syriac', 'armenian', 'greek', 'el'))],
+                                                         '(spanish)', 
+                                                         '$1,es-noindentfirst,es-noshorthands')[normalize-space()]" as="xs:string*"/>
+
+  <xsl:function name="xml2tex:foreign-scripts" as="xs:string?">
+    <xsl:param name="root" as="document-node(element())"/>
+    <!-- adds usescripts for lanugages defined in variable scripts. If a usescript is set, a fallback font for this language will be applied.
+         For greek this is overridden because most fonts contain greek characters already. If not, overwrite this function and deleted the 
+         condition for greek as well as the variable $greek in the documentclass definitiOn -->
+
+    <xsl:variable name="other-scripts-in-doc" as="xs:string*" select="xml2tex:determine-other-langs($root)"/>
+    
+    <xsl:sequence select="if(exists($other-scripts-in-doc))
+                          then concat(',usescript={',
+                                      string-join($other-scripts-in-doc, ','), 
+                                      '}')
+                          else ()"/>
+  </xsl:function>
+
+</set>

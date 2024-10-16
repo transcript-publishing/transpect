@@ -19,7 +19,8 @@
 
   <xsl:template match="TEI">
     <xsl:copy copy-namespaces="no">
-      <xsl:apply-templates select="@*, node()" mode="#current"/></xsl:copy>
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </xsl:copy>
   </xsl:template>
 
   <xsl:variable name="meta" select="/TEI/teiHeader/profileDesc/textClass/keywords[@rendition='titlepage']"/>
@@ -58,6 +59,14 @@
     <!--https://redmine.le-tex.de/issues/14518-->
   </xsl:template>
 
+
+  <xsl:template match="TEI/text//head[@type = 'main']
+                                     [..[self::div|self::divGen|self::listBibl]]/@*[last()]" priority="2">
+    <!--https://redmine.le-tex.de/issues/17601-->
+    <xsl:next-match/>
+    <xsl:attribute name="xml:id" select="concat('head_', format-number(count(../preceding::head[@type = 'main'][..[self::div|self::divGen|self::listBibl]]) +1, '000'))"/>
+  </xsl:template>
+  
   <xsl:template match="@css:*">
     <!--https://github.com/transcript-publishing/6246/issues/10-->
   </xsl:template>
@@ -181,9 +190,10 @@
           <title type="sub"><xsl:value-of select="$meta/term[@key = 'Untertitel']"/></title>
         </xsl:if>
       </title>
-      <xsl:if test="$meta/term[@key = 'Korrektorat'][normalize-space()]">
+      <xsl:copy-of select="editor[@role]" copy-namespaces="no"/>
+      <!--      <xsl:if test="$meta/term[@key = 'Korrektorat'][normalize-space()]">
         <editor role="proofreading"><xsl:value-of select="$meta/term[@key = 'Korrektorat']"/></editor>
-      </xsl:if>
+      </xsl:if>--><!-- is done earlier now.-->
       <xsl:if test="$meta/term[@key = 'Umschlaggestaltung'][normalize-space()]">
         <editor role="cover design"><xsl:value-of select="replace($meta/term[@key = 'Umschlaggestaltung'], '^.+:\p{Zs}*', '')"/></editor>
       </xsl:if>

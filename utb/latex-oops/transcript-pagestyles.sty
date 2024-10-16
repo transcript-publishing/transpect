@@ -71,12 +71,12 @@
       \fi
     \fi
   }%
-  \def\@oddhead{\hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
+  \def\@oddhead{\hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8.5mm{\hfill\thepage}}%
       % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     }}%
   \def\@evenhead{%
     % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    {\small\sffamily\if@TLtwenty\upseries\fi\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
+    {\small\sffamily\if@TLtwenty\upseries\fi\llap{\hb@xt@8.5mm{\thepage\hfill}}\left@mark}\hfill}%
   \let\@oddfoot\@empty
   \let\@evenfoot\@empty
   \def\partmark##1{%
@@ -118,12 +118,12 @@
     \def\numberline####1{####1\enskip}%
     \tp@chaptermark%
   }%
-  \def\@oddhead{\hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
+  \def\@oddhead{\hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8.5mm{\hfill\thepage}}%
       % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     }}%
   \def\@evenhead{%
     % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    {\small\sffamily\if@TLtwenty\upseries\fi\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
+    {\small\sffamily\if@TLtwenty\upseries\fi\llap{\hb@xt@8.5mm{\thepage\hfill}}\left@mark}\hfill}%
   \let\@oddfoot\@empty
   \let\@evenfoot\@empty
   \def\partmark##1{%
@@ -149,13 +149,13 @@
     \tp@chaptermark%
   }%
   \def\@oddhead{%
-    \hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}% Mig2024
+    \hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8.5mm{\hfill\thepage}}% Mig2024
       % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     }%
   }%
   \def\@evenhead{%
     % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    {\small\sffamily\if@TLtwenty\upseries\fi\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}% Mig2024
+    {\small\sffamily\if@TLtwenty\upseries\fi\llap{\hb@xt@8.5mm{\thepage\hfill}}\left@mark}\hfill}% Mig2024
   \let\@oddfoot\@empty
   \let\@evenfoot\@empty
   \def\partmark##1{%
@@ -172,10 +172,5 @@
   \def\@oddhead{\smash{\vtop{\hfill\footnotesize\nsffamily\tpNamespace{titlepage}\tpUseComp{JournalName}\space\tpUseComp{Year}\enskip\tpUseComp{Volume}/\tpUseComp{Issue}\ifx\@articleLicenceLogo\relax\else\enskip\includegraphics[height=7bp]{\@articleLicenceLogo}\fi\@@par\hfill \@articleDOI}}}%
   \def\@oddfoot{\smash{\parskip\z@\parindent\z@\vbox{\box\@articlefooterbox}}}
 }
+
 \pagestyle{headings}
-
-% neu
-\apptocmd\ps@articlehead{\ccaPagestyleArtifacts}{}{}
-\apptocmd\ps@altRunTitles{\ccaPagestyleArtifacts}{}{}
-\apptocmd\ps@backmatter{\ccaPagestyleArtifacts}{}{}
-

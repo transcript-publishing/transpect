@@ -1,9 +1,17 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-fonts}[2021/04/09 transcript]\relax
 
-\@ifpackageloaded{coco-accessibility}
-  {\definecolor{TranscriptGrey}{cmyk}{0, 0.02, 0.01, 0.79}}
-  {\definecolor{TranscriptGrey}{HTML}{353132}}
+\ifx\cc@color@enc\cc@str@cmyk
+  \definecolor{TranscriptGrey}{cmyk}{0, 0.02, 0.01, 0.79}
+\else
+  \definecolor{TranscriptGrey}{HTML}{353132}
+\fi
+\def\TranscriptGrey{\color{TranscriptGrey}}
+
+\babelfont{sansmono}[%
+    Path=fonts/Noto/Sans/,%
+  ]{NotoSansMono-Regular.ttf}
+
 
 \ifx\ts@layout@type\ts@str@layout@mdw
   \babelfont{rm}[%
@@ -29,7 +37,7 @@
     ItalicFont = Lato-Italic.ttf,%
     BoldItalicFont = Lato-BoldItalic.ttf,%
   ]{Lato-Regular.ttf}
-  
+
   \babelfont{nsfwider}[%
     Path = fonts/Lato/,%
     BoldFont = Lato-Bold.ttf,%
@@ -42,7 +50,7 @@
     ItalicFont = Lato-Italic.ttf,%
     BoldItalicFont = Lato-BoldItalic.ttf,%
   ]{Lato-Regular.ttf}
-  
+
   \if@altFonts
     \babelfont{sf}[%
       Path=fonts/Lato/,%
@@ -64,7 +72,7 @@
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
     ]{Lato-Regular.ttf}
-    
+
     \babelfont{sfwide}[%
       Path=fonts/Lato/,%
       BoldFont = Lato-Bold.ttf,%
@@ -85,7 +93,7 @@
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
     ]{Lato-Regular.ttf}
-  
+
     \babelfont{sfwider}[%
       Path=fonts/Lato/,%
       BoldFont = Lato-Bold.ttf,%
@@ -106,7 +114,7 @@
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
     ]{Lato-Regular.ttf}
-  
+
     \babelfont{sfchap}[%
       Path=fonts/Noto/Sans/,%
       BoldFont = NotoSans-CondensedBold.ttf,%
@@ -124,10 +132,11 @@
       BoldItalicFont = NotoSans-CondensedBoldItalic.ttf,%
       WordSpace=1.2,%
       LetterSpace=2.0,%
-      FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %LUP%FakeStretch=1.02,%
+      %Color=TranscriptGrey%
     ]{NotoSans-Condensed.ttf}
-    
+    \apptocmd{\sfchapfamily}{\TranscriptGrey}{}{}
+
     % Schrift für Untertitel in Kapitelüberschriften.
     \babelfont{sfchapsub}[%
       Path=fonts/Noto/Sans/,%
@@ -146,10 +155,11 @@
       BoldItalicFont = NotoSans-CondensedBoldItalic.ttf,%
       WordSpace=1.2,%
       LetterSpace=2.0,%
-      FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %LUP%FakeStretch=1.02,%
+      %Color=TranscriptGrey%
     ]{NotoSans-Condensed.ttf}
-    
+    \apptocmd{\sfchapsubfamily}{\TranscriptGrey}{}{}
+
     % Schrift für Untertitel in Kapitelüberschriften.
     \babelfont{sfchapsubtoc}[%
       Path=fonts/Noto/Sans/,%
@@ -169,9 +179,10 @@
       WordSpace=0.8,%
       LetterSpace=2.0,%
       %FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %Color=TranscriptGrey%
     ]{NotoSans-Condensed.ttf}
-    
+    \apptocmd{\sfchapsubtocfamily}{\TranscriptGrey}{}{}
+
     \babelfont{sfchapwide}[%
       Path=fonts/Noto/Sans/,%
       BoldFont = NotoSans-CondensedBold.ttf,%
@@ -193,10 +204,11 @@
         WordSpace=2.0,%
       \fi
       LetterSpace=2.0,%
-      FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %LUP%FakeStretch=1.02,%
+      %Color=TranscriptGrey%
     ]{NotoSans-Condensed.ttf}
-    
+    \apptocmd{\sfchapwidefamily}{\TranscriptGrey}{}{}
+
   \else
     \babelfont{sf}[%
       Path=fonts/Lato/,%
@@ -218,7 +230,7 @@
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
     ]{Lato-Regular.ttf}
-    
+
     \babelfont{sfwide}[%
       Path=fonts/Lato/,%
       BoldFont = Lato-Bold.ttf,%
@@ -242,7 +254,7 @@
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
     ]{Lato-Regular.ttf}
-    
+
     \babelfont{sfwider}[%
       Path=fonts/Lato/,%
       BoldFont = Lato-Bold.ttf,%
@@ -266,7 +278,7 @@
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
     ]{Lato-Regular.ttf}
-    
+
     % Schrift für Kapitelüberschriften.
     \babelfont{sfchap}[%
       Path=fonts/Lato/,%
@@ -288,7 +300,7 @@
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
     ]{Lato-Regular.ttf}
-    
+
     % Schrift für Untertitel in Kapitelüberschriften.
     \babelfont{sfchapsub}[%
       Path=fonts/Lato/,%
@@ -310,7 +322,7 @@
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
     ]{Lato-Regular.ttf}
-    
+
     \babelfont{sfchapsubtoc}[%
       Path=fonts/Lato/,%
       BoldFont = Lato-Bold.ttf,%
@@ -331,7 +343,7 @@
       %FakeStretch=1.02,%
       %Color=TranscriptGrey%
     ]{Lato-Regular.ttf}
-    
+
     \babelfont{sfchapwide}[%
       Path=fonts/Lato/,%
       BoldFont = Lato-Bold.ttf,%
@@ -367,7 +379,7 @@
     ItalicFont = Alegreya-Italic.ttf,%
     %WordSpace = 1.25,% Commenting this line fixes hyphenation differences. \tpDeclareBabelFont{greek} block below not necessary.
     BoldItalicFont = Alegreya-BoldItalic.ttf]{Alegreya-Regular.ttf}
-    
+
   \babelfont{nsf}[%
     Path=fonts/Alegreya/Alegreya Sans/,%
     BoldFont = AlegreyaSans-Bold.ttf,%
@@ -414,10 +426,11 @@
       BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
       WordSpace=1.1,%
       LetterSpace=1,%
-      FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %LUP%FakeStretch=1.02,%
+      %Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
-    
+    \apptocmd{\sffamily}{\TranscriptGrey}{}{}
+
     \babelfont{sfwide}[%
       Path=fonts/Barlow/Barlow Condensed/,%
       BoldFont = BarlowCondensed-Bold.ttf,%
@@ -439,11 +452,12 @@
       \else
         WordSpace=2.0,%
         LetterSpace=2.0,%
-        FakeStretch=1.02,%
+        %LUP%FakeStretch=1.02,%
       \fi
-      Color=TranscriptGrey%
+      %Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
-  
+    \apptocmd{\sfwidefamily}{\TranscriptGrey}{}{}
+
     \babelfont{sfwider}[%
       Path=fonts/Barlow/Barlow Condensed/,%
       BoldFont = BarlowCondensed-Bold.ttf,%
@@ -461,10 +475,11 @@
       BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
       WordSpace=1.0,%
       LetterSpace=5.0,%
-      FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %LUP%FakeStretch=1.02,%
+      %Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
-  
+    \apptocmd{\sfwiderfamily}{\TranscriptGrey}{}{}
+
     \babelfont{sfchap}[%
       Path=fonts/Noto/Sans/,%
       BoldFont = NotoSans-CondensedBold.ttf,%
@@ -482,10 +497,11 @@
       BoldItalicFont = NotoSans-CondensedBoldItalic.ttf,%
       WordSpace=1.2,%
       LetterSpace=2.0,%
-      FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %LUP%FakeStretch=1.02,%
+      %Color=TranscriptGrey%
     ]{NotoSans-Condensed.ttf}
-    
+    \apptocmd{\sfchapfamily}{\TranscriptGrey}{}{}
+
     % Schrift für Untertitel in Kapitelüberschriften.
     \babelfont{sfchapsub}[%
       Path=fonts/Noto/Sans/,%
@@ -505,9 +521,10 @@
       WordSpace=1.1,%
       %LetterSpace=2.0,%
       %FakeStretch=1.02,% Ruiniert den Wortabstand.
-      Color=TranscriptGrey%
+      %Color=TranscriptGrey%
     ]{NotoSans-Condensed.ttf}
-    
+    \apptocmd{\sfchapsubfamily}{\TranscriptGrey}{}{}
+
     % Schrift für Untertitel in Kapitelüberschriften.
     \babelfont{sfchapsubtoc}[%
       Path=fonts/Noto/Sans/,%
@@ -527,9 +544,10 @@
       WordSpace=0.8,%
       LetterSpace=2.0,%
       %FakeStretch=1.02,% Ruiniert den Wortabstand.
-      Color=TranscriptGrey%
+      %Color=TranscriptGrey%
     ]{NotoSans-Condensed.ttf}
-    
+    \apptocmd{\sfchapsubtocfamily}{\TranscriptGrey}{}{}
+
     \babelfont{sfchapwide}[%
       Path=fonts/Noto/Sans/,%
       BoldFont = NotoSans-CondensedBold.ttf,%
@@ -551,9 +569,10 @@
         WordSpace=2.0,%
       \fi
       LetterSpace=2.0,%
-      FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %LUP%FakeStretch=1.02,%
+      %Color=TranscriptGrey%
     ]{NotoSans-Condensed.ttf}
+    \apptocmd{\sfchapwidefamily}{\TranscriptGrey}{}{}
 
   % Nicht-MDW-Titel, keine alternativen Schriften.
   \else
@@ -574,10 +593,11 @@
       BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
       WordSpace=1.1,%
       LetterSpace=1,%
-      FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %LUP%FakeStretch=1.02,%
+      %Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
-    
+    \apptocmd{\sffamily}{\TranscriptGrey}{}{}
+
     \babelfont{sfwide}[%
       Path=fonts/Barlow/Barlow Condensed/,%
       BoldFont = BarlowCondensed-Bold.ttf,%
@@ -599,11 +619,12 @@
       \else
         WordSpace=2.0,%
         LetterSpace=2.0,%
-        FakeStretch=1.02,%
+        %LUP%FakeStretch=1.02,%
       \fi
-      Color=TranscriptGrey%
+      %Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
-  
+    \apptocmd{\sfwidefamily}{\TranscriptGrey}{}{}
+
     \babelfont{sfwider}[%
       Path=fonts/Barlow/Barlow Condensed/,%
       BoldFont = BarlowCondensed-Bold.ttf,%
@@ -621,10 +642,11 @@
       BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
       WordSpace=1.0,%
       LetterSpace=5.0,%
-      FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %LUP%FakeStretch=1.02,%
+      %Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
-  
+    \apptocmd{\sfwiderfamily}{\TranscriptGrey}{}{}
+
     \babelfont{sfchap}[%
       Path=fonts/Barlow/Barlow Condensed/,%
       BoldFont = BarlowCondensed-Bold.ttf,%
@@ -642,10 +664,11 @@
       BoldItalicFont = BarlowCondensed-BoldItalic.ttf,%
       WordSpace=1.2,%
       LetterSpace=2.0,%
-      FakeStretch=1.02,%
-      Color=353132%
+      %LUP%FakeStretch=1.02,%
+      % Color=353132%
     ]{BarlowCondensed-Regular.ttf}
-    
+    \apptocmd{\sfchapfamily}{\TranscriptGrey}{}{}
+
     % Schrift für Untertitel in Kapitelüberschriften.
     \babelfont{sfchapsub}[%
       Path=fonts/Barlow/Barlow Condensed/,%
@@ -665,9 +688,10 @@
       WordSpace=1.2,%
       LetterSpace=2.0,%
       %FakeStretch=1.02,% Erzeugt teils immense Wortabstände im IHV. Unbedingt vermeiden.
-      Color=TranscriptGrey%
+      %Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
-    
+    \apptocmd{\sfchapsubfamily}{\TranscriptGrey}{}{}
+
     \babelfont{sfchapsubtoc}[%
       Path=fonts/Barlow/Barlow Condensed/,%
       BoldFont = BarlowCondensed-Bold.ttf,%
@@ -686,9 +710,10 @@
       WordSpace=1.2,%
       LetterSpace=2.0,%
       %FakeStretch=1.02,% Erzeugt teils immense Wortabstände im IHV. Unbedingt vermeiden.
-      Color=TranscriptGrey%
+      %Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
-    
+    \apptocmd{\sfchapsubtocfamily}{\TranscriptGrey}{}{}
+
     \babelfont{sfchapwide}[%
       Path=fonts/Barlow/Barlow Condensed/,%
       BoldFont = BarlowCondensed-Bold.ttf,%
@@ -710,9 +735,11 @@
         WordSpace=2.0,%
       \fi
       LetterSpace=2.0,%
-      FakeStretch=1.02,%
-      Color=TranscriptGrey%
+      %LUP%FakeStretch=1.02,%
+      %Color=TranscriptGrey%
     ]{BarlowCondensed-Regular.ttf}
+    \apptocmd{\sfchapwidefamily}{\TranscriptGrey}{}{}
+
   \fi
 \fi
 

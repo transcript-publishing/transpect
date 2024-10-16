@@ -4,6 +4,7 @@
   xmlns:css="http://www.w3.org/1996/css"
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
   xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:c="http://www.w3.org/ns/xproc-step" 
   xmlns="http://docbook.org/ns/docbook"
   version="2.0" exclude-result-prefixes="#all">
   
@@ -20,10 +21,30 @@
    <xsl:output-character character="&#129;" string=" "/>
    <xsl:output-character character="&#159;" string=" "/>
   </xsl:character-map>-->
+  
+  <xsl:template match="c:directory" priority="2"/>
 
   <xsl:template match="*:product_export" priority="15">
     <keywordset role="titlepage">
-      <xsl:apply-templates select="*:product/*" mode="klopotek-to-keyword"/>
+      <xsl:message select="'####### process klopotek to keywords'"/>
+       <xsl:variable name="temporary-keys" as="node()*">
+        <xsl:apply-templates select="if (count (*:product) = 1) 
+                                     then *:product/*
+                                     else (*:product[*:edition_type = 'PBK'], *:product[*:edition_type = 'HC'], *:product[*:edition_type = 'EBP'], *:product[*:edition_type = 'EBEH'],*:product[*:edition_type = 'EBE'])[1]/*, 
+                                     *:serial" mode="klopotek-to-keyword">
+          <xsl:with-param name="all-products" select="*:product" as="element()+" tunnel="yes"/>
+          <xsl:with-param name="main-product-type" select="(*:product[*:edition_type = 'PBK'], *:product[*:edition_type = 'HC'], *:product[*:edition_type = 'EBP'], *:product[*:edition_type = 'EBEH'],*:product[*:edition_type = 'EBE'])[1]/*:edition_type/text()"
+                          as="xs:string" tunnel="yes"/>
+          <xsl:with-param name="funder-listing" select="../c:directory[@name='funders']" as="element(c:directory)?" tunnel="yes"/>
+          <xsl:with-param name="logo-listing" select="../c:directory[@name='series']" as="element(c:directory)?" tunnel="yes"/>
+        </xsl:apply-templates>
+       </xsl:variable>
+      <xsl:variable name="sorted" as="node()*">
+        <xsl:for-each-group select="$temporary-keys[. instance of element()]" group-by="./@role[not(matches(., 'Forder'))]">
+          <xsl:sequence select="current-group()[1]"/>
+        </xsl:for-each-group>
+      </xsl:variable>
+      <xsl:sequence select="$temporary-keys[@role ='Fordertext'][1], ($temporary-keys[matches(@role, 'Forder(name|logos|text_)')]|$sorted)"/>
     </keywordset>
   </xsl:template>
 
