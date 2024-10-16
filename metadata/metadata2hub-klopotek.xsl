@@ -499,28 +499,28 @@
   <xsl:template match="*:text[@term = 'Fördertext (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/17633 / https://redmine.le-tex.de/issues/16437 / https://redmine.le-tex.de/issues/17515 -->
     <keyword role="Fordertext">
-      <xsl:value-of select="."/>
+      <xsl:value-of select="html:process-html(., false())"/>
     </keyword>
   </xsl:template>
   
   <xsl:template match="*:text[@term = 'Mitwirkende Ergänzung (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/17617 -->
     <keyword role="Mitwirkung">
-      <xsl:value-of select="."/>
+      <xsl:value-of select="html:process-html(., false())"/>
     </keyword>
   </xsl:template>
   
   <xsl:template match="*:text[@term = 'Thesis-Pflichteintrag (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/16437 -->
     <keyword role="Qualifikationsnachweis">
-      <xsl:value-of select="."/>
+       <xsl:value-of select="html:process-html(., false())"/>
     </keyword>
   </xsl:template>
   
   <xsl:template match="*:text[@term = 'Umschlagabb./Copyright Vermerk'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/17617 -->
     <keyword role="Umschlagcopyright">
-      <xsl:value-of select="."/>
+      <xsl:value-of select="html:process-html(., false())"/>
     </keyword>
   </xsl:template>
   
