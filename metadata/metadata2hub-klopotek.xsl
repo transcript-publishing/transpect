@@ -275,9 +275,7 @@
           </xsl:variable>
           <xsl:variable name="current-lookup"  select="map:get($copyright-roles-lookup, $type)" as="xs:string+"/>
           <xsl:choose>
-            <xsl:when test="$type[. =  $copyright-roles] 
-                            and
-                            (not($type = 'UMSA') or empty($all-products//*:memo/*:text[@term = 'Umschlagabb./Copyright Vermerk']))">
+            <xsl:when test="$type[. =  $copyright-roles]">
               <keyword role="{$current-lookup[1]}">      
                 <xsl:choose>
                   <xsl:when test="count($cg) gt 1">
@@ -359,7 +357,7 @@
             <!--Herausgeberinformationen https://redmine.le-tex.de/issues/16479-->
             
             <xsl:choose>
-              <xsl:when test="count(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)][normalize-space()]) gt 1">
+              <xsl:when test="count(*:copyright_holder[*:cpr_type = ('HG', 'VE')][normalize-space()]) gt 1">
                 <xsl:for-each select="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)]">
                   <para>
                    <!-- <xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
@@ -390,7 +388,7 @@
   </xsl:template>
   
   <xsl:function name="html:process-html" as="node()*">
-    <xsl:param name="context" as="element()"/>
+    <xsl:param name="context" as="element()?"/>
     <xsl:param name="preserve-paras" as="xs:boolean"/>
     
     <xsl:if test="$context[normalize-space()]">
@@ -520,8 +518,8 @@
   </xsl:template>
   
   <xsl:template match="*:text[@term = 'Umschlagabb./Copyright Vermerk'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
-    <!-- https://redmine.le-tex.de/issues/17617. Higher prio than in copyright-holders -->
-    <keyword role="Umschlagcredit">
+    <!-- https://redmine.le-tex.de/issues/17617 -->
+    <keyword role="Umschlagcopyright">
       <xsl:value-of select="."/>
     </keyword>
   </xsl:template>
