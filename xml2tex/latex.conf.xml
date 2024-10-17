@@ -158,6 +158,8 @@
                 select="$metadata/dbk:keyword[@role eq 'Druck']"/>
   <xsl:variable name="used-font" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Schrift']"/>
+  <xsl:variable name="cover-copyright" as="element(dbk:keyword)?" 
+                select="$metadata/dbk:keyword[@role eq 'Umschlagcopyright']"/>
   <xsl:variable name="cover-credit" as="element(dbk:keyword)?" 
                 select="$metadata/dbk:keyword[@role eq 'Umschlagcredit']"/>
   <xsl:variable name="cover-art" as="element(dbk:keyword)?" 
@@ -367,6 +369,7 @@
       xml2tex:meta2tex($translator, (), 'tpTranslator'),
       xml2tex:meta2tex($copy-editing, (), 'tpQA'),
       xml2tex:meta2tex($cover-credit, (), 'tpCoverDesign'),
+      xml2tex:meta2tex($cover-copyright, (), 'tpCoverCopyright'),
       xml2tex:meta2tex($cover-art, (), 'tpCoverImage'),
       xml2tex:meta2tex($cover-concept, (), 'tpCoverConcept'),
       xml2tex:meta2tex($typesetter, (), 'tpTypesetter'),
