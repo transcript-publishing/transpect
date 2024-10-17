@@ -390,9 +390,10 @@
 }
 
 \ccaAddRolemap{Dialogue}{Div}
-\ccaAddRolemap{DialogueLine}{\if@cc@pdf@two Sub\else Div\fi}
-\ccaAddRolemap{DialogueLabel}{\if@cc@pdf@two Lbl\else Span\fi}
-\ccaAddRolemap{DialogueDirection}{\if@cc@pdf@two Sub\else Div\fi}
+% Achtung! @cc@pdf@two existiert nicht. Bis auf Weiteres alle Vorkommen auskommentiert.
+%\ccaAddRolemap{DialogueLine}{\if@cc@pdf@two Sub\else Div\fi}
+%\ccaAddRolemap{DialogueLabel}{\if@cc@pdf@two Lbl\else Span\fi}
+%\ccaAddRolemap{DialogueDirection}{\if@cc@pdf@two Sub\else Div\fi}
 
 \RequirePackage{amsmath}
 \let\lll\relax
@@ -422,7 +423,7 @@
   \ccaVstructEnd{Em}%
   \par%
 }
-\if@cc@pdf@two\else\ccaAddRolemap{Em}{Span}\fi
+%\if@cc@pdf@two\else\ccaAddRolemap{Em}{Span}\fi
 
 % Linksbündige Formeln mit 5 mm Einzug.
 \@fleqntrue\@mathmargin5mm
@@ -519,7 +520,7 @@
 }
 \ccaAddRolemap{Transcription}{Div}
 \ccaAddRolemap{TranscriptionLine}{Div}
-\ccaAddRolemap{TranscriptionLabel}{\if@cc@pdf@two Sub\else Div\fi}
+%\ccaAddRolemap{TranscriptionLabel}{\if@cc@pdf@two Sub\else Div\fi}
 
 % \def\@abstract#1{%
 %   \vskip-\lastskip

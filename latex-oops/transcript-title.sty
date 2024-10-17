@@ -21,6 +21,7 @@
 
 \tpAddToType{Components}{titlepage}{%
   \ccDeclareGlobalComponent{ImprintAddendum}% Zusatzinformation fürs Impressum, die nicht genauer spezifiziert werden kann und direkt vor der DOI und/oder anderen Identifikationsnummern erscheint.
+  \ccDeclareGlobalComponent{CoverCopyright}%
 }
 
 \tpDeclareTitlepage{%
@@ -970,6 +971,7 @@
     \tpGetComp{Discussion}%
     \tpWhenComp{Typesetter}{{\leftskip5mm\hskip-5mm\tpGetComp{Typesetter}}}%
     \tpGetComp{Print}%%
+    \tpGetComp{CoverCopyright}%
     \tpGetComp{ImprintAddendum}%
     \tpGetComp{DOI}%%
     \tpGetComp{Keywords}%%
