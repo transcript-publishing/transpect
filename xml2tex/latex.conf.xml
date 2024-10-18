@@ -567,7 +567,7 @@
     <!-- add \tpBreak after every verse para. perhaps it might be better for future projcts 
       to work with linebreaks and para if an empty line is desired-->
     <rule break-after="0">
-      <text/>
+      <text select="tr:add-cca('Start', 'P'), node(), tr:add-cca('End', 'P') "/>
       <xsl:if test="not(. is ../dbk:para[last()])"><text>\tpBreak</text></xsl:if>
     </rule>
     <xsl:if test="not($a11y) or ($a11y and following-sibling::dbk:para)">
