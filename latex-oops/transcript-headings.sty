@@ -63,7 +63,6 @@
   \tpSetProperty{toc-margin-top}{2.25em}%
   \tpSetProperty{toc-indent}{}%
   \tpSetProperty{toc-title-face}{\sffamily\sbseries\ifx\ts@layout@type\ts@str@layout@mdw\LARGE\else\huge\fi}%
-  
   \tpSetProperty{toc-before-entry}{%
     \addvspace{\tpUseProperty{toc-margin-top}}
     \parindent \z@
@@ -72,7 +71,6 @@
     \rightskip\z@skip\relax
     \parfillskip\@flushglue
   }%
-  
   \tpSetProperty{toc-format}{%
     \ccaVstructStart{TOCI}%
     \tpIfComp{TocNumber}{%
@@ -95,10 +93,7 @@
     \ccaVstructEnd{TOCI}%
     \par
   }%
-  
   \tpSetProperty{toc-after-entry}{\nopagebreak\par\nopagebreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nopagebreak}% Thing at the end of the entry, after the page number
-
-  
   \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
   \tpSetProperty{title-face}{%
@@ -130,8 +125,7 @@
         }{}%
       }%
     }%
-  }
-  
+  }%
   \tpSetProperty{before-heading}{%
     \cleardoublepage
     \null\vskip\headingsep
@@ -141,13 +135,10 @@
     \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
     % Zurücksetzen der Fußnotenzählen bereits bei Parts, nicht erst bei Chapter. Ticket 15665.
     \global\c@footnote\z@
-    \tpIfComp{Number}{%
-      \tpGStoreComp\tp@partnumber{Number}%
-    }{
-      \global\let\tp@partnumber\relax
-    }%
+    \tpIfComp{Number}
+      {\tpGStoreComp\tp@partnumber{Number}}
+      {\global\let\tp@partnumber\relax}%
   }%
-
   \def\tp@partmark{\tpRunBookTitle}%
   \tpSetProperty{running-heading}{%
     \ifx\tp@partnumber\relax
@@ -155,8 +146,7 @@
       \tp@partnumber\space
     \fi
     \tp@partmark%
-  }
-  
+  }%
   \tpSetProperty{heading-block}{%
     \gdef\tp@currentHeading{chapter}%
     % Kolumnentitel setzen.
@@ -224,7 +214,6 @@
 \global\let\tp@latestPartmark\relax% latestPartmark wird im part gespeichert und in Anthologien bei chapter als partmark gesetzt.
 \global\let\tp@authormark\relax
 
-%\tpAddToHook[heading]{before-print-hook-chapter}{% LUP
 %\AddToHook{cc/headings/chapter/print/before}{%
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Wird zu zeitig ausgewertet. RunAuthorNameList landet auf der Seite vor dem Kapitel, zu dem der Autorennamen eigentlich gehört. %
@@ -252,9 +241,8 @@
 \tpDeclareHeading{0}{chapter}{%
   % Ticket 13717.
   \if@backmatter%
-    \tpSetProperty{bookmark-level}{-1}
+    \tpSetProperty{bookmark-level}{-1}%
   \fi
-  
   %% Format IHV-Eintrag
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-margin-right}{2em}% Begrenzt die Breite, auf der Titel und Untertitel erscheinen können. 2 em sind dann der Platz, auf dem die Seitenzahl »übersteht«.
@@ -314,7 +302,6 @@
     \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
     \ccaVstructEnd{TOCI}%
   }%
-  
   % Unter Umständen nur für Monographien sinnvoll. In jenem Fall dann entsprechend anpassen.
   \tpSetProperty{toc-after-entry}{%
     \ifcollection
@@ -324,7 +311,6 @@
       \fi%
     \fi%
   }%
-  
   %% Format PDF-Bookmarks
   \tpSetProperty{bookmark}{%
     % \tpIfComp{TocAuthor}{\tpUseComp{TocAuthor}:\space}{}%
@@ -332,11 +318,9 @@
       \tpUseComp{BMNumber}\space%
     }{}%
     \tpUseComp{BMTitle}%
-  }
-
+  }%
   \tpSetProperty{title-face}{\ifx\ts@layout@type\ts@str@layout@mdw\huge\else\Huge\fi\sbseries\sfchapfamily}%
   \tpSetProperty{subtitle-face}{\normalfont\fontsize{13.7bp}{17.2bp}\selectfont\sfchapsubfamily\upseries}
-  
   \tpSetProperty{quote-block-format}{%
     \parskip\baselineskip
     \rightskip\z@
@@ -360,63 +344,47 @@
     }{%
       \par%
     }%
-  }
-  
+  }%
   \tpSetProperty{before-heading}{%
     \ifx\@noBlanksBeforeChapters\relax
       \clearpage
     \else
       \cleardoublepage
     \fi
-    \if@twocolumn
-    \else
+    \if@twocolumn\else
       \null\nobreak
       \vskip\dimexpr\headingsep-.45mm\relax
     \fi%
   }%
-  
   \tpSetProperty{running-heading}{%
     \tp@chaptermark%
-  }{}
-  
+  }%
   \tpSetProperty{heading-block}{%
-    \gdef\tp@currentHeading{chapter}
+    \gdef\tp@currentHeading{chapter}%
     \ifcollection
       \ifx\tp@latestPartmark\relax\else
         \protected@xdef\tp@partmark{\tp@latestPartmark}%
       \fi
     \fi
-    \tpIfComp{RunNumber}{%
-      \tpGStoreComp\tp@chapternumber{RunNumber}%
-    }{
-      \tpIfComp{Number}{%
-        \tpGStoreComp\tp@chapternumber{Number}%
-      }{%
-        \global\let\tp@chapternumber\relax%
-      }
-    }%
-    \tpIfComp{RunTitle}{%
-      \tpGStoreComp\tp@chaptermark{RunTitle}%
-    }{%
-      \tpGStoreComp\tp@chaptermark{Title}%
-    }%
-    \tpIfComp{RunAuthorNameList}{%
-      %\tpGStoreComp\tp@authormark{RunAuthorNameList}%
-      \xdef\tp@authormark{\cc@Heading@RunAuthorNameList}
-    }{%
-      \tpIfCompOverride{AuthorNameList}{%
-        %\tpGStoreComp\tp@authormark{AuthorNameList}%
-        \xdef\tp@authormark{\cc@Heading@AuthorNameList}
-      }{%
-        \tpCompGDef\tp@authormark{Author}{author-list-print-format}%
-      }%
-    }%
+    \tpIfComp{RunNumber}
+      {\tpGStoreComp\tp@chapternumber{RunNumber}}
+      {\tpIfComp{Number}
+        {\tpGStoreComp\tp@chapternumber{Number}}
+        {\global\let\tp@chapternumber\relax}}%
+    \tpIfComp{RunTitle}
+      {\tpGStoreComp\tp@chaptermark{RunTitle}}
+      {\tpGStoreComp\tp@chaptermark{Title}}%
+    \tpIfComp{RunAuthorNameList}
+      {\xdef\tp@authormark{\cc@Heading@RunAuthorNameList}}
+      {\tpIfCompOverride{AuthorNameList}
+        {%\tpGStoreComp\tp@authormark{AuthorNameList}%
+         \xdef\tp@authormark{\cc@Heading@AuthorNameList}}
+        {\tpCompGDef\tp@authormark{Author}{author-list-print-format}}}%
     \ifx\ts@journal@series\ts@str@journal@zig
       \protected@xdef\tp@partmark{\tp@authormark}%
     \fi
     %% Titel
-    \ifjournal
-    \else
+    \ifjournal\else
       \ifx\@twocolumnContinuousChapters\relax
         \thispagestyle{headings}%
       \else
@@ -427,60 +395,53 @@
     \leavevmode
     \bgroup
       \raggedright
-      \tpIfComp{Number}{\leftskip-\tpUseProperty{indent}}{}%
+      \tpWhenComp{Number}{\leftskip-\tpUseProperty{indent}}%
       \tpUseProperty{title-face}%
-      {%
+      \bgroup%
         \cchHeadTagStart
-        \tpIfComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}{}%
+        \tpWhenComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}%
         \ignorespaces\tpUseComp{Title}%
         \cchHeadTagEnd
-      }%
-      \tpIfComp{Subtitle}{%
+      \egroup
+      \tpWhenComp{Subtitle}{%
         \par\vskip1.1bp%
         \tpUseProperty{subtitle-face}%
         \ccaVstructStart{P}%
         \tpUseComp{Subtitle}%
         \ccaVstructEnd{P}%
-      }{}%
-      \par\nobreak
-    \egroup
-    \ccaVstructStart{Div}%
+      }%
+      \par
+    \egroup\nobreak
     %% Linie
     \vskip\dimexpr-1\baselineskip\relax
+    \ccaVstructStart{Div}%
     \ccaVstructStart[Document]{Rule}%
     \smash{\rlap{\lower3.25mm\vbox{\rule{\hsize}{.4\p@}}}}\par\nobreak
     \ccaVstructEnd{Rule}%
     %% Autor
-    \tpIfComp{AuthorNameList}{%
+    \tpWhenComp{AuthorNameList}{%
       \vskip\baselineskip
-      \ccaVstructStart{Authors}
+      \ccaVstructStart{Authors}%
       {\large\sfwidefamily\upseries\itshape\tpUseComp{AuthorNameList}}%
-      \ccaVstructEnd{Authors}
-      \par%\vskip\baselineskip
-    }{}%
+      \ccaVstructEnd{Authors}%
+      \par\nobreak%\vskip\baselineskip
+    }%
     %% Zitat
-    \par
-    \tpIfComp{QuoteBlock}{%
+    \tpWhenComp{QuoteBlock}{%
       \vskip1\baselineskip
       \savenotes
       \tpUseComp{QuoteBlock}\par%
-      \tpIfComp{AuthorNameList}{%
-        \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax%
-      }{%
-        \vskip-1.68\baselineskip%
-      }%
-      \spewnotes
-    }{}%
+      \tpIfComp{AuthorNameList}
+        {\vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax}
+        {\vskip-1.68\baselineskip}%
+      \spewnotes}%
     \ccaVstructEnd{Div}%
   }%
-  
   \tpSetProperty{after-skip}{%
-    \tpIfComp{AuthorNameList}{%
-      1.68\baselineskip
-    }{%
-      3.68\baselineskip
-    }%
-  }
+    \tpIfComp{AuthorNameList}
+      {1.68\baselineskip}
+      {3.68\baselineskip}%
+  }%
 }
 
 
@@ -500,11 +461,9 @@
   %\global\let\tpKeywordsTitle\tpKeywordsLabel
   %\global\let\tpTitleEnTitle\tpTitleEnLabel
   %\thispagestyle{articlehead}
-
   % Artikel-DOI für die Zeitschriftenauftaktseite. Aus den Makros der Überschrift übernommen.
   % Muss global und ausgewertet sein, damit das Seitenlayout ps@articlehead darauf zugreifen kann.
   \xdef\@articleDOI{\tpUseComp{DOI}}%
-
   % Vorherblock, 15194.
   \tpSetProperty{affiliation-format}{}%
   \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
@@ -534,10 +493,8 @@
         \tpIfComp{ORCID}{\tpUseComp{ORCID};\par}{}%
       }%
     \fi
-  }
-
-  \tpSetProperty{counted-name-sep}{/}
-
+  }%
+  \tpSetProperty{counted-name-sep}{/}%
   \tpSetProperty{before-heading}{%
     \ifx\@twocolumnContinuousChapters\relax
       \if@twocolumn
@@ -568,22 +525,18 @@
     \fi
     % Lizenzlogo und -text für die Ausgabe in der Fußzeile je Artikel speichern.
     %\global\setbox\@licenceTextFooter = \hbox{}
-    
     \xdef\@headingDOI{\tpUseComp{DOI}}
     \def\@headingCopyright{%
-      \tpIfComp{LicenceLogo}{%
+      \tpWhenComp{LicenceLogo}{%
         \includegraphics[height=7bp]{\tpUseComp{LicenceLogo}}\space%
         \footnotesize\nsffamily%
         \tpUseComp{LicenceName}\space%
-      }{}%
+      }%
       \tpUseComp{Copyright}%
-    }
-    \tpIfComp{LicenceLogo}{%
-      \xdef\@articleLicenceLogo{\tpUseComp{LicenceLogo}}%
-    }{
-      \global\let\@articleLicenceLogo\relax%
-    }
-    
+    }%
+    \tpIfComp{LicenceLogo}
+      {\xdef\@articleLicenceLogo{\tpUseComp{LicenceLogo}}}
+      {\global\let\@articleLicenceLogo\relax}%
     \global\setbox\@articlefooterbox = \vbox{%
       \parindent\z@%
       \tpUseProperty{affil-block-face}%
@@ -626,7 +579,7 @@
       }{}%
       \tpUseComp{Copyright}%
       \global\advance\@currAffilCnt\@ne%
-    }
+    }%
     \@tempdima = \the\ht\@articlefooterbox
     % Verkleinere die Seite um die Höhe der Fußzeileninformationen.
     % \enlargethispage* (d. h. Version mit Asterisk) drückt den Seiteninhalt vertikal so weit wie möglich zusammen. Bei einspaltigem Satz unerwünscht.
@@ -637,7 +590,6 @@
     \fi
     %\tpIfComp{AffilBlock}{{\tpUseProperty{affil-block-face}\tpUseComp{AffilBlock}}\par}{}
   }
-
   \tpSetProperty{extended-heading}{%
     \tpWhenComp{Abstract}{%
       \par\vskip2\baselineskip
@@ -714,10 +666,8 @@
     \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
     \ccaVstructEnd{TOCI}%
   }%
-
   \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
   \tpSetProperty{subtitle-face}{\normalfont\rmfamily\normalsize}%
-
   \tpSetProperty{before-heading}{%
     \if@twocolumn
       \ifx\@twocolumnContinousChapters\relax
@@ -725,10 +675,9 @@
         \clearpage
       \fi
     \fi
-    \addvspace{24.2bp}%
+    %\addvspace{24.2bp}%
   }%
-
-
+  \tpSetProperty{before-skip}{24.2bp}%
   \tpSetProperty{running-extra}{%
     \global\let\tp@partmark\relax%
     \global\let\tp@chapternumber\relax%
@@ -749,9 +698,7 @@
         }%
       }%
     \fi
-  }
-  
-  
+  }%
   \tpSetProperty{heading-block}{%
     \thispagestyle{empty}
     \gdef\tp@currentHeading{chapter}%
@@ -767,7 +714,7 @@
         \tpIfComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}{\leftskip\z@}%
         \ignorespaces\tpUseComp{Title}\par\nopagebreak%
         \cchHeadTagEnd
-        \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
+        \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}% Ticket 14677.
         \tpWhenComp{DOI}{%
           \vskip\baselineskip%
           \tpUseComp{DOI}%
@@ -780,8 +727,7 @@
     \nopagebreak
     \spewnotes
   }%
-  
-  \tpSetProperty{after-heading-block}{\nopagebreak}
+  \tpSetProperty{after-heading-block}{\nopagebreak}%
   \tpSetProperty{after-skip}{3\baselineskip}%
 }
 
@@ -793,9 +739,8 @@
 \tpDeclareHeading{1}{section}{%
   % Ticket 13717.
   \if@backmatter%
-    \tpSetProperty{bookmark-level}{-1}
+    \tpSetProperty{bookmark-level}{-1}%
   \fi
-  
   \ifcollection
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
@@ -867,7 +812,8 @@
       \par
     }%
   \fi
-  \tpSetProperty{before-heading}{\addvspace{24.2bp}}%
+  %\tpSetProperty{before-heading}{\addvspace{24.2bp}}%
+  \tpSetProperty{before-skip}{24.2bp}%
   \tpSetProperty{number-sep}{\enskip}%
   \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
   \tpSetProperty{subtitle-face}{\normalfont\sffamily\LARGE\if@TLtwenty\upseries\fi}% Mig2024
@@ -886,40 +832,39 @@
       \@tempdima=\baselineskip% Ticket 15122.
       \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \tpUseComp{QuoteText}\par
-      \tpIfComp{QuoteSource}{%
-        \itshape\tpUseComp{QuoteSource}%
-      }{}%
+      \tpWhenComp{QuoteSource}
+        {\itshape\tpUseComp{QuoteSource}}%
     }%
-  }{}
+  }%
   \tpSetProperty{heading-block}{%
     \savenotes
     \bgroup
       \normalfont
-      \interlinepenalty\@M
+      \interlinepenalty\@M\relax
+      % uncomment the following line if chapter headings are no longer allowed to "float" to even pages if the material below doesn't on the same page, as is the case with p 24 of ts_std_mono_05478_Schellens_FA3_finalindex.tex
+      \leavevmode
       \tpUseProperty{title-face}%
       \cchHeadTagStart
       \tpIfComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}{\leftskip\z@}%
       \ignorespaces\tpUseComp{Title}\par\nopagebreak%
       \cchHeadTagEnd
-      \tpIfComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}{}%\addvspace{12.8bp}\nopagebreak}{}% Ticket 14677.
-      \tpIfComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}{}%
+      \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}% Ticket 14677.
+      \tpWhenComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}%
     \egroup
     \nopagebreak
-    \tpIfComp{QuoteBlock}{%
+    \tpWhenComp{QuoteBlock}{%
       \vskip\tpUseProperty{before-quote-skip}%
       \tpUseComp{QuoteBlock}%
       \par%
-    }{}%
+    }%
     \spewnotes
   }%
   %\tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
   \tpSetProperty{bookmark}{%
-    \tpIfComp{BMNumber}{%
-      \tpUseComp{BMNumber}\enskip%
-    }{}%
+    \tpWhenComp{BMNumber}{\tpUseComp{BMNumber}\enskip}%
     \tpUseComp{BMTitle}%
-  }
-  \tpSetProperty{after-heading-block}{\nopagebreak}
+  }%
+  \tpSetProperty{after-heading-block}{\nopagebreak}%
   \tpSetProperty{after-skip}{12.8bp}%
 }
 
@@ -931,7 +876,8 @@
     \tpSetProperty{toc-level}{section}
   \fi
   
-  \tpSetProperty{before-heading}{\addvspace{11.5bp}}%
+  %\tpSetProperty{before-heading}{\addvspace{11.5bp}}%
+  \tpSetProperty{before-skip}{11.5bp}
   \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\sbseries\else\mdseries\fi\Large}%
   \tpSetProperty{before-quote-skip}{.5\baselineskip}%
   \tpSetProperty{running-heading}{}% da subsection sonst die Kolumnentitel ebenfalls von section erben würde
@@ -1016,9 +962,8 @@
 
 
 \tpDeclareHeading[section]{3}{subsubsection}{%
-  \tpSetProperty{before-heading}{%
-    \addvspace{1\baselineskip}%
-  }%
+  %\tpSetProperty{before-heading}{\addvspace{1\baselineskip}}%
+  \tpSetProperty{before-skip}{1\baselineskip}%
   %\tpSetProperty{after-skip}{1sp}% Ticket 12534, 2022-04-25
   \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\large\itshape\if@TLtwenty\upseries\fi\else\Large\mdseries\fi}%
   \ifcollection\else
@@ -1075,13 +1020,15 @@
 }
 
 \tpDeclareHeading[section]{4}{paragraph}{%
-  \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
+  %\tpSetProperty{before-heading}{\addvspace{12.8bp}}%
+  \tpSetProperty{before-skip}{12.8bp}%
   \tpSetProperty{after-skip}{1sp}%
   \tpSetProperty{title-face}{\normalfont\sffamily\normalsize\if@TLtwenty\upseries\fi}% Mig2024, 2022-06-02: \sffamily war vorher \sfwidefamily; 12745
 }
 
 \tpDeclareHeading{5}{subparagraph}{%
-  \tpSetProperty{before-heading}{\addvspace{12.8bp}}%
+  %\tpSetProperty{before-heading}{\addvspace{12.8bp}}%
+  \tpSetProperty{before-skip}{12.8bp}%
   \tpSetProperty{after-skip}{-.5em}%
   \tpSetProperty{title-face}{\normalfont\sffamily\normalsize\if@TLtwenty\upseries\else\mdseries\fi}% Mig2024
 }
