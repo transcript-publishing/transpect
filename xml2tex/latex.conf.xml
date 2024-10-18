@@ -596,14 +596,14 @@
   <template context="dbk:para[dbk:personname[@role eq 'speaker']]">
     <rule name="item" type="cmd" break-before="1">
       <option select="dbk:personname[@role eq 'speaker']/normalize-space(string-join(node(), ''))"/>
-      <text select="$cca-start, node() except dbk:personname[@role eq 'speaker'], $cca-end"/>
+      <text select="tr:add-cca('Start', 'P'), node() except dbk:personname[@role eq 'speaker'], tr:add-cca('End', 'P')"/>
     </rule>
   </template>
   
   <template context="dbk:blockquote[matches(@role,'tsdialogue')]/dbk:para[not(dbk:personname)]">
     <!--https://redmine.le-tex.de/issues/15597-->
     <rule name="infoItem" type="cmd" break-before="1">
-      <param select="$cca-start,node(),$cca-end"/>
+      <param select="tr:add-cca('Start', 'P'), node(),tr:add-cca('End', 'P')"/>
     </rule>
   </template>
 
@@ -1010,6 +1010,12 @@
       </xsl:otherwise>
     </xsl:choose>
   </template>
+  
+  <regex regex="([&#x0279;]+)">
+    <rule name="textfallback" type="cmd">
+      <param regex-group="1"/>
+    </rule>
+  </regex>
   
    <xsl:function name="tr:suppress-structure" as="xs:boolean">
     <xsl:param name="elt" as="element()"/>
