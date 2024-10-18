@@ -11,7 +11,7 @@
   <xsl:variable name="license-texts" as="element(Licenses)">
     <Licenses>
       <License id="BY-NC-ND">
-        <Image url="image_BY_NC_ND.jpg" />
+        <Image url="by-nc-nd.eu.eps" />
         <Link url="https://creativecommons.org/licenses/by-nc-nd/4.0/" />
         <Texts>
           <Text lang="en">
@@ -27,7 +27,7 @@
         </Texts>
       </License>
       <License id="BY-NC-SA">
-        <Image url="image_BY_NC_SA.jpg" />
+        <Image url="by-nc-sa.eu.eps" />
         <Link url="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
         <Texts>
           <Text lang="en">
@@ -43,7 +43,7 @@
         </Texts>
       </License>
       <License id="BY-NC">
-        <Image url="image_BY_NC.jpg" />
+        <Image url="by-nc.eu.eps" />
         <Link url="https://creativecommons.org/licenses/by-nc/4.0/" />
         <Texts>
           <Text lang="en">
@@ -60,7 +60,7 @@
         </Texts>
       </License>
       <License id="BY-ND">
-        <Image url="image_BY_ND.jpg" />
+        <Image url="by-nd.eps" />
         <Link url="https://creativecommons.org/licenses/by-nd/4.0/" />
         <Texts>
           <Text lang="en">
