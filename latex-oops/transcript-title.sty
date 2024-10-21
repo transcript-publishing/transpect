@@ -946,9 +946,28 @@
   %%%%%%%%%%%%%%%%%%%%%%%%
   %% Format Copyright-Zeile
   \tpSetProperty{copyright}{%
-    \tpIfComp{Copyright}{{\sbseries\sffamily\tpUseComp{Copyright}}\par}{{\sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par}}%
-    \tpIfComp{PubDivision}{{\sffamily\tpGetComp{PubDivision}}}{}%
-    \tpIfComp{CopyrightDisclaimer}{\vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par}{}% CopyrightDisclaimer enthält aktuell »© [Autorenname]«. Keine Leerzeile davor mit Ticket 13870. Beobachten.
+    \tpIfComp{Copyright}{%
+      {%
+        \sbseries\sffamily\tpUseComp{Copyright}\par%
+      }%
+    }{%
+      {%
+        \sffamily\sbseries\textcopyright\space\tpUseComp{Year}\space\tpUseComp{Publisher},\space\tpUseComp{PubPlace}\par%
+      }%
+    }%
+    % Wenn es ein Lizenzlogo gibt, hat die Publikation Open-Access-Status.
+    \tpIfComp{LicenceLogo}{%
+      \vskip1\baselineskip
+      transcript Verlag | Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\hfill\break
+    }{%
+      Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\hfill\break
+    }%
+    \tpIfComp{PubDivision}{%
+      {\sffamily\tpGetComp{PubDivision}}%
+    }{}%
+    \tpIfComp{CopyrightDisclaimer}{% CopyrightDisclaimer enthält aktuell »© [Autorenname]«. Keine Leerzeile davor mit Ticket 13870. Beobachten.
+      \vskip\baselineskip\tpUseComp{CopyrightDisclaimer}\par
+    }{}%
   }
   \tpSetProperty{publisher}{%
     \tpUseProperty{copyright}%
