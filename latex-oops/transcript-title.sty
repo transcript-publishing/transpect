@@ -776,23 +776,25 @@
         \bgroup
           \righthyphenmin62
           \lefthyphenmin62
+          \raggedright
           \ifjournal
-          \ccaStructStart{SeriesEditors}%
-            \raggedright\tpUseProperty{SeriesEditorNameList}\par%
-          \ccaStructStart{SeriesEditors}%
+            \ccaStructStart{SeriesEditors}%
+            \tpUseProperty{SeriesEditorNameList}%
+            \ccaStructEnd{SeriesEditors}%
           \else
-          \ccaStructStart{Editors}%
-            \raggedright\tpUseProperty{EditorNameList}\par%
+            \ccaStructStart{Editors}%
+            \tpUseProperty{EditorNameList}%
             \ccaStructEnd{Editors}%
           \fi%
+          \par
         \egroup
       \else
         \bgroup
           \righthyphenmin62
           \lefthyphenmin62
-          \ccaStructStart{Authors}%
+          \ccaVstructStart{Authors}%
           \raggedright\tpUseComp{AuthorNameList}\par%
-          \ccaStructEnd{Authors}%
+          \ccaVstructEnd{Authors}%
         \egroup
       \fi%
       \ccaStructEnd{MetaDatumBlock}%
