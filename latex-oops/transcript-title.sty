@@ -943,7 +943,7 @@
         \ccaStructStart{MetaDatumBlock}%
         \tpUseProperty{licence}%
         \ccaStructEnd{MetaDatumBlock}%
-        \vskip2\baselineskip
+        \vskip1\baselineskip
         \bgroup
           \ccaStructStart{MetaDatumBlock}%
           \tpUseProperty{imprint}%
@@ -971,6 +971,7 @@
     % Wenn es ein Lizenzlogo gibt, hat die Publikation Open-Access-Status.
     \tpIfComp{LicenceLogo}{%
       \vskip1\baselineskip
+      \fontdimen2\font=0.1em
       transcript Verlag | Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\hfill\break
     }{%
       Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\hfill\break
@@ -990,7 +991,8 @@
   %% Format Impressum
   \tpSetProperty{imprint}{%
     \ccaStructStart{P}\tpUseProperty{publisher}\ccaStructEnd{P}%
-    \tpUseProperty{imprint-sep}%
+    \par
+    %\tpUseProperty{imprint-sep}%
     \tpGetComp{Qualification}%
     \tpGetComp{Conversion}%
     \tpWhenComp{CoverImage}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverImage}}}%
