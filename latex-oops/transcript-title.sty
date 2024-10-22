@@ -799,16 +799,27 @@
       \fi%
       \ccaStructEnd{MetaDatumBlock}%
       \par
-      \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}\tpUseComp{Title}\ccaStructEnd{Title}\par%
+      \ccWhenComp{Title}{%
+        \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}%
+        \tpUseComp{Title}
+        \ccaStructEnd{Title}%
+        \par%
+      }%
       \vfill
       % mdw bekommt keine Reiheninformation am Ende der Seite, sondern stattdessen ein Logo auf Seite III.
       \ifx\ts@layout@type\ts@str@layout@mdw
       \else
-        \ccaStructStart{MetaDatumBlock}\ccaStructStart{P}%
+        % falls das Journal keinen eigenen Titel hat, nehmen wir die EditionNote+Serie+Volume als Titel-Tag, da sonst H1 fehlt!
+        % TODO @marcush: Fall \ts@str@layout@mdw noch abdecken!
+        \ccIfComp{Title}
+          {\ccaStructStart{MetaDatumBlock}\ccaStructStart{P}}
+          {\ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}}%
         \tpIfComp{EditionNote}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{EditionNote}}}{}%
         \tpIfComp{Series}{{\fontsize{10.5}{11}\selectfont\sfwiderfamily\sbseries\tpUseComp{Series}}}{}%
         \tpIfComp{Volume}{{\enskip\hbox{\rule{.5\p@}{\ht\strutbox}}\enskip\ignorespaces\tpUseComp{Volume}}}{}%
-        \ccaStructEnd{P}\ccaStructEnd{MetaDatumBlock}%
+        \ccIfComp{Title}
+          {\ccaStructEnd{P}\ccaStructEnd{MetaDatumBlock}}
+          {\ccaStructEnd{Title}}%
       \fi
       \ccaStructEnd{Titlepage}%
     }%
@@ -1064,7 +1075,16 @@
   }
   \tpSetProperty{counted-name-sep}{\ifnum\ccCurCount<\tpTotalCount\relax,\space\fi}%
   %\tpSetProperty{editor-suffix}{~(Hg.)}
+  \tpSetProperty{doc-book-title}{%
+    \ccIfComp{Title}
+      {\ccUseComp{Title}}
+      % TODO @marcush: refine!
+      {\ccWhenComp{JournalName}{\ccUseComp{JournalName}}
+       \ccWhenComp{Issue}{\ccUseComp{Issue}}/%
+       \ccWhenComp{Year}{\ccUseComp{Year}}}}%
 }
+
+
 
 \def\tsPrintFunding#1{%
   \ccWhenComp{Funding#1PreText}{\tpUseComp{Funding#1PreText}\par}%
