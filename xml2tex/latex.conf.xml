@@ -993,6 +993,12 @@
     <xsl:text>}</xsl:text>
   </template>
 
+  <template context="dbk:phrase[@role = 'tsipa']" priority="300">
+    <!-- https://redmine.le-tex.de/issues/17678 -->
+    <xsl:text>\texipa{</xsl:text>
+    <xsl:next-match/>
+    <xsl:text>}</xsl:text>
+  </template>
   <template context="processing-instruction()[name() eq $pi-xml-name]
                                              [matches(., '(^|\p{Zs}|\\|\{)(twocolumnContinuousChapters|noBlanksBeforeChapters)($|\}|\p{Zs})')]">
     <!-- these PIs go into options and will be stripped from content
@@ -1010,12 +1016,6 @@
       </xsl:otherwise>
     </xsl:choose>
   </template>
-  
-  <regex regex="([&#x0279;]+)">
-    <rule name="textfallback" type="cmd">
-      <param regex-group="1"/>
-    </rule>
-  </regex>
   
    <xsl:function name="tr:suppress-structure" as="xs:boolean">
     <xsl:param name="elt" as="element()"/>
