@@ -115,6 +115,7 @@
   <css:rule layout-type="inline" native-name="ts_pi" name="tspi"/>
   <css:rule layout-type="inline" native-name="ts_italic" name="tsitalic"/>
   <css:rule layout-type="inline" native-name="ts_bold" name="tsbold"/>
+  <css:rule layout-type="inline" native-name="ts_ipa" name="tsipa"/>
   <css:rule layout-type="inline" native-name="ts_emph" name="tsemph"/>
   <css:rule layout-type="inline" native-name="footnote reference" name="Funotenzeichen"/>
   <css:rule layout-type="inline" native-name="Hyperlink" name="Hyperlink"/>
