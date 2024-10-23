@@ -395,7 +395,7 @@
     <xsl:param name="preserve-paras" as="xs:boolean"/>
     
     <xsl:if test="$context[normalize-space()]">
-      <xsl:variable name="replaced-entities" select="tr:decode-text-with-html-ent(string-join($context/node(), ''))"/>
+      <xsl:variable name="replaced-entities" select="string-join(tr:decode-text-with-html-ent($context/node()), '')"/>
       <xsl:variable name="parsed" as="document-node(element(div))" 
         select="parse-xml('&lt;div>' || $replaced-entities || '&lt;/div>')"/>
       
