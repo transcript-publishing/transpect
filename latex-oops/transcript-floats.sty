@@ -196,8 +196,9 @@
     \tpUseProperty{list-of-caption-face}%
     \tpIfComp{ListofNumber}{%
       \@tempdima=\tpUseProperty{list-of-number-width-max}%
-      \leftskip\@tempdima \hskip-\@tempdima
-      \hbox to \@tempdima{%
+      \leftskip\@tempdima
+      \hskip-\@tempdima
+      \hb@xt@\@tempdima{%
         \tpUseComp{ListofNumber}%
         \tpIfComp{ListofCaption}{%
           \tpUseProperty{list-of-number-sep}%
