@@ -7,11 +7,14 @@
   xmlns:html="http://www.w3.org/1999/xhtml"
   xmlns:dbk="http://docbook.org/ns/docbook"
   xmlns:c="http://www.w3.org/ns/xproc-step" 
+  xmlns:tr="http://transpect.io"
   xmlns="http://docbook.org/ns/docbook"
+
   version="2.0" exclude-result-prefixes="#all">
   
 
   <xsl:import href="licenses.xsl"/>
+  <xsl:import href="http://this.transpect.io/xslt-util/strings/xsl/unicode-representation.xsl"/>
 
   <xsl:param name="basename" as="xs:string"/>
   <xsl:variable name="lang" select="     if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'ENGL', 'i')]) then 'E' 
@@ -392,9 +395,9 @@
     <xsl:param name="preserve-paras" as="xs:boolean"/>
     
     <xsl:if test="$context[normalize-space()]">
-      
+      <xsl:variable name="replaced-entities" select="string-join(tr:decode-text-with-html-ent($context/node()), '')"/>
       <xsl:variable name="parsed" as="document-node(element(div))" 
-        select="parse-xml('&lt;div>' || $context || '&lt;/div>')"/>
+        select="parse-xml('&lt;div>' || $replaced-entities || '&lt;/div>')"/>
       
       <xsl:variable name="postprocessed" as="node()*">
         <xsl:apply-templates select="$parsed/*:div/node()" mode="postprocess-html">

@@ -424,6 +424,10 @@
       \ccaVstructStart{Authors}%
       {\large\sfwidefamily\upseries\itshape\tpUseComp{AuthorNameList}}%
       \ccaVstructEnd{Authors}%
+      \ifx\ts@contact@dummy\@undefined\else
+        \ccaMoveStruct{\ts@contact@dummy}%
+        \global\let\ts@contact@dummy\@undefined
+      \fi
       \par\nobreak%\vskip\baselineskip
     }%
     %% Zitat
@@ -538,6 +542,8 @@
       {\xdef\@articleLicenceLogo{\tpUseComp{LicenceLogo}}}
       {\global\let\@articleLicenceLogo\relax}%
     \global\setbox\@articlefooterbox = \vbox{%
+      \ccaVstructStart{AuthorContact}%
+      \ccaSaveCurStruct{ts@contact@dummy}%
       \parindent\z@%
       \tpUseProperty{affil-block-face}%
       \ifx\ts@journal@series\ts@str@journal@zig
@@ -579,6 +585,7 @@
       }{}%
       \tpUseComp{Copyright}%
       \global\advance\@currAffilCnt\@ne%
+      \ccaVstructEnd{AuthorContact}%
     }%
     \@tempdima = \the\ht\@articlefooterbox
     % Verkleinere die Seite um die Höhe der Fußzeileninformationen.
