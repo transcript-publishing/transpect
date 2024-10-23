@@ -220,16 +220,18 @@
   
   <xsl:template name="join-copyright-statement">
     <xsl:param name="context" tunnel="yes" as="element()"/>
+    <xsl:param name="year" tunnel="yes" as="xs:string?"/>
+    
     <xsl:choose>
       <xsl:when test="contains($basename, '_anth_')">
-        <xsl:value-of select="concat('© ', 
+        <xsl:value-of select="concat(string-join(($year[normalize-space()], '© '), ' '), 
                                     string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'HG'] 
                                                 return concat($ch/*:first_name, ' ', $ch/*:last_name), ', '),
                                     if ($lang = 'E') then ' (ed.)' else ' (Hg.)'
           )"/>
       </xsl:when>
       <xsl:when test="contains($basename, '_mono_')">
-        <xsl:value-of select="concat('© ', 
+        <xsl:value-of select="concat(string-join(($year[normalize-space()], '© '), ' '), 
                                       string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'VE'] 
                                                   return concat($ch/*:first_name, ' ', $ch/*:last_name), ', ')
                                       )"/>
@@ -387,6 +389,7 @@
       <keyword role="Copyright">
         <xsl:call-template name="join-copyright-statement">
           <xsl:with-param name="context" select="if ($all-products[*:edition_type =  'EBP']/*:copyright_holders) then $all-products[*:edition_type =  'EBP']/*:copyright_holders else ." tunnel="yes" as="element()"/>
+          <xsl:with-param name="year" select="if ($all-products[*:edition_type =  'EBP']/*:copyright[@year]) then $all-products[*:edition_type =  'EBP']/*:copyright/@year else ../*:copyright/@year" tunnel="yes" as="xs:string?"/>
         </xsl:call-template>
       </keyword>
     </xsl:if>
