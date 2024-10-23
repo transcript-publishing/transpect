@@ -7,11 +7,14 @@
   xmlns:html="http://www.w3.org/1999/xhtml"
   xmlns:dbk="http://docbook.org/ns/docbook"
   xmlns:c="http://www.w3.org/ns/xproc-step" 
+  xmlns:tr="http://transpect.io"
   xmlns="http://docbook.org/ns/docbook"
+
   version="2.0" exclude-result-prefixes="#all">
   
 
   <xsl:import href="licenses.xsl"/>
+  <xsl:import href="http://this.transpect.io/xslt-util/strings/xsl/unicode-representation.xsl"/>
 
   <xsl:param name="basename" as="xs:string"/>
   <xsl:variable name="lang" select="     if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'ENGL', 'i')]) then 'E' 
@@ -217,16 +220,18 @@
   
   <xsl:template name="join-copyright-statement">
     <xsl:param name="context" tunnel="yes" as="element()"/>
+    <xsl:param name="year" tunnel="yes" as="xs:string?"/>
+    
     <xsl:choose>
       <xsl:when test="contains($basename, '_anth_')">
-        <xsl:value-of select="concat('© ', 
+        <xsl:value-of select="concat(string-join(($year[normalize-space()], '© '), ' '), 
                                     string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'HG'] 
                                                 return concat($ch/*:first_name, ' ', $ch/*:last_name), ', '),
                                     if ($lang = 'E') then ' (ed.)' else ' (Hg.)'
           )"/>
       </xsl:when>
       <xsl:when test="contains($basename, '_mono_')">
-        <xsl:value-of select="concat('© ', 
+        <xsl:value-of select="concat(string-join(($year[normalize-space()], '© '), ' '), 
                                       string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'VE'] 
                                                   return concat($ch/*:first_name, ' ', $ch/*:last_name), ', ')
                                       )"/>
@@ -238,6 +243,8 @@
                   select="map{'VE':  ('Autor',          '',                  '',             ''),
                               'HG':  ('Herausgeber',    '',                  '',             ''),
                               'UMSA':('Umschlagcredit', 'Umschlagabbildung', 'Cover illustration', 'Ilustración de portada'),
+                              'UMGS':('Umschlaggestaltung', 'Umschlaggestaltung','Cover design', 'Diseño de portada'),
+                              'UMKO':('Umschlagkonzept', 'Umschlagkonzept',   'Cover concept', 'Concepto de portada'),
                               'LEKT':('Lektorat',       'Lektorat',          'Proofreading', 'Revisión'),
                               'KORR':('Korrektorat',    'Korrektorat',       'Correction',   'Corrección'),
                               'LAYO':('Satz',           'Satz',              'Typesetting',  'Composición tipográfica'),
@@ -252,7 +259,7 @@
                   
                   
   <xsl:variable name="copyright-roles"  as="xs:string+" 
-              select="('VE', 'HG', 'UMSA', 'LEKT', 'KORR', 'LAYO', 'DRUK')"/>
+              select="('VE', 'HG', 'UMSA', 'UMGS', 'UMKO','LEKT', 'KORR', 'LAYO', 'DRUK')"/>
 
 
   <xsl:template match="*:copyright_holders | *:funders"  mode="klopotek-to-keyword"  priority="2">
@@ -382,6 +389,7 @@
       <keyword role="Copyright">
         <xsl:call-template name="join-copyright-statement">
           <xsl:with-param name="context" select="if ($all-products[*:edition_type =  'EBP']/*:copyright_holders) then $all-products[*:edition_type =  'EBP']/*:copyright_holders else ." tunnel="yes" as="element()"/>
+          <xsl:with-param name="year" select="if ($all-products[*:edition_type =  'EBP']/*:copyright[@year]) then $all-products[*:edition_type =  'EBP']/*:copyright/@year else ../*:copyright/@year" tunnel="yes" as="xs:string?"/>
         </xsl:call-template>
       </keyword>
     </xsl:if>
@@ -392,9 +400,9 @@
     <xsl:param name="preserve-paras" as="xs:boolean"/>
     
     <xsl:if test="$context[normalize-space()]">
-      
+      <xsl:variable name="replaced-entities" select="string-join(tr:decode-text-with-html-ent($context/node()), '')"/>
       <xsl:variable name="parsed" as="document-node(element(div))" 
-        select="parse-xml('&lt;div>' || $context || '&lt;/div>')"/>
+        select="parse-xml('&lt;div>' || $replaced-entities || '&lt;/div>')"/>
       
       <xsl:variable name="postprocessed" as="node()*">
         <xsl:apply-templates select="$parsed/*:div/node()" mode="postprocess-html">

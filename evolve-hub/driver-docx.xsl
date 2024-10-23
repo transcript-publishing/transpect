@@ -323,6 +323,13 @@
   
   <xsl:template match="row/@css:background-color" mode="custom-1"/>
   
+  <xsl:template match="title/phrase[@role = 'hub:caption-text']/tab" mode="custom-1"/>
+  
+  <xsl:template match="title/phrase[@role = 'hub:caption-text']/text()[1][preceding-sibling::*[1][self::tab]]" mode="custom-1">
+   <!-- https://redmine.le-tex.de/issues/17690 strip whitespace for structuring--> 
+    <xsl:value-of select="replace(., '^\p{Zs}+', '')"/>
+  </xsl:template>
+  
  <!--  <xsl:template match="|hub/section[matches(@role,$part-heading-role-regex)]/section[matches(@role, concat('^[a-z]{1,3}(heading(enumerated)?1(review)?|journalreviewheading|',
                                                                                                             replace($list-of-figures-regex, '^\^(.+)\$$', '$1'),
                                                                                                             '|', replace($list-of-tables-regex, '^\^(.+)\$$', '$1'),

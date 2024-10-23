@@ -971,8 +971,12 @@
     % Wenn es ein Lizenzlogo gibt, hat die Publikation Open-Access-Status.
     \tpIfComp{LicenceLogo}{%
       \vskip1\baselineskip
-      \fontdimen2\font=0.1em
-      transcript Verlag | Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\hfill\break
+      {%
+        \@tempdima=\fontdimen2\font\relax%
+        \fontdimen2\font=0.1em
+        transcript Verlag | Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\hfill\break
+        \fontdimen2\font=\@tempdima
+      }%
     }{%
       Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\hfill\break
     }%
