@@ -241,6 +241,8 @@
                   select="map{'VE':  ('Autor',          '',                  '',             ''),
                               'HG':  ('Herausgeber',    '',                  '',             ''),
                               'UMSA':('Umschlagcredit', 'Umschlagabbildung', 'Cover illustration', 'Ilustración de portada'),
+                              'UMGS':('Umschlaggestaltung', 'Umschlaggestaltung','Cover design', 'Diseño de portada'),
+                              'UMKO':('Umschlagkonzept', 'Umschlagkonzept',   'Cover concept', 'Concepto de portada'),
                               'LEKT':('Lektorat',       'Lektorat',          'Proofreading', 'Revisión'),
                               'KORR':('Korrektorat',    'Korrektorat',       'Correction',   'Corrección'),
                               'LAYO':('Satz',           'Satz',              'Typesetting',  'Composición tipográfica'),
@@ -255,7 +257,7 @@
                   
                   
   <xsl:variable name="copyright-roles"  as="xs:string+" 
-              select="('VE', 'HG', 'UMSA', 'LEKT', 'KORR', 'LAYO', 'DRUK')"/>
+              select="('VE', 'HG', 'UMSA', 'UMGS', 'UMKO','LEKT', 'KORR', 'LAYO', 'DRUK')"/>
 
 
   <xsl:template match="*:copyright_holders | *:funders"  mode="klopotek-to-keyword"  priority="2">
