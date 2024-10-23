@@ -58,12 +58,14 @@
 
 % Die Zeile auffüllende Punktierung. Verwendung derzeit für Inhalts- (transcript-headings.sty) sowie Tabellen- und Abbildungsverzeichnisse (transcript-floats.sty).
 \def\tsDotfill{%
+  \ccaVstructStart[Document]{leaders}%
   \nobreak\leaders\hbox{%
     $\m@th
     \mkern \@dotsep mu\textnormal{\normalsize\hbox{.}}\mkern \@dotsep
     mu$%
   }%
   \hskip 1em plus 1fill% Mindestens 1 em horizontaler Platz, damit leere Auspunktierungen und Seitenzahlen direkt hinter der Überschrift im Inhaltsverzeichnis vermieden werden.
+  \ccaVstructEnd{leaders}%
   \nobreak%
 }
 

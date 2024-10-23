@@ -170,46 +170,69 @@
   \tpSetProperty{numbering}{}%
   \tpSetProperty{list-of-block}{%
     \tpUseProperty{list-of-caption-face}%
+    \ccaStructStart{TOCI}%
     \tpIfComp{ListofNumber}
-      {\tpUseComp{ListofNumber}}
+      {\ccaStructStart{P}\ccaStructStart{Reference}\ccaStructStart{Lbl}%
+       \tpUseComp{ListofNumber}%
+       \ccaStructEnd{Lbl}}
       {\leftskip0pt}%
+    \ccaStructStart{Span}%
     \tpUseComp{ListofCaption}%
     \tpUseProperty{list-of-page-sep}\tpUseComp{ListofPage}%
+    \ccaStructEnd{Span}%
+    \ccWhenComp{ListofNumber}{\ccaStructEnd{Reference}\ccaStructEnd{P}}%
+    \ccaStructEnd{TOCI}%
+  }%
+  %% TODO @marcush: Die defs für list-of-block bei figure und table
+  %% waren weitgehend identisch, daher nach hier verschoben. Bitte
+  %% prüfen, ob die obide Def von list-of-block weg kann
+  %%
+  %% Zur Info: Wir müssen hier \ccaVstruct… nutzen, da \ccaStruct…
+  %% eine lokale Gruppe aufmacht. Da wir hier aber \leftskip nochmal
+  %% ändern, müsste der par auch in deselben Gruppe zugehen, damit
+  %% diese Änderung greift.
+  \tpSetProperty{list-of-block-figtab}{%
+    \tpUseProperty{list-of-caption-face}%
+    \ccaVstructStart{TOCI}%
+    \tpIfComp{ListofNumber}{%
+      \ccaVstructStart{P}\ccaVstructStart{Reference}%
+      \@tempdima=\dimexpr\tpUseProperty{list-of-number-width-max}\relax%
+      \leftskip=\@tempdima\relax
+      \hskip-\@tempdima\relax
+      \hb@xt@\@tempdima{%
+        \ccaVstructStart{Lbl}%
+        \tpUseComp{ListofNumber}%
+        \ccaVstructEnd{Lbl}%
+        \ccWhenComp{ListofCaption}{%
+          \tpUseProperty{list-of-number-sep}%
+        }%
+        \hss%
+      }%
+      \ccaVstructStart{Span}%
+      \ccWhenComp{ListofCaption}{\ignorespaces\tpUseComp{ListofCaption}}%
+    }{%
+      \leftskip=\z@\relax
+      \ccaVstructStart{Span}%
+      \ignorespaces\tpUseComp{ListofCaption}%
+    }%
+    \nobreak
+    \tpUseProperty{list-of-page-sep}%
+    \tpTocLink{\tpUseComp{ListofPage}}%
+    \ccaVstructEnd{Span}%
+    \ccWhenComp{ListofNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
+    \ccaVstructEnd{TOCI}%
   }%
 }
 
 \setcounter{lofdepth}{0}%% Tiefe des Abb.-Verzeichnisses: 0 = nur Haupteinträge; 1 = auch (echte) sub-floats inkludieren!
 
 %% gilt nur für Abbildungen:
-
-%% LUP: Syntax für \ccDeclareFloat hat sich im Verglech zu
-%% \tpDeclareFloat geändert: Zunächst mal darf kein bereits
-%% existierendes Float überdefiniert werden. Zum zweiten ist das
-%% 5. Argument ein \ccDeclareContainer-Body, kein
-%% \ccAddToType{Property}-Body.
 \ccAddToType{Properties}{Figure}{%
   \tpSetProperty{intext-skip-bottom}{\dimexpr1\baselineskip-2.5bp\relax}% Ticket 14959, 14989.
   \ifx\ts@layout@type\ts@str@layout@mdw
     \tpSetProperty{number-face}{\bfseries}% Ticket 14957.
   \fi%
-  \tpSetProperty{list-of-block}{%
-    \tpUseProperty{list-of-caption-face}%
-    \tpIfComp{ListofNumber}{%
-      \@tempdima=\tpUseProperty{list-of-number-width-max}%
-      \leftskip\@tempdima \hskip-\@tempdima
-      \hbox to \@tempdima{%
-        \tpUseComp{ListofNumber}%
-        \tpIfComp{ListofCaption}{%
-          \tpUseProperty{list-of-number-sep}%
-        }{}%
-        \hss%
-      }%
-      \tpIfComp{ListofCaption}{\ignorespaces\tpUseComp{ListofCaption}}{}%
-    }{%
-      \leftskip0pt \tpUseComp{ListofCaption}%
-    }%
-    \nobreak\tpUseProperty{list-of-page-sep}\tpTocLink{\tpUseComp{ListofPage}}%
-  }%
+  \ccPropertyLet{list-of-block}{list-of-block-figtab}%
 }
 
 %% gilt nur für Tabellen:
@@ -222,24 +245,8 @@
     \else
       \hfill\break
     \fi
-  }
-  \tpSetProperty{list-of-block}{%
-    \tpUseProperty{list-of-caption-face}%
-    \tpIfComp{ListofNumber}{%
-      \@tempdima=\dimexpr\ccUseProperty{list-of-number-width-max}\relax
-      \leftskip\@tempdima\hskip-\@tempdima\hb@xt@\@tempdima{%
-        \tpUseComp{ListofNumber}%
-        \tpIfComp{ListofCaption}{%
-          \tpUseProperty{list-of-number-sep}%
-        }{}%
-        \hss%
-      }%
-      \tpIfComp{ListofCaption}{\ignorespaces\tpUseComp{ListofCaption}}{}%
-    }{%
-      \leftskip0pt \tpUseComp{ListofCaption}%
-    }%
-    \nobreak\tpUseProperty{list-of-page-sep}\tpTocLink{\tpUseComp{ListofPage}}%
   }%
+  \ccPropertyLet{list-of-block}{list-of-block-figtab}%
 }
 
 % LUP Falls Tabellen und Abbildungen in derselebn ListOf erscheinen
@@ -265,12 +272,16 @@
 
 %% Abbildungsverzeichnis
 \renewcommand\listoffigures{%
+  \ccaStructStart{TOC}%
   \@starttoc{lof}%
+  \ccaStructEnd{TOC}%
   \clearpage%
 }
 
 %% Tabellenverzeichnis
 \renewcommand\listoftables{%
+  \ccaStructStart{TOC}%
   \@starttoc{lot}%
+  \ccaStructEnd{TOC}%
   \clearpage%
 }
