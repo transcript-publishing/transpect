@@ -11,14 +11,27 @@
 
 \babelfont{sansmono}[%
     Path=fonts/Noto/Sans/,%
+    FontFace = {md}{n}{NotoSansMono-Regular.ttf},%
   ]{NotoSansMono-Regular.ttf}
+% locally re-defined to patch in md font shapes
+\babelfont{mdv}[%
+    Path=fonts/Junicode/,%
+    ItalicFont = Junicode-Italic.ttf,%
+    BoldFont = Junicode-Bold.ttf,%
+    BoldItalicFont = Junicode-BoldItalic.ttf,%
+    FontFace = {md}{n}{Junicode.ttf},%
+    FontFace = {md}{it}{Junicode-Italic.ttf},%
+  ]{Junicode.ttf}
 
 
 \ifx\ts@layout@type\ts@str@layout@mdw
   \babelfont{rm}[%
     Path=fonts/Lora/,%
     BoldFont = Lora-Bold.ttf,%
+    FontFace = {md}{n}{Lora-Regular.ttf},%
     FontFace = {md}{it}{Lora-Italic.ttf},%
+    FontFace = {up}{n}{Lora-Regular.ttf},%
+    FontFace = {up}{it}{Lora-Italic.ttf},%
     FontFace = {eb}{n}{Lora-Regular.ttf},%
     FontFace = {eb}{it}{Lora-BoldItalic.ttf},%
     FontFace = {sb}{n}{Lora-Medium.ttf},%
@@ -782,3 +795,16 @@
 \tpBabelAlias{nsf}{sf}
 \tpBabelAlias{nsfwider}{sf}
 \tpBabelAlias{sfchap}{sf}
+
+%% redmine-17678:
+\let\ltx@cctextipa\ccTextipa
+\long\protected\def\ccTextipa#1{%
+  \begingroup
+    \ccsTestFont{\ccs@sfdefault}
+      {\def\ts@ipa@scale{\addfontfeature{Scale=0.95}}}
+      {\def\ts@ipa@scale{\addfontfeature{Scale=0.85}}}%
+      \expandafter\ifnum\pdf@strcmp{\f@shape}{it}=\z@\relax\upshape\fi
+      \expandafter\ifnum\pdf@strcmp{\f@series}{md}=\z@\relax\fontseries{m}\selectfont\fi
+    \ccIpaSfFont
+      \ts@ipa@scale\selectfont
+     #1\endgroup}
