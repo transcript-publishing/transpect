@@ -995,7 +995,7 @@
 
   <template context="dbk:phrase[@role = 'tsipa']" priority="300">
     <!-- https://redmine.le-tex.de/issues/17678 -->
-    <xsl:text>\texipa{</xsl:text>
+    <xsl:text>\ccTextipa{</xsl:text>
     <xsl:next-match/>
     <xsl:text>}</xsl:text>
   </template>
