@@ -93,9 +93,9 @@
     \ccaVstructEnd{TOCI}%
     \par
   }%
-  \tpSetProperty{toc-after-entry}{\nopagebreak\par\nopagebreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nopagebreak}% Thing at the end of the entry, after the page number
-  \tpSetProperty{margin-left}{}% leer um Default "auto" zu überschreiben
-  \tpSetProperty{indent}{}% leer um Default "auto" zu überschreiben
+  \tpSetProperty{toc-after-entry}{\nopagebreak\par\nopagebreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nopagebreak}%
+  \tpSetProperty{margin-left}{}%
+  \tpSetProperty{indent}{}%
   \tpSetProperty{title-face}{%
     \sffamily\sbseries%
     \ifx\ts@layout@type\ts@str@layout@mdw
@@ -189,7 +189,19 @@
     \tpUseProperty{title-face}%
     %\vskip.5\baselineskip
     \cchHeadTagStart
-    \ccWhenComp{Number}{\ccaVstructStart{Lbl}\tpUseComp{Number}\ccaVstructEnd{Lbl}\enskip}%
+    \ccIfComp{Number}{%
+      \ifcsname cc-Heading-number--1-maxwd\endcsname
+        \@tempdima=\csname cc-Heading-number--1-maxwd\endcsname%
+      \else
+        \@tempdima=\z@%
+      \fi%
+      \ccaVstructStart{Lbl}%
+      \leftskip\@tempdima
+      \hskip-\@tempdima
+      \tpUseComp{Number}%
+      \ccaVstructEnd{Lbl}%
+      \enskip
+    }{}%
     \ignorespaces\tpUseComp{Title}\par%
     \cchHeadTagEnd
     \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
