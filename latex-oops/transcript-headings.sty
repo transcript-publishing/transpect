@@ -56,10 +56,26 @@
 
 \gdef\tp@currentHeading{}
 
+
+% Ticket 17717. \nopagebreak funktioniert in den Hooks seit Frameworkumstellung nicht mehr (zuverlässig). Deswegen dieser etwas umständliche Workaround. Wird wahrscheinlich bei manchen Titeln zu unerwünschten vorzeitigen Seitenumbrüchen führen.
+\AddToHook{cc/headings/part/toc/before}{%
+  \setbox\z@=\vbox{\tpUseProperty{toc-title-face}\tpUseComp{TocTitle}}%
+  \@tempdima=\dimexpr\pagegoal-\pagetotal\relax
+  \ifdim\@tempdima>0\p@\relax
+    \ifdim\dimexpr\@tempdima-\ht\z@\relax<4\baselineskip
+      \newpage
+    \fi
+  \fi
+  \par\nobreak\nopagebreak
+}
+
 \tpDeclareHeading{-1}{part}{%
   %% ToC
   %\tpSetProperty{toc-before-hook-part}{\nobreak}
-  \tpSetProperty{toc-after-hook-part}{\nopagebreak}
+  %\tpSetProperty{toc-after-hook-part}{\nopagebreak}
+  %%%%%%%%%%%%%%%%%%%%%%%
+  % Inhaltsverzeichnis. %
+  %%%%%%%%%%%%%%%%%%%%%%%
   \tpSetProperty{toc-margin-top}{2.25em}%
   \tpSetProperty{toc-indent}{}%
   \tpSetProperty{toc-title-face}{\sffamily\sbseries\ifx\ts@layout@type\ts@str@layout@mdw\LARGE\else\huge\fi}%
@@ -86,14 +102,26 @@
     }%
     \tpUseProperty{toc-title-face}%
     \tpTocLink{%
-      \ccWhenComp{TocNumber}{\hskip-\@tempdima\hbox to \@tempdima{\ccaVstructStart{Lbl}\tpUseComp{TocNumber}\tpUseProperty{toc-number-sep}\ccaVstructEnd{Lbl}\hss}}%
+      \ccWhenComp{TocNumber}{%
+        \hskip-\@tempdima\hbox to \@tempdima{%
+          \ccaVstructStart{Lbl}%
+          \tpUseComp{TocNumber}%
+          \tpUseProperty{toc-number-sep}%
+          \ccaVstructEnd{Lbl}%
+          \hss
+        }%
+      }%
       \ccaVstructStart{Span}\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
     }%
     \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
     \ccaVstructEnd{TOCI}%
     \par
   }%
-  \tpSetProperty{toc-after-entry}{\nopagebreak\par\nopagebreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nopagebreak}%
+  %\tpSetProperty{toc-after-entry}{\nopagebreak\par\nopagebreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nopagebreak}%
+  %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Fließtextüberschriften. %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%
   \tpSetProperty{margin-left}{}%
   \tpSetProperty{indent}{}%
   \tpSetProperty{title-face}{%
@@ -204,7 +232,14 @@
     }{}%
     \ignorespaces\tpUseComp{Title}\par%
     \cchHeadTagEnd
-    \tpIfComp{Subtitle}{\@@par\vskip\baselineskip\large\bfseries\tpUseComp{Subtitle}\leavevmode\vskip\baselineskip}{}%
+    \tpIfComp{Subtitle}{%
+      \@@par
+      \vskip\baselineskip
+      \large\bfseries
+      \tpUseComp{Subtitle}
+      \leavevmode
+      \vskip\baselineskip
+    }{}%
     %% Zitat
     \tpIfComp{QuoteBlock}{%
       \vskip2\baselineskip
