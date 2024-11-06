@@ -334,14 +334,19 @@
         \tpWhenComp{TocSubtitle}{%
           \nopagebreak
           \newline
-          {\tpUseProperty{toc-subtitle-face}%
-            \ccaVstructStart{Span}\tpUseComp{TocSubtitle}\ccaVstructEnd{Span}}}%
+          {%
+            \tpUseProperty{toc-subtitle-face}%
+            \ccaVstructStart{Span}\tpUseComp{TocSubtitle}\ccaVstructEnd{Span}%
+          }%
+        }%
         \tpIfComp{TocAuthorNameList}{%
           \long\def\@tempa{\ignorespaces}%
           \ifx\@tempa\tp@heading@TocAuthorNameList
           \else
             \nopagebreak\newline
-            {\tpUseProperty{toc-author-face}\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}\ccaVstructEnd{Span}}%
+            {%
+              \tpUseProperty{toc-author-face}\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}\ccaVstructEnd{Span}%
+            }%
           \fi
         }{}%
         \tpUseProperty{toc-page-face}%
@@ -712,9 +717,13 @@
         \ccWhenComp{TocNumber}{\hskip-\@tempdima\hbox to \@tempdima{\ccaVstructStart{Span}\tpUseComp{TocNumber}\ccaVstructEnd{Span}\hss}}%
         \ccaVstructStart{Span}\strut\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
         % \tpIfComp{TocSubtitle}{\nopagebreak\newline{\tpUseProperty{toc-subtitle-format}\tpUseComp{TocSubtitle}}}{}%
-        \tpWhenComp{TocAuthorNameList}
-        {\nopagebreak\newline
-          {\normalfont\sfchapfamily\itshape\normalsize\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}\ccaVstructEnd{Span}}}%
+        \tpWhenComp{TocAuthorNameList}{%
+          \nopagebreak\newline
+          {%
+            \tpUseProperty{toc-author-face}%
+            \ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}\ccaVstructEnd{Span}%
+          }%
+        }%
         \tpUseProperty{toc-number-face}%
         \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
         \ccaVstructStart{Span}\tpUseComp{TocPage}\ccaVstructEnd{Span}%
