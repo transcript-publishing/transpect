@@ -738,23 +738,26 @@
   <!-- override toc-templates to allow newlines -->
   
   <template name="customer-toctitles">
+    <xsl:variable name="lang" select="if (dbk:title/@xml:lang) then concat('\protect\foreignlanguage{', xml2tex:lang-to-babel-lang(dbk:title/@xml:lang), '}{') else ()"/>
     <rule name="tpTocTitle" type="cmd" break-after="0" break-before="1">
-      <param select="dbk:title/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+      <param select="$lang[normalize-space()], dbk:title/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])], '}'[$lang[normalize-space()]]">
         <with-param name="protect-lang" select="true()" as="xs:boolean" tunnel="yes"/>
         <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
       </param>
     </rule>
     <xsl:if test="dbk:title[dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
+      <xsl:variable name="lang" select="if (dbk:title/@xml:lang) then concat('\protect\foreignlanguage{', xml2tex:lang-to-babel-lang(dbk:title/@xml:lang), '}{') else ()"/>
       <rule name="tpTocNumber" type="cmd" break-after="0" break-before="1">
-        <param select="dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()[self::dbk:phrase | self::text()]">
+        <param select="$lang[normalize-space()], dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()[self::dbk:phrase | self::text()], '}'[$lang[normalize-space()]]">
           <with-param name="protect-lang" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
       </rule>
     </xsl:if>
     <xsl:if test="dbk:subtitle">
+      <xsl:variable name="lang" select="if (dbk:subtitle/@xml:lang) then concat('\protect\foreignlanguage{', xml2tex:lang-to-babel-lang(dbk:subtitle/@xml:lang), '}{') else ()"/>
       <rule name="tpTocSubtitle" type="cmd" break-after="0" break-before="1">
-        <param select="dbk:subtitle/node()">
+        <param select="$lang[normalize-space()], dbk:subtitle/node(), '}'[$lang[normalize-space()]]">
           <with-param name="protect-lang" select="true()" as="xs:boolean" tunnel="yes"/>
           <with-param name="toc-override" select="true()" as="xs:boolean" tunnel="yes"/>
         </param>
@@ -867,8 +870,11 @@
     <rule name="heading" type="env" break-after="2" break-before="1">
       <option select="'notoc,noBM'"/>
       <param select="'subparagraph'"/>
+      <xsl:variable name="lang" select="if (@xml:lang) then concat('\protect\foreignlanguage{', xml2tex:lang-to-babel-lang(@xml:lang), '}{') else ()"/>
       <xsl:text>&#xa;\tpTitle{</xsl:text>
+      <xsl:value-of select="$lang[normalize-space()]"/>
       <xsl:apply-templates select="node()" mode="#current"/>
+      <xsl:value-of select="'}'[$lang[normalize-space()]]"/>
       <xsl:text>}</xsl:text>
       <xsl:if test="descendant::*[self::dbk:footnote | self::dbk:br | self::dbk:indexterm]">
         <rule name="tpRunTitle" type="cmd" break-before="1">
