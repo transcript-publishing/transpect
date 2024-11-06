@@ -224,16 +224,15 @@
     \cchHeadTagStart
     \ccIfComp{Number}{%
       \ifcsname cc-Heading-number--1-maxwd\endcsname
-        \@tempdima=\csname cc-Heading-number--1-maxwd\endcsname%
+        \@tempdima=\dimexpr\csname cc-Heading-number--1-maxwd\endcsname+0.5em\relax%
       \else
         \@tempdima=\z@%
       \fi%
       \ccaVstructStart{Lbl}%
-      \leftskip\@tempdima
-      \hskip-\@tempdima
-      \tpUseComp{Number}%
+      \leftskip\@tempdima%
+      \hskip-\@tempdima%
+      \hb@xt@\@tempdima{\tpUseComp{Number}\hss}%
       \ccaVstructEnd{Lbl}%
-      \enskip
     }{}%
     \ignorespaces\tpUseComp{Title}\par%
     \cchHeadTagEnd
@@ -241,7 +240,7 @@
       \@@par
       \vskip\baselineskip
       \large\bfseries
-      \tpUseComp{Subtitle}
+      \tpUseComp{Subtitle}%
       \leavevmode
       \vskip\baselineskip
     }{}%
