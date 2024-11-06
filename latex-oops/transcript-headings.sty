@@ -61,13 +61,18 @@
 \AddToHook{cc/headings/part/toc/before}{%
   \setbox\z@=\vbox{\tpUseProperty{toc-title-face}\tpUseComp{TocTitle}}%
   \@tempdima=\dimexpr\pagegoal-\pagetotal\relax
-  \ifdim\@tempdima>0\p@\relax
+  \ifdim\dimexpr\@tempdima-\ht\z@\relax>0\p@\relax
     \ifdim\dimexpr\@tempdima-\ht\z@\relax<5\baselineskip
       \newpage
     \fi
   \fi
-  \par\nobreak\nopagebreak
 }
+
+% Funktioniert nicht. Deswegen Workaround mit obigem Hook.
+%\AddToHook{cc/headings/part/toc/after}{%
+%  \nopagebreak
+%}
+
 
 \tpDeclareHeading{-1}{part}{%
   %% ToC
