@@ -133,7 +133,7 @@
             <!-- reviewer is only created as \tpRunAuthorNameList (https://redmine.le-tex.de/issues/14887#note-17) to avoid displaying-->
             <rule name="tpRunAuthorNameList" type="cmd" break-before="1">
               <param select="if (exists(ancestor::dbk:info//dbk:titleabbrev[@role='tsheadlineauthor'])) 
-                             then ancestor::dbk:info//dbk:titleabbrev[@role='tsheadlineauthor']
+                             then ancestor::dbk:info//dbk:titleabbrev[@role='tsheadlineauthor']/node()
                              else for $a in dbk:personname/dbk:othername return normalize-space($a)"/>
             </rule>
           </xsl:when>
@@ -353,7 +353,5 @@
       <xsl:value-of select="'&#xa;\tpLicenceLogo{logos/oasymbol.pdf}'"/>
     </xsl:if>
   </xsl:template>
-
-
 
 </set>
