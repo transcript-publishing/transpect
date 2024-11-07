@@ -74,6 +74,14 @@
 %}
 
 
+\DeclareRobustCommand\raggedrightKeepIndent{%
+  \let\\\@centercr
+  \@rightskip\@flushglue
+  \rightskip\@rightskip
+  \parindent\z@
+}
+
+
 \tpDeclareHeading{-1}{part}{%
   %% ToC
   %\tpSetProperty{toc-before-hook-part}{\nobreak}
@@ -83,7 +91,15 @@
   %%%%%%%%%%%%%%%%%%%%%%%
   \tpSetProperty{toc-margin-top}{2.25em}%
   \tpSetProperty{toc-indent}{}%
-  \tpSetProperty{toc-title-face}{\sffamily\sbseries\ifx\ts@layout@type\ts@str@layout@mdw\LARGE\else\huge\fi}%
+  \tpSetProperty{toc-title-face}{%
+    \sffamily\sbseries
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \LARGE
+    \else
+      \huge
+    \fi
+    \raggedrightKeepIndent
+  }%
   \tpSetProperty{toc-before-entry}{%
     \addvspace{\tpUseProperty{toc-margin-top}}
     \parindent \z@
