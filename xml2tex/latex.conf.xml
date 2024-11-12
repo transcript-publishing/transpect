@@ -564,10 +564,14 @@
   </template>
   
   <template context="dbk:blockquote[matches(@role, $verse-misc-style)]/dbk:para">
+    <xsl:param name="suppress-cca" select="tr:suppress-structure(.)" tunnel="yes" as="xs:boolean?"/>
+    <xsl:param name="already-structured" tunnel="yes" as="xs:boolean?"/>
     <!-- add \tpBreak after every verse para. perhaps it might be better for future projcts 
       to work with linebreaks and para if an empty line is desired-->
     <rule break-after="0">
-      <text select="tr:add-cca('Start', 'P'), node(), tr:add-cca('End', 'P') "/>
+      <text select="tr:add-cca('Start', 'P')[not($suppress-cca) and not($already-structured)]"/>
+      <text/>
+      <text select="tr:add-cca('End', 'P')[not($suppress-cca) and not($already-structured)]"/>
       <xsl:if test="not(. is ../dbk:para[last()])"><text>\tpBreak</text></xsl:if>
     </rule>
     <xsl:if test="not($a11y) or ($a11y and following-sibling::dbk:para)">
@@ -594,16 +598,24 @@
   </template>-->
 
   <template context="dbk:para[dbk:personname[@role eq 'speaker']]">
+    <xsl:param name="suppress-cca" select="tr:suppress-structure(.)" tunnel="yes" as="xs:boolean?"/>
+    <xsl:param name="already-structured" tunnel="yes" as="xs:boolean?"/>
     <rule name="item" type="cmd" break-before="1">
       <option select="dbk:personname[@role eq 'speaker']/normalize-space(string-join(node(), ''))"/>
-      <text select="tr:add-cca('Start', 'P'), node() except dbk:personname[@role eq 'speaker'], tr:add-cca('End', 'P')"/>
+      <text select="tr:add-cca('Start', 'P')[not($suppress-cca) and not($already-structured)]"/>
+      <text select="node() except dbk:personname[@role eq 'speaker']"/>
+      <text select="tr:add-cca('End', 'P')[not($suppress-cca) and not($already-structured)]"/>
     </rule>
   </template>
   
   <template context="dbk:blockquote[matches(@role,'tsdialogue')]/dbk:para[not(dbk:personname)]">
+    <xsl:param name="suppress-cca" select="tr:suppress-structure(.)" tunnel="yes" as="xs:boolean?"/>
+    <xsl:param name="already-structured" tunnel="yes" as="xs:boolean?"/>
     <!--https://redmine.le-tex.de/issues/15597-->
     <rule name="infoItem" type="cmd" break-before="1">
-      <param select="tr:add-cca('Start', 'P'), node(),tr:add-cca('End', 'P')"/>
+      <text select="tr:add-cca('Start', 'P')[not($suppress-cca) and not($already-structured)]"/>
+      <text/>
+      <text select="tr:add-cca('End', 'P')[not($suppress-cca) and not($already-structured)]"/>
     </rule>
   </template>
 
