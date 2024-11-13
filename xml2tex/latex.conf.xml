@@ -613,9 +613,7 @@
     <xsl:param name="already-structured" tunnel="yes" as="xs:boolean?"/>
     <!--https://redmine.le-tex.de/issues/15597-->
     <rule name="infoItem" type="cmd" break-before="1">
-      <text select="tr:add-cca('Start', 'P')[not($suppress-cca) and not($already-structured)]"/>
-      <text/>
-      <text select="tr:add-cca('End', 'P')[not($suppress-cca) and not($already-structured)]"/>
+      <param select="tr:add-cca('Start', 'P'), node(),tr:add-cca('End', 'P')"/>
     </rule>
   </template>
 
