@@ -191,7 +191,7 @@
 
 
   
-  <xsl:template match="*:original_publication"  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:original_publication[../*:edition_type[. = 'EBP']]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/16471-->
     <keyword role="Copyright">
       <para><xsl:sequence select="*:copyright_remark/node()"/></para>
@@ -368,13 +368,13 @@
                 <xsl:for-each select="*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)]">
                   <para>
                    <!-- <xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
-                    <xsl:sequence select="html:process-html(., false())" />
+                    <xsl:sequence select="html:process-html(., false(), false())" />
                   </para>
                 </xsl:for-each>
               </xsl:when>
               <xsl:otherwise>
                 <!--<xsl:sequence select="concat(./../*:first_name, ' ', ./../*:last_name, ' ')"/>-->
-                <xsl:sequence select="html:process-html(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)], false())" />
+                <xsl:sequence select="html:process-html(*:copyright_holder[*:cpr_type = ('HG', 'VE')]/text[@text_type = concat('AUTBIO', $lang)], false(), false())" />
               </xsl:otherwise>
             </xsl:choose>
           </keyword>
@@ -382,9 +382,9 @@
     </xsl:if>
     <!-- when print product: also apply epb-->
     <xsl:if test="../*:edition_type[. = $main-product-type][not(.  = 'EBP')] and self::*:copyright_holders">
-       <xsl:apply-templates select="$all-products[*:edition_type =  'EBP']/(*:copyright_holders|*:funders)" mode="#current"/>
+       <xsl:apply-templates select="$all-products[*:edition_type =  'EBP']/(*:copyright_holders|*:funders|*:original_publication)" mode="#current"/>
     </xsl:if>
-    <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists(..[*:original_publication])) and self::*:copyright_holders">
+    <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists($all-products[*:edition_type =  'EBP'][*:original_publication])) and self::*:copyright_holders">
       <!--https://redmine.le-tex.de/issues/17513-->
       <keyword role="Copyright">
         <xsl:call-template name="join-copyright-statement">
@@ -398,6 +398,7 @@
   <xsl:function name="html:process-html" as="node()*">
     <xsl:param name="context" as="element()?"/>
     <xsl:param name="preserve-paras" as="xs:boolean"/>
+    <xsl:param name="preserve-styling" as="xs:boolean"/>
     
     <xsl:if test="$context[normalize-space()]">
       <xsl:variable name="replaced-entities" select="string-join(tr:decode-text-with-html-ent($context/node()), '')"/>
@@ -407,6 +408,7 @@
       <xsl:variable name="postprocessed" as="node()*">
         <xsl:apply-templates select="$parsed/*:div/node()" mode="postprocess-html">
           <xsl:with-param name="preserve-paras" select="$preserve-paras" as="xs:boolean" tunnel="yes"/>
+          <xsl:with-param name="preserve-styling" select="$preserve-styling" as="xs:boolean" tunnel="yes"/>
         </xsl:apply-templates>
       </xsl:variable>
       <xsl:apply-templates select="$postprocessed" mode="strip-namespaces"/>
@@ -431,6 +433,43 @@
       <xsl:attribute name="css:font-weight" select="'bold'"/>
       <xsl:apply-templates select="node()" mode="#current"/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="*:i|*:em" mode="postprocess-html" priority="4">
+    <xsl:param name="preserve-styling" as="xs:boolean?" tunnel="yes"/>
+    <xsl:choose>
+      <xsl:when test="$preserve-styling">
+        <xsl:element name="phrase">
+          <xsl:attribute name="css:font-style" select="'italic'"/>
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="*:u" mode="postprocess-html" priority="4">
+    <xsl:param name="preserve-styling" as="xs:boolean?" tunnel="yes"/>
+    <xsl:choose>
+      <xsl:when test="$preserve-styling">
+        <xsl:element name="phrase">
+          <xsl:attribute name="css:text-decoration" select="'underline'"/>
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="*:br" mode="postprocess-html" priority="4">
+    <xsl:param name="preserve-styling" as="xs:boolean?" tunnel="yes"/>
+    <xsl:if test="$preserve-styling">
+      <br/>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="*:p" mode="postprocess-html" priority="3">
@@ -507,28 +546,28 @@
   <xsl:template match="*:text[@term = 'Fördertext (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/17633 / https://redmine.le-tex.de/issues/16437 / https://redmine.le-tex.de/issues/17515 -->
     <keyword role="Fordertext">
-      <xsl:value-of select="html:process-html(., false())"/>
+      <xsl:sequence select="html:process-html(., false(), true())"/>
     </keyword>
   </xsl:template>
   
   <xsl:template match="*:text[@term = 'Mitwirkende Ergänzung (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
-    <!-- https://redmine.le-tex.de/issues/17617 -->
+    <!-- https://redmine.le-tex.de/issues/17617, https://redmine.le-tex.de/issues/17777 -->
     <keyword role="Mitwirkung">
-      <xsl:value-of select="html:process-html(., false())"/>
+      <xsl:sequence select="html:process-html(., false(), true())"/>
     </keyword>
   </xsl:template>
   
   <xsl:template match="*:text[@term = 'Thesis-Pflichteintrag (Impressum)'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/16437 -->
     <keyword role="Qualifikationsnachweis">
-       <xsl:value-of select="html:process-html(., false())"/>
+      <xsl:sequence select="html:process-html(., false(), true())"/>
     </keyword>
   </xsl:template>
   
   <xsl:template match="*:text[@term = 'Umschlagabb./Copyright Vermerk'][normalize-space()]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/17617 -->
     <keyword role="Umschlagcopyright">
-      <xsl:value-of select="html:process-html(., false())"/>
+      <xsl:sequence select="html:process-html(., false(), true())"/>
     </keyword>
   </xsl:template>
   
@@ -537,7 +576,7 @@
     <!-- https://redmine.le-tex.de/issues/17450,
          https://redmine.le-tex.de/issues/17511 (localization)-->
     <keyword role="Editorial">
-      <xsl:sequence select="html:process-html(., true())" />
+      <xsl:sequence select="html:process-html(., true(), false())" />
     </keyword>
   </xsl:template>
   
@@ -545,7 +584,7 @@
                        *:text[@term][@text_type = 'REIHGU'][normalize-space()][not($lang = '')]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/17450 -->
     <keyword role="Reihenherausgeber">
-      <xsl:sequence select="html:process-html(., true())" />
+      <xsl:sequence select="html:process-html(., true(), false())" />
     </keyword>
   </xsl:template>
 
