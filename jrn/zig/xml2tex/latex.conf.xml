@@ -78,8 +78,8 @@
       </xsl:call-template>
     </xsl:if>   
     <xsl:if test="dbk:titleabbrev[matches(@role, $col-head-style)] 
-      or  
-      dbk:title[descendant::*[self::dbk:footnote | self::dbk:br]]">
+                  or  
+                  dbk:title[descendant::*[self::dbk:footnote | self::dbk:br]]">
       <rule name="tpRunTitle" type="cmd" break-before="1">
         <param select="(dbk:titleabbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
           <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
