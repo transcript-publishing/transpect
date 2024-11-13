@@ -386,7 +386,7 @@
     <xsl:if test="../*:edition_type[. = $main-product-type][not(.  = 'EBP')] and self::*:copyright_holders">
        <xsl:apply-templates select="$all-products[*:edition_type =  'EBP']/(*:copyright_holders|*:funders|*:original_publication)" mode="#current"/>
     </xsl:if>
-    <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists($all-products[*:edition_type =  'EBP'][*:original_publication])) and self::*:copyright_holders">
+    <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists(..[*:edition_type =  'EBP'][*:original_publication])) and self::*:copyright_holders">
       <!--https://redmine.le-tex.de/issues/17513-->
       <keyword role="Copyright">
         <xsl:call-template name="join-copyright-statement">
