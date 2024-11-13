@@ -191,7 +191,7 @@
 
 
   
-  <xsl:template match="*:original_publication[../*:edition_type[. = 'EBP']]"  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:original_publication(:[../*:edition_type[. = 'EBP']]:)"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/16471-->
     <keyword role="Copyright">
       <para><xsl:sequence select="*:copyright_remark/node()"/></para>
