@@ -1039,7 +1039,7 @@
     <xsl:param name="elt" as="element()"/>
     <!-- add conditions to not generate structure. if outcome is true: no structure will be added.  -->
     <xsl:sequence select="if ($a11y) 
-                          then exists($elt[parent::*[self::*:legalnotice|self::*:blockquote[matches(@role,'tsdialogue|verse')]] 
+                          then exists($elt[parent::*[self::*:legalnotice|self::*:blockquote[matches(@role,'tsdialogue')]] 
                                            or
                                            (every $node in node() satisfies $node[self::processing-instruction()])
                                           ]
