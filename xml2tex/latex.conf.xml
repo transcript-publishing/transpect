@@ -1045,10 +1045,4 @@
                           else true()"/>
   </xsl:function>
   
-  <xsl:template match="dbk:phrase[@css:font-weight = 'bold' or @role = ('cbold', 'fett', 'bold')]" mode="strip-meta" priority="6">
-    <xsl:text>\textbf{</xsl:text>
-    <xsl:next-match/>
-    <xsl:text>}</xsl:text>
-  </xsl:template>
-  
 </set>
