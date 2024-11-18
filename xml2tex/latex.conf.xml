@@ -395,7 +395,10 @@
       <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="normalize-space($series-logo-href)">
-      <xsl:value-of select="concat('&#xa;\tpSeries{\includegraphics{logos/series/', $series-logo-href, '}}&#xa;')"/>
+      <xsl:variable name="series-raisebox-val" select="if (exists(//processing-instruction()[name() = 'latex'][contains(., 'logo-series-raisebox')])) 
+                                                       then replace(//processing-instruction()[name() = 'latex'][contains(., 'logo-series-raisebox')], '^.:\p{Zs}?', '') 
+                                                       else '0'"/>
+      <xsl:value-of select="concat('&#xa;\tpSeries{\raisebox{', $series-raisebox-val, '}{\includegraphics{logos/series/', $series-logo-href, '}}}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($publisher-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpPubLogo{logos/', $publisher-logo-href, '}&#xa;')"/>
@@ -1044,5 +1047,8 @@
                                      ) 
                           else true()"/>
   </xsl:function>
+  
+  <xsl:template match="processing-instruction()[name() = $name-for-Tex-PI]
+                                               [some $t in tokenize(., '\s') satisfies $t[matches(., ' logo-series-raisebox')]]" mode="xml2tex"/>
   
 </set>
