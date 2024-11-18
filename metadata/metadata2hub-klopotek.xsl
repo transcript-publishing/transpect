@@ -414,7 +414,9 @@
     <xsl:param name="preserve-styling" as="xs:boolean"/>
     
     <xsl:if test="$context[normalize-space()]">
-      <xsl:variable name="replaced-entities" select="string-join(tr:decode-text-with-html-ent($context/node()), '')"/>
+      <xsl:variable name="cleaned" select="replace(string-join($context/node(), ''), '&amp;(\P{L})', 'uUu$1')"/>
+      <xsl:variable name="replaced-entities" select="tr:decode-text-with-html-ent($cleaned)"/>
+      <xsl:message select="$replaced-entities"/>
       <xsl:variable name="parsed" as="document-node(element(div))" 
         select="parse-xml('&lt;div>' || $replaced-entities || '&lt;/div>')"/>
       <xsl:variable name="postprocessed" as="node()*">
@@ -502,6 +504,10 @@
     <xsl:element name="{name()}">
       <xsl:apply-templates select="@* except @xmlns, node()" mode="#current"/>
     </xsl:element>
+  </xsl:template>
+  
+  <xsl:template match="text()[contains(., 'uUu')]" mode="strip-namespaces" priority="2" exclude-result-prefixes="#all">
+    <xsl:value-of select="replace(., 'uUu', '&#38;')"/>
   </xsl:template>
   
   <xsl:template match="*:serial_relation"  mode="klopotek-to-keyword"  priority="2">
