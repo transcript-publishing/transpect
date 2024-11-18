@@ -396,8 +396,9 @@
     </xsl:if>
     <xsl:if test="normalize-space($series-logo-href)">
       <xsl:variable name="series-raisebox-val" select="if (exists(//processing-instruction()[name() = 'latex'][contains(., 'logo-series-raisebox')])) 
-                                                       then replace(//processing-instruction()[name() = 'latex'][contains(., 'logo-series-raisebox')], '^.:\p{Zs}?', '') 
+                                                       then replace(//processing-instruction()[name() = 'latex'][contains(., 'logo-series-raisebox')], '^.+:\p{Zs}?', '') 
                                                        else '0'"/>
+      <!-- https://redmine.le-tex.de/issues/17811-->
       <xsl:value-of select="concat('&#xa;\tpSeries{\raisebox{', $series-raisebox-val, '}{\includegraphics{logos/series/', $series-logo-href, '}}}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($publisher-logo-href)">
