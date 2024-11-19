@@ -395,27 +395,21 @@
       <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="normalize-space($series-logo-href)">
-      <xsl:value-of select="concat('&#xa;\tpSeries{\includegraphics{logos/series/', $series-logo-href, '}}&#xa;')"/>
+      <xsl:variable name="series-raisebox-val" select="if (exists(//processing-instruction()[name() = 'latex'][contains(., 'logo-series-raisebox')])) 
+                                                       then replace(//processing-instruction()[name() = 'latex'][contains(., 'logo-series-raisebox')], '^.+:\p{Zs}?', '') 
+                                                       else '0'"/>
+      <!-- https://redmine.le-tex.de/issues/17811-->
+      <xsl:value-of select="concat('&#xa;\tpSeries{\raisebox{', $series-raisebox-val, '}{\includegraphics{logos/series/', $series-logo-href, '}}}&#xa;')"/>
     </xsl:if>
     <xsl:if test="normalize-space($publisher-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpPubLogo{logos/', $publisher-logo-href, '}&#xa;')"/>
     </xsl:if>
     <!-- licensing meta, https://redmine.le-tex.de/issues/13870. cannot use xml2tex:meta2tex() here because several paras might occur  -->
     <xsl:if test="normalize-space($copyright-note)">
-<!--      <xsl:text>&#xa;\tpCopyright{</xsl:text>
-      <xsl:for-each select="$copyright-note">
-        <xsl:apply-templates select="." mode="strip-meta"/>
-      </xsl:for-each>
-      <xsl:text>}&#xa;</xsl:text>-->
       <xsl:sequence select="xml2tex:meta2tex($copyright-note, (), 'tpCopyright')"/>
     </xsl:if>
     <xsl:if test="$copyright-holder[normalize-space()]">
   <xsl:sequence select="xml2tex:meta2tex($copyright-holder, (), 'tpCopyrightDisclaimer')"/>
-<!--      <xsl:text>&#xa;\tpCopyrightDisclaimer{</xsl:text>
-      <xsl:for-each select="$copyright-holder">
-        <xsl:apply-templates select="." mode="strip-meta"/>
-      </xsl:for-each>
-      <xsl:text>}&#xa;</xsl:text>-->
     </xsl:if>
     <xsl:if test="normalize-space($license-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpLicenceLogo{logos/cc/', 
@@ -1044,5 +1038,8 @@
                                      ) 
                           else true()"/>
   </xsl:function>
+  
+  <xsl:template match="processing-instruction()[name() = ($name-for-Tex-PI, 'latex')]
+                                               [some $t in tokenize(., '\s') satisfies $t[contains(., 'logo-series-raisebox')]]" mode="xml2tex" priority="222"/>
   
 </set>

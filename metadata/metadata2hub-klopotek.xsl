@@ -22,7 +22,8 @@
     <!-- https://redmine.le-tex.de/issues/16459#note-7, https://redmine.le-tex.de/issues/17587 -->
   </xsl:variable>
   <xsl:variable name="open-access" as="xs:boolean" select="exists(//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:open_access[@open_access_yn = 'Y'])"/>
-    
+  <xsl:variable name="open-access-embargo" as="xs:boolean" select="exists(//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:open_access[@open_access_yn = 'Y']/*:open_access_embargo_period)"/>
+  
   <xsl:template match="*"  mode="klopotek-to-keyword" priority="-0.5"/>
   
   <xsl:template match="*:doi"  mode="klopotek-to-keyword"  priority="2">
@@ -191,20 +192,33 @@
 
 
   
-  <xsl:template match="*:original_publication(:[../*:edition_type[. = 'EBP']]:)"  mode="klopotek-to-keyword"  priority="2">
-    <!-- https://redmine.le-tex.de/issues/16471-->
+  <xsl:template name="create-copyright" >
+    <xsl:param name="all-products" tunnel="yes" as="element()+"/>
+    <xsl:param name="copyright_holders" tunnel="yes" as="element()"/>
+    <xsl:param name="year" tunnel="yes" as="xs:string?"/>
+    <!-- https://redmine.le-tex.de/issues/17794, 
+         https://redmine.le-tex.de/issues/16471, 
+         https://redmine.le-tex.de/issues/17513 -->
     <keyword role="Copyright">
-      <para><xsl:sequence select="*:copyright_remark/node()"/></para>
+      <xsl:if test="$all-products[*:edition_type =  'EBP']/*:copyright_remark">
+        <para><xsl:sequence select="$all-products[*:edition_type =  'EBP']/*:copyright_remark/node()"/></para>
+      </xsl:if>
       <xsl:choose>
-        <xsl:when test="$open-access">
-          <!-- Open Access-->
+        
+        <xsl:when test="$open-access and not($open-access-embargo)">
+          <!-- Open Access gold-->
          <para>
            <xsl:call-template name="join-copyright-statement">
-              <xsl:with-param name="context" select="../*:copyright_holders" tunnel="yes" as="element()"/>
+              <xsl:with-param name="context" select="$copyright_holders" tunnel="yes" as="element()"/>
+              <xsl:with-param name="year" select="$year" tunnel="yes" as="xs:string?"/>
            </xsl:call-template>
          </para>
         </xsl:when>
-        <xsl:otherwise><!--default not OA-->
+        <xsl:otherwise>
+          <!--default not OA and OA green-->
+          <para>
+            <xsl:value-of select="concat($year, ' © transcript Verlag, Bielefeld')"/>
+          </para>
           <xsl:choose>
             <xsl:when test="$lang = 'E'">
               <para>All rights reserved. No part of this book may be reprinted or reproduced or utilized in any form or by any electronic, mechanical, or other means, now known or hereafter invented, including photocopying and recording, or in any information storage or retrieval system, without permission in writing from the publisher.</para>
@@ -384,17 +398,14 @@
     </xsl:if>
     <!-- when print product: also apply epb-->
     <xsl:if test="../*:edition_type[. = $main-product-type][not(.  = 'EBP')] and self::*:copyright_holders">
-       <xsl:apply-templates select="$all-products[*:edition_type =  'EBP']/(*:copyright_holders|*:funders|*:original_publication)" mode="#current"/>
+       <xsl:apply-templates select="$all-products[*:edition_type =  'EBP']/(*:copyright_holders|*:funders)" mode="#current"/>
     </xsl:if>
-    <xsl:if test="../*:edition_type[. = $main-product-type] and not(exists(..[*:edition_type =  'EBP'][*:original_publication])) and self::*:copyright_holders">
-      <!--https://redmine.le-tex.de/issues/17513-->
-      <keyword role="Copyright">
-        <xsl:call-template name="join-copyright-statement">
-          <xsl:with-param name="context" select="if ($all-products[*:edition_type =  'EBP']/*:copyright_holders) then $all-products[*:edition_type =  'EBP']/*:copyright_holders else ." tunnel="yes" as="element()"/>
-          <xsl:with-param name="year" select="if ($all-products[*:edition_type =  'EBP']/*:copyright[@year]) then $all-products[*:edition_type =  'EBP']/*:copyright/@year else ../*:copyright/@year" tunnel="yes" as="xs:string?"/>
-        </xsl:call-template>
-      </keyword>
-    </xsl:if>
+    <!--  https://redmine.le-tex.de/issues/17794-->
+    <xsl:call-template name="create-copyright">
+      <xsl:with-param name="all-products" select="$all-products" tunnel="yes" as="element()+"/>
+      <xsl:with-param name="copyright_holders" select="if ($all-products[*:edition_type =  'EBP']/*:copyright_holders) then $all-products[*:edition_type =  'EBP']/*:copyright_holders else ." tunnel="yes" as="element()"/>
+      <xsl:with-param name="year" select="if ($all-products[*:edition_type =  'EBP']/*:copyright[@year]) then $all-products[*:edition_type =  'EBP']/*:copyright/@year else ../*:copyright/@year" tunnel="yes" as="xs:string?"/>
+    </xsl:call-template>
   </xsl:template>
   
   <xsl:function name="html:process-html" as="node()*">
@@ -403,10 +414,11 @@
     <xsl:param name="preserve-styling" as="xs:boolean"/>
     
     <xsl:if test="$context[normalize-space()]">
-      <xsl:variable name="replaced-entities" select="string-join(tr:decode-text-with-html-ent($context/node()), '')"/>
+      <xsl:variable name="cleaned" select="replace(string-join($context/node(), ''), '&amp;(\P{L})', 'uUu$1')"/>
+      <xsl:variable name="replaced-entities" select="tr:decode-text-with-html-ent($cleaned)"/>
+      <xsl:message select="$replaced-entities"/>
       <xsl:variable name="parsed" as="document-node(element(div))" 
         select="parse-xml('&lt;div>' || $replaced-entities || '&lt;/div>')"/>
-      
       <xsl:variable name="postprocessed" as="node()*">
         <xsl:apply-templates select="$parsed/*:div/node()" mode="postprocess-html">
           <xsl:with-param name="preserve-paras" select="$preserve-paras" as="xs:boolean" tunnel="yes"/>
@@ -492,6 +504,10 @@
     <xsl:element name="{name()}">
       <xsl:apply-templates select="@* except @xmlns, node()" mode="#current"/>
     </xsl:element>
+  </xsl:template>
+  
+  <xsl:template match="text()[contains(., 'uUu')]" mode="strip-namespaces" priority="2" exclude-result-prefixes="#all">
+    <xsl:value-of select="replace(., 'uUu', '&#38;')"/>
   </xsl:template>
   
   <xsl:template match="*:serial_relation"  mode="klopotek-to-keyword"  priority="2">
