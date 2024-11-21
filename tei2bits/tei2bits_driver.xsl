@@ -172,10 +172,13 @@
       <xsl:variable name="copyright" select="if ($metadata/term[@key = 'Copyright'][normalize-space()]) 
                                              then $metadata/term[@key = 'Copyright']/node()[normalize-space()]
                                              else ()" as="node()*"/>
+    <xsl:variable name="copyright-diclaimer" select="if ($metadata/term[@key = 'Copyright_Disclaimer'][normalize-space()]) 
+                                             then $metadata/term[@key = 'Copyright_Disclaimer']/node()[normalize-space()]
+                                             else ()" as="node()*"/>
       <permissions>
         <xsl:choose>
           <xsl:when test="$copyright[normalize-space()]">
-            <xsl:for-each select="$copyright/node()[normalize-space()]">
+            <xsl:for-each select="($copyright/node()[normalize-space()], $copyright-diclaimer/node()[normalize-space()])">
               <copyright-statement><xsl:apply-templates select="." mode="#current"/></copyright-statement>
             </xsl:for-each>
           </xsl:when>
