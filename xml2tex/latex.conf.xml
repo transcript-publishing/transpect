@@ -174,15 +174,18 @@
   <xsl:variable name="copyright-note" as="element()?"
                 select="if ($metadata/dbk:keyword[@role eq 'Copyright'][dbk:para] 
                             and 
-                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')]))
+                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')])
+                            and 
+                            not($metadata/dbk:keyword[@role eq 'Copyright_Disclaimer']))
                         then $metadata/dbk:keyword[@role eq 'Copyright']/*:para[1] 
                         else $metadata/dbk:keyword[@role eq 'Copyright']"/>
 <!--    https://redmine.le-tex.de/issues/13098#change-72104-->
-  <xsl:variable name="copyright-holder" as="element(dbk:para)*" 
-                select="if ($metadata/dbk:keyword[@role eq 'Copyright'][count(dbk:para[normalize-space()]) gt 1] 
-                            and 
-                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')])) 
-                        then $metadata/dbk:keyword[@role eq 'Copyright']/dbk:para[not(position() = 1)]
+  <xsl:variable name="copyright-holder" as="element(*)*" 
+                select="if ($metadata/dbk:keyword[@role eq 'Copyright_Disclaimer'] 
+                            or (not($metadata/dbk:keyword[@role eq 'Copyright_Disclaimer']) and $metadata/dbk:keyword[@role eq 'Copyright'][count(dbk:para[normalize-space()]) gt 1] 
+                                and 
+                                not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')]))) 
+                        then ($metadata/dbk:keyword[@role eq 'Copyright_Disclaimer'], $metadata/dbk:keyword[@role eq 'Copyright']/dbk:para[not(position() = 1)])[1]
                         else ()"/>
   <xsl:variable name="license-logo-href" as="xs:string?" 
                 select="$metadata/dbk:keyword[@role eq 'Lizenzlogo']"/>
