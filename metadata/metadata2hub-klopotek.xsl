@@ -200,8 +200,8 @@
          https://redmine.le-tex.de/issues/16471, 
          https://redmine.le-tex.de/issues/17513 -->
     <keyword role="Copyright">
-      <xsl:if test="$all-products[*:edition_type =  'EBP']/*:copyright_remark">
-        <para><xsl:sequence select="$all-products[*:edition_type =  'EBP']/*:copyright_remark/node()"/></para>
+      <xsl:if test="$all-products[*:edition_type =  'EBP']/*:original_publication/*:copyright_remark">
+        <para><xsl:sequence select="$all-products[*:edition_type =  'EBP']/*:original_publication/*:copyright_remark/node()"/></para>
       </xsl:if>
       <xsl:choose>
         
@@ -219,7 +219,12 @@
           <para>
             <xsl:value-of select="concat($year, ' © transcript Verlag, Bielefeld')"/>
           </para>
-          <xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </keyword>
+    <xsl:if test="not($open-access) or ($open-access and $open-access-embargo)">
+       <keyword role="Copyright_Disclaimer">
+         <xsl:choose>
             <xsl:when test="$lang = 'E'">
               <para>All rights reserved. No part of this book may be reprinted or reproduced or utilized in any form or by any electronic, mechanical, or other means, now known or hereafter invented, including photocopying and recording, or in any information storage or retrieval system, without permission in writing from the publisher.</para>
             </xsl:when>
@@ -227,9 +232,8 @@
               <para>Alle Rechte vorbehalten. Die Verwertung der Texte und Bilder ist ohne Zustimmung des Verlages urheberrechtswidrig und strafbar. Das gilt auch für Vervielfältigungen, Übersetzungen, Mikroverfilmungen und für die Verarbeitung mit elektronischen Systemen.</para>
             </xsl:otherwise>
           </xsl:choose>
-        </xsl:otherwise>
-      </xsl:choose>
-    </keyword>
+       </keyword>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template name="join-copyright-statement">
@@ -416,7 +420,6 @@
     <xsl:if test="$context[normalize-space()]">
       <xsl:variable name="cleaned" select="replace(string-join($context/node(), ''), '&amp;(\P{L})', 'uUu$1')"/>
       <xsl:variable name="replaced-entities" select="tr:decode-text-with-html-ent($cleaned)"/>
-      <xsl:message select="$replaced-entities"/>
       <xsl:variable name="parsed" as="document-node(element(div))" 
         select="parse-xml('&lt;div>' || $replaced-entities || '&lt;/div>')"/>
       <xsl:variable name="postprocessed" as="node()*">
