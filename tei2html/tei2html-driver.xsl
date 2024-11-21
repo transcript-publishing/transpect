@@ -150,6 +150,7 @@
                                    $metadata[@key = 'Lizenzlink'],
                                    $metadata[@key = 'Lizenztext'],
                                    $metadata[@key = 'Copyright'],
+                                   $metadata[@key = 'Copyright_Disclaimer'],
                                    $metadata[@key = 'Umschlagkonzept'],
                                    $metadata[@key = 'Umschlaggestaltung'],
                                    $metadata[@key = 'Umschlagcredit'], 
