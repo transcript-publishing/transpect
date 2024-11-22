@@ -437,20 +437,30 @@
         \protected@xdef\tp@partmark{\tp@latestPartmark}%
       \fi
     \fi
-    \tpIfComp{RunNumber}
-      {\tpGStoreComp\tp@chapternumber{RunNumber}}
-      {\tpIfComp{Number}
-        {\tpGStoreComp\tp@chapternumber{Number}}
-        {\global\let\tp@chapternumber\relax}}%
-    \tpIfComp{RunTitle}
-      {\tpGStoreComp\tp@chaptermark{RunTitle}}
-      {\tpGStoreComp\tp@chaptermark{Title}}%
-    \tpIfComp{RunAuthorNameList}
-      {\xdef\tp@authormark{\cc@Heading@RunAuthorNameList}}
-      {\tpIfCompOverride{AuthorNameList}
-        {%\tpGStoreComp\tp@authormark{AuthorNameList}%
-         \xdef\tp@authormark{\cc@Heading@AuthorNameList}}
-        {\tpCompGDef\tp@authormark{Author}{author-list-print-format}}}%
+    \tpIfComp{RunNumber}{%
+      \tpGStoreComp\tp@chapternumber{RunNumber}%
+    }{%
+      \tpIfComp{Number}{%
+        \tpGStoreComp\tp@chapternumber{Number}%
+      }{%
+        \global\let\tp@chapternumber\relax
+      }%
+    }%
+    \tpIfComp{RunTitle}{%
+      \tpGStoreComp\tp@chaptermark{RunTitle}%
+    }{%
+      \tpGStoreComp\tp@chaptermark{Title}%
+    }%
+    \tpIfComp{RunAuthorNameList}{%
+      \xdef\tp@authormark{\cc@Heading@RunAuthorNameList}%
+    }{%
+      \tpIfCompOverride{AuthorNameList}{%
+        %\tpGStoreComp\tp@authormark{AuthorNameList}%
+        \xdef\tp@authormark{\cc@Heading@AuthorNameList}%
+      }{%
+        \tpCompGDef\tp@authormark{Author}{author-list-print-format}%
+      }%
+    }%
     \ifx\ts@journal@series\ts@str@journal@zig
       \protected@xdef\tp@partmark{\tp@authormark}%
     \fi
@@ -471,6 +481,7 @@
       \bgroup%
         \cchHeadTagStart
         \tpWhenComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}%
+        \ccCreateLabel{chapter}% Workaround für Ticket 17800.
         \ignorespaces\tpUseComp{Title}%
         \cchHeadTagEnd
       \egroup
@@ -493,9 +504,12 @@
     \tpWhenComp{AuthorNameList}{%
       \vskip\baselineskip
       \ccaVstructStart{Authors}%
-      {\large\sfwidefamily\upseries\itshape\tpUseComp{AuthorNameList}}%
+      {%
+        \large\sfwidefamily\upseries\itshape\tpUseComp{AuthorNameList}%
+      }%
       \ccaVstructEnd{Authors}%
-      \ifx\ts@contact@dummy\@undefined\else
+      \ifx\ts@contact@dummy\@undefined
+      \else
         \ccaMoveStruct{\ts@contact@dummy}%
         \global\let\ts@contact@dummy\@undefined
       \fi
@@ -506,16 +520,21 @@
       \vskip1\baselineskip
       \savenotes
       \tpUseComp{QuoteBlock}\par%
-      \tpIfComp{AuthorNameList}
-        {\vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax}
-        {\vskip-1.68\baselineskip}%
-      \spewnotes}%
+      \tpIfComp{AuthorNameList}{%
+        \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax
+      }{%
+        \vskip-1.68\baselineskip
+      }%
+      \spewnotes
+    }%
     \ccaVstructEnd{Div}%
   }%
   \tpSetProperty{after-skip}{%
-    \tpIfComp{AuthorNameList}
-      {1.68\baselineskip}
-      {3.68\baselineskip}%
+    \tpIfComp{AuthorNameList}{%
+      1.68\baselineskip
+    }{%
+      3.68\baselineskip
+    }%
   }%
 }
 
@@ -920,7 +939,14 @@
       \interlinepenalty\@M\relax
       \tpUseProperty{title-face}%
       \cchHeadTagStart
-      \tpIfComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}{\leftskip\z@}%
+      \tpIfComp{Number}{%
+        \ccaVstructStart{Lbl}%
+          \tpUseProperty{hang-number}%
+        \ccaVstructEnd{Lbl}%
+      }{%
+        \leftskip\z@
+      }%
+      \ccCreateLabel{section}% Workaround für Ticket 17800.
       \ignorespaces\tpUseComp{Title}\par\nopagebreak%
       \cchHeadTagEnd
       \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}% Ticket 14677.
