@@ -32,9 +32,23 @@
     </keyword>
   </xsl:template>
   
-  <xsl:template match="*:title | *:subtitle | *:serial_title"  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:title | *:subtitle"  mode="klopotek-to-keyword"  priority="2">
     <keyword role="{css:map-klopotek-to-keyword(name())}">
       <xsl:apply-templates select="node()" mode="#current"/>
+    </keyword>
+  </xsl:template>
+  
+  <xsl:template match="*:serial_title"  mode="klopotek-to-keyword"  priority="2">
+    <keyword role="{css:map-klopotek-to-keyword(name())}">
+      <xsl:choose>
+        <xsl:when test="$lang = ''">
+          <xsl:apply-templates select="node()" mode="#current"/>
+        </xsl:when>
+      <xsl:otherwise>
+        <!-- https://redmine.le-tex.de/issues/17843-->
+        <xsl:apply-templates select="//*:product_export/*:serial/*:classifications/*:category[@text = 'Übersetzungstitel']/*:category[starts-with(@var_part, $lang)]/*:category/@value" mode="#current"/>
+      </xsl:otherwise>
+      </xsl:choose>
     </keyword>
   </xsl:template>
   
