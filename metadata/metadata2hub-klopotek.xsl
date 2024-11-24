@@ -41,7 +41,7 @@
   <xsl:template match="*:serial_title"  mode="klopotek-to-keyword"  priority="2">
     <keyword role="{css:map-klopotek-to-keyword(name())}">
       <xsl:choose>
-        <xsl:when test="$lang = ''">
+        <xsl:when test="$lang = '' or not(exists(//*:product_export/*:serial/*:classifications/*:category[@text = 'Übersetzungstitel']/*:category[starts-with(@var_part, $lang)]))">
           <xsl:apply-templates select="node()" mode="#current"/>
         </xsl:when>
       <xsl:otherwise>
