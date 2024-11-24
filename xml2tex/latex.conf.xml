@@ -303,6 +303,10 @@
                                                 '}&#xa;')"/>
       <xsl:text>&#xa;\end{tpSeriesEditor}&#xa;</xsl:text>
     </xsl:for-each>
+    <xsl:if test="not($series-editors[normalize-space()]) and $series-editor-info[normalize-space()]">
+      <xsl:value-of select="xml2tex:meta2tex($series-editor-info, (), 'tpSeriesEditorNameList')"/>
+      <!-- https://redmine.le-tex.de/issues/17518-->
+    </xsl:if>
   <!-- for oop only → do not deploy in common -->
     <xsl:choose>
       <xsl:when test="$s9y2 = 'mono'">
