@@ -618,7 +618,7 @@
   <xsl:template match="*:text[@term][@text_type = 'REIHG'][normalize-space()][$lang = ''] |
                        *:text[@term][@text_type = 'REIHGU'][normalize-space()][not($lang = '')]"  mode="klopotek-to-keyword"  priority="2">
     <!-- https://redmine.le-tex.de/issues/17450 -->
-    <keyword role="Reihenherausgeber">
+    <keyword role="Reihenherausgeberinformationen">
       <xsl:sequence select="html:process-html(., true(), false())" />
     </keyword>
   </xsl:template>
