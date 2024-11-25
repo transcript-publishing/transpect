@@ -828,9 +828,25 @@
     %%%%%%%%%%%%
     \tpSetProperty{titlepage-ii}{%
       \ccaStructStart{Titlepage}%
-      \tpIfComp{Dedication}{{\itshape\large\tpUseComp{Dedication}}\par\vskip\baselineskip}{}%
-      \tpIfComp{Acknowledgements}{{\itshape\large\tpUseComp{Acknowledgements}}\par\vskip\baselineskip}{}%
-      \tpIfComp{Editorial}{{\justify{\sffamily\sbseries\large Editorial}\par\vskip\baselineskip\tpUseComp{Editorial}\par\vskip\baselineskip}}{}%
+      \tpIfComp{Dedication}{%
+        {\itshape\large\tpUseComp{Dedication}}%
+        \par\vskip\baselineskip
+      }{}%
+      \tpIfComp{Acknowledgements}{%
+        {\itshape\large\tpUseComp{Acknowledgements}}%
+        \par\vskip\baselineskip
+      }{}%
+      \tpIfComp{Editorial}{%
+        {%
+          \justify{\sffamily\sbseries\large Editorial}\par%
+          \vskip\baselineskip
+          \tpUseComp{Editorial}\par%
+          \tpIfComp{SeriesEditorNameList}{%
+            \tpUseComp{SeriesEditorNameList}\par
+          }{}%
+          \vskip\baselineskip
+        }
+      }{}%
       \vspace*{\fill}%
       \bgroup
         {\justify\tpUseProperty{bio-output-format}}%
