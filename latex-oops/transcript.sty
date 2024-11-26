@@ -369,7 +369,7 @@
 }
 
 \let\@foreignNewLanguageRules\foreignlanguage
-\gdef\foreignlanguage#1#2{%
+\protected\gdef\foreignlanguage#1#2{%
   \protect\@foreignNewLanguageRules{#1}{%
     \ifcsname tp@languageRules@\languagename\endcsname
       \csname tp@languageRules@\languagename\endcsname%
