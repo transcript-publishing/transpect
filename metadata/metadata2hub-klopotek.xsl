@@ -55,7 +55,7 @@
   <xsl:template match="*:open_access"  mode="klopotek-to-keyword"  priority="2">
     <xsl:param name="all-products" as="element()+" tunnel="yes"/>
     <!-- https://redmine.le-tex.de/issues/16949-->
-    <xsl:if test="$open-access">
+    <xsl:if test="$open-access and not($open-access-embargo)">
       <xsl:variable name="license-type" select="string-join(tokenize(($all-products[not(*:edition_type = ('EBE', 'PBK'))][*:open_access/@open_access_yn='Y'])[1]/*:open_access/*:cc_license_type/@term, '\P{Lu}')[not(. = 'CC')], '-')"/>
         <xsl:message select="'### license: ', $license-type"/>
       <keyword role="Lizenz">
