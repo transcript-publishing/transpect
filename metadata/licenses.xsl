@@ -15,11 +15,11 @@
         <Link url="https://creativecommons.org/licenses/by-nc-nd/4.0/" />
         <Texts>
           <Text lang="en">
-            This work is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 (BY-NC-ND) which means that the text may be used for non-commercial purposes, provided credit is given to the author. For details go to https://creativecommons.org/licenses/by-nc-nd/4.0/<br/>
+            This work is licensed under the Creative Commons Attribution‐NonCommercial‐NoDerivatives 4.0 (BY-NC-ND) which means that the text may be used for non-commercial purposes, provided credit is given to the author. For details go to https://creativecommons.org/licenses/by-nc-nd/4.0/<br/>
             To create an adaptation, translation, or derivative of the original work and for commercial use, further permission is required and can be obtained by contacting rights@transcript-publishing.com<br/>
             Creative Commons license terms for re-use do not apply to any content (such as graphs, figures, photos, excerpts, etc.) not original to the Open Access publication and further permission may be required from the rights holder. The obligation to research and clear permission lies solely with the party re-using the material.</Text>
           <Text lang="de">
-            Dieses Werk ist lizenziert unter der Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 Lizenz (BY-NC-ND). Diese Lizenz erlaubt die private Nutzung, gestattet aber keine Bearbeitung und keine kommerzielle Nutzung. Weitere Informationen finden Sie unter https://creativecommons.org/licenses/by-nc-nd/4.0/deed.de<br/>
+            Dieses Werk ist lizenziert unter der Creative Commons Attribution‐NonCommercial‐NoDerivatives 4.0 Lizenz (BY-NC-ND). Diese Lizenz erlaubt die private Nutzung, gestattet aber keine Bearbeitung und keine kommerzielle Nutzung. Weitere Informationen finden Sie unter https://creativecommons.org/licenses/by-nc-nd/4.0/deed.de<br/>
             Um Genehmigungen für Adaptionen, Übersetzungen, Derivate oder Wiederverwendung zu kommerziellen Zwecken einzuholen, wenden Sie sich bitte an rights@transcript-publishing.com<br/>
             Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Die Wiederverwendung von Material aus anderen Quellen (gekennzeichnet mit Quellenangabe) wie z.B. Schaubilder, Abbildungen, Fotos und Textauszüge erfordert ggf. weitere Nutzungsgenehmigungen durch den jeweiligen Rechteinhaber.
           </Text>
@@ -31,12 +31,12 @@
         <Link url="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
         <Texts>
           <Text lang="en">
-            This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (BY-NC-SA) license, which means that the text may be shared and redistributed, provided credit is given to the author for non-commercial purposes only.<br/>
+            This work is licensed under the Creative Commons Attribution‐NonCommercial‐ShareAlike 4.0 (BY-NC-SA) license, which means that the text may be shared and redistributed, provided credit is given to the author for non-commercial purposes only.<br/>
             Permission to use the text for commercial purposes can be obtained by contacting rights@transcript-publishing.com<br/>
             Creative Commons license terms for re-use do not apply to any content (such as graphs, figures, photos, excerpts, etc.) not original to the Open Access publication and further permission may be required from the rights holder. The obligation to research and clear permission lies solely with the party re-using the material.
           </Text>
           <Text lang="de">
-            Dieses Werk ist lizenziert unter der Creative Commons Attribution-NonCommercial-ShareAlike 4.0 Lizenz (BY-NC-SA). Diese Lizenz erlaubt unter Voraussetzung der Namensnennung des Urhebers die Bearbeitung, Vervielfältigung und Verbreitung des Materials in jedem Format oder Medium zu nicht-kommerziellen Zwecken, sofern der neu entstandene Text unter derselben Lizenz wie das Original verbreitet wird. (Lizenz-Text: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de)<br/>
+            Dieses Werk ist lizenziert unter der Creative Commons Attribution‐NonCommercial‐ShareAlike 4.0 Lizenz (BY-NC-SA). Diese Lizenz erlaubt unter Voraussetzung der Namensnennung des Urhebers die Bearbeitung, Vervielfältigung und Verbreitung des Materials in jedem Format oder Medium zu nicht-kommerziellen Zwecken, sofern der neu entstandene Text unter derselben Lizenz wie das Original verbreitet wird. (Lizenz-Text: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de)<br/>
             Um Genehmigungen für die Wiederverwendung zu kommerziellen Zwecken einzuholen, wenden Sie sich bitte an rights@transcript-verlag.de<br/>
             Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Die Wiederverwendung von Material aus anderen Quellen (gekennzeichnet mit Quellenangabe) wie z.B. Schaubilder, Abbildungen, Fotos und Textauszüge erfordert ggf. weitere Nutzungsgenehmigungen durch den jeweiligen Rechteinhaber.</Text>
           <Text lang="es">Spanish text for BY-NC-SA.</Text>
@@ -47,12 +47,12 @@
         <Link url="https://creativecommons.org/licenses/by-nc/4.0/" />
         <Texts>
           <Text lang="en">
-            This work is licensed under the Creative Commons Attribution-Non Commercial 4.0 (BY-NC) license, which means that the text may be may be remixed, build upon and be distributed, provided credit is given to the author, but may not be used for commercial purposes. For details go to: https://creativecommons.org/licenses/by-nc/4.0/<br/>
+            This work is licensed under the Creative Commons Attribution‐Non Commercial 4.0 (BY-NC) license, which means that the text may be may be remixed, build upon and be distributed, provided credit is given to the author, but may not be used for commercial purposes. For details go to: https://creativecommons.org/licenses/by-nc/4.0/<br/>
             Permission to use the text for commercial purposes can be obtained by contacting rights@transcript-publishing.com<br/>
             Creative Commons license terms for re-use do not apply to any content (such as graphs, figures, photos, excerpts, etc.) not original to the Open Access publication and further permission may be required from the rights holder. The obligation to research and clear permission lies solely with the party re-using the material.
           </Text>
           <Text lang="de">
-            Dieses Werk ist lizenziert unter der Creative Commons Attribution-Non-Commercial 4.0 Lizenz (BY-NC). Diese Lizenz erlaubt unter Voraussetzung der Namensnennung des Urhebers die Bearbeitung, Vervielfältigung und Verbreitung des Materials in jedem Format oder Medium ausschliesslich für nicht-kommerzielle Zwecke. (Lizenztext: https://creativecommons.org/licenses/by-nc/4.0/deed.de)<br/>
+            Dieses Werk ist lizenziert unter der Creative Commons Attribution‐Non‐Commercial 4.0 Lizenz (BY-NC). Diese Lizenz erlaubt unter Voraussetzung der Namensnennung des Urhebers die Bearbeitung, Vervielfältigung und Verbreitung des Materials in jedem Format oder Medium ausschliesslich für nicht-kommerzielle Zwecke. (Lizenztext: https://creativecommons.org/licenses/by-nc/4.0/deed.de)<br/>
             Um Genehmigungen für die Wiederverwendung zu kommerziellen Zwecken einzuholen, wenden Sie sich bitte an rights@transcript-publishing.com<br/>
             Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Die Wiederverwendung von Material aus anderen Quellen (gekennzeichnet mit Quellenangabe) wie z.B. Schaubilder, Abbildungen, Fotos und Textauszüge erfordert ggf. weitere Nutzungsgenehmigungen durch den jeweiligen Rechteinhaber.
           </Text>
@@ -81,12 +81,12 @@
         <Link url="https://creativecommons.org/licenses/by-sa/4.0/" />
         <Texts>
           <Text lang="en">
-            This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 (BY-SA) which means that the text may be remixed, build upon and be distributed, provided credit is given to the author and that copies or adaptations of the work are released under the same or similar license.<br/>
+            This work is licensed under the Creative Commons Attribution‐ShareAlike 4.0 (BY-SA) which means that the text may be remixed, build upon and be distributed, provided credit is given to the author and that copies or adaptations of the work are released under the same or similar license.<br/>
             https://creativecommons.org/licenses/by-sa/4.0/<br/>
             Creative Commons license terms for re-use do not apply to any content (such as graphs, figures, photos, excerpts, etc.) not original to the Open Access publication and further permission may be required from the rights holder. The obligation to research and clear permission lies solely with the party re-using the material.
           </Text>
           <Text lang="de">
-            Dieses Werk ist lizenziert unter der Creative Commons Attribution-ShareAlike 4.0 Lizenz (BY-SA). Diese Lizenz erlaubt unter Voraussetzung der Namensnennung des Urhebers die Bearbeitung, Vervielfältigung und Verbreitung des Materials in jedem Format oder Medium für beliebige Zwecke, auch kommerziell, sofern der neu entstandene Text unter derselben Lizenz wie das Original verbreitet wird.<br/>
+            Dieses Werk ist lizenziert unter der Creative Commons Attribution‐ShareAlike 4.0 Lizenz (BY-SA). Diese Lizenz erlaubt unter Voraussetzung der Namensnennung des Urhebers die Bearbeitung, Vervielfältigung und Verbreitung des Materials in jedem Format oder Medium für beliebige Zwecke, auch kommerziell, sofern der neu entstandene Text unter derselben Lizenz wie das Original verbreitet wird.<br/>
             https://creativecommons.org/licenses/by-sa/4.0/<br/>
             Die Bedingungen der Creative-Commons-Lizenz gelten nur für Originalmaterial. Die Wiederverwendung von Material aus anderen Quellen (gekennzeichnet mit Quellenangabe) wie z.B. Schaubilder, Abbildungen, Fotos und Textauszüge erfordert ggf. weitere Nutzungsgenehmigungen durch den jeweiligen Rechteinhaber.
           </Text>
