@@ -16,6 +16,8 @@
   
   <xsl:import href="http://transpect.io/tei2bits/xsl/tei2bits.xsl"/>
   
+  <xsl:param name="isbn-as-book-id" required="false" select="true()"/>
+  
   <xsl:variable name="css:wrap-content-with-elements-from-mappable-style-attributes" as="xs:boolean"
     select="false()"/>
   
