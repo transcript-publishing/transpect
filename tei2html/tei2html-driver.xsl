@@ -131,6 +131,7 @@
                                    $metadata[@key = 'Herausgeber'],
                                    $metadata[@key = 'Titel'],
                                    $metadata[@key = 'Untertitel'],
+                                   $metadata[@key = 'Mitarbeit'],
                                    $metadata[@key = 'Reihe']" mode="#current"/>
       <div class="logo">
         <img src="http://this.transpect.io/a9s/ts/logos/transcript_rgb.png" alt="Transcript Verlag"/>

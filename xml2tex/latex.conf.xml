@@ -65,6 +65,8 @@
                          $title)[1]"/>
   <xsl:variable name="subtitle" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Untertitel']"/>
+  <xsl:variable name="collaborators" as="element(dbk:keyword)?"
+                select="$metadata/dbk:keyword[@role eq 'Mitarbeit']"/>
   <xsl:variable name="shorttitle" as="element(dbk:keyword)?"
                 select="$metadata/dbk:keyword[@role eq 'Kurztitel']"/>
   <xsl:variable name="additional-info1" as="element(dbk:keyword)?"
@@ -339,6 +341,7 @@
     <xsl:sequence select="
       xml2tex:meta2tex(($title, $title-for-running-head)[1], (), 'tpTitle'),
       xml2tex:meta2tex($subtitle, (), 'tpSubtitle'),
+      xml2tex:meta2tex($collaborators, (), 'tpCollaborators'),
       xml2tex:meta2tex($shorttitle, (), 'tpShortTitle'),
       xml2tex:meta2tex($series-number, (), 'tpNumber'),
       xml2tex:meta2tex($series-name, (), 'tpSeries'),
