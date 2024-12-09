@@ -106,16 +106,16 @@
   <key>ePUB-ISBN</key>-->
   
   <xsl:template match="*:keywordset[@role = 'titlepage']" mode="meta">
-    <meta name="DC.creator" content="{*:keyword[@role = ('Autor', 'Herausgeber')]}"/>
+    <meta name="DC.creator" content="{if (*:keyword[@role = ('Autor', 'Herausgeber')][*]) then string-join(*:keyword[@role = ('Autor', 'Herausgeber')]/*, ' ') else *:keyword[@role = ('Autor', 'Herausgeber')]}"/>
     <meta name="DC.title" content="{*:keyword[@role = 'Titel']}"/>
     <meta name="DC.identifier" content="{(*:keyword[@role = 'ePUB-ISBN'],
                                           $htmlinput[1]/html:html/html:head/html:meta[@name='doi']/@content
                                           )[1]}"/>
     <meta name="DC.publisher" content="{(*:keyword[@role = ('Verlagsname')], 'transcript Verlag')[1]}"/>
     <xsl:if test="*:keyword[@role eq 'Kurztext']">
-      <meta name="DC.description" content="{*:keyword[@role = ('Kurztext')]}"/>
+      <meta name="DC.description" content="{if (*:keyword[@role = 'Kurztext'][*]) then string-join(*:keyword[@role = 'Kurztext']/*, ' ') else *:keyword[@role = ('Kurztext')]}"/>
     </xsl:if>
-    <xsl:variable name="copyright" select="*:keyword[@role = 'Copyright']"/>
+    <xsl:variable name="copyright" select="if (*:keyword[@role = 'Copyright'][*]) then string-join(*:keyword[@role = 'Copyright']/*, ' ') else *:keyword[@role = 'Copyright']"/>
     <meta name="DC.date">
       <xsl:attribute name="content" select="if (matches($copyright, '^\s*©\s*\d{4}')) then replace($copyright, '^\s*©\s*(\d{4}).+$', '$1') else format-date(current-date(), '[Y]')"/>
     </meta>
