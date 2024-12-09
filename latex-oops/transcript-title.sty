@@ -22,6 +22,7 @@
 \tpAddToType{Components}{titlepage}{%
   \ccDeclareGlobalComponent{ImprintAddendum}% Zusatzinformation fürs Impressum, die nicht genauer spezifiziert werden kann und direkt vor der DOI und/oder anderen Identifikationsnummern erscheint.
   \ccDeclareGlobalComponent{CoverCopyright}%
+  \ccDeclareGlobalComponent{Collaboration}%
 }
 
 \tpDeclareTitlepage{%
@@ -844,8 +845,7 @@
           \tpIfComp{SeriesEditorNameList}{%
             \tpUseComp{SeriesEditorNameList}\par
           }{}%
-          \vskip\baselineskip
-        }
+        }%
       }{}%
       \vspace*{\fill}%
       \bgroup
@@ -901,8 +901,8 @@
         \tpIfComp{Subtitle}{%
           \par
           \normalfont\Large\upseries
-          \sffamily\vskip\dimexpr5bp+0.65mm\relax
-          \Large
+          \sffamily
+          \vskip\dimexpr5bp+0.65mm\relax
           \topsep0pt \partopsep0pt % no space before
           \flushleft\ccaStructStart{P}\tpUseComp{Subtitle}\ccaStructEnd{P}\endflushleft%
         }{%
@@ -911,6 +911,13 @@
       }%
       \ccaStructEnd{MetaDatumBlock}%
       \par
+      \tpIfComp{Collaboration}{%
+        \vskip1\baselineskip
+        {%
+          \normalfont\Large\upseries\sffamily
+          \tpUseComp{Collaboration}%
+        }%
+      }{}%
       \vskip\baselineskip
       \tpWhenComp{AddNoteIII}{%
         \ccaStructStart{MetaDatumBlock}%
