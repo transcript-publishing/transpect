@@ -341,7 +341,7 @@
     <xsl:sequence select="
       xml2tex:meta2tex(($title, $title-for-running-head)[1], (), 'tpTitle'),
       xml2tex:meta2tex($subtitle, (), 'tpSubtitle'),
-      xml2tex:meta2tex($collaborators, (), 'tpCollaborators'),
+      xml2tex:meta2tex($collaborators, (), 'tpCollaboration'),
       xml2tex:meta2tex($shorttitle, (), 'tpShortTitle'),
       xml2tex:meta2tex($series-number, (), 'tpNumber'),
       xml2tex:meta2tex($series-name, (), 'tpSeries'),
