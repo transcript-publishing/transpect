@@ -6,12 +6,13 @@
   xmlns:html="http://www.w3.org/1999/xhtml"  
   xmlns:epub="http://www.idpf.org/2007/ops"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:dbk="http://docbook.org/ns/docbook"
   xmlns="http://www.w3.org/1999/xhtml" 
-  xmlns:tr="http://transpect.io" exclude-result-prefixes="xs c epub"
+  xmlns:tr="http://transpect.io" exclude-result-prefixes="xs c epub dbk"
   version="2.0">
   
 <!--  <xsl:variable name="epub-config" as="document-node(element(epub-config))?" select="collection()[1]"/>-->
-  <xsl:variable name="metadata" as="document-node(element())?" select="collection()[//*:plist]"/>
+  <xsl:variable name="metadata" as="document-node()?" select="collection()[/dbk:hub]"/>
   
   <xsl:variable name="htmlinput" as="document-node(element(html:html))*">
     <xsl:sequence select="collection()[/html:html]"/>
@@ -76,7 +77,7 @@
                                                        $htmlinput[1]/html:html/html:body/*[@epub:type = 'dedication'],
                                                        $htmlinput[1]/html:html/html:body/*[@epub:type = 'toc']" as="element(*)*"/>
   <xsl:variable name="language" as="xs:string?" select="(
-                                                         $htmlinput[1]/html:html/@lang, $metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Sprache']],
+                                                         $htmlinput[1]/html:html/@lang, $metadata//dbk:info/dbk:keywordset[@role ='titlepage']/*:keyword[normalize-space()][@role eq 'Sprache'],
                                                          'de'
                                                          )[1]"/>
   
@@ -86,7 +87,7 @@
       <!--  https://redmine.le-tex.de/issues/17361-->
       <head>
         <xsl:call-template name="htmltitle"/>
-        <xsl:apply-templates select="$metadata//*:dict" mode="meta"/>
+        <xsl:apply-templates select="$metadata" mode="meta"/>
         <xsl:apply-templates
           select="$htmlinput[1]/html:html/html:head/node() except ($htmlinput[1]/html:html/html:head/html:title, $htmlinput[1]/html:html/html:head/html:meta[@name = 'lang'])"/>
       </head>
@@ -99,30 +100,30 @@
 
 
   <xsl:template match="/" mode="meta">
-    <xsl:apply-templates select="*//*:dict" mode="#current"/>
+    <xsl:apply-templates select="//dbk:info/dbk:keywordset[@role = 'titlepage']" mode="#current"/>
   </xsl:template>
 <!--
   <key>ePUB-ISBN</key>-->
   
-  <xsl:template match="*:dict" mode="meta">
-    <meta name="DC.creator" content="{normalize-space(string-join($metadata//key[. = ('Autor', 'Herausgeber')]/following-sibling::*[1][normalize-space()]/descendant-or-self::string, ' '))}"/>
-    <meta name="DC.title" content="{normalize-space(string-join($metadata//key[. = ('Titel')]/following-sibling::*[1][normalize-space()]/descendant-or-self::string, ' '))}"/>
-    <meta name="DC.identifier" content="{(normalize-space(string-join($metadata//key[. = ('ePUB-ISBN')]/following-sibling::*[1][normalize-space()]/descendant-or-self::string, ' '))[normalize-space()],
+  <xsl:template match="*:keywordset[@role = 'titlepage']" mode="meta">
+    <meta name="DC.creator" content="{*:keyword[@role = ('Autor', 'Herausgeber')]}"/>
+    <meta name="DC.title" content="{*:keyword[@role = 'Titel']}"/>
+    <meta name="DC.identifier" content="{(*:keyword[@role = 'ePUB-ISBN'],
                                           $htmlinput[1]/html:html/html:head/html:meta[@name='doi']/@content
                                           )[1]}"/>
-    <meta name="DC.publisher" content="{(normalize-space(string-join($metadata//key[. = ('Verlagsname')]/following-sibling::*[1]/descendant-or-self::string, ' '))[normalize-space()], 'transcript Verlag')[1]}"/>
-    <xsl:if test="$metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Kurztext']]">
-      <meta name="DC.description" content="{normalize-space(string-join($metadata//key[. = ('Kurztext')]/following-sibling::*[1]/descendant-or-self::string, ' '))}"/>
+    <meta name="DC.publisher" content="{(*:keyword[@role = ('Verlagsname')], 'transcript Verlag')[1]}"/>
+    <xsl:if test="*:keyword[@role eq 'Kurztext']">
+      <meta name="DC.description" content="{*:keyword[@role = ('Kurztext')]}"/>
     </xsl:if>
-    <xsl:variable name="copyright" select="normalize-space(string-join($metadata//key[. = 'Copyright']/following-sibling::*[1]/descendant-or-self::string, ' '))"/>
+    <xsl:variable name="copyright" select="*:keyword[@role = 'Copyright']"/>
     <meta name="DC.date">
       <xsl:attribute name="content" select="if (matches($copyright, '^\s*©\s*\d{4}')) then replace($copyright, '^\s*©\s*(\d{4}).+$', '$1') else format-date(current-date(), '[Y]')"/>
     </meta>
-    <xsl:if test="$metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Copyright']]">
+    <xsl:if test="*:keyword[@role eq 'Copyright']">
        <meta name="DC.rights" content="{$copyright}"/>
     </xsl:if>
-    <xsl:if test="$metadata//*[self::array|self::string][normalize-space()][preceding-sibling::*[1][. eq 'Schlagworte']]">
-      <xsl:for-each select="tokenize($metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Schlagworte']], ';')[normalize-space()]">
+    <xsl:if test="*:keyword[@role eq 'Schlagworte']">
+      <xsl:for-each select="tokenize(*:keyword[@role eq 'Schlagworte'], ';')[normalize-space()]">
         <meta name="DC.subject" content="{.}"/>
       </xsl:for-each>
     </xsl:if>
@@ -327,8 +328,8 @@
   <!-- title of the html document-->
   <xsl:template name="htmltitle" as="element(html:title)">
     <title>
-      <xsl:value-of select="(($metadata//string[normalize-space()][preceding-sibling::*[1][. eq 'Titel']],
-                                string-join($metadata//array[preceding-sibling::*[1][. eq 'Titel']]//string[normalize-space()]/replace(., '\s+', ' '), ' ')
+      <xsl:value-of select="(($metadata//dbk:info/dbk:keywordset[@role ='titlepage']/*:keyword[@role eq 'Titel'],
+                                string-join($metadata//dbk:info/dbk:keywordset[@role ='titlepage']/*:keyword[@role eq 'Titel']/replace(., '\s+', ' '), ' ')
                               )[1][normalize-space()], $htmlinput[1]/html:html/html:head/html:title)[1]"/>
     </title>
   </xsl:template>
