@@ -171,18 +171,36 @@
   \ps@headings
   \def\@oddhead{%
     \ccaStructStart[Document]{header}%
-    \smash{\vtop{%
-        \hfill\footnotesize\nsffamily
+    \smash{%
+      \vtop{%
+        \hfill
+        \footnotesize
+        \nsffamily
         \tpNamespace{titlepage}%
-        \tpUseComp{JournalName}\space\tpUseComp{Year}\enskip\tpUseComp{Volume}/\tpUseComp{Issue}%
+        \ifx\ts@journal@series\ts@str@journal@zig
+          \tpUseComp{JournalName}\space\tpUseComp{Year}\enskip/\enskip Jg.\space\tpUseComp{Volume}% Differenzierung eingebaut mit Ticket 17966.
+        \else
+          \tpUseComp{JournalName}\space\tpUseComp{Year}\enskip\tpUseComp{Volume}/\tpUseComp{Issue}%
+        \fi
         \ifx\@articleLicenceLogo\relax\else
           \enskip\includegraphics[height=7bp]{\@articleLicenceLogo}%
         \fi
         \@@par
         \hfill
-        \@articleDOI}}%
-    \ccaStructEnd{header}}%
-  \def\@oddfoot{\smash{\parskip\z@\parindent\z@\vbox{\box\@articlefooterbox}}}%
+        \@articleDOI
+      }%
+    }%
+    \ccaStructEnd{header}%
+  }%
+  \def\@oddfoot{%
+    \smash{%
+      \parskip\z@
+      \parindent\z@
+      \vbox{%
+        \box\@articlefooterbox
+      }%
+    }%
+  }%
 }
 \pagestyle{headings}
 \ccaAddRolemap{AuthorContact}{P}

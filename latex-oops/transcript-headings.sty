@@ -556,9 +556,6 @@
   %\global\let\tpKeywordsTitle\tpKeywordsLabel
   %\global\let\tpTitleEnTitle\tpTitleEnLabel
   %\thispagestyle{articlehead}
-  % Artikel-DOI für die Zeitschriftenauftaktseite. Aus den Makros der Überschrift übernommen.
-  % Muss global und ausgewertet sein, damit das Seitenlayout ps@articlehead darauf zugreifen kann.
-  \xdef\@articleDOI{\tpUseComp{DOI}}%
   % Vorherblock, 15194.
   \tpSetProperty{affiliation-format}{}%
   \tpSetProperty{affil-block-format}{\tpUseComp{Affiliation}}
@@ -590,6 +587,13 @@
     \fi
   }%
   \tpSetProperty{counted-name-sep}{/}%
+
+  \tpSetProperty{before-heading-block}{%
+    \parindent\z@ \parskip\z@
+    % Artikel-DOI für die Zeitschriftenauftaktseite. Aus den Makros der Überschrift übernommen.
+    % Muss global und ausgewertet sein, damit das Seitenlayout ps@articlehead darauf zugreifen kann.
+    \xdef\@articleDOI{\tpUseComp{DOI}}%
+  }
   \tpSetProperty{before-heading}{%
     \ifx\@twocolumnContinuousChapters\relax
       \if@twocolumn
@@ -845,28 +849,59 @@
     \tpSetProperty{toc-subtitle-face}{\normalfont\normalsize}%
     \tpSetProperty{toc-format}{%
       \ccaVstructStart{TOCI}%
-      \ccWhenComp{TocNumber}{\ccaVstructStart{P}\ccaVstructStart{Reference}}%
+      \ccWhenComp{TocNumber}{%
+        \ccaVstructStart{P}%
+        \ccaVstructStart{Reference}%
+      }%
       \tpUseProperty{toc-title-face}%
       \tpIfComp{TocNumber}{%
-        \tpIfComp{TocAuthorNameList}{\tpTocLink{\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}:\ccaVstructEnd{Span}}\newline}{}%
+        \tpIfComp{TocAuthorNameList}{%
+          \tpTocLink{%
+            \ccaVstructStart{Span}%
+              \tpUseComp{TocAuthorNameList}:%
+            \ccaVstructEnd{Span}%
+          }%
+          \newline
+        }{}%
         \@tempdima=\csname cc-Heading-toc-number-1-maxwd\endcsname\relax%
         \@tempdimb=\csname cc-Heading-toc-number-0-maxwd\endcsname\relax%
         \ifdim\@tempdima<\@tempdimb\relax
           \@tempdima=\@tempdimb%
         \fi%
-        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{\tpTocLink{\ccaVstructStart{Lbl}\tpUseComp{TocNumber}\ccaVstructEnd{Lbl}}\hss}%
+        \leftskip\@tempdima\hskip-\@tempdima\hbox to \@tempdima{%
+          \tpTocLink{%
+            \ccaVstructStart{Lbl}%
+              \tpUseComp{TocNumber}%
+            \ccaVstructEnd{Lbl}%
+          }%
+          \hss
+        }%
       }{%\leftskip\z@%
-        \tpWhenComp{TocAuthorNameList}{\tpTocLink{\ccaVstructStart{Span}\tpUseComp{TocAuthorNameList}:\ccaVstructEnd{Span}}\space}%
+        \tpWhenComp{TocAuthorNameList}{%
+          \tpTocLink{%
+            \ccaVstructStart{Span}%
+              \tpUseComp{TocAuthorNameList}:%
+            \ccaVstructEnd{Span}%
+          }%
+          \space
+        }%
       }%
       \noindent%
       \advance\leftskip by 2em%
       \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
       \rightskip\wd\@tempboxa%
       \tpTocLink{%
-        \ccaVstructStart{Span}\tpUseComp{TocTitle}\ccaVstructEnd{Span}%
+        \ccaVstructStart{Span}%
+          \tpUseComp{TocTitle}%
+        \ccaVstructEnd{Span}%
         \tpWhenComp{TocSubtitle}{%
           \newline%
-          {\tpUseProperty{toc-subtitle-face}\ccaVstructStart{Span}\tpUseComp{TocSubtitle}\ccaVstructEnd{Span}}%
+          {%
+            \tpUseProperty{toc-subtitle-face}%
+            \ccaVstructStart{Span}%
+              \tpUseComp{TocSubtitle}%
+            \ccaVstructEnd{Span}%
+          }%
         }%
         \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
         \ccaVstructStart{Span}\rlap{\hb@xt@\wd\@tempboxa{\tpUseComp{TocPage}}}\ccaVstructEnd{Span}%
