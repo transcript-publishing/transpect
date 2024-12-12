@@ -287,7 +287,7 @@
                               'SPONSOR':('Fordertext_Series',  'Förderung der Reihe von',             '',     ''),
                               'ENAB':('Fordertext',     'Die Publikation entstand mit freundlicher Förderung von',    '',     ''),
                               'PENA':('Fordertext_Print',     'Print-Ausgabe mit freundlicher Förderung von',   '',     ''),
-                              'VARI':('Mitarbeit',     'Unter Mitarbeit von',   'Assisted by',     'Con la colaboración de')
+                              'VARI':('Mitarbeit',     'Unter Mitarbeit von ',   'Assisted by ',     'Con la colaboración de ')
                   }">
      <!--                             1: Keyname,        2: added info German, 3: English 4 Spanish (https://redmine.le-tex.de/issues/16459)-->
    </xsl:variable>
@@ -327,7 +327,7 @@
                                                           ($current-lookup[$lang-num][normalize-space()], 
                                                            string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
                                                           ), 
-                                                          ': '
+                                                          ': '[not($current-lookup = 'VARI')(:https://redmine.le-tex.de/issues/17944#note-8:)]
                                                           )"/>
                       </para>
                     </xsl:for-each>
@@ -337,7 +337,7 @@
                                                           ($current-lookup[$lang-num][normalize-space()], 
                                                            string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
                                                           ), 
-                                                          ': '
+                                                          ': '[not($current-lookup = 'VARI')(:https://redmine.le-tex.de/issues/17944#note-8:)]
                                                           )"/>
                   </xsl:otherwise>
                 </xsl:choose>
