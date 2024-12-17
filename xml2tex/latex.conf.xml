@@ -189,6 +189,8 @@
                                 not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')]))) 
                         then ($metadata/dbk:keyword[@role eq 'Copyright_Disclaimer'], $metadata/dbk:keyword[@role eq 'Copyright']/dbk:para[not(position() = 1)])[1]
                         else ()"/>
+  <xsl:variable name="copyright-remark" as="xs:string?" 
+                select="$metadata/dbk:keyword[@role eq 'CopyrightRemark']"/>
   <xsl:variable name="license-logo-href" as="xs:string?" 
                 select="$metadata/dbk:keyword[@role eq 'Lizenzlogo']"/>
   <xsl:variable name="license-text" as="element(dbk:keyword)?"
@@ -420,7 +422,8 @@
       <xsl:sequence select="xml2tex:meta2tex($copyright-note, (), 'tpCopyright')"/>
     </xsl:if>
     <xsl:if test="$copyright-holder[normalize-space()]">
-  <xsl:sequence select="xml2tex:meta2tex($copyright-holder, (), 'tpCopyrightDisclaimer')"/>
+  <xsl:sequence select="xml2tex:meta2tex($copyright-holder, (), 'tpCopyrightDisclaimer'), 
+                        xml2tex:meta2tex($copyright-remark, (), 'tpCopyrightRemark')"/>
     </xsl:if>
     <xsl:if test="normalize-space($license-logo-href)">
       <xsl:value-of select="concat('&#xa;\tpLicenceLogo{logos/cc/', 
