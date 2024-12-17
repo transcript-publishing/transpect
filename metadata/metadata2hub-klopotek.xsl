@@ -214,7 +214,7 @@
          https://redmine.le-tex.de/issues/16471, 
          https://redmine.le-tex.de/issues/17513 -->
     <xsl:if test="$all-products[*:edition_type =  'EBP']/*:original_publication/*:copyright_remark">
-      <keyword role="CopyrightRemark">
+      <keyword role="Copyright_Remark">
         <para><xsl:sequence select="$all-products[*:edition_type =  'EBP']/*:original_publication/*:copyright_remark/node()"/></para>
       </keyword>
     </xsl:if>

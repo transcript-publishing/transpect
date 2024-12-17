@@ -190,7 +190,7 @@
                         then ($metadata/dbk:keyword[@role eq 'Copyright_Disclaimer'], $metadata/dbk:keyword[@role eq 'Copyright']/dbk:para[not(position() = 1)])[1]
                         else ()"/>
   <xsl:variable name="copyright-remark" as="xs:string?" 
-                select="$metadata/dbk:keyword[@role eq 'CopyrightRemark']"/>
+                select="$metadata/dbk:keyword[@role eq 'Copyright_Remark']"/>
   <xsl:variable name="license-logo-href" as="xs:string?" 
                 select="$metadata/dbk:keyword[@role eq 'Lizenzlogo']"/>
   <xsl:variable name="license-text" as="element(dbk:keyword)?"
