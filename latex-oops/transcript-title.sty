@@ -23,6 +23,7 @@
   \ccDeclareGlobalComponent{ImprintAddendum}% Zusatzinformation fürs Impressum, die nicht genauer spezifiziert werden kann und direkt vor der DOI und/oder anderen Identifikationsnummern erscheint.
   \ccDeclareGlobalComponent{CoverCopyright}%
   \ccDeclareGlobalComponent{Collaboration}%
+  \ccDeclareGlobalComponent{CopyrightRemark}%
 }
 
 \tpDeclareTitlepage{%
@@ -1003,6 +1004,12 @@
     }{%
       Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\par
     }%
+    \tpIfComp{CopyrightRemark}{%
+      \vskip1\baselineskip
+      {%
+        \bfseries\tpUseComp{CopyrightRemark}%
+      }
+    }{}
     \tpIfComp{PubDivision}{%
       {\sffamily\tpGetComp{PubDivision}}%
     }{}%
