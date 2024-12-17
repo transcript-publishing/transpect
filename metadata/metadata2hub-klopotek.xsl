@@ -213,12 +213,13 @@
     <!-- https://redmine.le-tex.de/issues/17794, 
          https://redmine.le-tex.de/issues/16471, 
          https://redmine.le-tex.de/issues/17513 -->
-    <keyword role="Copyright">
-      <xsl:if test="$all-products[*:edition_type =  'EBP']/*:original_publication/*:copyright_remark">
+    <xsl:if test="$all-products[*:edition_type =  'EBP']/*:original_publication/*:copyright_remark">
+      <keyword role="CopyrightRemark">
         <para><xsl:sequence select="$all-products[*:edition_type =  'EBP']/*:original_publication/*:copyright_remark/node()"/></para>
-      </xsl:if>
+      </keyword>
+    </xsl:if>
+    <keyword role="Copyright">
       <xsl:choose>
-        
         <xsl:when test="$open-access and not($open-access-embargo)">
           <!-- Open Access gold-->
          <para>
