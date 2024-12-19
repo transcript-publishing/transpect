@@ -976,9 +976,14 @@
       \tpUseProperty{title-face}%
       \cchHeadTagStart
       \tpIfComp{Number}{%
-        \ccaVstructStart{Lbl}%
-          \tpUseProperty{hang-number}%
-        \ccaVstructEnd{Lbl}%
+        \edef\@tempa{\tpUseComp{Number}}%
+        \expandafter\ifx\@tempa\relax
+          \leftskip\z@
+        \else
+          \ccaVstructStart{Lbl}%
+            \tpUseProperty{hang-number}%
+          \ccaVstructEnd{Lbl}%
+        \fi
       }{%
         \leftskip\z@
       }%
