@@ -1109,6 +1109,9 @@
       \tsPrintFunding{Series}%
       \tsPrintFunding{}%
       \tsPrintFunding{Print}%
+      \tsPrintFunding{PrintProject}%
+      \tsPrintFunding{OAProject}%
+      \tsPrintFunding{HTML}%
     \egroup
   }
   \tpSetProperty{counted-name-sep}{\ifnum\ccCurCount<\tpTotalCount\relax,\space\fi}%
@@ -1159,12 +1162,30 @@
   \ccDeclareComponentGroup{FundingSeries}{\ts@funding@comps}{}%
   \ccDeclareGlobalComponent{FundingSeriesPreText}%
   \ccDeclareGlobalComponent{FundingSeriesPostText}%
+  %% Print project funding
+  \ccDeclareComponent{FundingPrintProjectBlock}{\expandafter\global}{}%
+  \ccDeclareComponentGroup{FundingPrintProject}{\ts@funding@comps}{}%
+  \ccDeclareGlobalComponent{FundingPrintProjectPreText}%
+  \ccDeclareGlobalComponent{FundingPrintProjectPostText}%
+  %% Open Access project funding
+  \ccDeclareComponent{FundingOAProjectBlock}{\expandafter\global}{}%
+  \ccDeclareComponentGroup{FundingOAProject}{\ts@funding@comps}{}%
+  \ccDeclareGlobalComponent{FundingOAProjectPreText}%
+  \ccDeclareGlobalComponent{FundingOAProjectPostText}%
+  %% HTML funding
+  \ccDeclareComponent{FundingHTMLBlock}{\expandafter\global}{}%
+  \ccDeclareComponentGroup{FundingHTML}{\ts@funding@comps}{}%
+  \ccDeclareGlobalComponent{FundingHTMLPreText}%
+  \ccDeclareGlobalComponent{FundingHTMLPostText}%
 }
 
 % Die neuen Funding-Kategorien solle intern genau so formatiert werden
 % wie das "normale" (Werks-)Funding:
 \AddToHook{cc/titlepage/funding}{%
-  \ccComposeCollection{FundingOA}    {fund-format}{FundingOABlock}%
-  \ccComposeCollection{FundingPrint} {fund-format}{FundingPrintBlock}%
-  \ccComposeCollection{FundingSeries}{fund-format}{FundingSeriesBlock}%
+  \ccComposeCollection{FundingOA}          {fund-format}{FundingOABlock}%
+  \ccComposeCollection{FundingPrint}       {fund-format}{FundingPrintBlock}%
+  \ccComposeCollection{FundingSeries}      {fund-format}{FundingSeriesBlock}%
+  \ccComposeCollection{FundingPrintProject}{fund-format}{FundingPrintProjectBlock}%
+  \ccComposeCollection{FundingOAProject}   {fund-format}{FundingOAProjectBlock}%
+  \ccComposeCollection{FundingHTML}        {fund-format}{FundingHTMLBlock}%
 }
