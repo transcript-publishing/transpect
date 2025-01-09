@@ -977,7 +977,8 @@
       \cchHeadTagStart
       \tpIfComp{Number}{%
         \edef\@tempa{\tpUseComp{Number}}%
-        \expandafter\ifx\@tempa\relax
+        \edef\@tempb{\relax}%
+        \ifx\@tempa\@tempb
           \leftskip\z@
         \else
           \ccaVstructStart{Lbl}%
