@@ -295,7 +295,21 @@
                   }">
      <!--                             1: Keyname,        2: added info German, 3: English 4 Spanish (https://redmine.le-tex.de/issues/16459)-->
    </xsl:variable>
-                  
+
+  <xsl:variable name="printer-lookup" as="map(xs:string, xs:string+)"
+                  select="map{'194789':  ('Wetzlar',    'Majuskel'),
+                               '60363':  ('Regensburg', 'Pustet'),
+                              '124592':  ('Leck',       'CPI'),
+                              '134098':  ('Göttingen',  'Hubert &amp; Co'),
+                              '133979':  ('Barleben',   'docupoint'),
+                              '178273':  ('Aachen',     'Sieprath'),
+                              '119674':  ('Düsselorf',  'Ostermann'),
+                              '161888':  ('Waiblingen', 'Elanders'),
+                              '148160':  ('Hamburg',    'BoD')                              
+                              }">
+     <!--                             1: Keyname (Konto-Nr),        2: Ort, 3: Name-->
+   </xsl:variable>
+  
                   
   <xsl:variable name="copyright-roles"  as="xs:string+" 
               select="('VE', 'HG', 'UMSA', 'UMGS', 'UMKO','LEKT', 'KORR', 'LAYO', 'DRUK', 'VARI')"/>
@@ -327,22 +341,28 @@
                   <xsl:when test="count($cg) gt 1">
                     <xsl:for-each select="$cg">
                       <para>
-                        <xsl:sequence select="string-join(
+                        <xsl:sequence select="string-join((:add Druckort https://redmine.le-tex.de/issues/17971:)
+                                               (string-join(
                                                           ($current-lookup[$lang-num][normalize-space()], 
                                                            string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
                                                           ), 
                                                           concat(':'[not($type = 'VARI')(:https://redmine.le-tex.de/issues/17944#note-8:)], ' ')
-                                                          )"/>
+                                                          ),
+                                               if ($type = 'DRUK') then map:get($printer-lookup,  ./@unique_person_id)[1] else ()),
+                                               ', ')"/>
                       </para>
                     </xsl:for-each>
                   </xsl:when>
                   <xsl:otherwise>
-                        <xsl:sequence select="string-join(
+                        <xsl:sequence select="string-join((:add Druckort https://redmine.le-tex.de/issues/17971:)
+                                                 (string-join(
                                                           ($current-lookup[$lang-num][normalize-space()], 
                                                            string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
                                                           ), 
                                                           concat(':'[not($type = 'VARI')(:https://redmine.le-tex.de/issues/17944#note-8:)], ' ')
-                                                          )"/>
+                                                          ), 
+                                                          if ($type = 'DRUK') then map:get($printer-lookup,  ./@unique_person_id)[1] else ()),
+                                                          ', ')"/>
                   </xsl:otherwise>
                 </xsl:choose>
               </keyword>
@@ -437,10 +457,10 @@
     <xsl:param name="preserve-styling" as="xs:boolean"/>
     
     <xsl:if test="$context[normalize-space()]">
-      <xsl:variable name="cleaned" select="replace(string-join($context/node(), ''), '&amp;amp;|&amp;(\p{Zs})', 'uUu$1')"/>
+      <xsl:variable name="cleaned" select="replace(string-join($context/node(), ''), '&amp;amp;|&amp;(\p{Zs}|\p{L}+[^\p{L}^;])', 'uUu$1')"/>
+      <xsl:message select="'~~', $cleaned"/>
       <xsl:variable name="replaced-entities" select="string-join(tr:decode-text-with-html-ent($cleaned), '')"/>
-      <!--<xsl:message select="$replaced-entities"/>-->
-      
+      <xsl:message select="$replaced-entities"/>
       <xsl:variable name="parsed" as="document-node(element(div))" 
         select="parse-xml('&lt;div>' || $replaced-entities || '&lt;/div>')"/>
       <xsl:variable name="postprocessed" as="node()*">
