@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c:param-set xmlns:c="http://www.w3.org/ns/xproc-step">
+  
+  <c:param name="clade-role" value="series"/>
+  <c:param name="exclude-filter" value="'(css|latex|xsl)'"/><!-- expects a regex -->
+
+</c:param-set>
