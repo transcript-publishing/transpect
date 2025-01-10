@@ -457,7 +457,7 @@
     <xsl:param name="preserve-styling" as="xs:boolean"/>
     
     <xsl:if test="$context[normalize-space()]">
-      <xsl:variable name="cleaned" select="replace(string-join($context/node(), ''), '&amp;amp;|&amp;(\p{Zs}|\p{L}+[^\p{L}^;])', 'uUu$1')"/>
+      <xsl:variable name="cleaned" select="replace(string-join($context/node(), ''), '&amp;amp;|&amp;(\p{L}+[^\p{L}^;]|\P{L})', 'uUu$1')"/>
       <xsl:message select="'~~', $cleaned"/>
       <xsl:variable name="replaced-entities" select="string-join(tr:decode-text-with-html-ent($cleaned), '')"/>
       <xsl:message select="$replaced-entities"/>
