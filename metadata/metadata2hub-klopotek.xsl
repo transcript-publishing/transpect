@@ -288,9 +288,9 @@
                               'SPONSOR':('Fordertext_Series',  'Förderung der Reihe von',             '',     ''),
                               'ENAB':('Fordertext',     'Die Publikation entstand mit freundlicher Förderung von',    '',     ''),
                               'PENA':('Fordertext_Print', 'Print-Ausgabe mit freundlicher Förderung von',   '',     ''),
-                              'ENPROA':('Fordertext_OAProject', 'Open-Access-Projekt mit freundlicher Förderung von:',   '',     ''),
-                              'ENPR':('Fordertext_PrintProject', 'Print-Projekt mit freundlicher Förderung von:',   '',     ''),
-                              'EBEN':('Fordertext_HTML', 'HTML mit freundlicher Förderung von:',   '',     ''),
+                              'ENPROA':('Fordertext_OAProject', 'Open-Access-Projekt mit freundlicher Förderung von',   '',     ''),
+                              'ENPR':('Fordertext_PrintProject', 'Print-Projekt mit freundlicher Förderung von',   '',     ''),
+                              'EBEN':('Fordertext_HTML', 'HTML mit freundlicher Förderung von',   '',     ''),
                               'VARI':('Mitarbeit',     'Unter Mitarbeit von',   'Assisted by',     'Con la colaboración de')
                   }">
      <!--                             1: Keyname,        2: added info German, 3: English 4 Spanish (https://redmine.le-tex.de/issues/16459)-->
