@@ -110,7 +110,7 @@
         </Texts>
       </License>
       <License id="CC0">
-        <Image url="cco.eu.png" />
+        <Image url="cc0.eu.png" />
         <Link url="https://creativecommons.org/publicdomain/zero/1.0/deed.de" />
         <Texts>
           <Text lang="de">
