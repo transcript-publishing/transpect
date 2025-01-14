@@ -109,6 +109,15 @@
           <Text lang="es">Spanish text for BY.</Text>
         </Texts>
       </License>
+      <License id="CC0">
+        <Image url="cc0.eu.png" />
+        <Link url="https://creativecommons.org/publicdomain/zero/1.0/deed.de" />
+        <Texts>
+          <Text lang="de">
+            Dieses Werk ist lizenziert unter der Creative Commons 1.0 Universal Lizenz (CC0 1.0). Diese Lizenz erlaubt die freie Bearbeitung, Vervielfältigung und Verbreitung des Materials in jedem Format oder Medium für beliebige Zwecke, auch kommerziell, ohne jegliche Einschränkung.
+          </Text>
+        </Texts>
+      </License>
     </Licenses>
   </xsl:variable>
   
