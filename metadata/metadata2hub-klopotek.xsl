@@ -301,11 +301,11 @@
                                '60363':  ('Regensburg', 'Pustet'),
                               '124592':  ('Leck',       'CPI'),
                               '134098':  ('Göttingen',  'Hubert &amp; Co'),
-                              '133979':  ('Barleben',   'docupoint'),
+                              '133979':  ('Magdeburg',   'docupoint'),
                               '178273':  ('Aachen',     'Sieprath'),
-                              '119674':  ('Düsselorf',  'Ostermann'),
+                              '119674':  ('Köln',  'Ostermann'),
                               '161888':  ('Waiblingen', 'Elanders'),
-                              '148160':  ('Hamburg',    'BoD')                              
+                              '148160':  ('Norderstedt',    'BoD')                              
                               }">
      <!--                             1: Keyname (Konto-Nr),        2: Ort, 3: Name-->
    </xsl:variable>
