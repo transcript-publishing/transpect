@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
   xmlns:c="http://www.w3.org/ns/xproc-step"
   xmlns:cx="http://xmlcalabash.com/ns/extensions"
@@ -110,6 +110,10 @@
   <p:sink/>
   
   -->
+
+  <cx:message>
+    <p:with-option name="message" select="'[info] analyze s9y1 path: ', concat(replace($basename, '^(.+_\d{5})(_.+)?$', '$1'), '.meta.xml')"/>
+  </cx:message>
   
   <tr:paths-for-files-xml name="get-titlepage-meta-path">
     <p:input port="conf">
@@ -118,44 +122,50 @@
     <p:with-option name="filenames" select="concat(replace($basename, '^(.+_\d{5})(_.+)?$', '$1'), '.meta.xml')"/>
   </tr:paths-for-files-xml>
 
-<!--  <tr:store-debug pipeline-step="metadata/00_paths-fo-files">
-    <p:with-option name="active" select="$debug"/>
-    <p:with-option name="base-uri" select="$debug-dir-uri"/>
-  </tr:store-debug>-->
-
-
-  <tr:recursive-directory-list name="meta-list">
-    <p:with-option name="path" select="if ($ci-test = true())
-                                       then concat(replace($local-dir, 'file:/', 'file:///'), '/meta.xml')
-                                       else replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:///$1')"/>
-  </tr:recursive-directory-list>
-
-
-  <tr:store-debug pipeline-step="metadata/01_meta-dir-content">
+  <cx:message cx:depends-on="get-titlepage-meta-path">
+    <p:with-option name="message" select="'[info] s9y1 path analyzed: ', /c:files/c:file/@name"/>
+  </cx:message>
+  
+  <tr:store-debug pipeline-step="metadata/00_paths-fo-files" cx:depends-on="get-titlepage-meta-path" name="load-meta_debug_001">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
 
-  <p:sink/>
+  <cx:message cx:depends-on="load-meta_debug_001" name="load-meta_msg_001">
+    <p:with-option name="message" select="'[info] list dir: ', replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:$1')"/>
+  </cx:message>
+
+  <tr:recursive-directory-list name="meta-list" cx:depends-on="load-meta_msg_001">
+    <p:with-option name="path" select="if ($ci-test = true())
+                                       then concat(replace($local-dir, 'file:/', 'file:///'), '/meta.xml')
+                                       else replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:$1//')"/>
+  </tr:recursive-directory-list>
+
+  <tr:store-debug pipeline-step="metadata/01_meta-dir-content" cx:depends-on="meta-list">
+    <p:with-option name="active" select="$debug"/>
+    <p:with-option name="base-uri" select="$debug-dir-uri"/>
+  </tr:store-debug>
+
+
   
-  <tr:recursive-directory-list name="funder-dir-listing">
+  <tr:recursive-directory-list name="funder-dir-listing" cx:depends-on="meta-list">
     <p:with-option name="path" select="if ($run-local = true())
                                        then 'file:///C:/cygwin/home/mpufe/transcript/content/media/logos/funders/'
                                        else '/media/logos/funders/'"/>
   </tr:recursive-directory-list>
   
-   <tr:store-debug pipeline-step="metadata/02a_funder-dir-content">
+  <tr:store-debug pipeline-step="metadata/02a_funder-dir-content" cx:depends-on="funder-dir-listing">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
   
   <p:sink/>
   
-  <tr:recursive-directory-list name="logo-dir-listing">
+  <tr:recursive-directory-list name="logo-dir-listing" cx:depends-on="meta-list">
     <p:with-option name="path" select="concat($code-dir, '/latex-oops/logos/series/')"/>
   </tr:recursive-directory-list>
   
-   <tr:store-debug pipeline-step="metadata/02b_logo-dir-content">
+  <tr:store-debug pipeline-step="metadata/02b_logo-dir-content" cx:depends-on="logo-dir-listing">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
@@ -181,7 +191,7 @@
 
   <p:sink/>
 
-  <p:choose name="ci-conf">
+  <p:choose name="ci-conf" cx:depends-on="meta-file-uri">
     <p:variable name="current-local-href" select="/c:result/@local-href">
       <p:pipe port="result" step="meta-file-uri"/>
     </p:variable>
@@ -210,7 +220,7 @@
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
   
-  <p:try name="try-load-titlepage-meta">
+  <p:try name="try-load-titlepage-meta" cx:depends-on="ci-conf">
     <p:group>
       <p:output port="result"/>
       <p:variable name="titlepage-meta-href" select="/c:result/@local-href"/>
@@ -267,7 +277,6 @@
   
   <p:wrap-sequence wrapper="cx:documents" name="meta-wrapped-with-logo-list">
     <p:input port="source">
-      <!--<p:pipe port="result" step="try-load-onix"/>-->
       <p:pipe port="result" step="try-load-titlepage-meta"/>
       <p:pipe port="result" step="funder-dir-listing"/>
       <p:pipe port="result" step="logo-dir-listing"/>
