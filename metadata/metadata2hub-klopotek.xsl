@@ -338,7 +338,7 @@
             <xsl:when test="$type[. =  $copyright-roles]">
               <keyword role="{$current-lookup[1]}">      
                 <xsl:choose>
-                  <xsl:when test="count($cg) gt 1">
+                  <xsl:when test="count($cg) gt 1 and not($type = ('UMKO', 'UMSA', 'UMGS', 'LEKT', 'KORR'))(:https://redmine.le-tex.de/issues/18085:)">
                     <xsl:for-each select="$cg">
                       <para>
                         <xsl:sequence select="string-join((:add Druckort https://redmine.le-tex.de/issues/17971:)
@@ -353,11 +353,26 @@
                       </para>
                     </xsl:for-each>
                   </xsl:when>
+                   <!--<xsl:when test="count($cg) gt 1 and $type = ('UMKO', 'UMSA', 'UMGS', 'LEKT', 'KORR')(:https://redmine.le-tex.de/issues/18085:)">
+                    <xsl:for-each select="$cg">
+                      <para>
+                        <xsl:sequence select="string-join((:add Druckort https://redmine.le-tex.de/issues/17971:)
+                                               (string-join(
+                                                          ($current-lookup[$lang-num][normalize-space()], 
+                                                           string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
+                                                          ), 
+                                                          concat(':'[not($type = 'VARI')(:https://redmine.le-tex.de/issues/17944#note-8:)], ' ')
+                                                          ),
+                                               if ($type = 'DRUK') then map:get($printer-lookup,  ./@unique_person_id)[1] else ()),
+                                               ', ')"/>
+                      </para>
+                    </xsl:for-each>
+                  </xsl:when>-->
                   <xsl:otherwise>
                         <xsl:sequence select="string-join((:add Druckort https://redmine.le-tex.de/issues/17971:)
                                                  (string-join(
                                                           ($current-lookup[$lang-num][normalize-space()], 
-                                                           string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
+                                                           string-join((for $contrib in $cg return string-join(($contrib/*:first_name[normalize-space()], $contrib/*:last_name[normalize-space()]), ' ')), ', ')
                                                           ), 
                                                           concat(':'[not($type = 'VARI')(:https://redmine.le-tex.de/issues/17944#note-8:)], ' ')
                                                           ), 
