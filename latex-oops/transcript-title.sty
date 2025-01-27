@@ -844,6 +844,9 @@
           \vskip\baselineskip
           \tpUseComp{Editorial}\par%
           \tpIfComp{SeriesEditorNameList}{%
+            % Temporäres Deaktivieren der Herausgeberkennung.
+            \let\editorsuffixsglname\relax%
+            \let\editorsuffixplname\relax%
             \tpUseComp{SeriesEditorNameList}\par
           }{}%
         }%
