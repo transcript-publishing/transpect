@@ -1048,12 +1048,29 @@
     \tpGetComp{ImprintAddendum}%
     \tpGetComp{DOI}%%
     \tpGetComp{Keywords}%%
-    \tpGetComp{ISBN}%
-    \tpGetComp{EpubPreText}%
-    \tpGetComp{EISBN}%
-    \tpGetComp{EpubISBN}%
-    \tpGetComp{BiblISSN}%
-    \tpGetComp{BibleISSN}%
+    % ISBN.
+    \tpUseComp{ISBN}%
+    \tpIfComp{EpubPreText}{%
+      \space| \tpUseComp{EpubPreText}%
+    }{}%
+    \tpIfComp{EISBN}{%
+      \space| \tpUseComp{EISBN}%
+    }{}%
+    \tpIfComp{EpubISBN}{%
+      \space| \tpUseComp{EpubISBN}%
+    }{}\par
+    % ISSN.
+    \def\@firstISSNFound{\@empty}%
+    \tpIfComp{BiblISSN}{%
+      \tpUseComp{BiblISSN}%
+      \gdef\@firstISSNFound{\relax}%
+    }{}%
+    \tpIfComp{BibleISSN}{%
+      \expandafter\ifx\@firstISSNFound\relax
+        \space |\space
+      \fi
+      \tpGetComp{BibleISSN}%
+    }{}%
     \tpUseProperty{imprint-sep}%
     \tpGetComp{EnvDisclaimer}%
     \tpGetComp{Advertise}%
