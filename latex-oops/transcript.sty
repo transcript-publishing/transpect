@@ -135,6 +135,18 @@
 
 \def\circledNumber#1{\raisebox{.2pt}{\textcircled{\raisebox{-1.2pt}{\sffamily #1}}}}
 
+%%%%%%%%%% Übergangsweise, bis die neuen Makros im xerif-latex-Branch sind.
+\DeclareTextFontCommand\textfallback{\fallbackfont}
+\DeclareTextFontCommand\textsffallback{\sffallbackfont}
+\DeclareTextFontCommand\textttfallback{\ttfallbackfont}
+\DeclareTextFontCommand\ccFallback{%
+  \ccsTestFont{\ccs@rmdefault}
+    {\fallbackfont}
+    {\ccsTestFont{\ccs@sfdefault}
+      {\sffallbackfont}
+      {\ttfallbackfont}}}%
+%%%%%%%%%%
+
 \usepackage{newunicodechar}
 %\newunicodechar{↩}{\ifmmode\hookleftarrow\else$\hookleftarrow$\fi}% 8617
 \newunicodechar{‐}{\penalty\@M-\hskip\z@skip}% 8617, U+2010, ersetzt durch U+002D.
@@ -160,6 +172,7 @@
 \newunicodechar{⑦}{\circledNumber{7}}
 \newunicodechar{⑧}{\circledNumber{8}}
 \newunicodechar{⑨}{\circledNumber{9}}
+\newunicodechar{č}{{\ccFallback{č}}}
 % Ideographisches Komma für Chinesisch.
 \newunicodechar{、}{\char"3001}
 %\newunicodechar{ǀ}{|}

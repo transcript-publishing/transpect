@@ -23,6 +23,16 @@
     FontFace = {md}{it}{Junicode-Italic.ttf},%
   ]{Junicode.ttf}
 
+\renewfontfamily\sffallbackfont{NotoSans-Regular.ttf}%
+[BoldFont = NotoSans-Bold.ttf,%
+ ItalicFont = NotoSans-Italic.ttf,%
+ BoldItalicFont = NotoSans-BoldItalic.ttf,%
+ FontFace = {up}{n}{NotoSans-Regular.ttf},%
+ FontFace = {up}{it}{NotoSans-Italic.ttf},%
+ Path = ./fonts/Noto/Sans/,%
+ WordSpace = 1.25,%
+ Scale = 0.94%
+]
 
 \ifx\ts@layout@type\ts@str@layout@mdw
   \babelfont{rm}[%
