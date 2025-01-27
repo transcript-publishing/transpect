@@ -454,8 +454,10 @@
 }
 
 
-\newcount\@transcriptionLineNumberSep \@transcriptionLineNumberSep=2 % Mindestanzahl der Leerzeichen nach der Zeilennummer.
-\newcount\@transcriptionNameSep       \@transcriptionNameSep=2       % Mindestanzahl der Leerzeichen nach der sprechenden Person.
+\newcount\@transcriptionLineNumberSep \@transcriptionLineNumberSep=2                       % Mindestanzahl der Leerzeichen nach der Zeilennummer.
+\newcount\@transcriptionNameSep       \@transcriptionNameSep=2                             % Mindestanzahl der Leerzeichen nach der sprechenden Person.
+
+\newdimen\@transcriptionTotalMaxNumberWidth \global\@transcriptionTotalMaxNumberWidth=0\p@ % Maximale Breite der Zeilennummer über alle Transkriptionsumgebungen hinweg.
 
 \newcount\@transcriptionLine % Aktuelle Zeilennummer innerhalb der Umgebung.
 \newcount\@transcriptionEnv  % Für die Durchnummerierung der Transkriptionsumgebungen, damit sich Labelbreiten speichern lassen.
@@ -468,6 +470,8 @@
   \def\lineNumber##1{\@transcriptionLine=\numexpr##1-1\relax}%
   \def\spaces##1{\hspace*{##1\fontdimen2\font}}%
   \sansmonofamily
+  % Reservierte Breite für die Ziffern soll mindestens vier Zeichen sein.
+  \global\@transcriptionTotalMaxNumberWidth=4\dimexpr\fontdimen2\font\relax
   % Die feste Breite der Zeilennummer auf die Breite der Nummer der erste Zeile setzen.
   \setbox\@tempboxa = \hbox{#1}%
   % Nach dem ersten Durchlauf wird diese Breite mit der der höchsten Zeilennummer in dieser Umgebung überschrieben.
@@ -475,6 +479,13 @@
     \setbox\@tempboxa = \hbox{\csuse{transcription-\the\@transcriptionEnv –maxLineNumber}}%
   \fi
   \edef\@lineNumberWidth{\the\dimexpr\wd\@tempboxa}%
+  \ifdim\@transcriptionTotalMaxNumberWidth<\@lineNumberWidth
+    \global\@transcriptionTotalMaxNumberWidth=\@lineNumberWidth
+  \fi
+  % Liegt die Breite der Zeilennummer unter der globalen, erhöhe diese auf den globalen Maximalwert.
+  \ifdim\@lineNumberWidth<\@transcriptionTotalMaxNumberWidth
+    \xdef\@lineNumberWidth{\the\@transcriptionTotalMaxNumberWidth}%
+  \fi  
   % Die maximale Breite unter den Namen der Gesprächsteilnehmer.
   \@tempdima=0\p@
   % Nach dem ersten Durchlauf wird diese Breite mit der des längsten Namens in dieser Umgebung überschrieben.
@@ -518,6 +529,12 @@
   \immediate\write\@auxout{\string\csgdef{transcription-\the\@transcriptionEnv –maxNameWidth}{\@nameWidth}}%
   \global\advance\@transcriptionEnv\@ne
 }
+
+%\AtEndDocument{%
+%  \write\@auxout{\string\global\string\@transcriptionTotalMaxNumberWidth=\the\@transcriptionTotalMaxNumberWidth}%
+%}
+
+
 \ccaAddRolemap{Transcription}{Div}
 \ccaAddRolemap{TranscriptionLine}{Div}
 %\ccaAddRolemap{TranscriptionLabel}{\if@cc@pdf@two Sub\else Div\fi}
