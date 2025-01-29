@@ -898,7 +898,8 @@
       \ccaStructEnd{MetaDatumBlock}%
       \vskip\dimexpr5bp-0.65mm\relax
       \ccaStructStart{MetaDatumBlock}%
-      {\raggedright
+      {%
+        \raggedright
         \leavevmode
         \sfwiderfamily\sbseries\fontsize{15.5}{19}\selectfont
         \ccaStructStart{P}\tpUseComp{Title}\ccaStructEnd{P}%
@@ -910,8 +911,18 @@
           \topsep0pt \partopsep0pt % no space before
           \flushleft\ccaStructStart{P}\tpUseComp{Subtitle}\ccaStructEnd{P}\endflushleft%
         }{%
-          \vskip\baselineskip
+          \vskip1\baselineskip
         }%
+        \tpIfComp{Translator}{%
+          \par
+          \normalfont\Large\upseries
+          \sffamily
+          \vskip\dimexpr5bp+0.65mm\relax
+          \topsep0pt \partopsep0pt % no space before
+          \flushleft\ccaStructStart{P}\tpUseComp{Translator}\ccaStructEnd{P}\endflushleft%
+        }{
+          \vskip1\baselineskip
+        }
       }%
       \ccaStructEnd{MetaDatumBlock}%
       \par
@@ -1040,7 +1051,7 @@
     \tpWhenComp{CoverDesign}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverDesign}}}%
     \tpWhenComp{Lectorate}{{\leftskip5mm\hskip-5mm\tpGetComp{Lectorate}}}%
     \tpWhenComp{QA}{{\leftskip5mm\hskip-5mm\tpGetComp{QA}}}{}%
-    \tpWhenComp{Translator}{{\leftskip5mm\hskip-5mm\tpGetComp{Translator}}}%
+    %\tpWhenComp{Translator}{{\leftskip5mm\hskip-5mm\tpGetComp{Translator}}}% Aus Impressum entfernt für 18087.
     \tpGetComp{Appraiser}%
     \tpGetComp{Discussion}%
     \tpWhenComp{Typesetter}{{\leftskip5mm\hskip-5mm\tpGetComp{Typesetter}}}%
