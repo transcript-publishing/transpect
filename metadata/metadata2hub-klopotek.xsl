@@ -392,7 +392,7 @@
             <xsl:when test="$type[. =  $translator-roles]">
               <xsl:if test="($type = 'TRGE' and $lang != '') or 
                             ($type != 'TRGE' and $lang = '')">
-                <keyword role="{concat($current-lookup[1], '_' ,$type)}">
+                <keyword role="{$current-lookup[1]}">
                   <para><xsl:message select="$lang-num"/>
                     <xsl:sequence select="concat(
                                             $current-lookup[$lang-num][normalize-space()],
