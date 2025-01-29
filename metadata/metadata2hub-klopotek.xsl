@@ -18,7 +18,8 @@
 
   <xsl:param name="basename" as="xs:string"/>
   <xsl:variable name="lang" select="     if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'ENGL', 'i')]) then 'E' 
-                                    else if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'SPA', 'i')]) then 'S' else ''" as="xs:string?">
+                                    else if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'SPA', 'i')]) then 'S'
+                                    else if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'FRA', 'i')]) then 'F' else ''" as="xs:string?">
     <!-- https://redmine.le-tex.de/issues/16459#note-7, https://redmine.le-tex.de/issues/17587 -->
   </xsl:variable>
   <xsl:variable name="open-access" as="xs:boolean" select="exists(//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:open_access[@open_access_yn = 'Y'])"/>
@@ -277,23 +278,27 @@
   <xsl:variable name="copyright-roles-lookup" as="map(xs:string, xs:string+)"
                   select="map{'VE':  ('Autor',          '',                  '',             ''),
                               'HG':  ('Herausgeber',    '',                  '',             ''),
-                              'UMSA':('Umschlagcredit', 'Umschlagabbildung', 'Cover illustration', 'Ilustración de portada'),
-                              'UMGS':('Umschlaggestaltung', 'Umschlaggestaltung','Cover design', 'Diseño de portada'),
-                              'UMKO':('Umschlagkonzept', 'Umschlagkonzept',   'Cover concept', 'Concepto de portada'),
-                              'LEKT':('Lektorat',       'Lektorat',          'Proofreading', 'Revisión'),
-                              'KORR':('Korrektorat',    'Korrektorat',       'Correction',   'Corrección'),
-                              'LAYO':('Satz',           'Satz',              'Typesetting',  'Composición tipográfica'),
-                              'DRUK':('Druck',          'Druck',             'Printing',     'Imprenta'),
-                              'OAEN':('Fordertext_OA',  'Open-Access-Ausgabe mit freundlicher Förderung von',   '',     ''),
-                              'SPONSOR':('Fordertext_Series',  'Förderung der Reihe von',             '',     ''),
-                              'ENAB':('Fordertext',     'Die Publikation entstand mit freundlicher Förderung von',    '',     ''),
-                              'PENA':('Fordertext_Print', 'Print-Ausgabe mit freundlicher Förderung von',   '',     ''),
-                              'ENPROA':('Fordertext_OAProject', 'Open-Access-Projekt mit freundlicher Förderung von',   '',     ''),
-                              'ENPR':('Fordertext_PrintProject', 'Print-Projekt mit freundlicher Förderung von',   '',     ''),
-                              'EBEN':('Fordertext_HTML', 'HTML mit freundlicher Förderung von',   '',     ''),
-                              'VARI':('Mitarbeit',     'Unter Mitarbeit von',   'Assisted by',     'Con la colaboración de')
+                              'UMSA':('Umschlagcredit', 'Umschlagabbildung', 'Cover illustration', 'Ilustración de portada',    ''),
+                              'UMGS':('Umschlaggestaltung', 'Umschlaggestaltung','Cover design', 'Diseño de portada',    ''),
+                              'UMKO':('Umschlagkonzept', 'Umschlagkonzept',   'Cover concept', 'Concepto de portada',    ''),
+                              'LEKT':('Lektorat',       'Lektorat',          'Proofreading', 'Revisión',    ''),
+                              'KORR':('Korrektorat',    'Korrektorat',       'Correction',   'Corrección',    ''),
+                              'LAYO':('Satz',           'Satz',              'Typesetting',  'Composición tipográfica',    ''),
+                              'DRUK':('Druck',          'Druck',             'Printing',     'Imprenta',    ''),
+                              'OAEN':('Fordertext_OA',  'Open-Access-Ausgabe mit freundlicher Förderung von',   '',     '',    ''),
+                              'SPONSOR':('Fordertext_Series',  'Förderung der Reihe von',             '',     '',    ''),
+                              'ENAB':('Fordertext',     'Die Publikation entstand mit freundlicher Förderung von',    '',     '',    ''),
+                              'PENA':('Fordertext_Print', 'Print-Ausgabe mit freundlicher Förderung von',   '',     '',    ''),
+                              'ENPROA':('Fordertext_OAProject', 'Open-Access-Projekt mit freundlicher Förderung von',   '',     '',    ''),
+                              'ENPR':('Fordertext_PrintProject', 'Print-Projekt mit freundlicher Förderung von',   '',     '',    ''),
+                              'EBEN':('Fordertext_HTML', 'HTML mit freundlicher Förderung von',   '',     '',    ''),
+                              'VARI':('Mitarbeit',  'Unter Mitarbeit von',   'Assisted by',     'Con la colaboración de',    ''),
+                              'TRGE':('Ubersetzer', '',                      'Translated from German by ',   'Traducido del alemán de ', 'Traduit de l&#8217;allemand de ',   '', ' and ', ' y ', ' et '),
+                              'TREN':('Ubersetzer', 'Übersetzt aus dem Englischen von ',     '',    '',    '', ' und ', '', '', ''),
+                              'TRFR':('Ubersetzer', 'Übersetzt aus dem Französischen von ',      '',    '',    '', ' und ', '', '', ''),
+                              'TRSP':('Ubersetzer', 'Übersetzt aus dem Spanischen von ',         '',    '',    '', ' und ', '', '', '')
                   }">
-     <!--                             1: Keyname,        2: added info German, 3: English 4 Spanish (https://redmine.le-tex.de/issues/16459)-->
+     <!--                             1: Keyname,        2: added info German, 3: English 4 Spanish 5 French (https://redmine.le-tex.de/issues/16459)-->
    </xsl:variable>
 
   <xsl:variable name="printer-lookup" as="map(xs:string, xs:string+)"
@@ -313,7 +318,8 @@
                   
   <xsl:variable name="copyright-roles"  as="xs:string+" 
               select="('VE', 'HG', 'UMSA', 'UMGS', 'UMKO','LEKT', 'KORR', 'LAYO', 'DRUK', 'VARI')"/>
-
+  <xsl:variable name="translator-roles"  as="xs:string+" 
+              select="('TRGE', 'TREN', 'TRFR', 'TRSP')"/>
 
   <xsl:template match="*:copyright_holders | *:funders"  mode="klopotek-to-keyword"  priority="2">
     <xsl:param name="all-products" as="element()+" tunnel="yes"/>
@@ -321,7 +327,8 @@
     <xsl:param name="funder-listing" as="element(c:directory)?" tunnel="yes"/>
     <!-- https://redmine.le-tex.de/issues/16437, https://redmine.le-tex.de/issues/17515 -->
     <xsl:variable name="lang-num" select="if ($lang = 'E') then 3 else
-                                          if ($lang = 'S') then 4 else 2" as="xs:integer"/>
+                                          if ($lang = 'S') then 4 else
+                                          if ($lang = 'F') then 5 else 2" as="xs:integer"/>
     <xsl:variable name="context" select="." as="element()"/>
    
     <xsl:if test="../*:edition_type[. = 'EBP']  or count($all-products) = 1">  
@@ -382,7 +389,25 @@
                 </xsl:choose>
               </keyword>
             </xsl:when>
-             <xsl:when test="$type =  ('OAEN', 'SPONSOR', 'ENAB', 'PENA', 'ENPROA', 'ENPR', 'EBEN')">
+            <xsl:when test="$type[. =  $translator-roles]">
+              <xsl:if test="($type = 'TRGE' and $lang != '') or 
+                            ($type != 'TRGE' and $lang = '')">
+                <keyword role="{concat($current-lookup[1], '_' ,$type)}">
+                  <para><xsl:message select="$lang-num"/>
+                    <xsl:sequence select="concat(
+                                            $current-lookup[$lang-num][normalize-space()],
+                                            string-join((for $tr in $cg[not(position() = last()) or count($cg) eq 1] return string-join(( $tr/*:first_name[normalize-space()],  $tr/*:last_name[normalize-space()]), ' ')), ', '),
+                                            if (count($cg) gt 1) 
+                                            then concat($current-lookup[$lang-num + 4], 
+                                                         string-join(( $cg[position() = last()]/*:first_name[normalize-space()], $cg[position() = last()]/*:last_name[normalize-space()]), ' ')
+                                                        ) 
+                                            else ()
+                                            )"/>
+                  </para>
+              </keyword></xsl:if>
+            </xsl:when>
+            
+            <xsl:when test="$type =  ('OAEN', 'SPONSOR', 'ENAB', 'PENA', 'ENPROA', 'ENPR', 'EBEN')">
                <!-- Sponsoring/funding-->
                
                <!-- pretext, https://redmine.le-tex.de/issues/17633 -->
