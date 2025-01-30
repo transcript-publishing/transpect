@@ -81,6 +81,8 @@
 }
 
 
+\def\tp@partmark{\tpRunBookTitle}%
+
 \tpDeclareHeading{-1}{part}{%
   %% ToC
   %\tpSetProperty{toc-before-hook-part}{\nobreak}
@@ -187,7 +189,7 @@
       {\tpGStoreComp\tp@partnumber{Number}}
       {\global\let\tp@partnumber\relax}%
   }%
-  \def\tp@partmark{\tpRunBookTitle}%
+
   \tpSetProperty{running-heading}{%
     \ifx\tp@partnumber\relax
     \else
@@ -195,6 +197,7 @@
     \fi
     \tp@partmark%
   }%
+
   \tpSetProperty{heading-block}{%
     \gdef\tp@currentHeading{chapter}%
     % Kolumnentitel setzen.
