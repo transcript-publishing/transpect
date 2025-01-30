@@ -840,9 +840,19 @@
       }{}%
       \tpIfComp{Editorial}{%
         {%
-          \justify{\sffamily\sbseries\large Editorial}\par%
+          \justify
+          {%
+            \sffamily\sbseries\large
+            \ccaVstructStart{P}%
+            Editorial%
+            \ccaVstructEnd{P}
+          }%
+          \par%
           \vskip\baselineskip
-          \tpUseComp{Editorial}\par%
+          \ccaVstructStart{P}%
+            \tpUseComp{Editorial}%
+          \ccaVstructEnd{P}%
+          \par%
           \tpIfComp{SeriesEditorNameList}{%
             % Temporäres Deaktivieren der Herausgeberkennung.
             \let\editorsuffixsglname\relax%
@@ -964,8 +974,10 @@
           \ccaStructEnd{MetaDatumBlock}}%
         \justify
         \ccaStructStart{MetaDatumBlock}%
-        \tpUseProperty{funding-block}%
-        \ccaStructEnd{MetaDatumBlock}
+          \ccaVstructStart{P}%
+            \tpUseProperty{funding-block}%
+          \ccaVstructEnd{P}%
+        \ccaStructEnd{MetaDatumBlock}%
         \null\vfill
         \tpWhenComp{Biblio}{%
           \ccaStructStart{MetaDatum}%
@@ -1060,28 +1072,36 @@
     \tpGetComp{DOI}%%
     \tpGetComp{Keywords}%%
     % ISBN.
-    \tpUseComp{ISBN}%
-    \tpIfComp{EpubPreText}{%
-      \space| \tpUseComp{EpubPreText}%
-    }{}%
-    \tpIfComp{EISBN}{%
-      \space| \tpUseComp{EISBN}%
-    }{}%
-    \tpIfComp{EpubISBN}{%
-      \space| \tpUseComp{EpubISBN}%
-    }{}\par
+    \ccaStructStart{MetaDatumBlock}%
+      \ccaVstructStart{P}%
+        \tpUseComp{ISBN}%
+        \tpIfComp{EpubPreText}{%
+          \space\ccaStructStart{Artifact}|\ccaStructEnd{Artifact}\space\tpUseComp{EpubPreText}%
+        }{}%
+        \tpIfComp{EISBN}{%
+          \space\ccaStructStart{Artifact}|\ccaStructEnd{Artifact}\space\tpUseComp{EISBN}%
+        }{}%
+        \tpIfComp{EpubISBN}{%
+          \space\ccaStructStart{Artifact}|\ccaStructEnd{Artifact}\space\tpUseComp{EpubISBN}%
+        }{}\par
+      \ccaStructEnd{P}%
+    \ccaVstructEnd{MetaDatumBlock}%
     % ISSN.
     \def\@firstISSNFound{\@empty}%
-    \tpIfComp{BiblISSN}{%
-      \tpUseComp{BiblISSN}%
-      \gdef\@firstISSNFound{\relax}%
-    }{}%
-    \tpIfComp{BibleISSN}{%
-      \expandafter\ifx\@firstISSNFound\relax
-        \space |\space
-      \fi
-      \tpGetComp{BibleISSN}%
-    }{}%
+    \ccaStructStart{MetaDatumBlock}%
+      \ccaVstructStart{P}%
+        \tpIfComp{BiblISSN}{%
+          \tpUseComp{BiblISSN}%
+          \gdef\@firstISSNFound{\relax}%
+        }{}%
+        \tpIfComp{BibleISSN}{%
+          \expandafter\ifx\@firstISSNFound\relax
+            \space\ccaStructStart{Artifact}|\ccaStructEnd{Artifact}\space
+          \fi
+          \tpGetComp{BibleISSN}%
+        }{}%
+      \ccaStructEnd{P}%
+    \ccaVstructEnd{MetaDatumBlock}%
     \tpUseProperty{imprint-sep}%
     \tpGetComp{EnvDisclaimer}%
     \tpGetComp{Advertise}%
