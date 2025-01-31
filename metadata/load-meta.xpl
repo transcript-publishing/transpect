@@ -109,12 +109,12 @@
   
   <p:sink/>
   
-  -->
+ 
 
   <cx:message>
     <p:with-option name="message" select="'[info] analyze s9y1 path: ', concat(replace($basename, '^(.+_\d{5})(_.+)?$', '$1'), '.meta.xml')"/>
   </cx:message>
-  
+   -->
   <tr:paths-for-files-xml name="get-titlepage-meta-path">
     <p:input port="conf">
       <p:document href="http://this.transpect.io/conf/conf.xml"/>
@@ -126,7 +126,7 @@
     <p:with-option name="message" select="'[info] s9y1 path analyzed: ', /c:files/c:file/@name"/>
   </cx:message>
   
-  <tr:store-debug pipeline-step="metadata/00_paths-fo-files" cx:depends-on="get-titlepage-meta-path" name="load-meta_debug_001">
+  <tr:store-debug pipeline-step="metadata/00_paths-for-files" cx:depends-on="get-titlepage-meta-path" name="load-meta_debug_001">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
@@ -138,15 +138,13 @@
   <tr:recursive-directory-list name="meta-list" cx:depends-on="load-meta_msg_001">
     <p:with-option name="path" select="if ($ci-test = true())
                                        then concat(replace($local-dir, 'file:/', 'file:///'), '/meta.xml')
-                                       else replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:$1//')"/>
+                                       else replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:///$1/')"/>
   </tr:recursive-directory-list>
 
   <tr:store-debug pipeline-step="metadata/01_meta-dir-content" cx:depends-on="meta-list">
     <p:with-option name="active" select="$debug"/>
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
-
-
   
   <tr:recursive-directory-list name="funder-dir-listing" cx:depends-on="meta-list">
     <p:with-option name="path" select="if ($run-local = true())
