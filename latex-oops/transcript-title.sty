@@ -1098,8 +1098,9 @@
           \expandafter\ifx\@firstISSNFound\relax
             \space\ccaStructStart{Artifact}|\ccaStructEnd{Artifact}\space
           \fi
-          \tpGetComp{BibleISSN}%
+          \tpUseComp{BibleISSN}%
         }{}%
+        \par
       \ccaStructEnd{P}%
     \ccaVstructEnd{MetaDatumBlock}%
     \tpUseProperty{imprint-sep}%
