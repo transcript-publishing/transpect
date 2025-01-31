@@ -138,7 +138,8 @@
   <tr:recursive-directory-list name="meta-list" cx:depends-on="load-meta_msg_001">
     <p:with-option name="path" select="if ($ci-test = true())
                                        then concat(replace($local-dir, 'file:/', 'file:///'), '/meta.xml')
-                                       else replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:///$1/')"/>
+                                       else if ($run-local = true()) then replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:///$1/')
+                                       else replace(/c:files/c:file/@name, '^(.+)/.+$', 'file:$1/')"/>
   </tr:recursive-directory-list>
 
   <tr:store-debug pipeline-step="metadata/01_meta-dir-content" cx:depends-on="meta-list">
