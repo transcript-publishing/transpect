@@ -15,13 +15,13 @@
 
 \ccWhenAlly{%
   \apptocmd{\NAT@bibitem@init}{%
-    \ccaStructStart{P}%
-    \ccaStructStart{BibEntry}%
+    %\ccaStructStart{P}% Beide entfernt für Ticket 18185, denn …
+    %\ccaStructStart{BibEntry}% … Referenzeinträge sollen konverterseitiges Tagging erhalten.
   }{}{}
   \pretocmd{\@lbibitem}{%
     \ifx\is@first\@undefined
-      \ccaStructEnd{BibEntry}%
-      \ccaStructEnd{P}%
+      %\ccaStructEnd{BibEntry}%
+      %\ccaStructEnd{P}%
     \else
       \global\let\is@first\@undefined
     \fi
@@ -55,8 +55,8 @@
  \def\@noitemerr{%
   \PackageWarning{natbib}{Empty `thebibliography' environment}%
  }%
- \ccaStructEnd{BibEntry}%
- \ccaStructEnd{P}%
+ %\ccaStructEnd{BibEntry}%
+ %\ccaStructEnd{P}%
  \endlist
  \bibcleanup
  \vskip1\baselineskip% 2022-06-02; 12745
