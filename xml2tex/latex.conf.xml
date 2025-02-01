@@ -7,6 +7,7 @@
   
   <xsl:import href="http://transpect.io/xslt-util/functx/Sequences/Sorting-and-Grouping/sort.xsl"/>
   
+
   <xsl:param name="cover" as="xs:string?"/>
   
   <xsl:param name="s9y1-path" as="xs:string?"/>
@@ -435,7 +436,7 @@
     </xsl:if>
     <xsl:if test="normalize-space($license-text)">
       <xsl:value-of select="concat('&#xA;\tpLicenceText{', 
-                                   string-join($license-text/*, '\\&#xa;'),
+                                   string-join(xml2tex:meta-remove-links-etc($license-text/*), '\\&#xa;'),
                                    '}&#xA;')"/>
     </xsl:if>
     <xsl:if test="$funding-block/dbk:keyword[normalize-space()]">
