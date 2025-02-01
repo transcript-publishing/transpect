@@ -55,12 +55,13 @@
   
   <xsl:template match="*:open_access"  mode="klopotek-to-keyword"  priority="2">
     <xsl:param name="all-products" as="element()+" tunnel="yes"/>
-    <!-- https://redmine.le-tex.de/issues/16949-->
+    <!-- https://redmine.le-tex.de/issues/16949-->  
     <xsl:if test="$open-access and not($open-access-embargo)">
-      <xsl:variable name="license-type" select="string-join(tokenize(($all-products[not(*:edition_type = ('EBE', 'PBK'))][*:open_access/@open_access_yn='Y'])[1]/*:open_access/*:cc_license_type/@term, '\P{Lu}')[not(. = 'CC')], '-')"/>
+      <xsl:variable name="license" select="($all-products[not(*:edition_type = ('EBE', 'PBK'))][*:open_access/@open_access_yn='Y'])[1]/*:open_access/*:cc_license_type/@term" as="xs:string"/>
+      <xsl:variable name="license-type" select="if ($license = 'CC0') then 'CC0' else string-join(tokenize($license, '\P{Lu}')[not(. = 'CC')], '-')"/>
         <xsl:message select="'### license: ', $license-type"/>
       <keyword role="Lizenz">
-        <xsl:value-of select="$license-type" />
+        <xsl:value-of select="$license-type"/>
       </keyword>
       <xsl:apply-templates select="$license-texts/*:License[@id = $license-type]" mode="#current">
         <xsl:with-param name="license-lang" 
@@ -96,8 +97,14 @@
     </xsl:choose>
   </xsl:template>
   
-  <xsl:template match="*:License/*:Texts/*:Text/text()"  mode="klopotek-to-keyword"  priority="2">
+  <xsl:template match="*:License/*:Texts/*:Text[not(*)]/text()"  mode="klopotek-to-keyword"  priority="2">
     <xsl:value-of select="normalize-space(.)"/>
+  </xsl:template>
+  
+  <xsl:template match="*:License/*:Texts/*:Text/*:Link"  mode="klopotek-to-keyword"  priority="2">
+    <link xlink:href="{@url}">
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </link>
   </xsl:template>
   
   <xsl:template match="*:License/*:Image"  mode="klopotek-to-keyword"  priority="2">
