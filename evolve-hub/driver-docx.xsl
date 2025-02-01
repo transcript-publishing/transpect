@@ -217,6 +217,33 @@
     <xsl:processing-instruction name="{$pi-xml-name}" select="'\newpage '"/>
   </xsl:template>
 
+  <xsl:template name="alt-texts">
+   <!-- https://redmine.le-tex.de/issues/18173-->
+    <xsl:variable name="alt" as="element(para)*">
+      <xsl:variable name="srcpath" select="@srcpath"/>
+      <xsl:for-each-group select="..[self::para]/../*" group-starting-with="para[*[self::mediaobject|self::inlinemediaobject]]">
+        <xsl:if test="current-group()[self::para[*[self::mediaobject|self::inlinemediaobject][@srcpath = $srcpath]]]">
+          <xsl:sequence select="current-group()[self::para[matches(@role, 'tsfigurealt')]][1]"/>
+        </xsl:if>
+      </xsl:for-each-group>
+    </xsl:variable>
+    <xsl:choose> 
+      <xsl:when test="$alt[normalize-space()]">
+        <alt><xsl:apply-templates select="$alt" mode="text-only"/></alt>
+      </xsl:when>
+      <xsl:otherwise>   
+        <xsl:apply-templates select="alt" mode="hub:split-at-tab"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <!-- https://redmine.le-tex.de/issues/18173 -->
+  </xsl:template>
+
+  <xsl:template match="*" mode="text-only">
+    <xsl:apply-templates select="node()" mode="#current"/>
+  </xsl:template>
+  
+  <xsl:template match="@*|indexterm|anchor|footnote" mode="text-only"/>
+  
   <xsl:template match="annotation" mode="hub:dissolve-sidebars-without-purpose">
     <!-- https://redmine.le-tex.de/issues/13166 -->
   </xsl:template>
