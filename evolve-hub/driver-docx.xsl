@@ -366,4 +366,11 @@
     </chapter>
   </xsl:template> -->
   
+  <xsl:template match="section[matches(@role, concat('(', $list-of-figures-regex,'|', $list-of-tables-regex, ')(', $suffixes-regex, ')?$'))]" 
+                mode="hub:postprocess-hierarchy" priority="5">
+    <chapter><!--https://redmine.le-tex.de/issues/18164-->
+      <xsl:apply-templates select="@*, node()" mode="#current"/>
+    </chapter>
+  </xsl:template>
+  
 </xsl:stylesheet>
