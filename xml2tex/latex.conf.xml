@@ -3,7 +3,7 @@
 <set xmlns="http://transpect.io/xml2tex" 
      xmlns:xml2tex="http://transpect.io/xml2tex" 
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-     xmlns:tr="http://transpect.io">
+     xmlns:tr="http://transpect.io"  decompose-diacritics="no">
   
   <xsl:import href="http://transpect.io/xslt-util/functx/Sequences/Sorting-and-Grouping/sort.xsl"/>
   
@@ -436,7 +436,7 @@
     </xsl:if>
     <xsl:if test="normalize-space($license-text)">
       <xsl:value-of select="concat('&#xA;\tpLicenceText{', 
-                                   string-join(xml2tex:meta-remove-links-etc($license-text/*), '\\&#xa;'),
+                                   string-join(xml2tex:meta-remove-links-etc($license-text/node()), '\\&#xa;'),
                                    '}&#xA;')"/>
     </xsl:if>
     <xsl:if test="$funding-block/dbk:keyword[normalize-space()]">
