@@ -3,7 +3,7 @@
 <set xmlns="http://transpect.io/xml2tex" 
      xmlns:xml2tex="http://transpect.io/xml2tex" 
      xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-     xmlns:tr="http://transpect.io"  decompose-diacritics="no">
+     xmlns:tr="http://transpect.io">
   
   <xsl:import href="http://transpect.io/xslt-util/functx/Sequences/Sorting-and-Grouping/sort.xsl"/>
   
@@ -1056,5 +1056,9 @@
   
   <xsl:template match="processing-instruction()[name() = ($name-for-Tex-PI, 'latex')]
                                                [some $t in tokenize(., '\s') satisfies $t[contains(., 'logo-series-raisebox')]]" mode="xml2tex" priority="222"/>
+  
+    <xsl:template match="dbk:para" mode="strip-meta" priority="6">
+    <xsl:text>\tpBreak </xsl:text>
+  </xsl:template>
   
 </set>
