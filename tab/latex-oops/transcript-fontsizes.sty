@@ -35,12 +35,23 @@
 \renewcommand\huge{\@setfontsize\huge{13.5bp}{16}}% part in TOC
 \renewcommand\Huge{\@setfontsize\Huge{14.3bp}{17bp}}% chapter
 \newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{36bp}}% part
-}%%l-layout
+}%%leeres layout
 {
-\renewcommand\normalsize{%
-  \@setfontsize\normalsize{9.2bp}{13.2bp}%
+  \renewcommand\normalsize{%
+  \@setfontsize\normalsize{9.7bp}{14.45bp}%fließtext
+  \let\@listi\@listI%
+  \let\@listii\@listI%
+  \let\@listiii\@listI%
 }
-}%% leeres layout
+\renewcommand\scriptsize{\@setfontsize\scriptsize\@viipt\@viiipt}
+\renewcommand\tiny{\@setfontsize\tiny\@vpt\@vipt}
+\renewcommand\large{\@setfontsize\large{10.5bp}{14.45bp}}% chapter in TOC
+\renewcommand\Large{\@setfontsize\Large{11bp}{14.45bp}}% subsection
+\renewcommand\LARGE{\@setfontsize\LARGE{13bp}{14.45bp}}% section
+\renewcommand\huge{\@setfontsize\huge{13.5bp}{16}}% part in TOC
+\renewcommand\Huge{\@setfontsize\Huge{15.0bp}{17bp}}% chapter
+\newcommand\HUGE{\@setfontsize\HUGE{17.5bp}{36bp}}% part
+}%% a-layout
 {
 \renewcommand\normalsize{%
   \@setfontsize\normalsize{9.2bp}{13.2bp}%
