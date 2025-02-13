@@ -967,8 +967,9 @@
       \@tempdima=\baselineskip% Ticket 15122.
       \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \tpUseComp{QuoteText}\par
-      \tpWhenComp{QuoteSource}
+      \tpWhenComp{QuoteSource}{%
         {\itshape\tpUseComp{QuoteSource}}%
+      }
     }%
   }%
   \tpSetProperty{heading-block}{%

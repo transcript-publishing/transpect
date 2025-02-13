@@ -172,7 +172,13 @@
 \newunicodechar{⑦}{\circledNumber{7}}
 \newunicodechar{⑧}{\circledNumber{8}}
 \newunicodechar{⑨}{\circledNumber{9}}
-\newunicodechar{č}{{\ccFallback{č}}}
+\newunicodechar{č}{%
+  \ifx\ts@layout@type\ts@str@layout@mdw
+    {\ccFallback{č}}%
+  \else
+    \v{c}%
+  \fi
+}
 % Ideographisches Komma für Chinesisch.
 \newunicodechar{、}{\char"3001}
 %\newunicodechar{ǀ}{|}
