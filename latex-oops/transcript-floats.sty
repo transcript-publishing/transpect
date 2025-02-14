@@ -89,7 +89,7 @@
   \tpSetProperty{caption-valign-top}{bottom}%
   \tpSetProperty{caption-valign-bottom}{top}%
   \tpSetProperty{caption-face-top}{\ifx\ts@layout@type\ts@str@layout@mdw\footnotesize\else\itshape\fi\RaggedRight}%
-  \tpSetProperty{caption-face-bottom}{\footnotesize\upshape\RaggedRight}%
+  \tpSetProperty{caption-face-bottom}{\footnotesize\ifx\ts@layout@type\ts@str@layout@mdw\upshape\else\itshape\fi\RaggedRight}%
   \tpSetProperty{sub-float-sep}{2mm}%
   \tpSetProperty{intext-skip-top}{2\baselineskip}%
   \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
