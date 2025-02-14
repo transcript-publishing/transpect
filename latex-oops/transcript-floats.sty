@@ -120,7 +120,7 @@
           }{}%
           \tpIfComp{Caption}{%
             \tpUseProperty{caption-face-bottom}%
-            \tpUseComp{Caption}\space\par%
+            \tpUseComp{Caption}\par%
           }{}%
           \tpIfComp{Legend}{%
             {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
@@ -144,6 +144,7 @@
           }%
         }{}%
         \tpIfComp{Caption}{%
+          \tpUseProperty{caption-face-top}%
           \tpUseComp{Caption}%
         }{}%
         \tpIfComp{Legend}{%
