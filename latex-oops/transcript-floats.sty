@@ -89,7 +89,7 @@
   \tpSetProperty{caption-valign-top}{bottom}%
   \tpSetProperty{caption-valign-bottom}{top}%
   \tpSetProperty{caption-face-top}{\ifx\ts@layout@type\ts@str@layout@mdw\footnotesize\else\itshape\fi\RaggedRight}%
-  \tpSetProperty{caption-face-bottom}{\footnotesize\ifx\ts@layout@type\ts@str@layout@mdw\upshape\else\itshape\fi\RaggedRight}%
+  \tpSetProperty{caption-face-bottom}{\ifx\ts@layout@type\ts@str@layout@mdw\footnotesize\upshape\else\itshape\fi\RaggedRight}%
   \tpSetProperty{sub-float-sep}{2mm}%
   \tpSetProperty{intext-skip-top}{2\baselineskip}%
   \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
@@ -102,8 +102,8 @@
   \else
     \let\ts@caps@table\ts@caps%
   \fi
-  \ifcsname tp@captype\endcsname
-    \expandafter\ifx\csname ts@caps@\tp@captype\endcsname\tp@str@bottom
+  \ifcsname ccfCapType\endcsname
+    \expandafter\ifx\csname ts@caps@\ccfCapType\endcsname\tp@str@bottom
       \tpSetProperty{caption-top}{}%
       \tpSetProperty{caption-bottom}{%
         \bgroup
@@ -120,6 +120,7 @@
           }{}%
           \tpIfComp{Caption}{%
             \tpUseProperty{caption-face-bottom}%
+            CAPTION BOTTOM \ccfCapType
             \tpUseComp{Caption}\par%
           }{}%
           \tpIfComp{Legend}{%
