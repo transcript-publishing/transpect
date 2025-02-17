@@ -90,6 +90,7 @@
   \tpSetProperty{caption-valign-bottom}{top}%
   \tpSetProperty{caption-face-top}{\ifx\ts@layout@type\ts@str@layout@mdw\footnotesize\else\itshape\fi\RaggedRight}%
   \tpSetProperty{caption-face-bottom}{\ifx\ts@layout@type\ts@str@layout@mdw\footnotesize\upshape\else\itshape\fi\RaggedRight}%
+  \tpSetProperty{source-face}{\normalfont\footnotesize}
   \tpSetProperty{sub-float-sep}{2mm}%
   \tpSetProperty{intext-skip-top}{2\baselineskip}%
   \tpSetProperty{intext-skip-bottom}{\dimexpr2\baselineskip-2.5bp\relax}%
@@ -130,7 +131,9 @@
           \tpIfComp{Legend}{%
             \par\nopagebreak%
           }{}%
-          {\tpUseProperty{source-format}\tpUseComp{Source}}%
+          {%
+            \tpUseProperty{source-face}\tpUseComp{Source}%
+          }%
         }{}%
       }%
     \else
@@ -156,7 +159,9 @@
           \tpIfComp{Legend}{%
             \par\nopagebreak%
           }{}%
-          {\tpUseProperty{source-format}\tpUseComp{Source}}%
+          {%
+            \tpUseProperty{source-face}\tpUseComp{Source}%
+          }%
         }{}%
       }%
     \fi
