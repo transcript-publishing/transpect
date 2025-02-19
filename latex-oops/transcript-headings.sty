@@ -324,6 +324,7 @@
   \tpSetProperty{toc-indent}{0em}%
   \tpSetProperty{toc-margin-left}{0em}%
   \tpSetProperty{toc-format}{%
+    \hyphenpenalty=\@M
     %\ifdim\dimexpr\pagegoal-\pagetotal\relax<7\baselineskip\relax
     %  \clearpage%
     %\fi
@@ -370,7 +371,7 @@
         }{}%
         \tpUseProperty{toc-page-face}%
         \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
-        \ccaVstructStart{Span}\tpUseComp{TocPage}\ccaVstructEnd{Span}%
+        \hskip0.5em\ccaVstructStart{Span}\tpUseComp{TocPage}\ccaVstructEnd{Span}%
         \strut%
       }%
     }%
@@ -851,6 +852,7 @@
     \tpSetProperty{toc-before-entry}{\nopagebreak}%
     \tpSetProperty{toc-subtitle-face}{\normalfont\normalsize}%
     \tpSetProperty{toc-format}{%
+      \hyphenpenalty=\@M
       \ccaVstructStart{TOCI}%
       \ccWhenComp{TocNumber}{%
         \ccaVstructStart{P}%
@@ -879,7 +881,8 @@
           }%
           \hss
         }%
-      }{%\leftskip\z@%
+      }{%
+        %\leftskip\z@%
         \tpWhenComp{TocAuthorNameList}{%
           \tpTocLink{%
             \ccaVstructStart{Span}%
@@ -890,8 +893,12 @@
         }%
       }%
       \noindent%
-      \advance\leftskip by 2em%
-      \setbox\@tempboxa=\hbox{\tpUseComp{TocPage}}%
+      \tpIfComp{TocNumber}{%
+        \advance\leftskip by 2em%
+      }{%
+        \leftskip\csname cc-Heading-toc-number-0-maxwd\endcsname\relax%
+      }%
+      \setbox\@tempboxa=\hbox{\hskip0.5em\tpUseComp{TocPage}}%
       \rightskip\wd\@tempboxa%
       \tpTocLink{%
         \ccaVstructStart{Span}%
@@ -907,7 +914,7 @@
           }%
         }%
         \ccaVstructStart[Document]{leaders}\tpUseProperty{toc-page-sep}\ccaVstructEnd{leaders}%
-        \ccaVstructStart{Span}\rlap{\hb@xt@\wd\@tempboxa{\tpUseComp{TocPage}}}\ccaVstructEnd{Span}%
+        \ccaVstructStart{Span}\rlap{\hb@xt@\wd\@tempboxa{\hss\tpUseComp{TocPage}}}\ccaVstructEnd{Span}%
       }%
       \ccWhenComp{TocNumber}{\ccaVstructEnd{Reference}\ccaVstructEnd{P}}%
       \ccaVstructEnd{TOCI}%
