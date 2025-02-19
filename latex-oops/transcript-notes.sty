@@ -27,6 +27,7 @@
 % \def\fnurlhref#1#2{\old@href{#1}{#2}}
 
 \renewcommand\@makefntext[1]{%
+  \leftskip\fnumwidth
   \ccaStructStart{FootnoteText}%
     \ifx\@lt@fn@parent\@empty
       \relax
@@ -34,7 +35,6 @@
       \ccaAddToStruct{\@lt@fn@parent}%
     \fi%
     \parindent\z@%
-    \leftskip\fnumwidth
     \bgroup%
       \ifx\ts@layout@type\ts@str@layout@mdw
         \rmfamily%
