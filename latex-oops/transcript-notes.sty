@@ -28,6 +28,11 @@
 
 \renewcommand\@makefntext[1]{%
   \ccaStructStart{FootnoteText}%
+    \ifx\@lt@fn@parent\@empty
+      \relax
+    \else
+      \ccaAddToStruct{\@lt@fn@parent}%
+    \fi%
     \parindent\z@%
     \leftskip\fnumwidth
     \bgroup%
@@ -44,5 +49,6 @@
       \def\selectlanguage##1{\originalSelectlanguage{##1}\justify}%
       #1%
     \egroup%
+    \ccaAddID{auto}
   \ccaStructEnd{FootnoteText}%
 }
