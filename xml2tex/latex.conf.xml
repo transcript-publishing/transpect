@@ -656,7 +656,7 @@
 
   
   <template context="dbk:link[@xlink:href][matches(@xlink:href, '\s')] | 
-                     dbk:link[@xlink:href][not(matches(., '\.\l+'))]">
+                     dbk:link[@xlink:href][not(matches(., '\.\p{L}+'))]" priority="350">
     <!-- https://redmine.le-tex.de/issues/18275-->
     <rule name="imgHref" type="cmd">
       <param select="replace(xml2tex:optionally-encode-uri((@url, @xlink:href)[1]), '(%|#|_|\\)', '\\$1' )"/>
