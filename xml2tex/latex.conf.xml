@@ -534,7 +534,6 @@
   <template context="dbk:para[matches(@role, $endnotes-heading-style)]">
     <xsl:value-of select="concat('&#xa;\def\notesname{', . ,'}')"/>
     <xsl:text>&#xa;\printnotes&#xa;</xsl:text>
-    <!-- A11Y: still needed? -->
   </template>
    
     <!-- suppress additional underline markup in titles -->
@@ -654,6 +653,17 @@
       <param select="xml2tex:add-tactical-breaks-by-string-length(xml2tex:add-tactical-break-chars-in-linktext(.))"/>
     </rule>
   </template>
+
+  
+  <template context="dbk:link[@xlink:href][matches(@xlink:href, '\s')] | 
+                     dbk:link[@xlink:href][not(matches(., '\.\l+'))]">
+    <!-- https://redmine.le-tex.de/issues/18275-->
+    <rule name="imgHref" type="cmd">
+      <param select="replace(xml2tex:optionally-encode-uri((@url, @xlink:href)[1]), '(%|#|_|\\)', '\\$1' )"/>
+      <param/>
+    </rule>
+  </template>
+   
    
   <template context="dbk:title[matches(@role, $general-heading-style)]/dbk:tab[preceding-sibling::dbk:phrase[@role eq 'hub:identifier']]"/>
 
@@ -1070,4 +1080,6 @@
                                                [some $t in tokenize(., '\s') satisfies $t[contains(., 'logo-series-raisebox')]]" mode="xml2tex" priority="222"/>
   
  
+
+  
 </set>
