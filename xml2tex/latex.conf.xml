@@ -1064,6 +1064,15 @@
     </xsl:choose>
   </template>
   
+  <template context="processing-instruction()[name() eq $pi-xml-name]
+                                             [matches(., '(^|\p{Zs}|\\)(toc-break)')]">
+    <!-- https://redmine.le-tex.de/issues/18283 -->
+    <xsl:param name="toc-override" as="xs:boolean"/>
+    <xsl:if test="$toc-override">
+      <xsl:text>\tpBreak </xsl:text>
+    </xsl:if>
+  </template>
+  
    <xsl:function name="tr:suppress-structure" as="xs:boolean">
     <xsl:param name="elt" as="element()"/>
     <!-- add conditions to not generate structure. if outcome is true: no structure will be added.  -->
@@ -1080,6 +1089,9 @@
                                                [some $t in tokenize(., '\s') satisfies $t[contains(., 'logo-series-raisebox')]]" mode="xml2tex" priority="222"/>
   
  
-
+ <charmap>
+    <!-- https://redmine.le-tex.de/issues/18297 -->
+   <char character="&#x2153;" string="$\frac{1}{3}$" context="*[ancestor-or-self::dbk:title]"/>
+ </charmap>
   
 </set>
