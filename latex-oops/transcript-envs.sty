@@ -24,11 +24,35 @@
 \let\orig@doendpe\@doendpe
 
 
+
+
+%\newenvironment{kastengrau}[1][\relax]{%
+%  \def\FrameCommand{\fboxsep1em \colorbox[gray]{0.88}}%
+%  \savenotes
+%  \def\optionalHeading{#1}%
+%  \begin{framed}%
+%    \if\optionalHeading\relax
+%    \else
+%      \vspace{-11.5bp}%
+%      \begin{heading}[notoc,noBM]{subsection}%
+%        \tpTitle{\optionalHeading}%
+%      \end{heading}%
+%    \fi
+%    \@afterheading\nsffamily
+%}{%
+%  \end{framed}%
+%  \spewnotes
+%  \aftergroup\@afterbox%
+%}
+
+\usepackage{mdframed}
+
+
 \newenvironment{kastengrau}[1][\relax]{%
-  \def\FrameCommand{\fboxsep1em \colorbox[gray]{0.88}}%
+  %\def\FrameCommand{\fboxsep1em \colorbox[gray]{0.88}}%
   \savenotes
   \def\optionalHeading{#1}%
-  \begin{framed}%
+  \begin{mdframed}[backgroundcolor=gray!25,linecolor=white!0]
     \if\optionalHeading\relax
     \else
       \vspace{-11.5bp}%
@@ -38,7 +62,7 @@
     \fi
     \@afterheading\nsffamily
 }{%
-  \end{framed}%
+  \end{mdframed}%
   \spewnotes
   \aftergroup\@afterbox%
 }
