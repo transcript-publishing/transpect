@@ -163,7 +163,7 @@
         <p:with-option name="path" select="$path"/>
       </tr:recursive-directory-list>
       
-      <tr:store-debug pipeline-step="metadata/02a_funder-dir-content" cx:depends-on="funder-dir-listing">
+      <tr:store-debug pipeline-step="metadata/02a_funder-dir-content" cx:depends-on="funder-dir-listing-inner">
         <p:with-option name="active" select="$debug"/>
         <p:with-option name="base-uri" select="$debug-dir-uri"/>
       </tr:store-debug>
