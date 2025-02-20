@@ -147,18 +147,40 @@
     <p:with-option name="base-uri" select="$debug-dir-uri"/>
   </tr:store-debug>
   
-  <tr:recursive-directory-list name="funder-dir-listing" cx:depends-on="meta-list">
-    <p:with-option name="path" select="if ($run-local = true())
-                                       then 'file:///C:/cygwin/home/mpufe/transcript/content/media/logos/funders/'
-                                       else '/media/logos/funders/'"/>
-  </tr:recursive-directory-list>
+  <p:try name="funder-dir-listing"  cx:depends-on="meta-list">
+    <p:group>
+      <p:output port="result">
+        <p:pipe port="result" step="funder-dir-listing-inner"/>
+      </p:output>
+      <p:variable name="path" select="if ($run-local = true())
+                                      then 'file:///C:/cygwin/home/mpufe/transcript/content/media/logos/funders/'
+                                      else '/media/logos/funders/'"/>
+      <cx:message>
+        <p:with-option name="message" select="'[info] look for images in ', $path"/>
+      </cx:message>
+      
+      <tr:recursive-directory-list name="funder-dir-listing-inner">
+        <p:with-option name="path" select="$path"/>
+      </tr:recursive-directory-list>
+      
+      <tr:store-debug pipeline-step="metadata/02a_funder-dir-content" cx:depends-on="funder-dir-listing">
+        <p:with-option name="active" select="$debug"/>
+        <p:with-option name="base-uri" select="$debug-dir-uri"/>
+      </tr:store-debug>
+      <p:sink name="s1"/>
+    </p:group>
+    <p:catch>
+      <p:output port="result">
+        <p:empty/>
+      </p:output>
+      <cx:message>
+        <p:with-option name="message" select="'[WARNING] could not list funder logos, please check for illegal characters in /media/logos/funders'"/>
+      </cx:message>
+       <p:sink name="s2"/>
+    </p:catch>
+  </p:try>
   
-  <tr:store-debug pipeline-step="metadata/02a_funder-dir-content" cx:depends-on="funder-dir-listing">
-    <p:with-option name="active" select="$debug"/>
-    <p:with-option name="base-uri" select="$debug-dir-uri"/>
-  </tr:store-debug>
-  
-  <p:sink/>
+  <p:sink name="s3"/>
   
   <tr:recursive-directory-list name="logo-dir-listing" cx:depends-on="meta-list">
     <p:with-option name="path" select="concat($code-dir, '/latex-oops/logos/series/')"/>
