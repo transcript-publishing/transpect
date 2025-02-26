@@ -194,6 +194,13 @@
               )"/>
   </xsl:template>
 
+  <xsl:template match="/hub/@xml:lang" mode="hub:split-at-tab">
+    <!-- replace language with lang from metadata, https://redmine.le-tex.de/issues/18318 -->
+    <xsl:attribute name="{name()}" select="if (/hub/info/keywordset[@role = 'titlepage']/keyword[@role='Sprache'][normalize-space()]) 
+                                           then /hub/info/keywordset[@role = 'titlepage']/keyword[@role='Sprache'] 
+                                           else ."/>
+  </xsl:template>
+  
   <xsl:template match="/hub[@xml:lang = 'en']/info/keywordset[@role = 'titlepage']/keyword//text()" mode="custom-2">
     <!-- replace quotation marks in title pages in english titles, https://redmine.le-tex.de/issues/13838 -->
     <xsl:sequence select="translate(., '»«›‹',  '“”ʻʼ')"/>

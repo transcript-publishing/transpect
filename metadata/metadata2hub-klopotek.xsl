@@ -20,7 +20,7 @@
   <xsl:variable name="lang" select="     if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'ENGL', 'i')]) then 'E' 
                                     else if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'SPA', 'i')]) then 'S'
                                     else if (//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1'][matches(., 'FRA', 'i')]) then 'F' else ''" as="xs:string?">
-    <!-- https://redmine.le-tex.de/issues/16459#note-7, https://redmine.le-tex.de/issues/17587 -->
+    <!-- https://redmine.le-tex.de/issues/18318, https://redmine.le-tex.de/issues/16459#note-7, https://redmine.le-tex.de/issues/17587 -->
   </xsl:variable>
   <xsl:variable name="open-access" as="xs:boolean" select="exists(//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:open_access[@open_access_yn = 'Y'])"/>
   <xsl:variable name="open-access-embargo" as="xs:boolean" select="exists(//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:open_access[@open_access_yn = 'Y']/*:open_access_embargo_period)"/>
@@ -31,6 +31,15 @@
     <keyword role="{css:map-klopotek-to-keyword(name())}">
       <xsl:value-of select="if (not(contains(., 'http'))) then concat('https://doi.org/',.) else ."/>
     </keyword>
+  </xsl:template>
+  
+   <xsl:template match="*:language[@seq_no='1']" mode="klopotek-to-keyword" >
+    <!-- https://redmine.le-tex.de/issues/18318 -->
+     <keyword role="Sprache">
+       <xsl:value-of select="if ($lang = 'E') then 'en' else 
+                                    if ($lang = 'S') then 'es' else 
+                                    if ($lang = 'F') then 'fr' else 'de'"/>
+     </keyword>
   </xsl:template>
   
   <xsl:template match="*:title | *:subtitle"  mode="klopotek-to-keyword"  priority="2">
