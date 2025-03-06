@@ -853,13 +853,13 @@
             \tpUseComp{Editorial}%
           \ccaVstructEnd{P}%
           \par%
-          \tpIfComp{SeriesEditorNameList}{%
-            % Temporäres Deaktivieren der Herausgeberkennung.
-            \let\editorsuffixsglname\relax%
-            \let\editorsuffixplname\relax%
-            \tpUseComp{SeriesEditorNameList}\par
-          }{}%
         }%
+      }{}%
+      \tpIfComp{SeriesEditorNameList}{%
+        % Temporäres Deaktivieren der Herausgeberkennung.
+        \let\editorsuffixsglname\relax%
+        \let\editorsuffixplname\relax%
+        \tpUseComp{SeriesEditorNameList}\par
       }{}%
       \vspace*{\fill}%
       \bgroup
