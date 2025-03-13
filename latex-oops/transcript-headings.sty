@@ -101,6 +101,7 @@
     \fi
     \raggedrightKeepIndent
   }%
+  
   \tpSetProperty{toc-before-entry}{%
     \addvspace{\tpUseProperty{toc-margin-top}}
     \parindent \z@
@@ -109,6 +110,7 @@
     \rightskip\z@skip\relax
     \parfillskip\@flushglue
   }%
+  
   \tpSetProperty{toc-format}{%
     \ccaVstructStart{TOCI}%
     \tpIfComp{TocNumber}{%
@@ -146,6 +148,7 @@
   %%%%%%%%%%%%%%%%%%%%%%%%%%%
   \tpSetProperty{margin-left}{}%
   \tpSetProperty{indent}{}%
+  
   \tpSetProperty{title-face}{%
     \sffamily\sbseries%
     \ifx\ts@layout@type\ts@str@layout@mdw
@@ -155,27 +158,25 @@
     \fi%
     \selectfont%
   }%
+  
   \tpSetProperty{quote-block-format}{%
-    \hfill\hbox{%
-      \vbox{%
-        \rightskip\z@
-        \hsize.5\textwidth
-        \normalfont\normalsize%
-        \ifx\ts@layout@type\ts@str@layout@mdw
-          \rmfamily%
-        \else
-          \nsfwiderfamily%
-        \fi
-        \@tempdima=\baselineskip% Ticket 15122.
-        \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
-        \tpUseComp{QuoteText}\par
-        %% Zitat-Quelle
-        \tpIfComp{QuoteSource}{%
-          {\itshape\tpUseComp{QuoteSource}\par}%
-        }{}%
-      }%
-    }%
+    \minusvspace{0.5\baselineskip}%
+    \rightskip\z@
+    \normalfont\normalsize%
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \rmfamily%
+    \else
+      \nsfwiderfamily%
+    \fi
+    \@tempdima=\baselineskip% Ticket 15122.
+    \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
+    \tpUseComp{QuoteText}\par
+    % Zitatquelle.
+    \tpIfComp{QuoteSource}{%
+      {\itshape\tpUseComp{QuoteSource}\par}%
+    }{}%
   }%
+  
   \tpSetProperty{before-heading}{%
     \cleardoublepage
     \null\vskip\headingsep
@@ -265,12 +266,14 @@
     }{}%
     %% Zitat
     \tpIfComp{QuoteBlock}{%
-      \vskip2\baselineskip
+      \vskip1.5\baselineskip
       \savenotes
-      \tpUseComp{QuoteBlock}
+      \hfill
+      \begin{minipage}[t]{0.5\textwidth}%
+        \tpUseComp{QuoteBlock}%
+      \end{minipage}%
       \spewnotes
-      %\vskip-2\baselineskip
-      \vskip\baselineskip% LUP: 2023-10-19, #15665
+      \vskip\baselineskip% Ticket 15665.
     }{}%
   }%
   \tpSetProperty{after-heading-block}{\vfill}%
