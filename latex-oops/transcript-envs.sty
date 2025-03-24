@@ -50,7 +50,7 @@
 
 \newenvironment{kastengrau}[1][\relax]{%
   %\def\FrameCommand{\fboxsep1em \colorbox[gray]{0.88}}%
-  \let\cc@topstrut\relax
+  \let\cc@topstrut\relax% Ticket 18426. 
   \savenotes
   \def\optionalHeading{#1}%
   \begin{mdframed}[backgroundcolor=gray!25,linecolor=white!0]
@@ -70,7 +70,7 @@
 
 
 \newenvironment{kastenlinie}[1][\relax]{%
-  \let\cc@topstrut\relax
+  \let\cc@topstrut\relax% Ticket 18426.
   \FrameSep3mm
   \fboxrule.5bp
   \savenotes
