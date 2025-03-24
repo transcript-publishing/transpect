@@ -253,7 +253,6 @@
       \hb@xt@\@tempdima{\tpUseComp{Number}\hss}%
       \ccaVstructEnd{Lbl}%
     }{}%
-    \ccCreateLabel{part}% Workaround für Ticket 17800.
     \ignorespaces\tpUseComp{Title}\par%
     \cchHeadTagEnd
     \tpIfComp{Subtitle}{%
@@ -489,10 +488,10 @@
       \bgroup%
         \cchHeadTagStart
         \tpWhenComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}%
-        \ccCreateLabel{chapter}% Workaround für Ticket 17800.
         \ignorespaces\tpUseComp{Title}%
         \cchHeadTagEnd
       \egroup
+      \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
       \tpWhenComp{Subtitle}{%
         \par\vskip1.1bp%
         \tpUseProperty{subtitle-face}%
@@ -820,7 +819,8 @@
         \tpUseProperty{title-face}%
         \cchHeadTagStart
         \tpIfComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}{\leftskip\z@}%
-        \ignorespaces\tpUseComp{Title}\par\nopagebreak%
+          \ignorespaces\tpUseComp{Title}\par\nopagebreak
+          \cchGenerateToC% Ticket 18344.
         \cchHeadTagEnd
         \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}% Ticket 14677.
         \tpWhenComp{DOI}{%
@@ -1010,24 +1010,24 @@
       \interlinepenalty\@M\relax
       \tpUseProperty{title-face}%
       \cchHeadTagStart
-      \tpIfComp{Number}{%
-        \edef\@tempa{\tpUseComp{Number}}%
-        \edef\@tempb{\relax}%
-        \ifx\@tempa\@tempb
+        \tpIfComp{Number}{%
+          \edef\@tempa{\tpUseComp{Number}}%
+          \edef\@tempb{\relax}%
+          \ifx\@tempa\@tempb
+            \leftskip\z@
+          \else
+            \ccaVstructStart{Lbl}%
+              \tpUseProperty{hang-number}%
+            \ccaVstructEnd{Lbl}%
+          \fi
+        }{%
           \leftskip\z@
-        \else
-          \ccaVstructStart{Lbl}%
-            \tpUseProperty{hang-number}%
-          \ccaVstructEnd{Lbl}%
-        \fi
-      }{%
-        \leftskip\z@
-      }%
-      \ccCreateLabel{section}% Workaround für Ticket 17800.
-      \ignorespaces\tpUseComp{Title}\par\nopagebreak%
+        }%
+        \ignorespaces\tpUseComp{Title}\par\nopagebreak
+        \cchGenerateToC% Ticket 18344.
+        \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}% Ticket 14677.
+        \tpWhenComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}%
       \cchHeadTagEnd
-      \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}% Ticket 14677.
-      \tpWhenComp{AuthorNameList}{\itshape\tpUseComp{AuthorNameList}\par}%
     \egroup
     \nopagebreak
     \tpWhenComp{QuoteBlock}{%
@@ -1036,6 +1036,7 @@
       \par%
     }%
     \spewnotes
+    \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
   }%
   %\tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
   \tpSetProperty{bookmark}{%
