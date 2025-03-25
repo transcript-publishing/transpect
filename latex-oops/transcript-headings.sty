@@ -241,20 +241,20 @@
     \tpUseProperty{title-face}%
     %\vskip.5\baselineskip
     \cchHeadTagStart
-    \ccIfComp{Number}{%
-      \ifcsname cc-Heading-number--1-maxwd\endcsname
-        \@tempdima=\dimexpr\csname cc-Heading-number--1-maxwd\endcsname+0.5em\relax%
-      \else
-        \@tempdima=\z@%
-      \fi%
-      \ccaVstructStart{Lbl}%
-      \leftskip\@tempdima%
-      \hskip-\@tempdima%
-      \hb@xt@\@tempdima{\tpUseComp{Number}\hss}%
-      \ccaVstructEnd{Lbl}%
-    }{}%
-    \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
-    \ignorespaces\tpUseComp{Title}\par%
+      \ccIfComp{Number}{%
+        \ifcsname cc-Heading-number--1-maxwd\endcsname
+          \@tempdima=\dimexpr\csname cc-Heading-number--1-maxwd\endcsname+0.5em\relax%
+        \else
+          \@tempdima=\z@%
+        \fi%
+        \ccaVstructStart{Lbl}%
+        \leftskip\@tempdima%
+        \hskip-\@tempdima%
+        \hb@xt@\@tempdima{\tpUseComp{Number}\hss}%
+        \ccaVstructEnd{Lbl}%
+      }{}%
+      \ignorespaces\tpUseComp{Title}\par%
+      \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
     \cchHeadTagEnd
     \tpIfComp{Subtitle}{%
       \@@par
@@ -488,9 +488,9 @@
       \tpUseProperty{title-face}%
       \bgroup%
         \cchHeadTagStart
-        \tpWhenComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}%
-        \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
-        \ignorespaces\tpUseComp{Title}%
+          \tpWhenComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}%
+          \ignorespaces\tpUseComp{Title}\par%
+          \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
         \cchHeadTagEnd
       \egroup
       \tpWhenComp{Subtitle}{%
@@ -1030,8 +1030,9 @@
         }{%
           \leftskip\z@
         }%
-        \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
+        \ccCreateLabel{section}% Muss drin bleiben, damit \nopagebreak bei section-Überschrift direkt nach section-Überschrift greift. PDF-Lesezeichen bleiben korrekt.
         \ignorespaces\tpUseComp{Title}\par
+        \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
         \nopagebreak%
       \cchHeadTagEnd
       \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}% Ticket 14677.
