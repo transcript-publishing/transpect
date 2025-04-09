@@ -561,7 +561,9 @@
     </rule>
   </template>
 
-
+  <xsl:template match="dbk:itemizedlist" mode="strip-meta" priority="4">
+    <xsl:apply-templates select="." mode="xml2tex"/>
+  </xsl:template>
 
   <xsl:variable name="dialogue-style" select="'^[a-z]+dialogue'" as="xs:string"/>
 
@@ -1001,8 +1003,6 @@
     <xsl:next-match/>
   </xsl:template>-->
   
-    <!-- medieval font (junicode) -->
-  <!-- use following regexes in your adaptations if medieval characters appear. https://redmine.le-tex.de/issues/16379 -->
   <regex context="ancestor::*[self::dbk:title|dbk:footnote]" regex="([&#x1E00;-&#x1E07;&#x1E0A;-&#x1E0B;&#x1E10;-&#x1E13;&#x1E18;-&#x1E1B;&#x1E1E;-&#x1E1F;&#x1E22;-&#x1E23;&#x1E26;-&#x1E29;&#x1E2C;-&#x1E2D;&#x1E30;-&#x1E35;&#x1E38;-&#x1E39;&#x1E3C;-&#x1E41;&#x1E4A;-&#x1E4B;&#x1E54;-&#x1E59;&#x1E5C;-&#x1E5D;&#x1E6A;-&#x1E6B;&#x1E70;-&#x1E77;&#x1E7C;-&#x1E7F;&#x1E86;-&#x1E8D;&#x1E90;-&#x1E91;&#x1E94;-&#x1E9F;]+)">
     <rule name="textsffallback" type="cmd">
       <param regex-group="1"/>
@@ -1015,7 +1015,9 @@
     </rule>
   </regex>
   
-  <regex regex="([&#xA722;-&#xA725;]+)">
+  <!-- medieval font (junicode) -->
+  <!-- use following regexes in your adaptations if medieval characters appear. https://redmine.le-tex.de/issues/16379 -->
+   <regex regex="([&#xA722;-&#xA725;]+)">
     <rule name="mdvfont" type="cmd">
       <param regex-group="1"/>
     </rule>
@@ -1046,6 +1048,7 @@
     <xsl:next-match/>
     <xsl:text>}</xsl:text>
   </template>
+  
   <template context="processing-instruction()[name() eq $pi-xml-name]
                                              [matches(., '(^|\p{Zs}|\\|\{)(twocolumnContinuousChapters|noBlanksBeforeChapters)($|\}|\p{Zs})')]">
     <!-- these PIs go into options and will be stripped from content

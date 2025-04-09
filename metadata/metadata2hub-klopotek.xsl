@@ -600,6 +600,52 @@
     </xsl:choose>
   </xsl:template>
   
+  <xsl:template match="*:ul" mode="postprocess-html" priority="3">
+    <xsl:param name="preserve-styling" as="xs:boolean?" tunnel="yes"/>
+    <!--  https://redmine.le-tex.de/issues/18568-->
+    <xsl:choose>
+      <xsl:when test="$preserve-styling">
+        <itemizedlist>
+          <xsl:apply-templates select="node()" mode="#current"/>
+        </itemizedlist>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="*:ol" mode="postprocess-html" priority="3">
+    <xsl:param name="preserve-styling" as="xs:boolean?" tunnel="yes"/>
+    <!--  https://redmine.le-tex.de/issues/18568-->
+    <xsl:choose>
+      <xsl:when test="$preserve-styling">
+        <orderedlist>
+          <xsl:apply-templates select="node()" mode="#current"/>
+        </orderedlist>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="*:li" mode="postprocess-html" priority="3">
+    <xsl:param name="preserve-styling" as="xs:boolean?" tunnel="yes"/>
+    <xsl:choose>
+      <xsl:when test="$preserve-styling">
+      <!--  https://redmine.le-tex.de/issues/18568-->
+      <listitem>
+        <xsl:if test="..[self::*:ol]"><xsl:attribute name="override" select="concat(position(), '.')"/></xsl:if>
+       <para><xsl:apply-templates select="node()" mode="#current"/></para>
+      </listitem>
+     </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
   <xsl:template match="*" mode="strip-namespaces" priority="2" exclude-result-prefixes="#all">
     <xsl:element name="{name()}">
       <xsl:apply-templates select="@* except @xmlns, node()" mode="#current"/>
@@ -694,7 +740,7 @@
     <!-- https://redmine.le-tex.de/issues/17450,
          https://redmine.le-tex.de/issues/17511 (localization)-->
     <keyword role="Editorial">
-      <xsl:sequence select="html:process-html(., true(), false())" />
+      <xsl:sequence select="html:process-html(., true(), true())" />
     </keyword>
   </xsl:template>
   
