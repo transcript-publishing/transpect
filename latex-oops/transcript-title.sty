@@ -53,12 +53,19 @@
   \tpSetProperty{coverpage}{%
     \bgroup
       \def\thepage{\@alph\c@page}%
-      \smash{\rlap{%
-          \raise\dimexpr\topskip+\headheight+\headsep+\topmargin-\paperheight\relax
-          \vtop{%
-            \hspace*{-\oddsidemargin}\relax
-            \includegraphics[width=\paperwidth,height=\paperheight]{\tpUseComp{Cover}}%
-          }}}%
+      \ccaVstructStart{Figure}%
+        \ccaAddPlacement{Block}%
+        \smash{%
+          \rlap{%
+            \raise\dimexpr\topskip+\headheight+\headsep+\topmargin-\paperheight\relax
+            \vtop{%
+              \hspace*{-\oddsidemargin}\relax
+              \ccaAddAltText{Cover image}% Alternativtext.
+              \includegraphics[width=\paperwidth,height=\paperheight]{\tpUseComp{Cover}}%
+            }%
+          }%
+        }%
+      \ccaVstructEnd{Figure}%
       \clearpage
     \egroup
   }%
@@ -655,7 +662,7 @@
         \tpSetProperty{editor-suffix}{}%
         \itshape%
         \ccaStructStart{SeriesEditors}%
-        \tpUseComp{SeriesEditorNameList}%
+          \tpUseComp{SeriesEditorNameList}%
         \ccaStructEnd{SeriesEditors}%
         \tpIfComp{MemberList}{%
           :%
@@ -859,7 +866,9 @@
         % Temporäres Deaktivieren der Herausgeberkennung.
         \let\editorsuffixsglname\relax%
         \let\editorsuffixplname\relax%
-        \tpUseComp{SeriesEditorNameList}\par
+        \ccaVstructStart{P}%
+          \tpUseComp{SeriesEditorNameList}\par
+        \ccaVstructEnd{P}%
       }{}%
       \vspace*{\fill}%
       \bgroup
