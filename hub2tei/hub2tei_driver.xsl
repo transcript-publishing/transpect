@@ -233,4 +233,7 @@
     <editor role="{$role}"><xsl:value-of select="if (*:para) then string-join(*:para/text(), ' ')  else ."/></editor>
   </xsl:template>
   
+  <xsl:template match="index[indexdiv or indexentry]" mode="hub2tei:dbk2tei">
+    <!-- discard static indices, https://redmine.le-tex.de/issues/18586#change-108403-->
+  </xsl:template>
 </xsl:stylesheet>
