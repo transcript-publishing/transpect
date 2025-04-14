@@ -392,34 +392,42 @@
     \egroup%
   }%
   \ccaVstructStart{Dialogue}%
-  \list{}%
-  {\leftmargin7mm
-   \labelsep1em
-   \labelwidth\dimexpr7mm-\labelsep\relax
-   \itemsep\z@
-   \itemindent\z@
-   \parsep\z@
-   \topsep12.8bp
-   \global\let\is@first@item\relax
-   \def\makelabel##1{%
-     \ifx\is@first@item\relax
-       \global\let\is@first@item\@undefined
-     \else
-       \ccaVstructEnd{DialogueLine}%
-     \fi
-     \ccaVstructStart{DialogueLine}%
-     {\ignorespaces\itshape\ccaVstructStart{DialogueLabel}##1\ccaVstructEnd{DialogueLabel}\ignorespaces}
-   }}%
+  \list{}{%
+    \leftmargin7mm
+    \labelsep1em
+    \labelwidth\dimexpr7mm-\labelsep\relax
+    \itemsep\z@
+    \itemindent\z@
+    \parsep\z@
+    \topsep12.8bp
+    \global\let\is@first@item\relax
+    \def\makelabel##1{%
+      \ifx\is@first@item\relax
+        \global\let\is@first@item\@undefined
+      \else
+        \ccaVstructEnd{DialogueLine}%
+      \fi
+      \ccaVstructStart{DialogueLine}%
+      {%
+        \ignorespaces\itshape
+        \ccaVstructStart{DialogueLabel}%
+          ##1%
+        \ccaVstructEnd{DialogueLabel}%
+        \ignorespaces
+      }
+    }%
+  }%
 }{%
+  \ccaVstructEnd{DialogueLine}%
   \endlist
   \ccaVstructEnd{Dialogue}%
 }
 
 \ccaAddRolemap{Dialogue}{Div}
-% Achtung! @cc@pdf@two existiert nicht. Bis auf Weiteres alle Vorkommen auskommentiert.
-%\ccaAddRolemap{DialogueLine}{\if@cc@pdf@two Sub\else Div\fi}
+\ccaAddRolemap{DialogueLine}{\if@cc@pdf@two Sub\else Div\fi}
 %\ccaAddRolemap{DialogueLabel}{\if@cc@pdf@two Lbl\else Span\fi}
-%\ccaAddRolemap{DialogueDirection}{\if@cc@pdf@two Sub\else Div\fi}
+\ccaAddRolemap{DialogueLabel}{Lbl}
+\ccaAddRolemap{DialogueDirection}{\if@cc@pdf@two Sub\else Div\fi}
 
 \RequirePackage{amsmath}
 \let\lll\relax

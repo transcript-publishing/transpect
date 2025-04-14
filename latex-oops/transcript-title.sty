@@ -978,8 +978,16 @@
     \tpSetProperty{titlepage-iv}{%
       \bgroup
         \ccaStructStart{Titlepage}%
-        \tpWhenComp{Statement}{\ccaStructStart{MetaDatumBlock}%
-          \tpUseComp{Statement}\par\ifx\ts@layout@type\ts@str@layout@mdw\else\vskip\baselineskip\fi
+        \tpWhenComp{Statement}{%
+          \ccaStructStart{MetaDatumBlock}%
+            \ccaStructStart{P}%
+              \tpUseComp{Statement}%
+            \ccaStructEnd{P}%
+            \par
+            \ifx\ts@layout@type\ts@str@layout@mdw
+            \else
+              \vskip\baselineskip
+            \fi
           \ccaStructEnd{MetaDatumBlock}}%
         \justify
         \ccaStructStart{MetaDatumBlock}%
