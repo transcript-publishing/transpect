@@ -140,11 +140,16 @@
 \DeclareTextFontCommand\textsffallback{\sffallbackfont}
 \DeclareTextFontCommand\textttfallback{\ttfallbackfont}
 \DeclareTextFontCommand\ccFallback{%
-  \ccsTestFont{\ccs@rmdefault}
-    {\fallbackfont}
-    {\ccsTestFont{\ccs@sfdefault}
-      {\sffallbackfont}
-      {\ttfallbackfont}}}%
+  \ccsTestFont{\ccs@rmdefault}{%
+    \fallbackfont
+  }{%
+    \ccsTestFont{\ccs@sfdefault}{%
+      \sffallbackfont
+    }{%
+      \ttfallbackfont
+    }%
+  }%
+}%
 %%%%%%%%%%
 
 \usepackage{newunicodechar}
