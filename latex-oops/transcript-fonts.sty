@@ -1,6 +1,8 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-fonts}[2021/04/09 transcript]\relax
 
+\def\ts@str@heading{heading}
+
 \ifx\cc@color@enc\cc@str@cmyk
   %\definecolor{TranscriptGrey}{cmyk}{0, 0.02, 0.01, 0.79}%% according to acrobat:
   \definecolor{TranscriptGrey}{cmyk}{0.7, 0.7, 0.65, 0.75}
@@ -29,16 +31,21 @@
 ]{NotoSansSymbols-Regular.ttf}
 
 \renewfontfamily\sffallbackfont{NotoSans-Regular.ttf}%
-[BoldFont = NotoSans-Bold.ttf,%
- ItalicFont = NotoSans-Italic.ttf,%
- BoldItalicFont = NotoSans-BoldItalic.ttf,%
- FontFace = {up}{n}{NotoSans-Regular.ttf},%
- FontFace = {up}{it}{NotoSans-Italic.ttf},%
- FontFace = {md}{n}{NotoSans-Regular.ttf},%
- FontFace = {md}{it}{NotoSans_Condensed-SemiBoldItalic.ttf},%
- Path = ./fonts/Noto/Sans/,%
- WordSpace = 1.25,%
- Scale = 0.94%
+  [%
+    BoldFont = NotoSans-Bold.ttf,%
+    ItalicFont = NotoSans-Italic.ttf,%
+    BoldItalicFont = NotoSans-BoldItalic.ttf,%
+    FontFace = {up}{n}{NotoSans-Regular.ttf},%
+    FontFace = {up}{it}{NotoSans-Italic.ttf},%
+    FontFace = {md}{n}{NotoSans-Regular.ttf},%
+    \ifx\cc@cur@cont\ts@str@heading
+      FontFace = {md}{it}{NotoSans_Condensed-SemiBoldItalic.ttf},%
+    \else
+      FontFace = {md}{it}{NotoSans-Italic.ttf},%
+    \fi
+    Path = ./fonts/Noto/Sans/,%
+    WordSpace = 1.25,%
+    Scale = 0.94%
 ]
 
 \ifx\ts@layout@type\ts@str@layout@mdw
