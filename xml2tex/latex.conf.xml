@@ -1003,7 +1003,7 @@
     <xsl:next-match/>
   </xsl:template>-->
   
-  <regex context="ancestor-or-self::*[self::dbk:title|self::dbk:footnote]" regex="([&#x1E00;-&#x1E7F;&#x1E86;-&#x1EF1;&#x1EF4;-&#x1EFF;]+)">
+  <regex context="ancestor-or-self::*[self::dbk:title|self::dbk:footnote]" regex="([&#x200;-&#x217;&#x21c;-&#x227;&#x22a;-&#x2c5;&#x2c8;&#x2ca;-&#x2d7;&#x2de;-&#x2ff;&#x305;&#x309;&#x30d;-&#x311;&#x314;-&#x325;&#x329;-&#x334;&#x1E00;-&#x1E7F;&#x1E86;-&#x1EF1;&#x1EF4;-&#x1EFF;]+)">
     <rule name="textsffallback" type="cmd">
       <param regex-group="1"/>
     </rule>
