@@ -731,7 +731,7 @@
     </xsl:if>
   </template>
   
-  <xsl:variable name="replace-charaters-in-toc-regex" as="xs:string" select="&#x200;-&#x217;&#x21c;-&#x227;&#x22A;-&#x2C5;&#x2c8;&#x2ca;-&#x2d7;&#x2de;-&#x2ff;&#x305;&#x309;&#x30d;-&#x311;&#x314;-&#x325;&#x329;-&#x334;&#x1E00;-&#x1E7F;&#x1E86;-&#x1EF1;&#x1EF4;-&#x1EFF;"/>
+  <xsl:variable name="replace-charaters-in-toc-regex" as="xs:string" select="'&#x200;-&#x217;&#x21c;-&#x227;&#x22A;-&#x2C5;&#x2c8;&#x2ca;-&#x2d7;&#x2de;-&#x2ff;&#x305;&#x309;&#x30d;-&#x311;&#x314;-&#x325;&#x329;-&#x334;&#x1E00;-&#x1E7F;&#x1E86;-&#x1EF1;&#x1EF4;-&#x1EFF;'"/>
  <!-- try to keep it synchronized wit regex in regex template -->
   <xsl:template match="*[self::dbk:title|dbk:subtitle|dbk:author]//text()[matches(., concat('[', $replace-charaters-in-toc-regex, '&amp;&#x9;&#xa0;&#x2000;-&#x200a;]+'))]" 
                 mode="xml2tex" priority="100000">
@@ -744,9 +744,9 @@
     <xsl:analyze-string select="." regex="{$regex}">
       <xsl:matching-substring>
           <xsl:if test="regex-group(1)[normalize-space()]">
-            <xsl:if test="not($toc-override eq true()) and not($bm-override eq true()) and not($run-override eq true())"><xsl:text>\textsffallback{</xsl:text></xsl:if>
+            <xsl:if test="not($bm-override eq true())"><xsl:text>\textsffallback{</xsl:text></xsl:if>
             <xsl:value-of select="regex-group(1)"/>
-            <xsl:if test="not($toc-override eq true()) and not($bm-override eq true()) and not($run-override eq true())"><xsl:text>}</xsl:text></xsl:if>Ṣ
+            <xsl:if test="not($bm-override eq true())"><xsl:text>}</xsl:text></xsl:if>
           </xsl:if>
           <xsl:if test="exists(regex-group(2))">
             <xsl:value-of select="if ($toc-override eq true() or $bm-override eq true() or $run-override eq true()) 
