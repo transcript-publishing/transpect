@@ -35,13 +35,18 @@
     BoldFont = NotoSans-Bold.ttf,%
     ItalicFont = NotoSans-Italic.ttf,%
     BoldItalicFont = NotoSans-BoldItalic.ttf,%
-    FontFace = {up}{n}{NotoSans-Regular.ttf},%
-    FontFace = {up}{it}{NotoSans-Italic.ttf},%
-    FontFace = {md}{n}{NotoSans-Regular.ttf},%
-    \ifx\cc@cur@cont\ts@str@heading
+    \ifx\cc@cur@cont\ts@str@Heading
+      FontFace = {up}{n}{NotoSans-Condensed.ttf},%
+      FontFace = {up}{it}{NotoSans-CondensedItalic.ttf},%
+      FontFace = {md}{n}{NotoSans_Condensed-Semibold.ttf},%
       FontFace = {md}{it}{NotoSans_Condensed-SemiBoldItalic.ttf},%
+      FontFace = {sb}{it}{NotoSans_Condensed-SemiBoldItalic.ttf},%
     \else
+      FontFace = {up}{n}{NotoSans-Regular.ttf},%
+      FontFace = {up}{it}{NotoSans-Italic.ttf},%
+      FontFace = {md}{n}{NotoSans-Regular.ttf},%
       FontFace = {md}{it}{NotoSans-Italic.ttf},%
+      FontFace = {sb}{it}{NotoSans-Italic.ttf},%
     \fi
     Path = ./fonts/Noto/Sans/,%
     WordSpace = 1.25,%
