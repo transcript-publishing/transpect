@@ -806,6 +806,27 @@
   }
 \fi
 
+\babelfont[hebrew]{rm}[%
+  Renderer=Harfbuzz,% https://github.com/latex3/babel/issues/313#issuecomment-2397163457
+  Path=./fonts/Noto/Hebrew/Serif/,%
+  BoldFont=NotoSerifHebrew-ExtraBold.ttf,%
+  Scale=MatchUppercase,%
+  Ligatures=TeX,%
+  Script=Hebrew,%
+  Contextuals=Alternate%
+]{NotoSerifHebrew-Regular.ttf}
+
+\babelfont[hebrew]{sf}[%
+  Renderer=Harfbuzz,% https://github.com/latex3/babel/issues/313#issuecomment-2397163457
+  Path=./fonts/Noto/Hebrew/Sans/,%
+  BoldFont=NotoSansHebrew-ExtraBold.ttf,%
+  Scale=MatchUppercase,%
+  Ligatures=TeX,%
+  Script=Hebrew,%
+  Contextuals=Alternate%
+]{NotoSansHebrew-Regular.ttf}
+
+
 \DeclareRobustCommand{\ltseries}{\fontseries{lt}\selectfont}
 \DeclareRobustCommand{\ebseries}{\fontseries{eb}\selectfont}
 \DeclareRobustCommand{\sbseries}{\fontseries{sb}\selectfont}
@@ -828,11 +849,20 @@
 \let\ltx@cctextipa\ccTextipa
 \long\protected\def\ccTextipa#1{%
   \begingroup
-    \ccsTestFont{\ccs@sfdefault}
-      {\def\ts@ipa@scale{\addfontfeature{Scale=0.95}}}
-      {\def\ts@ipa@scale{\addfontfeature{Scale=0.85}}}%
-      \expandafter\ifnum\pdf@strcmp{\f@shape}{it}=\z@\relax\upshape\fi
-      \expandafter\ifnum\pdf@strcmp{\f@series}{md}=\z@\relax\fontseries{m}\selectfont\fi
+    \ccsTestFont{\ccs@sfdefault}{%
+      \def\ts@ipa@scale{\addfontfeature{Scale=0.95}}%
+    }{%
+      \def\ts@ipa@scale{\addfontfeature{Scale=0.85}}%
+    }%
+    \expandafter\ifnum\pdf@strcmp{\f@shape}{it}=\z@\relax
+      \upshape
+    \fi
+    \expandafter\ifnum\pdf@strcmp{\f@series}{md}=\z@\relax
+      \fontseries{m}%
+      \selectfont
+    \fi
     \ccIpaSfFont
-      \ts@ipa@scale\selectfont
-     #1\endgroup}
+    \ts@ipa@scale\selectfont
+    #1%
+  \endgroup
+}

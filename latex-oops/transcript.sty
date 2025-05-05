@@ -401,6 +401,10 @@
   \tp@letterwise{#1}%
 }
 
+\gdef\tp@languageRules@hebrew{%
+  \sffamily
+}
+
 \let\@foreignNewLanguageRules\foreignlanguage
 \protected\gdef\foreignlanguage#1#2{%
   \protect\@foreignNewLanguageRules{#1}{%
