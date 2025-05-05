@@ -401,8 +401,10 @@
   \tp@letterwise{#1}%
 }
 
-\gdef\tp@languageRules@hebrew{%
-  \sffamily
+\gdef\tp@languageRules@hebrew{%+
+  \ifx\@withinFootnote\relax
+    \sffamily
+  \fi
 }
 
 \let\@foreignNewLanguageRules\foreignlanguage
