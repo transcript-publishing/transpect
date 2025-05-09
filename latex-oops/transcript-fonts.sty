@@ -29,28 +29,38 @@
   FontFace = {md}{n}{NotoSansSymbols-Regular.ttf},%
 ]{NotoSansSymbols-Regular.ttf}
 
+
 \renewfontfamily\sffallbackfont{NotoSans-Regular.ttf}%
   [%
     BoldFont = NotoSans-Bold.ttf,%
     ItalicFont = NotoSans-Italic.ttf,%
     BoldItalicFont = NotoSans-BoldItalic.ttf,%
-    \ifx\cc@cur@cont\tp@str@Heading
-      FontFace = {up}{n}{NotoSans-Condensed.ttf},%
-      FontFace = {up}{it}{NotoSans-CondensedItalic.ttf},%
-      FontFace = {md}{n}{NotoSans_Condensed-Semibold.ttf},%
-      FontFace = {md}{it}{NotoSans_Condensed-SemiBoldItalic.ttf},%
-      FontFace = {sb}{it}{NotoSans_Condensed-SemiBoldItalic.ttf},%
-    \else
-      FontFace = {up}{n}{NotoSans-Regular.ttf},%
-      FontFace = {up}{it}{NotoSans-Italic.ttf},%
-      FontFace = {md}{n}{NotoSans-Regular.ttf},%
-      FontFace = {md}{it}{NotoSans-Italic.ttf},%
-      FontFace = {sb}{it}{NotoSans-Italic.ttf},%
-    \fi
+    FontFace = {up}{n}{NotoSans-Regular.ttf},%
+    FontFace = {up}{it}{NotoSans-Italic.ttf},%
+    FontFace = {md}{n}{NotoSans-Regular.ttf},%
+    FontFace = {md}{it}{NotoSans-Italic.ttf},%
+    FontFace = {sb}{it}{NotoSans-Italic.ttf},%
     Path = ./fonts/Noto/Sans/,%
     WordSpace = 1.25,%
     Scale = 0.94%
-]
+  ]
+
+\newfontfamily\sffallbackfontcondensed{NotoSans-Condensed.ttf}%
+  [%
+    BoldFont = NotoSans-CondensedBold.ttf,%
+    ItalicFont = NotoSans-CondensedItalic.ttf,%
+    BoldItalicFont = NotoSans-CondensedBoldItalic.ttf,%
+    FontFace = {up}{n}{NotoSans-Condensed.ttf},%
+    FontFace = {up}{it}{NotoSans-CondensedItalic.ttf},%
+    FontFace = {md}{n}{NotoSans_Condensed-Semibold.ttf},%
+    FontFace = {md}{it}{NotoSans_Condensed-SemiBoldItalic.ttf},%
+    FontFace = {sb}{it}{NotoSans_Condensed-SemiBoldItalic.ttf},%
+    Path = ./fonts/Noto/Sans/,%
+    WordSpace = 1.25,%
+    Scale = 0.94%
+  ]
+
+
 
 \ifx\ts@layout@type\ts@str@layout@mdw
   \babelfont{rm}[%

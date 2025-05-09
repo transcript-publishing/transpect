@@ -38,8 +38,9 @@
 \gdef\ts@str@layout@utb{utb}
 \gdef\ts@str@layout@xtx{xtx}
 
-\def\tp@str@heading{heading}
-\def\tp@str@Heading{Heading}
+\gdef\ts@str@heading{heading}
+\gdef\ts@str@Heading{Heading}
+
 
 % Pfade sind nach Priorität geordnet und werden von TeX derart durchsucht.
 % Dateiendungen können weggelassen werden und werden nach TeX-interner Prioritätenliste (\Gin@extensions) gewählt:
@@ -132,7 +133,9 @@
 %%%%%%%%%%
 % Fonts  %
 %%%%%%%%%%
+
 \usepackage{transcript-fonts}
+
 
 \newdimen\tp@majuscleHeight
 
@@ -140,7 +143,8 @@
 
 %%%%%%%%%% Übergangsweise, bis die neuen Makros im xerif-latex-Branch sind.
 \DeclareTextFontCommand\textfallback{\fallbackfont}
-\DeclareTextFontCommand\textsffallback{\sffallbackfont}
+\gdef\@sffallbackfeatures{\relax}
+\DeclareTextFontCommand\textsffallback{\sffallbackfont\@sffallbackfeatures}
 \DeclareTextFontCommand\textttfallback{\ttfallbackfont}
 \DeclareTextFontCommand\ccFallback{%
   \ccsTestFont{\ccs@rmdefault}{%
@@ -388,7 +392,7 @@
   %\fi
   % END.
   \sffamily
-  \ifx\@currenvir\tp@str@heading
+  \ifx\@currenvir\ts@str@heading
     \ifx\@withinFootnote\relax
     \else
       \bfseries

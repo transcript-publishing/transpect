@@ -320,7 +320,17 @@
   \tpSetProperty{toc-margin-top}{1\baselineskip}%
   \tpSetProperty{toc-margin-right}{2em}% Begrenzt die Breite, auf der Titel und Untertitel erscheinen können. 2 em sind dann der Platz, auf dem die Seitenzahl »übersteht«.
   \tpSetProperty{toc-number-sep}{\enskip}%
-  \tpSetProperty{toc-title-face}{\sbseries\sfchapwidefamily\normalsize}%
+  \tpSetProperty{toc-title-face}{%
+    \def\@sffallbackfeatures{%
+      \addfontfeature{FakeBold=3.2}%
+      \sffallbackfontcondensed
+      \edef\@tempa{it}%
+      \ifx\f@shape\@tempa
+        \addfontfeature{FakeSlant=-0.09}%
+      \fi
+    }%
+    \sbseries\sfchapwidefamily\normalsize
+  }%
   \tpSetProperty{toc-subtitle-face}{\normalfont\sfchapsubtocfamily\normalsize\if@TLtwenty\upseries\fi}%
   \tpSetProperty{toc-author-face}{\normalfont\normalsize\sfchapfamily\itshape\if@TLtwenty\upseries\fi}%
   \tpSetProperty{toc-page-face}{\normalfont\normalsize\sfchapwidefamily\if@TLtwenty\upseries\fi}%
@@ -398,7 +408,23 @@
     }{}%
     \tpUseComp{BMTitle}%
   }%
-  \tpSetProperty{title-face}{\ifx\ts@layout@type\ts@str@layout@mdw\huge\else\Huge\fi\sbseries\sfchapfamily}%
+  
+  \tpSetProperty{title-face}{%
+    \def\@sffallbackfeatures{%
+      \addfontfeature{FakeBold=3.2}%
+      \edef\@tempa{it}%
+      \ifx\f@shape\@tempa
+        \addfontfeature{FakeSlant=-0.09}%
+      \fi
+    }%
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \huge
+    \else
+      \Huge
+    \fi
+    \sbseries\sfchapfamily
+  }%
+  
   \tpSetProperty{subtitle-face}{\normalfont\fontsize{13.7bp}{17.2bp}\selectfont\sfchapsubfamily\upseries}
   \tpSetProperty{quote-block-format}{%
     \parskip\baselineskip
@@ -435,9 +461,11 @@
       \vskip\dimexpr\headingsep-.45mm\relax
     \fi%
   }%
+  
   \tpSetProperty{running-heading}{%
     \tp@chaptermark%
   }%
+  
   \tpSetProperty{heading-block}{%
     \gdef\tp@currentHeading{chapter}%
     \ifcollection
@@ -860,6 +888,20 @@
     \tpSetProperty{toc-indent}{0em}%
     \tpSetProperty{toc-margin-left}{0em}%
     \tpSetProperty{toc-before-entry}{\nopagebreak}%
+    \tpSetProperty{toc-title-face}{%
+      \def\@sffallbackfeatures{%
+        \sffallbackfontcondensed
+        \edef\@tempa{it}%
+        \ifx\f@shape\@tempa
+          \addfontfeature{FakeSlant=-0.09}%
+        \fi
+      }%
+      \sffamily
+      \normalsize
+      \if@TLtwenty
+        \upseries
+      \fi
+    }
     \tpSetProperty{toc-subtitle-face}{\normalfont\normalsize}%
     \tpSetProperty{toc-format}{%
       \hyphenpenalty=\@M
@@ -952,11 +994,27 @@
       \par
     }%
   \else
+    \tpSetProperty{toc-title-face}{%
+      \def\@sffallbackfeatures{%
+        \sffallbackfontcondensed
+        \edef\@tempa{it}%
+        \ifx\f@shape\@tempa
+          \addfontfeature{FakeSlant=-0.09}%
+        \fi
+      }%
+      \sffamily
+      \normalsize
+      \if@TLtwenty
+        \upseries
+      \fi
+    }
+  
     \tpSetProperty{toc-before-entry}{%
       \addvspace{\tpUseProperty{toc-margin-top}}
       \parindent \z@
       \raggedright
     }%
+    
     \tpSetProperty{toc-format}{%
       \ccaVstructStart{TOCI}%
       \ccWhenComp{TocNumber}{\ccaVstructStart{P}\ccaVstructStart{Reference}}%
@@ -988,7 +1046,24 @@
   %\tpSetProperty{before-heading}{\addvspace{24.2bp}}%
   \tpSetProperty{before-skip}{24.2bp}%
   \tpSetProperty{number-sep}{\enskip}%
-  \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\Large\bfseries\else\LARGE\sbseries\fi}%
+  \tpSetProperty{title-face}{%
+    \def\@sffallbackfeatures{%
+      \addfontfeature{FakeBold=3.2}%
+      \sffallbackfontcondensed
+      \edef\@tempa{it}%
+      \ifx\f@shape\@tempa
+        \addfontfeature{FakeSlant=-0.09}%
+      \fi
+    }%
+    \sffamily
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \Large
+      \bfseries
+    \else
+      \LARGE
+      \sbseries
+    \fi
+  }%
   \tpSetProperty{subtitle-face}{\normalfont\sffamily\LARGE\if@TLtwenty\upseries\fi}% Mig2024
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
   \tpSetProperty{quote-block-format}{%
@@ -1062,10 +1137,39 @@
     \tpSetProperty{bookmark-level}{1}
     \tpSetProperty{toc-level}{section}
   \fi
+
+  \tpSetProperty{toc-title-face}{%
+    \def\@sffallbackfeatures{%
+      \sffallbackfontcondensed
+      %\addfontfeature{FakeSlant=-0.09}%
+      %\let\cc@cur@cont\tp@str@Heading
+    }%
+    \sffamily
+    \normalsize
+    \if@TLtwenty
+      \upseries
+    \fi
+  }
   
   %\tpSetProperty{before-heading}{\addvspace{11.5bp}}%
   \tpSetProperty{before-skip}{11.5bp}
-  \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\sbseries\else\mdseries\fi\Large}%
+  \tpSetProperty{title-face}{%
+    \def\@sffallbackfeatures{%
+      \addfontfeature{FakeBold=0.1}%
+      \sffallbackfontcondensed
+      \edef\@tempa{it}%
+      \ifx\f@shape\@tempa
+        \addfontfeature{FakeSlant=-0.09}%
+      \fi
+    }%
+    \sffamily
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \sbseries
+    \else
+      \mdseries
+    \fi
+    \Large
+  }%
   \tpSetProperty{before-quote-skip}{.5\baselineskip}%
   \tpSetProperty{running-heading}{}% da subsection sonst die Kolumnentitel ebenfalls von section erben würde
   \tpSetProperty{toc-number-sep}{\enskip}
@@ -1152,7 +1256,27 @@
   %\tpSetProperty{before-heading}{\addvspace{1\baselineskip}}%
   \tpSetProperty{before-skip}{1\baselineskip}%
   %\tpSetProperty{after-skip}{1sp}% Ticket 12534, 2022-04-25
-  \tpSetProperty{title-face}{\sffamily\ifx\ts@layout@type\ts@str@layout@mdw\large\itshape\if@TLtwenty\upseries\fi\else\Large\mdseries\fi}%
+  \tpSetProperty{title-face}{%
+    \def\@sffallbackfeatures{%
+      %\addfontfeature{FakeBold=0.1}%
+      \sffallbackfontcondensed
+      \edef\@tempa{it}%
+      \ifx\f@shape\@tempa
+        \addfontfeature{FakeSlant=-0.09}%
+      \fi
+    }%
+    \sffamily
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \large
+      \itshape
+      \if@TLtwenty
+        \upseries
+      \fi
+    \else
+      \Large
+      \mdseries
+    \fi
+  }%
   \ifcollection\else
     %\tpSetProperty{toc-indent}{8em}%
     \tpSetProperty{toc-margin-left}{6.5em}%
