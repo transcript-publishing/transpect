@@ -22,6 +22,8 @@
   <xsl:param name="a11y" as="xs:boolean" select="true()"/>
   <xsl:param name="table-caption-pos" as="xs:string?"/>
   <xsl:param name="figure-caption-pos" as="xs:string?"/>
+  <xsl:param name="table-font" as="xs:string?"/>
+  <xsl:param name="hyphenation" as="xs:string?"/>
   
   <xsl:variable name="is-collection" select="matches($basename,  'ts_[a-z]{3}_anth_')" as="xs:boolean"/>
   <xsl:variable name="is-journal" select="matches($basename,  'ts_jrn_[a-z]{3,4}_')" as="xs:boolean"/>
@@ -269,6 +271,7 @@
                                  ',captions_table=',
                                  if($table-caption-pos eq 'bottom') then 'bottom' else 'top',
                                  if($sans-font eq 'noto-condensed') then ',altFonts' else (),
+                                 (:if($table-font[. = 'Lato']) then () else ',table-altfont',:)
                                  if ($twocolumnContinuousChapters) then ',twocolumnContinuousChapters' else (),
                                  if ($noBlanksBeforeChapters) then ',noBlanksBeforeChapters' else (),
                                  $series-options,
@@ -277,6 +280,10 @@
     <xsl:if test="$langs = 'zh'">
       <xsl:value-of select="'\usepackage{CJK}&#xa;'"/>
     </xsl:if>
+<!--    <xsl:if test="$hyphenation = ('min', 'max')">
+      <xsl:value-of select="concat('\doublehyphendemerits=\maxdimen',
+                                   '&#xa;\hyphenpenalty=', if ($hyphenation = 'min') then '9800' else '9800')"/>
+    </xsl:if>-->
     <xsl:text>&#xa;\begin{tpMeta}&#xa;</xsl:text>
     <!-- authors -->
     <xsl:for-each select="if(count($authors/*) gt 1) then $authors/* else $authors">
@@ -652,7 +659,9 @@
   <template context="dbk:link[@xlink:href][matches(@xlink:href, '^(https?|ftp):') or matches(., '^(https?|ftp):')]">
     <rule name="href" type="cmd">
       <param select="replace(xml2tex:optionally-encode-uri((@url, @xlink:href)[1]), '(%|#|_|\\)', '\\$1' )"/>
-      <param select="xml2tex:add-tactical-breaks-by-string-length(xml2tex:add-tactical-break-chars-in-linktext(.))"/>
+      <param select="replace(xml2tex:add-tactical-breaks-by-string-length(xml2tex:add-tactical-break-chars-in-linktext(.)),
+                              '^(https?://|ftps?://|www\.)',
+                              '\\mbox{$1}')"/>
     </rule>
   </template>
 
