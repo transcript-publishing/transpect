@@ -661,7 +661,7 @@
       <param select="replace(xml2tex:optionally-encode-uri((@url, @xlink:href)[1]), '(%|#|_|\\)', '\\$1' )"/>
       <param select="replace(xml2tex:add-tactical-breaks-by-string-length(xml2tex:add-tactical-break-chars-in-linktext(.)),
                               '^(https?://|ftps?://|www\.)',
-                              '\\mbox{$1}')"/>
+                              '{\\mbox{$1}}')"/>
     </rule>
   </template>
 
