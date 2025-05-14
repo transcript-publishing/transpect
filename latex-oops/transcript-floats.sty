@@ -13,7 +13,15 @@
 
 % Standards für Tabellen:
 \SetHTClass{}{%
-  \SetClassProp{td}{font-family}{sans-serif}%
+  \ifx\ts@layout@type\ts@str@layout@mdw
+    \if@altTableFonts
+      \SetClassProp{td}{font-family}{sans-serif}%
+    \else
+      \SetClassProp{td}{font-family}{serif}%
+    \fi
+  \else
+    \SetClassProp{td}{font-family}{sans-serif}%
+  \fi
   \SetClassProp{td}{font-size}{x-small}%
   \SetClassProp[thead]{td}{font-weight}{bold}%
   \SetClassProp{td}{padding}{0.9mm 2.15mm 0.3mm}%

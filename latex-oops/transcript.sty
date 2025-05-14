@@ -51,6 +51,10 @@
 \newif\if@altFonts \@altFontsfalse
 \DeclareOptionX{altFonts}{\@altFontstrue}
 
+% Alternative Schriften; zuschaltbar im Falle fehlender Zeichen in den Standardschriften.
+\newif\if@altTableFonts \@altTableFontsfalse
+\DeclareOptionX{altTableFonts}{\@altTableFontstrue}
+
 \ProcessOptionsX\relax
 \ifjournal\collectiontrue\fi
 
