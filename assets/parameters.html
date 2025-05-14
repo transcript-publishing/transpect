@@ -29,7 +29,7 @@
     Inhaltsverzeichnisebenen
   </label>
   <div class="col-sm-4">
-      <select name="add_params[TOCDEPTH]" size="1">
+      <select name="add_params[TOCDEPTH]" size="1" id="tocdepth_param">
 	<option>1</option>
 	<option>2</option>
 	<option selected="selected">3</option>
@@ -43,7 +43,7 @@
     Nummerierungstiefe
   </label>
   <div class="col-sm-4">
-      <select name="add_params[NUMBERINGDEPTH]" size="1">
+      <select name="add_params[NUMBERINGDEPTH]" size="1" id="numberingdepth_param">
 	<option>1</option>
 	<option>2</option>
 	<option>3</option>
@@ -82,11 +82,23 @@
   </div>
 </div>
 <div class="form-group">
+    <label for="hyphenation_param" class="col-sm-3 control-label">
+      Silbentrennung
+    </label>
+    <div class="col-sm-4">
+      <select name="add_params[HYPHENATION]" size="6" id="hyphenation_param">
+        <option value="min">wenig</option>
+        <option value="less">mittel</option>
+        <option value="max" selected="selected">viel</option>
+      </select>
+    </div>
+  </div>
+<div class="form-group">
   <label for="table_captionpos_param" class="col-sm-3 control-label">
     Tabellen Captions
   </label>
   <div class="col-sm-4">
-    <select name="add_params[TABLE_CAPTION_POS]" size="1">
+    <select name="add_params[TABLE_CAPTION_POS]" size="1" id="table_captionpos_param">
       <option value="top">oben</option>
       <option value="bottom">unten</option>
     </select>
@@ -97,18 +109,29 @@
     Abbildungs Captions
   </label>
   <div class="col-sm-4">
-    <select name="add_params[FIGURE_CAPTION_POS]" size="1">
+    <select name="add_params[FIGURE_CAPTION_POS]" size="1" id="figure_captionpos_param" >
       <option value="top">oben</option>
       <option value="bottom">unten</option>
     </select>
   </div>
 </div>
 <div class="form-group">
+    <label for="table_font_param" class="col-sm-3 control-label">
+      Silbentrennung
+    </label>
+    <div class="col-sm-4">
+      <select name="add_params[TABLE_FONT]" size="4" id="table_font_param">
+        <option value="Lato" selected="selected">Lato</option>
+        <option value="Lora">Lora</option>
+      </select>
+    </div>
+  </div>
+<div class="form-group">
   <label for="layout_param" class="col-sm-3 control-label">
     Layout
   </label>
   <div class="col-sm-4">
-      <select name="add_params[LAYOUT]" size="1">
+      <select name="add_params[LAYOUT]" size="1" id="layout_param">
 	<option>A</option>
 	<option>B</option>
 	<option>C</option>
@@ -117,11 +140,11 @@
   </div>
 </div>
 <div class="form-group">
-  <label for="sansfont_param" class="col-sm-3 control-label">
+  <label for="sansfont_param" class="col-sm-3 control-label" >
     Sans-Font
   </label>
   <div class="col-sm-4">
-    <select name="add_params[SANS_FONT]" size="1">
+    <select name="add_params[SANS_FONT]" size="1" id="sansfont_param">
       <option value="barlow">Barlow</option>
       <option value="noto-condensed">Noto Condensed</option>
     </select>
