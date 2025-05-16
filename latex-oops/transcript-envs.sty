@@ -54,6 +54,9 @@
   \savenotes
   \def\optionalHeading{#1}%
   \begin{mdframed}[backgroundcolor=gray!25,linecolor=white!0]
+    \def\@mpfn{footnote}% Zählung der Fußnoten …
+    \let\thempfootnote=\thefootnote% … automatisch inkrementiert und …
+    \renewcommand{\thempfootnote}{\arabic{footnote}}% … mit arabischen Ziffern. Braucht mdframed explizit. Ticket 18737. 
     \if\optionalHeading\relax
     \else
       \vspace{-11.5bp}%
