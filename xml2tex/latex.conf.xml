@@ -1061,6 +1061,12 @@
     <xsl:text>}</xsl:text>
   </template>
   
+  <regex regex="([└┘]+)">
+    <rule name="ccFallback" type="cmd">
+      <param regex-group="1"/>
+    </rule>
+  </regex>
+  
   <template context="processing-instruction()[name() eq $pi-xml-name]
                                              [matches(., '(^|\p{Zs}|\\|\{)(twocolumnContinuousChapters|noBlanksBeforeChapters)($|\}|\p{Zs})')]">
     <!-- these PIs go into options and will be stripped from content
