@@ -376,6 +376,13 @@
 \let\@withinFootnote\@undefined
 \preto\footnote{%
   \let\@withinFootnote\relax
+  % Für Fußnoten müssen Sonderzeichen auf die schmale Schriftvariante und auf eine etwas geringere Größe umgestellt werden.
+  \def\@sffallbackfeatures{%
+    \normalfont
+    \sffallbackfontcondensed
+    \upseries
+    \addfontfeature{Scale=0.85}
+  }%
 }
 
 
