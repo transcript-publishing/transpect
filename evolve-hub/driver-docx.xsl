@@ -228,8 +228,11 @@
    <!-- https://redmine.le-tex.de/issues/18173-->
     <xsl:variable name="alt" as="element(para)*">
       <xsl:variable name="srcpath" select="@srcpath"/>
-      <xsl:for-each-group select="..[self::para]/../*" group-starting-with="para[*[self::mediaobject|self::inlinemediaobject]]">
-        <xsl:if test="current-group()[self::para[*[self::mediaobject|self::inlinemediaobject][@srcpath = $srcpath]]]">
+      <xsl:for-each-group select="..[self::para]/../* | 
+                                  ..[self::phrase]/..[self::para]/../*" 
+                         group-starting-with="para[*[self::mediaobject|self::inlinemediaobject|self::phrase[mediaobject|inlinemediaobject]]]">
+        <xsl:if test="current-group()[self::para[*[self::mediaobject|self::inlinemediaobject][@srcpath = $srcpath]]] or 
+                      current-group()[self::para[phrase/*[self::mediaobject|self::inlinemediaobject][@srcpath = $srcpath]]]  ">
           <xsl:sequence select="current-group()[self::para[matches(@role, 'tsfigurealt')]][1]"/>
         </xsl:if>
       </xsl:for-each-group>
