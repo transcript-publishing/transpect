@@ -195,9 +195,48 @@
 \newunicodechar{♯}{{\symbolsfamily ♯}}
 \newunicodechar{č}{%
   \ifx\ts@layout@type\ts@str@layout@mdw
-    {\ccFallback{č}}%
+    \expandafter\ifx\@withinHeadingTitle\relax
+      {\ccFallback{č}}%
+    \else
+      \expandafter\ifx\@withinHeadingAuthor\relax
+        {\ccFallback{č}}%
+      \else
+        \expandafter\ifx\@withinTocTitle\relax
+          {\ccFallback{č}}%
+        \else
+          \expandafter\ifx\@withinTocAuthor\relax
+            {\ccFallback{č}}%
+          \else
+            č%
+          \fi
+        \fi
+      \fi
+    \fi
   \else
     \v{c}%
+  \fi
+}
+\newunicodechar{Č}{%
+  \ifx\ts@layout@type\ts@str@layout@mdw
+    \expandafter\ifx\@withinHeadingTitle\relax
+      {\ccFallback{Č}}%
+    \else
+      \expandafter\ifx\@withinHeadingAuthor\relax
+        {\ccFallback{Č}}%
+      \else
+        \expandafter\ifx\@withinTocTitle\relax
+          {\ccFallback{Č}}%
+        \else
+          \expandafter\ifx\@withinTocAuthor\relax
+            {\ccFallback{Č}}%
+          \else
+            Č%
+          \fi
+        \fi
+      \fi
+    \fi
+  \else
+    \v{C}%
   \fi
 }
 
