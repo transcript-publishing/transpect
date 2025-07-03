@@ -909,6 +909,7 @@
     \tpSetProperty{toc-margin-left}{0em}%
     \tpSetProperty{toc-before-entry}{\nopagebreak}%
     \tpSetProperty{toc-title-face}{%
+      \let\@withinTocTitle\relax
       \def\@sffallbackfeatures{%
         \sffallbackfontcondensed
         \edef\@tempa{it}%
@@ -1015,6 +1016,7 @@
     }%
   \else
     \tpSetProperty{toc-title-face}{%
+      \let\@withinTocTitle\relax
       \def\@sffallbackfeatures{%
         \sffallbackfontcondensed
         \edef\@tempa{it}%

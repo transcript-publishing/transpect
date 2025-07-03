@@ -151,15 +151,19 @@
 \DeclareTextFontCommand\textsffallback{\sffallbackfont\@sffallbackfeatures}
 \DeclareTextFontCommand\textttfallback{\ttfallbackfont}
 \DeclareTextFontCommand\ccFallback{%
-  \ccsTestFont{\ccs@rmdefault}{%
-    \fallbackfont
-  }{%
-    \ccsTestFont{\ccs@sfdefault}{%
-      \sffallbackfont
+  \ifx\@withinFootnote\relax
+    \sffallbackfont\@sffallbackfeatures
+  \else
+    \ccsTestFont{\ccs@rmdefault}{%
+      \fallbackfont\@fallbackfeatures
     }{%
-      \ttfallbackfont
+      \ccsTestFont{\ccs@sfdefault}{%
+        \sffallbackfont\@sffallbackfeatures
+      }{%
+        \ttfallbackfont
+      }%
     }%
-  }%
+  \fi
 }%
 %%%%%%%%%%
 
