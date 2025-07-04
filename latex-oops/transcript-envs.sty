@@ -502,65 +502,65 @@
 \newenvironment{transcript}[1][1]{%
   \fontsize{8bp}{10bp}\selectfont
   \ccaVstructStart{Transcription}%
-  \def\tpBreak{\par}%
-  % Makro/PI, womit sich die Zeilennummer innerhalb der Umgebung neu setzen lässt.
-  \def\lineNumber##1{\@transcriptionLine=\numexpr##1-1\relax}%
-  \def\spaces##1{\hspace*{##1\fontdimen2\font}}%
-  \sansmonofamily
-  % Reservierte Breite für die Ziffern soll mindestens vier Zeichen sein.
-  \global\@transcriptionTotalMaxNumberWidth=4\dimexpr\fontdimen2\font\relax
-  % Die feste Breite der Zeilennummer auf die Breite der Nummer der erste Zeile setzen.
-  \setbox\@tempboxa = \hbox{#1}%
-  % Nach dem ersten Durchlauf wird diese Breite mit der der höchsten Zeilennummer in dieser Umgebung überschrieben.
-  \ifcsname transcription-\the\@transcriptionEnv –maxLineNumber\endcsname
-    \setbox\@tempboxa = \hbox{\csuse{transcription-\the\@transcriptionEnv –maxLineNumber}}%
-  \fi
-  \edef\@lineNumberWidth{\the\dimexpr\wd\@tempboxa}%
-  \ifdim\@transcriptionTotalMaxNumberWidth<\@lineNumberWidth
-    \global\@transcriptionTotalMaxNumberWidth=\@lineNumberWidth
-  \fi
-  % Liegt die Breite der Zeilennummer unter der globalen, erhöhe diese auf den globalen Maximalwert.
-  \ifdim\@lineNumberWidth<\@transcriptionTotalMaxNumberWidth
-    \xdef\@lineNumberWidth{\the\@transcriptionTotalMaxNumberWidth}%
-  \fi  
-  % Die maximale Breite unter den Namen der Gesprächsteilnehmer.
-  \@tempdima=0\p@
-  % Nach dem ersten Durchlauf wird diese Breite mit der des längsten Namens in dieser Umgebung überschrieben.
-  \ifcsname transcription-\the\@transcriptionEnv –maxNameWidth\endcsname
-    \@tempdima = \csuse{transcription-\the\@transcriptionEnv –maxNameWidth}%
-  \fi
-  \edef\@nameWidth{\the\dimexpr\@tempdima}%
-  \list{}{%
-    % Breite des Einzugs: (maximale) Zeilennummernbreite plus Zeilennummerntrenner plus (maximale) Namensbreite plus Namenstrenner.
-    % \fontdimen2\font entspricht der Breite des Leerzeichens in der aktuell eingestellten Schrift.
-    \leftmargin \dimexpr\@lineNumberWidth+\@transcriptionLineNumberSep\fontdimen2\font+\@nameWidth+\@transcriptionNameSep\fontdimen2\font\relax
-    \labelwidth \dimexpr\@lineNumberWidth+\@transcriptionLineNumberSep\fontdimen2\font+\@nameWidth\relax
-    \labelsep   \@transcriptionNameSep\fontdimen2\font
-    \itemsep    0\p@
-  }%
-  \@transcriptionLine=\numexpr#1-1\relax
-  \global\let\is@first@item\relax
-  \let\olditem\item
-  \renewcommand\item[1][]{%
-    \ifx\is@first@item\relax
-      \global\let\is@first@item\@undefined
-    \else
-      \ccaVstructEnd{TranscriptionLine}%
+    \def\tpBreak{\par}%
+    % Makro/PI, womit sich die Zeilennummer innerhalb der Umgebung neu setzen lässt.
+    \def\lineNumber##1{\@transcriptionLine=\numexpr##1-1\relax}%
+    \def\spaces##1{\hspace*{##1\fontdimen2\font}}%
+    \sansmonofamily
+    % Reservierte Breite für die Ziffern soll mindestens vier Zeichen sein.
+    \global\@transcriptionTotalMaxNumberWidth=4\dimexpr\fontdimen2\font\relax
+    % Die feste Breite der Zeilennummer auf die Breite der Nummer der erste Zeile setzen.
+    \setbox\@tempboxa = \hbox{#1}%
+    % Nach dem ersten Durchlauf wird diese Breite mit der der höchsten Zeilennummer in dieser Umgebung überschrieben.
+    \ifcsname transcription-\the\@transcriptionEnv –maxLineNumber\endcsname
+      \setbox\@tempboxa = \hbox{\csuse{transcription-\the\@transcriptionEnv –maxLineNumber}}%
     \fi
-    \global\advance\@transcriptionLine\@ne
-    \setbox\z@ = \hbox{##1}%
-    \ifdim\wd\z@ > \@nameWidth
-      \edef\@nameWidth{\the\dimexpr\wd\z@}%
+    \edef\@lineNumberWidth{\the\dimexpr\wd\@tempboxa}%
+    \ifdim\@transcriptionTotalMaxNumberWidth<\@lineNumberWidth
+      \global\@transcriptionTotalMaxNumberWidth=\@lineNumberWidth
     \fi
-    \ccaVstructStart{TranscriptionLine}%
-    \ccaVstructStart{TranscriptionLabel}%
-    \olditem[\hb@xt@\@lineNumberWidth{\the\@transcriptionLine\hss}\hskip\@transcriptionLineNumberSep\fontdimen2\font\hb@xt@\@nameWidth{##1\hss}]%
-    \ccaVstructEnd{TranscriptionLabel}%
-    \leavevmode\obeyspaces%
-  }%
+    % Liegt die Breite der Zeilennummer unter der globalen, erhöhe diese auf den globalen Maximalwert.
+    \ifdim\@lineNumberWidth<\@transcriptionTotalMaxNumberWidth
+      \xdef\@lineNumberWidth{\the\@transcriptionTotalMaxNumberWidth}%
+    \fi  
+    % Die maximale Breite unter den Namen der Gesprächsteilnehmer.
+    \@tempdima=0\p@
+    % Nach dem ersten Durchlauf wird diese Breite mit der des längsten Namens in dieser Umgebung überschrieben.
+    \ifcsname transcription-\the\@transcriptionEnv –maxNameWidth\endcsname
+      \@tempdima = \csuse{transcription-\the\@transcriptionEnv –maxNameWidth}%
+    \fi
+    \edef\@nameWidth{\the\dimexpr\@tempdima}%
+    \list{}{%
+      % Breite des Einzugs: (maximale) Zeilennummernbreite plus Zeilennummerntrenner plus (maximale) Namensbreite plus Namenstrenner.
+      % \fontdimen2\font entspricht der Breite des Leerzeichens in der aktuell eingestellten Schrift.
+      \leftmargin \dimexpr\@lineNumberWidth+\@transcriptionLineNumberSep\fontdimen2\font+\@nameWidth+\@transcriptionNameSep\fontdimen2\font\relax
+      \labelwidth \dimexpr\@lineNumberWidth+\@transcriptionLineNumberSep\fontdimen2\font+\@nameWidth\relax
+      \labelsep   \@transcriptionNameSep\fontdimen2\font
+      \itemsep    0\p@
+    }%
+    \@transcriptionLine=\numexpr#1-1\relax
+    \global\let\is@first@item\relax
+    \let\olditem\item
+    \renewcommand\item[1][]{%
+      \ifx\is@first@item\relax
+        \global\let\is@first@item\@undefined
+      \else
+        \ccaVstructEnd{TranscriptionLine}%
+      \fi
+      \global\advance\@transcriptionLine\@ne
+      \setbox\z@ = \hbox{##1}%
+      \ifdim\wd\z@ > \@nameWidth
+        \edef\@nameWidth{\the\dimexpr\wd\z@}%
+      \fi
+      \ccaVstructStart{TranscriptionLine}%
+        \ccaVstructStart{TranscriptionLabel}%
+          \olditem[\hb@xt@\@lineNumberWidth{\the\@transcriptionLine\hss}\hskip\@transcriptionLineNumberSep\fontdimen2\font\hb@xt@\@nameWidth{##1\hss}]%
+        \ccaVstructEnd{TranscriptionLabel}%
+        \leavevmode\obeyspaces%
+    }%
 }{%
-  \ccaVstructEnd{TranscriptionLine}%
-  \endlist
+      \ccaVstructEnd{TranscriptionLine}%
+    \endlist
   \ccaVstructEnd{Transcription}%
   \immediate\write\@auxout{\string\csgdef{transcription-\the\@transcriptionEnv –maxLineNumber}{\the\@transcriptionLine}}%
   \immediate\write\@auxout{\string\csgdef{transcription-\the\@transcriptionEnv –maxNameWidth}{\@nameWidth}}%
@@ -574,7 +574,7 @@
 
 \ccaAddRolemap{Transcription}{Div}
 \ccaAddRolemap{TranscriptionLine}{Div}
-%\ccaAddRolemap{TranscriptionLabel}{\if@cc@pdf@two Sub\else Div\fi}
+\ccaAddRolemap{TranscriptionLabel}{Lbl}
 
 % \def\@abstract#1{%
 %   \vskip-\lastskip
