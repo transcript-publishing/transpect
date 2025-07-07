@@ -2,7 +2,7 @@
 <?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <set xmlns="http://transpect.io/xml2tex" 
      xmlns:xml2tex="http://transpect.io/xml2tex" 
-     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tr="http://transpect.io" decompose-diacritics="no">
   
   <import href="../../xml2tex/latex.conf.xml"/>
  
@@ -30,4 +30,96 @@
                           else ()"/>
   </xsl:function>
 
+  <xsl:function name="tr:heading-level" as="xs:string?">
+    <xsl:param    name="heading" as="element()"/>
+    <xsl:variable name="style"   as="attribute(role)?" select="$heading/dbk:info/dbk:title[1]/@role"/>
+    <xsl:choose>
+      <xsl:when test="$style = 'tsheadingpart'">
+        <xsl:sequence select="'part'"/>
+      </xsl:when>
+      <xsl:when test="$style = ('tsheading1review', 'tsheading1reviewtoc')">
+        <xsl:sequence select="'review'"/>
+      </xsl:when>
+      <xsl:when test="$style = ('tsheading1', 'tsheading1nonum',  'tsheading1notoc', 'tsbackmatter1')">
+        <xsl:sequence select="if ($is-collection or $is-journal) then 'contribution' else 'chapter'"/>
+      </xsl:when>
+      <xsl:when test="$style[matches(., 'tsadd[a-z]+heading')]">
+        <xsl:sequence select="'didactics'"/>
+      </xsl:when>
+      <xsl:when test="$style = ('tsheading2', 'tsheading2nonum',  'tsheading2notoc', 'tsbackmatter2')">
+        <xsl:sequence select="'section'"/>
+      </xsl:when>
+      <xsl:when test="$style = ('tsheading3',  'tsheading3nonum',  'tsheading3notoc', 'tsbackmatter3')">
+        <xsl:sequence select="'subsection'"/>
+      </xsl:when>
+      <xsl:when test="$style = ('tsheading4', 'tsheading4nonum',  'tsheading4notoc',  'tsbackmatter4')">
+        <xsl:sequence select="'subsubsection'"/>
+      </xsl:when>
+      <xsl:when test="$style = ('tsheading5', 'tsheading5nonum',  'tsheading5notoc', 'tsbackmatter5')">
+        <xsl:sequence select="'paragraph'"/>
+      </xsl:when>
+     <xsl:when test="$style = 'tsheadheadword'">
+        <xsl:sequence select="'subparagraph'"/>
+      </xsl:when>
+      <xsl:when test="($heading/local-name() = 'chapter' and $heading[@renderas = 'subhead'])
+                       or
+                      ($heading/local-name() = 'part' and $heading[@renderas = 'subhead'])">
+        <!-- subparts from chapters or parts -->
+        <xsl:sequence select="'subpart'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = 'part'
+        or
+        ($heading/local-name() = 'bibliography' and $heading/parent::dbk:*[local-name() = ('hub', 'book')][dbk:part])">
+        <xsl:sequence select="'part'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('chapter', 'index', 'appendix') 
+                      or 
+                      ($heading/local-name() = 'section' and $heading[@renderas = 'chapter'])
+                      or
+                      ($heading/local-name() = 'bibliography' 
+                      and (
+                           $heading/parent::dbk:part 
+                           or 
+                           $heading/parent::dbk:*[local-name() = ('hub', 'book')][not(dbk:part)]
+                          )
+                      )">
+        <!-- if subpart level exists chapters may be disguised as sections. For collections 
+             level is called contribution and allows integration of abstracts and keywords -->
+        <xsl:sequence select="if ($pubtype = ('collection', 'anth', '') 
+                                              or contains($basename, '_anth_')
+                                              or $heading[dbk:info[dbk:abstract or dbk:keywordset]]
+                                              or $is-collection 
+                                              or $is-journal) 
+                              then 'contribution' 
+                              else 'chapter'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('section', 'bibliography') and not($heading/ancestor::*:section)">
+        <xsl:sequence select="'section'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('section', 'bibliography') and count($heading/ancestor::*:section) eq 1">
+        <xsl:sequence select="'subsection'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('section', 'bibliography') and count($heading/ancestor::*:section) eq 2">
+        <xsl:sequence select="'subsubsection'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('section', 'bibliography') and count($heading/ancestor::*:section) gt 2">
+        <xsl:sequence select="'paragraph'"/>
+      </xsl:when>
+      <xsl:when test="$heading/local-name() = ('bibliodiv')">
+        <xsl:variable name="level" select="count($heading/ancestor::dbk:bibliography)" as="xs:integer"/>
+        <xsl:sequence select="     if($level eq 1) then 'section'
+                              else if($level eq 2) then 'subsection'
+                              else if($level eq 3) then 'subsubsection'
+                              else                      'paragraph'"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:function>
+  
+  <xsl:template name="contribution-meta">
+    <!--  create icpon macro  https://redmine.le-tex.de/issues/18626#note-2 -->
+      <xsl:if test="dbk:title[1]/@role[starts-with(., 'tsadd')]">
+        <xsl:variable name="type" select="replace(dbk:title[1]/@role, '^ts(add)([a-z]+)heading', '$1_$2')"/>
+        <xsl:value-of select="concat('&#xa;\tpIcon{', $type,'}')"/>
+      </xsl:if>
+  </xsl:template>
 </set>
