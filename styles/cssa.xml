@@ -92,8 +92,13 @@
   <css:rule layout-type="para" native-name="ts_media_caption" name="tsmediacaption"/>
   <css:rule layout-type="para" native-name="ts_codeblock" name="tscodeblock" regex="tscodeblock([a-z])?"/>
 
- <!-- new styles for utb publications, https://redmine.le-tex.de/issues/11832 -->
-
+ <!-- new styles for utb publications, https://redmine.le-tex.de/issues/11832, https://redmine.le-tex.de/issues/18626 -->
+  <css:rule layout-type="para" native-name="ts_add_topics_heading" name="tsaddtopicsheading" regex="^tsadd[a-z]+heading$"/>
+  <css:rule layout-type="para" native-name="ts_add_topics" name="tsaddtopics" regex="^tsadd[a-z]+$"/>
+  <css:rule layout-type="para" native-name="ts_do_embed_link" name="tsdoembedlink"/>
+  <css:rule layout-type="para" native-name="ts_do_embed_h5p" name="tsdoembedh5p"/>
+  <css:rule layout-type="para" native-name="ts_number_of_tasks" name="tsnumberoftasks"/>
+  <css:rule layout-type="para" native-name="ts_number_of_units" name="tsnumberofunits"/>
   <css:rule layout-type="para" native-name="ts_quotation_source" name="tsquotationsource"/>
   <css:rule layout-type="para" native-name="ts_heading_2_keywords" name="tsheading2keywords" regex="tsheading2(keywords|orientation|exercise|summary|leadingquestions|learningoutcome|literature)?$"/>
 <!--  <css:rule layout-type="para" native-name="ts_heading_2_orientation" name="tsheading2orientation"/>
