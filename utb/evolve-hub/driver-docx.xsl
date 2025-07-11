@@ -31,9 +31,9 @@
                                 '|', replace($acknowledgements-role-regex, '^\^(.+)\$$', '$1'),
                                 ')(', $suffixes-regex, ')?$'
                                 ),
-                         concat('^(berschrift3|[Hh]eading\s?3|[a-z]{1,3}heading2|[a-z]{1,3}add[a-z]+heading|[a-z]{1,3}headingenumerated2|[a-z]{1,3}(front|back)matter3)(', $suffixes-regex, ')?$'),
+                         concat('^(berschrift3|[Hh]eading\s?3|[a-z]{1,3}heading2|[a-z]{1,3}headingenumerated2|[a-z]{1,3}(front|back)matter3)(', $suffixes-regex, ')?$'),
                          concat('^(berschrift4|[Hh]eading\s?4|[a-z]{1,3}heading3|[a-z]{1,3}headingenumerated3|[a-z]{1,3}(front|back)matter4)(', $suffixes-regex, ')?$'),
-                         concat('^(berschrift5|[Hh]eading\s?5|[a-z]{1,3}heading4|[a-z]{1,3}headingenumerated4|[a-z]{1,3}(front|back)matter5)(', $suffixes-regex, ')?$'),
+                         concat('^(berschrift5|[Hh]eading\s?5|[a-z]{1,3}heading4|[a-z]{1,3}add[a-z]+heading|[a-z]{1,3}headingenumerated4|[a-z]{1,3}(front|back)matter5)(', $suffixes-regex, ')?$'),
                          concat('^(berschrift6|[Hh]eading\s?6|[a-z]{1,3}heading5|[a-z]{1,3}headingenumerated5|[a-z]{1,3}(front|back)matter6)(', $suffixes-regex, ')?$'),
                          concat('^(berschrift7|[Hh]eading\s?7|[a-z]{1,3}heading6|[a-z]{1,3}headingenumerated6|[a-z]{1,3}(front|back)matter7)(', $suffixes-regex, ')?$'),
                          concat('^(berschrift8|[Hh]eading\s?8|[a-z]{1,3}heading7|[a-z]{1,3}headingenumerated7|[a-z]{1,3}(front|back)matter8)(', $suffixes-regex, ')?$'),

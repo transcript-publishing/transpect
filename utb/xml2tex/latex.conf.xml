@@ -43,6 +43,9 @@
       <xsl:when test="$style = ('tsheading1', 'tsheading1nonum',  'tsheading1notoc', 'tsbackmatter1')">
         <xsl:sequence select="if ($is-collection or $is-journal) then 'contribution' else 'chapter'"/>
       </xsl:when>
+      <xsl:when test="$style[matches(., 'tsadd[a-z]+heading')] and empty($heading[parent::dbk:section]) and empty($heading/preceding-sibling::dbk:para)">
+        <xsl:sequence select="'majorDidactics'"/>
+      </xsl:when>
       <xsl:when test="$style[matches(., 'tsadd[a-z]+heading')]">
         <xsl:sequence select="'didactics'"/>
       </xsl:when>
