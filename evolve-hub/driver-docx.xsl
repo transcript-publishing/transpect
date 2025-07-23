@@ -317,7 +317,9 @@
     <!-- https://redmine.le-tex.de/issues/15240 -->
     <xsl:copy>
       <xsl:apply-templates select="@*" mode="#current"/>
-      <xsl:processing-instruction name="latex" select="'\tpNewPar[1\baselineskip]'"/>
+      <xsl:variable name="vertical-space" select="if (matches(@role, $poem-role-regex)) then '0' else '1'"/>
+      <!-- https://redmine.le-tex.de/issues/18845#note-10 -->
+      <xsl:processing-instruction name="latex" select="concat('\tpNewPar[',$vertical-space,'\baselineskip]')"/>
     </xsl:copy>  
   </xsl:template>
 
