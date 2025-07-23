@@ -30,7 +30,7 @@
                           else ()"/>
   </xsl:function>
 
-  <xsl:function name="tr:heading-level" as="xs:string?">
+  <!--<xsl:function name="tr:heading-level" as="xs:string?">
     <xsl:param    name="heading" as="element()"/>
     <xsl:variable name="style"   as="attribute(role)?" select="$heading/dbk:info/dbk:title[1]/@role"/>
     <xsl:choose>
@@ -67,7 +67,7 @@
       <xsl:when test="($heading/local-name() = 'chapter' and $heading[@renderas = 'subhead'])
                        or
                       ($heading/local-name() = 'part' and $heading[@renderas = 'subhead'])">
-        <!-- subparts from chapters or parts -->
+        <!-\- subparts from chapters or parts -\->
         <xsl:sequence select="'subpart'"/>
       </xsl:when>
       <xsl:when test="$heading/local-name() = 'part'
@@ -86,8 +86,8 @@
                            $heading/parent::dbk:*[local-name() = ('hub', 'book')][not(dbk:part)]
                           )
                       )">
-        <!-- if subpart level exists chapters may be disguised as sections. For collections 
-             level is called contribution and allows integration of abstracts and keywords -->
+        <!-\- if subpart level exists chapters may be disguised as sections. For collections 
+             level is called contribution and allows integration of abstracts and keywords -\->
         <xsl:sequence select="if ($pubtype = ('collection', 'anth', '') 
                                               or contains($basename, '_anth_')
                                               or $heading[dbk:info[dbk:abstract or dbk:keywordset]]
@@ -116,13 +116,36 @@
                               else                      'paragraph'"/>
       </xsl:when>
     </xsl:choose>
-  </xsl:function>
+  </xsl:function>-->
   
-  <xsl:template name="contribution-meta">
-    <!--  create icpon macro  https://redmine.le-tex.de/issues/18626#note-2 -->
-      <xsl:if test="dbk:title[1]/@role[starts-with(., 'tsadd')]">
-        <xsl:variable name="type" select="replace(dbk:title[1]/@role, '^ts(add)([a-z]+)heading', '$1_$2')"/>
-        <xsl:value-of select="concat('&#xa;\tpIcon{', $type,'}')"/>
-      </xsl:if>
+  <xsl:template match="dbk:section[starts-with(@role, 'tsadd')]/dbk:info/dbk:title" mode="xml2tex" priority="300">
+    <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
+  
+        <template context="dbk:section[starts-with(@role, 'tsadd')]
+                                      [empty(parent::dbk:section)]
+                                      [empty(preceding-sibling::dbk:para)]" priority="500">
+          <!--   bigger headings on chapter start page https://redmine.le-tex.de/issues/18626-->
+          <xsl:variable name="icon-type" select="replace(@role, '^ts(add)([a-z]+)', '$1_$2.png')"/>
+          <rule name="majorDidactics" break-after="2" break-before="2" type="env">
+            <option select="$icon-type"/>
+            <!-- title -->
+            <param select="dbk:info/dbk:title"/>
+            <text select="'&#xa;'"/>
+            <text select="node() except dbk:info"/>
+          </rule>
+        </template>
+  
+        <template context="dbk:section[starts-with(@role, 'tsadd')]" priority="300">
+          <!--    https://redmine.le-tex.de/issues/18626-->
+          <xsl:variable name="icon-type" select="replace(@role, '^ts(add)([a-z]+)', '$1_$2.png')"/>
+          <rule name="didactics" break-after="2" break-before="2" type="env">
+            <option select="$icon-type"/>
+            <!-- title -->
+            <param select="dbk:info/dbk:title"/>
+            <text select="'&#xa;'"/>
+            <text select="node() except dbk:info"/>
+          </rule>
+        </template>
+  
 </set>
