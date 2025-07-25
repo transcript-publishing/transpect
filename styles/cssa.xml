@@ -117,6 +117,9 @@
   <css:rule layout-type="para" native-name="ts_learning_outcome" name="tslearningoutcome"/>
   <css:rule layout-type="para" native-name="ts_literature_comment" name="tsliteraturecomment"/>
 
+  <css:rule layout-type="inline" native-name="ts_unichar" name="tsunichar"/>
+  <css:rule layout-type="inline" native-name="ts_formula_alt" name="tsformulaalt"/>
+  <css:rule layout-type="inline" native-name="ts_image_alt" name="tsimagealt"/>
   <css:rule layout-type="inline" native-name="ts_pi" name="tspi"/>
   <css:rule layout-type="inline" native-name="ts_italic" name="tsitalic"/>
   <css:rule layout-type="inline" native-name="ts_bold" name="tsbold"/>
