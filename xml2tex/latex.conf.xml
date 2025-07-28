@@ -684,6 +684,11 @@
 
   <xsl:variable name="col-author-style" select="'^[a-z]{1,3}headline(author)$'" as="xs:string"/>
 
+  <xsl:function name="tr:is-review" as="xs:boolean">
+    <xsl:param name="context" as="element()"/>
+    <xsl:sequence select="$context[.//*[self::dbk:author|self::dbk:editor][dbk:personname/dbk:othername/@role = 'tsreviewer']]"/>
+  </xsl:function>
+  
   <template name="col-titles">
     <!-- use col-style para for runtitle. if it doesn't exist and heading contains footnotes or linebreaks:
          discard those and use as column title. otherwise do not create an element-->
@@ -692,8 +697,9 @@
       <xsl:when test="$is-collection">-->
 <!--        links: tpAuthor/tpRunAuthorNameList, wenn es den nicht gibt: \tp(Run)Title | Rechts: \tp(Run)Title-->
 
-        <xsl:if test="dbk:titleabbrev[matches(@role, $col-author-style)] or 
-                      (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]">
+        <xsl:if test="(dbk:titleabbrev[matches(@role, $col-author-style)] or 
+                      (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]])
+                      and not(tr:is-review(.))">
           <rule name="tpRunAuthorNameList" type="cmd" break-before="1">
             <param select="(dbk:titleabbrev[matches(@role, $col-author-style)], 
                            (dbk:author|dbk:authorgroup/dbk:author)[descendant::*[self::dbk:footnote | self::dbk:br]]/dbk:personname/dbk:othername
@@ -742,6 +748,58 @@
         </param>
       </rule>
     </xsl:if>
+  </template>
+  
+  <template context="*[not(self::dbk:hub)]/dbk:info//*[self::dbk:author
+                                                      |self::dbk:editor
+                                                      |self::dbk:othercredit]">
+    <!-- overridden from common to handle reviewer -->
+    <xsl:choose>
+      <xsl:when test="$cocotex 
+                      and 
+                      (
+                       (    dbk:personname/dbk:surname 
+                        and dbk:personname/*[self::dbk:givenname|self::dbk:firstname]
+                       ) 
+                       or exists(*[not(self::dbk:personname)])
+                      ) and 
+                      not(@role = 'override')">
+        <!-- if author contains only name → tpAuthorNamelist. If name is structured though 
+             or if other metadata is present generate environment -->
+        <rule name="tpAuthor" type="env" break-after="0" break-before="1">
+          <xsl:if test="@annotations='deceased'">
+            <xsl:text>\tpDeceased{}&#xa;</xsl:text>
+          </xsl:if>
+          <text select="node()">
+            <with-param name="in-author" tunnel="yes" as="xs:boolean" select="true()"/>
+          </text>
+        </rule>
+      </xsl:when>
+      <xsl:when test="@role = 'override'">
+        <xsl:choose>
+          <xsl:when test="dbk:personname/dbk:othername/@role = 'tsreviewer'">
+            <!-- reviewer is only created as \tpRunAuthorNameList (https://redmine.le-tex.de/issues/14887#note-17) to avoid displaying-->
+            <rule name="tpRunAuthorNameList" type="cmd" break-before="1">
+              <param select="if (exists(ancestor::dbk:info//dbk:titleabbrev[@role='tsheadlineauthor'])) 
+                             then ancestor::dbk:info//dbk:titleabbrev[@role='tsheadlineauthor']/node()
+                             else for $a in dbk:personname/dbk:othername return normalize-space($a)"/>
+            </rule>
+          </xsl:when>
+          <xsl:otherwise>
+            <rule name="tpAuthorNameList" type="cmd" break-before="1">
+              <param select="for $a in dbk:personname/dbk:othername return normalize-space($a)"/>
+            </rule>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when> 
+      <xsl:otherwise>
+        <rule name="tpAuthorNameList" type="cmd" break-before="1">
+          <param select="for $a in dbk:personname/dbk:othername return $a">
+            <with-param name="no-nesting" select="true()" as="xs:boolean" tunnel="yes"/>
+          </param>
+        </rule>
+      </xsl:otherwise>
+    </xsl:choose>
   </template>
   
   <xsl:variable name="replace-charaters-in-toc-regex" as="xs:string" select="'&#x17f;-&#x191;&#x193;-&#x1cc;&#x1cf;-&#x217;&#x21c;-&#x227;&#x22A;-&#x2C5;&#x2c8;&#x2ca;-&#x2d7;&#x2de;-&#x2ff;&#x305;&#x309;&#x30d;-&#x311;&#x314;-&#x325;&#x329;-&#x334;&#x1E00;-&#x1E7F;&#x1E86;-&#x1EF1;&#x1EF4;-&#x1EFF;'"/>
