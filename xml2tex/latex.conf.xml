@@ -686,7 +686,7 @@
 
   <xsl:function name="tr:is-review" as="xs:boolean">
     <xsl:param name="context" as="element()"/>
-    <xsl:sequence select="$context[.//*[self::dbk:author|self::dbk:editor][dbk:personname/dbk:othername/@role = 'tsreviewer']]"/>
+    <xsl:sequence select="exists($context[.//*[self::dbk:author|self::dbk:editor][dbk:personname/dbk:othername/@role = 'tsreviewer']])"/>
   </xsl:function>
   
   <template name="col-titles">
