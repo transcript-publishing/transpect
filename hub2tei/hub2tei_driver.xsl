@@ -234,6 +234,6 @@
   </xsl:template>
   
   <xsl:template match="index[indexdiv or indexentry]" mode="hub2tei:dbk2tei">
-    <!-- discard static indices, https://redmine.le-tex.de/issues/18586#change-108403-->
+    <!-- discard static indices, https://redmine.le-tex.de/issues/18586-->
   </xsl:template>
 </xsl:stylesheet>
