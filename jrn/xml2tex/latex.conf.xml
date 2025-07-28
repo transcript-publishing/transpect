@@ -198,7 +198,7 @@
 <!--        links: tpAuthor/tpRunAuthorNameList, wenn es den nicht gibt: \tp(Run)Title | Rechts: \tp(Run)Title-->
 
     <xsl:if test="(dbk:titleabbrev[matches(@role, $col-author-style)] or .//*[self::dbk:author|self::dbk:editor][descendant::*[self::dbk:footnote | self::dbk:br]]) 
-                  and not(.//*[self::dbk:author|self::dbk:editor][dbk:personname/dbk:othername/@role = 'tsreviewer'])">
+                  and not(tr:is-review(.))">
       <rule name="tpRunAuthorNameList" type="cmd" break-before="1">
         <param select="(dbk:titleabbrev[matches(@role, $col-author-style)], 
           .//*[self::dbk:author|self::dbk:editor][descendant::*[self::dbk:footnote | self::dbk:br]]
