@@ -270,45 +270,50 @@
 %% Überdef
 \def\@enum@{%
   \list{\csname label\@enumctr\endcsname}%
-  {\labelsep\z@
-   \itemsep\z@
-   \ifnum \@enumdepth=\@ne
-     \leftmargin\parindent
-     \labelwidth\parindent
-   \else
-     \@tempdima3mm
-     \leftmargin\dimexpr\@enumdepth\@tempdima\relax
-     \labelwidth\dimexpr\@enumdepth\@tempdima\relax
-     \itemindent\z@%\leftmargin
-   \fi
-   \parsep\z@
-   \ifnum \@enumdepth=\@ne\topsep12.8bp\else\topsep\z@\fi
-   \usecounter\@enumctr%
-   \global\let\is@first@item\relax
-   \ccaVstructStart{L}%
-   \def\makelabel##1{%
-     \ifx\is@first@item\relax
-       \global\let\is@first@item\@undefined
-     \else
-       \ccaVstructEnd{LBody}%
-       \ccaVstructEnd{LI}%
-     \fi
-     \ccaVstructStart{LI}%
-     \ccaVstructStart{Lbl}%
-     \small##1\hss
-     \ccaVstructEnd{Lbl}%
-     \ccaVstructStart{LBody}%
-}}}
+  {%
+    \labelsep\z@
+    \itemsep\z@
+    \ifnum \@enumdepth=\@ne
+      \leftmargin\parindent
+      \labelwidth\parindent
+    \else
+      \@tempdima3mm
+      \leftmargin\dimexpr\@enumdepth\@tempdima\relax
+      \labelwidth\dimexpr\@enumdepth\@tempdima\relax
+      \itemindent\z@%\leftmargin
+    \fi
+    \parsep\z@
+    \ifnum \@enumdepth=\@ne\topsep12.8bp\else\topsep\z@\fi
+    \usecounter\@enumctr%
+    \global\let\is@first@item\relax
+    \ccaVstructStart{L}%
+      \def\makelabel##1{%
+        \ifx\is@first@item\relax
+          \global\let\is@first@item\@undefined
+        \else
+            \ccaVstructEnd{LBody}%
+          \ccaVstructEnd{LI}%
+        \fi
+        \ccaVstructStart{LI}%
+          \ccaVstructStart{Lbl}%
+            \small##1\hss
+          \ccaVstructEnd{Lbl}%
+          \ccaVstructStart{LBody}%
+      }%
+  }%
+}
 \let\ltx@endenumerate\endenumerate
 \def\endenumerate{\ccaVstructEnd{LBody}\ccaVstructEnd{LI}\ccaVstructEnd{L}\ltx@endenumerate}
 
 \let\leftmarginii\leftmargini
 \let\leftmarginiii\leftmargini
 
+\newdimen\@itemizeTopSep \@itemizeTopSep=12.8bp
+
 \def\itemize{%
   \ifnum \@itemdepth >\thr@@\@toodeep\else
     \advance\@itemdepth\@ne
-    \@tempdima=12.8bp
+    \@tempdima=\@itemizeTopSep
     \ifnum\@itemdepth>\@ne\relax\@tempdima=0\p@\fi
     \@enumdepth=\@itemdepth
     \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
@@ -575,6 +580,195 @@
 \ccaAddRolemap{Transcription}{Div}
 \ccaAddRolemap{TranscriptionLine}{Div}
 \ccaAddRolemap{TranscriptionLabel}{Lbl}
+
+
+
+% Ermittlung der echten Seitennummer durch Labels.
+\global\newcount\realpageCnt \global\realpageCnt=0
+\global\newcount\realpage
+\gdef\realHref{}
+\def\getLabelPage#1{%
+  \def\tp@getPage##1##2##3##4##5{##2}
+  \def\tp@getHref##1##2##3##4##5{##4}
+  \bgroup%
+    \def\@setref##1##2##3{%
+      \ifx##1\relax%
+        \@latex@warning{Reference `##3' on page \thepage \space undefined; ##1}%
+      \else
+        \global\realpage=\number\expandafter\tp@getPage##1
+        \xdef\realHref{\expandafter\tp@getHref##1}%
+      \fi
+    }
+    \pageref{#1}%
+  \egroup%
+}%
+
+
+\newdimen\@majorDidacticsRuleExcess \@majorDidacticsRuleExcess=3.5mm
+\newdimen\@majorDidacticsIconHeight \@majorDidacticsIconHeight=7.75mm % Ist nur ein ungefährer Wert, weil die weißen Rahmen um die Icons in der Vorlage und im Repository unterschiedlich breit sind.
+
+\definecolor{didacticsRule}{RGB}{143, 143, 143}
+\definecolor{didacticsGeneral}{RGB}{45, 45, 45}
+
+\newcommand{\globalcolor}[1]{%
+  \color{#1}\global\let\default@color\current@color
+}
+
+\newenvironment{majorDidactics}[2][\relax]{%
+  \raggedbottom
+  \globalcolor{didacticsGeneral}%
+  \setbox\z@=\hbox{\large\bfseries\majorDidacticsHeadingfamily\ignorespaces #2\par}%
+  \edef\@titlewidth{\the\wd\z@}%
+  \llap{%
+    \ifx#1\relax
+    \else
+      \includegraphics[width=\@majorDidacticsIconHeight]{#1}%
+      \hspace*{1mm}%
+      \smash{\raisebox{0.75\baselineskip}{\textcolor{didacticsRule}{\rule{\dimexpr\@titlewidth+2\@majorDidacticsRuleExcess\relax}{2\p@}}}}%
+      \hspace*{\dimexpr-5mm-\@titlewidth-2\@majorDidacticsRuleExcess-1.5mm\relax}%
+    \fi
+  }%
+  \nobreak
+  \vspace*{\dimexpr-\@majorDidacticsIconHeight-0.5\baselineskip\relax}%
+  {%
+    \list{}
+      {%
+        \large
+        \bfseries
+        \majorDidacticsHeadingfamily
+        \leftmargin 10mm
+        \topsep \z@
+        \parsep \z@
+        \partopsep \z@
+      }%
+      \ignorespaces
+      \item #2
+    \endlist
+  }
+  %\hskip10mm\box\z@\par
+  \vskip0.6\baselineskip
+  \list{}{%
+    \listparindent \z@
+    \itemindent    \z@
+    \leftmargin    10mm%
+    \rightmargin   \z@
+    \didacticsContentfamily
+    \sbseries
+    %\topsep        \z@%
+    \topsep        \z@
+    \parsep        \z@
+  }%
+  \@itemizeTopSep\z@
+  \item\noindent\ignorespaces
+}{%
+  \endlist
+  \par
+  \leftskip\z@
+  \par
+  \vskip2\baselineskip
+  \globalcolor{black}%
+}
+
+
+\newdimen\@didacticsRuleExcess \@didacticsRuleExcess=4mm
+\newdimen\@didacticsIconHeight \@didacticsIconHeight=6mm
+
+\newcount\@didactics
+
+\newenvironment{didactics}[2][\relax]{%
+  \ifvmode\leavevmode\else\par\fi
+  \ifdim\dimexpr\pagegoal-\pagetotal\relax<7\baselineskip
+    \clearpage
+  \else
+    \vskip2\baselineskip
+  \fi
+  %\vskip2\baselineskip
+  \@itemizeTopSep\z@
+  \setbox\z@=\hbox{\large\sbseries\didacticsContentfamily\ignorespaces #2}%
+  \edef\@titlewidth{\the\wd\z@}%
+  \phantomsection
+  \label{didactics-\the\@didactics}%
+  \getLabelPage{didactics-\the\@didactics}%
+  \global\advance\@didactics\@ne
+  \ifodd\realpage
+    \vbox{%
+      \hfill
+      \rlap{%
+        \hbox{%
+          \hspace*{\dimexpr-\@titlewidth-\@didacticsRuleExcess\relax}\raisebox{0.5\baselineskip}{\hspace*{\@didacticsRuleExcess}\box\z@\par}%
+          \nobreak
+          \ifx#1\relax
+          \else
+            \hspace*{\dimexpr\@didacticsRuleExcess+1mm\relax}%
+            \raisebox{-0.5\@didacticsIconHeight}{\includegraphics[width=\@didacticsIconHeight]{#1}}%
+          \fi
+        }%
+        \nobreak
+        \hspace*{-1mm}%
+        \smash{\hfill\hspace*{\dimexpr-\@titlewidth-2\@didacticsRuleExcess-\@didacticsIconHeight\relax}\textcolor{didacticsRule}{\rule{\dimexpr\@titlewidth+2\@didacticsRuleExcess\relax}{1\p@}}}%
+        \nobreak%
+      }%
+    }%
+    \nobreak
+    \didacticsContentfamily
+    \noindent\ignorespaces
+  \else
+    \vbox{%
+      \llap{%
+        \hspace*{-\@titlewidth}%
+        \vspace{-0.5\@didacticsIconHeight}%
+        \ifx#1\relax
+        \else
+          \raisebox{0.3\@didacticsIconHeight}{\includegraphics[width=\@didacticsIconHeight]{#1}}%
+          %\hspace*{-\@didacticsRuleExcess}%
+          \hspace*{1mm}%
+          \smash{\raisebox{1\baselineskip}{\textcolor{didacticsRule}{\rule{\dimexpr\@titlewidth+2\@didacticsRuleExcess\relax}{1\p@}}}}%
+          \hspace*{\dimexpr-\@titlewidth-2\@didacticsRuleExcess+5mm\relax}%
+          \nobreak
+        \fi
+      }%
+      \vspace*{\dimexpr-\@didacticsIconHeight-0.6\baselineskip\relax plus 0pt minus 0pt}%
+      {%
+        \list{}%
+          {%
+            \minorDidacticsHeadingfamily
+            \sbseries
+            \large
+            \leftmargin \z@
+            \topsep \z@
+            \parsep \z@
+            \partopsep \z@
+          }%
+          \ignorespaces
+          \item #2%
+        \endlist
+      }
+      \nobreak
+      \vskip0.6\baselineskip
+      %\nobreak
+      %\list{}{%
+      %  \listparindent \z@
+      %  \itemindent    \z@
+      %  \leftmargin    \z@
+      %  \rightmargin   \z@
+      %  \didacticsContentfamily
+      %  %\topsep        \z@%
+      %  \topsep        \z@
+      %  \parsep        \z@
+      %}%
+      %\item\noindent\ignorespaces
+    }%
+    \nobreak
+    \didacticsContentfamily
+    \noindent\ignorespaces
+  \fi
+}{%
+  \endlist
+  \noindent
+}
+
+
+
 
 % \def\@abstract#1{%
 %   \vskip-\lastskip

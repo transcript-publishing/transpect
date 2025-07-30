@@ -26,6 +26,7 @@
   \ccDeclareGlobalComponent{CopyrightRemark}%
 }
 
+
 \tpDeclareTitlepage{%
   \ifcsname ts@journal@series\endcsname
   \else
@@ -36,6 +37,9 @@
   \else
     \let\ts@layout@type\relax%
   \fi
+
+  \newbox\@bookAuthorBox
+  \global\setbox\@bookAuthorBox=\hbox{\small\sffamily\if@TLtwenty\upseries\fi\expandonce{\tpUseComp{AuthorNameList}}}
   
   % Titeleien des a- und b-Layouts mit Layoutvariante c ausgeben. Gilt nur für std-Layout, nicht für xtx.
   \ifx\ts@layout@type\ts@str@layout@std
@@ -153,17 +157,17 @@
     \tpSetProperty{titlepage-ii}{%
       \bgroup
         \ccaStructStart{Titlepage}%
-        \tpIfComp{Statement}{\tpUseComp{Statement}\par\vskip\baselineskip}{}%
-        \justify
-        {\itshape\tpUseProperty{funding-block}}%
-        \tpIfComp{AddNoteII}{\tpUseComp{AddNoteII}\par\vskip\baselineskip}%
-        \null\vfill
-        \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
-        \tpUseProperty{licence}%
-        \vskip2\baselineskip
-        \bgroup
-          \tpUseProperty{imprint}%
-        \egroup
+          \tpIfComp{Statement}{\tpUseComp{Statement}\par\vskip\baselineskip}{}%
+          \justify
+          {\itshape\tpUseProperty{funding-block}}%
+          \tpIfComp{AddNoteII}{\tpUseComp{AddNoteII}\par\vskip\baselineskip}%
+          \null\vfill
+          \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
+          \tpUseProperty{licence}%
+          \vskip2\baselineskip
+          \bgroup
+            \tpUseProperty{imprint}%
+          \egroup
         \ccaStructEnd{Titlepage}%
       \egroup
     }
@@ -751,6 +755,7 @@
   %%%%%%%%%%%%%%%%%%%%%%
   % allgemeine Titelei %
   %%%%%%%%%%%%%%%%%%%%%%
+  
   \if@unknownJournal
     \let\ts@journal@series\relax
   \fi
@@ -788,11 +793,11 @@
           \raggedright
           \ifjournal
             \ccaStructStart{SeriesEditors}%
-            \tpUseProperty{SeriesEditorNameList}%
+              \tpUseProperty{SeriesEditorNameList}%
             \ccaStructEnd{SeriesEditors}%
           \else
             \ccaStructStart{Editors}%
-            \tpUseProperty{EditorNameList}%
+              \tpUseProperty{EditorNameList}%
             \ccaStructEnd{Editors}%
           \fi%
           \par

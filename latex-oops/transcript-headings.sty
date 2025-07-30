@@ -18,6 +18,10 @@
   \pagestyle{altRunTitles}%
 }
 
+
+% Kapitelüberschriftenfarbe für UTB.
+\definecolor{UTBHeading}{RGB}{90, 90, 90}
+
 %% Globale Settings: gelten für alle ÜS-Ebenen
 \tpAddToDefault{Heading}{%
   \tpSetProperty{numbering}{}%
@@ -432,6 +436,12 @@
       \Huge
     \fi
     \sbseries\sfchapfamily
+    % UTB-Layout.
+    \ifx\ts@layout@type\ts@str@layout@utb
+      \fontsize{22bp}{23bp}\selectfont
+      \bfseries
+      \sfchapfamily
+    \fi
   }%
   
   \tpSetProperty{subtitle-face}{\normalfont\fontsize{13.7bp}{17.2bp}\selectfont\sfchapsubfamily\upseries}
@@ -477,103 +487,175 @@
   
   \tpSetProperty{heading-block}{%
     \gdef\tp@currentHeading{chapter}%
-    \ifcollection
-      \ifx\tp@latestPartmark\relax\else
-        \protected@xdef\tp@partmark{\tp@latestPartmark}%
-      \fi
-    \fi
-    \tpIfComp{RunNumber}{%
-      \tpGStoreComp\tp@chapternumber{RunNumber}%
-    }{%
-      \tpIfComp{Number}{%
-        \tpGStoreComp\tp@chapternumber{Number}%
-      }{%
-        \global\let\tp@chapternumber\relax
-      }%
-    }%
-    \tpIfComp{RunTitle}{%
-      \tpGStoreComp\tp@chaptermark{RunTitle}%
-    }{%
-      \tpGStoreComp\tp@chaptermark{Title}%
-    }%
-    \tpIfComp{RunAuthorNameList}{%
-      \xdef\tp@authormark{\cc@Heading@RunAuthorNameList}%
-    }{%
-      \tpIfCompOverride{AuthorNameList}{%
-        %\tpGStoreComp\tp@authormark{AuthorNameList}%
-        \xdef\tp@authormark{\cc@Heading@AuthorNameList}%
-      }{%
-        \tpCompGDef\tp@authormark{Author}{author-list-print-format}%
-      }%
-    }%
-    \ifx\ts@journal@series\ts@str@journal@zig
-      \protected@xdef\tp@partmark{\tp@authormark}%
-    \fi
-    %% Titel
-    \ifjournal\else
-      \ifx\@twocolumnContinuousChapters\relax
-        \thispagestyle{headings}%
-      \else
+    \ifx\ts@layout@type\ts@str@layout@utb
+      \bgroup
+        \tpIfComp{RunNumber}{%
+          \tpGStoreComp\tp@chapternumber{RunNumber}%
+        }{%
+          \tpIfComp{Number}{%
+            \tpGStoreComp\tp@chapternumber{Number}%
+          }{%
+            \global\let\tp@chapternumber\relax
+          }%
+        }%
+        \tpIfComp{RunTitle}{%
+          \tpGStoreComp\tp@chaptermark{RunTitle}%
+        }{%
+          \tpGStoreComp\tp@chaptermark{Title}%
+        }%
+        \tpIfComp{RunAuthorNameList}{%
+          \xdef\tp@authormark{\cc@Heading@RunAuthorNameList}%
+        }{%
+          \tpIfCompOverride{AuthorNameList}{%
+            %\tpGStoreComp\tp@authormark{AuthorNameList}%
+            \xdef\tp@authormark{\noexpand\cc@Heading@AuthorNameList}%
+          }{%
+            {%
+              \gdef\tp@authormark{\unhcopy\@bookAuthorBox}%
+              %\global\let\tp@authormark\@bookAuthor
+            }
+            %\gdef\tp@authormark{\tp@runningTitleAuthorString}%
+          }%
+        }%
         \thispagestyle{empty}%
+        \tpUseProperty{title-face}%
+        \tpWhenComp{Number}{\leftskip-\tpUseProperty{indent}}%
+        \bgroup%
+          \cchHeadTagStart
+            \tpIfComp{Number}{%
+              \ccaVstructStart{Lbl}%
+                \rightskip0.15\textwidth plus 1fil
+                \leftskip10mm
+                \hskip-10mm
+                \textcolor{UTBHeading}{\hb@xt@10mm{\tpUseProperty{Number}\hss}}%
+              \ccaVstructEnd{Lbl}%
+            }{%
+              \leftskip\z@
+            }%
+            \ignorespaces\textcolor{UTBHeading}{\tpUseComp{Title}}\par
+            \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
+          \cchHeadTagEnd
+        \egroup
+        \tpWhenComp{Subtitle}{%
+          \par\vskip1.1bp%
+          \tpUseProperty{subtitle-face}%
+          \ccaVstructStart{P}%
+          \tpUseComp{Subtitle}%
+          \ccaVstructEnd{P}%
+        }%
+        \par
+        \tpIfComp{AuthorNameList}{%
+          {%
+            \leftskip10mm
+            \normalfont
+            \sfchapfamily
+            \itshape
+            \large
+            \vskip0.5\baselineskip
+            \textcolor{UTBHeading}{\tpUseComp{AuthorNameList}}\par
+            \vskip2\baselineskip
+          }
+        }{}%
+      \egroup\nobreak
+    \else
+      \ifcollection
+        \ifx\tp@latestPartmark\relax\else
+          \protected@xdef\tp@partmark{\tp@latestPartmark}%
+        \fi
       \fi
-    \fi
-    \leftskip\z@
-    \leavevmode
-    \bgroup
-      \raggedright
-      \tpWhenComp{Number}{\leftskip-\tpUseProperty{indent}}%
-      \tpUseProperty{title-face}%
-      \bgroup%
-        \cchHeadTagStart
-          \tpWhenComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}%
-          \ignorespaces\tpUseComp{Title}\par%
-          \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
-        \cchHeadTagEnd
-      \egroup
-      \tpWhenComp{Subtitle}{%
-        \par\vskip1.1bp%
-        \tpUseProperty{subtitle-face}%
-        \ccaVstructStart{P}%
-        \tpUseComp{Subtitle}%
-        \ccaVstructEnd{P}%
-      }%
-      \par
-    \egroup\nobreak
-    %% Linie
-    \vskip\dimexpr-1\baselineskip\relax
-    \ccaVstructStart{Div}%
-    \ccaVstructStart[Document]{Rule}%
-    \smash{\rlap{\lower3.25mm\vbox{\rule{\hsize}{.4\p@}}}}\par\nobreak
-    \ccaVstructEnd{Rule}%
-    %% Autor
-    \tpWhenComp{AuthorNameList}{%
-      \vskip\baselineskip
-      \ccaVstructStart{Authors}%
-      {%
-        \tpUseProperty{author-face}%
-        \large\sfwidefamily\upseries\itshape\tpUseComp{AuthorNameList}%
-      }%
-      \ccaVstructEnd{Authors}%
-      \ifx\ts@contact@dummy\@undefined
-      \else
-        \ccaMoveStruct{\ts@contact@dummy}%
-        \global\let\ts@contact@dummy\@undefined
-      \fi
-      \par\nobreak%\vskip\baselineskip
-    }%
-    %% Zitat
-    \tpWhenComp{QuoteBlock}{%
-      \vskip1\baselineskip
-      \savenotes
-      \tpUseComp{QuoteBlock}\par%
-      \tpIfComp{AuthorNameList}{%
-        \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax
+      \tpIfComp{RunNumber}{%
+        \tpGStoreComp\tp@chapternumber{RunNumber}%
       }{%
-        \vskip-1.68\baselineskip
+        \tpIfComp{Number}{%
+          \tpGStoreComp\tp@chapternumber{Number}%
+        }{%
+          \global\let\tp@chapternumber\relax
+        }%
       }%
-      \spewnotes
-    }%
-    \ccaVstructEnd{Div}%
+      \tpIfComp{RunTitle}{%
+        \tpGStoreComp\tp@chaptermark{RunTitle}%
+      }{%
+        \tpGStoreComp\tp@chaptermark{Title}%
+      }%
+      \tpIfComp{RunAuthorNameList}{%
+        \xdef\tp@authormark{\cc@Heading@RunAuthorNameList}%
+      }{%
+        \tpIfCompOverride{AuthorNameList}{%
+          %\tpGStoreComp\tp@authormark{AuthorNameList}%
+          \xdef\tp@authormark{\cc@Heading@AuthorNameList}%
+        }{%
+          \tpCompGDef\tp@authormark{Author}{author-list-print-format}%
+        }%
+      }%
+      \ifx\ts@journal@series\ts@str@journal@zig
+        \protected@xdef\tp@partmark{\tp@authormark}%
+      \fi
+      %% Titel
+      \ifjournal\else
+        \ifx\@twocolumnContinuousChapters\relax
+          \thispagestyle{headings}%
+        \else
+          \thispagestyle{empty}%
+        \fi
+      \fi
+      \leftskip\z@
+      \leavevmode
+      \bgroup
+        \raggedright
+        \tpWhenComp{Number}{\leftskip-\tpUseProperty{indent}}%
+        \tpUseProperty{title-face}%
+        \bgroup%
+          \cchHeadTagStart
+            \tpWhenComp{Number}{\ccaVstructStart{Lbl}\tpUseProperty{hang-number}\ccaVstructEnd{Lbl}}%
+            \ignorespaces\tpUseComp{Title}\par%
+            \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
+          \cchHeadTagEnd
+        \egroup
+        \tpWhenComp{Subtitle}{%
+          \par\vskip1.1bp%
+          \tpUseProperty{subtitle-face}%
+          \ccaVstructStart{P}%
+          \tpUseComp{Subtitle}%
+          \ccaVstructEnd{P}%
+        }%
+        \par
+      \egroup\nobreak
+      %% Linie
+      \vskip\dimexpr-1\baselineskip\relax
+      \ccaVstructStart{Div}%
+      \ccaVstructStart[Document]{Rule}%
+      \smash{\rlap{\lower3.25mm\vbox{\rule{\hsize}{.4\p@}}}}\par\nobreak
+      \ccaVstructEnd{Rule}%
+      %% Autor
+      \tpWhenComp{AuthorNameList}{%
+        \vskip\baselineskip
+        \ccaVstructStart{Authors}%
+        {%
+          \tpUseProperty{author-face}%
+          \large\sfwidefamily\upseries\itshape\tpUseComp{AuthorNameList}%
+        }%
+        \ccaVstructEnd{Authors}%
+        \ifx\ts@contact@dummy\@undefined
+        \else
+          \ccaMoveStruct{\ts@contact@dummy}%
+          \global\let\ts@contact@dummy\@undefined
+        \fi
+        \par\nobreak%\vskip\baselineskip
+      }%
+      %% Zitat
+      \tpWhenComp{QuoteBlock}{%
+        \vskip1\baselineskip
+        \savenotes
+        \tpUseComp{QuoteBlock}\par%
+        \tpIfComp{AuthorNameList}{%
+          \vskip\dimexpr-1.68\baselineskip+2\baselineskip\relax
+        }{%
+          \vskip-1.68\baselineskip
+        }%
+        \spewnotes
+      }%
+      \ccaVstructEnd{Div}%
+    \fi
   }%
   \tpSetProperty{after-skip}{%
     \tpIfComp{AuthorNameList}{%
@@ -583,6 +665,7 @@
     }%
   }%
 }
+
 
 
 % Für Zeitschriften.
@@ -850,7 +933,7 @@
         \tpIfCompOverride{AuthorNameList}{%
           \tpGStoreComp\tp@authormark{AuthorNameList}%
         }{%
-          \tpCompGDef\tp@authormark{tpAuthor}{author-list-print-format}%
+          \tpCompGDef\tp@authormark{tpAuthor}{name-list-print-format}%
         }%
       }%
     \fi
@@ -1155,6 +1238,11 @@
   }%
   \tpSetProperty{after-heading-block}{\nopagebreak}%
   \tpSetProperty{after-skip}{12.8bp}%
+}
+
+
+\ccAddToType{Components}{Heading}{%
+  \ccDeclareComponent{Icon}{}{}% Ticket 
 }
 
 

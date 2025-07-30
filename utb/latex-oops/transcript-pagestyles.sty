@@ -17,31 +17,39 @@
     % Das Inhaltsverzeichnis wird beim Erstellen von Kopfzeilen exkludiert.
     \ifx\@chaptername\contentsname
     \else
-      % Anthologien.
-      \ifcollection
-        \ifx\ts@journal@series\ts@str@journal@zig
-          % Bei ZiG die Abschnitte »Rezensionen« sowie »Autorinnen und Autoren« betreffend.
-          \ifx\tp@authormark\relax
-            \tpRunBookTitle
-          \else
-            \tp@authormark
-          \fi%
+      \ifx\ts@layout@type\ts@str@layout@utb
+        \ifx\tp@authormark\relax
         \else
-          % Mit Respektseiten.
-          \ifx\has@parts\relax
-            \ifcsname tp@partmark\endcsname
-              \tp@partmark
-            \else
-              \tpRunBookTitle
-            \fi%
-          % Ohne Respektseiten.
-          \else
-            \tpRunBookTitle%
-          \fi
-        \fi
-      % Monographien.
+          \tp@authormark :\space
+        \fi%
+        \tpRunBookTitle
       \else
-        \tpRunBookTitle%
+        % Anthologien.
+        \ifcollection
+          \ifx\ts@journal@series\ts@str@journal@zig
+            % Bei ZiG die Abschnitte »Rezensionen« sowie »Autorinnen und Autoren« betreffend.
+            \ifx\tp@authormark\relax
+              \tpRunBookTitle
+            \else
+              \tp@authormark
+            \fi%
+          \else
+            % Mit Respektseiten.
+            \ifx\has@parts\relax
+              \ifcsname tp@partmark\endcsname
+                \tp@partmark
+              \else
+                \tpRunBookTitle
+              \fi%
+            % Ohne Respektseiten.
+            \else
+              \tpRunBookTitle%
+            \fi
+          \fi
+        % Monographien.
+        \else
+          \tpRunBookTitle%
+        \fi
       \fi
     \fi
   }%
@@ -51,23 +59,32 @@
     % Das Inhaltsverzeichnis wird beim Erstellen von Kopfzeilen exkludiert.
     \ifx\@chaptername\contentsname
     \else
-      % Anthologien.
-      \ifcollection
-        \ifx\tp@authormark\relax
-        \else
-          \ifx\ts@journal@series\ts@str@journal@zig
-          \else
-            \tp@authormark:\space%
-          \fi
-        \fi%
-        \tp@chaptermark%
-      % Monographien.
-      \else
+      % UTB.
+      \ifx\ts@layout@type\ts@str@layout@utb
         \ifx\tp@chapternumber\relax
         \else
           \tp@chapternumber\space%
         \fi%
         \tp@chaptermark%
+      \else    
+        % Anthologien.
+        \ifcollection
+          \ifx\tp@authormark\relax
+          \else
+            \ifx\ts@journal@series\ts@str@journal@zig
+            \else
+              \tp@authormark:\space%
+            \fi
+          \fi%
+          \tp@chaptermark%
+        % Monographien.
+        \else
+          \ifx\tp@chapternumber\relax
+          \else
+            \tp@chapternumber\space%
+          \fi%
+          \tp@chaptermark%
+        \fi
       \fi
     \fi
   }%
