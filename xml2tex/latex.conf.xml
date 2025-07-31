@@ -574,7 +574,7 @@
 
   <xsl:variable name="dialogue-style" select="'^[a-z]+dialogue'" as="xs:string"/>
 
-  <template context="dbk:blockquote[dbk:para][not(matches(@role, concat('^[a-z]+_?verse.*$', '|', $dialogue-style)))]">
+  <template context="dbk:blockquote[not(..[self::dbk:info])][not(matches(@role, concat('^[a-z]+_?verse.*$', '|', $dialogue-style)))]">
     <rule name="quotation" type="env">
       <text/>
     </rule>
