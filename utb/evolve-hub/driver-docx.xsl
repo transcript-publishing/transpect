@@ -46,22 +46,24 @@
     <xsl:element name="{$wrapper-element-name}">
       <xsl:apply-templates select="@*" mode="#current"/>
       <xsl:for-each-group select="*|processing-instruction()" 
-                          group-adjacent="self::para[matches(@role, '^tsadd')] 
+                          group-adjacent="self::para[matches(@role, '^ts(add|do)')] 
                                           or
-                                          self::processing-instruction()[preceding-sibling::*[1][self::para[matches(@role, '^tsadd')]] 
+                                          self::processing-instruction()[preceding-sibling::*[1][self::para[matches(@role, '^ts(add|do)')]] 
                                                                          and
-                                                                         following-sibling::*[1][self::para[matches(@role, '^tsadd')]]]">
+                                                                         following-sibling::*[1][self::para[matches(@role, '^ts(add|do)')]]]">
 
           <xsl:choose>
             <xsl:when test="current-grouping-key()">
               <xsl:for-each-group select="current-group()" 
-                                  group-starting-with=".[self::para[matches(@role, '^tsadd.+heading')]]">
+                                  group-starting-with=".[self::para[matches(@role, '^ts(add|do).+heading')]]">
                 <!-- splitted in different ts add block, starting with 'headings' -->
                 <xsl:element name="section">
-                  <xsl:attribute name="role" select="replace(current-group()[1]/@role, 'heading', '')"/>
+                  <xsl:variable name="role" select="replace(current-group()[1]/@role, 'heading', '')"/>
+                  <xsl:attribute name="role" select="$role"/>
                     <title>
                       <xsl:apply-templates select="current-group()[1]/(@*,node())" mode="#current"/>
                     </title>
+                  <xsl:if test="$role = 'tsaddliteraturetip'"><xsl:processing-instruction name="latex" select="'\rmfamily&#xa;'"/></xsl:if>
                   <xsl:apply-templates select="current-group()[position() gt 1]" mode="#current"/>
                 </xsl:element>
               </xsl:for-each-group>
