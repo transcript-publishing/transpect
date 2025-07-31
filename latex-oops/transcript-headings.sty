@@ -855,6 +855,8 @@
 %%%%%%%%%%%
 
 \tpDeclareHeading[chapter]{0}{review}{%
+  \gdef\left@mark{Rezensionen}%
+
   % IHV-Überschrift der Rezension unterscheidet sich von chapter darin, dass kein Untertitel ausgegeben wird.
   \tpSetProperty{toc-format}{%
     \ccaVstructStart{TOCI}%
@@ -937,9 +939,10 @@
         }%
       }%
     \fi
-  }%
+  }
+  
   \tpSetProperty{heading-block}{%
-    \thispagestyle{empty}
+    %\thispagestyle{empty}
     \gdef\tp@currentHeading{chapter}%
     \savenotes
     \bgroup
@@ -961,10 +964,12 @@
           \nopagebreak%
         \cchHeadTagEnd
         \tpWhenComp{Subtitle}{\tpUseComp{subtitle-face}\tpUseComp{Subtitle}\nopagebreak\par}% Ticket 14677.
-        \tpWhenComp{DOI}{%
-          \vskip\baselineskip%
-          \tpUseComp{DOI}%
-        }%
+        \tpIfComp{DOI}{%
+          \ifjournal
+            \vskip\baselineskip
+            \tpUseComp{DOI}%
+          \fi
+        }{}%
       \if@twocolumn
         \vspace{1\baselineskip}%
         \end{table*}%
