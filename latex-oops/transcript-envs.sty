@@ -617,56 +617,61 @@
 \newenvironment{majorDidactics}[2][\relax]{%
   \raggedbottom
   \globalcolor{didacticsGeneral}%
-  \setbox\z@=\hbox{\large\bfseries\majorDidacticsHeadingfamily\ignorespaces #2\par}%
-  \edef\@titlewidth{\the\wd\z@}%
-  \llap{%
-    \ifx#1\relax
-    \else
-      \includegraphics[width=\@majorDidacticsIconHeight]{#1}%
-      \hspace*{1mm}%
-      \smash{\raisebox{0.75\baselineskip}{\textcolor{didacticsRule}{\rule{\dimexpr\@titlewidth+2\@majorDidacticsRuleExcess\relax}{2\p@}}}}%
-      \hspace*{\dimexpr-5mm-\@titlewidth-2\@majorDidacticsRuleExcess-1.5mm\relax}%
-    \fi
-  }%
-  \nobreak
-  \vspace*{\dimexpr-\@majorDidacticsIconHeight-0.5\baselineskip\relax}%
-  {%
-    \list{}
-      {%
-        \large
-        \bfseries
-        \majorDidacticsHeadingfamily
-        \leftmargin 10mm
-        \topsep \z@
-        \parsep \z@
-        \partopsep \z@
-      }%
-      \ignorespaces
-      \item #2
-    \endlist
-  }
-  %\hskip10mm\box\z@\par
-  \vskip0.6\baselineskip
-  \list{}{%
-    \listparindent \z@
-    \itemindent    \z@
-    \leftmargin    10mm%
-    \rightmargin   \z@
-    \didacticsContentfamily
-    \sbseries
-    %\topsep        \z@%
-    \topsep        \z@
-    \parsep        \z@
-  }%
-  \@itemizeTopSep\z@
-  \item\noindent\ignorespaces
+  \bgroup% Ist nötig, damit \@afterindentfalse und \@afterheading greifen.
+    \setbox\z@=\hbox{\large\bfseries\majorDidacticsHeadingfamily\ignorespaces #2\par}%
+    \edef\@titlewidth{\the\wd\z@}%
+    \llap{%
+      \ifx#1\relax
+      \else
+        \includegraphics[width=\@majorDidacticsIconHeight]{#1}%
+        \hspace*{1mm}%
+        \smash{\raisebox{0.75\baselineskip}{\textcolor{didacticsRule}{\rule{\dimexpr\@titlewidth+2\@majorDidacticsRuleExcess\relax}{2\p@}}}}%
+        \hspace*{\dimexpr-5mm-\@titlewidth-2\@majorDidacticsRuleExcess-1.5mm\relax}%
+      \fi
+    }%
+    \nobreak
+    \vspace*{\dimexpr-\@majorDidacticsIconHeight-0.5\baselineskip\relax}%
+    {%
+      \list{}
+        {%
+          \large
+          \bfseries
+          \majorDidacticsHeadingfamily
+          \leftmargin 10mm
+          \topsep \z@
+          \parsep \z@
+          \partopsep \z@
+        }%
+        \ignorespaces
+        \item #2
+      \endlist
+    }
+    %\hskip10mm\box\z@\par
+    \vskip0.6\baselineskip
+    \list{}{%
+      \listparindent \z@
+      \itemindent    \z@
+      \leftmargin    10mm%
+      \rightmargin   \z@
+      \didacticsContentfamily
+      \sbseries
+      %\topsep        \z@%
+      \topsep        \z@
+      \parsep        \z@
+    }%
+    \@itemizeTopSep\z@
+    \item\noindent\ignorespaces
 }{%
-  \endlist
-  \par
-  \leftskip\z@
-  \par
-  \vskip2\baselineskip
-  \globalcolor{black}%
+    \endlist
+    \par
+    \leftskip\z@
+    \par
+    \vskip2\baselineskip
+    \globalcolor{black}%
+    \noindent
+    \@afterindentfalse
+    \@afterheading
+  \egroup
 }
 
 
