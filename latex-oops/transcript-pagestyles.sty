@@ -1,6 +1,8 @@
 \NeedsTeXFormat{LaTeX2e}[2018/12/01]
 \ProvidesPackage{transcript-pagestyles}[2021/04/09 transcript]\relax
 
+\let\@withinRunningTitle\@empty
+
 \def\ps@empty{%
   \let\@oddhead\@empty
   \let\@oddfoot\@empty
@@ -71,12 +73,41 @@
       \fi
     \fi
   }%
-  \def\@oddhead{\hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
-      % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    }}%
+  \def\@oddhead{%
+    \let\@withinRunningTitle\relax
+    \hfill{
+      \small
+      \sffamily
+      \if@TLtwenty
+        \upseries
+      \fi
+      \right@mark
+      \rlap{%
+        \hb@xt@8mm{%
+          \hfill
+          \thepage
+        }%
+      }%
+    }%
+  }%
   \def\@evenhead{%
-    % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
-    {\small\sffamily\if@TLtwenty\upseries\fi\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
+    \let\@withinRunningTitle\relax
+    {%
+      \small
+      \sffamily
+      \if@TLtwenty
+        \upseries
+      \fi
+      \llap{%
+        \hb@xt@8mm{%
+          \thepage
+          \hfill
+        }%
+      }%
+      \left@mark
+    }%
+    \hfill
+  }%
   \let\@oddfoot\@empty
   \let\@evenfoot\@empty
   \def\partmark##1{%
@@ -118,10 +149,13 @@
     \def\numberline####1{####1\enskip}%
     \tp@chaptermark%
   }%
-  \def\@oddhead{\hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
+  \def\@oddhead{%
+    \let\@withinRunningTitle\relax
+    \hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}%
       % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     }}%
   \def\@evenhead{%
+    \let\@withinRunningTitle\relax
     % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     {\small\sffamily\if@TLtwenty\upseries\fi\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}%
   \let\@oddfoot\@empty
@@ -149,11 +183,13 @@
     \tp@chaptermark%
   }%
   \def\@oddhead{%
+    \let\@withinRunningTitle\relax
     \hfill{\small\sffamily\if@TLtwenty\upseries\fi\right@mark\rlap{\hb@xt@8mm{\hfill\thepage}}% Mig2024
       % \ifx\lay b\relax\llap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     }%
   }%
   \def\@evenhead{%
+    \let\@withinRunningTitle\relax
     % \ifx\lay b\relax\rlap{\smash{\lower1.35mm\hb@xt@\textwidth{\rule{\textwidth}{.4\p@}}}}\fi
     {\small\sffamily\if@TLtwenty\upseries\fi\llap{\hb@xt@8mm{\thepage\hfill}}\left@mark}\hfill}% Mig2024
   \let\@oddfoot\@empty
@@ -170,6 +206,7 @@
 \def\ps@articlehead{%
   \ps@headings
   \def\@oddhead{%
+    \let\@withinRunningTitle\relax
     \ccaStructStart[Document]{header}%
     \smash{%
       \vtop{%

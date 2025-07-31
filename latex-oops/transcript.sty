@@ -211,7 +211,11 @@
           \expandafter\ifx\@withinTocAuthor\relax
             {\ccFallback{č}}%
           \else
-            č%
+            \expandafter\ifx\@withinRunningTitle\relax
+              {\ccFallback{č}}%
+            \else
+              č%
+            \fi
           \fi
         \fi
       \fi
@@ -234,7 +238,11 @@
           \expandafter\ifx\@withinTocAuthor\relax
             {\ccFallback{Č}}%
           \else
-            Č%
+            \expandafter\ifx\@withinRunningTitle\relax
+              {\ccFallback{Č}}%
+            \else
+              Č%
+            \fi
           \fi
         \fi
       \fi
