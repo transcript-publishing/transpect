@@ -161,13 +161,17 @@
   \tpSetProperty{indent}{}%
   
   \tpSetProperty{title-face}{%
-    \sffamily\sbseries%
+    \sffamily\sbseries
     \ifx\ts@layout@type\ts@str@layout@mdw
-      \Huge%
-    \else%
-      \HUGE%
-    \fi%
-    \selectfont%
+      \Huge
+    \else
+      \HUGE
+    \fi
+    \ifx\ts@layout@type\ts@str@layout@utb
+      \fontsize{26bp}{27bp}\selectfont
+      \bfseries
+      \sfchapfamily
+    \fi
   }%
   
   \tpSetProperty{quote-block-format}{%
@@ -254,17 +258,31 @@
     \cchHeadTagStart
       \ccIfComp{Number}{%
         \ifcsname cc-Heading-number--1-maxwd\endcsname
-          \@tempdima=\dimexpr\csname cc-Heading-number--1-maxwd\endcsname+0.5em\relax%
+          \@tempdima=\dimexpr\csname cc-Heading-number--1-maxwd\endcsname+0.5em\relax
         \else
-          \@tempdima=\z@%
-        \fi%
+          \@tempdima=\z@
+        \fi
         \ccaVstructStart{Lbl}%
-        \leftskip\@tempdima%
-        \hskip-\@tempdima%
-        \hb@xt@\@tempdima{\tpUseComp{Number}\hss}%
+          \leftskip\@tempdima
+          \hskip-\@tempdima
+          \ifx\ts@layout@type\ts@str@layout@utb
+            \textcolor{UTBHeading}{%
+          \fi
+          \hb@xt@\@tempdima{\tpUseComp{Number}\hss}%
+          \ifx\ts@layout@type\ts@str@layout@utb
+            }%
+          \fi
         \ccaVstructEnd{Lbl}%
       }{}%
-      \ignorespaces\tpUseComp{Title}\par%
+      \ignorespaces
+      \ifx\ts@layout@type\ts@str@layout@utb
+        \textcolor{UTBHeading}{%
+      \fi
+      \tpUseComp{Title}%
+      \ifx\ts@layout@type\ts@str@layout@utb
+        }%
+      \fi
+      \par
       \cchGenerateToC% Erzeugt die Verzeichniseinträge (auch PDF-Lesezeichen). Ticket 18344.
     \cchHeadTagEnd
     \tpIfComp{Subtitle}{%

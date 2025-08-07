@@ -267,10 +267,14 @@
 \leftmargini\parindent
 \leftmarginii2\parindent
 
+\renewcommand{\theenumii}{\arabic{enumii}}
+\renewcommand{\labelenumii}{\theenumii}
+
 %% Überdef
 \def\@enum@{%
-  \list{\csname label\@enumctr\endcsname}%
-  {%
+  \list{%
+      \csname label\@enumctr\endcsname
+  }{%
     \labelsep\z@
     \itemsep\z@
     \ifnum \@enumdepth=\@ne
@@ -611,14 +615,14 @@
 \definecolor{didacticsGeneral}{RGB}{45, 45, 45}
 
 \newcommand{\globalcolor}[1]{%
-  \color{#1}\global\let\default@color\current@color
+  \color{#1}%
+  \global\let\default@color\current@color
 }
 
 \newenvironment{majorDidactics}[2][\relax]{%
-  \raggedbottom
-  \globalcolor{didacticsGeneral}%
   \bgroup% Ist nötig, damit \@afterindentfalse und \@afterheading greifen.
-    \setbox\z@=\hbox{\large\bfseries\majorDidacticsHeadingfamily\ignorespaces #2\par}%
+    \raggedbottom
+    \setbox\z@=\hbox{\large\bfseries\majorDidacticsHeadingfamily\textcolor{didacticsGeneral}{\ignorespaces#2}\par}%
     \edef\@titlewidth{\the\wd\z@}%
     \llap{%
       \ifx#1\relax
@@ -643,11 +647,11 @@
           \partopsep \z@
         }%
         \ignorespaces
-        \item #2
+        \item \textcolor{didacticsGeneral}{#2}
       \endlist
     }
     %\hskip10mm\box\z@\par
-    \vskip0.6\baselineskip
+    \vskip0.4\baselineskip
     \list{}{%
       \listparindent \z@
       \itemindent    \z@
@@ -660,13 +664,12 @@
       \parsep        \z@
     }%
     \@itemizeTopSep\z@
+    \globalcolor{didacticsGeneral}%
     \item\noindent\ignorespaces
 }{%
     \endlist
     \par
-    \leftskip\z@
-    \par
-    \vskip2\baselineskip
+    \vskip1\baselineskip%
     \globalcolor{black}%
     \noindent
     \@afterindentfalse
@@ -679,6 +682,7 @@
 \newdimen\@didacticsIconHeight \@didacticsIconHeight=6mm
 
 \newcount\@didactics
+\newdimen\@didacticsIconRuleDistance \@didacticsIconRuleDistance=4mm
 
 \newenvironment{didactics}[2][\relax]{%
   \ifvmode\leavevmode\else\par\fi
@@ -689,87 +693,80 @@
   \fi
   %\vskip2\baselineskip
   \@itemizeTopSep\z@
-  \setbox\z@=\hbox{\large\sbseries\didacticsContentfamily\ignorespaces #2}%
+  \setbox\z@=\hbox{\minorDidacticsHeadingfamily\sbseries\large\ignorespaces #2}%
   \edef\@titlewidth{\the\wd\z@}%
   \phantomsection
   \label{didactics-\the\@didactics}%
   \getLabelPage{didactics-\the\@didactics}%
   \global\advance\@didactics\@ne
-  \ifodd\realpage
-    \vbox{%
-      \hfill
-      \rlap{%
-        \hbox{%
-          \hspace*{\dimexpr-\@titlewidth-\@didacticsRuleExcess\relax}\raisebox{0.5\baselineskip}{\hspace*{\@didacticsRuleExcess}\box\z@\par}%
+  \bgroup% Ist nötig, damit \@afterindentfalse und \@afterheading greifen.
+    \ifodd\realpage
+      \vbox{%
+        \hfill
+        \rlap{%
+          \hbox{%
+            \hspace*{\dimexpr-\@titlewidth-\@didacticsRuleExcess\relax}\raisebox{0.5\baselineskip}{\hspace*{\@didacticsRuleExcess}\box\z@\par}%
+            \nobreak
+            \ifx#1\relax
+            \else
+              \hspace*{\dimexpr\@didacticsRuleExcess+\@didacticsIconRuleDistance\relax}%
+              \raisebox{-0.5\@didacticsIconHeight}{\includegraphics[width=\@didacticsIconHeight]{#1}}%
+            \fi
+          }%
           \nobreak
+          \hspace*{-\@didacticsIconRuleDistance}%
+          \smash{\hfill\hspace*{\dimexpr-\@titlewidth-2\@didacticsRuleExcess-\@didacticsIconHeight\relax}\textcolor{didacticsRule}{\rule{\dimexpr\@titlewidth+2\@didacticsRuleExcess\relax}{1\p@}}}%
+          \nobreak%
+        }%
+      }%
+      \nobreak
+      \didacticsContentfamily
+      \noindent\ignorespaces
+    \else
+      \vbox{%
+        \llap{%
+          \hspace*{-\@titlewidth}%
+          \vspace{-0.5\@didacticsIconHeight}%
           \ifx#1\relax
           \else
-            \hspace*{\dimexpr\@didacticsRuleExcess+1mm\relax}%
-            \raisebox{-0.5\@didacticsIconHeight}{\includegraphics[width=\@didacticsIconHeight]{#1}}%
+            \raisebox{0.3\@didacticsIconHeight}{\includegraphics[width=\@didacticsIconHeight]{#1}}%
+            %\hspace*{-\@didacticsRuleExcess}%
+            \hspace*{\@didacticsIconRuleDistance}%
+            \smash{\raisebox{1\baselineskip}{\textcolor{didacticsRule}{\rule{\dimexpr\@titlewidth+2\@didacticsRuleExcess\relax}{1\p@}}}}%
+            \hspace*{\dimexpr-\@titlewidth-2\@didacticsRuleExcess+\@didacticsRuleExcess\relax}%
+            \nobreak
           \fi
         }%
+        \vspace*{\dimexpr-\@didacticsIconHeight-0.6\baselineskip\relax plus 0pt minus 0pt}%
+        {%
+          \list{}%
+            {%
+              \minorDidacticsHeadingfamily
+              \sbseries
+              \large
+              \leftmargin \z@
+              \topsep \z@
+              \parsep \z@
+              \partopsep \z@
+            }%
+            \ignorespaces
+            \item #2%
+          \endlist
+        }%
         \nobreak
-        \hspace*{-1mm}%
-        \smash{\hfill\hspace*{\dimexpr-\@titlewidth-2\@didacticsRuleExcess-\@didacticsIconHeight\relax}\textcolor{didacticsRule}{\rule{\dimexpr\@titlewidth+2\@didacticsRuleExcess\relax}{1\p@}}}%
-        \nobreak%
+        \vskip0.6\baselineskip
       }%
-    }%
-    \nobreak
-    \didacticsContentfamily
-    \noindent\ignorespaces
-  \else
-    \vbox{%
-      \llap{%
-        \hspace*{-\@titlewidth}%
-        \vspace{-0.5\@didacticsIconHeight}%
-        \ifx#1\relax
-        \else
-          \raisebox{0.3\@didacticsIconHeight}{\includegraphics[width=\@didacticsIconHeight]{#1}}%
-          %\hspace*{-\@didacticsRuleExcess}%
-          \hspace*{1mm}%
-          \smash{\raisebox{1\baselineskip}{\textcolor{didacticsRule}{\rule{\dimexpr\@titlewidth+2\@didacticsRuleExcess\relax}{1\p@}}}}%
-          \hspace*{\dimexpr-\@titlewidth-2\@didacticsRuleExcess+5mm\relax}%
-          \nobreak
-        \fi
-      }%
-      \vspace*{\dimexpr-\@didacticsIconHeight-0.6\baselineskip\relax plus 0pt minus 0pt}%
-      {%
-        \list{}%
-          {%
-            \minorDidacticsHeadingfamily
-            \sbseries
-            \large
-            \leftmargin \z@
-            \topsep \z@
-            \parsep \z@
-            \partopsep \z@
-          }%
-          \ignorespaces
-          \item #2%
-        \endlist
-      }
       \nobreak
-      \vskip0.6\baselineskip
-      %\nobreak
-      %\list{}{%
-      %  \listparindent \z@
-      %  \itemindent    \z@
-      %  \leftmargin    \z@
-      %  \rightmargin   \z@
-      %  \didacticsContentfamily
-      %  %\topsep        \z@%
-      %  \topsep        \z@
-      %  \parsep        \z@
-      %}%
-      %\item\noindent\ignorespaces
-    }%
-    \nobreak
-    \didacticsContentfamily
-    \noindent\ignorespaces
-  \fi
+      \didacticsContentfamily
+      \noindent\ignorespaces
+    \fi
 }{%
-  \endlist
-  \noindent
+    \endlist
+    \par
+    \vskip1\baselineskip
+    \@afterindentfalse
+    \@afterheading
+  \egroup
 }
 
 
