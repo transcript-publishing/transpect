@@ -118,34 +118,47 @@
     </xsl:choose>
   </xsl:function>-->
   
-  <xsl:template match="dbk:section[starts-with(@role, 'tsadd')]/dbk:info/dbk:title" mode="xml2tex" priority="300">
+  <xsl:template match="dbk:section[starts-with(@role, 'tsadd')]/dbk:info/dbk:title |
+                       dbk:section[@role ='tsdo']/dbk:info/dbk:title" mode="xml2tex" priority="300">
     <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
   
-        <template context="dbk:section[starts-with(@role, 'tsadd')]
-                                      [empty(parent::dbk:section)]
-                                      [empty(preceding-sibling::dbk:para)]" priority="500">
-          <!--   bigger headings on chapter start page https://redmine.le-tex.de/issues/18626-->
-          <xsl:variable name="icon-type" select="replace(@role, '^ts(add)([a-z]+)', '$1_$2.png')"/>
-          <rule name="majorDidactics" break-after="2" break-before="2" type="env">
-            <option select="$icon-type"/>
-            <!-- title -->
-            <param select="dbk:info/dbk:title"/>
-            <text select="'&#xa;'"/>
-            <text select="node() except dbk:info"/>
-          </rule>
-        </template>
+  <template context="dbk:section[starts-with(@role, 'tsadd')]
+    [empty(parent::dbk:section)]
+    [empty(preceding-sibling::dbk:para)]" priority="500">
+    <!--   bigger headings on chapter start page https://redmine.le-tex.de/issues/18626-->
+    <xsl:variable name="icon-type" select="replace(@role, '^ts(add)([a-z]+)', '$1_$2.png')"/>
+    <rule name="majorDidactics" break-after="2" break-before="2" type="env">
+      <option select="$icon-type"/>
+      <!-- title -->
+      <param select="dbk:info/dbk:title"/>
+      <text select="'&#xa;'"/>
+      <text select="node() except dbk:info"/>
+    </rule>
+  </template>
   
-        <template context="dbk:section[starts-with(@role, 'tsadd')]" priority="300">
-          <!--    https://redmine.le-tex.de/issues/18626-->
-          <xsl:variable name="icon-type" select="replace(@role, '^ts(add)([a-z]+)', '$1_$2.png')"/>
-          <rule name="didactics" break-after="2" break-before="2" type="env">
-            <option select="$icon-type"/>
-            <!-- title -->
-            <param select="dbk:info/dbk:title"/>
-            <text select="'&#xa;'"/>
-            <text select="node() except dbk:info"/>
-          </rule>
-        </template>
+  <template context="dbk:section[starts-with(@role, 'tsadd')]" priority="300">
+    <!--    https://redmine.le-tex.de/issues/18626-->
+    <xsl:variable name="icon-type" select="replace(@role, '^ts(add)([a-z]+)', '$1_$2.png')"/>
+    <rule name="didactics" break-after="2" break-before="2" type="env">
+      <option select="$icon-type"/>
+      <!-- title -->
+      <param select="dbk:info/dbk:title"/>
+      <text select="'&#xa;'"/>
+      <text select="node() except dbk:info"/>
+    </rule>
+  </template>
+  
+  <template context="dbk:section[@role = 'tsdo']" priority="300">
+    <!--  https://redmine.le-tex.de/issues/18626#note-46-->
+    <rule name="utbQRCode" break-after="1" break-before="1" type="env">
+      <!-- title -->
+      <param select="dbk:info/dbk:title"/>
+      <!-- QR Link -->
+      <param select="dbk:para[@role = 'tsdolink']/dbk:link/@xlink:href"/>
+      <!-- QR image file name -->
+      <param select="replace(dbk:para[@role = 'tsdoqrcode']//dbk:imagedata/@fileref, '^.+/(.+)$', '$1')"/>
+    </rule>
+  </template>
   
 </set>
