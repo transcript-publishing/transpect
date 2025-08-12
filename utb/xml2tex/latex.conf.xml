@@ -151,7 +151,7 @@
   
   <template context="dbk:section[@role = 'tsdo']" priority="300">
     <!--  https://redmine.le-tex.de/issues/18626#note-46-->
-    <rule name="utbQRCode" break-after="1" break-before="1" type="env">
+    <rule name="utbQRCode" break-after="1" break-before="1" type="cmd">
       <!-- title -->
       <param select="dbk:info/dbk:title"/>
       <!-- QR Link -->
