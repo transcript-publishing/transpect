@@ -326,7 +326,8 @@
                               '178273':  ('Aachen',     'Sieprath'),
                               '119674':  ('Köln',  'Ostermann'),
                               '161888':  ('Waiblingen', 'Elanders'),
-                              '148160':  ('Norderstedt',    'BoD')                              
+                              '148160':  ('Norderstedt',    'BoD'),
+                              '262264':  ('Wetzlar',    'Bechstein')                              
                               }">
      <!--                             1: Keyname (Konto-Nr),        2: Ort, 3: Name-->
    </xsl:variable>
