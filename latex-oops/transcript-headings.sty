@@ -305,7 +305,12 @@
       \vskip\baselineskip% Ticket 15665.
     }{}%
   }%
-  \tpSetProperty{after-heading-block}{\vfill}%
+  \tpSetProperty{after-heading-block}{%
+    \vfill
+    \ifcollection
+      \cleardoublepage
+    \fi
+  }%
 }
 
 
@@ -958,6 +963,14 @@
       }%
     \fi
   }
+
+  \tpSetProperty{before-heading}{%
+    % Diese Abfrage soll einen Zeilenumbruch frühzeitig erkennen und damit das zu zeitige Setzen des Kolumnentitels verhindern.
+    \setbox\@tempboxa=\vbox{\tpUseComp{Title}}%
+    \ifdim\ht\@tempboxa>\dimexpr\pagegoal-\pagetotal-4\baselineskip\relax
+      \clearpage
+    \fi
+  }
   
   \tpSetProperty{heading-block}{%
     %\thispagestyle{empty}
@@ -989,7 +1002,11 @@
           \fi
         }{}%
       \if@twocolumn
-        \vspace{1\baselineskip}%
+        \tpIfComp{DOI}{%
+          \ifjournal
+            \vspace{1\baselineskip}%
+          \fi
+        }{}%
         \end{table*}%
       \fi%
     \egroup
@@ -997,7 +1014,17 @@
     \spewnotes
   }%
   \tpSetProperty{after-heading-block}{\nopagebreak}%
-  \tpSetProperty{after-skip}{3\baselineskip}%
+  \tpSetProperty{after-skip}{%
+    \tpIfComp{DOI}{%
+      \ifjournal
+        3\baselineskip
+      \else
+        1\baselineskip
+      \fi
+    }{%
+      \z@
+    }%
+  }
 }
 
 
