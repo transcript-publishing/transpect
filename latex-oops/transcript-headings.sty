@@ -308,7 +308,10 @@
   \tpSetProperty{after-heading-block}{%
     \vfill
     \ifcollection
-      \cleardoublepage
+      \ifjournal
+      \else
+        \cleardoublepage
+      \fi
     \fi
   }%
 }
