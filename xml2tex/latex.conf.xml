@@ -802,16 +802,16 @@
     </xsl:choose>
   </template>
   
-  <xsl:variable name="replace-charaters-in-toc-regex" as="xs:string" select="'&#x17f;-&#x191;&#x193;-&#x1cc;&#x1cf;-&#x217;&#x21c;-&#x227;&#x22A;-&#x236;&#x238;-&#x258;&#x25A;-&#x291;&#x293;-&#x2BA;&#x2BD;-&#x2C5;&#x2c8;&#x2ca;-&#x2d7;&#x2de;-&#x2ff;&#x305;&#x309;&#x30d;-&#x311;&#x314;-&#x325;&#x329;-&#x334;&#x1E00;-&#x1E7F;&#x1E86;-&#x1EF1;&#x1EF4;-&#x1EFF;'"/>
+  <xsl:variable name="replace-characters-in-toc-regex" as="xs:string" select="'&#x17f;-&#x191;&#x193;-&#x1cc;&#x1cf;-&#x217;&#x21c;-&#x227;&#x22A;-&#x236;&#x238;-&#x258;&#x25A;-&#x291;&#x293;-&#x2BA;&#x2BD;-&#x2C5;&#x2c8;&#x2ca;-&#x2d7;&#x2de;-&#x2ff;&#x305;&#x309;&#x30d;-&#x311;&#x314;-&#x325;&#x329;-&#x334;&#x1E00;-&#x1E7F;&#x1E86;-&#x1EF1;&#x1EF4;-&#x1EFF;'"/>
  <!-- try to keep it synchronized wit regex in regex template -->
-  <xsl:template match="*[self::dbk:title|dbk:subtitle|dbk:author][not(..[self::dbk:figure|self::*:table])]//text()[matches(., concat('[', $replace-charaters-in-toc-regex, '&amp;&#x9;&#xa0;&#x2000;-&#x200a;]+'))]" 
+  <xsl:template match="*[self::dbk:title|dbk:subtitle|dbk:author][not(..[self::dbk:figure|self::*:table])]//text()[matches(., concat('[', $replace-characters-in-toc-regex, '&amp;&#x9;&#xa0;&#x2000;-&#x200a;]+'))]" 
                 mode="xml2tex" priority="100000">
     <xsl:param name="toc-override" as="xs:boolean?" tunnel="yes"/>
     <xsl:param name="bm-override" as="xs:boolean?" tunnel="yes"/>
     <xsl:param name="run-override" as="xs:boolean?" tunnel="yes"/>
     <xsl:variable name="style" as="attribute()*" 
                   select="parent::*/(@css:font-weight, @css:font-style)"/>
-    <xsl:variable name="regex" select="concat('([', $replace-charaters-in-toc-regex, ']+)|([&amp;&#x9;&#xa0;&#x2000;-&#x200a;]+)')" as="xs:string"/>
+    <xsl:variable name="regex" select="concat('([', $replace-characters-in-toc-regex, ']+)|([&amp;&#x9;&#xa0;&#x2000;-&#x200a;]+)')" as="xs:string"/>
     <xsl:analyze-string select="." regex="{$regex}">
       <xsl:matching-substring>
           <xsl:if test="regex-group(1)[normalize-space()]">
