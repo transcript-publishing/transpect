@@ -18,6 +18,9 @@
                         then 'Bild|Abbildung|Abbildungen|Abb\.|Figures?|Figs?\.?' 
                         else '[^\p{Zs}]+'"/>
   
+    <xsl:variable name="figure-image-role-regex" as="xs:string"
+                select="'^[a-z]{1,3}figure([a-z]|qr)?(\d+)?$'" />
+  
   <xsl:variable name="text-to-identifiy-not-identifier" select="'(years|Jahre|to\p{Zs}|bis\p{Zs}|$)'">
     <!-- if chapter/part headings only are numbers: avoid identifying -->
   </xsl:variable>
