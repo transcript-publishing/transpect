@@ -755,8 +755,7 @@
                                                       |self::dbk:othercredit]">
     <!-- overridden from common to handle reviewer -->
     <xsl:choose>
-      <xsl:when test="$cocotex 
-                      and 
+      <xsl:when test="
                       (
                        (    dbk:personname/dbk:surname 
                         and dbk:personname/*[self::dbk:givenname|self::dbk:firstname]
