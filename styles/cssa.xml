@@ -28,7 +28,7 @@
   <css:rule layout-type="para" native-name="ts_subheading_5" name="tssubheading5"/>
   <css:rule layout-type="para" native-name="ts_motto" name="tsmotto"/>
   <css:rule layout-type="para" native-name="ts_motto_source" name="tsmottosource"/>
-  <css:rule layout-type="para" native-name="ts_figure" name="tsfigure" regex="tsfigure([A-Z]\d)?"/>
+  <css:rule layout-type="para" native-name="ts_figure" name="tsfigure" regex="tsfigure([A-Z]\d|qr)?"/>
   <css:rule layout-type="para" native-name="ts_figure_caption" name="tsfigurecaption"/>
   <css:rule layout-type="para" native-name="ts_figure_source" name="tsfiguresource"/>
   <css:rule layout-type="para" native-name="ts_formula" name="tsformula"/>
