@@ -94,30 +94,32 @@
   \aftergroup\@afterbox%
 }
 
+\let\@quotationStarted\@empty
 
 \renewenvironment{quotation}{%
+  \global\let\@quotationStarted\relax
   \def\tpBreak{\newline}%
   \ccaVstructStart{BlockQuote}% PDF/UA-1 only!
-  \list{}{%
-    \listparindent \z@%
-    \itemindent    \listparindent%
-    \leftmargin    \parindent%
-    \rightmargin   \ifx\ts@layout@type\ts@str@layout@mdw\leftmargin\else\z@\fi%
-    \nsfwiderfamily%
-    %\topsep        \z@%
-    \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
-    \parsep        \z@%
-  }%
-  \ifx\ts@layout@type\ts@str@layout@mdw%
-    \footnotesize%
-    \rmfamily%
-  \fi%
-  \setlength{\parindent}{5mm}% Ticket 15240.
-  \@tempdima=\baselineskip% Ticket 15122.
-  \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
-  \item\noindent\ignorespaces%
+    \list{}{%
+      \listparindent \z@%
+      \itemindent    \listparindent%
+      \leftmargin    \parindent%
+      \rightmargin   \ifx\ts@layout@type\ts@str@layout@mdw\leftmargin\else\z@\fi%
+      \nsfwiderfamily%
+      %\topsep        \z@%
+      \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
+      \parsep        \z@%
+    }%
+      \ifx\ts@layout@type\ts@str@layout@mdw%
+        \footnotesize%
+        \rmfamily%
+      \fi%
+      \setlength{\parindent}{5mm}% Ticket 15240.
+      \@tempdima=\baselineskip% Ticket 15122.
+      \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
+      \item\noindent\ignorespaces
 }{%
-  \endlist
+    \endlist
   \ccaVstructEnd{BlockQuote}% PDF/UA-1 only!
   \gdef\@doendpe{%
     \@endpetrue
@@ -315,10 +317,13 @@
 \newdimen\@itemizeTopSep \@itemizeTopSep=12.8bp
 
 \def\itemize{%
-  \ifnum \@itemdepth >\thr@@\@toodeep\else
+  \ifnum\@itemdepth >\thr@@\@toodeep
+  \else
     \advance\@itemdepth\@ne
     \@tempdima=\@itemizeTopSep
-    \ifnum\@itemdepth>\@ne\relax\@tempdima=0\p@\fi
+    \ifnum\@itemdepth>\@ne\relax
+      \@tempdima=0\p@
+    \fi
     \@enumdepth=\@itemdepth
     \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
     \expandafter\list\csname\@itemitem\endcsname{%
@@ -331,19 +336,20 @@
       \partopsep\z@
       \global\let\is@first@item\relax
       \ccaVstructStart{L}%
-      \def\makelabel##1{%
-        \ifx\is@first@item\relax
-          \global\let\is@first@item\@undefined
-        \else
-          \ccaVstructEnd{LBody}%
-          \ccaVstructEnd{LI}%
-        \fi
-        \ccaVstructStart{LI}%
-        \ccaVstructStart{Lbl}%
-        ##1\hss
-        \ccaVstructEnd{Lbl}%
-        \ccaVstructStart{LBody}%
-      }%
+        \def\makelabel##1{%
+          \global\let\@quotationStarted\@empty
+          \ifx\is@first@item\relax
+            \global\let\is@first@item\@undefined
+          \else
+              \ccaVstructEnd{LBody}%
+            \ccaVstructEnd{LI}%
+          \fi
+          \ccaVstructStart{LI}%
+            \ccaVstructStart{Lbl}%
+              ##1\hss
+            \ccaVstructEnd{Lbl}%
+          \ccaVstructStart{LBody}%
+        }%
     }%
   \fi%
 }
