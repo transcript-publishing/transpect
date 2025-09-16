@@ -79,6 +79,8 @@
     \expandafter\ifx\csname ts@caps@\ccfCapType\endcsname\tp@str@bottom
       \tpSetProperty{caption-top}{}%
       \tpSetProperty{caption-bottom}{%
+        % Wird hier explizit benötigt, damit Abbildungsverzeichniseinträge erzeugt werden.
+        \ccf@addcontentsline
         \bgroup
           \normalsize\itshape%
           \tpIfComp{Number}{%
@@ -96,7 +98,10 @@
             \tpUseComp{Caption}\par%
           }{}%
           \tpIfComp{Legend}{%
-            {\tpUseProperty{legend-format}\tpUseComp{Legend}}%
+            {%
+              \tpUseProperty{legend-format}%
+              \tpUseComp{Legend}%
+            }%
           }{}%
         \egroup
         \tpIfComp{Source}{%
