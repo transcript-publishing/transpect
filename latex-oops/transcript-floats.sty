@@ -243,11 +243,11 @@
 % Zusatzfunktion für Abbildungen.
 \pretocmd{\ccfFigureRender}{%
   % Überschreiben von \@ccf@includesubgraphics zur Verarbeitung der \@classIncludeGraphicsOptions.
-  \patchcmd{\@ccf@includesubgraphics}{%
-    \def\@igopts{max width=\hsize,max height=\vsize}%
-  }{%
-    \def\@igopts{}%
-  }{}{}%
+  %\patchcmd{\@ccf@includesubgraphics}{%
+  %  \def\@igopts{max width=\hsize,max height=\vsize}%
+  %}{%
+  %  \def\@igopts{}%
+  %}{}{}%
   %
   \patchcmd{\@ccf@includesubgraphics}{%
     \expandafter\ccf@ltx@includegraphics\expandafter[\@igopts]{#2}%
