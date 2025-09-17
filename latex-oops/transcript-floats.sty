@@ -299,8 +299,22 @@
   \tpSetProperty{fix-dimen}{true}%
 }
 
+\pretocmd{\endccf@float}{%
+  % float-pos-Parameter muss gespeichert werden, da er in endccf@float benötigt wird, aber dort nicht mehr mit seinem Initialwert verfügbar ist.
+  \xdef\@savedFloatPos{\ccf@floatpos}%
+  \xdef\@savedFloatClass{\ccf@current@class}%
+}{}{}
+
+\apptocmd{\endccf@float}{%
+  % \@empty bedeutet float-pos=h!.
+  \ifx\@savedFloatPos\@empty
+    \@afterheading
+  \fi
+}{}{}
+
 \tpDeclareClass[figure]{QR}{%
   \def\@classIncludeGraphicsOptions{max height=20mm}
+  \ccSetProperty{intext-skip-bottom}{0\baselineskip}
   \tpSetProperty{before-float}{\centering}
   \tpSetProperty{caption-top}{}
   \tpSetProperty{caption-bottom}{%
