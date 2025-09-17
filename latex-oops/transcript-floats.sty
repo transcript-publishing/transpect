@@ -306,9 +306,13 @@
 }{}{}
 
 \apptocmd{\endccf@float}{%
-  % \@empty bedeutet float-pos=h!.
-  \ifx\@savedFloatPos\@empty
-    \@afterheading
+  % Gilt nur für QR-Codes.
+  \edef\@tempa{QR}%
+  \ifx\@savedFloatClass\@tempa
+    % \@empty bedeutet float-pos=h!.
+    \ifx\@savedFloatPos\@empty  
+      \@afterheading
+    \fi
   \fi
 }{}{}
 
