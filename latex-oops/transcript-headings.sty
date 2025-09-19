@@ -201,9 +201,11 @@
     \immediate\write\@auxout{\string\global\string\let\string\has@parts\string\relax}%
     % Zurücksetzen der Fußnotenzählen bereits bei Parts, nicht erst bei Chapter. Ticket 15665.
     \global\c@footnote\z@
-    \tpIfComp{Number}
-      {\tpGStoreComp\tp@partnumber{Number}}
-      {\global\let\tp@partnumber\relax}%
+    \tpIfComp{Number}{%
+      \tpGStoreComp\tp@partnumber{Number}%
+    }{%
+      \global\let\tp@partnumber\relax
+    }%
   }%
 
   \tpSetProperty{running-heading}{%
@@ -304,16 +306,20 @@
       \spewnotes
       \vskip\baselineskip% Ticket 15665.
     }{}%
-  }%
+  }
+  
   \tpSetProperty{after-heading-block}{%
-    \vfill
-    \ifcollection
-      \ifjournal
-      \else
-        \cleardoublepage
-      \fi
-    \fi
-  }%
+    % Alles auskommentiert für Ticket 19317.
+    %\vfill
+    %\ifcollection
+    %  \ifjournal
+    %  \else
+    %    \cleardoublepage
+    %  \fi
+    %\fi
+  }
+  
+  \tpSetProperty{after-skip}{1\baselineskip}
 }
 
 
