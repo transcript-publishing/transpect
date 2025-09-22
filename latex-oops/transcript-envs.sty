@@ -97,7 +97,7 @@
 \let\@quotationStarted\@empty
 
 \renewenvironment{quotation}{%
-  \global\let\@quotationStarted\relax
+  \global\let\@quotationStarted\relax%
   \def\tpBreak{\newline}%
   \ccaVstructStart{BlockQuote}% PDF/UA-1 only!
     \list{}{%
@@ -117,7 +117,7 @@
       \setlength{\parindent}{5mm}% Ticket 15240.
       \@tempdima=\baselineskip% Ticket 15122.
       \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
-      \item\noindent\ignorespaces
+      \item\ignorespaces
 }{%
     \endlist
   \ccaVstructEnd{BlockQuote}% PDF/UA-1 only!
