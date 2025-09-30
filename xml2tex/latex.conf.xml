@@ -1076,13 +1076,13 @@
     <xsl:next-match/>
   </xsl:template>-->
   
-  <regex context="ancestor-or-self::*[self::dbk:title[not(..[self::dbk:figure|self::*:table])]|self::dbk:footnote]" regex="([&#x17f;-&#x191;&#x193;-&#x1cc;&#x1cf;-&#x217;&#x21c;-&#x227;&#x22A;-&#x236;&#x238;-&#x258;&#x25A;-&#x291;&#x293;-&#x2BA;&#x2BD;-&#x2C5;&#x2c8;&#x2ca;-&#x2d7;&#x2de;-&#x2ff;&#x305;&#x309;&#x30d;-&#x311;&#x314;-&#x325;&#x329;-&#x334;&#x1E00;-&#x1E7F;&#x1E86;-&#x1EF1;&#x1EF4;-&#x1EFF;]+)">
+  <regex context="ancestor-or-self::*[self::dbk:title[not(..[self::dbk:figure|self::*:table])]|self::dbk:footnote] and not($context/ancestor-or-self::dbk:phrase[@role = 'tsipa'])" regex="([&#x17f;-&#x191;&#x193;-&#x1cc;&#x1cf;-&#x217;&#x21c;-&#x227;&#x22A;-&#x236;&#x238;-&#x258;&#x25A;-&#x291;&#x293;-&#x2BA;&#x2BD;-&#x2C5;&#x2c8;&#x2ca;-&#x2d7;&#x2de;-&#x2ff;&#x305;&#x309;&#x30d;-&#x311;&#x314;-&#x325;&#x329;-&#x334;&#x1E00;-&#x1E7F;&#x1E86;-&#x1EF1;&#x1EF4;-&#x1EFF;]+)">
     <rule name="ccFallback" type="cmd">
       <param regex-group="1"/><!-- keep this synchronised with $replace-characters-in-toc-regex. (Barlow characters)-->
     </rule>
   </regex>
   
-  <regex context="not(ancestor-or-self::*[self::dbk:title[not(..[self::dbk:figure|self::*:table])]|self::dbk:footnote])" regex="([&#x1E00;-&#x1E07;&#x1E0A;-&#x1E0B;&#x1E10;-&#x1E13;&#x1E18;-&#x1E1B;&#x1E1E;-&#x1E1F;&#x1E22;-&#x1E23;&#x1E26;-&#x1E29;&#x1E2C;-&#x1E2D;&#x1E30;-&#x1E35;&#x1E38;-&#x1E39;&#x1E3C;-&#x1E41;&#x1E4A;-&#x1E4B;&#x1E54;-&#x1E59;&#x1E5C;-&#x1E5D;&#x1E6A;-&#x1E6B;&#x1E70;-&#x1E77;&#x1E7C;-&#x1E7F;&#x1E86;-&#x1E8D;&#x1E90;-&#x1E91;&#x1E94;-&#x1E9F;]+)">
+  <regex context="not(ancestor-or-self::*[self::dbk:title[not(..[self::dbk:figure|self::*:table])]|self::dbk:footnote|self::dbk:phrase[@role = 'tsipa']])" regex="([&#x1E00;-&#x1E07;&#x1E0A;-&#x1E0B;&#x1E10;-&#x1E13;&#x1E18;-&#x1E1B;&#x1E1E;-&#x1E1F;&#x1E22;-&#x1E23;&#x1E26;-&#x1E29;&#x1E2C;-&#x1E2D;&#x1E30;-&#x1E35;&#x1E38;-&#x1E39;&#x1E3C;-&#x1E41;&#x1E4A;-&#x1E4B;&#x1E54;-&#x1E59;&#x1E5C;-&#x1E5D;&#x1E6A;-&#x1E6B;&#x1E70;-&#x1E77;&#x1E7C;-&#x1E7F;&#x1E86;-&#x1E8D;&#x1E90;-&#x1E91;&#x1E94;-&#x1E9F;]+)">
     <rule name="ccFallback" type="cmd">
       <param regex-group="1"/><!-- characters not in Alegreya -->
     </rule>
