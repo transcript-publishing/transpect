@@ -284,6 +284,9 @@
       <xsl:value-of select="concat('\doublehyphendemerits=\maxdimen',
                                    if ($hyphenation = 'min') then '&#xa;\hyphenpenalty=9800' else ())"/>
     </xsl:if>
+    <xsl:if test="$hyphenation = ('none')">
+      <xsl:value-of select="'&#xa;\hyphenpenalty = 10000 &#xa;\sloppy'"/>
+    </xsl:if>
     <xsl:text>&#xa;\begin{tpMeta}&#xa;</xsl:text>
     <!-- authors -->
     <xsl:for-each select="if(count($authors/*) gt 1) then $authors/* else $authors">
