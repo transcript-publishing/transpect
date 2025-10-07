@@ -192,7 +192,7 @@
         <xsl:choose>  
           <xsl:when test="$lang = 'E'">
             <para>Bibliographic information published by the Deutsche Nationalbibliothek</para>
-            <para>The Deutsche Nationalbibliothek lists this publication in the Deutsche Nationalbibliografie; detailed bibliographic data are available in the Internet at <link xlink:href="https://dnb.dnb.de">https://dnb.dnb.de</link></para>
+            <para>The Deutsche Nationalbibliothek lists this publication in the Deutsche Nationalbibliografie; detailed bibliographic data are available online at <link xlink:href="https://dnb.dnb.de">https://dnb.dnb.de</link></para>
           </xsl:when>
           <xsl:when test="$lang = 'S'">
             <para>Informaciones bibliográficas de la Biblioteca Nacional de Alemania</para>
