@@ -941,15 +941,6 @@
     \fi
   }%
   \tpSetProperty{subtitle-face}{\normalfont\rmfamily\normalsize}%
-  \tpSetProperty{before-heading}{%
-    \if@twocolumn
-      \ifx\@twocolumnContinousChapters\relax
-      \else
-        \clearpage
-      \fi
-    \fi
-    %\addvspace{24.2bp}%
-  }%
   \tpSetProperty{before-skip}{24.2bp}%
   \tpSetProperty{running-extra}{%
     \global\let\tp@partmark\relax%
@@ -974,13 +965,27 @@
   }
 
   \tpSetProperty{before-heading}{%
-    % Diese Abfrage soll einen Zeilenumbruch frühzeitig erkennen und damit das zu zeitige Setzen des Kolumnentitels verhindern.
-    \setbox\@tempboxa=\vbox{\tpUseComp{Title}}%
-    \ifdim\ht\@tempboxa>\dimexpr\pagegoal-\pagetotal-4\baselineskip\relax
+    \if@twocolumn
+      % LUP: Hier war ein Typo drin (bei \@twocolumnContinuousChapters
+      % hat ein 'u' gefehlt), daher ist diese Abfrage nie im
+      % true-zweig gelandet. Der macht aber auch ohne typo keinen
+      % Sinn: da die Review-ÜSen als Floats(!!) angelegt sind sollte
+      % ihnen *immer* ein clearpage vorangehen, sonst kriegen wir
+      % sowas wie in redmine-19413...
+      %
+      % \ifx\@twocolumnContinuousChapters\relax
+      % \else
       \clearpage
+      % \fi
+    \else
+      % Diese Abfrage soll einen Zeilenumbruch frühzeitig erkennen und damit das zu zeitige Setzen des Kolumnentitels verhindern.
+      \setbox\@tempboxa=\vbox{\tpUseComp{Title}}%
+      \ifdim\ht\@tempboxa>\dimexpr\pagegoal-\pagetotal-4\baselineskip\relax
+        \clearpage
+      \fi
     \fi
   }
-  
+
   \tpSetProperty{heading-block}{%
     %\thispagestyle{empty}
     \gdef\tp@currentHeading{chapter}%
