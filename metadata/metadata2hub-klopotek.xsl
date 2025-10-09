@@ -274,16 +274,29 @@
     
     <xsl:choose>
       <xsl:when test="contains($basename, '_anth_')">
-        <xsl:value-of select="concat(string-join(($year[normalize-space()], '© '), ' '), 
+        <xsl:value-of select="if (contains($basename, '_mdw')) 
+                              then concat(string-join(('Published', $year[normalize-space()], 'by mdwPress, Vienna and Bielefeld © '), ' '), 
+                                      string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'HG'] 
+                                                return concat($ch/*:first_name, ' ', $ch/*:last_name), ', '),
+                                      if ($lang = 'E') 
+                                      then if (count($context/*:copyright_holder[*:cpr_type = 'HG']) gt 1) then ' (eds.)' else ' (ed.)' 
+                                      else ' (Hg.)'
+                                    )
+                              else concat(string-join(($year[normalize-space()], '© '), ' '), 
                                     string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'HG'] 
                                                 return concat($ch/*:first_name, ' ', $ch/*:last_name), ', '),
                                     if ($lang = 'E') 
                                     then if (count($context/*:copyright_holder[*:cpr_type = 'HG']) gt 1) then ' (eds.)' else ' (ed.)' 
                                     else ' (Hg.)'
-          )"/>
+                                    )"/>
       </xsl:when>
       <xsl:when test="contains($basename, '_mono_')">
-        <xsl:value-of select="concat(string-join(($year[normalize-space()], '© '), ' '), 
+        <xsl:value-of select="if (contains($basename, '_mdw')) 
+                              then concat(string-join(('Published', $year[normalize-space()], 'by mdwPress, Vienne and Bielefeld © '), ' '), 
+                                      string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'VE'] 
+                                                  return concat($ch/*:first_name, ' ', $ch/*:last_name), ', ')
+                                      )
+                              else concat(string-join(($year[normalize-space()], '© '), ' '), 
                                       string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'VE'] 
                                                   return concat($ch/*:first_name, ' ', $ch/*:last_name), ', ')
                                       )"/>

@@ -97,7 +97,7 @@
       <xsl:apply-templates/>
     </superscript>
   </xsl:template>
-
+  
   <!-- https://redmine.le-tex.de/issues/13098 -->
   
  <!--  <xsl:template match="array[preceding-sibling::*[1][self::key][. eq 'Bibliografische Information']]/string[1]" priority="5"/>-->
