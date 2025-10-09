@@ -12,9 +12,16 @@
   <xsl:variable name="license-text" as="element(dbk:keyword)?">
     <xsl:element name="keyword" xmlns="http://docbook.org/ns/docbook">
       <xsl:attribute name="role" select="'Lizenztext'"/>
-      <xsl:sequence select="$metadata/dbk:keyword[@role eq 'Lizenztext']/(text()[normalize-space()]|dbk:para/node())"/>
-        
-      
+      <xsl:choose><xsl:when test="exists($metadata/dbk:keyword[@role eq 'Lizenztext']/dbk:para)">
+            <xsl:for-each select="$metadata/dbk:keyword[@role eq 'Lizenztext']/dbk:para">
+            <xsl:sequence select="./node()"/>
+<!--            <xsl:if test=". is ../*[last()]">-->
+               <xsl:text> </xsl:text>
+            <!--</xsl:if>-->
+         </xsl:for-each>
+         </xsl:when>
+            <xsl:otherwise><xsl:sequence select="$metadata/dbk:keyword[@role eq 'Lizenztext']/node()"/></xsl:otherwise>
+         </xsl:choose>
     </xsl:element>
   </xsl:variable>
                
