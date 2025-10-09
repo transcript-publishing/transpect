@@ -140,6 +140,10 @@
       </xsl:call-template>
     </xsl:copy>
   </xsl:template>
+  
+  <xsl:template match="keywordset[@role='titlepage']/keyword[@role = ('Print-ISBN', 'Print-ISBN', 'ePUB-ISBN')]/text()" mode="custom-1">
+    <xsl:value-of select="translate(., '-', '‑')"/>
+  </xsl:template>
 
   <xsl:variable name="book-part-chapters" select="/*/part/*[exists(info) or self::bibliography] |
                                                   /*/*[self::chapter|self::bibliography|self::appendix|self::colophon|self::preface|
