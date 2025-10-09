@@ -8,6 +8,16 @@
  
   <xsl:variable name="series-logo-href" as="xs:string?" 
                 select="'mdw_logo.eps'"/>
+  
+  <xsl:variable name="license-text" as="element(dbk:keyword)?">
+    <xsl:element name="keyword" xmlns="http://docbook.org/ns/docbook">
+      <xsl:attribute name="role" select="'Lizenztext'"/>
+      <xsl:sequence select="$metadata/dbk:keyword[@role eq 'Lizenztext']/(text()[normalize-space()]|dbk:para/node())"/>
+        
+      
+    </xsl:element>
+  </xsl:variable>
+               
 
 <!--  <xsl:variable name="greek" as="xs:string?" select="()"/>-->
   <xsl:variable name="babel-langs" select="for $i in $all-langs
