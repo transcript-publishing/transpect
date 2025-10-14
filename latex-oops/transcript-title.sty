@@ -602,6 +602,97 @@
       \egroup
     }
   \fi
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % ZKKW – Zeitschrift für Kultur- und Kollektivwissenschaft %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \ifx\ts@journal@series\ts@str@journal@zkk
+    \global\@unknownJournalfalse
+    
+    \tpSetBabelLabel{german}{editorsuffixsgl}{}
+    \tpSetBabelLabel{english}{editorsuffixsgl}{}
+    \tpSetBabelLabel{german}{editorsuffixpl}{}
+    \tpSetBabelLabel{english}{editorsuffixpl}{}
+    \tpSetBabelLabel{german}{nameand}{und}
+    \tpSetBabelLabel{english}{nameand}{and}
+    
+    \tpSetProperty{name-and}{\space \nameandname\space}%
+    \tpSetProperty{name-sep}{,\space}%
+    
+    \tpSetProperty{role-block-print-format}{%
+      \tpUseComp{FullName}%
+      \ifnum\ccCurCount<\numexpr\tpTotalCount-1\relax%
+        \tpUseProperty{name-sep}%
+      \else%
+        \ifnum\ccCurCount<\tpTotalCount\relax%
+          \tpUseProperty{name-and}%
+        \fi%
+      \fi%
+    }%
+    
+    \tpSetProperty{titlepage-roman}{%
+      \titleLayoutOverride%
+      \ifx\ts@layout@type\ts@str@layout@std
+        \if\layout a
+          \enlargethispage{5\baselineskip}%
+        \fi
+        \if\layout b
+          \enlargethispage{2\baselineskip}%
+        \fi
+      \fi
+      \tpUsePropEnv{titlepage-i}%
+      \clearpage
+      \tpUsePropEnv{titlepage-ii}%
+      \clearpage
+    }%
+    
+    %%%%%%%%%%%
+    % Seite I %
+    %%%%%%%%%%%
+    \tpSetProperty{titlepage-i}{%
+      \ccaStructStart{Titlepage}%
+      \tpUseComp{Series}% In diesem Fall ein Logo.
+      \vskip1\baselineskip%
+      \bgroup
+        \Large\sbseries\sfchapfamily%
+        \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}%
+        \tpUseComp{Volume}. Jahrgang, \tpUseComp{Year}%, \tpUseComp{Issue} % Auskommentiert mit Ticket 17966.
+        \ccaStructEnd{Title}
+      \egroup
+      \vfill
+      \ccaStructStart{MetaDatumBlock}%
+      {\bfseries Die Zeitschrift wird herausgegeben von}\newline
+      \ccaStructStart{SeriesEditors}%
+      \tpUseComp{SeriesEditorNameList}%
+      \ccaStructEnd{SeriesEditors}%
+      \ccaStructEnd{MetaDatumBlock}%
+      \vskip1\baselineskip
+      \ccaStructStart{MetaDatumBlock}%
+      \tpUseComp{AddNoteI}%
+      \ccaStructEnd{MetaDatumBlock}%
+      \ccaStructEnd{Titlepage}%
+    }
+    %%%%%%%%%%%%
+    % Seite II %
+    %%%%%%%%%%%%
+    \tpSetProperty{titlepage-ii}{%
+      \bgroup
+        \ccaStructStart{Titlepage}%
+        \tpIfComp{Statement}{\tpUseComp{Statement}\par\vskip\baselineskip}{}%
+        \justify
+        {\itshape\tpUseProperty{funding-block}}%
+        \tpIfComp{AddNoteII}{\tpUseComp{AddNoteII}\par\vskip\baselineskip}%
+        \null\vfill
+        \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
+        \tpUseProperty{licence}%
+        \vskip2\baselineskip
+        \bgroup
+          \tpUseProperty{imprint}%
+        \egroup
+        \ccaStructEnd{Titlepage}%
+      \egroup
+    }
+  \fi
   
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % ZWG – Werkstattgeschichte %

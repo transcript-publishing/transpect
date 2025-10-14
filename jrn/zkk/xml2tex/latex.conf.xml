@@ -1,0 +1,116 @@
+<?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://transpect.io/xml2tex/schema/xml2tex.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<set xmlns="http://transpect.io/xml2tex" 
+     xmlns:xml2tex="http://transpect.io/xml2tex" 
+     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  
+  <import href="../../xml2tex/latex.conf.xml"/>
+
+  <xsl:param name="cocotex" as="xs:boolean" select="true()"/>
+
+  
+  
+  
+  <xsl:template name="xml2tex:add-publicationtype-specific-meta">
+   <xsl:if test="not($license-name[normalize-space()](:already applied in main template then:)) 
+                 and 
+                 $open-access">
+     <xsl:value-of select="concat('&#xa;\tpLicenceName{',
+                                  replace((//dbk:chapter[dbk:info/dbk:biblioset/dbk:legalnotice[matches(., 'Creative\p{Zs}+Commons', 'i')]])[1]/
+                                            dbk:info/dbk:biblioset/dbk:legalnotice[matches(., 'Creative\p{Zs}+Commons', 'i')][1], 
+                                          '^.*(Creative\p{Zs}+Commons.+?\)).*$', '$1'),
+                                  '}')"/>
+    </xsl:if> 
+   <xsl:sequence select="'&#xa;\tpSeries{\includegraphics[width=\hsize]{logos/series/REIHENLOGO_KUL_ZKK.png}}&#xa;',
+                         xml2tex:meta2tex($prices, (), 'tpPrices'),
+                         xml2tex:meta2tex($pub-cycle, (), 'tpPubCycle '),
+                         xml2tex:meta2tex($memberlist, (), 'tpMemberList ')"/>
+  </xsl:template>
+  
+  
+  <template name="run-authors">
+    <xsl:param name="authors" as="element()*" tunnel="yes"/>
+    <xsl:if test="exists($authors[normalize-space()])">
+      <rule name="tpRunAuthorNameList" type="cmd" break-after="0" break-before="1">
+      <xsl:variable name="content" as="xs:string+">
+        <xsl:for-each select="$authors">
+          <xsl:variable name="single-author">
+            <xsl:apply-templates select="node()" mode="#current">
+            <xsl:with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+            <xsl:with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+            <xsl:with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+            <xsl:with-param name="suppress-foreign-lang" select="true()" as="xs:boolean" tunnel="yes"/>
+          </xsl:apply-templates>
+          </xsl:variable>
+          <xsl:sequence select="string-join($single-author)"/>
+        </xsl:for-each>
+      </xsl:variable>
+      <xsl:variable name="actual-authors" as="element(*)">
+        <tmp>
+          <xsl:for-each select="$content">
+            <author><xsl:sequence select="string-join(., '')"></xsl:sequence></author>
+          </xsl:for-each>
+        </tmp>
+      </xsl:variable>
+      <xsl:variable name="relevant-authors" as="element(*)*" select="$actual-authors/*"/>
+      <xsl:variable name="opening-brackets" as="xs:integer" select="string-length(replace(string-join($relevant-authors, ''), '[^\{]', ''))"/>
+      <xsl:variable name="closing-brackets" as="xs:integer" select="string-length(replace(string-join($relevant-authors, ''), '[^\}]', ''))"/>
+      <xsl:variable name="missing-closing-brackets" as="xs:integer" select="$opening-brackets - $closing-brackets"/>
+      <!-- add closing parenthesis if there is markup-->
+<!--      <xsl:message select="'#####', $relevant-authors, '-', $opening-brackets, '-', $closing-brackets, '=', $missing-closing-brackets "/>
+      <xsl:message select="'~~~~', concat(string-join($relevant-authors, ' | '), ' u.a.'[count($actual-authors/*) gt 3], string-join(for $count in (1 to $missing-closing-brackets) return '}', ''))"/>-->
+<!--      <param select="concat(string-join($relevant-authors, '/'), ' u.a.'[count($actual-authors/*) gt 3], string-join(for $count in (1 to $missing-closing-brackets) return '}', ''))"/>-->
+       <param select="concat(string-join($relevant-authors[normalize-space()], '/'), string-join(for $count in (1 to $missing-closing-brackets) return '}', ''))"/>
+      </rule>
+    </xsl:if>
+  </template>
+  
+  <template name="col-titles">
+    <!-- use col-style para for runtitle. if it doesn't exist and heading contains footnotes or linebreaks:
+      discard those and use as column title. otherwise '/'  separated list of authors, https://redmine.le-tex.de/issues/16194 -->
+    <!-- not reviewer and not editorial/gig-->
+    <xsl:if test="not(dbk:title[contains(@role, 'review')]) and not(dbk:title[matches(., '(^Editorial|^Autorinnen\p{Zs}+und\p{Zs}+Autoren)', 'i')])">
+      <xsl:call-template name="run-authors">
+        <xsl:with-param name="authors" select="if (dbk:titleabbrev[matches(@role, $col-author-style)])
+                                               then dbk:titleabbrev[matches(@role, $col-author-style)] 
+                                               else .//*[self::dbk:author|self::dbk:editor][not(@role = 'override')]/dbk:personname/dbk:othername"
+                        tunnel="yes" as="element()*"/>
+      </xsl:call-template>
+    </xsl:if>   
+    <xsl:if test="dbk:titleabbrev[matches(@role, $col-head-style)] 
+                  or  
+                  dbk:title[descendant::*[self::dbk:footnote | self::dbk:br]]">
+      <rule name="tpRunTitle" type="cmd" break-before="1">
+        <param select="(dbk:titleabbrev[matches(@role, $col-head-style)] , dbk:title)[1]/node()[not(self::dbk:phrase[@role = ('identifier', 'hub:identifier')])]">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+    <xsl:if test="(dbk:title[descendant::*[self::dbk:footnote]]/dbk:phrase[@role = ('identifier', 'hub:identifier')] and not(dbk:titleabbrev[matches(@role, $col-head-style)]))
+      or 
+      dbk:titleabbrev[matches(@role, $col-head-style)][dbk:phrase[@role = ('identifier', 'hub:identifier')]]">
+      <rule name="tpRunNumber" type="cmd" break-before="1">
+        <param select="if (dbk:titleabbrev[matches(@role, $col-head-style)])
+          then dbk:titleabbrev[matches(@role, $col-head-style)]/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()
+          else dbk:title/dbk:phrase[@role = ('identifier', 'hub:identifier')]/node()">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+    
+    <xsl:if test="dbk:subtitle[descendant::*[self::dbk:footnote | self::dbk:br]]">
+      <rule name="tpRunSubtitle" type="cmd" break-before="1">
+        <param select="dbk:subtitle/node()">
+          <with-param name="remove-footnote" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-newline" select="true()" as="xs:boolean?" tunnel="yes"/>
+          <with-param name="remove-indexterm" select="true()" as="xs:boolean?" tunnel="yes"/>
+        </param>
+      </rule>
+    </xsl:if>
+  </template>
+
+</set>
