@@ -20,7 +20,7 @@
       \ifx\ts@layout@type\ts@str@layout@utb
         \ifx\tp@authormark\relax
         \else
-          \tp@authormark :\space
+          %\tp@authormark :\space % Auskommentiert für Ticket 18626#note-52. Abweichend vom initialen Muster.
         \fi%
         \tpRunBookTitle
       \else
@@ -64,6 +64,10 @@
         \ifx\tp@chapternumber\relax
         \else
           \tp@chapternumber\space%
+        \fi%
+        \ifx\tp@authormark\relax
+        \else
+          \tp@authormark :\space % Neu rein für Ticket 18626#note-52. Abweichend vom initialen Muster.
         \fi%
         \tp@chaptermark%
       \else    

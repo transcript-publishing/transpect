@@ -539,14 +539,13 @@
           \xdef\tp@authormark{\cc@Heading@RunAuthorNameList}%
         }{%
           \tpIfCompOverride{AuthorNameList}{%
-            %\tpGStoreComp\tp@authormark{AuthorNameList}%
-            \xdef\tp@authormark{\noexpand\cc@Heading@AuthorNameList}%
+            \ifx\ts@layout@type\ts@str@layout@utb
+              \tpGStoreComp\tp@authormark{AuthorNameList}%
+            \else
+              \xdef\tp@authormark{\noexpand\cc@Heading@AuthorNameList}%
+            \fi
           }{%
-            {%
-              \gdef\tp@authormark{\unhcopy\@bookAuthorBox}%
-              %\global\let\tp@authormark\@bookAuthor
-            }
-            %\gdef\tp@authormark{\tp@runningTitleAuthorString}%
+            \gdef\tp@authormark{\unhcopy\@bookAuthorBox}%
           }%
         }%
         \thispagestyle{empty}%
@@ -578,7 +577,11 @@
         \par
         \tpIfComp{AuthorNameList}{%
           {%
-            \leftskip10mm
+            \tpIfComp{Number}{%
+              \leftskip10mm
+            }{%
+              \leftskip\z@
+            }%
             \normalfont
             \sfchapfamily
             \itshape

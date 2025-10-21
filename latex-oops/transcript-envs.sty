@@ -640,7 +640,7 @@
       \fi
     }%
     \nobreak
-    \vspace*{\dimexpr-\@majorDidacticsIconHeight-0.5\baselineskip\relax}%
+    \vspace*{0pt}\vspace*{\dimexpr-\@majorDidacticsIconHeight-0.5\baselineskip\relax}%
     {%
       \list{}
         {%
@@ -657,7 +657,7 @@
       \endlist
     }
     %\hskip10mm\box\z@\par
-    \vskip0.4\baselineskip
+    \vspace*{0pt}\vspace*{0.4\baselineskip}%
     \list{}{%
       \listparindent \z@
       \itemindent    \z@
@@ -665,7 +665,6 @@
       \rightmargin   \z@
       \didacticsContentfamily
       \sbseries
-      %\topsep        \z@%
       \topsep        \z@
       \parsep        \z@
     }%
@@ -675,11 +674,8 @@
 }{%
     \endlist
     \par
-    \vskip1\baselineskip%
+    \vskip1.5\baselineskip%
     \globalcolor{black}%
-    \noindent
-    \@afterindentfalse
-    \@afterheading
   \egroup
 }
 
@@ -770,10 +766,11 @@
     \endlist
     \par
     \vskip1\baselineskip
-    \@afterindentfalse
-    \@afterheading
   \egroup
 }
+
+% Verhindert den Einzug des Absatzes nach didactics-Umgebung. Voraussetzung: Nach \end{didactics} darf keine Leerzeile stehen.
+\AfterEndEnvironment{didactics}{\noindent\ignorespaces}
 
 
 \newcount\@qrCode
