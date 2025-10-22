@@ -714,9 +714,12 @@
     <xsl:param name="logo-listing" as="element(c:directory)?" tunnel="yes"/>
     <!-- https://redmine.le-tex.de/issues/17605 -->
     <!-- if logo is not present: do not create keyword- fallback reihe will be rendered then -->
-    <xsl:if test="$logo-listing/c:file[@name = concat('reihenlogo_', lower-case(current()), '.eps')]">   
+    <xsl:variable name="lang-appendix" select="if (. = 'KUL_AKU' and $lang = 'E') then '_eng' else ()
+                                                (:if series is kul_aku and lang=en; https://redmine.le-tex.de/issues/19463:)"
+                  as="xs:string?"/>
+    <xsl:if test="$logo-listing/c:file[@name = concat('reihenlogo_', lower-case(current()), $lang-appendix, '.eps')]">   
       <keyword role="Reihenlogo">
-        <xsl:value-of select="concat('reihenlogo_', lower-case(.), '.eps')"/>
+        <xsl:value-of select="concat('reihenlogo_', lower-case(.), $lang-appendix, '.eps')"/>
       </keyword>
     </xsl:if>
   </xsl:template>
