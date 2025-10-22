@@ -1195,7 +1195,13 @@
           \space\ccaStructStart{Artifact}|\ccaStructEnd{Artifact}\space\tpUseComp{EISBN}%
         }{}%
         \tpIfComp{EpubISBN}{%
-          \space\ccaStructStart{Artifact}|\ccaStructEnd{Artifact}\space\tpUseComp{EpubISBN}%
+          \space\ccaStructStart{Artifact}|\ccaStructEnd{Artifact}%
+          \ifx\ts@layout@type\ts@str@layout@mdw
+            \tpBreak
+          \else
+            \space
+          \fi
+          \tpUseComp{EpubISBN}%
         }{}\par
       \ccaStructEnd{P}%
     \ccaVstructEnd{MetaDatumBlock}%
