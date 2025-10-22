@@ -767,11 +767,10 @@
     \endlist
     \par
     \vskip1\baselineskip
+    \@afterindentfalse
+    \@afterheading
   \egroup
 }
-
-% Verhindert den Einzug des Absatzes nach didactics-Umgebung. Voraussetzung: Nach \end{didactics} darf keine Leerzeile stehen.
-\AfterEndEnvironment{didactics}{\noindent\ignorespaces}
 
 
 \newcount\@qrCode
