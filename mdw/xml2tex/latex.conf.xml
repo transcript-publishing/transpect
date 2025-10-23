@@ -24,7 +24,35 @@
          </xsl:choose>
     </xsl:element>
   </xsl:variable>
-               
+  
+  <xsl:variable name="copyright-note-selector" as="element()?"
+                select="if ($metadata/dbk:keyword[@role eq 'Copyright'][dbk:para] 
+                            and 
+                            not($metadata/dbk:keyword[@role eq 'Lizenz'][contains(., 'BY')])
+                            and 
+                            not($metadata/dbk:keyword[@role eq 'Copyright_Disclaimer']))
+                        then $metadata/dbk:keyword[@role eq 'Copyright']/*:para[1] 
+                        else $metadata/dbk:keyword[@role eq 'Copyright']"/>
+  
+
+  <xsl:variable name="copyright-note" as="element(dbk:keyword)?">
+    <xsl:apply-templates select="$copyright-note-selector" mode="add-copyright-break"/>
+  </xsl:variable>
+
+  <xsl:template match="@*|node()" mode="add-copyright-break">
+    <xsl:copy><xsl:apply-templates select="@*, node()" mode="#current"/></xsl:copy>
+  </xsl:template>
+  
+  <xsl:template match="text()[contains(., '©')]" mode="add-copyright-break">
+    <xsl:variable name="regex" select="'\p{Zs}*©'"/>
+    <xsl:analyze-string select="." regex="{$regex}">
+      <xsl:matching-substring>
+        <xsl:processing-instruction select="'\tpBreak'" name="latex"/>
+        <xsl:text>©</xsl:text>
+      </xsl:matching-substring>
+      <xsl:non-matching-substring><xsl:value-of select="."/></xsl:non-matching-substring>
+    </xsl:analyze-string>
+  </xsl:template>
 
 <!--  <xsl:variable name="greek" as="xs:string?" select="()"/>-->
   <xsl:variable name="babel-langs" select="for $i in $all-langs
