@@ -321,9 +321,9 @@
                               'ENPROA':('Fordertext_OAProject', 'Open-Access-Projekt mit freundlicher Förderung von',   '',     '',    ''),
                               'ENPR':('Fordertext_PrintProject', 'Print-Projekt mit freundlicher Förderung von',   '',     '',    ''),
                               'EBEN':('Fordertext_HTML', 'HTML mit freundlicher Förderung von',   '',     '',    ''),
-                              'VARI':('Mitarbeit',  'Unter Mitarbeit von',   'Assisted by',     'Con la colaboración de',    ''),
+                              'VARI':('Mitarbeit',  'Unter Mitarbeit von',   'Assisted by',     'Con la colaboración de',    '', ' und ', ' and ', ' y ', ' et '),
                               'TRGE':('Ubersetzer', '',                      'Translated from German by ',   'Traducido del alemán de ', 'Traduit de l&#8217;allemand de ',   '', ' and ', ' y ', ' et '),
-                              'TREN':('Ubersetzer', 'Übersetzt aus dem Englischen von ',     '',    '',    '', ' und ', '', '', ''),
+                              'TREN':('Ubersetzer', 'Übersetzt aus dem Englischen von ',         '',    '',    '', ' und ', '', '', ''),
                               'TRFR':('Ubersetzer', 'Übersetzt aus dem Französischen von ',      '',    '',    '', ' und ', '', '', ''),
                               'TRSP':('Ubersetzer', 'Übersetzt aus dem Spanischen von ',         '',    '',    '', ' und ', '', '', '')
                   }">
@@ -375,7 +375,7 @@
             <xsl:when test="$type[. =  $copyright-roles]">
               <keyword role="{$current-lookup[1]}">      
                 <xsl:choose>
-                  <xsl:when test="count($cg) gt 1 and not($type = ('UMKO', 'UMSA', 'UMGS', 'LEKT', 'KORR'))(:https://redmine.le-tex.de/issues/18085:)">
+                  <xsl:when test="count($cg) gt 1 and not($type = ('UMKO', 'UMSA', 'UMGS', 'LEKT', 'KORR', 'VARI'))(:https://redmine.le-tex.de/issues/18085:)">
                     <xsl:for-each select="$cg">
                       <para>
                         <xsl:sequence select="string-join((:add Druckort https://redmine.le-tex.de/issues/17971:)
@@ -383,12 +383,23 @@
                                                           ($current-lookup[$lang-num][normalize-space()], 
                                                            string-join((*:first_name[normalize-space()], *:last_name[normalize-space()]), ' ')
                                                           ), 
-                                                          concat(':'[not($type = 'VARI')(:https://redmine.le-tex.de/issues/17944#note-8:)], ' ')
+                                                          concat(':', ' ')
                                                           ),
                                                if ($type = 'DRUK') then map:get($printer-lookup,  ./@unique_person_id)[1] else ()),
                                                ', ')"/>
                       </para>
                     </xsl:for-each>
+                  </xsl:when>
+                  <xsl:when test="count($cg) gt 1 and $type = 'VARI'(:https://redmine.le-tex.de/issues/19482:)">
+                      <para>
+                        <xsl:sequence select="concat(
+                                                      $current-lookup[$lang-num][normalize-space()], 
+                                                      ' ',
+                                                      string-join((for $contrib in $cg[not(position() = last())] return string-join(($contrib/*:first_name[normalize-space()], $contrib/*:last_name[normalize-space()]), ' ')), ', '),
+                                                      $current-lookup[$lang-num + 4],
+                                                      for $contrib in $cg[position() = last()] return string-join(($contrib/*:first_name[normalize-space()], $contrib/*:last_name[normalize-space()]), ' ')
+                                                     )"/>
+                      </para>
                   </xsl:when>
                    <!--<xsl:when test="count($cg) gt 1 and $type = ('UMKO', 'UMSA', 'UMGS', 'LEKT', 'KORR')(:https://redmine.le-tex.de/issues/18085:)">
                     <xsl:for-each select="$cg">
@@ -423,7 +434,7 @@
               <xsl:if test="($type = 'TRGE' and $lang != '') or 
                             ($type != 'TRGE' and $lang = '')">
                 <keyword role="{$current-lookup[1]}">
-                  <para><xsl:message select="$lang-num"/>
+                  <para><!--<xsl:message select="$lang-num"/>-->
                     <xsl:sequence select="concat(
                                             $current-lookup[$lang-num][normalize-space()],
                                             string-join((for $tr in $cg[not(position() = last()) or count($cg) eq 1] return string-join(( $tr/*:first_name[normalize-space()],  $tr/*:last_name[normalize-space()]), ' ')), ', '),
