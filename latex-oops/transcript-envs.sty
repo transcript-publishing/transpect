@@ -289,6 +289,7 @@
       \itemindent\z@%\leftmargin
     \fi
     \parsep\z@
+    \partopsep\z@
     \ifnum \@enumdepth=\@ne\topsep12.8bp\else\topsep\z@\fi
     \usecounter\@enumctr%
     \global\let\is@first@item\relax
@@ -677,11 +678,10 @@
     \par
     \vskip1.5\baselineskip%
     \globalcolor{black}%
-    \@afterindentfalse
-    \@afterheading
   \egroup
 }
 
+\AfterEndEnvironment{majorDidactics}{\@afterindentfalse\@afterheading}
 
 \newdimen\@didacticsRuleExcess \@didacticsRuleExcess=4mm
 \newdimen\@didacticsIconHeight \@didacticsIconHeight=6mm
@@ -689,12 +689,18 @@
 \newcount\@didactics
 \newdimen\@didacticsIconRuleDistance \@didacticsIconRuleDistance=4mm
 
+\graphicspath{{logos/cc/}{logos/}{images/}{series/}}
+
 \newenvironment{didactics}[2][\relax]{%
-  \ifvmode\leavevmode\else\par\fi
+  \ifhmode\par\fi
   \ifdim\dimexpr\pagegoal-\pagetotal\relax<7\baselineskip
     \clearpage
   \else
-    \vskip2\baselineskip
+    \ifodd\realpage
+      \vspace{\dimexpr\baselineskip + 0.5\@didacticsIconHeight\relax plus 0pt minus 0pt}
+    \else
+      \vspace{1.25\baselineskip plus 0pt minus 0pt}
+    \fi
   \fi
   %\vskip2\baselineskip
   \@itemizeTopSep\z@
@@ -766,14 +772,25 @@
       \noindent\ignorespaces
     \fi
 }{%
-    \endlist
-    \par
-    \vskip1\baselineskip
-    \@afterindentfalse
-    \@afterheading
-  \egroup
+    \endlist%
+    \par%
+    \vskip1\baselineskip%
+  \egroup%
 }
 
+\AfterEndEnvironment{didactics}{\@afterindentfalse\@afterheading}
+
+\renewcommand{\@listi}{%
+  \leftmargin\leftmargini
+  \topsep 0pt
+  \parsep 0pt
+  \itemsep 0pt
+}
+
+\newcommand*{\removelistskip}{\vspace{-2\baselineskip}}
+
+%\usepackage{enumitem}
+%\setlist{topsep=0pt, partopsep=0pt}
 
 \newcount\@qrCode
 
@@ -793,7 +810,7 @@
       \hfill
       \smash{%
         \rlap{%
-          \includegraphics[height=12mm]{#3}%
+          \raisebox{-1.1\baselineskip}{\includegraphics[height=12mm]{#3}}%
         }%
       }%
     }
@@ -801,7 +818,7 @@
     \vbox{%
       \smash{%
         \llap{%
-          \raisebox{-1\baselineskip}{\includegraphics[height=12mm]{#3}}%
+          \raisebox{-2.1\baselineskip}{\includegraphics[height=12mm]{#3}}%
           \hspace*{5mm}%
         }%
       }%
@@ -810,6 +827,7 @@
       \href{#2}{#2}%
     }
   \fi
+  \vskip\baselineskip
 }
 
 % \def\@abstract#1{%
