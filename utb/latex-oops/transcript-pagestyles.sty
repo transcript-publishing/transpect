@@ -67,7 +67,7 @@
         \fi%
         \ifx\tp@authormark\relax
         \else
-          \tp@authormark :\space % Neu rein für Ticket 18626#note-52. Abweichend vom initialen Muster.
+          \tp@authormark\ifcollection :\space\fi % Neu rein für Ticket 18626#note-52. Abweichend vom initialen Muster.
         \fi%
         \tp@chaptermark%
       \else    
