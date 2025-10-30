@@ -133,6 +133,9 @@
       <!-- title -->
       <param select="dbk:info/dbk:title"/>
       <text select="'&#xa;'"/>
+      <xsl:if test="dbk:info[following-sibling::*[1][self::dbk:orderedlist|self::dbk:itemizedlist]]">
+        <text select="if (dbk:info[following-sibling::*[1][self::dbk:orderedlist]]) then '\noenumerateskip&#xa;' else '\noitemizeskip&#xa;'"/>
+      </xsl:if>
       <text select="node() except dbk:info"/>
     </rule>
   </template>
@@ -145,6 +148,9 @@
       <!-- title -->
       <param select="dbk:info/dbk:title"/>
       <text select="'&#xa;'"/>
+      <xsl:if test="dbk:info[following-sibling::*[1][self::dbk:orderedlist|self::dbk:itemizedlist]]">
+        <text select="if (dbk:info[following-sibling::*[1][self::dbk:orderedlist]]) then '\noenumerateskip&#xa;' else '\noitemizeskip&#xa;'"/>
+      </xsl:if>
       <text select="node() except dbk:info"/>
     </rule>
   </template>
