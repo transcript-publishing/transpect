@@ -41,7 +41,7 @@
                          )"/>-->
   
   
-  <xsl:template match="*[para[matches(@role, '^tsadd')]]"  mode="hub:group-add-elements" xmlns="http://docbook.org/ns/docbook">
+  <xsl:template match="*[para[matches(@role, '^ts(add|do)')]]"  mode="hub:group-add-elements" xmlns="http://docbook.org/ns/docbook">
     <xsl:param name="wrapper-element-name" select="name()" as="xs:string" tunnel="no"/>
     <xsl:element name="{$wrapper-element-name}">
       <xsl:apply-templates select="@*" mode="#current"/>
@@ -55,7 +55,7 @@
           <xsl:choose>
             <xsl:when test="current-grouping-key()">
               <xsl:for-each-group select="current-group()" 
-                                  group-starting-with=".[self::para[matches(@role, '^ts(add|do).+heading')]]">
+                                  group-starting-with=".[self::para[matches(@role, '^ts(add|do).*heading')]]">
                 <!-- splitted in different ts add block, starting with 'headings' -->
                 <xsl:element name="section">
                   <xsl:variable name="role" select="replace(current-group()[1]/@role, 'heading', '')"/>
