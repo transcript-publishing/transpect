@@ -13,6 +13,9 @@
 \gdef\tp@str@part{part}
 
 \def\ps@headings{%
+  \def\@sffallbackfeatures{%
+    \sffallbackfontcondensed
+  }%
   % Gerade, linke Seiten.
   \def\left@mark{%
     \def\numberline####1{####1\enskip}%

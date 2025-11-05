@@ -404,6 +404,7 @@
       }{%
         \leftskip\z@%
       }%
+      %\ccaAddAltText{Test}% Test für Ticket 19448.
       \tpTocLink{%
         \ccWhenComp{TocNumber}{\hskip-\@tempdima\hbox to \@tempdima{%
             \ccaVstructStart{Lbl}\tpUseComp{TocNumber}\ccaVstructEnd{Lbl}\hss}}%
@@ -616,8 +617,8 @@
         \xdef\tp@authormark{\cc@Heading@RunAuthorNameList}%
       }{%
         \tpIfCompOverride{AuthorNameList}{%
-          %\tpGStoreComp\tp@authormark{AuthorNameList}%
-          \xdef\tp@authormark{\cc@Heading@AuthorNameList}%
+          \tpGStoreComp\tp@authormark{AuthorNameList}%
+          %\xdef\tp@authormark{\protect\cc@Heading@AuthorNameList}% Auskommentiert für Ticket 19515.
         }{%
           \tpCompGDef\tp@authormark{Author}{author-list-print-format}%
         }%
@@ -665,10 +666,11 @@
       \tpWhenComp{AuthorNameList}{%
         \vskip\baselineskip
         \ccaVstructStart{Authors}%
-        {%
-          \tpUseProperty{author-face}%
-          \large\sfwidefamily\upseries\itshape\tpUseComp{AuthorNameList}%
-        }%
+          {%
+            \tpUseProperty{author-face}%
+            \large\sfwidefamily\upseries\itshape
+            \tpUseComp{AuthorNameList}%
+          }%
         \ccaVstructEnd{Authors}%
         \ifx\ts@contact@dummy\@undefined
         \else
@@ -677,7 +679,7 @@
         \fi
         \par\nobreak%\vskip\baselineskip
       }%
-      %% Zitat
+      % Zitat
       \tpWhenComp{QuoteBlock}{%
         \vskip1\baselineskip
         \savenotes
