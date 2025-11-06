@@ -407,4 +407,22 @@
     </xsl:choose>
   </xsl:template>
   
+  <xsl:function name="hub:is-itemized-list-because-we-know-better" as="xs:boolean">
+    <xsl:param name="list" as="element(*)"/>
+    <xsl:sequence select="every $item in $list/listitem satisfies ($item[not(tab) and not(phrase[@role='hub:identifier'])]
+                                                                  [para[@css:list-style-type]])"/>
+  </xsl:function>
+    
+  <xsl:template match="orderedlist[hub:is-itemized-list-because-we-know-better(.)]" priority="3" mode="hub:postprocess-lists">
+    <xsl:choose> 
+      <xsl:when test="hub:is-itemized-list-because-we-know-better(.)">
+        <itemizedlist mark="">
+          <xsl:apply-templates select="@*, node()" mode="#current"/>
+        </itemizedlist>
+      </xsl:when>
+      <xsl:otherwise><xsl:next-match/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
 </xsl:stylesheet>
