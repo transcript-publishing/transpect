@@ -409,8 +409,8 @@
   
   <xsl:function name="hub:is-itemized-list-because-we-know-better" as="xs:boolean">
     <xsl:param name="list" as="element(*)"/>
-    <xsl:sequence select="every $item in $list/listitem satisfies ($item[not(tab) and not(phrase[@role='hub:identifier'])]
-                                                                  [para[@css:list-style-type]])"/>
+    <xsl:sequence select="every $item in $list/listitem/para satisfies ($item[not(tab) and not(phrase[@role='hub:identifier'])]
+                                                                                                     [@css:list-style-type[not(. = 'ordinal')]])"/>
   </xsl:function>
     
   <xsl:template match="orderedlist[hub:is-itemized-list-because-we-know-better(.)]" priority="3" mode="hub:postprocess-lists">
