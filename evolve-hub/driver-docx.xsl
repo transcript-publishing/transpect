@@ -409,11 +409,15 @@
   
   <xsl:function name="hub:is-itemized-list-because-we-know-better" as="xs:boolean">
     <xsl:param name="list" as="element(*)"/>
-    <xsl:sequence select="every $item in $list/listitem/para satisfies ($item[not(tab) and not(phrase[@role='hub:identifier'])]
-                                                                                                     [@css:list-style-type[not(. = 'ordinal')]])"/>
+    <xsl:sequence select="(every $item in $list/listitem/para satisfies ($item[not(tab) and not(phrase[@role='hub:identifier'])]
+                                                                                                     [@css:list-style-type[not(. = 'ordinal')]]))
+                         and (every $li in $list/listitem satisfies ($li[para[normalize-space()]]))"/>
   </xsl:function>
     
-  <xsl:template match="orderedlist[hub:is-itemized-list-because-we-know-better(.)]" priority="3" mode="hub:postprocess-lists">
+  <xsl:template match="orderedlist" priority="3" mode="hub:postprocess-lists">
+<xsl:message select="'11111', every $item in ./listitem/para satisfies ($item[not(tab) and not(phrase[@role='hub:identifier'])]
+                                                                                                     [@css:list-style-type[not(. = 'ordinal')]])"/>
+    <xsl:message select="'22222', every $li in ./listitem satisfies ($li[para[normalize-space()]])"/>
     <xsl:choose> 
       <xsl:when test="hub:is-itemized-list-because-we-know-better(.)">
         <itemizedlist mark="">
