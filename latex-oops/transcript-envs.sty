@@ -731,6 +731,7 @@
   \itemsep 0pt
 }
 
+\newcommand*{\didacticsnoskip}{\vspace{-2\baselineskip}}
 \newcommand*{\noenumerateskip}{\vspace{-2\baselineskip}}
 \newcommand*{\noitemizeskip}{\vspace{-\baselineskip}}
 
@@ -772,7 +773,8 @@
       \href{#2}{#2}%
     }
   \fi
-  \vskip\baselineskip
+  %\vskip\baselineskip
+  \addvspace{2\baselineskip}
 }
 
 % \def\@abstract#1{%
