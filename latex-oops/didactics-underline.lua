@@ -70,7 +70,8 @@ local function make_partline ( head )
             wi_node.mode = 0
             local excess = calc_value ( tex.sp ( "4mm" ) )
             width = width + 2 * excess
-            wi_node.data = "/Artifact BMC q " .. width .. " w " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) + calc_value ( tex.sp ( "1pt" ) ) .. " m " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) .. " l .57 G S Q EMC"
+            -- wi_node.data = "/Artifact BMC q " .. width .. " w " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) + calc_value ( tex.sp ( "1pt" ) ) .. " m " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) .. " l .57 G S Q EMC"
+            wi_node.data = "q " .. width .. " w " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) + calc_value ( tex.sp ( "1pt" ) ) .. " m " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) .. " l .57 G S Q"
             -- wi_node.attr = node.new ("attribute_list")
             -- wi_node.attr.number = attr_id
             -- node.set_attribute ( wi_node, attr_id, 1 )
