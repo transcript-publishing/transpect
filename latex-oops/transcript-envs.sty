@@ -697,6 +697,8 @@
 
 \directlua{require ( "oddeven.lua" )}
 
+\definecolor{didacticslinegray}{gray}{0.57}
+
 \newenvironment{didactics}[2][\relax]{%
     \addvspace{\baselineskip}
     \phantomsection
@@ -705,7 +707,7 @@
     \global\advance\@didactics\@ne
     \bgroup%
         \noindent
-        {\noindent\special{gets_hfill}\minorDidacticsHeadingfamily\sbseries\large ​\special{PHPL_part_line}\ignorespaces #2}
+        {\noindent\special{gets_hfill}\minorDidacticsHeadingfamily\sbseries\large\char"200B \color{didacticslinegray}\special{PHPL_part_line}\color{black}\ignorespaces #2}
         \ifx#1\relax
         \else
             \relpos[width=\@didacticsIconHeight][.8cm,-0.5cm]{#1}%

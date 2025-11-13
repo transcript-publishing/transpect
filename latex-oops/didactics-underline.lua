@@ -54,8 +54,6 @@ local function get_x_value ( n, x_value, hlist )
     return x_value
 end
 
--- local attr_id = luatexbase.attributes['tagpdf@attribute']
-
 local function make_partline ( head )
     for n in T ( head ) do
         if n.id == HLIST or n.id == VLIST then
@@ -70,13 +68,7 @@ local function make_partline ( head )
             wi_node.mode = 0
             local excess = calc_value ( tex.sp ( "4mm" ) )
             width = width + 2 * excess
-            -- wi_node.data = "/Artifact BMC q " .. width .. " w " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) + calc_value ( tex.sp ( "1pt" ) ) .. " m " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) .. " l .57 G S Q EMC"
-            wi_node.data = "q " .. width .. " w " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) + calc_value ( tex.sp ( "1pt" ) ) .. " m " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) .. " l .57 G S Q"
-            -- wi_node.attr = node.new ("attribute_list")
-            -- wi_node.attr.number = attr_id
-            -- node.set_attribute ( wi_node, attr_id, 1 )
-            -- wi_node.attr.value = 1
-            -- head = INS_B ( head, node.first_glyph ( head ), wi_node )
+            wi_node.data = "q " .. width .. " w " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) + calc_value ( tex.sp ( "1pt" ) ) .. " m " .. width * 0.5 - excess .. " " .. calc_value ( tex.sp ( "-.85em" ) ) .. " l S Q"
             head = INS_B ( head, n, wi_node )
             head = REM ( head, n )
         end
