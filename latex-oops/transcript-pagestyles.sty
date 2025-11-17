@@ -24,14 +24,18 @@
     \else
       % Anthologien.
       \ifcollection
-        \ifx\ts@journal@series\ts@str@journal@zig
+        \ifboolexpr{
+            test {\ifdefstrequal{\ts@journal@series}{\ts@str@journal@zig}}
+            or
+            test {\ifdefstrequal{\ts@journal@series}{\ts@str@journal@zkk}}
+        }{%
           % Bei ZiG die Abschnitte »Rezensionen« sowie »Autorinnen und Autoren« betreffend.
           \ifx\tp@authormark\relax
             \tpRunBookTitle
           \else
             \tp@authormark
           \fi%
-        \else
+        }{%
           % Mit Respektseiten.
           \ifx\has@parts\relax
             \ifcsname tp@partmark\endcsname
@@ -43,7 +47,7 @@
           \else
             \tpRunBookTitle%
           \fi
-        \fi
+        }
       % Monographien.
       \else
         \tpRunBookTitle%
@@ -60,10 +64,13 @@
       \ifcollection
         \ifx\tp@authormark\relax
         \else
-          \ifx\ts@journal@series\ts@str@journal@zig
-          \else
+          \ifboolexpr{
+              test {\ifdefstrequal{\ts@journal@series}{\ts@str@journal@zig}}
+              or
+              test {\ifdefstrequal{\ts@journal@series}{\ts@str@journal@zkk}}
+          }{}{%
             \tp@authormark:\space%
-          \fi
+          }
         \fi%
         \tp@chaptermark%
       % Monographien.

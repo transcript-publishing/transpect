@@ -652,16 +652,24 @@
     \tpSetProperty{titlepage-i}{%
       \ccaStructStart{Titlepage}%
       \tpUseComp{Series}% In diesem Fall ein Logo.
-      \vskip1\baselineskip%
+      \vskip1.65\baselineskip%
       \bgroup
         \Large\sbseries\sfchapfamily%
         \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}%
-        \tpUseComp{Volume}. Jahrgang, \tpUseComp{Year}%, \tpUseComp{Issue} % Auskommentiert mit Ticket 17966.
+        Jg. \tpUseComp{Volume}, Heft \tpUseComp{Issue}/\tpUseComp{Year}%, \tpUseComp{Issue} % Auskommentiert mit Ticket 17966.
+        \ccaStructEnd{Title}
+      \egroup
+      \par
+      \vskip1.65\baselineskip%
+      \bgroup
+        \sbseries\sfchapfamily%
+        \ccaStructStart{Title}\ccaReplaceStruct{\cca@id@document@dummy}%
+        Herausgeber: \tpUseComp{EditorNameList}
         \ccaStructEnd{Title}
       \egroup
       \vfill
       \ccaStructStart{MetaDatumBlock}%
-      {\bfseries Die Zeitschrift wird herausgegeben von}\newline
+      %{\bfseries Die Zeitschrift wird herausgegeben von}\newline
       \ccaStructStart{SeriesEditors}%
       \tpUseComp{SeriesEditorNameList}%
       \ccaStructEnd{SeriesEditors}%
