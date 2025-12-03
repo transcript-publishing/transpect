@@ -14,6 +14,10 @@
 \tpSetBabelLabel{german}{editorsuffixpl}{(Hg.)}
 \tpSetBabelLabel{english}{editorsuffixpl}{(eds.)}
 
+
+\tpSetBabelLabel{german}{copyrightpatterns}{Die automatisierte Analyse des Werkes, um daraus Informationen insbesondere über Muster, Trends und Korrelationen gemäß § 44b UrhG (Text und Data Mining) zu gewinnen, ist ohne schriftliche Zustimmung der Rechteinhaber*innen untersagt.}
+\tpSetBabelLabel{english}{copyrightpatterns}{The automated analysis of the work in order to obtain information, particularly concerning patterns, trends, and correlations as defined in § 44b (text and data mining) of the German Copyright Act (UrhG) is prohibited without the written consent of the rights holders.}
+
 \global\newbox\@licenceTextFooter
 
 \gdef\titleLayoutOverride{}
@@ -1151,6 +1155,8 @@
     }{%
       Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\par
     }%
+    \vskip1\baselineskip
+    \copyrightpatternsname
     \tpIfComp{CopyrightRemark}{%
       \vskip1\baselineskip
       {%
