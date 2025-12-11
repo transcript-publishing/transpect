@@ -69,7 +69,10 @@
               or
               test {\ifdefstrequal{\ts@journal@series}{\ts@str@journal@zkk}}
           }{}{%
-            \tp@authormark:\space%
+            \setbox\@tempboxa=\hbox{\tp@authormark}%
+            \ifdim\wd\@tempboxa>\z@%
+              \unhbox\@tempboxa:\space%
+            \fi%
           }%
         \fi%
         \tp@chaptermark%
