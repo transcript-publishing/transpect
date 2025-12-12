@@ -77,7 +77,10 @@
           \else
             \ifx\ts@journal@series\ts@str@journal@zig
             \else
-              \tp@authormark:\space%
+              \setbox\@tempboxa=\hbox{\tp@authormark}%
+              \ifdim\wd\@tempboxa>\z@%
+                \unhbox\@tempboxa:\space%
+              \fi%
             \fi
           \fi%
           \tp@chaptermark%
