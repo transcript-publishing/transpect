@@ -615,7 +615,7 @@
         \tpGStoreComp\tp@chaptermark{Title}%
       }%
       \tpIfComp{RunAuthorNameList}{%
-        \xdef\tp@authormark{\cc@Heading@RunAuthorNameList}%
+        \tpGStoreComp\tp@authormark{RunAuthorNameList}%
       }{%
         \tpIfCompOverride{AuthorNameList}{%
           \tpGStoreComp\tp@authormark{AuthorNameList}%
