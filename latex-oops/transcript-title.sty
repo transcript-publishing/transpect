@@ -320,7 +320,10 @@
         \tpUseProperty{funding-block}%
         \null\vfill
         \tpIfComp{Biblio}{{\sffamily\sbseries\tpGetComp{BiblioTitle}}\tpGetComp{Biblio}}{}%
-        \tpIfComp{AddNoteIV}{\vskip1\baselineskip\tpUseComp{AddNoteIV}}{}%
+        \tpIfComp{AddNoteIV}{%
+          \vskip1\baselineskip
+          \tpUseComp{AddNoteIV}%
+        }{}%
         \tpUseProperty{licence}%
         \vfill
         \bgroup
@@ -1094,7 +1097,7 @@
             \par
             \ifx\ts@layout@type\ts@str@layout@mdw
             \else
-              \vskip\baselineskip
+              \vskip0.5\baselineskip
             \fi
           \ccaStructEnd{MetaDatumBlock}}%
         \justify
@@ -1118,7 +1121,7 @@
         \ccaStructStart{MetaDatumBlock}%
         \tpUseProperty{licence}%
         \ccaStructEnd{MetaDatumBlock}%
-        \vskip1\baselineskip
+        \vskip0.5\baselineskip% Verringert mit Ticket 19711.
         \bgroup
           \ccaStructStart{MetaDatumBlock}%
           \tpUseProperty{imprint}%
@@ -1145,7 +1148,7 @@
     }%
     % Wenn es ein Lizenzlogo gibt, hat die Publikation Open-Access-Status.
     \tpIfComp{LicenceLogo}{%
-      \vskip1\baselineskip
+      %\vskip1\baselineskip% Entfernt mit Ticket 19711.
       {%
         \@tempdima=\fontdimen2\font\relax%
         \fontdimen2\font=0.1em
@@ -1155,21 +1158,23 @@
     }{%
       Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\par
     }%
-    \vskip1\baselineskip
-    \fontsize{8.5}{10}\selectfont
-    \copyrightpatternsname
-    \par
+    \vskip0.5\baselineskip% Verringert mit Ticket 19711.
+    {%
+      \fontsize{8.5}{10}\selectfont
+      \copyrightpatternsname
+      \par
+    }%
     \tpIfComp{CopyrightRemark}{%
-      \vskip1\baselineskip
+      \vskip0.5\baselineskip% Verringert mit Ticket 19711.
       {%
         \sbseries\sffamily\tpUseComp{CopyrightRemark}%
-      }
+      }%
     }{}
     \tpIfComp{PubDivision}{%
       {\sffamily\tpGetComp{PubDivision}}%
     }{}%
     \tpIfComp{CopyrightDisclaimer}{% CopyrightDisclaimer enthält aktuell »© [Autorenname]«. Keine Leerzeile davor mit Ticket 13870. Beobachten.
-      \vskip1\baselineskip
+      \vskip0.5\baselineskip% Verringert mit Ticket 19711.
       \tpUseComp{CopyrightDisclaimer}\par
     }{}%
   }
@@ -1180,10 +1185,9 @@
   }%
   %% Format Impressum
   \tpSetProperty{imprint}{%
-    \ccaStructStart{P}\tpUseProperty{publisher}\ccaStructEnd{P}%
-    \par
+    \ccaStructStart{P}\tpUseProperty{publisher}\ccaStructEnd{P}\par
     %\tpUseProperty{imprint-sep}%
-    \vskip\baselineskip
+    \vskip0.5\baselineskip % Verringert mit Ticket 19711.
     \tpGetComp{Qualification}%
     \tpGetComp{Conversion}%
     \tpWhenComp{CoverImage}{{\leftskip5mm\hskip-5mm\tpGetComp{CoverImage}}}%
@@ -1218,7 +1222,8 @@
             \space
           \fi
           \tpUseComp{EpubISBN}%
-        }{}\par
+        }{}
+        \par
       \ccaStructEnd{P}%
     \ccaVstructEnd{MetaDatumBlock}%
     % ISSN.
@@ -1238,7 +1243,8 @@
         \par
       \ccaStructEnd{P}%
     \ccaVstructEnd{MetaDatumBlock}%
-    \tpUseProperty{imprint-sep}%
+    %\tpUseProperty{imprint-sep}%
+    \vskip0.5\baselineskip% Eingeführt mit Ticket 19711.
     \tpGetComp{EnvDisclaimer}%
     \tpGetComp{Advertise}%
   }%
@@ -1260,7 +1266,8 @@
         \ccaStructStart{Figure}%
         \ccaAddAltText{\ccUseComp{LicenceName} Logo}%
         \ccaAddPlacement{Block}%
-        \includegraphics[height=10mm]{\tpUseComp{LicenceLogo}}\par\vskip1mm
+        \includegraphics[height=8mm]{\tpUseComp{LicenceLogo}}\par
+        \vskip1mm
         \ccaStructEnd{Figure}%
       }%
       \tpGetComp{LicenceText}%
