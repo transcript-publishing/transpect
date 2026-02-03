@@ -94,13 +94,18 @@
 
 \def\tp@partmark{\tpRunBookTitle}%
 
+% Dieses Makro \texthashchar soll insbesondere in \tpBMTitle{…} Verwendung finden, weil
+%   eine Raute (#) einen Kompilationsfehler verursacht und \# gar nicht dargestellt wird.
+\begingroup
+  \catcode `\#=\active\gdef#{\string#}
+  \gdef\texthashchar{\string#}%
+\endgroup
+
+
 \tpDeclareHeading{-1}{part}{%
-  %% ToC
-  %\tpSetProperty{toc-before-hook-part}{\nobreak}
-  %\tpSetProperty{toc-after-hook-part}{\nopagebreak}
   %%%%%%%%%%%%%%%%%%%%%%%
   % Inhaltsverzeichnis. %
-  %%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%  
   \tpSetProperty{toc-margin-top}{2.25em}%
   \tpSetProperty{toc-indent}{}%
   \tpSetProperty{toc-title-face}{%
@@ -152,8 +157,7 @@
     \ccaVstructEnd{TOCI}%
     \par
   }%
-  %\tpSetProperty{toc-after-entry}{\nopagebreak\par\nopagebreak\addvspace{\tpUseProperty{toc-margin-bottom}}\nopagebreak}%
-  %
+
   %%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Fließtextüberschriften. %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%
