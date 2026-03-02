@@ -215,6 +215,11 @@
     <xsl:value-of select="tr:roman-numeral-to-letter(.)"/>
   </xsl:template>
   
+  <xsl:template match="text()[matches(., '&#xfe0f;')]" mode="hub:dissolve-sidebars-without-purpose" priority="15">
+    <!-- replace emojiji selectors, https://redmine.le-tex.de/issues/19956 -->
+    <xsl:value-of select="translate(., '&#xfe0f;', '')"/>
+  </xsl:template>
+  
   <xsl:template match="footnote/para/phrase[@role = 'hub:identifier']/phrase" mode="custom-2">
     <xsl:apply-templates select="node()" mode="#current"/>
   </xsl:template>
