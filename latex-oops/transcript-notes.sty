@@ -47,6 +47,9 @@
       % Preserve the justified alignment for footnotes which the language changes within.
       \let\originalSelectlanguage\selectlanguage
       \def\selectlanguage##1{\originalSelectlanguage{##1}\justify}%
+      % Do the same for the \textit{…} macro.
+      \let\originalTextit\textit
+      \def\textit##1{\originalTextit{\justify ##1}}%
       #1%
     \egroup
     \ccaAddID{auto}%
