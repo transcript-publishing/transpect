@@ -1166,24 +1166,27 @@
     }{%
       Hermannstraße 26 | D-33602 Bielefeld | live@transcript-verlag.de\par
     }%
-    \vskip0.5\baselineskip% Verringert mit Ticket 19711.
-    {%
+    
+    \tpIfComp{LicenceName}{}{%
+      \vskip0.5\baselineskip% Verringert mit Ticket 19711.
+      {%
       \fontsize{8.5}{10}\selectfont
       \copyrightpatternsname
       \par
+      }%
     }%
     \tpIfComp{CopyrightRemark}{%
-      \vskip0.5\baselineskip% Verringert mit Ticket 19711.
-      {%
+    \vskip0.5\baselineskip% Verringert mit Ticket 19711.
+    {%
         \sbseries\sffamily\tpUseComp{CopyrightRemark}%
-      }%
+    }%
     }{}
     \tpIfComp{PubDivision}{%
-      {\sffamily\tpGetComp{PubDivision}}%
+    {\sffamily\tpGetComp{PubDivision}}%
     }{}%
     \tpIfComp{CopyrightDisclaimer}{% CopyrightDisclaimer enthält aktuell »© [Autorenname]«. Keine Leerzeile davor mit Ticket 13870. Beobachten.
-      \vskip0.5\baselineskip% Verringert mit Ticket 19711.
-      \tpUseComp{CopyrightDisclaimer}\par
+    \vskip0.5\baselineskip% Verringert mit Ticket 19711.
+    \tpUseComp{CopyrightDisclaimer}\par
     }{}%
   }
   \tpSetProperty{publisher}{%
