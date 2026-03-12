@@ -468,7 +468,7 @@
       \fi
     }%
     \ifx\ts@layout@type\ts@str@layout@mdw
-      \huge
+      \fontsize{15bp}{18.3bp}\selectfont
     \else
       \Huge
     \fi
@@ -1235,14 +1235,14 @@
         \addfontfeature{FakeSlant=-0.09}%
       \fi
     }%
-    \sffamily
     \ifx\ts@layout@type\ts@str@layout@mdw
-      \Large
-      \bfseries
+      \sfchapfamily
+      \fontsize{12bp}{12.8bp}\selectfont
     \else
+      \sffamily
       \LARGE
-      \sbseries
     \fi
+    \sbseries
   }%
   \tpSetProperty{subtitle-face}{\normalfont\sffamily\LARGE\if@TLtwenty\upseries\fi}% Mig2024
   \tpSetProperty{before-quote-skip}{1\baselineskip}%
@@ -1333,8 +1333,13 @@
       %\addfontfeature{FakeSlant=-0.09}%
       %\let\cc@cur@cont\tp@str@Heading
     }%
-    \sffamily
-    \normalsize
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \sfchapfamily
+      \fontsize{10bp}{12.8bp}\selectfont
+    \else
+      \sffamily
+      \normalsize
+    \fi
     \if@TLtwenty
       \upseries
     \fi
@@ -1352,13 +1357,15 @@
         \addfontfeature{FakeSlant=-0.09}%
       \fi
     }%
-    \sffamily
     \ifx\ts@layout@type\ts@str@layout@mdw
+      \sfchapfamily
       \sbseries
+      \fontsize{10bp}{12.8bp}\selectfont
     \else
+      \sffamily
       \mdseries
+      \Large
     \fi
-    \Large
   }%
   \tpSetProperty{before-quote-skip}{.5\baselineskip}%
   \tpSetProperty{running-heading}{}% da subsection sonst die Kolumnentitel ebenfalls von section erben würde

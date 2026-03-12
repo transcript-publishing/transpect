@@ -380,48 +380,21 @@
 
     % Schrift für Kapitelüberschriften.
     \babelfont{sfchap}[%
-      Path=fonts/Lato/,%
-      BoldFont = Lato-Bold.ttf,%
-      FontFace = {lt}{n}{Lato-Thin.ttf},%
-      FontFace = {lt}{it}{Lato-ThinItalic.ttf},%
-      FontFace = {up}{n}{Lato-Regular.ttf},%
-      FontFace = {up}{it}{Lato-Italic.ttf},%
-      FontFace = {md}{n}{Lato-Semibold.ttf},%
-      FontFace = {md}{it}{Lato-SemiboldItalic.ttf},%
-      FontFace = {eb}{n}{Lato-Heavy.ttf},%
-      FontFace = {eb}{it}{Lato-HeavyItalic.ttf},%
-      FontFace = {sb}{n}{Lato-Bold.ttf},%
-      FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
-      ItalicFont = Lato-Italic.ttf,%
-      BoldItalicFont = Lato-BoldItalic.ttf,%
-      %WordSpace=1.1,%
-      %LetterSpace=1,%
-      %FakeStretch=1.02,%
-      %Color=TranscriptGrey%
-    ]{Lato-Regular.ttf}
+      Path=fonts/SourceSans3/,%
+      FontFace = {up}{n}{SourceSans3-Regular.ttf},%
+      FontFace = {up}{it}{SourceSans3-Italic.ttf},%
+      FontFace = {md}{n}{SourceSans3-Regular.ttf},%
+      FontFace = {md}{it}{SourceSans3-Italic.ttf},%
+      FontFace = {sb}{n}{SourceSans3-SemiBold.ttf},%
+      FontFace = {sb}{it}{SourceSans3-SemiBoldItalic.ttf},%
+      BoldFont = SourceSans3-SemiBold.ttf,%
+      ItalicFont = SourceSans3-Italic.ttf,%
+      BoldItalicFont = SourceSans3-SemiBoldItalic.ttf,%
+    ]{SourceSans3-Regular.ttf}
 
     % Schrift für Untertitel in Kapitelüberschriften.
-    \babelfont{sfchapsub}[%
-      Path=fonts/Lato/,%
-      BoldFont = Lato-Bold.ttf,%
-      FontFace = {lt}{n}{Lato-Thin.ttf},%
-      FontFace = {lt}{it}{Lato-ThinItalic.ttf},%
-      FontFace = {up}{n}{Lato-Regular.ttf},%
-      FontFace = {up}{it}{Lato-Italic.ttf},%
-      FontFace = {md}{n}{Lato-Semibold.ttf},%
-      FontFace = {md}{it}{Lato-SemiboldItalic.ttf},%
-      FontFace = {eb}{n}{Lato-Heavy.ttf},%
-      FontFace = {eb}{it}{Lato-HeavyItalic.ttf},%
-      FontFace = {sb}{n}{Lato-Bold.ttf},%
-      FontFace = {sb}{it}{Lato-BoldItalic.ttf},%
-      ItalicFont = Lato-Italic.ttf,%
-      BoldItalicFont = Lato-BoldItalic.ttf,%
-      %WordSpace=1.1,%
-      %LetterSpace=1,%
-      %FakeStretch=1.02,%
-      %Color=TranscriptGrey%
-    ]{Lato-Regular.ttf}
-
+    \glet\sfchapsubfamily\sfchapfamily
+    
     \babelfont{sfchapsubtoc}[%
       Path=fonts/Lato/,%
       BoldFont = Lato-Bold.ttf,%
