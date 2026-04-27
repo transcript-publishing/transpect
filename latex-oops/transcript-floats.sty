@@ -221,6 +221,7 @@
 
 %% gilt nur für Tabellen:
 \ccAddToType{Properties}{Table}{%
+  \let\ht@cr\break
   \def\tpBreak{%
     \GetCellProp{@tempa}{text-align}%
     \def\@tempb{center}%
