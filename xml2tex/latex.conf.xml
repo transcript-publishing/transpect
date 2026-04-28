@@ -1002,7 +1002,7 @@
       <xsl:copy-of select="./following-sibling::node()"/>
     </xsl:variable>
     <rule name="inlineEquation" type="env" break-before="0" break-after="0">
-      <option select="$nodes"/>
+      <option select="if ($nodes[text()]) then $nodes/text() else $nodes"/>
       <text>&#xa;</text>
       <text/>
     </rule>
@@ -1010,6 +1010,11 @@
   
   <template context="node()[preceding-sibling::dbk:inlineequation[matches(@role, 'render-inline-as-display-equation')]]"/>
 
+  <template context="dbk:para[dbk:inlineequation[matches(@role, 'render-inline-as-display-equation')]]" priority="3000">
+    <xsl:apply-templates select="node()" mode="xml2tex"/>
+    <!-- avoid tagging and justification -->
+  </template>
+  
   <xsl:template match="dbk:keywordset[@role='titlepage']/dbk:keyword
                           [not(@role = ('Herausgeber', 'Autor', 'Herausgeberinformationen', 'Bibliografische_Information', 'Copyright'))]/dbk:para[not(position() eq last())] |
                        dbk:keywordset[@role='titlepage']/dbk:keyword
