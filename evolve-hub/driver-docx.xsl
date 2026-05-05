@@ -333,14 +333,36 @@
   
   <!-- https://redmine.le-tex.de/issues/16004 -->
   
-  <xsl:template match="para[count(*) eq 1 
+  <xsl:function name="hub:is-inline-block-equation" as="xs:boolean">
+    <xsl:param name="para" as="element(para)"/>
+    <xsl:sequence select="exists($para[(count(*) eq 1 or (count(*) eq 2 and phrase[matches(.,'^[\.,:;!?]$')])) 
                             and inlineequation 
-                            and matches(normalize-space(string-join(text())),'^[\.:;!?]$' )]/inlineequation" mode="custom-1">
+                            and matches(normalize-space(string-join((text()|phrase/text()))),'^[\.,:;!?]$' )])"/>
+                            
+  </xsl:function>
+  
+  <xsl:template match="para[hub:is-inline-block-equation(.)]/inlineequation" mode="custom-1">
     <xsl:copy>
       <xsl:attribute name="role" select="string-join((@role, 'render-inline-as-display-equation'), ' ')"/>
       <xsl:apply-templates select="@* except @role, node()" mode="#current"/>
     </xsl:copy>
   </xsl:template>
+  
+  <xsl:template match="para[hub:is-inline-block-equation(.)]/*:inlineequation[../following-sibling::*[1]
+                                                                                                     [self::*:para]
+                                                                                                     [empty(*:inlineequation)]
+                                                                                                     [*:phrase[matches(@role, $formula_alt_role_regex)]]]/*[1]" mode="hub:split-at-tab" priority="5">
+    <!-- https://redmine.le-tex.de/issues/20167 -->
+    <alt>
+      <xsl:apply-templates select="../../following-sibling::*[1]/phrase[matches(@role, $formula_alt_role_regex)]" mode="text-only"/>
+    </alt>
+    <xsl:next-match/>
+  </xsl:template>
+  
+  <xsl:template match="phrase[matches(@role, $formula_alt_role_regex)]
+                             [..[self::para][empty(inlineequation)]
+                                [preceding-sibling::*[1][self::para[hub:is-inline-block-equation(.)]]]
+                             ]" mode="hub:split-at-tab"/>
   
   <xsl:template match="div[@role= 'tsboxquotation']" mode="hub:clean-hub">
     <!--  https://redmine.le-tex.de/issues/16263-->
