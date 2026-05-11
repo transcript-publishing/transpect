@@ -753,25 +753,14 @@
   \ifodd\realpage
     \vbox{%
       \noindent
+      \relpos[height=12mm][\dimexpr\textwidth + 5mm\relax, -9.5mm]{#3}% Alternativ: \dimexpr\textwidth + 5mm\relax, \dimexpr\the\ht\strutbox - 12mm\relax
       \textbf{#1}\newline
       \href{#2}{#2}%
-      \hfill
-      \smash{%
-        \rlap{%
-          \raisebox{-1.1\baselineskip}{\includegraphics[height=12mm]{#3}}%
-        }%
-      }%
     }
   \else
     \vbox{%
       \noindent%eingefügt am 27022026
-      \smash{%
-        \llap{%
-          \raisebox{-2.1\baselineskip}{\includegraphics[height=12mm]{#3}}%
-          \hspace*{5mm}%
-        }%
-      }%
-      \noindent
+      \relpos[height=12mm][-17mm, -9.5mm]{#3}% Alternativ: -17mm, \dimexpr\the\ht\strutbox - 12mm\relax
       \textbf{#1}\newline
       \href{#2}{#2}%
     }
