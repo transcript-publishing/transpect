@@ -482,11 +482,10 @@
                  <xsl:variable name="lang-codes" select="( replace(concat('_', lower-case(//*:product_export/(*:product[*:edition_type = 'EBP'], *:product)[1]/*:language[@seq_no='1']), '$'), '_ger\$', '^\\d+-[^_]+\$'),
                                                           '_engl$', 
                                                           '^\d+-[^_]+$')" as="xs:string+"/>
-    
                  <xsl:variable name="logo-filenames" as="document-node()">
                    <xsl:document>
                      <xsl:for-each select="distinct-values($lang-codes)">
-                       <xsl:sequence select="$funder-listing/c:file[starts-with(@name, $current-copyright/@unique_person_id)][matches(@name, .)]"/>
+                       <xsl:sequence select="$funder-listing/c:file[starts-with(@name, $current-copyright/@unique_person_id)][matches(substring-before(@name, '.'), current())]"/>
                      </xsl:for-each>
                    </xsl:document>
                  </xsl:variable>
