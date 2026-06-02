@@ -742,30 +742,34 @@
 
 \newcount\@qrCode
 
-
 \def\utbQRCode#1#2#3{%
   \par
   %\vskip0.5\baselineskip
+  \addvspace{\baselineskip}
   \phantomsection
   \label{qrCode-\the\@qrCode}%
   \getLabelPage{qrCode-\the\@qrCode}%
   \global\advance\@qrCode\@ne
-  \ifodd\realpage
-    \vbox{%
-      \noindent
-      \relpos[height=12mm][\dimexpr\textwidth + 5mm\relax, -9.5mm]{#3}% Alternativ: \dimexpr\textwidth + 5mm\relax, \dimexpr\the\ht\strutbox - 12mm\relax
-      \textbf{#1}\newline
-      \href{#2}{#2}%
-    }
-  \else
-    \vbox{%
-      \noindent%eingefügt am 27022026
-      \relpos[height=12mm][-17mm, -9.5mm]{#3}% Alternativ: -17mm, \dimexpr\the\ht\strutbox - 12mm\relax
-      \textbf{#1}\newline
-      \href{#2}{#2}%
-    }
-  \fi
+  %\ifodd\realpage
+    \noindent\special{gets_qr_hfill}%
+    \relpos[height=12mm][.5cm, -1.18cm]{#3}% Alternativ: \dimexpr\textwidth + 5mm\relax, \dimexpr\the\ht\strutbox - 12mm\relax
+    \par%
+    \nopagebreak[4]
+    \vspace{-.5\baselineskip}%
+    \nopagebreak[4]
+    \noindent%
+    \textbf{#1}\newline
+    \href{#2}{#2}%
+  %\else
+    %\vbox{%
+      %\noindent%eingefügt am 27022026
+      %\relpos[height=12mm][-17mm, -9.5mm]{#3}% Alternativ: -17mm, \dimexpr\the\ht\strutbox - 12mm\relax
+      %\textbf{#1}\newline
+      %\href{#2}{#2}%
+    %}
+  %\fi
   %\vskip\baselineskip
+  \par
   \addvspace{2\baselineskip}
 }
 

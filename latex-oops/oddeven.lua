@@ -134,7 +134,7 @@ local function do_stuff ( head )
     for n in T ( head ) do
         if n.id == VLIST or n.id == HLIST then
             n.head = do_stuff ( n.head )
-        elseif n.id == WI and n.subtype == SPECIAL and n.data == "gets_hfill" then
+        elseif n.id == WI and n.subtype == SPECIAL and ( n.data == "gets_hfill" or n.data == "gets_qr_hfill" ) then
             local glue_node = NEW ( GLUE )
             glue_node.subtype = SPACESKIP
             glue_node.stretch = 2^16
@@ -145,7 +145,11 @@ local function do_stuff ( head )
                     width = get_x_value ( node, width, head )
                 end
                 local kern_value = width
-                kern_value = kern_value + tex.sp ( "1.4cm" )
+                if n.data == "gets_hfill" then
+                    kern_value = kern_value + tex.sp ( "1.4cm" )
+                else
+                    kern_value = kern_value + tex.sp ( "1.7cm" )
+                end
                 local next_node = n
                 while next_node and not ( next_node.id == HLIST and next_node.subtype == BOX ) do
                     next_node = NEXT ( next_node )
