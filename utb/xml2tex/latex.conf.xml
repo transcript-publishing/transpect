@@ -167,4 +167,10 @@
     </rule>
   </template>
   
+   <xsl:template match="dbk:para[preceding-sibling::*[1][self::dbk:section[@role = 'tsdo']]]" priority="650" mode="xml2tex">
+    <!--  https://redmine.le-tex.de/issues/20341 -->
+    <xsl:text>\noindent </xsl:text>
+    <xsl:next-match/>
+  </xsl:template>
+  
 </set>
