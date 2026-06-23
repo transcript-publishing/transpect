@@ -77,10 +77,9 @@
   \fi
   \ifcsname ccfCapType\endcsname
     \expandafter\ifx\csname ts@caps@\ccfCapType\endcsname\tp@str@bottom
+      \tpSetProperty{label-pos}{bottom}%
       \tpSetProperty{caption-top}{}%
       \tpSetProperty{caption-bottom}{%
-        % Wird hier explizit benötigt, damit Abbildungsverzeichniseinträge erzeugt werden.
-        \ccf@addcontentsline
         \bgroup
           \normalsize\itshape%
           \tpIfComp{Number}{%
