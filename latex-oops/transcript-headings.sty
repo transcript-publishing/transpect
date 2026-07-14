@@ -22,6 +22,14 @@
 % Kapitelüberschriftenfarbe für UTB.
 \definecolor{UTBHeading}{RGB}{90, 90, 90}
 
+\let\cch@current@label\relax
+
+\ccAddToType{Attributes}{Heading}{%
+  \ccDeclareAttributeHandler{label}{%
+    \glet\cch@current@label\ccAttrVal
+  }%
+}
+
 %% Globale Settings: gelten für alle ÜS-Ebenen
 \tpAddToDefault{Heading}{%
   \tpSetProperty{numbering}{}%
@@ -321,6 +329,12 @@
     %    \cleardoublepage
     %  \fi
     %\fi
+    \ifx\cch@current@label\relax
+    \else
+      \typeout{++++++++++++++++++++++++++++++++ SETTING LABEL \cch@current@label}%
+      \hypertarget{\cch@current@label}{}%
+    \fi
+    \glet\cch@current@label\relax
   }
   
   \tpSetProperty{after-skip}{3\baselineskip}
@@ -699,6 +713,16 @@
       \ccaVstructEnd{Div}%
     \fi
   }%
+
+  \ccSetProperty{after-heading-block}{%
+    \ifx\cch@current@label\relax
+    \else
+      \typeout{++++++++++++++++++++++++++++++++ SETTING LABEL \cch@current@label}%
+      \hypertarget{\cch@current@label}{}%
+    \fi
+    \glet\cch@current@label\relax
+  }
+
   \tpSetProperty{after-skip}{%
     \tpIfComp{AuthorNameList}{%
       1.68\baselineskip
@@ -1037,7 +1061,17 @@
     \nopagebreak
     \spewnotes
   }%
-  \tpSetProperty{after-heading-block}{\nopagebreak}%
+
+  \tpSetProperty{after-heading-block}{%
+    \ifx\cch@current@label\relax
+    \else
+      \typeout{++++++++++++++++++++++++++++++++ SETTING LABEL \cch@current@label}%
+      \hypertarget{\cch@current@label}{}%
+    \fi
+    \glet\cch@current@label\relax
+    \nopagebreak
+  }%
+
   \tpSetProperty{after-skip}{%
     \tpIfComp{DOI}{%
       \ifjournal
@@ -1266,6 +1300,7 @@
     }%
   }%
   \tpSetProperty{heading-block}{%
+    \typeout{++++++++++++++++++++++++++++++ LABEL? \cch@current@label}%
     \savenotes
     \bgroup
       \normalfont
@@ -1305,12 +1340,22 @@
     }%
     \spewnotes
   }%
-  %\tpSetProperty{running-heading}{\tpIfComp{RunNumber}{\tpUseComp{RunNumber}\space}{}\tpUseComp{RunTitle}}%
+
   \tpSetProperty{bookmark}{%
     \tpWhenComp{BMNumber}{\tpUseComp{BMNumber}\space}%
     \tpUseComp{BMTitle}%
   }%
-  \tpSetProperty{after-heading-block}{\nopagebreak}%
+
+  \tpSetProperty{after-heading-block}{%
+    \ifx\cch@current@label\relax
+    \else
+      \typeout{++++++++++++++++++++++++++++++++ SETTING LABEL \cch@current@label}%
+      \hypertarget{\cch@current@label}{}%
+    \fi
+    \glet\cch@current@label\relax
+    \nopagebreak
+  }%
+
   \tpSetProperty{after-skip}{12.8bp}%
 }
 
@@ -1505,6 +1550,7 @@
     \ccaVstructEnd{TOCI}%
     \par
   }%
+
   \tpSetProperty{quote-block-format}{%
     \hfill\vbox{%
       %\justify% Auskommentiert mit Ticket 15122.
@@ -1525,13 +1571,16 @@
       \vskip\baselineskip%
     }%
   }{}
+
   \tpSetProperty{after-skip}{\z@}%
 }
 
 \tpDeclareHeading[section]{4}{paragraph}{%
   %\tpSetProperty{before-heading}{\addvspace{12.8bp}}%
   \tpSetProperty{before-skip}{12.8bp}%
+
   \tpSetProperty{after-skip}{1sp}%
+
   \tpSetProperty{title-face}{%
     \let\@withinHeadingTitle\relax
     \normalfont
@@ -1546,7 +1595,9 @@
 \tpDeclareHeading{5}{subparagraph}{%
   %\tpSetProperty{before-heading}{\addvspace{12.8bp}}%
   \tpSetProperty{before-skip}{12.8bp}%
+
   \tpSetProperty{after-skip}{-.5em}%
+
   \tpSetProperty{title-face}{%
     \let\@withinHeadingTitle\relax
     \normalfont
