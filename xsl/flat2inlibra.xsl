@@ -10,11 +10,17 @@
   
 <!--  <xsl:key name="elt-by-corresp" match="*[@corresp]" use="@corresp"/>-->
   <!-- this stylesheets postprocesses the result of the docx2hub conversion for the use at a inlibra platform. see https://redmine.le-tex.de/issues/20646 -->
+  <xsl:key name="tr:find-list" use="listitem[1]/para[1]/@srcpath" 
+           match="orderedlist[not(ancestor::*[self::orderedlist|self::itemizedlist])]|itemizedlist[not(ancestor::*[self::orderedlist|self::itemizedlist])]"/>
   
   <xsl:variable name="didactic-para-roles" select="('tsaddattention', 'tsadddefinition', 'tsaddexample', 'tsaddexcursus', 
                                                     'tsaddlearningoutcomes', 'tsaddliteraturetip', 'tsaddnote', 'tsaddorientation', 
                                                     'tsaddsummary', 'tsaddtask', 'tsaddtip', 'tsaddtopics')" as="xs:string+">
     <!-- those paras will be merged by <br/> -->
+  </xsl:variable>
+  
+  <xsl:variable name="evolved" select="collection()[/hub[info/keywordset[@role='hub']/keyword[@role='hierarchized'] = 'true']]" as="document-node()">
+    <!-- used to copy the lists, -->
   </xsl:variable>
   
   <xsl:template match="@*|node()|processing-instruction()" priority="-1">
@@ -49,6 +55,7 @@
     <xsl:param name="node" as="node()"/>
     <xsl:choose>
       <xsl:when test="$node[self::para[@role = $didactic-para-roles]]
+                           [not(phrase[@role = 'hub:identifier'])] 
                            [following-sibling::*[1][self::para][@role = $node/@role] or 
                            preceding-sibling::*[1][self::para][@role = $node/@role]]">
         <xsl:sequence select="true()"/>
@@ -56,9 +63,9 @@
       <xsl:when test="$node/(self::text() | self::processing-instruction()) 
                      and
                      (
-                       $node/preceding-sibling::*[1]/self::para[@role = $didactic-para-roles]
+                       $node/preceding-sibling::*[1]/self::para[@role = $didactic-para-roles][not(phrase[@role = 'hub:identifier'])] 
                        and 
-                       $node/following-sibling::*[1]/self::para[@role = $node/preceding-sibling::*[1]/@role]
+                       $node/following-sibling::*[1]/self::para[@role = $node/preceding-sibling::*[1]/@role][not(phrase[@role = 'hub:identifier'])] 
                      )">
         <xsl:sequence select="true()"/>
       </xsl:when>
@@ -67,5 +74,20 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
+  
+  <xsl:template match="para[@role = $didactic-para-roles]
+                           [phrase[@role = 'hub:identifier']]">
+    <!--<xsl:choose>-->
+      <xsl:if test="key('tr:find-list', @srcpath, $evolved)[self::orderedlist|self::itemizedlist]">
+       <xsl:copy copy-namespaces="no"> 
+         <xsl:apply-templates select="@*" mode="#current"/>
+         <xsl:copy-of select="key('tr:find-list', @srcpath, $evolved)[self::orderedlist|self::itemizedlist]"/>
+       </xsl:copy>
+      </xsl:if>
+     <!-- <xsl:otherwise>
+        <xsl:comment select="serialize(.)"/>
+      </xsl:otherwise>-->
+    <!--</xsl:choose>-->
+  </xsl:template>
   
 </xsl:stylesheet>
