@@ -281,8 +281,9 @@
   {\fontsize{\the\dimexpr1.4\tp@majuscleHeight\relax}{0bp}\selectfont\raisebox{\the\dimexpr0\tp@majuscleHeight\relax}{\unichar{ǃ}}}%
 }
 
-\DeclareRobustCommand\unichar[1]{\textfallback{#1}}
+\newunicodechar{⚭}{{\symbolsfamily\char"26AD}}
 
+\DeclareRobustCommand\unichar[1]{\textfallback{#1}}
 
 %%%%%%%%%%%%%%%%%%
 % Schriftgrößen. %
