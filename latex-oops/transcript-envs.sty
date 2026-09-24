@@ -13,12 +13,12 @@
       \clubpenalty \@M
       \if@afterindent \else
         {\setbox\z@\lastbox}%
-        \everypar{}%2015-04-09
+        \global\everypar{}%2015-04-09
       \fi
     \else
       \clubpenalty \@clubpenalty
       {\setbox\z@\lastbox}%
-      \everypar{}%
+      \global\everypar{}%
     \fi}}
 
 \let\orig@doendpe\@doendpe
