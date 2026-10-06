@@ -190,10 +190,15 @@
     \minusvspace{0.5\baselineskip}%
     \rightskip\z@
     \normalfont\normalsize%
+    % MDW-Reihe.
     \ifx\ts@layout@type\ts@str@layout@mdw
       \rmfamily%
     \else
       \nsfwiderfamily%
+    \fi
+    % BUB-Reihe.
+    \ifx\ts@layout@type\ts@str@layout@bub%
+      \alegreyafamily%
     \fi
     \@tempdima=\baselineskip% Ticket 15122.
     \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
@@ -496,6 +501,7 @@
   }%
   
   \tpSetProperty{subtitle-face}{\normalfont\fontsize{13.7bp}{17.2bp}\selectfont\sfchapsubfamily\upseries}
+
   \tpSetProperty{quote-block-format}{%
     \parskip\baselineskip
     \rightskip\z@
@@ -506,10 +512,15 @@
     % END.
     \normalfont
     \normalsize
+    % MDW-Reihe.
     \ifx\ts@layout@type\ts@str@layout@mdw
       \rmfamily%
     \else
       \nsfwiderfamily%
+    \fi
+    % BUB-Reihe.
+    \ifx\ts@layout@type\ts@str@layout@bub%
+      \alegreyafamily%
     \fi
     \@tempdima=\baselineskip% Ticket 15122.
     \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
@@ -1285,10 +1296,15 @@
       %\justify% Auskommentiert mit Ticket 15122.
       \leftskip0.5\textwidth
       \normalsize\mdseries
+      % MDW-Reihe.
       \ifx\ts@layout@type\ts@str@layout@mdw
         \rmfamily%
       \else
         \nsfwiderfamily%
+      \fi
+      % BUB-Reihe.
+      \ifx\ts@layout@type\ts@str@layout@bub%
+        \alegreyafamily%
       \fi
       \noindent
       \@tempdima=\baselineskip% Ticket 15122.
@@ -1556,10 +1572,15 @@
       %\justify% Auskommentiert mit Ticket 15122.
       \leftskip0.5\textwidth
       \normalsize\mdseries
+      % MDW-Reihe.
       \ifx\ts@layout@type\ts@str@layout@mdw
         \rmfamily%
       \else
         \nsfwiderfamily%
+      \fi
+      % BUB-Reihe.
+      \ifx\ts@layout@type\ts@str@layout@bub%
+        \alegreyafamily%
       \fi
       \noindent
       \@tempdima=\baselineskip% Ticket 15122.

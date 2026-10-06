@@ -10,9 +10,12 @@
 
 \usepackage{htmltabs}
 \expandafter\def\csname ht@font-family@sans-serif\endcsname{\ht@apply@prop{internal-font-family}{\nsffamily}}
+% BUB-Reihe.
+\expandafter\def\csname ht@font-family@alegreya\endcsname{\ht@apply@prop{internal-font-family}{\alegreyafamily}}
 
 % Standards für Tabellen:
 \SetHTClass{}{%
+  % MDW-Reihe.
   \ifx\ts@layout@type\ts@str@layout@mdw
     \if@altTableFonts
       \SetClassProp{td}{font-family}{sans-serif}%
@@ -21,6 +24,10 @@
     \fi
   \else
     \SetClassProp{td}{font-family}{sans-serif}%
+  \fi
+  % BUB-Reihe.
+  \ifx\ts@layout@type\ts@str@layout@bub%
+    \SetClassProp{td}{font-family}{alegreya}%
   \fi
   \SetClassProp{td}{font-size}{x-small}%
   \SetClassProp[thead]{td}{font-weight}{bold}%

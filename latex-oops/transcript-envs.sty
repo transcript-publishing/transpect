@@ -100,20 +100,28 @@
   \global\let\@quotationStarted\relax%
   \def\tpBreak{\newline}%
   \ccaVstructStart{BlockQuote}% PDF/UA-1 only!
-    \list{}{%
+    \list{%
+      %
+    }{%
       \listparindent \z@%
       \itemindent    \listparindent%
-      \leftmargin    \parindent%
+      \leftmargin    \ifx\ts@layout@type\ts@str@layout@bub\z@\else\parindent\fi%
       \rightmargin   \ifx\ts@layout@type\ts@str@layout@mdw\leftmargin\else\z@\fi%
       \nsfwiderfamily%
       %\topsep        \z@%
       \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
       \parsep        \z@%
     }%
+      % MDW-Reihe.
       \ifx\ts@layout@type\ts@str@layout@mdw%
         \footnotesize%
         \rmfamily%
       \fi%
+      % BUB-Reihe.
+      \ifx\ts@layout@type\ts@str@layout@bub%
+        \footnotesize% Entspricht \fontsize{8bp}{11bp}; Ticket 20820.
+        \alegreyafamily%
+      \fi
       \setlength{\parindent}{5mm}% Ticket 15240.
       \@tempdima=\baselineskip% Ticket 15122.
       \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
@@ -135,46 +143,68 @@
 }
 
 
-\renewenvironment{quote}
-{\noindent\par
- \ccaVstructStart{BlockQuote}% PDF/UA-1 only!
- \list{}{\rightmargin\leftmargin\nsfwiderfamily}%
-\item\relax}
-{\endlist
+\renewenvironment{quote}{%
+  \noindent
+  \par
   \ccaVstructStart{BlockQuote}% PDF/UA-1 only!
+    \list{%
+      %
+    }{%
+      \rightmargin\leftmargin
+      \nsfwiderfamily
+    }%
+      \item\relax
+}{%
+    \endlist
+  \ccaVstructEnd{BlockQuote}% PDF/UA-1 only!
   \par
   \gdef\@doendpe{%
     \@endpetrue
-    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
-    \global\let\@doendpe\orig@doendpe}}
+    \everypar{%
+      {%
+        \setbox\z@\lastbox
+      }%
+      \global\everypar{}%
+      \@endpefalse
+    }%
+    \global\let\@doendpe\orig@doendpe
+  }
+}
 
 
 \renewenvironment{verse}{%
   \noindent\par%
   \ccaVstructStart{Verse}%
-  \list{%
-  }{%
-    \listparindent \z@%
-    \parindent     \z@
-    \partopsep     \z@
-    \itemindent    \listparindent
-    \rightmargin   \z@
-    \rightskip     \rightmargin\@plus1fil
-    \nsfwiderfamily
-    %\topsep        6.4bp
-    \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
-    \parsep       .5\baselineskip%
-  }%
-  \@tempdima=\baselineskip% Ticket 15122.
-  \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
-  \item\noindent\ignorespaces%
+    \list{%
+      %
+    }{%
+      \listparindent \z@%
+      \parindent     \z@
+      \partopsep     \z@
+      \itemindent    \listparindent
+      \rightmargin   \z@
+      \rightskip     \rightmargin\@plus1fil
+      \nsfwiderfamily
+      %\topsep        6.4bp
+      \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
+      \parsep       .5\baselineskip%
+    }%
+      \@tempdima=\baselineskip% Ticket 15122.
+      \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
+      \item\noindent\ignorespaces%
 }{%
-  \endlist
+    \endlist
   \ccaVstructEnd{Verse}%
   \par
   \gdef\@doendpe{%
     \@endpetrue
-    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \everypar{%
+      {%
+        \setbox\z@\lastbox
+      }%
+      \global\everypar{}%
+      \@endpefalse
+    }%
     \global\let\@doendpe\orig@doendpe%
   }%
 }
@@ -185,28 +215,35 @@
   \par%
   \def\tpBreak{\break}%
   \ccaVstructStart{Verse}%
-  \list{%
-  }{%
-    \listparindent  \z@%
-    \parindent      \z@
-    \itemindent     \listparindent
-    \leftmargin     \z@
-    \rightmargin    \z@
-    \nsfwiderfamily
-    %\topsep         6.4bp
-    \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
-    \parsep        .5\baselineskip%
-  }%
-  \@tempdima=\baselineskip% Ticket 15122.
-  \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
-  \item\noindent\centering\ignorespaces%
+    \list{%
+      %
+    }{%
+      \listparindent  \z@%
+      \parindent      \z@
+      \itemindent     \listparindent
+      \leftmargin     \z@
+      \rightmargin    \z@
+      \nsfwiderfamily
+      %\topsep         6.4bp
+      \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
+      \parsep        .5\baselineskip%
+    }%
+      \@tempdima=\baselineskip% Ticket 15122.
+      \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
+      \item\noindent\centering\ignorespaces%
 }{%
-  \endlist%
+    \endlist%
   \ccaVstructEnd{Verse}%
   \par%
   \gdef\@doendpe{%
     \@endpetrue
-    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \everypar{%
+      {%
+        \setbox\z@\lastbox
+      }%
+      \global\everypar{}%
+      \@endpefalse
+    }%
     \global\let\@doendpe\orig@doendpe%
   }%
 }
@@ -215,22 +252,32 @@
   \noindent%
   \par%
   \ccaVstructStart{Motto}%
-  \list{%
-  }{%
-    \rightmargin \leftmargin
-    \parsep      6.4bp
-    \partopsep   \z@
-    \parindent   \z@
-    \nsfwiderfamily%
-  }%
-  \item\relax%
+    \list{%
+    }{%
+      \rightmargin \leftmargin
+      \parsep      6.4bp
+      \partopsep   \z@
+      \parindent   \z@
+      \nsfwiderfamily%
+    }%
+      % BUB-Reihe.
+      \ifx\ts@layout@type\ts@str@layout@bub%
+        \alegreyafamily%
+      \fi
+      \item\relax%
 }{%
-  \endlist
+    \endlist
   \ccaVstructEnd{Motto}%
   \par
   \gdef\@doendpe{%
     \@endpetrue
-    \everypar{{\setbox\z@\lastbox}\global\everypar{}\@endpefalse}%
+    \everypar{%
+      {%
+        \setbox\z@\lastbox
+      }%
+      \global\everypar{}%
+      \@endpefalse
+    }%
     \global\let\@doendpe\orig@doendpe%
   }%
 }
