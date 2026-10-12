@@ -189,7 +189,8 @@
   \tpSetProperty{quote-block-format}{%
     \minusvspace{0.5\baselineskip}%
     \rightskip\z@
-    \normalfont\normalsize%
+    \normalfont
+    \normalsize
     % MDW-Reihe.
     \ifx\ts@layout@type\ts@str@layout@mdw
       \rmfamily%
@@ -198,10 +199,12 @@
     \fi
     % BUB-Reihe.
     \ifx\ts@layout@type\ts@str@layout@bub%
-      \alegreyafamily%
+      \footnotesize
+      \alegreyafamily
+    \else
+      \@tempdima=\baselineskip% Tickets 15122, 20820.
+      \baselineskip=\dimexpr0.92\@tempdima\relax% Tickets 15122, 20820.
     \fi
-    \@tempdima=\baselineskip% Ticket 15122.
-    \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
     \tpUseComp{QuoteText}\par
     % Zitatquelle.
     \tpIfComp{QuoteSource}{%
@@ -520,10 +523,12 @@
     \fi
     % BUB-Reihe.
     \ifx\ts@layout@type\ts@str@layout@bub%
+      \footnotesize
       \alegreyafamily%
+    \else
+      \@tempdima=\baselineskip% Tickets 15122, 20820.
+      \baselineskip=\dimexpr0.92\@tempdima\relax% Tickets 15122, 20820.
     \fi
-    \@tempdima=\baselineskip% Ticket 15122.
-    \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
     \tpUseComp{QuoteText}%
     \tpIfComp{QuoteSource}{%
       {\hfill\break\itshape\tpUseComp{QuoteSource}}\par%
@@ -1304,11 +1309,13 @@
       \fi
       % BUB-Reihe.
       \ifx\ts@layout@type\ts@str@layout@bub%
+        \footnotesize
         \alegreyafamily%
+      \else
+        \@tempdima=\baselineskip% Tickets 15122, 20820.
+        \baselineskip=\dimexpr0.92\@tempdima\relax% Tickets 15122, 20820.
       \fi
       \noindent
-      \@tempdima=\baselineskip% Ticket 15122.
-      \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \tpUseComp{QuoteText}\par
       \tpWhenComp{QuoteSource}{%
         {\itshape\tpUseComp{QuoteSource}}%
@@ -1316,7 +1323,6 @@
     }%
   }%
   \tpSetProperty{heading-block}{%
-    \typeout{++++++++++++++++++++++++++++++ LABEL? \cch@current@label}%
     \savenotes
     \bgroup
       \normalfont
@@ -1580,11 +1586,13 @@
       \fi
       % BUB-Reihe.
       \ifx\ts@layout@type\ts@str@layout@bub%
+        \footnotesize
         \alegreyafamily%
+      \else
+        \@tempdima=\baselineskip% Tickets 15122, 20820.
+        \baselineskip=\dimexpr0.92\@tempdima\relax% Tickets 15122, 20820.
       \fi
       \noindent
-      \@tempdima=\baselineskip% Ticket 15122.
-      \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \tpUseComp{QuoteText}\par
       \tpIfComp{QuoteSource}{%
         \itshape\tpUseComp{QuoteSource}%

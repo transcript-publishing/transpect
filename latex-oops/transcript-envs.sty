@@ -120,11 +120,12 @@
       % BUB-Reihe.
       \ifx\ts@layout@type\ts@str@layout@bub%
         \footnotesize% Entspricht \fontsize{8bp}{11bp}; Ticket 20820.
-        \alegreyafamily%
+        \alegreyafamily
+      \else
+        \@tempdima=\baselineskip% Tickets 15122, 20820.
+        \baselineskip=\dimexpr0.92\@tempdima\relax% Tickets 15122, 20820.
       \fi
       \setlength{\parindent}{5mm}% Ticket 15240.
-      \@tempdima=\baselineskip% Ticket 15122.
-      \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \item\ignorespaces
 }{%
     \endlist
@@ -173,7 +174,8 @@
 
 
 \renewenvironment{verse}{%
-  \noindent\par%
+  \noindent
+  \par
   \ccaVstructStart{Verse}%
     \list{%
       %
@@ -184,11 +186,15 @@
       \itemindent    \listparindent
       \rightmargin   \z@
       \rightskip     \rightmargin\@plus1fil
-      \nsfwiderfamily
       %\topsep        6.4bp
       \topsep        \dimexpr6.96bp+1.087mm+1mm\relax% Ticket 15122. (6.4 bp + 1 mm) ÷ 0.92.
       \parsep       .5\baselineskip%
     }%
+      \nsfwiderfamily
+      % BUB-Reihe.
+      \ifx\ts@layout@type\ts@str@layout@bub%
+        \alegreyafamily
+      \fi
       \@tempdima=\baselineskip% Ticket 15122.
       \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \item\noindent\ignorespaces%
@@ -262,6 +268,7 @@
     }%
       % BUB-Reihe.
       \ifx\ts@layout@type\ts@str@layout@bub%
+        \footnotesize
         \alegreyafamily%
       \fi
       \item\relax%
