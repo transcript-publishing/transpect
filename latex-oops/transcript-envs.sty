@@ -193,10 +193,12 @@
       \nsfwiderfamily
       % BUB-Reihe.
       \ifx\ts@layout@type\ts@str@layout@bub%
+        \footnotesize
         \alegreyafamily
+      \else
+        \@tempdima=\baselineskip% Ticket 15122.
+        \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \fi
-      \@tempdima=\baselineskip% Ticket 15122.
-      \baselineskip=\dimexpr0.92\@tempdima\relax% Ticket 15122.
       \item\noindent\ignorespaces%
 }{%
     \endlist
