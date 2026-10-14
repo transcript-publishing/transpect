@@ -292,7 +292,7 @@
       </xsl:when>
       <xsl:when test="contains($basename, '_mono_')">
         <xsl:value-of select="if (contains($basename, '_mdw')) 
-                              then concat(string-join(('Published', $year[normalize-space()], 'by mdwPress, Vienne and Bielefeld © '), ' '), 
+                              then concat(string-join(('Published', $year[normalize-space()], 'by mdwPress, Vienna and Bielefeld © '), ' '), 
                                       string-join(for $ch in $context/*:copyright_holder[*:cpr_type = 'VE'] 
                                                   return concat($ch/*:first_name, ' ', $ch/*:last_name), ', ')
                                       )
