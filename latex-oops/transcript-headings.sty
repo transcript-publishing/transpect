@@ -1574,31 +1574,34 @@
   }%
 
   \tpSetProperty{quote-block-format}{%
-    \hfill\vbox{%
-      %\justify% Auskommentiert mit Ticket 15122.
-      \leftskip0.5\textwidth
-      \normalsize\mdseries
-      % MDW-Reihe.
-      \ifx\ts@layout@type\ts@str@layout@mdw
-        \rmfamily%
-      \else
-        \nsfwiderfamily%
-      \fi
-      % BUB-Reihe.
-      \ifx\ts@layout@type\ts@str@layout@bub%
-        \footnotesize
-        \alegreyafamily%
-      \else
-        \@tempdima=\baselineskip% Tickets 15122, 20820.
-        \baselineskip=\dimexpr0.92\@tempdima\relax% Tickets 15122, 20820.
-      \fi
-      \noindent
-      \tpUseComp{QuoteText}\par
-      \tpIfComp{QuoteSource}{%
-        \itshape\tpUseComp{QuoteSource}%
-      }{}%
-      \vskip\baselineskip%
-    }%
+    %\justify% Auskommentiert mit Ticket 15122.
+    \rightskip\z@
+    \leftskip0.5\textwidth
+    \@rightskip\RaggedRightRightskip
+    \rightskip\@rightskip
+    \normalsize\mdseries
+    % MDW-Reihe.
+    \ifx\ts@layout@type\ts@str@layout@mdw
+      \rmfamily%
+    \else
+      \nsfwiderfamily%
+    \fi
+    % BUB-Reihe.
+    \ifx\ts@layout@type\ts@str@layout@bub%
+      \footnotesize
+      \alegreyafamily%
+    \else
+      \@tempdima=\baselineskip% Tickets 15122, 20820.
+      \baselineskip=\dimexpr0.92\@tempdima\relax% Tickets 15122, 20820.
+    \fi
+    \noindent
+    \interlinepenalty=\maxdimen
+    \tpUseComp{QuoteText}\par
+    \nopagebreak
+    \tpIfComp{QuoteSource}{%
+      \itshape\tpUseComp{QuoteSource}%
+    }{}%
+    \vskip\baselineskip
   }{}
 
   \tpSetProperty{after-skip}{\z@}%
