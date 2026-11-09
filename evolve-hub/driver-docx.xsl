@@ -233,6 +233,21 @@
     <xsl:processing-instruction name="{$pi-xml-name}" select="'\newpage '"/>
   </xsl:template>
 
+  <xsl:template match="phrase[not(normalize-space())][not(*)]" mode="hub:preprocess-hierarchy">
+    <!--  https://redmine.le-tex.de/issues/20917-->
+    <xsl:choose>
+      <xsl:when test="@xml:lang or @role">
+        <xsl:copy>
+          <xsl:apply-templates select="(@xml:lang | @role | @srcpath), node()" mode="#current"/>
+        </xsl:copy>
+      </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates select="node()" mode="#current"/>
+    </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+
   <xsl:template name="alt-texts">
    <!-- https://redmine.le-tex.de/issues/18173-->
     <xsl:variable name="alt" as="element(para)*">
