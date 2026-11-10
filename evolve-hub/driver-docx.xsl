@@ -236,9 +236,9 @@
   <xsl:template match="phrase[not(normalize-space())][not(*)]" mode="hub:preprocess-hierarchy">
     <!--  https://redmine.le-tex.de/issues/20917-->
     <xsl:choose>
-      <xsl:when test="@xml:lang or @role">
+      <xsl:when test="@xml:lang or @role or @css:text-decoration">
         <xsl:copy>
-          <xsl:apply-templates select="(@xml:lang | @role | @srcpath), node()" mode="#current"/>
+          <xsl:apply-templates select="(@xml:lang | @role | @srcpath | @css:text-decoration), node()" mode="#current"/>
         </xsl:copy>
       </xsl:when>
     <xsl:otherwise>
