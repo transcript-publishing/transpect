@@ -63,8 +63,9 @@
       \begin{heading}[notoc,noBM]{subsection}%
         \tpTitle{\optionalHeading}%
       \end{heading}%
+      \@afterheading
     \fi
-    \@afterheading\nsffamily
+    \nsffamily
 }{%
   \end{mdframed}%
   \spewnotes
@@ -97,7 +98,7 @@
 \let\@quotationStarted\@empty
 
 \renewenvironment{quotation}{%
-  \global\let\@quotationStarted\relax%
+  \global\let\@quotationStarted\relax
   \def\tpBreak{\newline}%
   \ccaVstructStart{BlockQuote}% PDF/UA-1 only!
     \list{%
