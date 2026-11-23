@@ -761,22 +761,30 @@
     \label{didactics-\the\@didactics}%
     \getLabelPage{didactics-\the\@didactics}%
     \global\advance\@didactics\@ne
-    \bgroup%
-        \parindent=0pt
+    \bgroup
+      \parindent=0pt
+      \noindent
+      {%
         \noindent
-        {\noindent\special{gets_hfill}\minorDidacticsHeadingfamily\sbseries\large\char"200B \color{didacticslinegray}\special{PHPL_part_line}\color{black}\ignorespaces #2}
-        \ifx#1\relax
+        \ifodd\realpage
+          \hfill
         \else
-            \relpos[width=\@didacticsIconHeight][.8cm,-0.5cm]{#1}%
+          \special{gets_hfill}%
         \fi
-        \par%
-        \nopagebreak[4]
-        \vspace{\baselineskip}
-        \nopagebreak[4]
-        \didacticsContentfamily%
-        \noindent\ignorespaces
+        \minorDidacticsHeadingfamily\sbseries\large\char"200B \color{didacticslinegray}\special{PHPL_part_line}\color{black}\ignorespaces #2%
+      }%
+      \ifx#1\relax
+      \else
+        \relpos[width=\@didacticsIconHeight][.8cm,-0.5cm]{#1}%
+      \fi
+      \par%
+      \nopagebreak[4]
+      \vspace{\baselineskip}%
+      \nopagebreak[4]
+      \didacticsContentfamily%
+      \noindent\ignorespaces
 }{%
-        \par%
+      \par%
     \egroup%
     \addvspace{\baselineskip}
 }
