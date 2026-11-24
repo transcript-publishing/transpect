@@ -756,37 +756,60 @@
 
 \definecolor{didacticslinegray}{gray}{0.57}
 
+\newcommand{\@writeDidacticsPage}{%
+  \edef\@tempa{%
+    \noexpand\write\noexpand\@auxout{%
+      \string\expandafter\string\gdef\string\csname\space didactics-\the\@didactics\string\endcsname{\noexpand\thepage}%
+    }%
+  }
+  \@tempa
+}
+
 \newenvironment{didactics}[2][\relax]{%
     \addvspace{\baselineskip}
-    \phantomsection
-    \label{didactics-\the\@didactics}%
-    \getLabelPage{didactics-\the\@didactics}%
-    \global\advance\@didactics\@ne
+    \@tempcnta=\z@
+    \ifcsname didactics-\the\@didactics\endcsname
+      \@tempcnta=\csuse{didactics-\the\@didactics}%
+    \fi
     \bgroup
       \parindent=0pt
       \noindent
       {%
         \noindent
-        \ifodd\realpage
+        \ifodd\@tempcnta
           \hfill
         \else
-          \special{gets_hfill}%
+          \smash{%
+            \llap{%
+              \raisebox{-5mm}{\includegraphics[height=6mm]{#1}}%
+              \hspace*{7.6mm}%
+            }%
+          }%
         \fi
         \minorDidacticsHeadingfamily\sbseries\large\char"200B \color{didacticslinegray}\special{PHPL_part_line}\color{black}\ignorespaces #2%
       }%
       \ifx#1\relax
       \else
-        \relpos[width=\@didacticsIconHeight][.8cm,-0.5cm]{#1}%
+        \ifodd\@tempcnta
+          \smash{%
+            \rlap{%
+              \hspace*{8mm}%
+              \raisebox{-5mm}{\includegraphics[height=6mm]{#1}}%
+            }%
+          }%
+        \fi
       \fi
       \par%
       \nopagebreak[4]
       \vspace{\baselineskip}%
       \nopagebreak[4]
-      \didacticsContentfamily%
+      \@writeDidacticsPage
+      \global\advance\@didactics\@ne
+      \didacticsContentfamily
       \noindent\ignorespaces
 }{%
-      \par%
-    \egroup%
+      \par
+    \egroup
     \addvspace{\baselineskip}
 }
 
@@ -808,35 +831,49 @@
 
 \newcount\@qrCode
 
+\newcommand{\@writeQRCodePage}{%
+  \edef\@tempa{%
+    \noexpand\write\noexpand\@auxout{%
+      \string\expandafter\string\gdef\string\csname\space qrCode-\the\@qrCode\string\endcsname{\noexpand\thepage}%
+    }%
+  }
+  \@tempa
+}
+
 \def\utbQRCode#1#2#3{%
   \par
-  %\vskip0.5\baselineskip
-  \addvspace{\baselineskip}
-  \phantomsection
-  \label{qrCode-\the\@qrCode}%
-  \getLabelPage{qrCode-\the\@qrCode}%
+  \addvspace{1.5\baselineskip}%
+  \def\@qrCodePage{\z@}%
+  \ifcsname qrCode-\the\@qrCode\endcsname
+    \def\@qrCodePage{\csuse{qrCode-\the\@qrCode}}%
+  \fi
+  \nopagebreak[4]
+  \ifodd\numexpr\@qrCodePage
+  \else
+    \smash{%
+      \llap{%
+        \raisebox{-7mm}{\includegraphics[height=12mm]{#3}}%
+        \hspace*{3mm}%
+      }%
+    }%
+  \fi
+  \noindent
+  \textbf{#1}\newline
+  \href{#2}{#2}%
+  \ifodd\numexpr\@qrCodePage
+    \hfill
+    \smash{%
+      \rlap{%
+        \hspace*{3mm}%
+        \raisebox{\dimexpr-7mm+1\baselineskip\relax}{\includegraphics[height=12mm]{#3}}%
+      }%
+    }%
+  \fi
+  \@writeQRCodePage
   \global\advance\@qrCode\@ne
-  %\ifodd\realpage
-    \noindent\special{gets_qr_hfill}%
-    \relpos[height=12mm][.5cm, -1.18cm]{#3}% Alternativ: \dimexpr\textwidth + 5mm\relax, \dimexpr\the\ht\strutbox - 12mm\relax
-    \par%
-    \nopagebreak[4]
-    \vspace{-.5\baselineskip}%
-    \nopagebreak[4]
-    \noindent%
-    \textbf{#1}\newline
-    \href{#2}{#2}%
-  %\else
-    %\vbox{%
-      %\noindent%eingefügt am 27022026
-      %\relpos[height=12mm][-17mm, -9.5mm]{#3}% Alternativ: -17mm, \dimexpr\the\ht\strutbox - 12mm\relax
-      %\textbf{#1}\newline
-      %\href{#2}{#2}%
-    %}
-  %\fi
-  %\vskip\baselineskip
   \par
-  \addvspace{2\baselineskip}
+  \addvspace{2\baselineskip}%
+  \@afterheading
 }
 
 % \def\@abstract#1{%
