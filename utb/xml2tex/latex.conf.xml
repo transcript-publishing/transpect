@@ -124,8 +124,8 @@
   </xsl:template>
   
   <template context="dbk:section[starts-with(@role, 'tsadd')]
-    [empty(parent::dbk:section)]
-    [empty(preceding-sibling::dbk:para)]" priority="500">
+                                [empty(parent::dbk:section)]
+                                [empty(preceding-sibling::dbk:para)]" priority="500">
     <!--   bigger headings on chapter start page https://redmine.le-tex.de/issues/18626-->
     <xsl:variable name="icon-type" select="replace(@role, '^ts(add)([a-z]+)', '$1_$2.png')"/>
     <rule name="majorDidactics" break-after="2" break-before="2" type="env">
@@ -161,14 +161,14 @@
       <!-- title -->
       <param select="dbk:info/dbk:title"/>
       <!-- QR Link -->
-      <param select="dbk:para[@role = 'tsdolink']/dbk:link/@xlink:href"/>
+      <param select="replace(dbk:para[@role = 'tsdolink']/dbk:link/@xlink:href, '([%_])', '\\$1')"/>
       <!-- QR image file name -->
       <param select="replace(dbk:para[@role = 'tsdoqrcode']//dbk:imagedata/@fileref, '^.+/(.+)$', '$1')"/>
     </rule>
   </template>
   
    <xsl:template match="dbk:para[preceding-sibling::*[1][self::dbk:section[@role = 'tsdo']]]" priority="650" mode="xml2tex">
-    <!--  https://redmine.le-tex.de/issues/20341 -->
+    <!--  https://redmine.le-tex.de/issues/20341, https://redmine.le-tex.de/issues/20342 -->
     <xsl:text>\noindent </xsl:text>
     <xsl:next-match/>
   </xsl:template>
